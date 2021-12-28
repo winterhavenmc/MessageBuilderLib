@@ -1,0 +1,5 @@
+name: ${project.name}
+main: com.winterhavenmc.util.messagebuilder.PluginMain
+author: ${project.author}
+version: ${project.version}
+api-version: 1.16
