@@ -12,6 +12,7 @@ import java.util.Set;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FileLoaderTests {
 
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private ServerMock server;
     private PluginMain plugin;
     private FileLoader fileLoader;
@@ -58,7 +59,7 @@ public class FileLoaderTests {
 
 
     @Nested
-    class MatchMessageKeys {
+    class MatchMessageKeysTest {
 
         private Set<String> getConfigMessageNames() {
             return fileLoader.getMessages().getKeys(false);
@@ -101,8 +102,8 @@ public class FileLoaderTests {
     @Test
     @DisplayName("Test language manager reload method.")
     void reload() {
-        plugin.languageHandler.reload();
-        Assertions.assertNotNull(plugin.languageHandler, "language manager not null after reload.");
+        plugin.messageBuilder.reload();
+        Assertions.assertNotNull(plugin.messageBuilder.languageHandler, "language manager not null after reload.");
     }
 
 

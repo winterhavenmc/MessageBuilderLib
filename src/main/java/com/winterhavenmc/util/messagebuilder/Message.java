@@ -23,6 +23,7 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 	// required parameters
 	private final CommandSender recipient;
 	private final MessageId messageId;
+	private final LanguageHandler languageHandler;
 
 	// optional parameters
 	private final Map<Macro, Object> macroObjectMap = new HashMap<>();
@@ -35,9 +36,10 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 	 * @param recipient message recipient
 	 * @param messageId message identifier
 	 */
-	public Message(final CommandSender recipient, final MessageId messageId) {
+	public Message(final CommandSender recipient, final MessageId messageId, final LanguageHandler languageHandler) {
 		this.recipient = recipient;
 		this.messageId = messageId;
+		this.languageHandler = languageHandler;
 	}
 
 
@@ -56,10 +58,8 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 
 	/**
 	 * Final step of message builder, performs replacements and sends message to recipient
-	 *
-	 * @param languageHandler the plugin's current language handler
 	 */
-	public void send(final LanguageHandler languageHandler) {
+	public void send() {
 
 		// if message is not enabled in messages file, do nothing and return
 		if (!languageHandler.isEnabled(messageId)) {

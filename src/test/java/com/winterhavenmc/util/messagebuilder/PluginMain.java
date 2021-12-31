@@ -12,7 +12,7 @@ import java.io.File;
 @SuppressWarnings("unused")
 public final class PluginMain extends JavaPlugin {
 
-    LanguageHandler languageHandler;
+//    LanguageHandler languageHandler;
     MessageBuilder<MessageId, Macro> messageBuilder;
 
     public PluginMain() {
@@ -31,10 +31,10 @@ public final class PluginMain extends JavaPlugin {
         reloadConfig();
 
         // instantiate language handler
-        languageHandler = new LanguageHandler(this);
+//        languageHandler = new LanguageHandlerImpl(this);
 
         // instantiate message builder
-        messageBuilder = new MessageBuilder<>();
+        messageBuilder = new MessageBuilder<>(this);
     }
 
 }
