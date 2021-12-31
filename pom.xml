@@ -5,8 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.winterhaven-mc</groupId>
-	<artifactId>message-builder</artifactId>
-	<version>1.0.1</version>
+	<artifactId>message-builder-lib</artifactId>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>MessageBuilder</name>
