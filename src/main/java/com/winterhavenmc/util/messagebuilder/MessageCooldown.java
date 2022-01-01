@@ -25,7 +25,7 @@ public class MessageCooldown<MessageId extends Enum<MessageId>> implements Liste
 	/**
 	 * private class constructor, registers class as bukkit event listener
 	 */
-	MessageCooldown(JavaPlugin plugin) {
+	MessageCooldown(final JavaPlugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
@@ -36,17 +36,19 @@ public class MessageCooldown<MessageId extends Enum<MessageId>> implements Liste
 	 * @return instance of this class
 	 */
 	@SuppressWarnings("unchecked")
-	static synchronized <MessageId extends Enum<MessageId>> MessageCooldown<MessageId> getInstance(JavaPlugin plugin) {
+	static synchronized <MessageId extends Enum<MessageId>> MessageCooldown<MessageId> getInstance(final JavaPlugin plugin) {
 		if (INSTANCE == null) {
 			INSTANCE = new MessageCooldown<>(plugin);
 		}
 		return (MessageCooldown<MessageId>) INSTANCE;
 	}
 
+
 	@SuppressWarnings("unused")
 	public Map<MessageId, Map<UUID, Long>>getMessageCooldownMap() {
 		return this.messageCooldownMap;
 	}
+
 
 	/**
 	 * Add entry to message cooldown map

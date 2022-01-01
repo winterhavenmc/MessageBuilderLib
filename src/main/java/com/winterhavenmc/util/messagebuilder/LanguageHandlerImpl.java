@@ -28,7 +28,7 @@ public class LanguageHandlerImpl implements LanguageHandler {
 	/**
 	 * class constructor
 	 */
-	public LanguageHandlerImpl(JavaPlugin plugin) {
+	public LanguageHandlerImpl(final JavaPlugin plugin) {
 
 		this.plugin = plugin;
 

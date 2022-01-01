@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 public class FileLoader {
 
-	JavaPlugin plugin;
+	private final JavaPlugin plugin;
 
 	private final String directoryName = "language";
 
@@ -20,7 +20,7 @@ public class FileLoader {
 	 * Class constructor
 	 * @param plugin reference to plugin main class
 	 */
-	FileLoader(JavaPlugin plugin) {
+	FileLoader(final JavaPlugin plugin) {
 		this.plugin = plugin;
 	}
 
@@ -85,7 +85,7 @@ public class FileLoader {
 	 * @param plugin reference to plugin main class
 	 * @return IETF language string from config.yml
 	 */
-	private String getConfiguredLanguage(JavaPlugin plugin) {
+	private String getConfiguredLanguage(final JavaPlugin plugin) {
 		return plugin.getConfig().getString("language");
 	}
 
@@ -96,7 +96,7 @@ public class FileLoader {
 	 * @param language the IETF language tag
 	 * @return if file exists for language tag, return the language tag; else return the default tag (en-US)
 	 */
-	private String languageFileExists(JavaPlugin plugin, final String language) {
+	private String languageFileExists(final JavaPlugin plugin, final String language) {
 
 		// get file object for passed language tag by adding prefixing for directory name and .yml suffix
 		File languageFile = new File(getCurrentFilename(plugin, language));
@@ -121,7 +121,7 @@ public class FileLoader {
 	 * @param language IETF language tag
 	 * @return current language file name as String
 	 */
-	protected String getCurrentFilename(JavaPlugin plugin, String language) {
+	protected String getCurrentFilename(final JavaPlugin plugin, final String language) {
 		return plugin.getDataFolder() + File.separator + directoryName + File.separator + language + ".yml";
 	}
 

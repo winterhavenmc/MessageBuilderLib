@@ -19,9 +19,9 @@ import java.util.zip.ZipInputStream;
  */
 public class FileInstaller {
 
-	JavaPlugin plugin;
+	private final JavaPlugin plugin;
 
-	FileInstaller(JavaPlugin plugin) {
+	FileInstaller(final JavaPlugin plugin) {
 		this.plugin = plugin;
 	}
 
@@ -66,7 +66,7 @@ public class FileInstaller {
 	 *
 	 * @param fileList list of filenames to be installed
 	 */
-	void installFiles(List<String> fileList) {
+	void installFiles(final List<String> fileList) {
 
 		// iterate over list of language files and install from jar if not already present
 		for (String filename : fileList) {

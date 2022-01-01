@@ -22,7 +22,7 @@ public interface LanguageHandler {
 	 * @return true if message is enabled, false if not
 	 * @throws NullPointerException if parameter is null
 	 */
-	<MessageId extends Enum<MessageId>> boolean isEnabled(MessageId messageId);
+	<MessageId extends Enum<MessageId>> boolean isEnabled(final MessageId messageId);
 
 
 	/**
@@ -31,9 +31,8 @@ public interface LanguageHandler {
 	 * @param <MessageId> parameterized type enum member for messageId
 	 * @param messageId   message identifier to retrieve message delay
 	 * @return long - message repeat delay in seconds
-	 * @throws NullPointerException if parameter is null
 	 */
-	<MessageId extends Enum<MessageId>> long getRepeatDelay(MessageId messageId);
+	<MessageId extends Enum<MessageId>> long getRepeatDelay(final MessageId messageId);
 
 
 	/**
@@ -42,9 +41,8 @@ public interface LanguageHandler {
 	 * @param <MessageId> parameterized type enum member for messageId
 	 * @param messageId   message identifier to retrieve message text
 	 * @return String message text, or empty string if no message string found
-	 * @throws NullPointerException if parameter is null
 	 */
-	<MessageId extends Enum<MessageId>> String getMessage(MessageId messageId);
+	<MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId);
 
 
 	/**
@@ -101,7 +99,7 @@ public interface LanguageHandler {
 	 * @param duration a time duration in milliseconds
 	 * @return formatted time string
 	 */
-	String getTimeString(long duration);
+	String getTimeString(final long duration);
 
 
 	/**
@@ -112,7 +110,7 @@ public interface LanguageHandler {
 	 * @return formatted time string
 	 * @throws NullPointerException if parameter is null
 	 */
-	String getTimeString(long duration, TimeUnit timeUnit);
+	String getTimeString(final long duration, final TimeUnit timeUnit);
 
 
 	/**
