@@ -54,8 +54,16 @@ public class LanguageHandlerImpl implements LanguageHandler {
 	public final <MessageId extends Enum<MessageId>> boolean isEnabled(final MessageId messageId) {
 
 		// check for null parameter
-		Objects.requireNonNull(messageId);
+		if (messageId == null) {
+			return false;
+		}
 
+		// if enabled setting for a message does not exist and no default is set, default to true
+		if (messages.getString("MESSAGES." + messageId + ".enabled") == null) {
+			return true;
+		}
+
+		// return boolean value of message enabled setting
 		return messages.getBoolean("MESSAGES." + messageId + ".enabled");
 	}
 
@@ -72,7 +80,9 @@ public class LanguageHandlerImpl implements LanguageHandler {
 	public final <MessageId extends Enum<MessageId>> long getRepeatDelay(final MessageId messageId) {
 
 		// check for null parameter
-		Objects.requireNonNull(messageId);
+		if (messageId == null) {
+			return 0L;
+		}
 
 		return messages.getLong("MESSAGES." + messageId + ".repeat-delay");
 	}
@@ -90,7 +100,9 @@ public class LanguageHandlerImpl implements LanguageHandler {
 	public final <MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId) {
 
 		// check for null parameter
-		Objects.requireNonNull(messageId);
+		if (messageId == null) {
+			return "";
+		}
 
 		String string = messages.getString("MESSAGES." + messageId + ".string");
 
