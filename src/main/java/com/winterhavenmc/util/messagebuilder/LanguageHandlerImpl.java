@@ -58,8 +58,10 @@ public class LanguageHandlerImpl implements LanguageHandler {
 			return false;
 		}
 
-		// if enabled setting for a message does not exist and no default is set, default to true
-		if (messages.getString("MESSAGES." + messageId + ".enabled") == null) {
+		// if enabled setting for a message does not exist and no default is set,
+		// and message string does exist, default to true
+		if (messages.getString("MESSAGES." + messageId + ".enabled") == null
+				&& messages.getString("MESSAGES." + messageId + ".string") != null) {
 			return true;
 		}
 
