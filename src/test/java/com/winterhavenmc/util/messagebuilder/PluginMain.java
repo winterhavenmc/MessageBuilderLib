@@ -12,7 +12,7 @@ import java.io.File;
 @SuppressWarnings("unused")
 public final class PluginMain extends JavaPlugin {
 
-    YamlMessageBuilder<MessageId, Macro> messageBuilder;
+    MessageBuilder<MessageId, Macro> messageBuilder;
 
 
     public PluginMain() {
@@ -31,7 +31,7 @@ public final class PluginMain extends JavaPlugin {
         reloadConfig();
 
         // instantiate message builder
-        messageBuilder = new YamlMessageBuilder<>(this);
+        messageBuilder = new MessageBuilder<>(this);
     }
 
 }

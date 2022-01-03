@@ -1,37 +1,57 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
-public interface MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
+public class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
+
+	LanguageHandler languageHandler;
+
+
+	/**
+	 * Class constructor
+	 *
+	 * @param plugin reference to plugin main class
+	 */
+	public MessageBuilder(final JavaPlugin plugin) {
+		this.languageHandler = new YamlLanguageHandler(plugin);
+	}
+
 
 	/**
 	 * Initiate a message
-	 *
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
 	 * @return Message - an initialized message object
 	 */
-	Message<MessageId, Macro> build(CommandSender recipient, MessageId messageId);
+	public Message<MessageId, Macro> build(final CommandSender recipient, final MessageId messageId) {
+		return new Message<>(recipient, messageId, languageHandler);
+	}
+
 
 	/**
 	 * Check if a message is enabled in the configuration file
-	 *
 	 * @param messageId the message identifier
 	 * @return true if message is enabled, false if not
 	 */
-	boolean isEnabled(MessageId messageId);
+	public boolean isEnabled(final MessageId messageId) {
+		return languageHandler.isEnabled(messageId);
+	}
+
 
 	/**
 	 * Get the configured repeat delay for a message
-	 *
 	 * @param messageId the message identifier
 	 * @return long - the message repeat delay (in seconds)
 	 */
-	long getRepeatDelay(MessageId messageId);
+	public long getRepeatDelay(final MessageId messageId) {
+		return languageHandler.getRepeatDelay(messageId);
+	}
+
 
 	/**
 	 * get message text from language file
@@ -39,49 +59,70 @@ public interface MessageBuilder<MessageId extends Enum<MessageId>, Macro extends
 	 * @param messageId the message identifier
 	 * @return String message text, or empty string if no message string found
 	 */
-	String getMessage(MessageId messageId);
+	public String getMessage(final MessageId messageId) {
+		return languageHandler.getMessage(messageId);
+	}
+
 
 	/**
 	 * Get item name from language specific messages file, with translated color codes
 	 *
 	 * @return the formatted item name from language file, or empty string if key not found
 	 */
-	String getItemName();
+	public String getItemName() {
+		return languageHandler.getItemName();
+	}
+
 
 	/**
 	 * Get configured plural item name from language file
 	 *
 	 * @return the formatted item plural name from language file, or empty string if key not found
 	 */
-	String getItemNamePlural();
+	public String getItemNamePlural() {
+		return languageHandler.getItemNamePlural();
+	}
+
 
 	/**
 	 * Get configured inventory item name from language file
 	 *
 	 * @return the formatted inventory display name of an item, or empty string if key not found
 	 */
-	String getInventoryItemName();
+	public String getInventoryItemName() {
+		return languageHandler.getInventoryItemName();
+	}
+
 
 	/**
 	 * Get item lore from language specific messages file, with translated color codes
 	 *
 	 * @return List of strings, one string for each line of lore, or empty list if key not found
 	 */
-	List<String> getItemLore();
+	public List<String> getItemLore() {
+		return languageHandler.getItemLore();
+	}
+
 
 	/**
 	 * Get spawn display name from language file
 	 *
 	 * @return the formatted display name for the world spawn, or empty string if key not found
 	 */
-	String getSpawnDisplayName();
+	public String getSpawnDisplayName() {
+		return languageHandler.getSpawnDisplayName();
+	}
+
 
 	/**
 	 * Get home display name from language file
 	 *
 	 * @return the formatted display name for home, or empty string if key not found
 	 */
-	String getHomeDisplayName();
+	public String getHomeDisplayName() {
+		return languageHandler.getHomeDisplayName();
+	}
+
 
 	/**
 	 * Format the time string with days, hours, minutes and seconds as necessary
@@ -89,7 +130,10 @@ public interface MessageBuilder<MessageId extends Enum<MessageId>, Macro extends
 	 * @param duration a time duration in milliseconds
 	 * @return formatted time string
 	 */
-	String getTimeString(long duration);
+	public String getTimeString(final long duration) {
+		return languageHandler.getTimeString(duration);
+	}
+
 
 	/**
 	 * Format the time string with days, hours, minutes and seconds as necessary, to the granularity passed
@@ -99,10 +143,16 @@ public interface MessageBuilder<MessageId extends Enum<MessageId>, Macro extends
 	 * @return formatted time string
 	 * @throws NullPointerException if parameter is null
 	 */
-	String getTimeString(long duration, TimeUnit timeUnit);
+	public String getTimeString(final long duration, TimeUnit timeUnit) {
+		return languageHandler.getTimeString(duration, timeUnit);
+	}
+
 
 	/**
 	 * Reload messages from configured language file
 	 */
-	void reload();
+	public void reload() {
+		languageHandler.reload();
+	}
+
 }
