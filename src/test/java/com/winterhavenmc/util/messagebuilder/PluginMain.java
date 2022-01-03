@@ -12,8 +12,8 @@ import java.io.File;
 @SuppressWarnings("unused")
 public final class PluginMain extends JavaPlugin {
 
-//    LanguageHandler languageHandler;
-    MessageBuilder<MessageId, Macro> messageBuilder;
+    YamlMessageBuilder<MessageId, Macro> messageBuilder;
+
 
     public PluginMain() {
         super();
@@ -30,11 +30,8 @@ public final class PluginMain extends JavaPlugin {
 
         reloadConfig();
 
-        // instantiate language handler
-//        languageHandler = new LanguageHandlerImpl(this);
-
         // instantiate message builder
-        messageBuilder = new MessageBuilder<>(this);
+        messageBuilder = new YamlMessageBuilder<>(this);
     }
 
 }

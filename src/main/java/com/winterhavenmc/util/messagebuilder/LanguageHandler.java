@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public interface LanguageHandler {
+interface LanguageHandler {
 
 	/**
 	 * Get message keys; used for testing

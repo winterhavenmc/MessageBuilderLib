@@ -15,8 +15,7 @@ import java.util.concurrent.TimeUnit;
  * provides common methods for the installation and management of
  * localized language files for bukkit plugins.
  */
-@SuppressWarnings("unused")
-public class LanguageHandlerImpl implements LanguageHandler {
+class YamlLanguageHandler implements LanguageHandler {
 
 	// reference to main plugin
 	private final JavaPlugin plugin;
@@ -28,7 +27,7 @@ public class LanguageHandlerImpl implements LanguageHandler {
 	/**
 	 * class constructor
 	 */
-	public LanguageHandlerImpl(final JavaPlugin plugin) {
+	YamlLanguageHandler(final JavaPlugin plugin) {
 
 		this.plugin = plugin;
 
@@ -393,12 +392,12 @@ public class LanguageHandlerImpl implements LanguageHandler {
 	public final void reload() {
 
 		// install message files if necessary; this will not overwrite existing files
-		FileInstaller installer = new FileInstaller(plugin);
+		YamlFileInstaller installer = new YamlFileInstaller(plugin);
 		List<String> filenames = installer.getFilenames();
 		installer.installFiles(filenames);
 
 		// load messages Configuration object from configured language file
-		messages = new FileLoader(plugin).getMessages();
+		messages = new YamlFileLoader(plugin).getMessages();
 	}
 
 }

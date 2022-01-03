@@ -9,7 +9,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 
-public class FileLoader {
+class YamlFileLoader {
 
 	private final JavaPlugin plugin;
 
@@ -20,7 +20,7 @@ public class FileLoader {
 	 * Class constructor
 	 * @param plugin reference to plugin main class
 	 */
-	FileLoader(final JavaPlugin plugin) {
+	YamlFileLoader(final JavaPlugin plugin) {
 		this.plugin = plugin;
 	}
 

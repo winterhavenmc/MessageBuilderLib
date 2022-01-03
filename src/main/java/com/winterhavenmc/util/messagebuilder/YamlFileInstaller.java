@@ -17,11 +17,11 @@ import java.util.zip.ZipInputStream;
  * within a /language subdirectory in the plugin jar archive will be copied to the /language
  * subdirectory of the plugin data directory.
  */
-public class FileInstaller {
+public class YamlFileInstaller {
 
 	private final JavaPlugin plugin;
 
-	FileInstaller(final JavaPlugin plugin) {
+	YamlFileInstaller(final JavaPlugin plugin) {
 		this.plugin = plugin;
 	}
 

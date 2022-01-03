@@ -14,7 +14,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 
-public class MessageCooldown<MessageId extends Enum<MessageId>> implements Listener {
+/**
+ * A singleton class that wraps a map of player message cooldown times.
+ * The map is keyed by MessageId, with values containing a nested map keyed by player uuid and
+ * with value a long representing the last displayed time of the message in milliseconds since epoch.
+ * On subsequent calls to display the same message for the same user, this value will be used to check
+ * if the configured message cooldown time has elapsed.
+ *
+ * @param <MessageId> An enum representing message identifiers defined in the client
+ */
+class MessageCooldown<MessageId extends Enum<MessageId>> implements Listener {
 
 	private static MessageCooldown<? extends Enum<?>> INSTANCE;
 
@@ -45,7 +54,7 @@ public class MessageCooldown<MessageId extends Enum<MessageId>> implements Liste
 
 
 	@SuppressWarnings("unused")
-	public Map<MessageId, Map<UUID, Long>>getMessageCooldownMap() {
+	public Map<MessageId, Map<UUID, Long>> getMessageCooldownMap() {
 		return this.messageCooldownMap;
 	}
 

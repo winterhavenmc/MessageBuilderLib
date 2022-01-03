@@ -15,7 +15,7 @@ public class FileLoaderTests {
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private ServerMock server;
     private PluginMain plugin;
-    private FileLoader fileLoader;
+    private YamlFileLoader fileLoader;
 
     @BeforeAll
     public void setUp() {
@@ -26,7 +26,7 @@ public class FileLoaderTests {
         plugin = MockBukkit.load(PluginMain.class);
 
         // start file loader
-        fileLoader = new FileLoader(plugin);
+        fileLoader = new YamlFileLoader(plugin);
 
     }
 
