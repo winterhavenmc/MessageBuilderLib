@@ -77,8 +77,32 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 		// get message string from file
 		String messageString = languageHandler.getMessage(messageId);
 
+		messageString = doMacroReplacements(messageString);
+
+		// send message to player
+		recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageString));
+
+		// if message repeat delay value is greater than zero, add entry to messageCooldownMap
+		if (languageHandler.getRepeatDelay(messageId) > 0) {
+			if (recipient instanceof Entity) {
+				messageCooldown.put(messageId, (Entity) recipient);
+			}
+		}
+	}
+
+
+	/**
+	 * Do macro replacements in message string
+	 *
+	 * @param messageString the message string to perform replacements on
+	 * @return the modified message string post replacements
+	 */
+	String doMacroReplacements(final String messageString) {
+
+		String modifiedMessageString = messageString;
+
 		// only process macro tokens if message string contains a token marker character
-		if (messageString.contains("%")) {
+		if (modifiedMessageString.contains("%")) {
 
 			// iterate over macro map, giving special treatment to certain entries
 			for (Map.Entry<Macro, Object> entry : macroObjectMap.entrySet()) {
@@ -119,10 +143,10 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 							String locZ = String.valueOf(location.getBlockZ());
 							String locString = locWorld + " [" + locX + ", " + locY + ", " + locZ + "]";
 							entry.setValue(locString);
-							messageString = messageString.replace("%LOC_WORLD%", locWorld);
-							messageString = messageString.replace("%LOC_X%", locX);
-							messageString = messageString.replace("%LOC_Y%", locY);
-							messageString = messageString.replace("%LOC_Z%", locZ);
+							modifiedMessageString = modifiedMessageString.replace("%LOC_WORLD%", locWorld);
+							modifiedMessageString = modifiedMessageString.replace("%LOC_X%", locX);
+							modifiedMessageString = modifiedMessageString.replace("%LOC_Y%", locY);
+							modifiedMessageString = modifiedMessageString.replace("%LOC_Z%", locZ);
 						}
 						break;
 					case "PLAYER_LOCATION":
@@ -139,10 +163,10 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 							String locZ = String.valueOf(location.getBlockZ());
 							String locString = locWorld + " [" + locX + ", " + locY + ", " + locZ + "]";
 							entry.setValue(locString);
-							messageString = messageString.replace("%PLAYER_LOC_WORLD%", locWorld);
-							messageString = messageString.replace("%PLAYER_LOC_X%", locX);
-							messageString = messageString.replace("%PLAYER_LOC_Y%", locY);
-							messageString = messageString.replace("%PLAYER_LOC_Z%", locZ);
+							modifiedMessageString = modifiedMessageString.replace("%PLAYER_LOC_WORLD%", locWorld);
+							modifiedMessageString = modifiedMessageString.replace("%PLAYER_LOC_X%", locX);
+							modifiedMessageString = modifiedMessageString.replace("%PLAYER_LOC_Y%", locY);
+							modifiedMessageString = modifiedMessageString.replace("%PLAYER_LOC_Z%", locZ);
 						}
 						break;
 					case "DURATION":
@@ -171,7 +195,7 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 
 				// replace macro tokens in message string with values as string
 				String macroToken = "%" + entry.getKey().toString() + "%";
-				messageString = messageString.replace(macroToken, entry.getValue().toString());
+				modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue().toString());
 			}
 
 			// replace %ITEM_NAME% with value declared in language file
@@ -179,27 +203,19 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 			if (quantity != 1) {
 				itemName = languageHandler.getItemNamePlural();
 			}
-			messageString = messageString.replace("%ITEM%", itemName);
-			messageString = messageString.replace("%ITEM_NAME%", itemName);
+			modifiedMessageString = modifiedMessageString.replace("%ITEM%", itemName);
+			modifiedMessageString = modifiedMessageString.replace("%ITEM_NAME%", itemName);
 
 			// replace %WORLD_NAME% with recipient world name
-			messageString = messageString.replace("%WORLD%", getWorldName(recipient));
-			messageString = messageString.replace("%WORLD_NAME%", getWorldName(recipient));
+			modifiedMessageString = modifiedMessageString.replace("%WORLD%", getWorldName(recipient));
+			modifiedMessageString = modifiedMessageString.replace("%WORLD_NAME%", getWorldName(recipient));
 
 			// replace %PLAYER_NAME% with recipient name
-			messageString = messageString.replace("%PLAYER%", recipient.getName());
-			messageString = messageString.replace("%PLAYER_NAME%", recipient.getName());
+			modifiedMessageString = modifiedMessageString.replace("%PLAYER%", recipient.getName());
+			modifiedMessageString = modifiedMessageString.replace("%PLAYER_NAME%", recipient.getName());
 		}
 
-		// send message to player
-		recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageString));
-
-		// if message repeat delay value is greater than zero, add entry to messageCooldownMap
-		if (languageHandler.getRepeatDelay(messageId) > 0) {
-			if (recipient instanceof Entity) {
-				messageCooldown.put(messageId, (Entity) recipient);
-			}
-		}
+		return modifiedMessageString;
 	}
 
 
