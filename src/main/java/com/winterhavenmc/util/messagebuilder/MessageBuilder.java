@@ -143,7 +143,7 @@ public class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enu
 	 * @return formatted time string
 	 * @throws NullPointerException if parameter is null
 	 */
-	public String getTimeString(final long duration, TimeUnit timeUnit) {
+	public String getTimeString(final long duration, final TimeUnit timeUnit) {
 		return languageHandler.getTimeString(duration, timeUnit);
 	}
 

@@ -141,7 +141,7 @@ class MessageCooldown<MessageId extends Enum<MessageId>> implements Listener {
 	 * @return true if player message is in cooldown map, false if it is not
 	 * @throws NullPointerException if parameter is null
 	 */
-	boolean isCooling(final CommandSender recipient, final MessageId messageId, long repeatDelay) {
+	boolean isCooling(final CommandSender recipient, final MessageId messageId, final long repeatDelay) {
 
 		// check for null parameters
 		Objects.requireNonNull(recipient);
