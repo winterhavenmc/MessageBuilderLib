@@ -34,7 +34,7 @@ class YamlFileInstaller {
 			Scanner scan = new Scanner(Objects.requireNonNull(plugin.getResource("language/auto_install.txt")));
 			while (scan.hasNextLine()) {
 				String line = scan.nextLine();
-				if (!line.startsWith("#")) {
+				if (!line.startsWith("#") && line.endsWith(".yml")) {
 					fileList.add(line);
 				}
 			}
