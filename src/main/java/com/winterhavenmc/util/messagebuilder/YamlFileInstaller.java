@@ -28,7 +28,8 @@ class YamlFileInstaller {
 	 */
 	Collection<String> getFilenames() {
 
-		Collection<String> filenames = new ArrayList<>();
+		// use linked hash set to preserve order while eliminating duplicates
+		Collection<String> filenames = new LinkedHashSet<>();
 
 		try {
 			Scanner scan = new Scanner(Objects.requireNonNull(plugin.getResource("language/auto_install.txt")));
