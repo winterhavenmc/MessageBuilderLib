@@ -4,10 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -393,7 +390,7 @@ class YamlLanguageHandler implements LanguageHandler {
 
 		// install message files if necessary; this will not overwrite existing files
 		YamlFileInstaller installer = new YamlFileInstaller(plugin);
-		List<String> filenames = installer.getFilenames();
+		Collection<String> filenames = installer.getFilenames();
 		installer.installFiles(filenames);
 
 		// load messages Configuration object from configured language file

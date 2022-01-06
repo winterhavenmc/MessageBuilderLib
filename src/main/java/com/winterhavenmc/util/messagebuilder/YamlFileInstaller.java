@@ -26,16 +26,16 @@ class YamlFileInstaller {
 	 *
 	 * @return Set of filename strings
 	 */
-	List<String> getFilenames() {
+	Collection<String> getFilenames() {
 
-		List<String> fileList = new ArrayList<>();
+		Collection<String> filenames = new ArrayList<>();
 
 		try {
 			Scanner scan = new Scanner(Objects.requireNonNull(plugin.getResource("language/auto_install.txt")));
 			while (scan.hasNextLine()) {
 				String line = scan.nextLine();
 				if (!line.startsWith("#") && line.endsWith(".yml")) {
-					fileList.add(line);
+					filenames.add(line);
 				}
 			}
 		}
@@ -43,7 +43,7 @@ class YamlFileInstaller {
 			plugin.getLogger().warning("language/auto_install.txt file not found in jar.");
 		}
 
-		return fileList;
+		return filenames;
 	}
 
 
@@ -52,7 +52,7 @@ class YamlFileInstaller {
 	 *
 	 * @param fileList list of filenames to be installed
 	 */
-	void installFiles(final List<String> fileList) {
+	void installFiles(final Collection<String> fileList) {
 
 		// iterate over list of language files and install from jar if not already present
 		for (String filename : fileList) {
