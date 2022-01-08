@@ -169,25 +169,24 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 							modifiedMessageString = modifiedMessageString.replace("%PLAYER_LOC_Z%", locZ);
 						}
 						break;
-					case "DURATION":
-						// if entry type is Number, set value to time string
-						if (entry.getValue() instanceof Number) {
+					default:
+						// if key ends in "DURATION" and value type is Number, set value to time string
+						if (entry.getKey().toString().endsWith("DURATION") && entry.getValue() instanceof Number) {
 							entry.setValue(languageHandler.getTimeString((Long) entry.getValue()));
 						}
-						break;
-					case "DURATION_MINUTES":
-						// if entry type is Number, set value to time string
-						if (entry.getValue() instanceof Number) {
+
+						// if key ends in "DURATION_MINUTES" and value type is Number, set value to time string
+						else if (entry.getKey().toString().endsWith("DURATION_MINUTES") && entry.getValue() instanceof Number) {
 							entry.setValue(languageHandler.getTimeString((Long) entry.getValue(), TimeUnit.MINUTES));
 						}
-						break;
-					default:
+
 						// if entry is CommandSender, set value to name
-						if (entry.getValue() instanceof CommandSender) {
+						else if (entry.getValue() instanceof CommandSender) {
 							entry.setValue(((CommandSender) entry.getValue()).getName());
 						}
+
 						// if entry is OfflinePlayer, set value to name
-						if (entry.getValue() instanceof OfflinePlayer) {
+						else if (entry.getValue() instanceof OfflinePlayer) {
 							entry.setValue(((OfflinePlayer) entry.getValue()).getName());
 						}
 						break;
