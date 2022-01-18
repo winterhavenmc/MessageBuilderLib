@@ -253,7 +253,7 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 		// set result string to world name
 		String resultString = world.getName();
 
-		// if Multiverse is enabled, use Mulitverse world alias if available
+		// if Multiverse is enabled, use Multiverse world alias if available
 		if (mvCore != null && mvCore.isEnabled()) {
 
 			// get Multiverse world object
@@ -386,7 +386,7 @@ public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro
 			resultString = plugin.getServer().getWorlds().get(0).getName();
 		}
 
-		// if Multiverse is enabled, use Mulitverse world alias if available
+		// if Multiverse is enabled, use Multiverse world alias if available
 		if (mvCore != null && mvCore.isEnabled()) {
 
 			// get Multiverse world object
