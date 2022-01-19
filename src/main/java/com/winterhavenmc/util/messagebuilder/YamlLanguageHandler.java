@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  * provides common methods for the installation and management of
  * localized language files for bukkit plugins.
  */
-class YamlLanguageHandler implements LanguageHandler {
+final class YamlLanguageHandler implements LanguageHandler {
 
 	// reference to main plugin
 	private final JavaPlugin plugin;
@@ -33,7 +33,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	}
 
 	@Override
-	public final Set<String> getMessageKeys() {
+	public Set<String> getMessageKeys() {
 		return Objects.requireNonNull(messages.getConfigurationSection("MESSAGES")).getKeys(false);
 	}
 
@@ -47,7 +47,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @throws NullPointerException if parameter is null
 	 */
 	@Override
-	public final <MessageId extends Enum<MessageId>> boolean isEnabled(final MessageId messageId) {
+	public <MessageId extends Enum<MessageId>> boolean isEnabled(final MessageId messageId) {
 
 		// check for null parameter
 		if (messageId == null) {
@@ -75,7 +75,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @throws NullPointerException if parameter is null
 	 */
 	@Override
-	public final <MessageId extends Enum<MessageId>> long getRepeatDelay(final MessageId messageId) {
+	public <MessageId extends Enum<MessageId>> long getRepeatDelay(final MessageId messageId) {
 
 		// check for null parameter
 		if (messageId == null) {
@@ -95,7 +95,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @throws NullPointerException if parameter is null
 	 */
 	@Override
-	public final <MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId) {
+	public <MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId) {
 
 		// check for null parameter
 		if (messageId == null) {
@@ -118,7 +118,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @return String ITEM_NAME, or empty string if key not found
 	 */
 	@Override
-	public final String getItemName() {
+	public String getItemName() {
 
 		String string = messages.getString("ITEM_INFO.ITEM_NAME");
 
@@ -136,7 +136,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted plural display name of an item, or empty string if key not found
 	 */
 	@Override
-	public final String getItemNamePlural() {
+	public String getItemNamePlural() {
 
 		String string = messages.getString("ITEM_INFO.ITEM_NAME_PLURAL");
 
@@ -154,7 +154,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted inventory display name of an item, or empty string if key not found
 	 */
 	@Override
-	public final String getInventoryItemName() {
+	public String getInventoryItemName() {
 
 		String string = messages.getString("ITEM_INFO.INVENTORY_ITEM_NAME");
 
@@ -172,7 +172,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @return List of strings, one string for each line of lore, or empty list if key not found
 	 */
 	@Override
-	public final List<String> getItemLore() {
+	public List<String> getItemLore() {
 
 		List<String> configLore = messages.getStringList("ITEM_INFO.ITEM_LORE");
 		List<String> coloredLore = new ArrayList<>();
@@ -189,7 +189,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted display name for the world spawn, or empty string if key not found
 	 */
 	@Override
-	public final String getSpawnDisplayName() {
+	public String getSpawnDisplayName() {
 
 		String string = messages.getString("ITEM_INFO.SPAWN_DISPLAY_NAME");
 
@@ -207,7 +207,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted display name for home, or empty string if key not found
 	 */
 	@Override
-	public final String getHomeDisplayName() {
+	public String getHomeDisplayName() {
 
 		String string = messages.getString("ITEM_INFO.HOME_DISPLAY_NAME");
 
@@ -226,7 +226,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @return formatted time string
 	 */
 	@Override
-	public final String getTimeString(final long duration) {
+	public String getTimeString(final long duration) {
 		return getTimeString(duration, TimeUnit.SECONDS);
 	}
 
@@ -240,7 +240,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * @throws NullPointerException if parameter is null
 	 */
 	@Override
-	public final String getTimeString(final long duration, final TimeUnit timeUnit) {
+	public String getTimeString(final long duration, final TimeUnit timeUnit) {
 
 		// check for null parameter
 		Objects.requireNonNull(timeUnit);
@@ -386,7 +386,7 @@ class YamlLanguageHandler implements LanguageHandler {
 	 * Reload messages from yaml file into Configuration object
 	 */
 	@Override
-	public final void reload() {
+	public void reload() {
 
 		// install message files if necessary; this will not overwrite existing files
 		YamlFileInstaller installer = new YamlFileInstaller(plugin);
