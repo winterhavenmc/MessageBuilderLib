@@ -12,7 +12,7 @@ import java.util.*;
  * that are stored as a resource within a /language subdirectory in the plugin jar archive will be
  * copied to the /language subdirectory of the plugin data directory.
  */
-class YamlFileInstaller {
+final class YamlFileInstaller {
 
 	private final JavaPlugin plugin;
 

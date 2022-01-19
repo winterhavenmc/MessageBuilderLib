@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
-public class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
+public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	// reference to plugin main class
 	private final JavaPlugin plugin = JavaPlugin.getProvidingPlugin(this.getClass());

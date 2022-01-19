@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @param <MessageId> An enum representing message identifiers defined in the client
  */
-class MessageCooldown<MessageId extends Enum<MessageId>> implements Listener {
+final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listener {
 
 	private static MessageCooldown<? extends Enum<?>> INSTANCE;
 

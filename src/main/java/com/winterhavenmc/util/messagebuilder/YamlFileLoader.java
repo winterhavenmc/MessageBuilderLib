@@ -9,7 +9,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 
-class YamlFileLoader {
+final class YamlFileLoader {
 
 	private final JavaPlugin plugin;
 
@@ -121,7 +121,7 @@ class YamlFileLoader {
 	 * @param language IETF language tag
 	 * @return current language file name as String
 	 */
-	protected String getCurrentFilename(final JavaPlugin plugin, final String language) {
+	private String getCurrentFilename(final JavaPlugin plugin, final String language) {
 		return plugin.getDataFolder() + File.separator + directoryName + File.separator + language + ".yml";
 	}
 

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
-public class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
+public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	LanguageHandler languageHandler;
 
