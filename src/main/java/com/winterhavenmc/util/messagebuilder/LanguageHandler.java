@@ -1,7 +1,7 @@
 package com.winterhavenmc.util.messagebuilder;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 interface LanguageHandler {
@@ -11,7 +11,7 @@ interface LanguageHandler {
 	 * @return Set of String containing message keys
 	 */
 	@SuppressWarnings("unused")
-	Set<String> getMessageKeys();
+	Collection<String> getMessageKeys();
 
 
 	/**

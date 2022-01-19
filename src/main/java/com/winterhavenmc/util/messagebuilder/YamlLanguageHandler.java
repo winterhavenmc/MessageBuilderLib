@@ -33,7 +33,7 @@ final class YamlLanguageHandler implements LanguageHandler {
 	}
 
 	@Override
-	public Set<String> getMessageKeys() {
+	public Collection<String> getMessageKeys() {
 		return Objects.requireNonNull(messages.getConfigurationSection("MESSAGES")).getKeys(false);
 	}
 
