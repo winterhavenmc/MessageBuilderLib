@@ -114,6 +114,14 @@ interface LanguageHandler {
 
 
 	/**
+	 * Get string by path in message file
+	 * @param path the message path for the string being retrieved
+	 * @return String - the string retrieved by path from message file
+	 */
+	String getString(final String path);
+
+
+	/**
 	 * Reload messages into Configuration object
 	 */
 	void reload();

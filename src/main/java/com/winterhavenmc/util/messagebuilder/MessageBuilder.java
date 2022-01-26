@@ -148,6 +148,17 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	}
 
 
+
+	/**
+	 * Get string by path in message file
+	 * @param path the message path for the string being retrieved
+	 * @return String - the string retrieved by path from message file
+	 */
+	public String getString(final String path) {
+		return languageHandler.getString(path);
+	}
+
+
 	/**
 	 * Reload messages from configured language file
 	 */

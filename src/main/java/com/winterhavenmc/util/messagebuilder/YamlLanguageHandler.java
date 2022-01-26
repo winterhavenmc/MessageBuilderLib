@@ -382,6 +382,11 @@ final class YamlLanguageHandler implements LanguageHandler {
 	}
 
 
+	public String getString(final String path) {
+		return messages.getString(path);
+	}
+
+
 	/**
 	 * Reload messages from yaml file into Configuration object
 	 */
