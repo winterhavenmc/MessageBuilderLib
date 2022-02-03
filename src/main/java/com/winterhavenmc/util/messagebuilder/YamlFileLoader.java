@@ -52,7 +52,7 @@ final class YamlFileLoader {
 		String confirmedLanguage = languageFileExists(plugin, getConfiguredLanguage(plugin));
 
 		// get file object for configured language file
-		File languageFile = new File(getCurrentFilename(plugin, confirmedLanguage));
+		File languageFile = new File(getLanguageFilename(plugin, confirmedLanguage));
 
 		// create new YamlConfiguration object
 		YamlConfiguration newMessagesConfig = new YamlConfiguration();
@@ -116,7 +116,7 @@ final class YamlFileLoader {
 	private String languageFileExists(final JavaPlugin plugin, final String language) {
 
 		// get file object for passed language tag by adding prefixing for directory name and .yml suffix
-		File languageFile = new File(getCurrentFilename(plugin, language));
+		File languageFile = new File(getLanguageFilename(plugin, language));
 
 		// if a language file exists for the language tag, return the language tag
 		if (languageFile.exists()) {
@@ -132,13 +132,14 @@ final class YamlFileLoader {
 
 
 	/**
-	 * Get the file name for the currently selected language
+	 * Get the file path as a string for the provided language identifier. This method does not verify the file
+	 * exists, but merely returns a string representing the path if such a file was installed.
 	 *
 	 * @param plugin reference to plugin main class
 	 * @param language IETF language tag
 	 * @return current language file name as String
 	 */
-	private String getCurrentFilename(final JavaPlugin plugin, final String language) {
+	private String getLanguageFilename(final JavaPlugin plugin, final String language) {
 		return plugin.getDataFolder() + File.separator + directoryName + File.separator + language + ".yml";
 	}
 
