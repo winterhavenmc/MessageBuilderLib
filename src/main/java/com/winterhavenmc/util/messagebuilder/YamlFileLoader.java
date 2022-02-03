@@ -101,10 +101,16 @@ final class YamlFileLoader {
 
 
 	/**
-	 * get language specified in config.yml
+	 * Gets language tag specified in config.yml.
+	 * <p>
+	 * it is recommended, but not required, that languages should be specified by their ISO-639 codes,
+	 * with two letter lowercase language code and two letter uppercase country code separate by a hyphen.<br>
+	 * Example: en-US
+	 * <p>
+	 * The language yaml file must match the specified tag, with a .yml extension appended.
 	 *
 	 * @param plugin reference to plugin main class
-	 * @return IETF language string from config.yml
+	 * @return IETF language tag as string from config.yml
 	 */
 	private String getConfiguredLanguage(final JavaPlugin plugin) {
 		return plugin.getConfig().getString("language");
