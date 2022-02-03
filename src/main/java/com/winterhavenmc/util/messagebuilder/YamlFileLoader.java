@@ -28,8 +28,10 @@ import java.nio.charset.StandardCharsets;
 
 final class YamlFileLoader {
 
+	// reference to plugin main class
 	private final JavaPlugin plugin;
 
+	// the directory name within a plugin data directory where the language yaml files are installed
 	private final String directoryName = "language";
 
 
