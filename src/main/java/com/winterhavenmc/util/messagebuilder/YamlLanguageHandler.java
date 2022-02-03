@@ -412,8 +412,8 @@ final class YamlLanguageHandler implements LanguageHandler {
 
 		// install message files if necessary; this will not overwrite existing files
 		YamlFileInstaller installer = new YamlFileInstaller(plugin);
-		Collection<String> filenames = installer.getFilenames();
-		installer.installFiles(filenames);
+		Collection<String> filenames = installer.getResourceFilenames();
+		installer.installResourceFiles(filenames);
 
 		// load messages Configuration object from configured language file
 		messages = new YamlFileLoader(plugin).getMessages();

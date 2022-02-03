@@ -43,7 +43,7 @@ final class YamlFileInstaller {
 	 *
 	 * @return Set of filename strings
 	 */
-	Collection<String> getFilenames() {
+	Collection<String> getResourceFilenames() {
 
 		// auto install file path
 		String resourcePath = "language/auto_install.txt";
@@ -75,7 +75,7 @@ final class YamlFileInstaller {
 	 *
 	 * @param fileList collection of filenames to be installed
 	 */
-	void installFiles(final Collection<String> fileList) {
+	void installResourceFiles(final Collection<String> fileList) {
 
 		// iterate over list of language files and install from jar if not already present
 		for (String filename : fileList) {
