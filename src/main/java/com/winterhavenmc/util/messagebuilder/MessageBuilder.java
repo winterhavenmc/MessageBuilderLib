@@ -165,7 +165,6 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	}
 
 
-
 	/**
 	 * Get string by path in message file
 	 * @param path the message path for the string being retrieved
