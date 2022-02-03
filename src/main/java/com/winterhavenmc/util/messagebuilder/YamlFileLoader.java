@@ -37,6 +37,7 @@ final class YamlFileLoader {
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to plugin main class
 	 */
 	YamlFileLoader(final JavaPlugin plugin) {
@@ -46,6 +47,7 @@ final class YamlFileLoader {
 
 	/**
 	 * Get configuration object containing message settings and strings
+	 *
 	 * @return Configuration - message configuration object
 	 */
 	Configuration getMessages() {
