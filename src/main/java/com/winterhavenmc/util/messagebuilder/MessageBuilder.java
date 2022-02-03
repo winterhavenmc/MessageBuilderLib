@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unused")
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
-	LanguageHandler languageHandler;
+	private final LanguageHandler languageHandler;
 
 
 	/**
