@@ -23,6 +23,38 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * A class that implements a builder pattern for messages to be sent to a player or console.
+ * <p>
+ * It should be instantiated in a plugin's onEnable method, and the build method is called
+ * with a CommandSender as recipient and a MessageId enum member to reference the message defined
+ * in the language file. Macro replacements can then be assigned with a chained method call to
+ * the setMacro method, which can be repeated as necessary to set all the macros to be replaced
+ * in the message string. Finally, the send method is called, usually as a final chained method call
+ * to effectuate the actual sending of the message.
+ *
+ * If the message is configured in the language file with a repeat-delay, an entry will be added to
+ * the message cooldown map for the player / message, and a task started to remove the entry from the
+ * cooldown map after the configured repeat-delay time has elapsed.
+ * <p>
+ * Example:
+ * <pre>
+ *     messageBuilder.build(recipient, MessageId.MESSAGE_TO_SEND)
+ *         .setMacro(Macro.PLACEHOLDER1, object)
+ *         .setMacro(Macro.PLACEHOLDER2, replacementString)
+ *         .send();
+ * </pre>
+ *
+ * Note that any object may be passed as the replacement string, which will be converted using
+ * that object's toString method, except in the case of some placeholder keys that are treated
+ * specially by the doMacroReplacements method. Special keys are:
+ * ITEM or ITEM_NAME, ITEM_QUANTITY, WORLD or WORLD_NAME, PLAYER or PLAYER_NAME, LOCATION or PLAYER_LOCATION,
+ * DURATION or DURATION_MINUTES
+ *
+ * @param <MessageId> An enum whose members correspond to a message key in a language file
+ * @param <Macro> An enum whose members correspond to a string replacement placeholder in a message string
+ */
 @SuppressWarnings("unused")
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
