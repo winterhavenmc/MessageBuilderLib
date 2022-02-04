@@ -24,15 +24,18 @@ import java.util.concurrent.TimeUnit;
 interface LanguageHandler {
 
 	/**
-	 * Get message keys; used for testing
-	 * @return Set of String containing message keys
+	 * Get all keys for a message section of the language file. This method is only used for unit testing.
+	 *
+	 * @return Collection of String containing the keys for a message section of the language file
 	 */
 	@SuppressWarnings("unused")
 	Collection<String> getMessageKeys();
 
 
 	/**
-	 * Check if message is enabled
+	 * Check if message is enabled. If an 'enabled' key does not exist for a valid message,
+	 * and a default does not exist, returns true so that the enabled setting is optional
+	 * in otherwise valid messages that contain a 'string' key.
 	 *
 	 * @param <MessageId> parameterized type enum member for messageId
 	 * @param messageId   message identifier to check

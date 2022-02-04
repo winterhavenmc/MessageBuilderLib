@@ -49,6 +49,12 @@ final class YamlLanguageHandler implements LanguageHandler {
 		reload();
 	}
 
+
+	/**
+	 * Get all keys for a message section of the language file. This method is only used for unit testing.
+	 *
+	 * @return Collection of String containing the keys for a message section of the language file
+	 */
 	@Override
 	public Collection<String> getMessageKeys() {
 		return Objects.requireNonNull(messages.getConfigurationSection("MESSAGES")).getKeys(false);
@@ -56,7 +62,9 @@ final class YamlLanguageHandler implements LanguageHandler {
 
 
 	/**
-	 * Check if message is enabled
+	 * Check if message is enabled. If an 'enabled' key does not exist for a valid message,
+	 * and a default does not exist, returns true so that the enabled setting is optional
+	 * in otherwise valid messages that contain a 'string' key.
 	 *
 	 * @param <MessageId> parameterized type enum member for messageId
 	 * @param messageId   message identifier to check
@@ -399,13 +407,20 @@ final class YamlLanguageHandler implements LanguageHandler {
 	}
 
 
+	/**
+	 * Retrieve an arbitrary string from the language file with the specified key.
+	 *
+ 	 * @param path the message path for the string being retrieved
+	 * @return the retrieved string, or null if no matching key found
+	 */
 	public String getString(final String path) {
 		return messages.getString(path);
 	}
 
 
 	/**
-	 * Reload messages from yaml file into Configuration object
+	 * Reload messages from yaml file into Configuration object. If the yaml language file
+	 * does not exist in the plugin data directory, it will be re-copied from the jar embedded resource.
 	 */
 	@Override
 	public void reload() {
