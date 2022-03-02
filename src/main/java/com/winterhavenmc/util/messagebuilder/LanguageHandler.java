@@ -64,6 +64,16 @@ interface LanguageHandler {
 	 */
 	<MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId);
 
+	<MessageId extends Enum<MessageId>> String getTitle(final MessageId messageId);
+
+	<MessageId extends Enum<MessageId>> String getSubtitle(final MessageId messageId);
+
+	<MessageId extends Enum<MessageId>> int getTitleFadeIn(final MessageId messageId);
+
+	<MessageId extends Enum<MessageId>> int getTitleStay(final MessageId messageId);
+
+	<MessageId extends Enum<MessageId>> int getTitleFadeOut(final MessageId messageId);
+
 
 	/**
 	 * Get item name from language specific messages file, with translated color codes
@@ -139,6 +149,14 @@ interface LanguageHandler {
 	 * @return String - the string retrieved by path from message file
 	 */
 	String getString(final String path);
+
+
+	/**
+	 * Get List of String by path in message file
+	 * @param path the message path for the string list being retrieved
+	 * @return List of String - the string list retrieved by path from message file
+	 */
+	List<String> getStringList(final String path);
 
 
 	/**

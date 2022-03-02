@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * Example:
  * <pre>
- *     messageBuilder.build(recipient, MessageId.MESSAGE_TO_SEND)
+ *     messageBuilder.compose(recipient, MessageId.MESSAGE_TO_SEND)
  *         .setMacro(Macro.PLACEHOLDER1, object)
  *         .setMacro(Macro.PLACEHOLDER2, replacementString)
  *         .send();
@@ -78,6 +78,17 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return Message - an initialized message object
 	 */
 	public Message<MessageId, Macro> build(final CommandSender recipient, final MessageId messageId) {
+		return new Message<>(recipient, messageId, languageHandler);
+	}
+
+
+	/**
+	 * Initiate a message
+	 * @param recipient the command sender to whom the message will be sent
+	 * @param messageId the message identifier
+	 * @return Message - an initialized message object
+	 */
+	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
 		return new Message<>(recipient, messageId, languageHandler);
 	}
 
@@ -204,6 +215,16 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public String getString(final String path) {
 		return languageHandler.getString(path);
+	}
+
+
+	/**
+	 * Get List of String by path in message file
+	 * @param path the message path for the string list being retrieved
+	 * @return List of String - the string list retrieved by path from message file
+	 */
+	public List<String> getStringList(final String path) {
+		return languageHandler.getStringList(path);
 	}
 
 

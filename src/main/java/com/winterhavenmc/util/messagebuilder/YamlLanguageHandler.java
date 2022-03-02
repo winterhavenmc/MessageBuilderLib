@@ -69,7 +69,6 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 * @param <MessageId> parameterized type enum member for messageId
 	 * @param messageId   message identifier to check
 	 * @return true if message is enabled, false if not
-	 * @throws NullPointerException if parameter is null
 	 */
 	@Override
 	public <MessageId extends Enum<MessageId>> boolean isEnabled(final MessageId messageId) {
@@ -97,7 +96,6 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 * @param <MessageId> parameterized type enum member for messageId
 	 * @param messageId   message identifier to retrieve message delay
 	 * @return int message repeat delay in seconds
-	 * @throws NullPointerException if parameter is null
 	 */
 	@Override
 	public <MessageId extends Enum<MessageId>> long getRepeatDelay(final MessageId messageId) {
@@ -115,9 +113,8 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 * get message text from language file
 	 *
 	 * @param <MessageId> parameterized type enum member for messageId
-	 * @param messageId   message identifier to retrieve message text
+	 * @param messageId   message identifier to retrieve message text string
 	 * @return String message text, or empty string if no message string found
-	 * @throws NullPointerException if parameter is null
 	 */
 	@Override
 	public <MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId) {
@@ -127,13 +124,103 @@ final class YamlLanguageHandler implements LanguageHandler {
 			return "";
 		}
 
-		String string = messages.getString("MESSAGES." + messageId + ".string");
+		// check for message string at .message
+		String string = messages.getString("MESSAGES." + messageId + ".message");
+
+		// if null, check for message at .string
+		if (string == null) {
+			string = messages.getString("MESSAGES." + messageId + ".string");
+		}
+
+		// if null, set to empty string
+		if (string == null) {
+			string = "";
+		}
+
+		return ChatColor.translateAlternateColorCodes('&', string);
+	}
+
+
+	/**
+	 * get title text from language file
+	 *
+	 * @param <MessageId> parameterized type enum member for messageId
+	 * @param messageId   message identifier to retrieve title text string
+	 * @return String title text, or empty string if no title string found
+	 */
+	@Override
+	public <MessageId extends Enum<MessageId>> String getTitle(final MessageId messageId) {
+
+		// check for null parameter
+		if (messageId == null) {
+			return "";
+		}
+
+		String string = messages.getString("MESSAGES." + messageId + ".title");
 
 		if (string == null) {
 			string = "";
 		}
 
 		return ChatColor.translateAlternateColorCodes('&', string);
+	}
+
+
+	/**
+	 * get subtitle text from language file
+	 *
+	 * @param <MessageId> parameterized type enum member for messageId
+	 * @param messageId   message identifier to retrieve subtitle text string
+	 * @return String subtitle text, or empty string if no subtitle string found
+	 */
+	@Override
+	public <MessageId extends Enum<MessageId>> String getSubtitle(final MessageId messageId) {
+
+		// check for null parameter
+		if (messageId == null) {
+			return "";
+		}
+
+		String string = messages.getString("MESSAGES." + messageId + ".subtitle");
+
+		if (string == null) {
+			string = "";
+		}
+
+		return ChatColor.translateAlternateColorCodes('&', string);
+	}
+
+
+	@Override
+	public <MessageId extends Enum<MessageId>> int getTitleFadeIn(final MessageId messageId) {
+
+		// check for null parameter
+		if (messageId == null || !messages.isInt("MESSAGES." + messageId + ".title-fade-in")) {
+			return 10;
+		}
+		return messages.getInt("MESSAGES." + messageId + ".title-fade-in");
+	}
+
+
+	@Override
+	public <MessageId extends Enum<MessageId>> int getTitleStay(final MessageId messageId) {
+
+		// check for null parameter
+		if (messageId == null || !messages.isInt("MESSAGES." + messageId + ".title-stay")) {
+			return 70;
+		}
+		return messages.getInt("MESSAGES." + messageId + ".title-stay");
+	}
+
+
+	@Override
+	public <MessageId extends Enum<MessageId>> int getTitleFadeOut(final MessageId messageId) {
+
+		// check for null parameter
+		if (messageId == null || !messages.isInt("MESSAGES." + messageId + ".title-fade-out")) {
+			return 20;
+		}
+		return messages.getInt("MESSAGES." + messageId + ".title-fade-out");
 	}
 
 
@@ -415,6 +502,17 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 */
 	public String getString(final String path) {
 		return messages.getString(path);
+	}
+
+
+	/**
+	 * Get List of String by path in message file
+	 *
+	 * @param path the message path for the string list being retrieved
+	 * @return List of String - the string list retrieved by path from message file
+	 */
+	public List<String> getStringList(final String path) {
+		return messages.getStringList(path);
 	}
 
 

@@ -25,6 +25,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -46,6 +47,10 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	private final Map<Macro, Object> macroObjectMap = new HashMap<>();
 	private int quantity = 1;
 
+	private String altMessage;
+	private String altTitle;
+	private String altSubtitle;
+
 
 	/**
 	 * Class constructor
@@ -61,11 +66,53 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 
 
 	/**
+	 * Set alternate message string
+	 *
+	 * @param altMessage the alternative message string
+	 * @return this message object with alternative message string set
+	 */
+	public Message<MessageId, Macro> setAltMessage(final String altMessage) {
+		if (altMessage != null) {
+			this.altMessage = altMessage;
+		}
+		return this;
+	}
+
+
+	/**
+	 * Set alternate title string
+	 *
+	 * @param altTitle the alternate title string
+	 * @return this message object with alternate title string set
+	 */
+	public Message<MessageId, Macro> setAltTitle(final String altTitle) {
+		if (altTitle != null) {
+			this.altTitle = altTitle;
+		}
+		return this;
+	}
+
+
+	/**
+	 * Set alternate subtitle string
+	 *
+	 * @param altSubtitle the alternate subtitle string
+	 * @return this message object with alternate title string set
+	 */
+	public Message<MessageId, Macro> setAltSubtitle(final String altSubtitle) {
+		if (altSubtitle != null) {
+			this.altSubtitle = altSubtitle;
+		}
+		return this;
+	}
+
+
+	/**
 	 * set macro for message replacements
 	 *
 	 * @param macro token for placeholder
 	 * @param value object that contains value that will be substituted in message
-	 * @return AbstractMessage to be used further in build process
+	 * @return this message object with macro value set in map
 	 */
 	public Message<MessageId, Macro> setMacro(final Macro macro, final Object value) {
 		macroObjectMap.put(macro, value);
@@ -91,13 +138,66 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			return;
 		}
 
-		// get message string from file
-		String messageString = languageHandler.getMessage(messageId);
-
-		messageString = doMacroReplacements(messageString);
+		// get message string
+		String messageString;
+		if (altMessage != null && !altMessage.isEmpty()) {
+			messageString = doMacroReplacements(altMessage);
+		}
+		else {
+			messageString = doMacroReplacements(languageHandler.getMessage(messageId));
+		}
 
 		// send message to player
 		recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageString));
+
+		// if titles enabled in config, do title process
+		if (plugin.getConfig().getBoolean("titles-enabled")) {
+
+			if (recipient instanceof Player) {
+
+				// get title string
+				String titleString;
+				if (altTitle != null && !altTitle.isEmpty()) {
+					titleString = doMacroReplacements(altTitle);
+				}
+				else {
+					titleString = doMacroReplacements(languageHandler.getTitle(messageId));
+				}
+
+				// get subtitle string
+				String subtitleString;
+				if (altSubtitle != null && !altSubtitle.isEmpty()) {
+					subtitleString = doMacroReplacements(altSubtitle);
+				}
+				else {
+					subtitleString = doMacroReplacements(languageHandler.getTitle(messageId));
+				}
+
+				// only send title if either title string or subtitle string is not empty
+				if (!titleString.isEmpty() || !subtitleString.isEmpty()) {
+
+					// get title timing values
+					int titleFadeIn = languageHandler.getTitleFadeIn(messageId);
+					int titleStay = languageHandler.getTitleStay(messageId);
+					int titleFadeOut = languageHandler.getTitleFadeOut(messageId);
+
+					// if title string is empty, add format code, else it won't display with subtitle only
+					if (titleString.isEmpty()) {
+						titleString = "&r";
+					}
+
+					// convert formatting codes
+					titleString = ChatColor.translateAlternateColorCodes('&', titleString);
+					subtitleString = ChatColor.translateAlternateColorCodes('&', subtitleString);
+
+					// cast recipient to player
+					Player player = (Player) recipient;
+
+					// send title to player
+					player.sendTitle(titleString, subtitleString, titleFadeIn, titleStay, titleFadeOut);
+				}
+			}
+		}
 
 		// if message repeat delay value is greater than zero, add entry to messageCooldownMap
 		if (languageHandler.getRepeatDelay(messageId) > 0) {
@@ -105,6 +205,24 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 				messageCooldown.put(messageId, (Entity) recipient);
 			}
 		}
+	}
+
+
+	/**
+	 * Final step of message builder, performs replacements and returns message string
+	 */
+	public String draft() {
+
+		// if message is not enabled in messages file, do nothing and return
+		if (!languageHandler.isEnabled(messageId)) {
+			return "";
+		}
+
+		// get message string from file
+		String messageString = languageHandler.getMessage(messageId);
+
+		// return message with macro replacements and color codes translated
+		return ChatColor.translateAlternateColorCodes('&', doMacroReplacements(messageString));
 	}
 
 
@@ -211,7 +329,9 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 
 				// replace macro tokens in message string with values as string
 				String macroToken = "%" + entry.getKey().toString() + "%";
-				modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue().toString());
+				if (entry.getValue() != null) {
+					modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue().toString());
+				}
 			}
 
 			// replace %ITEM_NAME% with value declared in language file
