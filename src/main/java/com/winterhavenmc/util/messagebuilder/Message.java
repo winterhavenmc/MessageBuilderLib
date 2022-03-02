@@ -148,7 +148,9 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 
 		// send message to player
-		recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageString));
+		if (!messageString.isEmpty()) {
+			recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageString));
+		}
 
 		// if titles enabled in config, do title process
 		if (plugin.getConfig().getBoolean("titles-enabled")) {
@@ -170,7 +172,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 					subtitleString = doMacroReplacements(altSubtitle);
 				}
 				else {
-					subtitleString = doMacroReplacements(languageHandler.getTitle(messageId));
+					subtitleString = doMacroReplacements(languageHandler.getSubtitle(messageId));
 				}
 
 				// only send title if either title string or subtitle string is not empty
