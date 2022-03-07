@@ -213,9 +213,10 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	/**
 	 * Final step of message builder, performs replacements and returns message string
 	 */
-	public String draft() {
+	@Override
+	public String toString() {
 
-		// if message is not enabled in messages file, do nothing and return
+		// if message is not enabled in messages file, return empty string
 		if (!languageHandler.isEnabled(messageId)) {
 			return "";
 		}
