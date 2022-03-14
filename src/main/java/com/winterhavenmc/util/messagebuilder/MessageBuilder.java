@@ -168,7 +168,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	/**
 	 * Get spawn display name from language file
 	 *
-	 * @return the formatted display name for the world spawn, or empty string if key not found
+	 * @return the formatted display name for the world spawn, as a string wrapped in an {@link Optional}
 	 */
 	public Optional<String> getSpawnDisplayName() {
 		return Optional.ofNullable(languageHandler.getSpawnDisplayName());
@@ -178,7 +178,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	/**
 	 * Get home display name from language file
 	 *
-	 * @return the formatted display name for home, or empty string if key not found
+	 * @return the formatted display name for home, as a string wrapped in an {@link Optional}
 	 */
 	public Optional<String> getHomeDisplayName() {
 		return Optional.ofNullable(languageHandler.getHomeDisplayName());
