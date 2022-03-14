@@ -30,6 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
@@ -37,6 +38,8 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 
 	// reference to plugin main class
 	private final JavaPlugin plugin = JavaPlugin.getProvidingPlugin(this.getClass());
+
+	private final static String UNKNOWN_STRING = "???";
 
 	// required parameters
 	private final CommandSender recipient;
@@ -115,7 +118,18 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @return this message object with macro value set in map
 	 */
 	public Message<MessageId, Macro> setMacro(final Macro macro, final Object value) {
-		macroObjectMap.put(macro, value);
+
+		if (value instanceof Optional) {
+			Optional<?> optionalValue = (Optional<?>) value;
+
+			optionalValue.ifPresentOrElse(
+				unwrappedValue -> macroObjectMap.put(macro, unwrappedValue),
+				() -> macroObjectMap.put(macro, UNKNOWN_STRING)
+			);
+		}
+		else {
+			macroObjectMap.put(macro, value);
+		}
 		return this;
 	}
 
@@ -256,15 +270,15 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 					case "WORLD_NAME":
 						// if object is a world, attempt to replace with Multiverse alias as string
 						if (entry.getValue() instanceof World) {
-							entry.setValue(getWorldName((World) entry.getValue()));
+							entry.setValue(getWorldName((World) entry.getValue()).orElse(UNKNOWN_STRING));
 						}
 						// if object is an entity, attempt to replace with Multiverse alias for entity world name as string
 						else if (entry.getValue() instanceof Entity) {
-							entry.setValue(getWorldName((Entity) entry.getValue()));
+							entry.setValue(getWorldName((Entity) entry.getValue()).orElse(UNKNOWN_STRING));
 						}
 						// if object is a location, attempt to replace with Multiverse alias for location world as string
 						else if (entry.getValue() instanceof Location) {
-							entry.setValue(getWorldName((Location) entry.getValue()));
+							entry.setValue(getWorldName((Location) entry.getValue()).orElse(UNKNOWN_STRING));
 						}
 						break;
 					case "LOCATION":
@@ -275,7 +289,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 						// if entry type is location, set value to formatted location string and do message replacements
 						if (entry.getValue() instanceof Location) {
 							Location location = (Location) entry.getValue();
-							String locWorld = getWorldName(location);
+							String locWorld = getWorldName(location).orElse(UNKNOWN_STRING);
 							String locX = String.valueOf(location.getBlockX());
 							String locY = String.valueOf(location.getBlockY());
 							String locZ = String.valueOf(location.getBlockZ());
@@ -295,7 +309,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 						// if entry type is location, set value to formatted location string and do message replacements
 						if (entry.getValue() instanceof Location) {
 							Location location = (Location) entry.getValue();
-							String locWorld = getWorldName(location);
+							String locWorld = getWorldName(location).orElse(UNKNOWN_STRING);
 							String locX = String.valueOf(location.getBlockX());
 							String locY = String.valueOf(location.getBlockY());
 							String locZ = String.valueOf(location.getBlockZ());
@@ -346,8 +360,8 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			modifiedMessageString = modifiedMessageString.replace("%ITEM_NAME%", itemName);
 
 			// replace %WORLD_NAME% with recipient world name
-			modifiedMessageString = modifiedMessageString.replace("%WORLD%", getWorldName(recipient));
-			modifiedMessageString = modifiedMessageString.replace("%WORLD_NAME%", getWorldName(recipient));
+			modifiedMessageString = modifiedMessageString.replace("%WORLD%", getWorldName(recipient).orElse(UNKNOWN_STRING));
+			modifiedMessageString = modifiedMessageString.replace("%WORLD_NAME%", getWorldName(recipient).orElse(UNKNOWN_STRING));
 
 			// replace %PLAYER_NAME% with recipient name
 			modifiedMessageString = modifiedMessageString.replace("%PLAYER%", recipient.getName());
@@ -362,14 +376,13 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * get current world name of message recipient, using Multiverse alias if available
 	 *
 	 * @param recipient player to fetch world name
-	 * @return String containing recipient world name
-	 * @throws NullPointerException if parameter is null
+	 * @return {@link Optional} wrapped String containing recipient world name
 	 */
-	private static String getWorldName(final CommandSender recipient) {
+	private Optional<String> getWorldName(final CommandSender recipient) {
 
 		// if recipient is null, return question marks
 		if (recipient == null) {
-			return "???";
+			return Optional.empty();
 		}
 
 		// get reference to plugin main class
@@ -406,7 +419,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 
 		// return resultString
-		return resultString;
+		return Optional.of(resultString);
 	}
 
 
@@ -414,14 +427,13 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * Get world name from world object, using Multiverse alias if available
 	 *
 	 * @param world the world object to retrieve name
-	 * @return bukkit world name or multiverse alias as String
-	 * @throws NullPointerException if passed world is null
+	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
 	 */
-	private static String getWorldName(final World world) {
+	private Optional<String> getWorldName(final World world) {
 
 		// if world is null, return question marks
 		if (world == null) {
-			return "???";
+			return Optional.empty();
 		}
 
 		// get reference to plugin main class
@@ -445,69 +457,68 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 
 		// return the bukkit world name or Multiverse world alias
-		return worldName;
+		return Optional.of(worldName);
 	}
 
 
-	/**
-	 * Get world name from world name string, using Multiverse alias if available
-	 *
-	 * @param passedName the bukkit world name as string
-	 * @return bukkit world name or multiverse alias as String
-	 */
-	private static String getWorldName(final String passedName) {
-
-		// if passedName is null or empty, return question marks
-		if (passedName == null || passedName.isEmpty()) {
-			return "???";
-		}
-
-		// get reference to plugin main class
-		JavaPlugin plugin = JavaPlugin.getProvidingPlugin(Message.class);
-
-		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
-
-		// get world
-		World world = plugin.getServer().getWorld(passedName);
-
-		// if world is null, return question marks
-		if (world == null) {
-			return "???";
-		}
-
-		// get bukkit world name
-		String worldName = world.getName();
-
-		// if Multiverse is enabled, get MultiverseWorld object
-		if (mvCore != null && mvCore.isEnabled()) {
-
-			// get MultiverseWorld object
-			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(world);
-
-			// if Multiverse alias is not null or empty, set worldName to alias
-			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
-				worldName = mvWorld.getAlias();
-			}
-		}
-
-		// return the bukkit world name or Multiverse world alias
-		return worldName;
-	}
+//	/**
+//	 * Get world name from world name string, using Multiverse alias if available
+//	 *
+//	 * @param passedName the bukkit world name as string
+//	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
+//	 */
+//	private Optional<String> getWorldName(final String passedName) {
+//
+//		// if passedName is null or empty, return question marks
+//		if (passedName == null || passedName.isEmpty()) {
+//			return Optional.empty();
+//		}
+//
+//		// get reference to plugin main class
+//		JavaPlugin plugin = JavaPlugin.getProvidingPlugin(Message.class);
+//
+//		// get reference to Multiverse-Core if installed
+//		MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
+//
+//		// get world
+//		World world = plugin.getServer().getWorld(passedName);
+//
+//		// if world is null, return question marks
+//		if (world == null) {
+//			return Optional.empty();
+//		}
+//
+//		// get bukkit world name
+//		String worldName = world.getName();
+//
+//		// if Multiverse is enabled, get MultiverseWorld object
+//		if (mvCore != null && mvCore.isEnabled()) {
+//
+//			// get MultiverseWorld object
+//			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(world);
+//
+//			// if Multiverse alias is not null or empty, set worldName to alias
+//			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
+//				worldName = mvWorld.getAlias();
+//			}
+//		}
+//
+//		// return the bukkit world name or Multiverse world alias
+//		return Optional.of(worldName);
+//	}
 
 
 	/**
 	 * Get world name for location, using Multiverse alias if available
 	 *
 	 * @param location the location used to retrieve world name
-	 * @return bukkit world name or multiverse alias as String
-	 * @throws NullPointerException if passed location is null
+	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
 	 */
-	private static String getWorldName(final Location location) {
+	private Optional<String> getWorldName(final Location location) {
 
 		// check for null parameter
 		if (location == null) {
-			return "???";
+			return Optional.empty();
 		}
 
 		// get reference to plugin main class
@@ -539,7 +550,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 
 		// return resultString
-		return resultString;
+		return Optional.of(resultString);
 	}
 
 }

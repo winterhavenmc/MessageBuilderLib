@@ -21,6 +21,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 
@@ -169,8 +170,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the formatted display name for the world spawn, or empty string if key not found
 	 */
-	public String getSpawnDisplayName() {
-		return languageHandler.getSpawnDisplayName();
+	public Optional<String> getSpawnDisplayName() {
+		return Optional.ofNullable(languageHandler.getSpawnDisplayName());
 	}
 
 
@@ -179,8 +180,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the formatted display name for home, or empty string if key not found
 	 */
-	public String getHomeDisplayName() {
-		return languageHandler.getHomeDisplayName();
+	public Optional<String> getHomeDisplayName() {
+		return Optional.ofNullable(languageHandler.getHomeDisplayName());
 	}
 
 
