@@ -156,11 +156,7 @@ final class YamlLanguageHandler implements LanguageHandler {
 			return "";
 		}
 
-		String string = messages.getString("MESSAGES." + messageId + ".title");
-
-		if (string == null) {
-			string = "";
-		}
+		String string = messages.getString("MESSAGES." + messageId + ".title", "");
 
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
@@ -181,11 +177,7 @@ final class YamlLanguageHandler implements LanguageHandler {
 			return "";
 		}
 
-		String string = messages.getString("MESSAGES." + messageId + ".subtitle");
-
-		if (string == null) {
-			string = "";
-		}
+		String string = messages.getString("MESSAGES." + messageId + ".subtitle", "");
 
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
