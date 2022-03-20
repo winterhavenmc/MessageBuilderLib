@@ -17,12 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.TimeUnit;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -130,7 +131,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the formatted item name from language file, or empty string if key not found
 	 */
-	public String getItemName() {
+	public Optional<String> getItemName() {
 		return languageHandler.getItemName();
 	}
 
@@ -140,7 +141,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the formatted item plural name from language file, or empty string if key not found
 	 */
-	public String getItemNamePlural() {
+	public Optional<String> getItemNamePlural() {
 		return languageHandler.getItemNamePlural();
 	}
 
@@ -148,9 +149,9 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	/**
 	 * Get configured inventory item name from language file
 	 *
-	 * @return the formatted inventory display name of an item, or empty string if key not found
+	 * @return the formatted inventory display name of an item, as a String wrapped in an {@link Optional}
 	 */
-	public String getInventoryItemName() {
+	public Optional<String> getInventoryItemName() {
 		return languageHandler.getInventoryItemName();
 	}
 
@@ -168,20 +169,20 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	/**
 	 * Get spawn display name from language file
 	 *
-	 * @return the formatted display name for the world spawn, as a string wrapped in an {@link Optional}
+	 * @return the formatted display name for the world spawn, as a String wrapped in an {@link Optional}
 	 */
 	public Optional<String> getSpawnDisplayName() {
-		return Optional.ofNullable(languageHandler.getSpawnDisplayName());
+		return languageHandler.getSpawnDisplayName();
 	}
 
 
 	/**
 	 * Get home display name from language file
 	 *
-	 * @return the formatted display name for home, as a string wrapped in an {@link Optional}
+	 * @return the formatted display name for home, as a String wrapped in an {@link Optional}
 	 */
 	public Optional<String> getHomeDisplayName() {
-		return Optional.ofNullable(languageHandler.getHomeDisplayName());
+		return languageHandler.getHomeDisplayName();
 	}
 
 
@@ -202,7 +203,6 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param duration a time duration in milliseconds
 	 * @param timeUnit the time granularity to display (days | hours | minutes | seconds)
 	 * @return formatted time string
-	 * @throws NullPointerException if parameter is null
 	 */
 	public String getTimeString(final long duration, final TimeUnit timeUnit) {
 		return languageHandler.getTimeString(duration, timeUnit);
@@ -212,9 +212,9 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	/**
 	 * Get string by path in message file
 	 * @param path the message path for the string being retrieved
-	 * @return String - the string retrieved by path from message file
+	 * @return String - the string retrieved by path from message file, wrapped in an {@link Optional}
 	 */
-	public String getString(final String path) {
+	public Optional<String> getString(final String path) {
 		return languageHandler.getString(path);
 	}
 

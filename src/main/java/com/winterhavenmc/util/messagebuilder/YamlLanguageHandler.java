@@ -17,12 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.TimeUnit;
+
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -222,15 +223,15 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 * @return String ITEM_NAME, or empty string if key not found
 	 */
 	@Override
-	public String getItemName() {
+	public Optional<String> getItemName() {
 
 		String string = messages.getString("ITEM_INFO.ITEM_NAME");
 
 		if (string == null) {
-			string = "";
+			return Optional.empty();
 		}
 
-		return ChatColor.translateAlternateColorCodes('&', string);
+		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
 	}
 
 
@@ -240,15 +241,15 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted plural display name of an item, or empty string if key not found
 	 */
 	@Override
-	public String getItemNamePlural() {
+	public Optional<String> getItemNamePlural() {
 
 		String string = messages.getString("ITEM_INFO.ITEM_NAME_PLURAL");
 
 		if (string == null) {
-			string = "";
+			return Optional.empty();
 		}
 
-		return ChatColor.translateAlternateColorCodes('&', string);
+		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
 	}
 
 
@@ -258,15 +259,15 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted inventory display name of an item, or empty string if key not found
 	 */
 	@Override
-	public String getInventoryItemName() {
+	public Optional<String> getInventoryItemName() {
 
 		String string = messages.getString("ITEM_INFO.INVENTORY_ITEM_NAME");
 
 		if (string == null) {
-			string = "";
+			return Optional.empty();
 		}
 
-		return ChatColor.translateAlternateColorCodes('&', string);
+		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
 	}
 
 
@@ -293,15 +294,15 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted display name for the world spawn, or empty string if key not found
 	 */
 	@Override
-	public String getSpawnDisplayName() {
+	public Optional<String> getSpawnDisplayName() {
 
 		String string = messages.getString("ITEM_INFO.SPAWN_DISPLAY_NAME");
 
 		if (string == null) {
-			string = "";
+			return Optional.empty();
 		}
 
-		return ChatColor.translateAlternateColorCodes('&', string);
+		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
 	}
 
 
@@ -311,15 +312,15 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted display name for home, or empty string if key not found
 	 */
 	@Override
-	public String getHomeDisplayName() {
+	public Optional<String> getHomeDisplayName() {
 
 		String string = messages.getString("ITEM_INFO.HOME_DISPLAY_NAME");
 
 		if (string == null) {
-			string = "";
+			return Optional.empty();
 		}
 
-		return ChatColor.translateAlternateColorCodes('&', string);
+		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
 	}
 
 
@@ -346,8 +347,12 @@ final class YamlLanguageHandler implements LanguageHandler {
 	@Override
 	public String getTimeString(final long duration, final TimeUnit timeUnit) {
 
+		TimeUnit finalTimeUnit = timeUnit;
+
 		// check for null parameter
-		Objects.requireNonNull(timeUnit);
+		if (finalTimeUnit == null) {
+			finalTimeUnit = TimeUnit.SECONDS;
+		}
 
 		// if duration is negative, return unlimited time string
 		if (duration < 0) {
@@ -366,19 +371,19 @@ final class YamlLanguageHandler implements LanguageHandler {
 		if (lessString == null) {
 			lessString = "< 1";
 		}
-		if (timeUnit.equals(TimeUnit.DAYS)
+		if (finalTimeUnit.equals(TimeUnit.DAYS)
 				&& TimeUnit.MILLISECONDS.toDays(duration) < 1) {
 			return lessString + " " + messages.getString("TIME_STRINGS.DAY");
 		}
-		if (timeUnit.equals(TimeUnit.HOURS)
+		if (finalTimeUnit.equals(TimeUnit.HOURS)
 				&& TimeUnit.MILLISECONDS.toHours(duration) < 1) {
 			return lessString + " " + messages.getString("TIME_STRINGS.HOUR");
 		}
-		if (timeUnit.equals(TimeUnit.MINUTES)
+		if (finalTimeUnit.equals(TimeUnit.MINUTES)
 				&& TimeUnit.MILLISECONDS.toMinutes(duration) < 1) {
 			return lessString + " " + messages.getString("TIME_STRINGS.MINUTE");
 		}
-		if (timeUnit.equals(TimeUnit.SECONDS)
+		if (finalTimeUnit.equals(TimeUnit.SECONDS)
 				&& TimeUnit.MILLISECONDS.toSeconds(duration) < 1) {
 			return lessString + " " + messages.getString("TIME_STRINGS.SECOND");
 		}
@@ -437,9 +442,9 @@ final class YamlLanguageHandler implements LanguageHandler {
 			timeString.append(' ');
 		}
 
-		if (timeUnit.equals(TimeUnit.HOURS)
-				|| timeUnit.equals(TimeUnit.MINUTES)
-				|| timeUnit.equals(TimeUnit.SECONDS)) {
+		if (finalTimeUnit.equals(TimeUnit.HOURS)
+				|| finalTimeUnit.equals(TimeUnit.MINUTES)
+				|| finalTimeUnit.equals(TimeUnit.SECONDS)) {
 			if (hours > 1) {
 				timeString.append(hours);
 				timeString.append(' ');
@@ -454,7 +459,7 @@ final class YamlLanguageHandler implements LanguageHandler {
 			}
 		}
 
-		if (timeUnit.equals(TimeUnit.MINUTES) || timeUnit.equals(TimeUnit.SECONDS)) {
+		if (finalTimeUnit.equals(TimeUnit.MINUTES) || finalTimeUnit.equals(TimeUnit.SECONDS)) {
 			if (minutes > 1) {
 				timeString.append(minutes);
 				timeString.append(' ');
@@ -469,7 +474,7 @@ final class YamlLanguageHandler implements LanguageHandler {
 			}
 		}
 
-		if (timeUnit.equals(TimeUnit.SECONDS)) {
+		if (finalTimeUnit.equals(TimeUnit.SECONDS)) {
 			if (seconds > 1) {
 				timeString.append(seconds);
 				timeString.append(' ');
@@ -492,8 +497,8 @@ final class YamlLanguageHandler implements LanguageHandler {
  	 * @param path the message path for the string being retrieved
 	 * @return the retrieved string, or null if no matching key found
 	 */
-	public String getString(final String path) {
-		return messages.getString(path);
+	public Optional<String> getString(final String path) {
+		return Optional.ofNullable(messages.getString(path));
 	}
 
 

@@ -17,9 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.TimeUnit;
+
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Optional;
 
 interface LanguageHandler {
 
@@ -80,7 +82,7 @@ interface LanguageHandler {
 	 *
 	 * @return String ITEM_NAME, or empty string if key not found
 	 */
-	String getItemName();
+	Optional<String> getItemName();
 
 
 	/**
@@ -88,7 +90,7 @@ interface LanguageHandler {
 	 *
 	 * @return the formatted plural display name of an item, or empty string if key not found
 	 */
-	String getItemNamePlural();
+	Optional<String> getItemNamePlural();
 
 
 	/**
@@ -96,7 +98,7 @@ interface LanguageHandler {
 	 *
 	 * @return the formatted inventory display name of an item, or empty string if key not found
 	 */
-	String getInventoryItemName();
+	Optional<String> getInventoryItemName();
 
 
 	/**
@@ -112,7 +114,7 @@ interface LanguageHandler {
 	 *
 	 * @return the formatted display name for the world spawn, or empty string if key not found
 	 */
-	String getSpawnDisplayName();
+	Optional<String> getSpawnDisplayName();
 
 
 	/**
@@ -120,7 +122,7 @@ interface LanguageHandler {
 	 *
 	 * @return the formatted display name for home, or empty string if key not found
 	 */
-	String getHomeDisplayName();
+	Optional<String> getHomeDisplayName();
 
 
 	/**
@@ -138,7 +140,6 @@ interface LanguageHandler {
 	 * @param duration a time duration in milliseconds
 	 * @param timeUnit the time granularity to display (days | hours | minutes | seconds)
 	 * @return formatted time string
-	 * @throws NullPointerException if parameter is null
 	 */
 	String getTimeString(final long duration, final TimeUnit timeUnit);
 
@@ -148,7 +149,7 @@ interface LanguageHandler {
 	 * @param path the message path for the string being retrieved
 	 * @return String - the string retrieved by path from message file
 	 */
-	String getString(final String path);
+	Optional<String> getString(final String path);
 
 
 	/**

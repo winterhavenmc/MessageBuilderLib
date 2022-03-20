@@ -17,8 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.TimeUnit;
+
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -31,7 +34,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
@@ -352,9 +354,9 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			}
 
 			// replace %ITEM_NAME% with value declared in language file
-			String itemName = languageHandler.getItemName();
+			String itemName = languageHandler.getItemName().orElse(ChatColor.RED + "UNDEFINED" + ChatColor.RESET);
 			if (quantity != 1) {
-				itemName = languageHandler.getItemNamePlural();
+				itemName = languageHandler.getItemNamePlural().orElse(ChatColor.RED + "UNDEFINED" + ChatColor.RESET);
 			}
 			modifiedMessageString = modifiedMessageString.replace("%ITEM%", itemName);
 			modifiedMessageString = modifiedMessageString.replace("%ITEM_NAME%", itemName);
@@ -459,53 +461,6 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		// return the bukkit world name or Multiverse world alias
 		return Optional.of(worldName);
 	}
-
-
-//	/**
-//	 * Get world name from world name string, using Multiverse alias if available
-//	 *
-//	 * @param passedName the bukkit world name as string
-//	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
-//	 */
-//	private Optional<String> getWorldName(final String passedName) {
-//
-//		// if passedName is null or empty, return question marks
-//		if (passedName == null || passedName.isEmpty()) {
-//			return Optional.empty();
-//		}
-//
-//		// get reference to plugin main class
-//		JavaPlugin plugin = JavaPlugin.getProvidingPlugin(Message.class);
-//
-//		// get reference to Multiverse-Core if installed
-//		MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
-//
-//		// get world
-//		World world = plugin.getServer().getWorld(passedName);
-//
-//		// if world is null, return question marks
-//		if (world == null) {
-//			return Optional.empty();
-//		}
-//
-//		// get bukkit world name
-//		String worldName = world.getName();
-//
-//		// if Multiverse is enabled, get MultiverseWorld object
-//		if (mvCore != null && mvCore.isEnabled()) {
-//
-//			// get MultiverseWorld object
-//			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(world);
-//
-//			// if Multiverse alias is not null or empty, set worldName to alias
-//			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
-//				worldName = mvWorld.getAlias();
-//			}
-//		}
-//
-//		// return the bukkit world name or Multiverse world alias
-//		return Optional.of(worldName);
-//	}
 
 
 	/**
