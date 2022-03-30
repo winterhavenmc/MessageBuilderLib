@@ -55,7 +55,7 @@ final class YamlFileInstaller {
 			// read file names to be installed from text file
 			Scanner scan = new Scanner(Objects.requireNonNull(plugin.getResource(resourcePath)));
 			while (scan.hasNextLine()) {
-				String line = scan.nextLine().trim();
+				String line = scan.nextLine().strip();
 				if (!line.startsWith("#") && line.endsWith(".yml")) {
 					filenames.add(line);
 				}

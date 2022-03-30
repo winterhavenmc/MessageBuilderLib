@@ -487,7 +487,7 @@ final class YamlLanguageHandler implements LanguageHandler {
 			}
 		}
 
-		return ChatColor.translateAlternateColorCodes('&', timeString.toString().trim());
+		return ChatColor.translateAlternateColorCodes('&', timeString.toString().strip());
 	}
 
 
