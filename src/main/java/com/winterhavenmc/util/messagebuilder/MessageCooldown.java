@@ -165,10 +165,7 @@ final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listen
 		Objects.requireNonNull(messageId);
 
 		// if recipient is entity...
-		if (recipient instanceof Entity) {
-
-			// cast recipient to Entity
-			Entity entity = (Entity) recipient;
+		if (recipient instanceof Entity entity) {
 
 			// get message cooldown time remaining
 			long lastDisplayed = get(messageId, entity);

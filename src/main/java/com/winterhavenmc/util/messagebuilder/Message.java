@@ -121,8 +121,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 */
 	public Message<MessageId, Macro> setMacro(final Macro macro, final Object value) {
 
-		if (value instanceof Optional) {
-			Optional<?> optionalValue = (Optional<?>) value;
+		if (value instanceof Optional<?> optionalValue) {
 
 			optionalValue.ifPresentOrElse(
 				unwrappedValue -> macroObjectMap.put(macro, unwrappedValue),
@@ -289,8 +288,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 							entry.setValue(((Entity) entry.getValue()).getLocation());
 						}
 						// if entry type is location, set value to formatted location string and do message replacements
-						if (entry.getValue() instanceof Location) {
-							Location location = (Location) entry.getValue();
+						if (entry.getValue() instanceof Location location) {
 							String locWorld = getWorldName(location).orElse(UNKNOWN_STRING);
 							String locX = String.valueOf(location.getBlockX());
 							String locY = String.valueOf(location.getBlockY());
@@ -309,8 +307,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 							entry.setValue(((Entity) entry.getValue()).getLocation());
 						}
 						// if entry type is location, set value to formatted location string and do message replacements
-						if (entry.getValue() instanceof Location) {
-							Location location = (Location) entry.getValue();
+						if (entry.getValue() instanceof Location location) {
 							String locWorld = getWorldName(location).orElse(UNKNOWN_STRING);
 							String locX = String.valueOf(location.getBlockX());
 							String locY = String.valueOf(location.getBlockY());
