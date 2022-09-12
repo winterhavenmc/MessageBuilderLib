@@ -61,6 +61,7 @@ import java.util.Optional;
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	private final LanguageHandler languageHandler;
+	private final JavaPlugin plugin;
 
 
 	/**
@@ -69,6 +70,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param plugin reference to plugin main class
 	 */
 	public MessageBuilder(final JavaPlugin plugin) {
+		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin);
 	}
 
@@ -80,7 +82,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return Message - an initialized message object
 	 */
 	public Message<MessageId, Macro> build(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(recipient, messageId, languageHandler);
+		return new Message<>(plugin, recipient, messageId, languageHandler);
 	}
 
 
@@ -91,7 +93,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return Message - an initialized message object
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(recipient, messageId, languageHandler);
+		return new Message<>(plugin, recipient, messageId, languageHandler);
 	}
 
 

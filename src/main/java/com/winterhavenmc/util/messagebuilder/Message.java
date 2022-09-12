@@ -39,7 +39,7 @@ import java.util.Optional;
 public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	// reference to plugin main class
-	private final JavaPlugin plugin = JavaPlugin.getProvidingPlugin(this.getClass());
+	private final JavaPlugin plugin;
 
 	private final static String UNKNOWN_STRING = "???";
 
@@ -63,7 +63,8 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @param recipient message recipient
 	 * @param messageId message identifier
 	 */
-	public Message(final CommandSender recipient, final MessageId messageId, final LanguageHandler languageHandler) {
+	public Message(final JavaPlugin plugin, final CommandSender recipient, final MessageId messageId, final LanguageHandler languageHandler) {
+		this.plugin = plugin;
 		this.recipient = recipient;
 		this.messageId = messageId;
 		this.languageHandler = languageHandler;
