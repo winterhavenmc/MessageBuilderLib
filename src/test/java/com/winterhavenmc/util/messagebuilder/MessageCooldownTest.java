@@ -66,27 +66,26 @@ class MessageCooldownTest {
 	void put() {
 		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
 		PlayerMock player = server.addPlayer();
-		messageCooldown.put(MessageId.TEST_MESSAGE_1, player);
-		assertTrue(messageCooldown.isCooling(player, MessageId.TEST_MESSAGE_1, 10));
+		messageCooldown.put(MessageId.ENABLED_MESSAGE, player);
+		assertTrue(messageCooldown.isCooling(player, MessageId.ENABLED_MESSAGE, 10));
 	}
 
 	@Test
 	void get() {
 		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
 		PlayerMock player = server.addPlayer();
-		messageCooldown.put(MessageId.TEST_MESSAGE_1, player);
-		long value = messageCooldown.get(MessageId.TEST_MESSAGE_1, player);
-		assertTrue(value > 0);
+		messageCooldown.put(MessageId.ENABLED_MESSAGE, player);
+		assertTrue(messageCooldown.get(MessageId.ENABLED_MESSAGE, player) > 0);
 	}
 
 	@Test
 	void remove() {
 		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
 		PlayerMock player = server.addPlayer();
-		messageCooldown.put(MessageId.TEST_MESSAGE_1, player);
-		assertTrue(messageCooldown.isCooling(player, MessageId.TEST_MESSAGE_1, 10));
+		messageCooldown.put(MessageId.ENABLED_MESSAGE, player);
+		assertTrue(messageCooldown.isCooling(player, MessageId.ENABLED_MESSAGE, 10));
 		messageCooldown.remove(player);
-		assertFalse(messageCooldown.isCooling(player, MessageId.TEST_MESSAGE_1, 10));
+		assertFalse(messageCooldown.isCooling(player, MessageId.ENABLED_MESSAGE, 10));
 	}
 
 	@Test
@@ -94,9 +93,9 @@ class MessageCooldownTest {
 		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
 		PlayerMock player1 = server.addPlayer("player1");
 		PlayerMock player2 = server.addPlayer("player2");
-		messageCooldown.put(MessageId.TEST_MESSAGE_1, player1);
-		assertTrue(messageCooldown.isCooling(player1, MessageId.TEST_MESSAGE_1, 10));
-		assertFalse(messageCooldown.isCooling(player2, MessageId.TEST_MESSAGE_1, 10));
+		messageCooldown.put(MessageId.ENABLED_MESSAGE, player1);
+		assertTrue(messageCooldown.isCooling(player1, MessageId.ENABLED_MESSAGE, 10));
+		assertFalse(messageCooldown.isCooling(player2, MessageId.ENABLED_MESSAGE, 10));
 	}
 
 }
