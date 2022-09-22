@@ -145,20 +145,23 @@ class YamlLanguageHandlerTest {
 	}
 
 	@Test
-	void getTimeString() {
+	void getTimeString_with_singluar_units() {
+		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+		long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
+		assertEquals("1 day 1 hour 1 minute 1 second", languageHandler.getTimeString(duration));
+	}
+
+	@Test
+	void getTimeString_with_plural_units() {
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 
-		long duration;
-
-		// singular time units
-		duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
-		assertEquals("1 day 1 hour 1 minute 1 second", languageHandler.getTimeString(duration));
-
-		// plural time units
-		duration = DAYS.toMillis(2) + HOURS.toMillis(2) + MINUTES.toMillis(2) + SECONDS.toMillis(2);
+		long duration = DAYS.toMillis(2) + HOURS.toMillis(2) + MINUTES.toMillis(2) + SECONDS.toMillis(2);
 		assertEquals("2 days 2 hours 2 minutes 2 seconds", languageHandler.getTimeString(duration));
+	}
 
-		// unlimited time
+	@Test
+	void getTimeString_with_unlimited_time() {
+		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		assertEquals("unlimited time", languageHandler.getTimeString(-1));
 	}
 
@@ -176,6 +179,10 @@ class YamlLanguageHandlerTest {
 
 	@Test
 	void reload() {
+		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+		languageHandler.reload();
+		assertFalse(languageHandler.getMessageKeys().isEmpty());
+		assertTrue(languageHandler.getMessageKeys().contains("ENABLED_MESSAGE"));
 	}
 
 }
