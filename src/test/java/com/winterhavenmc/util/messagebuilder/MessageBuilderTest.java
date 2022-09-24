@@ -159,11 +159,11 @@ class MessageBuilderTest {
 		assertTrue(messageBuilder.getStringList("ARBITRARY_STRING_LIST").containsAll(List.of("item 1", "item 2", "item 3")));
 	}
 
-	@Test
-	void reload() {
-		MessageBuilder<MessageId, Macro> messageBuilder = new MessageBuilder<>(plugin);
-		messageBuilder.reload();
-		assertEquals("This is an enabled message", messageBuilder.getMessage(MessageId.ENABLED_MESSAGE));
-	}
+//	@Test
+//	void reload() {
+//		MessageBuilder<MessageId, Macro> messageBuilder = new MessageBuilder<>(plugin);
+//		messageBuilder.reload();
+//		assertEquals("This is an enabled message", messageBuilder.getMessage(MessageId.ENABLED_MESSAGE));
+//	}
 
 }

@@ -65,7 +65,7 @@ class MessageCooldownTest {
 	@Test
 	void put() {
 		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
-		PlayerMock player = server.addPlayer();
+		PlayerMock player = server.addPlayer("testy");
 		messageCooldown.put(MessageId.ENABLED_MESSAGE, player);
 		assertTrue(messageCooldown.isCooling(player, MessageId.ENABLED_MESSAGE, 10));
 	}
