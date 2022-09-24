@@ -28,7 +28,7 @@ public final class PluginMain extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        reloadConfig();
+        saveDefaultConfig();
 
         // instantiate message builder
         messageBuilder = new MessageBuilder<>(this);
