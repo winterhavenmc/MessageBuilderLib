@@ -49,8 +49,8 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	private final LanguageHandler languageHandler;
 
 	// optional parameters
-	private final Map<Macro, Object> macroObjectMap = new HashMap<>();
-	private int quantity = 1;
+	private final Map<String, Object> macroObjectMap = new HashMap<>();
+	private int itemQuantity = 1;
 
 	private String altMessage;
 	private String altTitle;
@@ -125,12 +125,12 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		if (value instanceof Optional<?> optionalValue) {
 
 			optionalValue.ifPresentOrElse(
-				unwrappedValue -> macroObjectMap.put(macro, unwrappedValue),
-				() -> macroObjectMap.put(macro, UNKNOWN_STRING)
+				unwrappedValue -> macroObjectMap.put(macro.name(), unwrappedValue),
+				() -> macroObjectMap.put(macro.name(), UNKNOWN_STRING)
 			);
 		}
 		else {
-			macroObjectMap.put(macro, value);
+			macroObjectMap.put(macro.name(), value);
 		}
 		return this;
 	}
@@ -258,18 +258,22 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		// only process macro tokens if message string contains a token marker character
 		if (modifiedMessageString.contains("%")) {
 
-			// iterate over macro map, giving special treatment to certain entries
-			for (Map.Entry<Macro, Object> entry : macroObjectMap.entrySet()) {
+			// if macro ITEM_QUANTITY exists and is integer, set quantity
+			if (macroObjectMap.containsKey("ITEM_QUANTITY") && macroObjectMap.get("ITEM_QUANTITY") instanceof Integer) {
+				itemQuantity = (Integer) macroObjectMap.get("ITEM_QUANTITY");
+			}
 
-				switch (entry.getKey().toString()) {
-					case "ITEM_QUANTITY" -> getItemQuantity(entry);
+			// iterate over macro map, giving special treatment to certain entries
+			for (Map.Entry<String, Object> entry : macroObjectMap.entrySet()) {
+
+				switch (entry.getKey()) {
 					case "WORLD", "WORLD_NAME" -> getWorldName(entry);
-					case "LOCATION", "PLAYER_LOCATION" -> modifiedMessageString = replaceLocation(modifiedMessageString, entry);
+					case "LOCATION", "PLAYER_LOCATION" -> getLocation(entry);
 					default -> getOtherSpecialValues(entry);
 				}
 
 				// replace macro tokens in message string with values as string
-				String macroToken = "%" + entry.getKey().toString() + "%";
+				String macroToken = "%" + entry.getKey() + "%";
 				if (entry.getValue() != null) {
 					modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue().toString());
 				}
@@ -277,7 +281,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 
 			// replace %ITEM_NAME% with value declared in language file
 			String itemName = languageHandler.getItemName().orElse(ChatColor.RED + "UNDEFINED" + ChatColor.RESET);
-			if (quantity != 1) {
+			if (itemQuantity != 1) {
 				itemName = languageHandler.getItemNamePlural().orElse(ChatColor.RED + "UNDEFINED" + ChatColor.RESET);
 			}
 			modifiedMessageString = modifiedMessageString.replace("%ITEM%", itemName);
@@ -295,14 +299,14 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		return modifiedMessageString;
 	}
 
-	private void getOtherSpecialValues(Map.Entry<Macro, Object> entry) {
+	private void getOtherSpecialValues(Map.Entry<String, Object> entry) {
 		// if key ends in "DURATION" and value type is Number, set value to time string
-		if (entry.getKey().toString().endsWith("DURATION") && entry.getValue() instanceof Number) {
+		if (entry.getKey().endsWith("DURATION") && entry.getValue() instanceof Number) {
 			entry.setValue(languageHandler.getTimeString((Long) entry.getValue()));
 		}
 
 		// if key ends in "DURATION_MINUTES" and value type is Number, set value to time string
-		else if (entry.getKey().toString().endsWith("DURATION_MINUTES") && entry.getValue() instanceof Number) {
+		else if (entry.getKey().endsWith("DURATION_MINUTES") && entry.getValue() instanceof Number) {
 			entry.setValue(languageHandler.getTimeString((Long) entry.getValue(), TimeUnit.MINUTES));
 		}
 
@@ -317,14 +321,14 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 	}
 
-	private void getItemQuantity(Map.Entry<Macro, Object> entry) {
+	private void getItemQuantity(final Map.Entry<String, Object> entry) {
 		// if quantity is an integer, copy value to class field
 		if (entry.getValue() instanceof Integer) {
-			quantity = (Integer) entry.getValue();
+			itemQuantity = (Integer) entry.getValue();
 		}
 	}
 
-	private void getWorldName(Map.Entry<Macro, Object> entry) {
+	private void getWorldName(final Map.Entry<String, Object> entry) {
 		// if object is a world, attempt to replace with Multiverse alias as string
 		if (entry.getValue() instanceof World) {
 			entry.setValue(getWorldName((World) entry.getValue()).orElse(UNKNOWN_STRING));
@@ -339,8 +343,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 	}
 
-
-	private String replaceLocation(String modifiedMessageString, Map.Entry<Macro, Object> entry) {
+	private void getLocation(final Map.Entry<String, Object> entry) {
 		// if entry type is Entity, set value to entity's location
 		if (entry.getValue() instanceof Entity) {
 			entry.setValue(((Entity) entry.getValue()).getLocation());
@@ -353,12 +356,11 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			String locZ = String.valueOf(location.getBlockZ());
 			String locString = locWorld + " [" + locX + ", " + locY + ", " + locZ + "]";
 			entry.setValue(locString);
-			modifiedMessageString = modifiedMessageString.replace("%LOC_WORLD%", locWorld);
-			modifiedMessageString = modifiedMessageString.replace("%LOC_X%", locX);
-			modifiedMessageString = modifiedMessageString.replace("%LOC_Y%", locY);
-			modifiedMessageString = modifiedMessageString.replace("%LOC_Z%", locZ);
+			macroObjectMap.put("LOC_WORLD", locWorld);
+			macroObjectMap.put("LOC_X", locX);
+			macroObjectMap.put("LOC_Y", locY);
+			macroObjectMap.put("LOC_Z", locZ);
 		}
-		return modifiedMessageString;
 	}
 
 
