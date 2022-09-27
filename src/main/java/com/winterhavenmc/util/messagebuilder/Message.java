@@ -284,42 +284,8 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 						}
 						break;
 					case "LOCATION":
-						// if entry type is Entity, set value to entity's location
-						if (entry.getValue() instanceof Entity) {
-							entry.setValue(((Entity) entry.getValue()).getLocation());
-						}
-						// if entry type is location, set value to formatted location string and do message replacements
-						if (entry.getValue() instanceof Location location) {
-							String locWorld = getWorldName(location).orElse(UNKNOWN_STRING);
-							String locX = String.valueOf(location.getBlockX());
-							String locY = String.valueOf(location.getBlockY());
-							String locZ = String.valueOf(location.getBlockZ());
-							String locString = locWorld + " [" + locX + ", " + locY + ", " + locZ + "]";
-							entry.setValue(locString);
-							modifiedMessageString = modifiedMessageString.replace("%LOC_WORLD%", locWorld);
-							modifiedMessageString = modifiedMessageString.replace("%LOC_X%", locX);
-							modifiedMessageString = modifiedMessageString.replace("%LOC_Y%", locY);
-							modifiedMessageString = modifiedMessageString.replace("%LOC_Z%", locZ);
-						}
-						break;
 					case "PLAYER_LOCATION":
-						// if entry type is Entity, set value to entity's location
-						if (entry.getValue() instanceof Entity) {
-							entry.setValue(((Entity) entry.getValue()).getLocation());
-						}
-						// if entry type is location, set value to formatted location string and do message replacements
-						if (entry.getValue() instanceof Location location) {
-							String locWorld = getWorldName(location).orElse(UNKNOWN_STRING);
-							String locX = String.valueOf(location.getBlockX());
-							String locY = String.valueOf(location.getBlockY());
-							String locZ = String.valueOf(location.getBlockZ());
-							String locString = locWorld + " [" + locX + ", " + locY + ", " + locZ + "]";
-							entry.setValue(locString);
-							modifiedMessageString = modifiedMessageString.replace("%PLAYER_LOC_WORLD%", locWorld);
-							modifiedMessageString = modifiedMessageString.replace("%PLAYER_LOC_X%", locX);
-							modifiedMessageString = modifiedMessageString.replace("%PLAYER_LOC_Y%", locY);
-							modifiedMessageString = modifiedMessageString.replace("%PLAYER_LOC_Z%", locZ);
-						}
+						modifiedMessageString = replaceLocation(modifiedMessageString, entry);
 						break;
 					default:
 						// if key ends in "DURATION" and value type is Number, set value to time string
@@ -368,6 +334,28 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			modifiedMessageString = modifiedMessageString.replace("%PLAYER_NAME%", recipient.getName());
 		}
 
+		return modifiedMessageString;
+	}
+
+
+	private String replaceLocation(String modifiedMessageString, Map.Entry<Macro, Object> entry) {
+		// if entry type is Entity, set value to entity's location
+		if (entry.getValue() instanceof Entity) {
+			entry.setValue(((Entity) entry.getValue()).getLocation());
+		}
+		// if entry type is location, set value to formatted location string and do message replacements
+		if (entry.getValue() instanceof Location location) {
+			String locWorld = getWorldName(location).orElse(UNKNOWN_STRING);
+			String locX = String.valueOf(location.getBlockX());
+			String locY = String.valueOf(location.getBlockY());
+			String locZ = String.valueOf(location.getBlockZ());
+			String locString = locWorld + " [" + locX + ", " + locY + ", " + locZ + "]";
+			entry.setValue(locString);
+			modifiedMessageString = modifiedMessageString.replace("%LOC_WORLD%", locWorld);
+			modifiedMessageString = modifiedMessageString.replace("%LOC_X%", locX);
+			modifiedMessageString = modifiedMessageString.replace("%LOC_Y%", locY);
+			modifiedMessageString = modifiedMessageString.replace("%LOC_Z%", locZ);
+		}
 		return modifiedMessageString;
 	}
 
