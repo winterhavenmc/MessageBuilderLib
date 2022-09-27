@@ -263,10 +263,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 
 				switch (entry.getKey().toString()) {
 					case "ITEM_QUANTITY":
-						// if quantity is an integer, copy value to class field
-						if (entry.getValue() instanceof Integer) {
-							quantity = (Integer) entry.getValue();
-						}
+						getItemQuantity(entry);
 						break;
 					case "WORLD":
 					case "WORLD_NAME":
@@ -324,6 +321,13 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 
 		return modifiedMessageString;
+	}
+
+	private void getItemQuantity(Map.Entry<Macro, Object> entry) {
+		// if quantity is an integer, copy value to class field
+		if (entry.getValue() instanceof Integer) {
+			quantity = (Integer) entry.getValue();
+		}
 	}
 
 	private void getWorldName(Map.Entry<Macro, Object> entry) {
