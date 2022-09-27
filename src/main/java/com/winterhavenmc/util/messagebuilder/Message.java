@@ -270,18 +270,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 						break;
 					case "WORLD":
 					case "WORLD_NAME":
-						// if object is a world, attempt to replace with Multiverse alias as string
-						if (entry.getValue() instanceof World) {
-							entry.setValue(getWorldName((World) entry.getValue()).orElse(UNKNOWN_STRING));
-						}
-						// if object is an entity, attempt to replace with Multiverse alias for entity world name as string
-						else if (entry.getValue() instanceof Entity) {
-							entry.setValue(getWorldName((Entity) entry.getValue()).orElse(UNKNOWN_STRING));
-						}
-						// if object is a location, attempt to replace with Multiverse alias for location world as string
-						else if (entry.getValue() instanceof Location) {
-							entry.setValue(getWorldName((Location) entry.getValue()).orElse(UNKNOWN_STRING));
-						}
+						getWorldName(entry);
 						break;
 					case "LOCATION":
 					case "PLAYER_LOCATION":
@@ -335,6 +324,21 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 
 		return modifiedMessageString;
+	}
+
+	private void getWorldName(Map.Entry<Macro, Object> entry) {
+		// if object is a world, attempt to replace with Multiverse alias as string
+		if (entry.getValue() instanceof World) {
+			entry.setValue(getWorldName((World) entry.getValue()).orElse(UNKNOWN_STRING));
+		}
+		// if object is an entity, attempt to replace with Multiverse alias for entity world name as string
+		else if (entry.getValue() instanceof Entity) {
+			entry.setValue(getWorldName((Entity) entry.getValue()).orElse(UNKNOWN_STRING));
+		}
+		// if object is a location, attempt to replace with Multiverse alias for location world as string
+		else if (entry.getValue() instanceof Location) {
+			entry.setValue(getWorldName((Location) entry.getValue()).orElse(UNKNOWN_STRING));
+		}
 	}
 
 
