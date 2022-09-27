@@ -262,38 +262,10 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			for (Map.Entry<Macro, Object> entry : macroObjectMap.entrySet()) {
 
 				switch (entry.getKey().toString()) {
-					case "ITEM_QUANTITY":
-						getItemQuantity(entry);
-						break;
-					case "WORLD":
-					case "WORLD_NAME":
-						getWorldName(entry);
-						break;
-					case "LOCATION":
-					case "PLAYER_LOCATION":
-						modifiedMessageString = replaceLocation(modifiedMessageString, entry);
-						break;
-					default:
-						// if key ends in "DURATION" and value type is Number, set value to time string
-						if (entry.getKey().toString().endsWith("DURATION") && entry.getValue() instanceof Number) {
-							entry.setValue(languageHandler.getTimeString((Long) entry.getValue()));
-						}
-
-						// if key ends in "DURATION_MINUTES" and value type is Number, set value to time string
-						else if (entry.getKey().toString().endsWith("DURATION_MINUTES") && entry.getValue() instanceof Number) {
-							entry.setValue(languageHandler.getTimeString((Long) entry.getValue(), TimeUnit.MINUTES));
-						}
-
-						// if entry is CommandSender, set value to name
-						else if (entry.getValue() instanceof CommandSender) {
-							entry.setValue(((CommandSender) entry.getValue()).getName());
-						}
-
-						// if entry is OfflinePlayer, set value to name
-						else if (entry.getValue() instanceof OfflinePlayer) {
-							entry.setValue(((OfflinePlayer) entry.getValue()).getName());
-						}
-						break;
+					case "ITEM_QUANTITY" -> getItemQuantity(entry);
+					case "WORLD", "WORLD_NAME" -> getWorldName(entry);
+					case "LOCATION", "PLAYER_LOCATION" -> modifiedMessageString = replaceLocation(modifiedMessageString, entry);
+					default -> getOtherSpecialValues(entry);
 				}
 
 				// replace macro tokens in message string with values as string
@@ -321,6 +293,28 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 
 		return modifiedMessageString;
+	}
+
+	private void getOtherSpecialValues(Map.Entry<Macro, Object> entry) {
+		// if key ends in "DURATION" and value type is Number, set value to time string
+		if (entry.getKey().toString().endsWith("DURATION") && entry.getValue() instanceof Number) {
+			entry.setValue(languageHandler.getTimeString((Long) entry.getValue()));
+		}
+
+		// if key ends in "DURATION_MINUTES" and value type is Number, set value to time string
+		else if (entry.getKey().toString().endsWith("DURATION_MINUTES") && entry.getValue() instanceof Number) {
+			entry.setValue(languageHandler.getTimeString((Long) entry.getValue(), TimeUnit.MINUTES));
+		}
+
+		// if entry is CommandSender, set value to name
+		else if (entry.getValue() instanceof CommandSender) {
+			entry.setValue(((CommandSender) entry.getValue()).getName());
+		}
+
+		// if entry is OfflinePlayer, set value to name
+		else if (entry.getValue() instanceof OfflinePlayer) {
+			entry.setValue(((OfflinePlayer) entry.getValue()).getName());
+		}
 	}
 
 	private void getItemQuantity(Map.Entry<Macro, Object> entry) {
