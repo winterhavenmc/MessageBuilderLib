@@ -31,7 +31,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -49,7 +48,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	private final LanguageHandler languageHandler;
 
 	// optional parameters
-	private final Map<String, Object> macroObjectMap = new HashMap<>();
+	private final MacroObjectMap<Macro> macroMacroObjectMap = new MacroObjectMap<>();
 	private int itemQuantity = 1;
 
 	private String altMessage;
@@ -125,12 +124,12 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		if (value instanceof Optional<?> optionalValue) {
 
 			optionalValue.ifPresentOrElse(
-				unwrappedValue -> macroObjectMap.put(macro.name(), unwrappedValue),
-				() -> macroObjectMap.put(macro.name(), UNKNOWN_STRING)
+				unwrappedValue -> macroMacroObjectMap.put(macro, unwrappedValue),
+				() -> macroMacroObjectMap.put(macro, UNKNOWN_STRING)
 			);
 		}
 		else {
-			macroObjectMap.put(macro.name(), value);
+			macroMacroObjectMap.put(macro, value);
 		}
 		return this;
 	}
@@ -259,12 +258,14 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		if (modifiedMessageString.contains("%")) {
 
 			// if macro ITEM_QUANTITY exists and is integer, set quantity
-			if (macroObjectMap.containsKey("ITEM_QUANTITY") && macroObjectMap.get("ITEM_QUANTITY") instanceof Integer) {
-				itemQuantity = (Integer) macroObjectMap.get("ITEM_QUANTITY");
+			if (macroMacroObjectMap.containsKey("ITEM_QUANTITY") && macroMacroObjectMap.get("ITEM_QUANTITY") instanceof Integer) {
+				itemQuantity = (Integer) macroMacroObjectMap.get("ITEM_QUANTITY");
 			}
 
+			processItemName();
+
 			// iterate over macro map, giving special treatment to certain entries
-			for (Map.Entry<String, Object> entry : macroObjectMap.entrySet()) {
+			for (Map.Entry<String, Object> entry : macroMacroObjectMap.entrySet()) {
 
 				switch (entry.getKey()) {
 					case "WORLD", "WORLD_NAME" -> getWorldName(entry);
@@ -280,12 +281,12 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			}
 
 			// replace %ITEM_NAME% with value declared in language file
-			String itemName = languageHandler.getItemName().orElse(ChatColor.RED + "UNDEFINED" + ChatColor.RESET);
-			if (itemQuantity != 1) {
-				itemName = languageHandler.getItemNamePlural().orElse(ChatColor.RED + "UNDEFINED" + ChatColor.RESET);
-			}
-			modifiedMessageString = modifiedMessageString.replace("%ITEM%", itemName);
-			modifiedMessageString = modifiedMessageString.replace("%ITEM_NAME%", itemName);
+//			String itemName = languageHandler.getItemName().orElse(ChatColor.RED + "UNDEFINED" + ChatColor.RESET);
+//			if (itemQuantity != 1) {
+//				itemName = languageHandler.getItemNamePlural().orElse(ChatColor.RED + "UNDEFINED" + ChatColor.RESET);
+//			}
+//			modifiedMessageString = modifiedMessageString.replace("%ITEM%", itemName);
+//			modifiedMessageString = modifiedMessageString.replace("%ITEM_NAME%", itemName);
 
 			// replace %WORLD_NAME% with recipient world name
 			modifiedMessageString = modifiedMessageString.replace("%WORLD%", getWorldName(recipient).orElse(UNKNOWN_STRING));
@@ -298,6 +299,18 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 
 		return modifiedMessageString;
 	}
+
+	private void processItemName() {
+		// get item name from messages file, choosing plurality based on itemQuantity
+		String itemName = languageHandler.getItemName().orElse(ChatColor.RED + UNKNOWN_STRING + ChatColor.RESET);
+		if (itemQuantity != 1) {
+			itemName = languageHandler.getItemNamePlural().orElse(ChatColor.RED + UNKNOWN_STRING + ChatColor.RESET);
+		}
+		// put item name string in macro map
+		macroMacroObjectMap.put("ITEM", itemName);
+		macroMacroObjectMap.put("ITEM_NAME", itemName);
+	}
+
 
 	private void getOtherSpecialValues(Map.Entry<String, Object> entry) {
 		// if key ends in "DURATION" and value type is Number, set value to time string
@@ -356,10 +369,10 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			String locZ = String.valueOf(location.getBlockZ());
 			String locString = locWorld + " [" + locX + ", " + locY + ", " + locZ + "]";
 			entry.setValue(locString);
-			macroObjectMap.put("LOC_WORLD", locWorld);
-			macroObjectMap.put("LOC_X", locX);
-			macroObjectMap.put("LOC_Y", locY);
-			macroObjectMap.put("LOC_Z", locZ);
+			macroMacroObjectMap.put("LOC_WORLD", locWorld);
+			macroMacroObjectMap.put("LOC_X", locX);
+			macroMacroObjectMap.put("LOC_Y", locY);
+			macroMacroObjectMap.put("LOC_Z", locZ);
 		}
 	}
 
