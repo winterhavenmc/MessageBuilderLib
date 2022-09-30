@@ -62,7 +62,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	private final LanguageHandler languageHandler;
 	private final JavaPlugin plugin;
-
+	private final MacroProcessor macroProcessor;
 
 	/**
 	 * Class constructor
@@ -72,6 +72,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	public MessageBuilder(final JavaPlugin plugin) {
 		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin);
+		this.macroProcessor = new MacroProcessor(languageHandler);
 	}
 
 
@@ -85,7 +86,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	@Deprecated
 	public Message<MessageId, Macro> build(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, recipient, messageId, languageHandler);
+		return new Message<>(plugin, languageHandler, macroProcessor, recipient, messageId);
 	}
 
 
@@ -96,7 +97,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return Message - an initialized message object
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, recipient, messageId, languageHandler);
+		return new Message<>(plugin, languageHandler, macroProcessor, recipient, messageId);
 	}
 
 
