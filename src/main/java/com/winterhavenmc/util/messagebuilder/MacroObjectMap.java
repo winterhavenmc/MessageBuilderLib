@@ -21,13 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class MacroObjectMap<Macro extends Enum<Macro>> {
+class MacroObjectMap {
 
 	private final Map<String, Object> macroObjectMap = new HashMap<>();
-
-	void put(Macro macro, Object object) {
-		this.macroObjectMap.put(macro.name(), object);
-	}
 
 	void put(String macro, Object object) {
 		this.macroObjectMap.put(macro, object);
@@ -39,10 +35,6 @@ public class MacroObjectMap<Macro extends Enum<Macro>> {
 
 	boolean containsKey(final String key) {
 		return this.macroObjectMap.containsKey(key);
-	}
-
-	Set<String> keySet() {
-		return this.macroObjectMap.keySet();
 	}
 
 	Set<Map.Entry<String, Object>> entrySet() {
