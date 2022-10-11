@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -40,7 +42,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	private final CommandSender recipient;
 	private final MessageId messageId;
 	private final LanguageHandler languageHandler;
-	private final MacroProcessor macroProcessor;
+	private final MacroProcessorHandler macroProcessorHandler;
 
 	// optional parameters
 	private String altMessage;
@@ -53,14 +55,14 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 *
 	 * @param plugin          reference to plugin main class
 	 * @param languageHandler reference to language handler class
-	 * @param macroProcessor  reference to macro processor class
+	 * @param macroProcessorHandler  reference to macro processor class
 	 * @param recipient       message recipient
 	 * @param messageId       message identifier
 	 */
-	public Message(final JavaPlugin plugin, final LanguageHandler languageHandler, final MacroProcessor macroProcessor, final CommandSender recipient, final MessageId messageId) {
+	public Message(final JavaPlugin plugin, final LanguageHandler languageHandler, final MacroProcessorHandler macroProcessorHandler, final CommandSender recipient, final MessageId messageId) {
 		this.plugin = plugin;
 		this.languageHandler = languageHandler;
-		this.macroProcessor = macroProcessor;
+		this.macroProcessorHandler = macroProcessorHandler;
 		this.recipient = recipient;
 		this.messageId = messageId;
 	}
@@ -132,19 +134,19 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			// get title string
 			String titleString;
 			if (altTitle != null && !altTitle.isEmpty()) {
-				titleString = macroProcessor.replaceMacros(recipient, macroObjectMap, altTitle);
+				titleString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, altTitle);
 			}
 			else {
-				titleString = macroProcessor.replaceMacros(recipient, macroObjectMap, languageHandler.getTitle(messageId));
+				titleString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, languageHandler.getTitle(messageId));
 			}
 
 			// get subtitle string
 			String subtitleString;
 			if (altSubtitle != null && !altSubtitle.isEmpty()) {
-				subtitleString = macroProcessor.replaceMacros(recipient, macroObjectMap, altSubtitle);
+				subtitleString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, altSubtitle);
 			}
 			else {
-				subtitleString = macroProcessor.replaceMacros(recipient, macroObjectMap, languageHandler.getSubtitle(messageId));
+				subtitleString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, languageHandler.getSubtitle(messageId));
 			}
 
 			// only send title if either title string or subtitle string is not empty
@@ -198,10 +200,10 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	private String getMessageString() {
 		String messageString;
 		if (altMessage != null && !altMessage.isEmpty()) {
-			messageString = macroProcessor.replaceMacros(recipient, macroObjectMap, altMessage);
+			messageString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, altMessage);
 		}
 		else {
-			messageString = macroProcessor.replaceMacros(recipient, macroObjectMap, languageHandler.getMessage(messageId));
+			messageString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, languageHandler.getMessage(messageId));
 		}
 		return ChatColor.translateAlternateColorCodes('&', messageString);
 	}
