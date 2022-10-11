@@ -18,12 +18,13 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.TimeUnit;
+import org.bukkit.World;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-interface LanguageHandler {
+public interface LanguageHandler {
 
 	/**
 	 * Get all keys for a message section of the language file. This method is only used for unit testing.
@@ -158,6 +159,9 @@ interface LanguageHandler {
 	 * @return List of String - the string list retrieved by path from message file
 	 */
 	List<String> getStringList(final String path);
+
+
+	Optional<String> getWorldName(final World world);
 
 
 	/**
