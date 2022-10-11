@@ -15,12 +15,14 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import org.bukkit.command.CommandSender;
+import com.winterhavenmc.util.messagebuilder.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.PluginMain;
+import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
+import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,10 +32,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class MessageTest {
+class ObjectProcessorTest {
 
-	private ServerMock server;
-	private PluginMain plugin;
+	ServerMock server;
+	PluginMain plugin;
+	LanguageHandler languageHandler;
+	Processor processor;
+
 
 	@BeforeAll
 	public void setUp() {
@@ -42,6 +47,9 @@ class MessageTest {
 
 		// start the mock plugin
 		plugin = MockBukkit.load(PluginMain.class);
+
+		languageHandler = new YamlLanguageHandler(plugin);
+		processor = new ObjectProcessor(plugin, languageHandler);
 	}
 
 	@AfterAll
@@ -52,34 +60,16 @@ class MessageTest {
 
 
 	@Test
-	void setAltMessage() {
+	void doReplacements_integer() {
+		String key = "SOME_INTEGER";
+		Integer number = 42;
+
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
+		macroObjectMap.put(key, number);
+
+		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, number);
+		assertTrue(resultMap.containsKey("SOME_INTEGER"));
+		assertEquals("42", resultMap.get("SOME_INTEGER"));
 	}
 
-	@Test
-	void setAltTitle() {
-	}
-
-	@Test
-	void setAltSubtitle() {
-	}
-
-	@Test
-	void setMacro() {
-	}
-
-	@Test
-	void send() {
-	}
-
-	@Test
-	void testToString() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		PlayerMock player = server.addPlayer("testy");
-		Message<MessageId, Macro> message = new Message<>(plugin, player, MessageId.ENABLED_MESSAGE, languageHandler);
-		assertEquals("This is an enabled message", message.toString());
-	}
-
-	@Test
-	void doMacroReplacements() {
-	}
 }
