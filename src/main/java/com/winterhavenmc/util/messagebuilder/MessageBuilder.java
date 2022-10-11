@@ -19,6 +19,8 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.TimeUnit;
 
+import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,7 +64,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	private final LanguageHandler languageHandler;
 	private final JavaPlugin plugin;
-	private final MacroProcessor macroProcessor;
+	private final MacroProcessorHandler macroProcessorHandler;
 
 	/**
 	 * Class constructor
@@ -72,7 +74,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	public MessageBuilder(final JavaPlugin plugin) {
 		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin);
-		this.macroProcessor = new MacroProcessor(languageHandler);
+		this.macroProcessorHandler = new MacroProcessorHandler(plugin, languageHandler);
 	}
 
 
@@ -86,7 +88,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	@Deprecated
 	public Message<MessageId, Macro> build(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, languageHandler, macroProcessor, recipient, messageId);
+		return new Message<>(plugin, languageHandler, macroProcessorHandler, recipient, messageId);
 	}
 
 
@@ -97,7 +99,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return Message - an initialized message object
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, languageHandler, macroProcessor, recipient, messageId);
+		return new Message<>(plugin, languageHandler, macroProcessorHandler, recipient, messageId);
 	}
 
 
@@ -234,6 +236,10 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		return languageHandler.getStringList(path);
 	}
 
+
+	public Optional<String> getWorldName(final World world) {
+		return languageHandler.getWorldName(world);
+	}
 
 	/**
 	 * Reload messages from configured language file
