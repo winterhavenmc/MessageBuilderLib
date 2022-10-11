@@ -15,25 +15,25 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.macro;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-class MacroObjectMap {
+public class MacroObjectMap {
 
 	private final Map<String, Object> macroObjectMap = new HashMap<>();
 
-	void put(String macro, Object object) {
+	public void put(String macro, Object object) {
 		this.macroObjectMap.put(macro, object);
 	}
 
-	Object get(final String key) {
+	public Object get(final String key) {
 		return this.macroObjectMap.get(key);
 	}
 
-	boolean containsKey(final String key) {
+	public boolean containsKey(final String key) {
 		return this.macroObjectMap.containsKey(key);
 	}
 
