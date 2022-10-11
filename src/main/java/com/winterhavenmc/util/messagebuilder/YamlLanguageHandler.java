@@ -17,9 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import com.winterhavenmc.util.TimeUnit;
 
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,7 +33,7 @@ import java.util.*;
  * provides common methods for the installation and management of
  * localized language files for bukkit plugins.
  */
-final class YamlLanguageHandler implements LanguageHandler {
+public final class YamlLanguageHandler implements LanguageHandler {
 
 	// reference to main plugin
 	private final JavaPlugin plugin;
@@ -42,7 +45,7 @@ final class YamlLanguageHandler implements LanguageHandler {
 	/**
 	 * class constructor
 	 */
-	YamlLanguageHandler(final JavaPlugin plugin) {
+	public YamlLanguageHandler(final JavaPlugin plugin) {
 
 		this.plugin = plugin;
 
@@ -494,7 +497,7 @@ final class YamlLanguageHandler implements LanguageHandler {
 	/**
 	 * Retrieve an arbitrary string from the language file with the specified key.
 	 *
- 	 * @param path the message path for the string being retrieved
+	 * @param path the message path for the string being retrieved
 	 * @return the retrieved string, or null if no matching key found
 	 */
 	public Optional<String> getString(final String path) {
@@ -510,6 +513,50 @@ final class YamlLanguageHandler implements LanguageHandler {
 	 */
 	public List<String> getStringList(final String path) {
 		return messages.getStringList(path);
+	}
+
+
+	public Optional<String> getWorldName(final World world) {
+		// if world is null, return empty optional
+		if(world == null) {
+			return Optional.empty();
+		}
+		// return multiverse alias or bukkit world name as optional string
+		return Optional.of(getWorldAlias(world).orElse(world.getName()));
+	}
+
+
+	/**
+	 * Get world name from world object, using Multiverse alias if available
+	 *
+	 * @param world the world object to retrieve name
+	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
+	 */
+	private Optional<String> getWorldAlias(final World world) {
+
+		// if world is null, return empty optional
+		if (world == null) {
+			return Optional.empty();
+		}
+
+		String worldName = null;
+
+		// get reference to Multiverse-Core if installed
+		MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
+
+		// if Multiverse is enabled, get MultiverseWorld object
+		if (mvCore != null && mvCore.isEnabled()) {
+
+			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(world);
+
+			// if Multiverse alias is not null or empty, set worldName to alias
+			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
+				worldName = mvWorld.getAlias();
+			}
+		}
+
+		// return the bukkit world name or Multiverse world alias
+		return Optional.ofNullable(worldName);
 	}
 
 
