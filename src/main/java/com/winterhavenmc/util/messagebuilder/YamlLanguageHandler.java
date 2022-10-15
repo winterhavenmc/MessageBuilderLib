@@ -518,7 +518,7 @@ public final class YamlLanguageHandler implements LanguageHandler {
 
 	public Optional<String> getWorldName(final World world) {
 		// if world is null, return empty optional
-		if(world == null) {
+		if (world == null) {
 			return Optional.empty();
 		}
 		// return multiverse alias or bukkit world name as optional string
