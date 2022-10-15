@@ -20,6 +20,7 @@ package com.winterhavenmc.util.messagebuilder;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.TimeUnit;
+import org.bukkit.World;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -158,6 +159,15 @@ class MessageBuilderTest {
 		MessageBuilder<MessageId, Macro> messageBuilder = new MessageBuilder<>(plugin);
 		assertTrue(messageBuilder.getStringList("ARBITRARY_STRING_LIST").containsAll(List.of("item 1", "item 2", "item 3")));
 	}
+
+	@Test
+	void getWorldName() {
+		World world = server.addSimpleWorld("test_world");
+		MessageBuilder<MessageId, Macro> messageBuilder = new MessageBuilder<>(plugin);
+		assertTrue(messageBuilder.getWorldName(world).isPresent());
+		assertEquals("test_world", messageBuilder.getWorldName(world).get());
+	}
+
 
 //	@Test
 //	void reload() {
