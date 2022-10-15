@@ -237,6 +237,11 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	}
 
 
+	/**
+	 * Get optional string of world name or multiverse alias if available
+	 * @param world the world to retrieve name
+	 * @return Optional String containing world name or multiverse alias
+	 */
 	public Optional<String> getWorldName(final World world) {
 		return languageHandler.getWorldName(world);
 	}
