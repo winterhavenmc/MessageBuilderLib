@@ -71,3 +71,7 @@ MESSAGES:
     title-fade-in: 20
     title-stay: 140
     title-fade-out: 40
+
+  DURATION_MESSAGE:
+    enabled: true
+    message: "Duration is %DURATION%"
