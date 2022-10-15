@@ -19,9 +19,11 @@ package com.winterhavenmc.util.messagebuilder;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+import org.bukkit.World;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.winterhavenmc.util.TimeUnit.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -217,6 +219,22 @@ class YamlLanguageHandlerTest {
 	void getStringList() {
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		assertTrue(languageHandler.getStringList("ARBITRARY_STRING_LIST").containsAll(List.of("item 1", "item 2", "item 3")));
+	}
+
+	@Test
+	void getWorldName() {
+		World world = server.addSimpleWorld("test_world");
+		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+		Optional<String> optionalWorldName = languageHandler.getWorldName(world);
+		assertTrue(optionalWorldName.isPresent());
+		assertEquals("test_world", optionalWorldName.get());
+	}
+
+	@Test
+	void getWorldName_null() {
+		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+		Optional<String> optionalWorldName = languageHandler.getWorldName(null);
+		assertTrue(optionalWorldName.isEmpty());
 	}
 
 	@Test
