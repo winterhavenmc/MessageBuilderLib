@@ -345,7 +345,6 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @param duration a time duration in milliseconds
 	 * @param timeUnit the time granularity to display (days | hours | minutes | seconds)
 	 * @return formatted time string
-	 * @throws NullPointerException if parameter is null
 	 */
 	@Override
 	public String getTimeString(final long duration, final TimeUnit timeUnit) {
