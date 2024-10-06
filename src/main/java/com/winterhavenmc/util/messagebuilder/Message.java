@@ -75,6 +75,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
+	@SuppressWarnings("UnusedReturnValue")
 	public Message<MessageId, Macro> setMacro(final Macro macro, final Object value) {
 
 		if (value instanceof Optional<?> optionalValue) {
