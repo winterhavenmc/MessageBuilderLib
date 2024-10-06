@@ -19,19 +19,24 @@ package com.winterhavenmc.util;
 
 public enum TimeUnit {
 
+	// pass number of milliseconds for each time unit as parameter to constructor
 	MILLISECONDS(1L),
 	TICKS(50L),
-	SECONDS(1000L),
-	MINUTES(60000L),
-	HOURS(3600000L),
-	DAYS(86400000L),
-	WEEKS(604800000L),
-	MONTHS(2629800000L),
-	YEARS(31557600000L);
+	SECONDS(1_000L),
+	MINUTES(60_000L),
+	HOURS(3_600_000L),
+	DAYS(86_400_000L),
+	WEEKS(604_800_000L),
+	MONTHS(2_629_800_000L),
+	YEARS(31_557_600_000L);
 
+	// number of milliseconds for each time unit
 	private final long millis;
 
-
+	/**
+	 * Class constructor
+	 * @param millis milliseconds for time unit
+	 */
 	TimeUnit(final long millis) {
 		this.millis = millis;
 	}
@@ -72,7 +77,7 @@ public enum TimeUnit {
 		return convert(duration, YEARS);
 	}
 
-	public final long convert(long duration, TimeUnit unit) {
+	public final long convert(final long duration, final TimeUnit unit) {
 		if (duration < Long.MIN_VALUE / this.millis) {
 			throw new IllegalArgumentException("duration of " + duration + " " + this + " would cause an underflow in conversion to " + unit + ".");
 		}
@@ -92,3 +97,4 @@ public enum TimeUnit {
 	}
 
 }
+
