@@ -25,8 +25,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static com.winterhavenmc.util.TimeUnit.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
 
@@ -269,12 +268,10 @@ class TimeUnitTest {
 		assertEquals(YEARS, TimeUnit.valueOf("YEARS"));
 
 		// test invalid member name
-		Exception exception = Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> TimeUnit.valueOf("invalid"));
-
+		String actualMessage = assertThrowsExactly(IllegalArgumentException.class, () -> TimeUnit.valueOf("invalid")).getMessage();
 		String expectedMessage = "No enum constant";
-		String actualMessage = exception.getMessage();
 
-		Assertions.assertTrue(actualMessage.startsWith(expectedMessage));
+		assertTrue(actualMessage.startsWith(expectedMessage));
 	}
 
 }
