@@ -19,6 +19,8 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.TimeUnit;
 
+import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,7 +64,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	private final LanguageHandler languageHandler;
 	private final JavaPlugin plugin;
-
+	private final MacroProcessorHandler macroProcessorHandler;
 
 	/**
 	 * Class constructor
@@ -72,17 +74,21 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	public MessageBuilder(final JavaPlugin plugin) {
 		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin);
+		this.macroProcessorHandler = new MacroProcessorHandler(plugin, languageHandler);
 	}
 
 
 	/**
 	 * Initiate a message
+	 *
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
 	 * @return Message - an initialized message object
+	 * @deprecated use compose method instead
 	 */
+	@Deprecated
 	public Message<MessageId, Macro> build(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, recipient, messageId, languageHandler);
+		return new Message<>(plugin, languageHandler, macroProcessorHandler, recipient, messageId);
 	}
 
 
@@ -93,7 +99,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return Message - an initialized message object
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, recipient, messageId, languageHandler);
+		return new Message<>(plugin, languageHandler, macroProcessorHandler, recipient, messageId);
 	}
 
 
@@ -230,6 +236,15 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		return languageHandler.getStringList(path);
 	}
 
+
+	/**
+	 * Get optional string of world name or multiverse alias if available
+	 * @param world the world to retrieve name
+	 * @return Optional String containing world name or multiverse alias
+	 */
+	public Optional<String> getWorldName(final World world) {
+		return languageHandler.getWorldName(world);
+	}
 
 	/**
 	 * Reload messages from configured language file
