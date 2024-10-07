@@ -38,7 +38,7 @@
 
 	<profiles>
 		<profile>
-			<id>archiva</id>
+			<id>winterhaven</id>
 			<distributionManagement>
 				<repository>
 					<id>releases</id>
