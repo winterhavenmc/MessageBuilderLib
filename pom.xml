@@ -11,7 +11,7 @@
 
 	<name>MessageBuilder</name>
 
-	<url>https://github.com/winterhavenmc/MessageBuilder</url>
+	<url>https://github.com/winterhavenmc/MessageBuilderLib</url>
 
 	<description>
 		A library for minecraft plugins that manages composing and sending messages to players.
