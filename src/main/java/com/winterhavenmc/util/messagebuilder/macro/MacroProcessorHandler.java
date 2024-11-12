@@ -51,7 +51,7 @@ public class MacroProcessorHandler {
 		LEFT('%'),
 		RIGHT('%');
 
-		private final char character;
+		private char character;
 
 		MacroDelimiter(final char defaultChar) {
 			this.character = defaultChar;
@@ -60,6 +60,11 @@ public class MacroProcessorHandler {
 		@Override
 		public String toString() {
 			return String.valueOf(this.character);
+		}
+
+		@SuppressWarnings("unused")
+		public void set(final char character) {
+			this.character = character;
 		}
 	}
 
