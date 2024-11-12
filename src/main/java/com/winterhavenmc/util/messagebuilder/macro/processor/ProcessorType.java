@@ -93,32 +93,19 @@ public enum ProcessorType {
 	}
 
 
+	@SuppressWarnings("unused")
 	public static ProcessorType matchType(final Object object) {
-		if (object instanceof String) {
-			return STRING;
-		}
-		else if (object instanceof Entity) {
-			return ENTITY;
-		}
-		else if (object instanceof CommandSender) {
-			return COMMAND_SENDER;
-		}
-		else if (object instanceof OfflinePlayer) {
-			return OFFLINE_PLAYER;
-		}
-		else if (object instanceof ItemStack) {
-			return ITEM_STACK;
-		}
-		else if (object instanceof Location) {
-			return LOCATION;
-		}
-		else if (object instanceof World) {
-			return WORLD;
-		}
-		else if (object instanceof Number) {
-			return NUMBER;
-		}
-		return OBJECT;
+		return switch (object) {
+			case String s -> STRING;
+			case Entity entity -> ENTITY;
+			case CommandSender commandSender -> COMMAND_SENDER;
+			case OfflinePlayer offlinePlayer -> OFFLINE_PLAYER;
+			case ItemStack itemStack -> ITEM_STACK;
+			case Location location -> LOCATION;
+			case World world -> WORLD;
+			case Number number -> NUMBER;
+			case null, default -> OBJECT;
+		};
 	}
 
 }
