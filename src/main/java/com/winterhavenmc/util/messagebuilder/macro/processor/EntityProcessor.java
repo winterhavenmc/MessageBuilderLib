@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,7 +31,7 @@ public class EntityProcessor extends AbstractProcessor implements Processor {
 
 
 	@Override
-	public ResultMap doReplacements(MacroObjectMap macroObjectMap, String key, Object object) {
+	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
 		ResultMap resultMap = new ResultMap();
 

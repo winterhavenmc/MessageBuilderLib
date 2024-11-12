@@ -30,7 +30,7 @@ public class CommandSenderProcessor extends AbstractProcessor implements Process
 	}
 
 	@Override
-	public ResultMap doReplacements(MacroObjectMap macroObjectMap, String key, Object object) {
+	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
 		ResultMap resultMap = new ResultMap();
 

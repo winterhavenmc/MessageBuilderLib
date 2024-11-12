@@ -28,7 +28,7 @@ public class ObjectProcessor extends AbstractProcessor implements Processor {
 	}
 
 	@Override
-	public ResultMap doReplacements(MacroObjectMap macroObjectMap, String key, Object object) {
+	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 		ResultMap resultMap = new ResultMap();
 		resultMap.put(key, object.toString());
 		return resultMap;

@@ -30,60 +30,60 @@ public enum ProcessorType {
 
 	STRING() {
 		@Override
-		Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new StringProcessor(plugin, languageHandler);
 		}
 	},
 	ENTITY() {
 		@Override
-		Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new EntityProcessor(plugin, languageHandler);
 		}
 	},
 	COMMAND_SENDER() {
 		@Override
-		Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new CommandSenderProcessor(plugin, languageHandler);
 		}
 	},
 	ITEM_STACK() {
 		@Override
-		Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new ItemStackProcessor(plugin, languageHandler);
 		}
 	},
 	LOCATION() {
 		@Override
-		Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new LocationProcessor(plugin, languageHandler);
 		}
 	},
 	NUMBER() {
 		@Override
-		Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new NumberProcessor(plugin, languageHandler);
 		}
 	},
 	OFFLINE_PLAYER() {
 		@Override
-		Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new OfflinePlayerProcessor(plugin, languageHandler);
 		}
 	},
 	WORLD() {
 		@Override
-		Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new WorldProcessor(plugin, languageHandler);
 		}
 	},
 	OBJECT() {
 		@Override
-		Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new ObjectProcessor(plugin, languageHandler);
 		}
 	};
 
-	Processor create(JavaPlugin plugin, LanguageHandler languageHandler) {
+	Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		return null;
 	}
 
@@ -93,7 +93,7 @@ public enum ProcessorType {
 	}
 
 
-	public static ProcessorType matchType(Object object) {
+	public static ProcessorType matchType(final Object object) {
 		if (object instanceof String) {
 			return STRING;
 		}
