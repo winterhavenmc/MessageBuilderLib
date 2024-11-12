@@ -27,9 +27,9 @@ import java.util.Optional;
 public interface LanguageHandler {
 
 	/**
-	 * Get all keys for a message section of the language file. This method is only used for unit testing.
+	 * Get all keys for the message section of the language file. This method is only used for unit testing.
 	 *
-	 * @return Collection of String containing the keys for a message section of the language file
+	 * @return Collection of String containing the keys for the message section of the language file
 	 */
 	@SuppressWarnings("unused")
 	Collection<String> getMessageKeys();
