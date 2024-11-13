@@ -81,12 +81,21 @@ public enum ProcessorType {
 		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 			return new ObjectProcessor(plugin, languageHandler);
 		}
+	},
+	NULL() {
+		@Override
+		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
+			return new NullProcessor(plugin, languageHandler);
+		}
 	};
 
 	abstract Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler);
 
 
-	public void register(final JavaPlugin plugin, final LanguageHandler languageHandler, final ProcessorRegistry macroProcessorRegistry, final ProcessorType type) {
+	public void register(final JavaPlugin plugin,
+	                     final LanguageHandler languageHandler,
+	                     final ProcessorRegistry macroProcessorRegistry,
+	                     final ProcessorType type) {
 		macroProcessorRegistry.put(type, type.create(plugin, languageHandler));
 	}
 
@@ -102,7 +111,8 @@ public enum ProcessorType {
 			case Location location -> LOCATION;
 			case World world -> WORLD;
 			case Number number -> NUMBER;
-			case null, default -> OBJECT;
+			case null -> NULL;
+			default -> OBJECT;
 		};
 	}
 
