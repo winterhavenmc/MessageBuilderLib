@@ -83,9 +83,7 @@ public enum ProcessorType {
 		}
 	};
 
-	Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		return null;
-	}
+	abstract Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler);
 
 
 	public void register(final JavaPlugin plugin, final LanguageHandler languageHandler, final ProcessorRegistry macroProcessorRegistry, final ProcessorType type) {
