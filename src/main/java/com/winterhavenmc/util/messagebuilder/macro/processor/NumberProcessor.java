@@ -39,14 +39,24 @@ public class NumberProcessor extends AbstractProcessor implements Processor {
 		}
 
 		if (object instanceof Long longVar) {
+
 			if (key.endsWith("DURATION") || key.endsWith("DURATION_SECONDS")) {
 				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.SECONDS));
+			}
+			else if (key.endsWith("DURATION_TICKS")) {
+				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.TICKS));
 			}
 			else if (key.endsWith("DURATION_MINUTES")) {
 				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.MINUTES));
 			}
+			else if (key.endsWith("DURATION_HOURS")) {
+				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.HOURS));
+			}
+			else if (key.endsWith("DURATION_DAYS")) {
+				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.DAYS));
+			}
 			else {
-				resultMap.put(key, String.valueOf(object));
+				resultMap.put(key, String.valueOf(longVar));
 			}
 		}
 		else {
