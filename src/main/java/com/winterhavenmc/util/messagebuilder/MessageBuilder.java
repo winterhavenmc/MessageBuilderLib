@@ -37,7 +37,7 @@ import java.util.Optional;
  * the setMacro method, which can be repeated as necessary to set all the macros to be replaced
  * in the message string. Finally, the send method is called, usually as a final chained method call
  * to effectuate the actual sending of the message.
- *
+ * <p>
  * If the message is configured in the language file with a repeat-delay, an entry will be added to
  * the message cooldown map for the player / message, and a task started to remove the entry from the
  * cooldown map after the configured repeat-delay time has elapsed.
