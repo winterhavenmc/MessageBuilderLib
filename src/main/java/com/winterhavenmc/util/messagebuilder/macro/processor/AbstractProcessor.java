@@ -42,6 +42,9 @@ public abstract class AbstractProcessor {
 
 		ResultMap resultMap = new ResultMap();
 
+		//TODO: This creates a key with the original key string, and additionally a second key suffixed with '_NAME' if that is not already the case.
+		// This was done for backward compatibility purposes, and will be removed or modified at some point in the future
+
 		String keyExtra = "_NAME";
 		if (key.endsWith("_NAME")) {
 			keyExtra = "";
