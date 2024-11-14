@@ -34,20 +34,7 @@ public class MacroProcessorHandler {
 	private final LanguageHandler languageHandler;
 	private final ProcessorRegistry macroProcessorRegistry;
 
-
-	/**
-	 * Class constructor
-	 * @param plugin reference to plugin main class
-	 * @param languageHandler reference to language handler
-	 */
-	public MacroProcessorHandler(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		this.plugin = plugin;
-		this.languageHandler = languageHandler;
-		this.macroProcessorRegistry = new ProcessorRegistry();
-	}
-
-
-	enum MacroDelimiter {
+	public enum MacroDelimiter {
 		LEFT('%'),
 		RIGHT('%');
 
@@ -62,10 +49,21 @@ public class MacroProcessorHandler {
 			return String.valueOf(this.character);
 		}
 
-		@SuppressWarnings("unused")
 		public void set(final char character) {
 			this.character = character;
 		}
+	}
+
+
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class
+	 * @param languageHandler reference to language handler
+	 */
+	public MacroProcessorHandler(final JavaPlugin plugin, final LanguageHandler languageHandler) {
+		this.plugin = plugin;
+		this.languageHandler = languageHandler;
+		this.macroProcessorRegistry = new ProcessorRegistry();
 	}
 
 
