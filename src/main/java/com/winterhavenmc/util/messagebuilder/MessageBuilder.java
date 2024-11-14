@@ -80,20 +80,6 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Initiate a message
-	 *
-	 * @param recipient the command sender to whom the message will be sent
-	 * @param messageId the message identifier
-	 * @return Message - an initialized message object
-	 * @deprecated use compose method instead
-	 */
-	@Deprecated
-	public Message<MessageId, Macro> build(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, languageHandler, macroProcessorHandler, recipient, messageId);
-	}
-
-
-	/**
-	 * Initiate a message
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
 	 * @return Message - an initialized message object
