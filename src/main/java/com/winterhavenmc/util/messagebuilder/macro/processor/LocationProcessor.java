@@ -111,7 +111,7 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 		}
 		else {
 			// get name of first world
-			resultString = plugin.getServer().getWorlds().get(0).getName();
+			resultString = plugin.getServer().getWorlds().getFirst().getName();
 		}
 
 		// if Multiverse is enabled, use Multiverse world alias if available
