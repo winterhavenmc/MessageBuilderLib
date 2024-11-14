@@ -31,7 +31,9 @@ public class NullProcessor extends AbstractProcessor implements Processor {
 	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
 		ResultMap resultMap = new ResultMap();
-		resultMap.put(key, "NULL");
+		if (object == null) {
+			resultMap.put(key, "NULL");
+		}
 		return resultMap;
 	}
 
