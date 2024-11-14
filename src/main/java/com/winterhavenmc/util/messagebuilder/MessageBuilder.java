@@ -79,6 +79,27 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 
 	/**
+	 * Set both delimiters to the same specific character
+	 * @param character the character to use for both delimiters
+	 */
+	public void setDelimiters(final Character character) {
+		MacroProcessorHandler.MacroDelimiter.LEFT.set(character);
+		MacroProcessorHandler.MacroDelimiter.RIGHT.set(character);
+	}
+
+
+	/**
+	 * Set delimiters to unique characters by passing two parameters
+	 * @param leftCharacter the character to use for the left delimiter
+	 * @param rightCharacter the character to use for the right delimiter
+	 */
+	public void setDelimiters(final Character leftCharacter, final Character rightCharacter) {
+		MacroProcessorHandler.MacroDelimiter.LEFT.set(leftCharacter);
+		MacroProcessorHandler.MacroDelimiter.RIGHT.set(rightCharacter);
+	}
+
+
+	/**
 	 * Initiate a message
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
