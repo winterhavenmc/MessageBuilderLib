@@ -17,21 +17,19 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.macro.processor.Processor;
-import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
-
 import java.util.EnumMap;
+
 
 public class ProcessorRegistry {
 
 	private final EnumMap<ProcessorType, Processor> macroProcessorMap = new EnumMap<>(ProcessorType.class);
 
 
-	public void put(ProcessorType type, Processor macroProcessor) {
+	public void put(final ProcessorType type, final Processor macroProcessor) {
 		this.macroProcessorMap.put(type, macroProcessor);
 	}
 
-	public Processor get(ProcessorType macroProcessorType) {
+	public Processor get(final ProcessorType macroProcessorType) {
 		return macroProcessorMap.get(macroProcessorType);
 	}
 

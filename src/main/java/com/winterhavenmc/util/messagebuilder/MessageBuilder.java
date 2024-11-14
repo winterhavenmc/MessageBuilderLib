@@ -37,7 +37,7 @@ import java.util.Optional;
  * the setMacro method, which can be repeated as necessary to set all the macros to be replaced
  * in the message string. Finally, the send method is called, usually as a final chained method call
  * to effectuate the actual sending of the message.
- *
+ * <p>
  * If the message is configured in the language file with a repeat-delay, an entry will be added to
  * the message cooldown map for the player / message, and a task started to remove the entry from the
  * cooldown map after the configured repeat-delay time has elapsed.
@@ -79,16 +79,23 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 
 	/**
-	 * Initiate a message
-	 *
-	 * @param recipient the command sender to whom the message will be sent
-	 * @param messageId the message identifier
-	 * @return Message - an initialized message object
-	 * @deprecated use compose method instead
+	 * Set both delimiters to the same specific character
+	 * @param character the character to use for both delimiters
 	 */
-	@Deprecated
-	public Message<MessageId, Macro> build(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, languageHandler, macroProcessorHandler, recipient, messageId);
+	public void setDelimiters(final Character character) {
+		MacroProcessorHandler.MacroDelimiter.LEFT.set(character);
+		MacroProcessorHandler.MacroDelimiter.RIGHT.set(character);
+	}
+
+
+	/**
+	 * Set delimiters to unique characters by passing two parameters
+	 * @param leftCharacter the character to use for the left delimiter
+	 * @param rightCharacter the character to use for the right delimiter
+	 */
+	public void setDelimiters(final Character leftCharacter, final Character rightCharacter) {
+		MacroProcessorHandler.MacroDelimiter.LEFT.set(leftCharacter);
+		MacroProcessorHandler.MacroDelimiter.RIGHT.set(rightCharacter);
 	}
 
 

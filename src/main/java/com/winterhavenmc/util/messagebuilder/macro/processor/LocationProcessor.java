@@ -39,6 +39,9 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 
 		Location location = null;
 
+		//todo: these checks are likely obsolete, as an object of types other than location should not get here.
+		// it was a feature intended to give some added flexibility with passing locations for macro replacements.
+
 		// if object is Entity, set use entity location
 		if (object instanceof Entity entity) {
 			location = entity.getLocation();
@@ -108,7 +111,7 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 		}
 		else {
 			// get name of first world
-			resultString = plugin.getServer().getWorlds().get(0).getName();
+			resultString = plugin.getServer().getWorlds().getFirst().getName();
 		}
 
 		// if Multiverse is enabled, use Multiverse world alias if available

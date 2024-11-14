@@ -17,15 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class NumberProcessor extends AbstractProcessor implements Processor {
-
-	public NumberProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+public class NullProcessor extends AbstractProcessor implements Processor {
+	public NullProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
 		super(plugin, languageHandler);
 	}
 
@@ -33,36 +31,9 @@ public class NumberProcessor extends AbstractProcessor implements Processor {
 	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
 		ResultMap resultMap = new ResultMap();
-
 		if (object == null) {
-			return resultMap;
+			resultMap.put(key, "NULL");
 		}
-
-		if (object instanceof Long longVar) {
-
-			if (key.endsWith("DURATION") || key.endsWith("DURATION_SECONDS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.SECONDS));
-			}
-			else if (key.endsWith("DURATION_TICKS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.TICKS));
-			}
-			else if (key.endsWith("DURATION_MINUTES")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.MINUTES));
-			}
-			else if (key.endsWith("DURATION_HOURS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.HOURS));
-			}
-			else if (key.endsWith("DURATION_DAYS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.DAYS));
-			}
-			else {
-				resultMap.put(key, String.valueOf(longVar));
-			}
-		}
-		else {
-			resultMap.put(key, String.valueOf(object));
-		}
-
 		return resultMap;
 	}
 

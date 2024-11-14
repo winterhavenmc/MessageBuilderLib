@@ -34,6 +34,26 @@ public class MacroProcessorHandler {
 	private final LanguageHandler languageHandler;
 	private final ProcessorRegistry macroProcessorRegistry;
 
+	public enum MacroDelimiter {
+		LEFT('%'),
+		RIGHT('%');
+
+		private char character;
+
+		MacroDelimiter(final char defaultChar) {
+			this.character = defaultChar;
+		}
+
+		@Override
+		public String toString() {
+			return String.valueOf(this.character);
+		}
+
+		public void set(final char character) {
+			this.character = character;
+		}
+	}
+
 
 	/**
 	 * Class constructor
@@ -44,23 +64,6 @@ public class MacroProcessorHandler {
 		this.plugin = plugin;
 		this.languageHandler = languageHandler;
 		this.macroProcessorRegistry = new ProcessorRegistry();
-	}
-
-
-	enum MacroDelimiter {
-		LEFT('%'),
-		RIGHT('%');
-
-		private final char character;
-
-		MacroDelimiter(final char defaultChar) {
-			this.character = defaultChar;
-		}
-
-		@Override
-		public String toString() {
-			return String.valueOf(this.character);
-		}
 	}
 
 
