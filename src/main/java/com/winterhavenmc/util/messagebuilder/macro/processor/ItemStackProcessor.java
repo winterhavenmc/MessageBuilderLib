@@ -58,6 +58,7 @@ public class ItemStackProcessor extends AbstractProcessor implements Processor {
 				resultMap.put(key, resultString);
 			}
 		}
+
 		return resultMap;
 	}
 
