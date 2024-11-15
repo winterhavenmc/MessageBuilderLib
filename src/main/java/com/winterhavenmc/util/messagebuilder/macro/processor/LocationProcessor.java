@@ -30,7 +30,7 @@ import java.util.Optional;
 
 public class LocationProcessor extends AbstractProcessor implements Processor {
 
-	public LocationProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	public LocationProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		super(plugin, languageHandler);
 	}
 
