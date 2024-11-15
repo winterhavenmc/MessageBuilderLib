@@ -24,12 +24,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class StringProcessor extends AbstractProcessor implements Processor {
 
-	public StringProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	public StringProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		super(plugin, languageHandler);
 	}
 
 	@Override
-	public ResultMap doReplacements(MacroObjectMap macroObjectMap, String key, Object object) {
+	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
 		ResultMap resultMap = new ResultMap();
 
