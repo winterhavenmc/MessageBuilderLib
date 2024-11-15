@@ -23,7 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class NullProcessor extends AbstractProcessor implements Processor {
-	public NullProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	public NullProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		super(plugin, languageHandler);
 	}
 
