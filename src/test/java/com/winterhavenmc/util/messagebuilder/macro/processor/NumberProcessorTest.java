@@ -56,77 +56,77 @@ class NumberProcessorTest {
 
 
 	@Test
-	void doReplacements_integer() {
+	void execute_integer() {
 		String key = "SOME_INTEGER";
 		Integer number = 42;
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, number);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, number);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
 		assertTrue(resultMap.containsKey("SOME_INTEGER"));
 		assertEquals("42", resultMap.get("SOME_INTEGER"));
 	}
 
 	@Test
-	void doReplacements_null_integer() {
+	void execute_null_integer() {
 		String key = "SOME_NULL_INTEGER";
 		Integer number = null;
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, number);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, number);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
 		assertFalse(resultMap.containsKey("SOME_NULL_INTEGER"));
 	}
 
 	@Test
-	void doReplacements_long() {
+	void execute_long() {
 		String key = "SOME_LONG";
 		Long number = 420L;
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, number);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, number);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
 		assertTrue(resultMap.containsKey("SOME_LONG"));
 		assertEquals("420", resultMap.get("SOME_LONG"));
 	}
 
 	@Test
-	void doReplacements_null_long() {
+	void execute_null_long() {
 		String key = "SOME_NULL_LONG";
 		Long number = null;
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, number);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, number);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
 		assertFalse(resultMap.containsKey("SOME_NULL_LONG"));
 	}
 
 	@Test
-	void doReplacements_duration() {
+	void execute_duration() {
 		String key = "SOME_DURATION";
 		Long number = 12000L;
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, number);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, number);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
 		assertTrue(resultMap.containsKey("SOME_DURATION"));
 		assertEquals("12 seconds", resultMap.get("SOME_DURATION"));
 	}
 
 	@Test
-	void doReplacements_duration_minutes() {
+	void execute_duration_minutes() {
 		String key = "SOME_DURATION_MINUTES";
 		Long number = 61_000L;
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, number);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, number);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
 		assertTrue(resultMap.containsKey("SOME_DURATION_MINUTES"));
 		assertEquals("1 minute", resultMap.get("SOME_DURATION_MINUTES"));
 	}

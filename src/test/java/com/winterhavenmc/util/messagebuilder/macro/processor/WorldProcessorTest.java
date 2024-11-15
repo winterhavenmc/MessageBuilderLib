@@ -56,7 +56,7 @@ class WorldProcessorTest {
 
 
 	@Test
-	void doReplacements() {
+	void execute() {
 
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		Processor processor = new WorldProcessor(plugin, languageHandler);
@@ -69,13 +69,13 @@ class WorldProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, world);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, world);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, world);
 		assertTrue(resultMap.containsKey("SOME_WORLD"));
 		assertEquals("test_world", resultMap.get("SOME_WORLD"));
 	}
 
 	@Test
-	void doReplacements_with_null_world() {
+	void execute_with_null_world() {
 
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		Processor processor = new WorldProcessor(plugin, languageHandler);
@@ -86,7 +86,7 @@ class WorldProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, null);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, null);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, null);
 		assertTrue(resultMap.isEmpty());
 	}
 

@@ -61,7 +61,7 @@ class LocationProcessorTest {
 
 
 	@Test
-	void doReplacements() {
+	void execute() {
 		String key = "SOME_LOCATION";
 
 		WorldMock world = server.addSimpleWorld("new_world");
@@ -71,7 +71,7 @@ class LocationProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, location);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, location);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, location);
 		assertTrue(resultMap.containsKey("SOME_LOCATION"));
 		assertEquals("new_world", resultMap.get("SOME_LOCATION_WORLD"));
 		assertEquals("80", resultMap.get("SOME_LOCATION_X"));

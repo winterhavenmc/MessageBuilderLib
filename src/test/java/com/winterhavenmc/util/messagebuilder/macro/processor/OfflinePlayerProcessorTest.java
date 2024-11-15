@@ -53,7 +53,7 @@ class OfflinePlayerProcessorTest {
 	}
 
 //	@Test
-//	void doReplacements() {
+//	void execute() {
 //		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 //		Processor processor = new StringProcessor(plugin, languageHandler);
 //
@@ -63,13 +63,13 @@ class OfflinePlayerProcessorTest {
 //		MacroObjectMap macroObjectMap = new MacroObjectMap();
 //		macroObjectMap.put(key, offlinePlayer);
 //
-//		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, offlinePlayer);
+//		ResultMap resultMap = processor.execute(macroObjectMap, key, offlinePlayer);
 //
 //		assertTrue(resultMap.containsKey("SOME_NAME"));
 //	}
 
 	@Test
-	void doReplacements_with_null_offlinePlayer() {
+	void execute_with_null_offlinePlayer() {
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		Processor processor = new StringProcessor(plugin, languageHandler);
 
@@ -78,7 +78,7 @@ class OfflinePlayerProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, null);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, null);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, null);
 
 		assertFalse(resultMap.containsKey("SOME_NAME"));
 	}

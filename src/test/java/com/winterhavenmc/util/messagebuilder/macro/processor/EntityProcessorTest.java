@@ -60,7 +60,7 @@ class EntityProcessorTest {
 
 
 	@Test
-	void doReplacements() {
+	void execute() {
 		String key = "SOME_ENTITY";
 
 		PlayerMock player = server.addPlayer("testy");
@@ -68,7 +68,7 @@ class EntityProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, player);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, player);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, player);
 		assertTrue(resultMap.containsKey("SOME_ENTITY"));
 		assertEquals("testy", resultMap.get("SOME_ENTITY"));
 		assertTrue(resultMap.containsKey("SOME_ENTITY_NAME"));

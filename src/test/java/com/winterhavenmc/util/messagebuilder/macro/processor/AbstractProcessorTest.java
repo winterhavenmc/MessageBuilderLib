@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AbstractProcessorTest {
 
 	@Test
-	void doReplacements() {
+	void execute() {
 
 
 	}

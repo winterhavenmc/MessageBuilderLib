@@ -35,7 +35,7 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 	}
 
 	@Override
-	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
 		Location location = null;
 

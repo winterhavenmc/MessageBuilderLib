@@ -35,7 +35,7 @@ public abstract class AbstractProcessor {
 		this.languageHandler = languageHandler;
 	}
 
-	public abstract ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object);
+	public abstract ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object);
 
 
 	protected ResultMap mapName(final String key, final String name) {

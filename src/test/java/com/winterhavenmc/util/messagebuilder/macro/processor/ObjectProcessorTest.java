@@ -60,14 +60,14 @@ class ObjectProcessorTest {
 
 
 	@Test
-	void doReplacements_integer() {
+	void execute_integer() {
 		String key = "SOME_INTEGER";
 		Integer number = 42;
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, number);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, number);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
 		assertTrue(resultMap.containsKey("SOME_INTEGER"));
 		assertEquals("42", resultMap.get("SOME_INTEGER"));
 	}

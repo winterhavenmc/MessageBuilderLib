@@ -63,7 +63,7 @@ class CommandSenderProcessorTest {
 
 
 	@Test
-	void doReplacements() {
+	void execute() {
 		String key = "SOME_SENDER";
 
 		PlayerMock player = server.addPlayer("testy");
@@ -71,7 +71,7 @@ class CommandSenderProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, player);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, player);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, player);
 		assertTrue(resultMap.containsKey("SOME_SENDER"));
 		assertEquals("testy", resultMap.get("SOME_SENDER"));
 	}

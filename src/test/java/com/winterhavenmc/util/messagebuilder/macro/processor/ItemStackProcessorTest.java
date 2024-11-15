@@ -63,7 +63,7 @@ class ItemStackProcessorTest {
 	}
 
 	@Test
-	void doReplacements_with_item_meta() {
+	void execute_with_item_meta() {
 
 		String key = "SOME_ITEM";
 
@@ -76,7 +76,7 @@ class ItemStackProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, itemStack);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, itemStack);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, itemStack);
 
 		assertFalse(resultMap.isEmpty());
 		assertTrue(resultMap.containsKey("SOME_ITEM"));
@@ -84,7 +84,7 @@ class ItemStackProcessorTest {
 	}
 
 	@Test
-	void doReplacements_with_item_material() {
+	void execute_with_item_material() {
 		String key = "SOME_ITEM";
 
 		ItemStack itemStack = new ItemStack(Material.STONE);
@@ -92,7 +92,7 @@ class ItemStackProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, itemStack);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, itemStack);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, itemStack);
 
 		assertFalse(resultMap.isEmpty());
 		assertTrue(resultMap.containsKey("SOME_ITEM"));
