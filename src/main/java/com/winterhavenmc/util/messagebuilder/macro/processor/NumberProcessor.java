@@ -25,7 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class NumberProcessor extends AbstractProcessor implements Processor {
 
-	public NumberProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	public NumberProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		super(plugin, languageHandler);
 	}
 
