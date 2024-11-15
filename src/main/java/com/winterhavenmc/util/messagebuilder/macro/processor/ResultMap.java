@@ -24,21 +24,21 @@ public class ResultMap {
 
 	private final Map<String, String> internalResultMap = new HashMap<>();
 
-	void put(String key, String value) {
+	void put(final String key, final String value) {
 		internalResultMap.put(key, value);
 	}
 
-	String get(String key) {
+	String get(final String key) {
 		return internalResultMap.get(key);
 	}
 
-	public void putAll(ResultMap resultMap) {
+	public void putAll(final ResultMap resultMap) {
 		for (Map.Entry<String, String> entry : resultMap.entrySet()) {
 			internalResultMap.put(entry.getKey(), entry.getValue());
 		}
 	}
 
-	public boolean containsKey(String key) {
+	public boolean containsKey(final String key) {
 		return internalResultMap.containsKey(key);
 	}
 
