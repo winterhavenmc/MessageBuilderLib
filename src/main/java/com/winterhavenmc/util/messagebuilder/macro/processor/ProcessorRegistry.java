@@ -26,6 +26,7 @@ import java.util.EnumMap;
  */
 public class ProcessorRegistry {
 
+	// the backing store EnumMap
 	private final EnumMap<ProcessorType, Processor> macroProcessorMap = new EnumMap<>(ProcessorType.class);
 
 
