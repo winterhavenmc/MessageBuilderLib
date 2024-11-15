@@ -25,7 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandSenderProcessor extends AbstractProcessor implements Processor {
 
-	public CommandSenderProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	public CommandSenderProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		super(plugin, languageHandler);
 	}
 
