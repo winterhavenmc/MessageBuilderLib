@@ -30,7 +30,7 @@ public abstract class AbstractProcessor {
 	protected final static String UNKNOWN_VALUE = "???";
 
 
-	AbstractProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	AbstractProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		this.plugin = plugin;
 		this.languageHandler = languageHandler;
 	}
