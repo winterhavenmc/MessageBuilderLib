@@ -59,7 +59,11 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @param recipient       message recipient
 	 * @param messageId       message identifier
 	 */
-	public Message(final JavaPlugin plugin, final LanguageHandler languageHandler, final MacroProcessorHandler macroProcessorHandler, final CommandSender recipient, final MessageId messageId) {
+	public Message(final JavaPlugin plugin,
+	               final LanguageHandler languageHandler,
+	               final MacroProcessorHandler macroProcessorHandler,
+	               final CommandSender recipient,
+	               final MessageId messageId) {
 		this.plugin = plugin;
 		this.languageHandler = languageHandler;
 		this.macroProcessorHandler = macroProcessorHandler;
