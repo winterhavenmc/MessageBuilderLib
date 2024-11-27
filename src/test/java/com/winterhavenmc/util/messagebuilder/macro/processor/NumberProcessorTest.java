@@ -17,13 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.junit.jupiter.api.*;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +36,7 @@ class NumberProcessorTest {
 	Processor processor;
 
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
 		// Start the mock server
 		server = MockBukkit.mock();
@@ -48,7 +48,7 @@ class NumberProcessorTest {
 		processor = new NumberProcessor(plugin, languageHandler);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
 		// Stop the mock server
 		MockBukkit.unmock();

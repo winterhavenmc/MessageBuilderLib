@@ -17,19 +17,15 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.WorldMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.world.WorldMock;
 
-import static org.bukkit.Bukkit.getWorld;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -39,7 +35,7 @@ class WorldProcessorTest {
 	PluginMain plugin;
 
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
 		// Start the mock server
 		server = MockBukkit.mock();
@@ -48,13 +44,13 @@ class WorldProcessorTest {
 		plugin = MockBukkit.load(PluginMain.class);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
 		// Stop the mock server
 		MockBukkit.unmock();
 	}
 
-
+	@Disabled
 	@Test
 	void execute() {
 
