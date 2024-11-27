@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
@@ -27,6 +25,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,7 +54,7 @@ class StringProcessorTest {
 	}
 
 	@Test
-	void doReplacements() {
+	void execute() {
 
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		Processor processor = new StringProcessor(plugin, languageHandler);
@@ -65,7 +65,7 @@ class StringProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, value);
 
-		ResultMap stringMap = processor.doReplacements(macroObjectMap, "SOME_NAME", "some name");
+		ResultMap stringMap = processor.execute(macroObjectMap, "SOME_NAME", "some name");
 
 		assertTrue(stringMap.containsKey("SOME_NAME"));
 		assertEquals(value, stringMap.get(key));
@@ -73,7 +73,7 @@ class StringProcessorTest {
 
 
 	@Test
-	void doReplacementsWithItem() {
+	void executeWithItem() {
 
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		Processor processor = new StringProcessor(plugin, languageHandler);
@@ -84,7 +84,7 @@ class StringProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, value);
 
-		ResultMap stringMap = processor.doReplacements(macroObjectMap, "ITEM", "some item string");
+		ResultMap stringMap = processor.execute(macroObjectMap, "ITEM", "some item string");
 
 		assertTrue(stringMap.containsKey(key));
 		assertEquals("§aTest Item", stringMap.get(key));

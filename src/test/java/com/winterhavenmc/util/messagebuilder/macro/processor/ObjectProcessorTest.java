@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
@@ -27,6 +25,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,14 +60,14 @@ class ObjectProcessorTest {
 
 
 	@Test
-	void doReplacements_integer() {
+	void execute_integer() {
 		String key = "SOME_INTEGER";
 		Integer number = 42;
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, number);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, number);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
 		assertTrue(resultMap.containsKey("SOME_INTEGER"));
 		assertEquals("42", resultMap.get("SOME_INTEGER"));
 	}

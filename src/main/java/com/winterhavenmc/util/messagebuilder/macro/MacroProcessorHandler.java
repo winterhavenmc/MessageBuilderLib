@@ -95,7 +95,7 @@ public class MacroProcessorHandler {
 			// iterate over macro object map, getting macro value strings based on class type in object map
 			for (Map.Entry<String, Object> entry : macroObjectMap.entrySet()) {
 				ProcessorType type = ProcessorType.matchType(entry.getValue());
-				macroStringMap.putAll(macroProcessorRegistry.get(type).doReplacements(macroObjectMap, entry.getKey(), entry.getValue()));
+				macroStringMap.putAll(macroProcessorRegistry.get(type).execute(macroObjectMap, entry.getKey(), entry.getValue()));
 			}
 
 			// replace macro tokens in message string with macro strings

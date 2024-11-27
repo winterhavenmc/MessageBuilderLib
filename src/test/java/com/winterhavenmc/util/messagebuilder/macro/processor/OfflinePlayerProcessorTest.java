@@ -17,17 +17,18 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.bukkit.OfflinePlayer;
+import org.junit.jupiter.api.*;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 
+import java.util.UUID;
+
+import static java.util.UUID.fromString;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -52,33 +53,35 @@ class OfflinePlayerProcessorTest {
 		MockBukkit.unmock();
 	}
 
-//	@Test
-//	void doReplacements() {
-//		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-//		Processor processor = new StringProcessor(plugin, languageHandler);
-//
-//		String key = "SOME_NAME";
-//		OfflinePlayer offlinePlayer = server.getOfflinePlayer( UUID.fromString("test_player"));
-//
-//		MacroObjectMap macroObjectMap = new MacroObjectMap();
-//		macroObjectMap.put(key, offlinePlayer);
-//
-//		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, offlinePlayer);
-//
-//		assertTrue(resultMap.containsKey("SOME_NAME"));
-//	}
-
+	@Disabled
 	@Test
-	void doReplacements_with_null_offlinePlayer() {
+	void execute() {
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		Processor processor = new StringProcessor(plugin, languageHandler);
 
-		String key = "SOME_Name";
+		String key = "SOME_NAME";
+		OfflinePlayer offlinePlayer = server.getOfflinePlayer(UUID.randomUUID());
+		assertNotNull(offlinePlayer);
+
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
+		macroObjectMap.put(key, offlinePlayer);
+
+		ResultMap resultMap = processor.execute(macroObjectMap, key, offlinePlayer);
+
+		assertTrue(resultMap.containsKey(key), "No match: " + key);
+	}
+
+	@Test
+	void execute_with_null_offlinePlayer() {
+		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+		Processor processor = new StringProcessor(plugin, languageHandler);
+
+		String key = "SOME_NAME";
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, null);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, null);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, null);
 
 		assertFalse(resultMap.containsKey("SOME_NAME"));
 	}

@@ -22,5 +22,5 @@ import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 
 public interface Processor {
 
-	ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object);
+	ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object);
 }

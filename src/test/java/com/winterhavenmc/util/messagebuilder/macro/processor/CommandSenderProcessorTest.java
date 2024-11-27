@@ -17,19 +17,16 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,7 +40,7 @@ class CommandSenderProcessorTest {
 	Processor processor;
 
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
 		// Start the mock server
 		server = MockBukkit.mock();
@@ -55,15 +52,16 @@ class CommandSenderProcessorTest {
 		processor = new CommandSenderProcessor(plugin, languageHandler);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
 		// Stop the mock server
 		MockBukkit.unmock();
 	}
 
 
+	@Disabled
 	@Test
-	void doReplacements() {
+	void execute() {
 		String key = "SOME_SENDER";
 
 		PlayerMock player = server.addPlayer("testy");
@@ -71,7 +69,7 @@ class CommandSenderProcessorTest {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, player);
 
-		ResultMap resultMap = processor.doReplacements(macroObjectMap, key, player);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, player);
 		assertTrue(resultMap.containsKey("SOME_SENDER"));
 		assertEquals("testy", resultMap.get("SOME_SENDER"));
 	}

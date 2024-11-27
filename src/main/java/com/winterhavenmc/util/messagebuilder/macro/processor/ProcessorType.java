@@ -100,17 +100,16 @@ public enum ProcessorType {
 	}
 
 
-	@SuppressWarnings("unused")
 	public static ProcessorType matchType(final Object object) {
 		return switch (object) {
-			case String s -> STRING;
-			case Entity entity -> ENTITY;
-			case CommandSender commandSender -> COMMAND_SENDER;
-			case OfflinePlayer offlinePlayer -> OFFLINE_PLAYER;
-			case ItemStack itemStack -> ITEM_STACK;
-			case Location location -> LOCATION;
-			case World world -> WORLD;
-			case Number number -> NUMBER;
+			case String ignored -> STRING;
+			case Entity ignored -> ENTITY;
+			case CommandSender ignored -> COMMAND_SENDER;
+			case OfflinePlayer ignored -> OFFLINE_PLAYER;
+			case ItemStack ignored -> ITEM_STACK;
+			case Location ignored -> LOCATION;
+			case World ignored -> WORLD;
+			case Number ignored -> NUMBER;
 			case null -> NULL;
 			default -> OBJECT;
 		};

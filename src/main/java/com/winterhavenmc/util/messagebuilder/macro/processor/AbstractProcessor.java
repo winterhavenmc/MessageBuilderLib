@@ -30,12 +30,12 @@ public abstract class AbstractProcessor {
 	protected final static String UNKNOWN_VALUE = "???";
 
 
-	AbstractProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	AbstractProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		this.plugin = plugin;
 		this.languageHandler = languageHandler;
 	}
 
-	public abstract ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object);
+	public abstract ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object);
 
 
 	protected ResultMap mapName(final String key, final String name) {

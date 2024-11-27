@@ -26,12 +26,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ItemStackProcessor extends AbstractProcessor implements Processor {
 
-	public ItemStackProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	public ItemStackProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		super(plugin, languageHandler);
 	}
 
 	@Override
-	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
 		ResultMap resultMap = new ResultMap();
 

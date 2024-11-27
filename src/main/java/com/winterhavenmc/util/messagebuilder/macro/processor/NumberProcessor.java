@@ -25,12 +25,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class NumberProcessor extends AbstractProcessor implements Processor {
 
-	public NumberProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	public NumberProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		super(plugin, languageHandler);
 	}
 
 	@Override
-	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
 		ResultMap resultMap = new ResultMap();
 

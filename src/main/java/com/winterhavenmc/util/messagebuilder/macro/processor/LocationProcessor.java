@@ -30,12 +30,12 @@ import java.util.Optional;
 
 public class LocationProcessor extends AbstractProcessor implements Processor {
 
-	public LocationProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
+	public LocationProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
 		super(plugin, languageHandler);
 	}
 
 	@Override
-	public ResultMap doReplacements(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
 		Location location = null;
 
