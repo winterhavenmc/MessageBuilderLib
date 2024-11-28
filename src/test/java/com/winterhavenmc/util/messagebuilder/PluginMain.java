@@ -6,11 +6,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * The main class for SoundConfigTest plugin
  */
-@SuppressWarnings("unused")
 public class PluginMain extends JavaPlugin {
 
     MessageBuilder<MessageId, Macro> messageBuilder;
-
 
     @Override
     public void onEnable() {
