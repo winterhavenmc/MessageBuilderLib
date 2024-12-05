@@ -52,6 +52,9 @@ MESSAGES:
     enabled: false
     message: "This is a disabled message"
 
+  LEGACY_MESSAGE:
+    string: "This is a legacy message"
+
   ENABLED_TITLE:
     enabled: false
     title: "This is an enabled title"
@@ -71,6 +74,13 @@ MESSAGES:
     title-fade-in: 20
     title-stay: 140
     title-fade-out: 40
+
+  NON_INT_TITLE_FADE_VALUES:
+    enabled: true
+    title: "This is a title with non-integer fade values"
+    title-fade-in: "STRING"
+    title-stay: "STRING"
+    title-fade-out: "STRING"
 
   DURATION_MESSAGE:
     enabled: true
