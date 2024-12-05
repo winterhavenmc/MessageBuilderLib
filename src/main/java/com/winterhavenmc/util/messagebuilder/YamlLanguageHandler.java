@@ -239,6 +239,24 @@ public final class YamlLanguageHandler implements LanguageHandler {
 
 
 	/**
+	 * Get item name from language specific messages file, with translated color codes
+	 *
+	 * @return String ITEM_NAME, or empty string if key not found
+	 */
+	@Override
+	public Optional<String> getItemName(String def) {
+
+		String string = messages.getString("ITEM_INFO.ITEM_NAME", def);
+
+		if (string == null) {
+			return Optional.empty();
+		}
+
+		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
+	}
+
+
+	/**
 	 * Get configured plural item name from language file
 	 *
 	 * @return the formatted plural display name of an item, or empty string if key not found
@@ -358,13 +376,10 @@ public final class YamlLanguageHandler implements LanguageHandler {
 
 		// if duration is negative, return unlimited time string
 		if (duration < 0) {
-
 			String string = messages.getString("TIME_STRINGS.UNLIMITED");
-
 			if (string == null) {
 				string = "unlimited";
 			}
-
 			return ChatColor.translateAlternateColorCodes('&', string);
 		}
 
@@ -531,7 +546,7 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @param world the world object to retrieve name
 	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
 	 */
-	private Optional<String> getWorldAlias(final World world) {
+	public Optional<String> getWorldAlias(final World world) {
 
 		// if world is null, return empty optional
 		if (world == null) {
