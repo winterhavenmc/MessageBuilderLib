@@ -112,7 +112,7 @@ public class MacroProcessorHandler {
 
 			// replace macro tokens in message string with macro strings
 			for (Map.Entry<String, String> entry : macroStringMap.entrySet()) {
-				String macroToken = MacroDelimiter.LEFT.character + entry.getKey() + MacroDelimiter.RIGHT.character;
+				String macroToken = MacroDelimiter.LEFT + entry.getKey() + MacroDelimiter.RIGHT;
 				modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue());
 			}
 		}
