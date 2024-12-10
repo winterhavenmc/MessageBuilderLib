@@ -24,79 +24,78 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
+
 
 public enum ProcessorType {
 
 	STRING() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new StringProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new StringProcessor(languageHandler);
 		}
 	},
 	ENTITY() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new EntityProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new EntityProcessor(languageHandler);
 		}
 	},
 	COMMAND_SENDER() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new CommandSenderProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new CommandSenderProcessor(languageHandler);
 		}
 	},
 	ITEM_STACK() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new ItemStackProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new ItemStackProcessor(languageHandler);
 		}
 	},
 	LOCATION() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new LocationProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new LocationProcessor(languageHandler);
 		}
 	},
 	NUMBER() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new NumberProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new NumberProcessor(languageHandler);
 		}
 	},
 	OFFLINE_PLAYER() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new OfflinePlayerProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new OfflinePlayerProcessor(languageHandler);
 		}
 	},
 	WORLD() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new WorldProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new WorldProcessor(languageHandler);
 		}
 	},
 	OBJECT() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new ObjectProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new ObjectProcessor(languageHandler);
 		}
 	},
 	NULL() {
 		@Override
-		Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-			return new NullProcessor(plugin, languageHandler);
+		Processor create(final LanguageHandler languageHandler) {
+			return new NullProcessor(languageHandler);
 		}
 	};
 
-	abstract Processor create(final JavaPlugin plugin, final LanguageHandler languageHandler);
+	abstract Processor create(final LanguageHandler languageHandler);
 
 
-	public void register(final JavaPlugin plugin,
-	                     final LanguageHandler languageHandler,
+	public void register(final LanguageHandler languageHandler,
 	                     final ProcessorRegistry macroProcessorRegistry,
 	                     final ProcessorType type) {
-		macroProcessorRegistry.put(type, type.create(plugin, languageHandler));
+		macroProcessorRegistry.put(type, type.create(languageHandler));
 	}
 
 
