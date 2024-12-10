@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Server;
 
 import java.util.Optional;
 
@@ -87,8 +88,13 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 			return Optional.empty();
 		}
 
+		// get server instance from static reference to access the plugin manager and worlds
+		// note this is the only processor that needed external access, so we are resorting to static references
+		// in order to avoid otherwise unnecessary dependency injection
+		Server server = Bukkit.getServer();
+
 		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) Bukkit.getPluginManager().getPlugin("Multiverse-Core");
+		MultiverseCore mvCore = (MultiverseCore) server.getPluginManager().getPlugin("Multiverse-Core");
 
 		// declare resultString with world name for location
 		String resultString;
@@ -97,7 +103,7 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 		}
 		else {
 			// get name of first world
-			resultString = Bukkit.getServer().getWorlds().getFirst().getName();
+			resultString = server.getWorlds().getFirst().getName();
 		}
 
 		// if Multiverse is enabled, use Multiverse world alias if available
