@@ -21,13 +21,12 @@ import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 
 import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class WorldProcessor extends AbstractProcessor implements Processor {
 
-	public WorldProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		super(plugin, languageHandler);
+	public WorldProcessor(final LanguageHandler languageHandler) {
+		super(languageHandler);
 	}
 
 	@Override
