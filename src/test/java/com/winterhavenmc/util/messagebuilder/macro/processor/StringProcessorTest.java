@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
@@ -25,8 +27,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,7 +57,7 @@ class StringProcessorTest {
 	void execute() {
 
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(plugin, languageHandler);
+		Processor processor = new StringProcessor(languageHandler);
 
 		String key = "SOME_NAME";
 		String value = "some name";
@@ -76,7 +76,7 @@ class StringProcessorTest {
 	void executeWithItem() {
 
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(plugin, languageHandler);
+		Processor processor = new StringProcessor(languageHandler);
 
 		String key = "ITEM";
 		String value = "some item string";
