@@ -23,7 +23,6 @@ import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 
 import java.util.Optional;
 
@@ -37,24 +36,11 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 	@Override
 	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
 
-		Location location = null;
-
-		//todo: these checks are likely obsolete, as an object of types other than location should not get here.
-		// it was a feature intended to give some added flexibility with passing locations for macro replacements.
-
-		// if object is Entity, set use entity location
-		if (object instanceof Entity entity) {
-			location = entity.getLocation();
-		}
-		// if object is Location, use location
-		else if (object instanceof Location) {
-			location = (Location) object;
-		}
-
+		// create empty result map
 		ResultMap resultMap = new ResultMap();
 
-		// if location is null return empty map
-		if (location == null) {
+		// if passed object is not a Location, return empty result map
+		if (!(object instanceof Location location)) {
 			return resultMap;
 		}
 
