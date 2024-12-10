@@ -124,11 +124,9 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			displayTitle();
 		}
 
-		// if message repeat delay value is greater than zero, add entry to messageCooldownMap
-		if (languageHandler.getRepeatDelay(messageId) > 0) {
-			if (recipient instanceof Entity) {
-				messageCooldown.put(messageId, (Entity) recipient);
-			}
+		// if message repeat delay value is greater than zero and recipient is entity, add entry to messageCooldownMap
+		if (languageHandler.getRepeatDelay(messageId) > 0 && recipient instanceof Entity) {
+			messageCooldown.put(messageId, (Entity) recipient);
 		}
 	}
 
