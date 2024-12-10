@@ -74,7 +74,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	public MessageBuilder(final JavaPlugin plugin) {
 		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin);
-		this.macroProcessorHandler = new MacroProcessorHandler(plugin, languageHandler);
+		this.macroProcessorHandler = new MacroProcessorHandler(languageHandler);
 	}
 
 
