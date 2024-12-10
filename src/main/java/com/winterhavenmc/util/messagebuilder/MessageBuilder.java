@@ -42,14 +42,15 @@ import java.util.Optional;
  * the message cooldown map for the player / message, and a task started to remove the entry from the
  * cooldown map after the configured repeat-delay time has elapsed.
  * <p>
- * Example:
+ * <i>example:</i>
  * <pre>
- *     messageBuilder.compose(recipient, MessageId.MESSAGE_TO_SEND)
+ *     {@code messageBuilder.compose(recipient, MessageId.MESSAGE_TO_SEND)
  *         .setMacro(Macro.PLACEHOLDER1, object)
  *         .setMacro(Macro.PLACEHOLDER2, replacementString)
  *         .send();
+ *     }
  * </pre>
- *
+ * <p>
  * Note that any object may be passed as the replacement string, which will be converted using
  * that object's toString method, except in the case of some placeholder keys that are treated
  * specially by the doMacroReplacements method. Special keys are:
