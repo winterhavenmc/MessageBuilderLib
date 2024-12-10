@@ -25,8 +25,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class EntityProcessor extends AbstractProcessor implements Processor {
 
-	public EntityProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		super(plugin, languageHandler);
+	public EntityProcessor(final LanguageHandler languageHandler) {
+		super(languageHandler);
 	}
 
 
