@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import org.bukkit.World;
 import org.junit.jupiter.api.*;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 
 import java.util.List;
 import java.util.Optional;
@@ -333,12 +333,29 @@ class YamlLanguageHandlerTest {
 		assertTrue(languageHandler.getStringList("ARBITRARY_STRING_LIST").containsAll(List.of("item 1", "item 2", "item 3")));
 	}
 
+	@Disabled
+	@Nested
+	class mockServerWorldTests {
+		@Test
+		void getWorlds_test_for_empty() {
+			assertFalse(server.getWorlds().isEmpty());
+		}
+		@Test
+		void addSimpleWorld_test_for_null() {
+			assertNotNull(server.addSimpleWorld("test_world"));
+		}
+		@Test
+		void addPlayerTest() {
+			assertNotNull(server.addPlayer("player1"));
+		}
+	}
+
+
 	@Nested
 	class WorldNameTests {
 		@Disabled
 		@Test
-		void getWorldName() {
-			//		World world = server.addSimpleWorld("test_world");
+		void getWorldNameTest() {
 			World world = server.getWorld("world");
 			Optional<String> optionalWorldName = languageHandler.getWorldName(world);
 			assertNotNull(world, "The default mock world is null.");
@@ -370,9 +387,11 @@ class YamlLanguageHandlerTest {
 	}
 
 	@Test
-	void reload () {
+	void reload() {
 		languageHandler.reload();
+		// test that at least one message key exists after reload
 		assertFalse(languageHandler.getMessageKeys().isEmpty());
+		// test that a specific message key exists after reload
 		assertTrue(languageHandler.getMessageKeys().contains("ENABLED_MESSAGE"));
 	}
 }
