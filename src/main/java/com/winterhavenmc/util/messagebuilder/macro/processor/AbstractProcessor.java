@@ -20,18 +20,14 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 
 public abstract class AbstractProcessor {
 
-	protected final JavaPlugin plugin;
 	protected final LanguageHandler languageHandler;
 	protected final static String UNKNOWN_VALUE = "???";
 
 
-	AbstractProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		this.plugin = plugin;
+	AbstractProcessor(final LanguageHandler languageHandler) {
 		this.languageHandler = languageHandler;
 	}
 

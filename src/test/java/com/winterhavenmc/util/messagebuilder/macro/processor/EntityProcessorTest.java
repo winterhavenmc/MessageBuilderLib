@@ -17,14 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.junit.jupiter.api.*;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
-import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,7 +46,7 @@ class EntityProcessorTest {
 		plugin = MockBukkit.load(PluginMain.class);
 
 		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new EntityProcessor(plugin, languageHandler);
+		processor = new EntityProcessor(languageHandler);
 	}
 
 	@AfterAll

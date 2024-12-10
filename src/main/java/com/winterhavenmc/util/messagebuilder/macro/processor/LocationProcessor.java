@@ -21,17 +21,17 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Optional;
 
 
 public class LocationProcessor extends AbstractProcessor implements Processor {
 
-	public LocationProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		super(plugin, languageHandler);
+	public LocationProcessor(final LanguageHandler languageHandler) {
+		super(languageHandler);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 		}
 
 		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
+		MultiverseCore mvCore = (MultiverseCore) Bukkit.getPluginManager().getPlugin("Multiverse-Core");
 
 		// declare resultString with world name for location
 		String resultString;
@@ -111,7 +111,7 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 		}
 		else {
 			// get name of first world
-			resultString = plugin.getServer().getWorlds().getFirst().getName();
+			resultString = Bukkit.getServer().getWorlds().getFirst().getName();
 		}
 
 		// if Multiverse is enabled, use Multiverse world alias if available
