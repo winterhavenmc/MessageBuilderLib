@@ -34,7 +34,7 @@ public class MacroProcessorHandler {
 
 
 	/**
-	 * Enum that contains LEFT and RIGHT macro delimiter characters
+	 * Enum that contains settable LEFT and RIGHT macro delimiter characters
 	 */
 	public enum MacroDelimiter {
 		LEFT('%'),
@@ -43,6 +43,10 @@ public class MacroProcessorHandler {
 		// the delimiter character
 		private char character;
 
+		/**
+		 * Constructor for enum
+		 * @param defaultChar the default character for a delimiter
+		 */
 		MacroDelimiter(final char defaultChar) {
 			this.character = defaultChar;
 		}
