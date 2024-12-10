@@ -19,13 +19,12 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class StringProcessor extends AbstractProcessor implements Processor {
 
-	public StringProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		super(plugin, languageHandler);
+	public StringProcessor(final LanguageHandler languageHandler) {
+		super(languageHandler);
 	}
 
 	@Override
