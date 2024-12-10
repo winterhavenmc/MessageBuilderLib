@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import org.junit.jupiter.api.*;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
-import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,17 +30,21 @@ class MessageCooldownTest {
 
 	private ServerMock server;
 	private PluginMain plugin;
+	private MessageCooldown<MessageId> messageCooldown;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
 		// Start the mock server
 		server = MockBukkit.mock();
 
 		// start the mock plugin
 		plugin = MockBukkit.load(PluginMain.class);
+
+		// instantiate MessageCooldown
+		messageCooldown = new MessageCooldown<>(plugin);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
 		// Stop the mock server
 		MockBukkit.unmock();
@@ -49,13 +53,11 @@ class MessageCooldownTest {
 
 	@Test
 	void getInstance() {
-		new MessageCooldown<>(plugin);
 		assertNotNull(MessageCooldown.getInstance(plugin));
 	}
 
 	@Test
 	void getMessageCooldownMap() {
-		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
 		assertNotNull(messageCooldown.getMessageCooldownMap());
 	}
 

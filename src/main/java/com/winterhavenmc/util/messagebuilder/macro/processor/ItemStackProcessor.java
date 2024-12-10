@@ -21,13 +21,12 @@ import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class ItemStackProcessor extends AbstractProcessor implements Processor {
 
-	public ItemStackProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		super(plugin, languageHandler);
+	public ItemStackProcessor(final LanguageHandler languageHandler) {
+		super(languageHandler);
 	}
 
 	@Override

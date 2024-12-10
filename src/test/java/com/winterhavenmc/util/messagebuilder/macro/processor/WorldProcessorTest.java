@@ -17,14 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
+import be.seeseemelk.mockbukkit.WorldMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.junit.jupiter.api.*;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
-import org.mockbukkit.mockbukkit.world.WorldMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,7 +55,7 @@ class WorldProcessorTest {
 	void execute() {
 
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new WorldProcessor(plugin, languageHandler);
+		Processor processor = new WorldProcessor(languageHandler);
 
 		String key = "SOME_WORLD";
 		String value = "some word";
@@ -74,7 +74,7 @@ class WorldProcessorTest {
 	void execute_with_null_world() {
 
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new WorldProcessor(plugin, languageHandler);
+		Processor processor = new WorldProcessor(languageHandler);
 
 		String key = "SOME_WORLD";
 		String value = "some word";

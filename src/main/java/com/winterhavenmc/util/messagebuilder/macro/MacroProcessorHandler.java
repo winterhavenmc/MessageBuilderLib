@@ -24,20 +24,23 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Map;
 
+
 public class MacroProcessorHandler {
 
-	private final JavaPlugin plugin;
-	private final LanguageHandler languageHandler;
 	private final ProcessorRegistry macroProcessorRegistry;
 
+
+	/**
+	 * Enum that contains LEFT and RIGHT macro delimiter characters
+	 */
 	public enum MacroDelimiter {
 		LEFT('%'),
 		RIGHT('%');
 
+		// the delimiter character
 		private char character;
 
 		MacroDelimiter(final char defaultChar) {
@@ -49,6 +52,10 @@ public class MacroProcessorHandler {
 			return String.valueOf(this.character);
 		}
 
+		public char toChar() {
+			return this.character;
+		}
+
 		public void set(final char character) {
 			this.character = character;
 		}
@@ -57,22 +64,21 @@ public class MacroProcessorHandler {
 
 	/**
 	 * Class constructor
-	 * @param plugin reference to plugin main class
 	 * @param languageHandler reference to language handler
 	 */
-	public MacroProcessorHandler(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		this.plugin = plugin;
-		this.languageHandler = languageHandler;
+	public MacroProcessorHandler(final LanguageHandler languageHandler) {
+		// instantiate macro processor registry
 		this.macroProcessorRegistry = new ProcessorRegistry();
+		// populate macro processor registry
+		for (ProcessorType type : ProcessorType.values()) {
+			type.register(languageHandler, macroProcessorRegistry, type);
+		}
 	}
 
 
-	@SuppressWarnings("unused")
-	public String replaceMacros(final CommandSender recipient, final MacroObjectMap macroObjectMap, final String messageString) {
-
-		for (ProcessorType type : ProcessorType.values()) {
-			type.register(plugin, languageHandler, macroProcessorRegistry, type);
-		}
+	public String replaceMacros(final CommandSender recipient,
+	                            final MacroObjectMap macroObjectMap,
+	                            final String messageString) {
 
 		String modifiedMessageString = messageString;
 
@@ -81,8 +87,10 @@ public class MacroProcessorHandler {
 
 			ResultMap macroStringMap = new ResultMap();
 
-			// put message recipient in object map
+			// put message recipient in macro object map
 			macroObjectMap.put("RECIPIENT", recipient);
+
+			// if recipient is an entity, put recipient location in macro object map
 			if (recipient instanceof Entity entity) {
 				macroObjectMap.put("RECIPIENT_LOCATION", entity.getLocation());
 			}

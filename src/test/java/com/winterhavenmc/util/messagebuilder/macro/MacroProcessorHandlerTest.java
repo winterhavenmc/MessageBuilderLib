@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2024 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,29 +15,29 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.macro;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
+
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class EntityProcessorTest {
+class MacroProcessorHandlerTest {
 
 	ServerMock server;
 	PluginMain plugin;
 	LanguageHandler languageHandler;
-	Processor processor;
+	MacroProcessorHandler macroProcessorHandler;
 
-
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
 		// Start the mock server
 		server = MockBukkit.mock();
@@ -46,30 +46,35 @@ class EntityProcessorTest {
 		plugin = MockBukkit.load(PluginMain.class);
 
 		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new EntityProcessor(languageHandler);
+		macroProcessorHandler = new MacroProcessorHandler(languageHandler);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
 		// Stop the mock server
 		MockBukkit.unmock();
 	}
 
-	@Disabled
-	@Test
-	void execute() {
-		String key = "SOME_ENTITY";
+	@Nested
+	class DelimiterTests {
+		@Test
+		void setDelimiterTest_LEFT() {
+			MacroProcessorHandler.MacroDelimiter.LEFT.set('L');
+			assertEquals('L', MacroProcessorHandler.MacroDelimiter.LEFT.toChar());
+		}
 
-		PlayerMock player = server.addPlayer("testy");
-		assertNotNull(player);
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, player);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, player);
-		assertTrue(resultMap.containsKey("SOME_ENTITY"));
-		assertEquals("testy", resultMap.get("SOME_ENTITY"));
-		assertTrue(resultMap.containsKey("SOME_ENTITY_NAME"));
-		assertEquals("testy", resultMap.get("SOME_ENTITY_NAME"));
+		@Test
+		void setDelimiterTest_RIGHT() {
+			MacroProcessorHandler.MacroDelimiter.RIGHT.set('R');
+			assertEquals('R', MacroProcessorHandler.MacroDelimiter.RIGHT.toChar());
+		}
 	}
+
+	@Test
+	void replaceMacrosTest() {
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
+		String resultString = macroProcessorHandler.replaceMacros(server.getConsoleSender(), macroObjectMap, "Replace this: %ITEM_NAME%");
+		assertEquals("Replace this: §aTest Item", resultString);
+	}
+
 }

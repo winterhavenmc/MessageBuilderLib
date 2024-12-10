@@ -23,8 +23,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class ObjectProcessor extends AbstractProcessor implements Processor {
-	public ObjectProcessor(final JavaPlugin plugin, final LanguageHandler languageHandler) {
-		super(plugin, languageHandler);
+	public ObjectProcessor(final LanguageHandler languageHandler) {
+		super(languageHandler);
 	}
 
 	@Override

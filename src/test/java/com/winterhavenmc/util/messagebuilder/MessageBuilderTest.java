@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.TimeUnit;
 import org.bukkit.World;
 import org.junit.jupiter.api.*;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 
 import java.util.List;
 

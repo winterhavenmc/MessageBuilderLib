@@ -121,7 +121,6 @@
 		</dependency>
 
 		<!-- Unit Testing Dependencies -->
-		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -131,9 +130,9 @@
 
 		<!-- Mock Bukkit Framework -->
 		<dependency>
-			<groupId>org.mockbukkit.mockbukkit</groupId>
-			<artifactId>mockbukkit-v1.21</artifactId>
-			<version>4.3.1</version>
+			<groupId>com.github.seeseemelk</groupId>
+			<artifactId>MockBukkit-v1.21</artifactId>
+			<version>3.133.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -232,6 +231,8 @@
 					<trimStackTrace>false</trimStackTrace>
 				</configuration>
 			</plugin>
+
+			<!-- plugin to generate coverage reports -->
 			<plugin>
 				<groupId>org.jetbrains.kotlinx</groupId>
 				<artifactId>kover-maven-plugin</artifactId>

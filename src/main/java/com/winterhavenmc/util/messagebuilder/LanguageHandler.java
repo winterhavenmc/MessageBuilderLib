@@ -87,6 +87,14 @@ public interface LanguageHandler {
 
 
 	/**
+	 * Get item name from language specific messages file, with translated color codes
+	 *
+	 * @param def a default value to use if the item name cannot be found in the config
+	 * @return String ITEM_NAME, or empty string if key not found
+	 */
+	Optional<String> getItemName(String def);
+
+	/**
 	 * Get configured plural item name from language file
 	 *
 	 * @return the formatted plural display name of an item, or empty string if key not found
@@ -168,5 +176,7 @@ public interface LanguageHandler {
 	 * Reload messages into Configuration object
 	 */
 	void reload();
+
+	Optional<String> getWorldAlias(final World world);
 
 }

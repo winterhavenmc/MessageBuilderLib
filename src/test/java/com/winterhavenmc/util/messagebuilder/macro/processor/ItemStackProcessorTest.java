@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
@@ -25,8 +27,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.jupiter.api.*;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +49,7 @@ class ItemStackProcessorTest {
 		plugin = MockBukkit.load(PluginMain.class);
 
 		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new ItemStackProcessor(plugin, languageHandler);
+		processor = new ItemStackProcessor(languageHandler);
 	}
 
 

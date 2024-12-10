@@ -17,18 +17,17 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.bukkit.OfflinePlayer;
 import org.junit.jupiter.api.*;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 
 import java.util.UUID;
 
-import static java.util.UUID.fromString;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -57,7 +56,7 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void execute() {
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(plugin, languageHandler);
+		Processor processor = new StringProcessor(languageHandler);
 
 		String key = "SOME_NAME";
 		OfflinePlayer offlinePlayer = server.getOfflinePlayer(UUID.randomUUID());
@@ -74,7 +73,7 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void execute_with_null_offlinePlayer() {
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(plugin, languageHandler);
+		Processor processor = new StringProcessor(languageHandler);
 
 		String key = "SOME_NAME";
 

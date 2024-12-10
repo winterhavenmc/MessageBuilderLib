@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import org.bukkit.World;
 import org.junit.jupiter.api.*;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,20 +32,24 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class YamlLanguageHandlerTest {
 
-	@SuppressWarnings({"FieldCanBeLocal", "unused"})
 	private ServerMock server;
 	private PluginMain plugin;
+	private LanguageHandler languageHandler;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
 		// Start the mock server
 		server = MockBukkit.mock();
 
 		// start the mock plugin
 		plugin = MockBukkit.load(PluginMain.class);
+
+		// create a language handler instance
+		languageHandler = new YamlLanguageHandler(plugin);
+
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
 		// Stop the mock server
 		MockBukkit.unmock();
@@ -53,199 +57,341 @@ class YamlLanguageHandlerTest {
 
 	@Test
 	void getMessageKeys() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		assertFalse(languageHandler.getMessageKeys().isEmpty());
 		assertTrue(languageHandler.getMessageKeys().contains("ENABLED_MESSAGE"));
 	}
 
-	@Test
-	void isEnabled() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertTrue(languageHandler.isEnabled(MessageId.ENABLED_MESSAGE));
-		assertFalse(languageHandler.isEnabled(MessageId.DISABLED_MESSAGE));
+	@Nested
+	class IsEnabledTests {
+		@Test
+		void isEnabled() {
+			assertTrue(languageHandler.isEnabled(MessageId.ENABLED_MESSAGE));
+			assertFalse(languageHandler.isEnabled(MessageId.DISABLED_MESSAGE));
+		}
+
+		@Test
+		void isEnabled_null() {
+			assertFalse(languageHandler.isEnabled(null));
+		}
+
+		@Test
+		void isEnabled_unconfigured_message() {
+			assertFalse(languageHandler.isEnabled(MessageId.UNCONFIGURED_MESSAGE));
+		}
+
+
+		@Test
+		void isEnabled_legacy_message() {
+			assertTrue(languageHandler.isEnabled(MessageId.LEGACY_MESSAGE));
+		}
 	}
 
-	@Test
-	void getRepeatDelay() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals(10, languageHandler.getRepeatDelay(MessageId.REPEAT_DELAYED_MESSAGE));
+	@Nested
+	class RepeatDelayTests {
+		@Test
+		void getRepeatDelay() {
+			assertEquals(10, languageHandler.getRepeatDelay(MessageId.REPEAT_DELAYED_MESSAGE));
+		}
+
+		@Test
+		void getRepeatDelay_null_parameter() {
+			assertEquals(0, languageHandler.getRepeatDelay(null));
+		}
 	}
 
-	@Test
-	void getRepeatDelay_null_parameter() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals(0, languageHandler.getRepeatDelay(null));
+	@Nested
+	class GetMessageTests {
+		@Test
+		void getMessage() {
+			assertEquals("This is an enabled message", languageHandler.getMessage(MessageId.ENABLED_MESSAGE));
+		}
+
+		@Test
+		void getMessage_null_parameter() {
+			assertEquals("", languageHandler.getMessage(null));
+		}
+
+		@Test
+		void getMessage_no_message_string() {
+			assertEquals("", languageHandler.getMessage(MessageId.ENABLED_TITLE));
+		}
 	}
 
-	@Test
-	void getMessage() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("This is an enabled message", languageHandler.getMessage(MessageId.ENABLED_MESSAGE));
+	@Nested
+	class TitleTests {
+		@Test
+		void getTitle() {
+			assertEquals("This is an enabled title", languageHandler.getTitle(MessageId.ENABLED_TITLE));
+		}
+
+		@Test
+		void getTitle_null() {
+			assertEquals("", languageHandler.getTitle(null));
+		}
+
+		@Test
+		void getTitle_no_title_configured() {
+			assertEquals("", languageHandler.getTitle(MessageId.ENABLED_MESSAGE));
+		}
+
+		@Test
+		void getTitle_unconfigured_message() {
+			assertEquals("", languageHandler.getTitle(MessageId.UNCONFIGURED_MESSAGE));
+		}
 	}
 
-	@Test
-	void getMessage_null_parameter() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("", languageHandler.getMessage(null));
+
+	@Nested
+	class SubtitleTests {
+		@Test
+		void getSubtitle() {
+			assertEquals("This is an enabled subtitle", languageHandler.getSubtitle(MessageId.ENABLED_SUBTITLE));
+		}
+
+		@Test
+		void getSubtitle_null_parameter() {
+			assertEquals("", languageHandler.getSubtitle(null));
+		}
 	}
 
-	@Test
-	void getMessage_no_message_string() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("", languageHandler.getMessage(MessageId.ENABLED_TITLE));
+	@Nested
+	class TitleFadeInTests {
+
+		private final int defaultFadeIn = 10;
+
+		@Test
+		void getTitleFadeIn_default() {
+			assertEquals(defaultFadeIn, languageHandler.getTitleFadeIn(MessageId.ENABLED_TITLE));
+		}
+
+		@Test
+		void getTitleFadeIn_custom() {
+			assertEquals(20, languageHandler.getTitleFadeIn(MessageId.CUSTOM_FADE_TITLE));
+		}
+
+		@Test
+		void getTitleFadeIn_unconfigured_message() {
+			assertEquals(defaultFadeIn, languageHandler.getTitleFadeIn(MessageId.UNCONFIGURED_MESSAGE));
+		}
+
+		@Test
+		void getTitleFadeIn_non_integer_values() {
+			assertEquals(defaultFadeIn, languageHandler.getTitleFadeIn(MessageId.NON_INT_TITLE_FADE_VALUES));
+		}
+
+		@Test
+		void getTitleFadeIn_null() {
+			assertEquals(defaultFadeIn, languageHandler.getTitleFadeIn(null));
+		}
 	}
 
-	@Test
-	void getTitle() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("This is an enabled title", languageHandler.getTitle(MessageId.ENABLED_TITLE));
+	@Nested
+	class TitleStayTests {
+
+		private final int defaultStay = 70;
+
+		@Test
+		void getTitleStay_default() {
+			assertEquals(defaultStay, languageHandler.getTitleStay(MessageId.ENABLED_TITLE));
+		}
+
+		@Test
+		void getTitleStay_custom() {
+			assertEquals(140, languageHandler.getTitleStay(MessageId.CUSTOM_FADE_TITLE));
+		}
+
+		@Test
+		void getTitleFadeIn_unconfigured_message() {
+			assertEquals(defaultStay, languageHandler.getTitleStay(MessageId.UNCONFIGURED_MESSAGE));
+		}
+
+		@Test
+		void getTitleFadeIn_non_integer_values() {
+			assertEquals(defaultStay, languageHandler.getTitleStay(MessageId.NON_INT_TITLE_FADE_VALUES));
+		}
+
+		@Test
+		void getTitleStay_null() {
+			assertEquals(defaultStay, languageHandler.getTitleStay(null));
+		}
 	}
 
-	@Test
-	void getTitle_null_parameter() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("", languageHandler.getTitle(null));
+	@Nested
+	class TitleFadeOutTests {
+
+		private final int defaultFadeOut = 20;
+
+		@Test
+		void getTitleFadeOut_default() {
+			assertEquals(defaultFadeOut, languageHandler.getTitleFadeOut(MessageId.ENABLED_TITLE));
+		}
+
+		@Test
+		void getTitleFadeOut_custom() {
+			assertEquals(40, languageHandler.getTitleFadeOut(MessageId.CUSTOM_FADE_TITLE));
+		}
+
+		@Test
+		void getTitleFadeIn_unconfigured_message() {
+			assertEquals(defaultFadeOut, languageHandler.getTitleFadeOut(MessageId.UNCONFIGURED_MESSAGE));
+		}
+
+		@Test
+		void getTitleFadeIn_non_integer_values() {
+			assertEquals(defaultFadeOut, languageHandler.getTitleFadeOut(MessageId.NON_INT_TITLE_FADE_VALUES));
+		}
+
+		@Test
+		void getTitleFadeOut_null() {
+			assertEquals(defaultFadeOut, languageHandler.getTitleFadeOut(null));
+		}
 	}
 
-	@Test
-	void getSubtitle() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("This is an enabled subtitle", languageHandler.getSubtitle(MessageId.ENABLED_SUBTITLE));
+	@Nested
+	class ItemMetadataTests {
+		@Test
+		void getItemName() {
+			assertEquals("§aTest Item", languageHandler.getItemName().orElse("fail"));
+		}
+
+		@Test
+		void getItemName_null() {
+			plugin.getConfig().set("item-name", null);
+			assertNull(plugin.getConfig().getString("item-name"));
+			assertEquals("§aTest Item", languageHandler.getItemName(null).orElse("fail"));
+			// this test still passes because the null config entry is supplanted by the default config
+		}
+
+		@Test
+		void getItemNamePlural() {
+			assertEquals("§aTest Items", languageHandler.getItemNamePlural().orElse("fail"));
+		}
+
+		@Test
+		void getInventoryItemName() {
+			assertEquals("§aInventory Item", languageHandler.getInventoryItemName().orElse("fail"));
+		}
+
+		@Test
+		void getItemLore() {
+			assertEquals(List.of("§elore line 1", "§elore line 2"), languageHandler.getItemLore());
+		}
 	}
 
-	@Test
-	void getSubtitle_null_parameter() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("", languageHandler.getSubtitle(null));
+	@Nested
+	class LocationNameTests {
+		@Test
+		void getSpawnDisplayName() {
+			assertEquals("§aSpawn", languageHandler.getSpawnDisplayName().orElse("fail"));
+		}
+
+		@Test
+		void getHomeDisplayName() {
+			assertEquals("§aHome", languageHandler.getHomeDisplayName().orElse("fail"));
+		}
 	}
 
-	@Test
-	void getTitleFadeIn() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals(10, languageHandler.getTitleFadeIn(MessageId.ENABLED_TITLE));
-		assertEquals(20, languageHandler.getTitleFadeIn(MessageId.CUSTOM_FADE_TITLE));
-	}
+	@Nested
+	class TimeStringTests {
+		@Test
+		void getTimeString_with_singular_units() {
+			// test duration
+			long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
+			assertEquals("1 day 1 hour 1 minute 1 second", languageHandler.getTimeString(duration));
+		}
 
-	@Test
-	void getTitleStay() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals(70, languageHandler.getTitleStay(MessageId.ENABLED_TITLE));
-		assertEquals(140, languageHandler.getTitleStay(MessageId.CUSTOM_FADE_TITLE));
-	}
+		@Test
+		void getTimeString_with_plural_units() {
+			long duration = DAYS.toMillis(2) + HOURS.toMillis(2) + MINUTES.toMillis(2) + SECONDS.toMillis(2);
+			assertEquals("2 days 2 hours 2 minutes 2 seconds", languageHandler.getTimeString(duration));
+		}
 
-	@Test
-	void getTitleFadeOut() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals(20, languageHandler.getTitleFadeOut(MessageId.ENABLED_TITLE));
-		assertEquals(40, languageHandler.getTitleFadeOut(MessageId.CUSTOM_FADE_TITLE));
-	}
+		@Test
+		void getTimeString_with_unlimited_time() {
+			assertEquals("unlimited time", languageHandler.getTimeString(-1));
+		}
 
-	@Test
-	void getItemName() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("§aTest Item", languageHandler.getItemName().orElse("fail"));
-	}
+		@Test
+		void getTimeString_with_null_timeUnit() {
+			long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
+			assertEquals("1 day 1 hour 1 minute 1 second", languageHandler.getTimeString(duration, null));
+		}
 
-	@Test
-	void getItemNamePlural() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("§aTest Items", languageHandler.getItemNamePlural().orElse("fail"));
-	}
-
-	@Test
-	void getInventoryItemName() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("§aInventory Item", languageHandler.getInventoryItemName().orElse("fail"));
-	}
-
-	@Test
-	void getItemLore() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals(List.of("§elore line 1", "§elore line 2"), languageHandler.getItemLore());
-	}
-
-	@Test
-	void getSpawnDisplayName() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("§aSpawn", languageHandler.getSpawnDisplayName().orElse("fail"));
-	}
-
-	@Test
-	void getHomeDisplayName() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("§aHome", languageHandler.getHomeDisplayName().orElse("fail"));
-	}
-
-	@Test
-	void getTimeString_with_singular_units() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
-		assertEquals("1 day 1 hour 1 minute 1 second", languageHandler.getTimeString(duration));
-	}
-
-	@Test
-	void getTimeString_with_plural_units() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		long duration = DAYS.toMillis(2) + HOURS.toMillis(2) + MINUTES.toMillis(2) + SECONDS.toMillis(2);
-		assertEquals("2 days 2 hours 2 minutes 2 seconds", languageHandler.getTimeString(duration));
-	}
-
-	@Test
-	void getTimeString_with_unlimited_time() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("unlimited time", languageHandler.getTimeString(-1));
-	}
-
-	@Test
-	void getTimeString_with_null_parameter() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
-		assertEquals("1 day 1 hour 1 minute 1 second", languageHandler.getTimeString(duration, null));
-	}
-
-	@Test
-	void getTimeString_with_less_than_second() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertEquals("less than one second", languageHandler.getTimeString(999));
+		@Test
+		void getTimeString_with_less_than_second() {
+			assertEquals("less than one second", languageHandler.getTimeString(999));
+		}
 	}
 
 	@Test
 	void getString() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		assertEquals("an arbitrary string", languageHandler.getString("ARBITRARY_STRING").orElse("fail"));
 	}
 
 	@Test
 	void getStringList() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		assertTrue(languageHandler.getStringList("ARBITRARY_STRING_LIST").containsAll(List.of("item 1", "item 2", "item 3")));
 	}
 
 	@Disabled
-	@Test
-	void getWorldName() {
-//		World world = server.addSimpleWorld("test_world");
-		World world = server.getWorld("world");
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Optional<String> optionalWorldName = languageHandler.getWorldName(world);
-		assertNotNull(world, "The default mock world is null.");
-		assertTrue(optionalWorldName.isPresent());
-		assertEquals("world", optionalWorldName.get());
+	@Nested
+	class mockServerWorldTests {
+		@Test
+		void getWorlds_test_for_empty() {
+			assertFalse(server.getWorlds().isEmpty());
+		}
+		@Test
+		void addSimpleWorld_test_for_null() {
+			assertNotNull(server.addSimpleWorld("test_world"));
+		}
+		@Test
+		void addPlayerTest() {
+			assertNotNull(server.addPlayer("player1"));
+		}
 	}
 
-	@Test
-	void getWorldName_null() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Optional<String> optionalWorldName = languageHandler.getWorldName(null);
-		assertTrue(optionalWorldName.isEmpty());
+
+	@Nested
+	class WorldNameTests {
+		@Disabled
+		@Test
+		void getWorldNameTest() {
+			World world = server.getWorld("world");
+			Optional<String> optionalWorldName = languageHandler.getWorldName(world);
+			assertNotNull(world, "The default mock world is null.");
+			assertTrue(optionalWorldName.isPresent());
+			assertEquals("world", optionalWorldName.get());
+		}
+
+		@Test
+		void getWorldName_null() {
+			Optional<String> optionalWorldName = languageHandler.getWorldName(null);
+			assertTrue(optionalWorldName.isEmpty());
+		}
+	}
+
+	@Nested
+	class WorldAliasTests {
+
+		@Disabled
+		@Test
+		void getWorldAliasTest() {
+			World world = server.getWorld("world");
+			assertTrue(languageHandler.getWorldAlias(world).isEmpty());
+		}
+
+		@Test
+		void getWorldAliasTest_null() {
+			assertTrue(languageHandler.getWorldAlias(null).isEmpty());
+		}
 	}
 
 	@Test
 	void reload() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
 		languageHandler.reload();
+		// test that at least one message key exists after reload
 		assertFalse(languageHandler.getMessageKeys().isEmpty());
+		// test that a specific message key exists after reload
 		assertTrue(languageHandler.getMessageKeys().contains("ENABLED_MESSAGE"));
 	}
-
 }

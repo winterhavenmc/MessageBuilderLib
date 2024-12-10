@@ -21,6 +21,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -78,13 +79,7 @@ final class YamlFileLoader {
 
 		// Set defaults to embedded resource file
 
-		// get embedded resource file name; note that forward slash (/) is always used, regardless of platform
-		String resourceName = directoryName + "/" + confirmedLanguage + ".yml";
-
-		// check if specified language resource exists, otherwise use en-US
-		if (plugin.getResource(resourceName) == null) {
-			resourceName = directoryName + "/" + "en-US.yml";
-		}
+		final String resourceName = getResourceName(confirmedLanguage);
 
 		// get input stream reader for embedded resource file
 		//noinspection ConstantConditions
@@ -97,6 +92,18 @@ final class YamlFileLoader {
 		newMessagesConfig.setDefaults(defaultConfig);
 
 		return newMessagesConfig;
+	}
+
+
+	@NotNull String getResourceName(String confirmedLanguage) {
+		// get embedded resource file name; note that forward slash (/) is always used, regardless of platform
+		String resourceName = directoryName + "/" + confirmedLanguage + ".yml";
+
+		// check if specified language resource exists, otherwise use en-US
+		if (plugin.getResource(resourceName) == null) {
+			resourceName = directoryName + "/" + "en-US.yml";
+		}
+		return resourceName;
 	}
 
 
@@ -123,9 +130,9 @@ final class YamlFileLoader {
 	 * @param language the IETF language tag
 	 * @return if file exists for language tag, return the language tag; else return the default tag (en-US)
 	 */
-	private String languageFileExists(final JavaPlugin plugin, final String language) {
+	String languageFileExists(final JavaPlugin plugin, final String language) {
 
-		// get file object for passed language tag by adding prefixing for directory name and .yml suffix
+		// get a file object for language tag by adding prefixing for directory name and .yml suffix
 		File languageFile = new File(getLanguageFilename(plugin, language));
 
 		// if a language file exists for the language tag, return the language tag
@@ -149,7 +156,7 @@ final class YamlFileLoader {
 	 * @param language IETF language tag
 	 * @return current language file name as String
 	 */
-	private String getLanguageFilename(final JavaPlugin plugin, final String language) {
+	String getLanguageFilename(final JavaPlugin plugin, final String language) {
 		return plugin.getDataFolder() + File.separator + directoryName + File.separator + language + ".yml";
 	}
 

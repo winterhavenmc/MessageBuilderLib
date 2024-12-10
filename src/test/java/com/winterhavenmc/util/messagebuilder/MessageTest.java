@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import org.bukkit.entity.Player;
+import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import org.junit.jupiter.api.*;
-import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +30,7 @@ class MessageTest {
 	private ServerMock server;
 	private PluginMain plugin;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
 		// Start the mock server
 		server = MockBukkit.mock();
@@ -39,7 +39,7 @@ class MessageTest {
 		plugin = MockBukkit.load(PluginMain.class);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
 		// Stop the mock server
 		MockBukkit.unmock();
@@ -48,7 +48,7 @@ class MessageTest {
 	@Disabled
 	@Test
 	void setMacro() {
-		Player testPlayer = server.addPlayer("test_player");
+		PlayerMock testPlayer = server.addPlayer("test_player");
 		Message<MessageId, Macro> message = plugin.messageBuilder.compose(testPlayer, MessageId.DURATION_MESSAGE);
 		message.setMacro(Macro.DURATION, 1200L);
 		assertEquals("Duration is 1 second", message.toString());

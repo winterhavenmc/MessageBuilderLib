@@ -25,8 +25,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class OfflinePlayerProcessor extends AbstractProcessor implements Processor {
 
-	public OfflinePlayerProcessor(JavaPlugin plugin, LanguageHandler languageHandler) {
-		super(plugin, languageHandler);
+	public OfflinePlayerProcessor(final LanguageHandler languageHandler) {
+		super(languageHandler);
 	}
 
 	@Override
