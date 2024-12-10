@@ -55,6 +55,10 @@ MESSAGES:
   LEGACY_MESSAGE:
     string: "This is a legacy message"
 
+  MACRO_MESSAGE:
+    enabled: true
+    message: This is a message with a macro replacement %ITEM_NAME%.
+
   ENABLED_TITLE:
     enabled: false
     title: "This is an enabled title"
