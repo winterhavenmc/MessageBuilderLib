@@ -51,7 +51,7 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 		String locationZ = String.valueOf(location.getBlockZ());
 		String locationString = locationWorld + " [" + locationX + ", " + locationY + ", " + locationZ + "]";
 
-		// if key does not end in _LOCATION or LOC, add it for location string keys
+		// if key does not end in _LOCATION or _LOC, add it for location string keys
 		String[] keySuffixes = {"_LOCATION", "_LOC"};
 
 		// put location strings in map
