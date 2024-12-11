@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class YamlLanguageHandlerTest {
+class YamlLanguageHandlerTests {
 
 	private ServerMock server;
 	private PluginMain plugin;
