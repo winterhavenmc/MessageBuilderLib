@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class FileLoaderTests {
+public class YamlFileLoaderTests {
 
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private ServerMock server;
