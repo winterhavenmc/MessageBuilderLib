@@ -129,13 +129,4 @@ public class YamlFileLoaderTests {
         }
     }
 
-
-//    @Test
-//    @DisplayName("Test language manager reload method.")
-//    void reload() {
-//        plugin.messageBuilder.reload();
-//        Assertions.assertNotNull(plugin.messageBuilder.languageHandler, "language manager not null after reload.");
-//    }
-
-
 }
