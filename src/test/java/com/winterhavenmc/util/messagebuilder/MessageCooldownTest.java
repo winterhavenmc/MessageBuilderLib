@@ -20,6 +20,7 @@ package com.winterhavenmc.util.messagebuilder;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;

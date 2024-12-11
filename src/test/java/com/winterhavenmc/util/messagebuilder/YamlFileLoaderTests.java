@@ -2,6 +2,7 @@ package com.winterhavenmc.util.messagebuilder;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import org.bukkit.configuration.Configuration;
 import org.junit.jupiter.api.*;
 

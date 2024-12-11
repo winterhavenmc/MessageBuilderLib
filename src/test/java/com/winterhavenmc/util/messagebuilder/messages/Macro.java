@@ -1,4 +1,4 @@
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.messages;
 
 
 public enum Macro {

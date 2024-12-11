@@ -21,6 +21,8 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import org.bukkit.World;
 import org.junit.jupiter.api.*;
 
