@@ -5,6 +5,7 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import org.bukkit.configuration.Configuration;
 import org.junit.jupiter.api.*;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,14 +55,14 @@ public class FileLoaderTests {
     @DisplayName("file loader get current filename not null.")
     void GetLanguageFilenameTest() {
         Assertions.assertNotNull(fileLoader.getLanguageFilename(plugin, "en-US"));
-        Assertions.assertTrue(fileLoader.getLanguageFilename(plugin, "en-US").endsWith("language/en-US.yml"));
+        Assertions.assertTrue(fileLoader.getLanguageFilename(plugin, "en-US").endsWith("language" + File.separator + "en-US.yml"));
     }
 
     @Test
     @DisplayName("file loader get current filename non-existent.")
     void GetLanguageFilenameTest_nonexistent() {
         Assertions.assertNotNull(fileLoader.getLanguageFilename(plugin, "not-a-valid-tag"));
-        Assertions.assertTrue(fileLoader.getLanguageFilename(plugin, "not-a-valid-tag").endsWith("language/not-a-valid-tag.yml"));
+        Assertions.assertTrue(fileLoader.getLanguageFilename(plugin, "not-a-valid-tag").endsWith("language" + File.separator + "not-a-valid-tag.yml"));
     }
 
     @Test
