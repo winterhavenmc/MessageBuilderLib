@@ -19,7 +19,7 @@ public class YamlFileLoaderTests {
     private PluginMain plugin;
     private YamlFileLoader fileLoader;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         // Start the mock server
         server = MockBukkit.mock();
@@ -32,7 +32,7 @@ public class YamlFileLoaderTests {
 
     }
 
-    @AfterAll
+    @AfterEach
     public void tearDown() {
         // Stop the mock server
         MockBukkit.unmock();
