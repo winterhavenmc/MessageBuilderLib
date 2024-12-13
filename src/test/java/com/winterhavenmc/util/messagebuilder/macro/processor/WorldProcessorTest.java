@@ -24,19 +24,26 @@ import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WorldProcessorTest {
 
+	private final Plugin mockPlugin = mock(Plugin.class);
 	ServerMock server;
 	PluginMain plugin;
 
 
 	@BeforeEach
 	public void setUp() {
+
+//		when(mockPlugin)
+
 		// Start the mock server
 		server = MockBukkit.mock();
 

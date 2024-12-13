@@ -23,7 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
@@ -31,7 +31,7 @@ import java.util.Optional;
 public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	// reference to plugin main class
-	private final JavaPlugin plugin;
+	private final Plugin plugin;
 
 	// macro object map
 	private final MacroObjectMap macroObjectMap = new MacroObjectMap();
@@ -59,7 +59,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @param recipient       message recipient
 	 * @param messageId       message identifier
 	 */
-	public Message(final JavaPlugin plugin,
+	public Message(final Plugin plugin,
 	               final LanguageHandler languageHandler,
 	               final MacroProcessorHandler macroProcessorHandler,
 	               final CommandSender recipient,

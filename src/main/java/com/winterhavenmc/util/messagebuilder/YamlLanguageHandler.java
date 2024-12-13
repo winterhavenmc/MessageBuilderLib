@@ -24,7 +24,7 @@ import com.winterhavenmc.util.TimeUnit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 
@@ -36,7 +36,7 @@ import java.util.*;
 public final class YamlLanguageHandler implements LanguageHandler {
 
 	// reference to main plugin
-	private final JavaPlugin plugin;
+	private final Plugin plugin;
 
 	// configuration object for messages file
 	private Configuration messages;
@@ -45,7 +45,7 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	/**
 	 * class constructor
 	 */
-	public YamlLanguageHandler(final JavaPlugin plugin) {
+	public YamlLanguageHandler(final Plugin plugin) {
 
 		this.plugin = plugin;
 
@@ -366,6 +366,7 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public String getTimeString(final long duration, final TimeUnit timeUnit) {
+		//TODO: Refactor this entire method
 
 		TimeUnit finalTimeUnit = timeUnit;
 
@@ -582,9 +583,7 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	public void reload() {
 
 		// install message files if necessary; this will not overwrite existing files
-		YamlFileInstaller installer = new YamlFileInstaller(plugin);
-		Collection<String> filenames = installer.getResourceFilenames();
-		installer.installResourceFiles(filenames);
+		new YamlFileInstaller(plugin).install();
 
 		// load messages Configuration object from configured language file
 		messages = new YamlFileLoader(plugin).getMessages();
