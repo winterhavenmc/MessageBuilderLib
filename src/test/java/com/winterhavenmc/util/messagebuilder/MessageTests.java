@@ -49,7 +49,7 @@ class MessageTests {
 
 	@Disabled
 	@Test
-	void setMacro() {
+	void setMacroTest() {
 		PlayerMock testPlayer = server.addPlayer("test_player");
 		Message<MessageId, Macro> message = plugin.messageBuilder.compose(testPlayer, MessageId.DURATION_MESSAGE);
 		message.setMacro(Macro.DURATION, 1200L);

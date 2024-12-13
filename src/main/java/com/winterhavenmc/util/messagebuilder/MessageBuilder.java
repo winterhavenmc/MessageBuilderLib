@@ -22,7 +22,7 @@ import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +64,7 @@ import java.util.Optional;
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	private final LanguageHandler languageHandler;
-	private final JavaPlugin plugin;
+	private final Plugin plugin;
 	private final MacroProcessorHandler macroProcessorHandler;
 
 	/**
@@ -72,7 +72,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public MessageBuilder(final JavaPlugin plugin) {
+	public MessageBuilder(final Plugin plugin) {
 		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin);
 		this.macroProcessorHandler = new MacroProcessorHandler(languageHandler);

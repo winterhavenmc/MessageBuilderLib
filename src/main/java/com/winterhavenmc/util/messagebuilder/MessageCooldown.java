@@ -22,7 +22,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
 import java.util.Objects;
@@ -51,7 +51,7 @@ final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listen
 	/**
 	 * private class constructor, registers class as bukkit event listener
 	 */
-	MessageCooldown(final JavaPlugin plugin) {
+	MessageCooldown(final Plugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
@@ -62,7 +62,7 @@ final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listen
 	 * @return instance of this class
 	 */
 	@SuppressWarnings("unchecked")
-	static synchronized <MessageId extends Enum<MessageId>> MessageCooldown<MessageId> getInstance(final JavaPlugin plugin) {
+	static synchronized <MessageId extends Enum<MessageId>> MessageCooldown<MessageId> getInstance(final Plugin plugin) {
 		if (INSTANCE == null) {
 			INSTANCE = new MessageCooldown<>(plugin);
 		}

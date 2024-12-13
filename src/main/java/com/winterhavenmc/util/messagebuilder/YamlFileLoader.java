@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
 final class YamlFileLoader {
 
 	// reference to plugin main class
-	private final JavaPlugin plugin;
+	private final Plugin plugin;
 
 	// the directory name within a plugin data directory where the language yaml files are installed
 	private final String directoryName = "language";
@@ -41,7 +41,7 @@ final class YamlFileLoader {
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	YamlFileLoader(final JavaPlugin plugin) {
+	YamlFileLoader(final Plugin plugin) {
 		this.plugin = plugin;
 	}
 
@@ -119,7 +119,7 @@ final class YamlFileLoader {
 	 * @param plugin reference to plugin main class
 	 * @return IETF language tag as string from config.yml
 	 */
-	private String getConfiguredLanguage(final JavaPlugin plugin) {
+	private String getConfiguredLanguage(final Plugin plugin) {
 		return plugin.getConfig().getString("language");
 	}
 
@@ -130,7 +130,7 @@ final class YamlFileLoader {
 	 * @param language the IETF language tag
 	 * @return if file exists for language tag, return the language tag; else return the default tag (en-US)
 	 */
-	String languageFileExists(final JavaPlugin plugin, final String language) {
+	String languageFileExists(final Plugin plugin, final String language) {
 
 		// get a file object for language tag by adding prefixing for directory name and .yml suffix
 		File languageFile = new File(getLanguageFilename(plugin, language));
@@ -156,7 +156,7 @@ final class YamlFileLoader {
 	 * @param language IETF language tag
 	 * @return current language file name as String
 	 */
-	String getLanguageFilename(final JavaPlugin plugin, final String language) {
+	String getLanguageFilename(final Plugin plugin, final String language) {
 		return plugin.getDataFolder() + File.separator + directoryName + File.separator + language + ".yml";
 	}
 
