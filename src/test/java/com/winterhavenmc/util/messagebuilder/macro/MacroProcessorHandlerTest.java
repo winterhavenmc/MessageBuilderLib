@@ -23,19 +23,26 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
+import org.bukkit.entity.Entity;
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MacroProcessorHandlerTest {
 
+	private final Plugin mockPlugin = mock(Plugin.class);
 	ServerMock server;
 	PluginMain plugin;
 	LanguageHandler languageHandler;
-	MacroProcessorHandler macroProcessorHandler;
+	private MacroProcessorHandler macroProcessorHandler;
 
 	@BeforeEach
 	public void setUp() {
@@ -74,6 +81,33 @@ class MacroProcessorHandlerTest {
 	void replaceMacrosTest() {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		String resultString = macroProcessorHandler.replaceMacros(server.getConsoleSender(), macroObjectMap, "Replace this: %ITEM_NAME%");
+		assertEquals("Replace this: §aTest Item", resultString);
+	}
+
+	@Test
+	void replaceMacrosTest_item_already_in_map() {
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
+		macroObjectMap.put("ITEM_NAME", "item_name");
+		String resultString = macroProcessorHandler.replaceMacros(server.getConsoleSender(), macroObjectMap, "Replace this: %ITEM_NAME%");
+		assertEquals("Replace this: §aTest Item", resultString);
+	}
+
+	@Test
+	void replaceMacrosTest_item_no_delimiter() {
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
+		String resultString = macroProcessorHandler.replaceMacros(server.getConsoleSender(), macroObjectMap, "Replace this: ITEM_NAME");
+		assertEquals("Replace this: ITEM_NAME", resultString);
+	}
+
+	@Test
+	void replaceMacrosTest_recipient_is_entity() {
+
+		Entity entity = mock(Entity.class);
+		when(entity.getUniqueId()).thenReturn(new UUID(123,123));
+		when(entity.getName()).thenReturn("player1");
+
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
+		String resultString = macroProcessorHandler.replaceMacros(entity, macroObjectMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
