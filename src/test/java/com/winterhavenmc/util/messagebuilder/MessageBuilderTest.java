@@ -27,10 +27,15 @@ import org.bukkit.World;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.winterhavenmc.util.TimeUnit.*;
 import static com.winterhavenmc.util.TimeUnit.SECONDS;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -57,105 +62,93 @@ class MessageBuilderTest {
 		// Stop the mock server
 		MockBukkit.unmock();
 
-		// destroy messageBuilder
+		// explicitly destroy messageBuilder
 		messageBuilder = null;
 	}
 
 
 	@Test
-	void compose() {
+	void composeTest() {
 		Message<MessageId, Macro> message = messageBuilder.compose(server.getConsoleSender(), MessageId.ENABLED_MESSAGE);
 		assertEquals("This is an enabled message", message.toString());
 	}
 
 	@Test
-	void isEnabled() {
+	void isEnabledTest() {
 		assertTrue(messageBuilder.isEnabled(MessageId.ENABLED_MESSAGE));
 		assertFalse(messageBuilder.isEnabled(MessageId.DISABLED_MESSAGE));
 	}
 
 	@Test
-	void getRepeatDelay() {
+	void getRepeatDelayTest() {
 		assertEquals(10, messageBuilder.getRepeatDelay(MessageId.REPEAT_DELAYED_MESSAGE));
 	}
 
 	@Test
-	void getMessage() {
+	void getMessageTest() {
 		assertEquals("This is an enabled message", messageBuilder.getMessage(MessageId.ENABLED_MESSAGE));
 	}
 
 	@Test
-	void getItemName() {
+	void getItemNameTest() {
 		assertEquals("§aTest Item", messageBuilder.getItemName().orElse("fail"));
 	}
 
 	@Test
-	void getItemNamePlural() {
-
+	void getItemNamePluralTest() {
 		assertEquals("§aTest Items", messageBuilder.getItemNamePlural().orElse("fail"));
 	}
 
 	@Test
-	void getInventoryItemName() {
-
+	void getInventoryItemNameTest() {
 		assertEquals("§aInventory Item", messageBuilder.getInventoryItemName().orElse("fail"));
 	}
 
 	@Test
-	void getItemLore() {
-
+	void getItemLoreTest() {
 		assertEquals(List.of("§elore line 1", "§elore line 2"), messageBuilder.getItemLore());
 	}
 
 	@Test
-	void getSpawnDisplayName() {
-
+	void getSpawnDisplayNameTest() {
 		assertEquals("§aSpawn", messageBuilder.getSpawnDisplayName().orElse("fail"));
 	}
 
 	@Test
-	void getHomeDisplayName() {
-
+	void getHomeDisplayNameTest() {
 		assertEquals("§aHome", messageBuilder.getHomeDisplayName().orElse("fail"));
 	}
 
 	@Test
-	void getTimeString_with_singular_units() {
-
-
+	void getTimeStringTest_with_singular_units() {
 		long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
 		assertEquals("1 day 1 hour 1 minute 1 second", messageBuilder.getTimeString(duration));
 	}
 
 	@Test
-	void getTimeString_with_plural_units() {
-
-
+	void getTimeStringTest_with_plural_units() {
 		long duration = DAYS.toMillis(2) + HOURS.toMillis(2) + MINUTES.toMillis(2) + SECONDS.toMillis(2);
 		assertEquals("2 days 2 hours 2 minutes 2 seconds", messageBuilder.getTimeString(duration));
 	}
 
 	@Test
-	void getTimeString_with_unlimited_time() {
-
+	void getTimeStringTest_with_unlimited_time() {
 		assertEquals("unlimited time", messageBuilder.getTimeString(-1));
 	}
 
 	@Test
-	void getTimeString_two_parameter_with_singular_units() {
-
-
+	void getTimeStringTest_two_parameter_with_singular_units() {
 		long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
 		assertEquals("1 day 1 hour 1 minute 1 second", messageBuilder.getTimeString(duration, TimeUnit.SECONDS));
 	}
 
 	@Test
-	void getString() {
+	void getStringTest() {
 		assertEquals("an arbitrary string", messageBuilder.getString("ARBITRARY_STRING").orElse("fail"));
 	}
 
 	@Test
-	void getStringList() {
+	void getStringListTest() {
 		assertTrue(messageBuilder.getStringList("ARBITRARY_STRING_LIST").containsAll(List.of("item 1", "item 2", "item 3")));
 	}
 
@@ -181,21 +174,18 @@ class MessageBuilderTest {
 		assertEquals('%', MacroProcessorHandler.MacroDelimiter.RIGHT.toChar());
 	}
 
-	@Disabled
 	@Test
-	void getWorldName() {
-//		World world = server.addSimpleWorld("test_world");
-		World world = server.getWorld("world");
+	void getWorldNameTest_mockito() {
+		World world = mock(World.class);
+		when(world.getName()).thenReturn("world");
 
-		assertNotNull(world, "Default Mock world 'world' is null.");
-		assertTrue(messageBuilder.getWorldName(world).isPresent());
-		assertEquals("world", messageBuilder.getWorldName(world).get());
+		assertNotNull(world, "Mock world 'world' is null.");
+		assertTrue(messageBuilder.getWorldName(world).isPresent(), "Returned value is an empty Optional.");
+		assertEquals(Optional.of("world"), messageBuilder.getWorldName(world), "Returned world name is not 'world'.");
 	}
 
-
 	@Test
-	void reload() {
-
+	void reloadTest() {
 		messageBuilder.reload();
 		assertEquals("This is an enabled message", messageBuilder.getMessage(MessageId.ENABLED_MESSAGE));
 	}
