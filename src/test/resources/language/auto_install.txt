@@ -1,2 +1,4 @@
 # list of language files to auto install on startup
 en-US.yml
+fr-FR.yml
+this_line_is_intended_to_fail
