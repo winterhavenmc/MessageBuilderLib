@@ -20,7 +20,6 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class NumberProcessor extends AbstractProcessor implements Processor {

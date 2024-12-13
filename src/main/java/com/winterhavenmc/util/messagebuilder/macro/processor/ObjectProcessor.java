@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class ObjectProcessor extends AbstractProcessor implements Processor {
