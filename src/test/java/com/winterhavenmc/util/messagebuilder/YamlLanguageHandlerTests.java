@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import org.bukkit.World;
 import org.junit.jupiter.api.*;
 
@@ -30,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class YamlLanguageHandlerTest {
+class YamlLanguageHandlerTests {
 
 	private ServerMock server;
 	private PluginMain plugin;

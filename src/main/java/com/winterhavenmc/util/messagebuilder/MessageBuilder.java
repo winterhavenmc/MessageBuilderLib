@@ -44,11 +44,11 @@ import java.util.Optional;
  * <p>
  * <i>example:</i>
  * <pre>
- *     {@code messageBuilder.compose(recipient, MessageId.MESSAGE_TO_SEND)
- *         .setMacro(Macro.PLACEHOLDER1, object)
- *         .setMacro(Macro.PLACEHOLDER2, replacementString)
- *         .send();
- *     }
+ * {@code messageBuilder.compose(recipient, MessageId.MESSAGE_TO_SEND)
+ *     .setMacro(Macro.PLACEHOLDER1, object)
+ *     .setMacro(Macro.PLACEHOLDER2, replacementString)
+ *     .send();
+ * }
  * </pre>
  * <p>
  * Note that any object may be passed as the replacement string, which will be converted using

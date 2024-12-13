@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
