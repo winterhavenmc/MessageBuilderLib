@@ -36,7 +36,7 @@ class TimeUnitTest {
 	private final static long MAX = Long.MAX_VALUE / YEARS.getMillis();
 
 	// return an array of values that will be used as durations for tests
-	static long[] durationProvider() {
+	private static long[] durationProvider() {
 		return new long[] {MIN, -86400001L, -3600001L, -60001L, -1001L, -51L, -1L, 0L, 1L, 51L, 1001L, 60001L, 3600001L, 86400001L, MAX};
 	}
 
