@@ -57,15 +57,23 @@ MESSAGES:
 
   MACRO_MESSAGE:
     enabled: true
-    message: This is a message with a macro replacement %ITEM_NAME%.
+    message: "This is a message with a macro replacement %ITEM_NAME%."
 
   ENABLED_TITLE:
-    enabled: false
+    enabled: true
     title: "This is an enabled title"
 
-  ENABLED_SUBTITLE:
+  DISABLED_TITLE:
     enabled: false
+    title: "This is a disabled title"
+
+  ENABLED_SUBTITLE:
+    enabled: true
     subtitle: "This is an enabled subtitle"
+
+  DISABLED_SUBTITLE:
+    enabled: false
+    subtitle: "This is a disabled subtitle"
 
   REPEAT_DELAYED_MESSAGE:
     enabled: true
