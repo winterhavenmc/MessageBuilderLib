@@ -74,13 +74,16 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public MessageBuilder(final Plugin plugin) {
 		this.plugin = plugin;
-		this.languageHandler = new YamlLanguageHandler(plugin);
+		YamlLanguageFileInstaller yamlLanguageFileInstaller = new YamlLanguageFileInstaller(plugin);
+		YamlLanguageFileLoader yamlLanguageFileLoader = new YamlLanguageFileLoader(plugin);
+		this.languageHandler = new YamlLanguageHandler(plugin, yamlLanguageFileInstaller, yamlLanguageFileLoader);
 		this.macroProcessorHandler = new MacroProcessorHandler(languageHandler);
 	}
 
 
 	/**
 	 * Set both delimiters to the same specific character
+	 *
 	 * @param character the character to use for both delimiters
 	 */
 	public void setDelimiters(final Character character) {
@@ -91,6 +94,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Set delimiters to unique characters by passing two parameters
+	 *
 	 * @param leftCharacter the character to use for the left delimiter
 	 * @param rightCharacter the character to use for the right delimiter
 	 */
@@ -102,6 +106,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Initiate a message
+	 *
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
 	 * @return Message - an initialized message object
@@ -113,6 +118,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Check if a message is enabled in the configuration file
+	 *
 	 * @param messageId the message identifier
 	 * @return true if message is enabled, false if not
 	 */
@@ -123,6 +129,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Get the configured repeat delay for a message
+	 *
 	 * @param messageId the message identifier
 	 * @return long - the message repeat delay (in seconds)
 	 */
@@ -227,6 +234,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Get string by path in message file
+	 *
 	 * @param path the message path for the string being retrieved
 	 * @return String - the string retrieved by path from message file, wrapped in an {@link Optional}
 	 */
@@ -237,6 +245,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Get List of String by path in message file
+	 *
 	 * @param path the message path for the string list being retrieved
 	 * @return List of String - the string list retrieved by path from message file
 	 */
@@ -247,6 +256,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Get optional string of world name or multiverse alias if available
+	 *
 	 * @param world the world to retrieve name
 	 * @return Optional String containing world name or multiverse alias
 	 */
