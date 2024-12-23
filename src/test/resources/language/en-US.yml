@@ -1,22 +1,60 @@
 # Language configuration file for ${project.name} v${project.version}
 
-###########
-# Item Info
-###########
-ITEM_INFO:
-  # Item Display Name
-  ITEM_NAME: '&aTest Item'
-  ITEM_NAME_PLURAL: '&aTest Items'
-  INVENTORY_ITEM_NAME: '&aInventory Item'
+########################
+# Location Display Names
+########################
+LOCATIONS:
+  SPAWN:
+    DISPLAY_NAME: '&aSpawn'
+  HOME:
+    DISPLAY_NAME: '&aHome'
 
-  # Item Lore
-  ITEM_LORE:
-    - '&elore line 1'
-    - '&elore line 2'
 
-  # Spawn Display Name
-  SPAWN_DISPLAY_NAME: '&aSpawn'
-  HOME_DISPLAY_NAME: '&aHome'
+##############
+# Item Strings
+##############
+ITEMS:
+  DEFAULT:
+    ITEM_NAME: 'Default Item'
+    ITEM_NAME_PLURAL: 'Default Items'
+    INVENTORY_ITEM_NAME: 'Default Inventory Item'
+    ITEM_LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  TEST_ITEM_1:
+    ITEM_NAME: '&aTest Item'
+    ITEM_NAME_PLURAL: '&aTest Items'
+    INVENTORY_ITEM_NAME: '&aInventory Item'
+    ITEM_LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_ITEM_NAME:
+    ITEM_NAME_PLURAL: '&aTest Items'
+    INVENTORY_ITEM_NAME: '&aInventory Item'
+    ITEM_LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  MISSING_ITEM_NAME_PLURAL:
+    ITEM_NAME: '&aTest Item'
+    INVENTORY_ITEM_NAME: '&aInventory Item'
+    ITEM_LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  MISSING_INVENTORY_ITEM_NAME:
+    ITEM_NAME: '&aTest Item'
+    ITEM_NAME_PLURAL: '&aTest Items'
+    ITEM_LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  MISSING_ITEM_LORE:
+    ITEM_NAME: '&aTest Item'
+    ITEM_NAME_PLURAL: '&aTest Items'
+    INVENTORY_ITEM_NAME: '&aInventory Item'
 
 
 ##############
@@ -35,6 +73,9 @@ TIME_STRINGS:
   LESS_THAN_ONE: 'less than one'
 
 
+###################
+# Arbitrary Strings
+###################
 ARBITRARY_STRING: 'an arbitrary string'
 
 ARBITRARY_STRING_LIST:
@@ -43,6 +84,9 @@ ARBITRARY_STRING_LIST:
   - "item 3"
 
 
+##########
+# Messages
+##########
 MESSAGES:
   ENABLED_MESSAGE:
     enabled: true
@@ -52,8 +96,10 @@ MESSAGES:
     enabled: false
     message: "This is a disabled message"
 
-  LEGACY_MESSAGE:
-    string: "This is a legacy message"
+  REPEAT_DELAYED_MESSAGE:
+    enabled: true
+    message: "this is a repeat delayed message"
+    repeat-delay: 10
 
   MACRO_MESSAGE:
     enabled: true
@@ -75,13 +121,8 @@ MESSAGES:
     enabled: false
     subtitle: "This is a disabled subtitle"
 
-  REPEAT_DELAYED_MESSAGE:
-    enabled: true
-    message: "this is a repeat delayed message"
-    repeat-delay: 10
-
   CUSTOM_FADE_TITLE:
-    enabled: false
+    enabled: true
     title: "This is a title with custom fade values"
     title-fade-in: 20
     title-stay: 140
@@ -97,3 +138,46 @@ MESSAGES:
   DURATION_MESSAGE:
     enabled: true
     message: "Duration is %DURATION%"
+
+
+  # all number fields are unique and different from defaults
+  ALL_FIELDS_PRESENT:
+    message: "This entry has all fields present - message"
+    repeat-delay: 14
+    title: "This entry has all fields present - title"
+    title_fade_in: 24
+    title_stay: 34
+    title_fade_out: 44
+    subtitle: "This entry has all fields present - subtitle"
+
+
+  UNDEFINED_FIELD_ENABLED:
+    message: "This entry has no enabled field"
+
+  UNDEFINED_FIELD_MESSAGE:
+    enabled: true
+    title: "This entry has no message field"
+
+  UNDEFINED_FIELD_REPEAT_DELAY:
+    enabled: true
+    message: "This entry has no repeat-delay field"
+
+  UNDEFINED_FIELD_TITLE:
+    enabled: true
+    message: "This entry has no title field"
+
+  UNDEFINED_FIELD_TITLE_FADE_IN:
+    enabled: true
+    message: "This entry has no title-fade-in field"
+
+  UNDEFINED_FIELD_TITLE_STAY:
+    enabled: true
+    message: "This entry has no title-stay field"
+
+  UNDEFINED_FIELD_TITLE_FADE_OUT:
+    enabled: true
+    message: "This entry has no title-fade-out field"
+
+  UNDEFINED_FIELD_SUBTITLE:
+    enabled: true
+    message: "This entry has no subtitle field"
