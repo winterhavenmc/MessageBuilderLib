@@ -66,7 +66,10 @@ messageBuilder.compose(player, MessageId.WELCOME)
 ```
 
 ### Adding Localization Files
-Language files are stored in the `language` resource folder and are managed automatically. Server operators can customize or delete them to refresh from defaults.
+Language files are stored in the `language` resource folder and can be installed automatically if they are listed
+in a 'auto_install.txt' file within the same folder. Server operators can customize the messages, or delete them 
+and reload the plugin to re-install any auto-install specified files from their resources. The auto install process
+runs when the MessageBuilder is instantiated in the plugin onEnable method, and whenever the reload method is called.
 
 ### Querying Records
 #### Fetching Message Records
@@ -92,34 +95,35 @@ The primary entry point for the library, enabling message composition and macro 
 Provides access to localized message and item records stored in YAML configuration files.
 
 ### LanguageHandler
-Manages installation and loading of language files, adhering to IETF standard language tags.
+Manages installation and loading of language files, adhering to IETF standard language tags for
+specifying the language to be used. A planned feature is to be locale aware,
+so that date and number formatting will be based on the locale selected in the plugin's config.yml file.
 
 ### ContextMap
-Stores macro data using composite keys to allow multiple entries of the same type.
+Collects and stores macro data for all macros before any replacements occur so that
+macro processors may refer to values from other sources in determining the string replacement logic.
 
 ### Record Classes
 - **MessageRecord**: Holds data for a message, including content, title, subtitle, and timings.
 - **ItemRecord**: Holds data for an item, including names and lore.
 
 ### MacroProcessor System
-Processes macros dynamically, replacing placeholders with appropriate values. MacroProcessor instances are tied to `MacroProcessorType` constants for efficient access.
+Processes macros according to type, replacing message placeholders with appropriate values. Each MacroProcessor instance 
+is keyed to a `MacroProcessorType` constant for ensuring type safety, and future processor types can be easily added
+to future versions the library, if necessary.
 
 ## Example YAML Layout
+The language yaml file is broken into top-level sections, including Settings, Items, and Messages
 
-### Messages
+### Settings
 ```yaml
-MESSAGES:
-  WELCOME_MESSAGE:
-    messageKey: "WELCOME_MESSAGE"
-    enabled: true
-    message: "Welcome, %PLAYER_NAME%!"
-    repeatDelay: 0
-    title: "Welcome!"
-    titleFadeIn: 10
-    titleStay: 70
-    titleFadeOut: 20
-    subtitle: "Enjoy your stay at %LOCATION_WORLD%!"
+SETTINGS:
+  DELIMITERS:
+    LEFT: '{'
+    RIGHT: '}'
 ```
+The settings section contains various settings related to the language file.
+Currently, the DELIMITERS section is the only available setting.
 
 ### Items
 ```yaml
@@ -134,6 +138,21 @@ ITEMS:
     ITEM_LORE:
       - '&edefault lore line 1'
       - '&edefault lore line 2'
+```
+
+### Messages
+```yaml
+MESSAGES:
+  WELCOME_MESSAGE:
+    messageKey: "WELCOME_MESSAGE"
+    enabled: true
+    message: "Welcome, %PLAYER_NAME%!"
+    repeatDelay: 0
+    title: "Welcome!"
+    titleFadeIn: 10
+    titleStay: 70
+    titleFadeOut: 20
+    subtitle: "Enjoy your stay at %LOCATION_WORLD%!"
 ```
 
 ## Requirements
