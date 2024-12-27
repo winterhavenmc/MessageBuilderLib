@@ -51,13 +51,13 @@ final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listen
 	/**
 	 * private class constructor, registers class as bukkit event listener
 	 */
-	MessageCooldown(final Plugin plugin) {
+	private MessageCooldown(final Plugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 
 	/**
-	 * Static factory method
+	 * Static getter for instance
 	 *
 	 * @return instance of this class
 	 */
@@ -133,19 +133,25 @@ final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listen
 	 *
 	 * @param entity the entity (player) to be removed from message cooldown map
 	 */
-	void remove(final Entity entity) {
+	int remove(final Entity entity) {
 
 		// if entity is null, do nothing and return
 		if (entity == null) {
-			return;
+			return 0;
 		}
+
+		int count = 0;
 
 		// iterate through all cooldown map keys
 		for (MessageId messageId : messageCooldownMap.keySet()) {
 
 			// remove entity UUID from cooldown map
-			messageCooldownMap.get(messageId).remove(entity.getUniqueId());
+			Long ignored = messageCooldownMap.get(messageId).remove(entity.getUniqueId());
+			if (ignored != null) {
+				count++;
+			}
 		}
+		return count;
 	}
 
 
