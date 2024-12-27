@@ -18,12 +18,14 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.TimeUnit;
-
-import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
+import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
+import com.winterhavenmc.util.messagebuilder.query.ConfigurationQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,14 +60,18 @@ import java.util.Optional;
  * DURATION or DURATION_MINUTES
  *
  * @param <MessageId> An enum whose members correspond to a message key in a language file
- * @param <Macro> An enum whose members correspond to a string replacement placeholder in a message string
+ * @param <Macro>     An enum whose members correspond to a string replacement placeholder in a message string
  */
 @SuppressWarnings("unused")
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
-	private final LanguageHandler languageHandler;
+	private final static String DEFAULT = "DEFAULT";
+
 	private final Plugin plugin;
-	private final MacroProcessorHandler macroProcessorHandler;
+	private final LanguageHandler languageHandler;
+	private final QueryHandler queryHandler;
+	private final MacroHandler macroHandler;
+
 
 	/**
 	 * Class constructor
@@ -74,10 +80,9 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public MessageBuilder(final Plugin plugin) {
 		this.plugin = plugin;
-		YamlLanguageFileInstaller yamlLanguageFileInstaller = new YamlLanguageFileInstaller(plugin);
-		YamlLanguageFileLoader yamlLanguageFileLoader = new YamlLanguageFileLoader(plugin);
-		this.languageHandler = new YamlLanguageHandler(plugin, yamlLanguageFileInstaller, yamlLanguageFileLoader);
-		this.macroProcessorHandler = new MacroProcessorHandler(languageHandler);
+		this.languageHandler = new YamlLanguageHandler(plugin);
+		this.queryHandler = new ConfigurationQueryHandler(plugin, languageHandler.getConfiguration());
+		this.macroHandler = new MacroHandler(plugin, queryHandler);
 	}
 
 
@@ -87,20 +92,20 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param character the character to use for both delimiters
 	 */
 	public void setDelimiters(final Character character) {
-		MacroProcessorHandler.MacroDelimiter.LEFT.set(character);
-		MacroProcessorHandler.MacroDelimiter.RIGHT.set(character);
+		MacroHandler.MacroDelimiter.LEFT.set(character);
+		MacroHandler.MacroDelimiter.RIGHT.set(character);
 	}
 
 
 	/**
 	 * Set delimiters to unique characters by passing two parameters
 	 *
-	 * @param leftCharacter the character to use for the left delimiter
+	 * @param leftCharacter  the character to use for the left delimiter
 	 * @param rightCharacter the character to use for the right delimiter
 	 */
 	public void setDelimiters(final Character leftCharacter, final Character rightCharacter) {
-		MacroProcessorHandler.MacroDelimiter.LEFT.set(leftCharacter);
-		MacroProcessorHandler.MacroDelimiter.RIGHT.set(rightCharacter);
+		MacroHandler.MacroDelimiter.LEFT.set(leftCharacter);
+		MacroHandler.MacroDelimiter.RIGHT.set(rightCharacter);
 	}
 
 
@@ -112,7 +117,10 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return Message - an initialized message object
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, languageHandler, macroProcessorHandler, recipient, messageId);
+		if (messageId == null) {
+			throw new IllegalArgumentException(Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
+		}
+		return new Message<>(plugin, queryHandler, macroHandler, recipient, messageId);
 	}
 
 
@@ -123,7 +131,10 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return true if message is enabled, false if not
 	 */
 	public boolean isEnabled(final MessageId messageId) {
-		return languageHandler.isEnabled(messageId);
+		if (messageId == null) {
+			throw new IllegalArgumentException(Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
+		}
+		return queryHandler.getMessageRecord(messageId).map(MessageRecord::enabled).orElse(false);
 	}
 
 
@@ -134,7 +145,10 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return long - the message repeat delay (in seconds)
 	 */
 	public long getRepeatDelay(final MessageId messageId) {
-		return languageHandler.getRepeatDelay(messageId);
+		if (messageId == null) {
+			throw new IllegalArgumentException(Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
+		}
+		return queryHandler.getMessageRecord(messageId).map(MessageRecord::repeatDelay).orElse(0L);
 	}
 
 
@@ -145,47 +159,128 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return String message text, or empty string if no message string found
 	 */
 	public String getMessage(final MessageId messageId) {
-		return languageHandler.getMessage(messageId);
+		if (messageId == null) {
+			throw new IllegalArgumentException(Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
+		}
+		return queryHandler.getMessageRecord(messageId).map(MessageRecord::message).orElse("");
 	}
 
 
 	/**
-	 * Get item name from language specific messages file, with translated color codes
+	 * Get DEFAULT item name from language specific messages file
 	 *
-	 * @return the formatted item name from language file, or empty string if key not found
+	 * @return item name from language file, or empty {@link Optional} if key not found
 	 */
-	public Optional<String> getItemName() {
-		return languageHandler.getItemName();
+	public Optional<String> getItemNameSingular() {
+		return getItemNameSingular(DEFAULT);
+	}
+
+
+	/**
+	 * Get item name from language specific messages file
+	 *
+	 * @return the item name from language file, or empty {@link Optional} if key not found
+	 */
+	public Optional<String> getItemNameSingular(final String itemKey) {
+		if (itemKey == null) {
+			throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.getMessage());
+		}
+		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemName);
 	}
 
 
 	/**
 	 * Get configured plural item name from language file
 	 *
-	 * @return the formatted item plural name from language file, or empty string if key not found
+	 * @return the item plural name from language file, or empty {@link Optional} if entry not found for key
 	 */
 	public Optional<String> getItemNamePlural() {
-		return languageHandler.getItemNamePlural();
+		return getItemNamePlural(DEFAULT);
+	}
+
+
+	/**
+	 * Get configured plural item name from language file
+	 *
+	 * @return the item plural name from language file, or empty {@link Optional} if entry not found for key
+	 */
+	public Optional<String> getItemNamePlural(final String itemKey) {
+		if (itemKey == null) {
+			throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.getMessage());
+		}
+		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemNamePlural);
 	}
 
 
 	/**
 	 * Get configured inventory item name from language file
 	 *
-	 * @return the formatted inventory display name of an item, as a String wrapped in an {@link Optional}
+	 * @return the inventory display name of an item, as a String wrapped in an {@link Optional}
 	 */
-	public Optional<String> getInventoryItemName() {
-		return languageHandler.getInventoryItemName();
+	public Optional<String> getInventoryItemNameSingular() {
+		return getInventoryItemNameSingular(DEFAULT);
+	}
+
+
+	/**
+	 * Get configured inventory item name from language file
+	 *
+	 * @return the inventory display name of an item, as a String wrapped in an {@link Optional}
+	 */
+	public Optional<String> getInventoryItemNameSingular(final String itemKey) {
+		if (itemKey == null) {
+			throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.getMessage());
+		}
+		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemName);
+	}
+
+
+	/**
+	 * Get configured inventory item name from language file
+	 *
+	 * @return the inventory display name of an item, as a String wrapped in an {@link Optional}
+	 */
+	public Optional<String> getInventoryItemNamePlural() {
+		return getInventoryItemNamePlural(DEFAULT);
+	}
+
+	/**
+	 * Get configured inventory item name from language file
+	 *
+	 * @return the inventory display name of an item, as a String wrapped in an {@link Optional}
+	 */
+	public Optional<String> getInventoryItemNamePlural(final String itemKey) {
+		if (itemKey == null) {
+			throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.getMessage());
+		}
+		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemNamePlural);
 	}
 
 
 	/**
 	 * Get item lore from language specific messages file, with translated color codes
 	 *
-	 * @return List of strings, one string for each line of lore, or empty list if key not found
+	 * @return {@link List}&lt;{@link String}&gt; of strings, one string for each line of lore, or empty list if not found
 	 */
 	public List<String> getItemLore() {
-		return languageHandler.getItemLore();
+		return getItemLore(DEFAULT);
+	}
+
+
+	/**
+	 * Get item lore from language specific messages file, with translated color codes
+	 *
+	 * @return {@link List}&lt;{@link String}&gt; of strings, one string for each line of lore, or empty list if not found
+	 */
+	public List<String> getItemLore(final String itemKey) {
+		if (itemKey == null) {
+			throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.getMessage());
+		}
+		Optional<ItemRecord> itemRecord = queryHandler.getItemRecord(itemKey);
+		if (itemRecord.isEmpty()) {
+			return Collections.emptyList();
+		}
+		return itemRecord.get().itemLore();
 	}
 
 
@@ -213,10 +308,10 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * Format the time string with days, hours, minutes and seconds as necessary
 	 *
 	 * @param duration a time duration in milliseconds
-	 * @return formatted time string
+	 * @return {@link String} &ndash; formatted time string
 	 */
 	public String getTimeString(final long duration) {
-		return languageHandler.getTimeString(duration);
+		return queryHandler.getTimeString(duration);
 	}
 
 
@@ -225,10 +320,10 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @param duration a time duration in milliseconds
 	 * @param timeUnit the time granularity to display (days | hours | minutes | seconds)
-	 * @return formatted time string
+	 * @return {@link String} &ndash; formatted time string
 	 */
 	public String getTimeString(final long duration, final TimeUnit timeUnit) {
-		return languageHandler.getTimeString(duration, timeUnit);
+		return queryHandler.getTimeString(duration, timeUnit);
 	}
 
 
@@ -236,7 +331,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * Get string by path in message file
 	 *
 	 * @param path the message path for the string being retrieved
-	 * @return String - the string retrieved by path from message file, wrapped in an {@link Optional}
+	 * @return {@link String} &ndash; the string retrieved by path from message file, wrapped in an {@link Optional}
 	 */
 	public Optional<String> getString(final String path) {
 		return languageHandler.getString(path);
@@ -261,7 +356,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return Optional String containing world name or multiverse alias
 	 */
 	public Optional<String> getWorldName(final World world) {
-		return languageHandler.getWorldName(world);
+		return queryHandler.getWorldName(world);
 	}
 
 	/**
