@@ -15,15 +15,14 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.loader;
 
-import org.bukkit.configuration.Configuration;
-
-public interface LanguageFileLoader {
+public interface LanguageFileInstaller {
 	/**
-	 * Get configuration object containing message settings and strings
+	 * Install resource files from plugin jar to plugin data directory
 	 *
-	 * @return Configuration - message configuration object
+	 * @return {@code int} the number of resource files installed
 	 */
-	Configuration getConfiguration();
+	@SuppressWarnings("UnusedReturnValue")
+	int install();
 }

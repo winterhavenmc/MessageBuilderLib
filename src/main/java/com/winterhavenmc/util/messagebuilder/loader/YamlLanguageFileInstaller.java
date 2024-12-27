@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2022-2024 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.loader;
 
 import org.bukkit.plugin.Plugin;
 
@@ -49,7 +49,7 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
 	 * package-private getter for auto install filename constant (for testing)
 	 * @return the auto install filename
 	 */
-	String getAutoInstallFilename() {
+	public String getAutoInstallFilename() {
 		return AUTO_INSTALL_TXT;
 	}
 
@@ -74,7 +74,7 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
 	 * Install resource from plugin jar to plugin data directory
 	 * @param resourceName {@code String} the path name of the resource to be installed
 	 */
-	void install(final String resourceName) {
+	private void install(final String resourceName) {
 
 		if (plugin.getResource(resourceName) == null) {
 			plugin.getLogger().warning("The resource " + resourceName + " could not be found by the auto installer!");
@@ -103,7 +103,7 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
 	 *
 	 * @return Set of filename strings
 	 */
-	Set<String> getAutoInstallFilenames() {
+	private Set<String> getAutoInstallFilenames() {
 
 		// get input stream for resource
 		InputStream resourceInputStream = plugin.getResource(AUTO_INSTALL_TXT);
@@ -136,7 +136,7 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
 	 * @param resourceName the name of the resource
 	 * @return {@code true} if the resource exists, {@code false} if it does not
 	 */
-	boolean resourceExists(final String resourceName) {
+	private boolean resourceExists(final String resourceName) {
 		return plugin.getResource(resourceName) != null;
 	}
 
@@ -147,7 +147,7 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
  	 * @param filename the name of the file being verified
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
-	boolean verifyResourceInstalled(final String filename) {
+	private boolean verifyResourceInstalled(final String filename) {
 		return new File(plugin.getDataFolder(), filename).exists();
 	}
 
