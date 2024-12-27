@@ -17,20 +17,24 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-
+import com.winterhavenmc.util.messagebuilder.macro.processor.Processor;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorRegistry;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
 
 
-public class MacroProcessorHandler {
+/**
+ * This class provides handling of the Macro Processors and their Registry
+ */
+public class MacroHandler {
 
-	private final ProcessorRegistry macroProcessorRegistry;
+	// the processor registry
+	private final ProcessorRegistry processorRegistry;
 
 
 	/**
@@ -45,6 +49,7 @@ public class MacroProcessorHandler {
 
 		/**
 		 * Constructor for enum
+		 *
 		 * @param defaultChar the default character for a delimiter
 		 */
 		MacroDelimiter(final char defaultChar) {
@@ -68,20 +73,27 @@ public class MacroProcessorHandler {
 
 	/**
 	 * Class constructor
-	 * @param languageHandler reference to language handler
 	 */
-	public MacroProcessorHandler(final LanguageHandler languageHandler) {
+	public MacroHandler(final Plugin plugin, final QueryHandler queryHandler) {
 		// instantiate macro processor registry
-		this.macroProcessorRegistry = new ProcessorRegistry();
+		this.processorRegistry = new ProcessorRegistry();
 		// populate macro processor registry
 		for (ProcessorType type : ProcessorType.values()) {
-			type.register(languageHandler, macroProcessorRegistry, type);
+			type.register(plugin, queryHandler, processorRegistry, type);
 		}
 	}
 
 
+	/**
+	 * Replace macros in a message to be sent
+	 *
+	 * @param recipient     the message recipient
+	 * @param contextMap    the context map containing other objects whose values may be retrieved
+	 * @param messageString the message with placeholders to be replaced by macro values
+	 * @return the string with all macro replacements performed
+	 */
 	public String replaceMacros(final CommandSender recipient,
-	                            final MacroObjectMap macroObjectMap,
+	                            final ContextMap contextMap,
 	                            final String messageString) {
 
 		String modifiedMessageString = messageString;
@@ -91,23 +103,39 @@ public class MacroProcessorHandler {
 
 			ResultMap macroStringMap = new ResultMap();
 
-			// put message recipient in macro object map
-			macroObjectMap.put("RECIPIENT", recipient);
-
-			// if recipient is an entity, put recipient location in macro object map
-			if (recipient instanceof Entity entity) {
-				macroObjectMap.put("RECIPIENT_LOCATION", entity.getLocation());
-			}
-
-			// put string placeholder for item in object map if not already in map
-			if (!macroObjectMap.containsKey("ITEM_NAME")) {
-				macroObjectMap.put("ITEM_NAME", "item_name");
-			}
+			//TODO: THESE WILL NEED TO BE ADDED ELSEWHERE, LIKE IN THE APPROPRIATE MACRO PROCESSOR
+			// perhaps we need a RECIPIENT type; at any rate, there will need to be a method
+			// to add items to the ContextMap manually, before macros are processed
+//			// put message recipient in macro object map
+//			// create key for recipient in contextMap
+//			CompositeKey compositeKey = new CompositeKey(processorType, "RECIPIENT");
+//
+//			contextMap.put(compositeKey, recipient);
+//
+//			// if recipient is an entity, put recipient location in macro object map
+//			if (recipient instanceof Entity entity) {
+//				contextMap.put("RECIPIENT_LOCATION", entity.getLocation());
+//			}
+//
+//			// put string placeholder for item in object map if not already in map
+//			if (!contextMap.containsKey("ITEM_NAME")) {
+//				contextMap.put("ITEM_NAME", "item_name");
+//			}
 
 			// iterate over macro object map, getting macro value strings based on class type in object map
-			for (Map.Entry<String, Object> entry : macroObjectMap.entrySet()) {
-				ProcessorType type = ProcessorType.matchType(entry.getValue());
-				macroStringMap.putAll(macroProcessorRegistry.get(type).execute(macroObjectMap, entry.getKey(), entry.getValue()));
+			for (Map.Entry<CompositeKey, Object> entry : contextMap.entrySet()) {
+
+				ProcessorType processorType = entry.getKey().getType();
+				String macroName = entry.getKey().getMacroName();
+
+				// get processor from registry by ProcessorType
+				Processor processor = processorRegistry.get(processorType);
+
+				// get resultMap from processor execution
+				ResultMap resultMap = processor.execute(macroName, entry.getValue(), contextMap);
+
+				// add all entries of resultMap to macroStringMap
+				macroStringMap.putAll(resultMap);
 			}
 
 			// replace macro tokens in message string with macro strings
