@@ -20,14 +20,34 @@ MessageBuilderLib is a Java library designed for Bukkit Minecraft server plugin 
 ## Usage
 
 ### Basic Setup
-You must first create two Enums in your plugin. You can choose any name for these Enums,
-but it is recommended to name them 'MessageId' and 'Macro' for the sake of convention. The constants in the
-MessageId Enum correlate directly to the message keys in the language yaml file.
-The Macro Enum corresponds directly to any placeholders that may be contained in
-any of the messages.
+You must first create two enums in your plugin. You can choose any name for these enums,
+but it is recommended to name them 'MessageId' and 'Macro' for the sake of convention. The 
+MessageId enum constants correlate directly to the message keys in the language yaml file,
+and should be an exact string match for the constant name, as returned by the .name() method.
+
+example:
+```java
+public enum MessageId {
+    COMMAND_INVALID,
+    COMMAND_SUCCESS
+}
+```
+
+The Macro enum corresponds directly to any placeholders that may be contained in
+any of the messages, and also must be an exact string match for the Macro enum constant names.
+
+example:
+```java
+public enum MessageId {
+    PLAYER_NAME,
+    PLAYER_LOCATION,
+    ITEM_NAME,
+    WORLD_NAME
+}
+```
 
 In your plugin's `onEnable` method, initialize the `MessageBuilder` using the
-Enums as parameterized types:
+enums as parameterized types:
 
 ```java
 @Override
