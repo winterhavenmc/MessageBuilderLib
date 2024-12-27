@@ -22,6 +22,7 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -57,17 +58,17 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	/**
 	 * Class constructor
 	 *
-	 * @param plugin          reference to plugin main class
+	 * @param plugin       reference to plugin main class
 	 * @param queryHandler the query handler for message records
-	 * @param macroHandler  reference to macro processor class
-	 * @param recipient       message recipient
-	 * @param messageId       message identifier
+	 * @param macroHandler reference to macro processor class
+	 * @param recipient    message recipient
+	 * @param messageId    message identifier
 	 */
 	public Message(final Plugin plugin,
-				   final QueryHandler queryHandler,
-	               final MacroHandler macroHandler,
-	               final CommandSender recipient,
-	               final MessageId messageId) {
+				final QueryHandler queryHandler,
+                final MacroHandler macroHandler,
+                final CommandSender recipient,
+                final MessageId messageId) {
 
 		this.plugin = plugin;
 		this.queryHandler = queryHandler;
@@ -154,20 +155,20 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 			// get title string
 			String titleString;
 			if (altTitle != null && !altTitle.isEmpty()) {
-				titleString = macroHandler.replaceMacros(recipient, contextMap, processorType, altTitle);
+				titleString = macroHandler.replaceMacros(recipient, contextMap, altTitle);
 			}
 			else {
-				titleString = macroHandler.replaceMacros(recipient, contextMap, processorType,
+				titleString = macroHandler.replaceMacros(recipient, contextMap,
 						queryHandler.getMessageRecord(messageId).map(MessageRecord::title).orElse(""));
 			}
 
 			// get subtitle string
 			String subtitleString;
 			if (altSubtitle != null && !altSubtitle.isEmpty()) {
-				subtitleString = macroHandler.replaceMacros(recipient, contextMap, processorType, altSubtitle);
+				subtitleString = macroHandler.replaceMacros(recipient, contextMap, altSubtitle);
 			}
 			else {
-				subtitleString = macroHandler.replaceMacros(recipient, contextMap, processorType,
+				subtitleString = macroHandler.replaceMacros(recipient, contextMap,
 						queryHandler.getMessageRecord(messageId).map(MessageRecord::subtitle).orElse(""));
 			}
 
@@ -227,7 +228,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		String messageString;
 
 		if (altMessage != null && !altMessage.isEmpty()) {
-			messageString = macroHandler.replaceMacros(recipient, contextMap, processorType, altMessage);
+			messageString = macroHandler.replaceMacros(recipient, contextMap, altMessage);
 		}
 		else {
 			Optional<MessageRecord> messageRecord = queryHandler.getMessageRecord(messageId);
@@ -237,7 +238,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 				return "";
 			}
 
-			messageString = macroHandler.replaceMacros(recipient, contextMap, processorType, messageRecord.get().message());
+			messageString = macroHandler.replaceMacros(recipient, contextMap, messageRecord.get().message());
 		}
 		return ChatColor.translateAlternateColorCodes('&', messageString);
 	}
