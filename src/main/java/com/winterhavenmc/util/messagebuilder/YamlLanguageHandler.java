@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.TimeUnit;
-
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
@@ -146,22 +144,6 @@ public class YamlLanguageHandler implements LanguageHandler {
 		return Optional.ofNullable(configuration.getString(LOCATION_SECTION + ".HOME.DISPLAY_NAME"));
 	}
 
-
-	/**
-	 * Format the time string with days, hours, minutes and seconds as necessary
-	 *
-	 * @param duration a time duration in milliseconds
-	 * @return formatted time string
-	 */
-	@Override
-	public String getTimeString(final long duration) {
-		return new TimeString(configuration).getTimeString(duration, TimeUnit.SECONDS);
-	}
-
-	@Override
-	public String getTimeString(final long duration, final TimeUnit timeUnit) {
-		return new TimeString(configuration).getTimeString(duration, timeUnit);
-	}
 
 	/**
 	 * Retrieve an arbitrary string from the language file with the specified key.
