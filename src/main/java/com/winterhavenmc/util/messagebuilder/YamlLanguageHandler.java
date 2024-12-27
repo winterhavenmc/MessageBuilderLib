@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.messagebuilder.loader.LanguageFileLoader;
+import com.winterhavenmc.util.messagebuilder.loader.YamlLanguageFileLoader;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
