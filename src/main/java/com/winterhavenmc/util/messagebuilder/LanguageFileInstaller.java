@@ -17,13 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import org.bukkit.configuration.Configuration;
-
-public interface FileLoader {
+public interface LanguageFileInstaller {
 	/**
-	 * Get configuration object containing message settings and strings
+	 * Install resource files from plugin jar to plugin data directory
 	 *
-	 * @return Configuration - message configuration object
+	 * @return {@code int} the number of resource files installed
 	 */
-	Configuration getMessages();
+	@SuppressWarnings("UnusedReturnValue")
+	int install();
 }

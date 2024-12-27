@@ -19,104 +19,79 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.TimeUnit;
 import org.bukkit.World;
+import org.bukkit.configuration.Configuration;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public interface LanguageHandler {
 
-	/**
-	 * Get all keys for the message section of the language file. This method is only used for unit testing.
-	 *
-	 * @return Collection of String containing the keys for the message section of the language file
-	 */
-	@SuppressWarnings("unused")
-	Collection<String> getMessageKeys();
+//	/**
+//	 * Retrieve a MessageRecord
+//	 *
+//	 * @param messageId an Enum constant that is the key for a message record
+//	 * @return the MessageRecord for the key
+//	 * @param <MessageId> an Enum constant
+//	 */
+//	<MessageId extends Enum<MessageId>> MessageRecord getMessageRecord(final MessageId messageId);
+
+//	/**
+//	 * Get item name from language specific messages file
+//	 *
+//	 * @return String ITEM_NAME, or empty string if key not found
+//	 */
+//	Optional<String> getItemName();
+
+//	/**
+//	 * Get a message record from the current message configuration
+//	 * @param messageId an Enum constant that is used as the key for a message record
+//	 * @param configuration the current message configuration
+//	 * @return {@link Optional} {@link MessageRecord} the message record returned for the messageId key from the configuration
+//	 * @param <MessageId> an Enum constant
+//	 */
+//	<MessageId extends Enum<MessageId>> // parameterized type
+//	Optional<MessageRecord> // return type
+//	getMessageRecord // method name
+//	(final MessageId messageId, final Configuration configuration); // parameters
+//
+//	Optional<ItemRecord> getItemRecord(final String itemKey);
+
+	Configuration getConfiguration();
+
+	//	/**
+//	 * Get item name from language specific messages file
+//	 *
+//	 * @param itemKey the unique key for the item
+//	 * @return String ITEM_NAME, or empty string if key not found
+//	 */
+//	Optional<String> getItemName(final String itemKey);
+//
+//	/**
+//	 * Get configured plural item name from language file
+//	 *
+//	 * @return the formatted plural display name of an item, or empty string if key not found
+//	 */
+//	Optional<String> getItemNamePlural(final String itemKey);
+//
+//
+//	/**
+//	 * Get configured inventory item name from language file
+//	 *
+//	 * @return the formatted inventory display name of an item, or empty string if key not found
+//	 */
+//	Optional<String> getInventoryItemName(final String itemKey);
+//
+//
+//	/**
+//	 * Get item lore from language specific messages file
+//	 *
+//	 * @return List of strings, one string for each line of lore, or empty list if key not found
+//	 */
+//	List<String> getItemLore(final String itemKey);
 
 
-	/**
-	 * Check if message is enabled. If an 'enabled' key does not exist for a valid message,
-	 * and a default does not exist, returns true so that the enabled setting is optional
-	 * in otherwise valid messages that contain a 'string' key.
-	 *
-	 * @param <MessageId> parameterized type enum member for messageId
-	 * @param messageId   message identifier to check
-	 * @return true if message is enabled, false if not
-	 * @throws NullPointerException if parameter is null
-	 */
-	<MessageId extends Enum<MessageId>> boolean isEnabled(final MessageId messageId);
-
-
-	/**
-	 * get message repeat delay from language file
-	 *
-	 * @param <MessageId> parameterized type enum member for messageId
-	 * @param messageId   message identifier to retrieve message delay
-	 * @return long - message repeat delay in seconds
-	 */
-	<MessageId extends Enum<MessageId>> long getRepeatDelay(final MessageId messageId);
-
-
-	/**
-	 * get message text from language file
-	 *
-	 * @param <MessageId> parameterized type enum member for messageId
-	 * @param messageId   message identifier to retrieve message text
-	 * @return String message text, or empty string if no message string found
-	 */
-	<MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId);
-
-	<MessageId extends Enum<MessageId>> String getTitle(final MessageId messageId);
-
-	<MessageId extends Enum<MessageId>> String getSubtitle(final MessageId messageId);
-
-	<MessageId extends Enum<MessageId>> int getTitleFadeIn(final MessageId messageId);
-
-	<MessageId extends Enum<MessageId>> int getTitleStay(final MessageId messageId);
-
-	<MessageId extends Enum<MessageId>> int getTitleFadeOut(final MessageId messageId);
-
-
-	/**
-	 * Get item name from language specific messages file, with translated color codes
-	 *
-	 * @return String ITEM_NAME, or empty string if key not found
-	 */
-	Optional<String> getItemName();
-
-
-	/**
-	 * Get item name from language specific messages file, with translated color codes
-	 *
-	 * @param def a default value to use if the item name cannot be found in the config
-	 * @return String ITEM_NAME, or empty string if key not found
-	 */
-	Optional<String> getItemName(String def);
-
-	/**
-	 * Get configured plural item name from language file
-	 *
-	 * @return the formatted plural display name of an item, or empty string if key not found
-	 */
-	Optional<String> getItemNamePlural();
-
-
-	/**
-	 * Get configured inventory item name from language file
-	 *
-	 * @return the formatted inventory display name of an item, or empty string if key not found
-	 */
-	Optional<String> getInventoryItemName();
-
-
-	/**
-	 * Get item lore from language specific messages file, with translated color codes
-	 *
-	 * @return List of strings, one string for each line of lore, or empty list if key not found
-	 */
-	List<String> getItemLore();
-
+	//TODO: change this (or add) to getLocale
+	String getConfigLanguage();
 
 	/**
 	 * Get spawn display name from language file
@@ -169,14 +144,12 @@ public interface LanguageHandler {
 	List<String> getStringList(final String path);
 
 
-	Optional<String> getWorldName(final World world);
+//	Optional<String> getWorldName(final World world);
 
 
 	/**
 	 * Reload messages into Configuration object
 	 */
 	void reload();
-
-	Optional<String> getWorldAlias(final World world);
 
 }

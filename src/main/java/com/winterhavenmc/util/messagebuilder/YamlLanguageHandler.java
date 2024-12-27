@@ -17,295 +17,111 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import com.winterhavenmc.util.TimeUnit;
 
-import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
  * provides common methods for the installation and management of
  * localized language files for bukkit plugins.
  */
-public final class YamlLanguageHandler implements LanguageHandler {
+public class YamlLanguageHandler implements LanguageHandler {
+
+	// string constant for language key in plugin config file
+	private final static String CONFIG_LANGUAGE_KEY = "language";
+
+	// string constant for configuration section key
+	private final static String LOCATION_SECTION = "LOCATIONS";
 
 	// reference to main plugin
-	private final Plugin plugin;
+	private Plugin plugin;
+
+	// language file installer and loader
+	private LanguageFileLoader languageFileLoader;
 
 	// configuration object for messages file
-	private Configuration messages;
+	private Configuration configuration;
 
 
 	/**
-	 * class constructor
+	 * class constructor, no parameter
+	 * must use setters for all fields
+	 */
+	public YamlLanguageHandler() { }
+
+
+	/**
+	 * class constructor, one parameter
+	 * must use setters for languageFileInstaller and languageFileLoader fields
+	 *
+	 * @param plugin the plugin main class
 	 */
 	public YamlLanguageHandler(final Plugin plugin) {
 
+		// reference to plugin main class
 		this.plugin = plugin;
 
-		// load messages
-		reload();
+		// load message configuration from file loader
+		configuration = new YamlLanguageFileLoader(plugin).getConfiguration();
 	}
 
 
 	/**
-	 * Get all keys for a message section of the language file. This method is only used for unit testing.
+	 * class constructor, three parameter
+	 * all fields are provided as parameters
 	 *
-	 * @return Collection of String containing the keys for a message section of the language file
+	 * @param plugin the plugin main class
 	 */
-	@Override
-	public Collection<String> getMessageKeys() {
-		return Objects.requireNonNull(messages.getConfigurationSection("MESSAGES")).getKeys(false);
-	}
+	public YamlLanguageHandler(final Plugin plugin,
+	                           final LanguageFileLoader languageFileLoader) {
 
+		// reference to plugin main class
+		this.plugin = plugin;
+		this.languageFileLoader = languageFileLoader;
+
+		// load message configuration from file
+		configuration = languageFileLoader.getConfiguration();
+	}
 
 	/**
-	 * Check if message is enabled. If an 'enabled' key does not exist for a valid message,
-	 * and a default does not exist, returns true so that the enabled setting is optional
-	 * in otherwise valid messages that contain a 'string' key.
-	 *
-	 * @param <MessageId> parameterized type enum member for messageId
-	 * @param messageId   message identifier to check
-	 * @return true if message is enabled, false if not
+	 * setter for plugin (do we really need a setter for plugin? maybe for testing.)
+	 * @param plugin a new plugin to replace the existing plugin
 	 */
-	@Override
-	public <MessageId extends Enum<MessageId>> boolean isEnabled(final MessageId messageId) {
-
-		// check for null parameter
-		if (messageId == null) {
-			return false;
-		}
-
-		// if enabled setting for a message does not exist and no default is set,
-		// and message string does exist, default to true
-		if (messages.getString("MESSAGES." + messageId + ".enabled") == null
-				&& messages.getString("MESSAGES." + messageId + ".string") != null) {
-			return true;
-		}
-
-		// return boolean value of message enabled setting
-		return messages.getBoolean("MESSAGES." + messageId + ".enabled");
+	void setPlugin(Plugin plugin) {
+		this.plugin = plugin;
 	}
-
 
 	/**
-	 * get message repeat delay from language file
-	 *
-	 * @param <MessageId> parameterized type enum member for messageId
-	 * @param messageId   message identifier to retrieve message delay
-	 * @return int message repeat delay in seconds
+	 * setter for fileLoader
+	 * @param languageFileLoader a new FileLoader to replace the existing fileLoader
 	 */
-	@Override
-	public <MessageId extends Enum<MessageId>> long getRepeatDelay(final MessageId messageId) {
-
-		// check for null parameter
-		if (messageId == null) {
-			return 0L;
-		}
-
-		return messages.getLong("MESSAGES." + messageId + ".repeat-delay");
+	void setFileLoader(LanguageFileLoader languageFileLoader) {
+		this.languageFileLoader = languageFileLoader;
 	}
 
-
-	/**
-	 * get message text from language file
-	 *
-	 * @param <MessageId> parameterized type enum member for messageId
-	 * @param messageId   message identifier to retrieve message text string
-	 * @return String message text, or empty string if no message string found
-	 */
-	@Override
-	public <MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId) {
-
-		// check for null parameter
-		if (messageId == null) {
-			return "";
-		}
-
-		// check for message string at .message
-		String string = messages.getString("MESSAGES." + messageId + ".message");
-
-		// if null, check for message at .string
-		if (string == null) {
-			string = messages.getString("MESSAGES." + messageId + ".string");
-		}
-
-		// if null, set to empty string
-		if (string == null) {
-			string = "";
-		}
-
-		return ChatColor.translateAlternateColorCodes('&', string);
+	// for testing setters
+	boolean isPluginSet() {
+		return this.plugin != null;
 	}
-
-
-	/**
-	 * get title text from language file
-	 *
-	 * @param <MessageId> parameterized type enum member for messageId
-	 * @param messageId   message identifier to retrieve title text string
-	 * @return String title text, or empty string if no title string found
-	 */
-	@Override
-	public <MessageId extends Enum<MessageId>> String getTitle(final MessageId messageId) {
-
-		// check for null parameter
-		if (messageId == null) {
-			return "";
-		}
-
-		String string = messages.getString("MESSAGES." + messageId + ".title", "");
-
-		return ChatColor.translateAlternateColorCodes('&', string);
-	}
-
-
-	/**
-	 * get subtitle text from language file
-	 *
-	 * @param <MessageId> parameterized type enum member for messageId
-	 * @param messageId   message identifier to retrieve subtitle text string
-	 * @return String subtitle text, or empty string if no subtitle string found
-	 */
-	@Override
-	public <MessageId extends Enum<MessageId>> String getSubtitle(final MessageId messageId) {
-
-		// check for null parameter
-		if (messageId == null) {
-			return "";
-		}
-
-		String string = messages.getString("MESSAGES." + messageId + ".subtitle", "");
-
-		return ChatColor.translateAlternateColorCodes('&', string);
+	boolean isFileLoaderSet() {
+		return this.languageFileLoader != null;
 	}
 
 
 	@Override
-	public <MessageId extends Enum<MessageId>> int getTitleFadeIn(final MessageId messageId) {
-
-		// check for null parameter
-		if (messageId == null || !messages.isInt("MESSAGES." + messageId + ".title-fade-in")) {
-			return 10;
-		}
-		return messages.getInt("MESSAGES." + messageId + ".title-fade-in");
+	public Configuration getConfiguration() {
+		return configuration;
 	}
 
 
 	@Override
-	public <MessageId extends Enum<MessageId>> int getTitleStay(final MessageId messageId) {
-
-		// check for null parameter
-		if (messageId == null || !messages.isInt("MESSAGES." + messageId + ".title-stay")) {
-			return 70;
-		}
-		return messages.getInt("MESSAGES." + messageId + ".title-stay");
-	}
-
-
-	@Override
-	public <MessageId extends Enum<MessageId>> int getTitleFadeOut(final MessageId messageId) {
-
-		// check for null parameter
-		if (messageId == null || !messages.isInt("MESSAGES." + messageId + ".title-fade-out")) {
-			return 20;
-		}
-		return messages.getInt("MESSAGES." + messageId + ".title-fade-out");
-	}
-
-
-	/**
-	 * Get item name from language specific messages file, with translated color codes
-	 *
-	 * @return String ITEM_NAME, or empty string if key not found
-	 */
-	@Override
-	public Optional<String> getItemName() {
-
-		String string = messages.getString("ITEM_INFO.ITEM_NAME");
-
-		if (string == null) {
-			return Optional.empty();
-		}
-
-		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
-	}
-
-
-	/**
-	 * Get item name from language specific messages file, with translated color codes
-	 *
-	 * @return String ITEM_NAME, or empty string if key not found
-	 */
-	@Override
-	public Optional<String> getItemName(String def) {
-
-		String string = messages.getString("ITEM_INFO.ITEM_NAME", def);
-
-		if (string == null) {
-			return Optional.empty();
-		}
-
-		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
-	}
-
-
-	/**
-	 * Get configured plural item name from language file
-	 *
-	 * @return the formatted plural display name of an item, or empty string if key not found
-	 */
-	@Override
-	public Optional<String> getItemNamePlural() {
-
-		String string = messages.getString("ITEM_INFO.ITEM_NAME_PLURAL");
-
-		if (string == null) {
-			return Optional.empty();
-		}
-
-		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
-	}
-
-
-	/**
-	 * Get configured inventory item name from language file
-	 *
-	 * @return the formatted inventory display name of an item, or empty string if key not found
-	 */
-	@Override
-	public Optional<String> getInventoryItemName() {
-
-		String string = messages.getString("ITEM_INFO.INVENTORY_ITEM_NAME");
-
-		if (string == null) {
-			return Optional.empty();
-		}
-
-		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
-	}
-
-
-	/**
-	 * Get item lore from language specific messages file, with translated color codes
-	 *
-	 * @return List of strings, one string for each line of lore, or empty list if key not found
-	 */
-	@Override
-	public List<String> getItemLore() {
-
-		List<String> configLore = messages.getStringList("ITEM_INFO.ITEM_LORE");
-		List<String> coloredLore = new ArrayList<>();
-		for (String line : configLore) {
-			coloredLore.add(ChatColor.translateAlternateColorCodes('&', line));
-		}
-		return coloredLore;
+	public String getConfigLanguage() {
+		return plugin.getConfig().getString(CONFIG_LANGUAGE_KEY);
 	}
 
 
@@ -316,14 +132,7 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public Optional<String> getSpawnDisplayName() {
-
-		String string = messages.getString("ITEM_INFO.SPAWN_DISPLAY_NAME");
-
-		if (string == null) {
-			return Optional.empty();
-		}
-
-		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
+		return Optional.ofNullable(configuration.getString(LOCATION_SECTION + ".SPAWN.DISPLAY_NAME"));
 	}
 
 
@@ -334,14 +143,7 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public Optional<String> getHomeDisplayName() {
-
-		String string = messages.getString("ITEM_INFO.HOME_DISPLAY_NAME");
-
-		if (string == null) {
-			return Optional.empty();
-		}
-
-		return Optional.of(ChatColor.translateAlternateColorCodes('&', string));
+		return Optional.ofNullable(configuration.getString(LOCATION_SECTION + ".HOME.DISPLAY_NAME"));
 	}
 
 
@@ -353,161 +155,13 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public String getTimeString(final long duration) {
-		return getTimeString(duration, TimeUnit.SECONDS);
+		return new TimeString(configuration).getTimeString(duration, TimeUnit.SECONDS);
 	}
 
-
-	/**
-	 * Format the time string with days, hours, minutes and seconds as necessary, to the granularity passed
-	 *
-	 * @param duration a time duration in milliseconds
-	 * @param timeUnit the time granularity to display (days | hours | minutes | seconds)
-	 * @return formatted time string
-	 */
 	@Override
 	public String getTimeString(final long duration, final TimeUnit timeUnit) {
-		//TODO: Refactor this entire method
-
-		TimeUnit finalTimeUnit = timeUnit;
-
-		// check for null parameter
-		if (finalTimeUnit == null) {
-			finalTimeUnit = TimeUnit.SECONDS;
-		}
-
-		// if duration is negative, return unlimited time string
-		if (duration < 0) {
-			String string = messages.getString("TIME_STRINGS.UNLIMITED");
-			if (string == null) {
-				string = "unlimited";
-			}
-			return ChatColor.translateAlternateColorCodes('&', string);
-		}
-
-		// return string if less than 1 of passed timeUnit remains
-		String lessString = messages.getString("TIME_STRINGS.LESS_THAN_ONE");
-		if (lessString == null) {
-			lessString = "< 1";
-		}
-		if (finalTimeUnit.equals(TimeUnit.DAYS)
-				&& TimeUnit.MILLISECONDS.toDays(duration) < 1) {
-			return lessString + " " + messages.getString("TIME_STRINGS.DAY");
-		}
-		if (finalTimeUnit.equals(TimeUnit.HOURS)
-				&& TimeUnit.MILLISECONDS.toHours(duration) < 1) {
-			return lessString + " " + messages.getString("TIME_STRINGS.HOUR");
-		}
-		if (finalTimeUnit.equals(TimeUnit.MINUTES)
-				&& TimeUnit.MILLISECONDS.toMinutes(duration) < 1) {
-			return lessString + " " + messages.getString("TIME_STRINGS.MINUTE");
-		}
-		if (finalTimeUnit.equals(TimeUnit.SECONDS)
-				&& TimeUnit.MILLISECONDS.toSeconds(duration) < 1) {
-			return lessString + " " + messages.getString("TIME_STRINGS.SECOND");
-		}
-
-
-		StringBuilder timeString = new StringBuilder();
-
-		int days = (int) TimeUnit.MILLISECONDS.toDays(duration);
-		int hours = (int) TimeUnit.MILLISECONDS.toHours(duration % TimeUnit.DAYS.toMillis(1));
-		int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(duration % TimeUnit.HOURS.toMillis(1));
-		int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(duration % TimeUnit.MINUTES.toMillis(1));
-
-		String dayString = messages.getString("TIME_STRINGS.DAY");
-		if (dayString == null) {
-			dayString = "day";
-		}
-		String dayPluralString = messages.getString("TIME_STRINGS.DAY_PLURAL");
-		if (dayPluralString == null) {
-			dayPluralString = "days";
-		}
-		String hourString = messages.getString("TIME_STRINGS.HOUR");
-		if (hourString == null) {
-			hourString = "hour";
-		}
-		String hourPluralString = messages.getString("TIME_STRINGS.HOUR_PLURAL");
-		if (hourPluralString == null) {
-			hourPluralString = "hours";
-		}
-		String minuteString = messages.getString("TIME_STRINGS.MINUTE");
-		if (minuteString == null) {
-			minuteString = "minute";
-		}
-		String minutePluralString = messages.getString("TIME_STRINGS.MINUTE_PLURAL");
-		if (minutePluralString == null) {
-			minutePluralString = "minutes";
-		}
-		String secondString = messages.getString("TIME_STRINGS.SECOND");
-		if (secondString == null) {
-			secondString = "second";
-		}
-		String secondPluralString = messages.getString("TIME_STRINGS.SECOND_PLURAL");
-		if (secondPluralString == null) {
-			secondPluralString = "seconds";
-		}
-
-		if (days > 1) {
-			timeString.append(days);
-			timeString.append(' ');
-			timeString.append(dayPluralString);
-			timeString.append(' ');
-		}
-		else if (days == 1) {
-			timeString.append(days);
-			timeString.append(' ');
-			timeString.append(dayString);
-			timeString.append(' ');
-		}
-
-		if (finalTimeUnit.equals(TimeUnit.HOURS)
-				|| finalTimeUnit.equals(TimeUnit.MINUTES)
-				|| finalTimeUnit.equals(TimeUnit.SECONDS)) {
-			if (hours > 1) {
-				timeString.append(hours);
-				timeString.append(' ');
-				timeString.append(hourPluralString);
-				timeString.append(' ');
-			}
-			else if (hours == 1) {
-				timeString.append(hours);
-				timeString.append(' ');
-				timeString.append(hourString);
-				timeString.append(' ');
-			}
-		}
-
-		if (finalTimeUnit.equals(TimeUnit.MINUTES) || finalTimeUnit.equals(TimeUnit.SECONDS)) {
-			if (minutes > 1) {
-				timeString.append(minutes);
-				timeString.append(' ');
-				timeString.append(minutePluralString);
-				timeString.append(' ');
-			}
-			else if (minutes == 1) {
-				timeString.append(minutes);
-				timeString.append(' ');
-				timeString.append(minuteString);
-				timeString.append(' ');
-			}
-		}
-
-		if (finalTimeUnit.equals(TimeUnit.SECONDS)) {
-			if (seconds > 1) {
-				timeString.append(seconds);
-				timeString.append(' ');
-				timeString.append(secondPluralString);
-			}
-			else if (seconds == 1) {
-				timeString.append(seconds);
-				timeString.append(' ');
-				timeString.append(secondString);
-			}
-		}
-
-		return ChatColor.translateAlternateColorCodes('&', timeString.toString().strip());
+		return new TimeString(configuration).getTimeString(duration, timeUnit);
 	}
-
 
 	/**
 	 * Retrieve an arbitrary string from the language file with the specified key.
@@ -516,7 +170,7 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return the retrieved string, or null if no matching key found
 	 */
 	public Optional<String> getString(final String path) {
-		return Optional.ofNullable(messages.getString(path));
+		return Optional.ofNullable(configuration.getString(path));
 	}
 
 
@@ -527,66 +181,19 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return List of String - the string list retrieved by path from message file
 	 */
 	public List<String> getStringList(final String path) {
-		return messages.getStringList(path);
-	}
-
-
-	public Optional<String> getWorldName(final World world) {
-		// if world is null, return empty optional
-		if (world == null) {
-			return Optional.empty();
-		}
-		// return multiverse alias or bukkit world name as optional string
-		return Optional.of(getWorldAlias(world).orElse(world.getName()));
-	}
-
-
-	/**
-	 * Get world name from world object, using Multiverse alias if available
-	 *
-	 * @param world the world object to retrieve name
-	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
-	 */
-	public Optional<String> getWorldAlias(final World world) {
-
-		// if world is null, return empty optional
-		if (world == null) {
-			return Optional.empty();
-		}
-
-		String worldName = null;
-
-		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
-
-		// if Multiverse is enabled, get MultiverseWorld object
-		if (mvCore != null && mvCore.isEnabled()) {
-
-			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(world);
-
-			// if Multiverse alias is not null or empty, set worldName to alias
-			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
-				worldName = mvWorld.getAlias();
-			}
-		}
-
-		// return the bukkit world name or Multiverse world alias
-		return Optional.ofNullable(worldName);
+		return configuration.getStringList(path);
 	}
 
 
 	/**
 	 * Reload messages from yaml file into Configuration object. If the yaml language file
-	 * does not exist in the plugin data directory, it will be re-copied from the jar embedded resource.
+	 * does not exist in the plugin data directory, it will be re-copied from the jar resource.
+	 * If a file does not exist and a resource cannot be found, the en-US language file
+	 * or resource will be used to load the configuration.
 	 */
 	@Override
 	public void reload() {
-
-		// install message files if necessary; this will not overwrite existing files
-		new YamlFileInstaller(plugin).install();
-
-		// load messages Configuration object from configured language file
-		messages = new YamlFileLoader(plugin).getMessages();
+		configuration = new YamlLanguageFileLoader(plugin).getConfiguration();
 	}
 
 }
