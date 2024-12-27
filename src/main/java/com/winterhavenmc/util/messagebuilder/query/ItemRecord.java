@@ -15,16 +15,16 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.query;
+
+import java.util.List;
+import java.util.Optional;
 
 
-public record MessageRecord(
-		String messageKey,
-		boolean enabled,
-		String message,
-		long repeatDelay,
-		String title,
-		int titleFadeIn,
-		int titleStay,
-		int titleFadeOut,
-		String subtitle) { }
+public record ItemRecord(
+		String key,
+		Optional<String> itemName,
+		Optional<String> itemNamePlural,
+		Optional<String> inventoryItemSingular,
+		Optional<String> inventoryItemPlural,
+		List<String> itemLore) { }
