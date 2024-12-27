@@ -1,5 +1,14 @@
 # Language configuration file for ${project.name} v${project.version}
 
+##########
+# Settings
+##########
+SETTINGS:
+  DELIMITERS:
+    LEFT: '%'
+    RIGHT: '%'
+
+
 ########################
 # Location Display Names
 ########################
@@ -15,46 +24,86 @@ LOCATIONS:
 ##############
 ITEMS:
   DEFAULT:
-    ITEM_NAME: 'Default Item'
-    ITEM_NAME_PLURAL: 'Default Items'
-    INVENTORY_ITEM_NAME: 'Default Inventory Item'
+    NAME:
+      SINGULAR: 'Default Item'
+      PLURAL: 'Default Items'
+    INVENTORY_NAME:
+      SINGULAR: 'Default Inventory Item'
+      PLURAL:  'Default Inventory ItemS'
     ITEM_LORE:
-      - '&elore line 1'
-      - '&elore line 2'
+      - '&edefault lore line 1'
+      - '&edefault lore line 2'
 
   TEST_ITEM_1:
-    ITEM_NAME: '&aTest Item'
-    ITEM_NAME_PLURAL: '&aTest Items'
-    INVENTORY_ITEM_NAME: '&aInventory Item'
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory Item'
     ITEM_LORE:
-      - '&elore line 1'
-      - '&elore line 2'
+      - '&etest1 lore line 1'
+      - '&etest1 lore line 2'
+
+  TEST_ITEM_2:
+    NAME:
+      SINGULAR: '&aTest Item 2'
+      PLURAL: '&aTest Items 2'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item 2'
+      PLURAL: '&aInventory Items 2'
+    LORE:
+      - '&etest2 lore line 1'
+      - '&etest2 lore line 2'
 
   UNDEFINED_ITEM_NAME:
-    ITEM_NAME_PLURAL: '&aTest Items'
-    INVENTORY_ITEM_NAME: '&aInventory Item'
+    NAME:
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory Items'
+    LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_NAME_PLURAL:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory ItemS'
+    LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_INVENTORY_ITEM_NAME:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      PLURAL: '&aInventory ItemS'
     ITEM_LORE:
       - '&elore line 1'
       - '&elore line 2'
 
-  MISSING_ITEM_NAME_PLURAL:
-    ITEM_NAME: '&aTest Item'
-    INVENTORY_ITEM_NAME: '&aInventory Item'
+  UNDEFINED_INVENTORY_ITEM_NAME_PLURAL:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
     ITEM_LORE:
       - '&elore line 1'
       - '&elore line 2'
 
-  MISSING_INVENTORY_ITEM_NAME:
-    ITEM_NAME: '&aTest Item'
-    ITEM_NAME_PLURAL: '&aTest Items'
-    ITEM_LORE:
-      - '&elore line 1'
-      - '&elore line 2'
-
-  MISSING_ITEM_LORE:
-    ITEM_NAME: '&aTest Item'
-    ITEM_NAME_PLURAL: '&aTest Items'
-    INVENTORY_ITEM_NAME: '&aInventory Item'
+  UNDEFINED_ITEM_LORE:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory Item'
 
 
 ##############
@@ -105,6 +154,10 @@ MESSAGES:
     enabled: true
     message: "This is a message with a macro replacement %ITEM_NAME%."
 
+  MACRO_MESSAGE_CURLY_BRACE_DELIMITERS:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM_NAME}."
+
   ENABLED_TITLE:
     enabled: true
     title: "This is an enabled title"
@@ -140,7 +193,7 @@ MESSAGES:
     message: "Duration is %DURATION%"
 
 
-  # all number fields are unique and different from defaults
+  # all number fields are unique from each other and defaults(20, 70, 10)
   ALL_FIELDS_PRESENT:
     message: "This entry has all fields present - message"
     repeat-delay: 14
