@@ -103,7 +103,7 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
 	 *
 	 * @return Set of filename strings
 	 */
-	private Set<String> getAutoInstallFilenames() {
+	Set<String> getAutoInstallFilenames() {
 
 		// get input stream for resource
 		InputStream resourceInputStream = plugin.getResource(AUTO_INSTALL_TXT);
@@ -136,7 +136,7 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
 	 * @param resourceName the name of the resource
 	 * @return {@code true} if the resource exists, {@code false} if it does not
 	 */
-	private boolean resourceExists(final String resourceName) {
+	boolean resourceExists(final String resourceName) {
 		return plugin.getResource(resourceName) != null;
 	}
 
@@ -147,7 +147,7 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
  	 * @param filename the name of the file being verified
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
-	private boolean verifyResourceInstalled(final String filename) {
+	boolean verifyResourceInstalled(final String filename) {
 		return new File(plugin.getDataFolder(), filename).exists();
 	}
 
