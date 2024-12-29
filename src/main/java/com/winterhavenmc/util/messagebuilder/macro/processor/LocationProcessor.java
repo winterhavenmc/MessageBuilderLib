@@ -17,11 +17,15 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.WorldNameUtility;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.macro.NamespacedKey;
+import com.winterhavenmc.util.messagebuilder.macro.NameSpace;
+import com.winterhavenmc.util.messagebuilder.macro.NameSpacedKey;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.plugin.PluginManager;
 
 
 public class LocationProcessor extends AbstractProcessor {
@@ -33,6 +37,12 @@ public class LocationProcessor extends AbstractProcessor {
 	@Override
 	public <T> ResultMap execute(final String key, final ContextMap contextMap, final T value) {
 
+		// get server plugin manager
+		PluginManager pluginManager = Bukkit.getPluginManager();
+
+		// get world name utility
+		WorldNameUtility worldNameUtility = new WorldNameUtility(pluginManager);
+
 		// create empty result map
 		ResultMap resultMap = new ResultMap();
 
@@ -42,7 +52,7 @@ public class LocationProcessor extends AbstractProcessor {
 			String resultKey = key;
 
 			// get location strings from location object
-			String locationWorld = queryHandler.getWorldName(location.getWorld()).orElse(UNKNOWN_VALUE);
+			String locationWorld = worldNameUtility.getWorldName(location.getWorld()).orElse(UNKNOWN_VALUE);
 			String locationX = String.valueOf(location.getBlockX());
 			String locationY = String.valueOf(location.getBlockY());
 			String locationZ = String.valueOf(location.getBlockZ());
@@ -62,11 +72,11 @@ public class LocationProcessor extends AbstractProcessor {
 			}
 
 			// create new map entries for location string and separate fields
-			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO), locationString);
-			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO) + "_WORLD", locationWorld);
-			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO) + "_X", locationX);
-			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO) + "_Y", locationY);
-			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO) + "_Z", locationY);
+			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO), locationString);
+			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO) + "_WORLD", locationWorld);
+			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO) + "_X", locationX);
+			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO) + "_Y", locationY);
+			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO) + "_Z", locationY);
 		}
 		return resultMap;
 	}
