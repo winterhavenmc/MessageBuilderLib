@@ -17,10 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 
 
 public interface Processor {
 
-	ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object);
+	<T> ResultMap execute(String key, ContextMap contextMap, T value);
+
 }
