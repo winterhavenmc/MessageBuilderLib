@@ -17,29 +17,23 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 
 public class StringProcessor extends AbstractProcessor implements Processor {
 
-	public StringProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public StringProcessor(QueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap execute(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object instanceof String string) {
-			if (key.equals("ITEM") || key.equals("ITEM_NAME")) {
-				// get item name from messages file
-				resultMap.putAll(mapConfigItemName(macroObjectMap, "ITEM", "ITEM_NAME"));
-			}
-			else {
-				resultMap.put(key, string);
-			}
+		if (value instanceof String resultString) {
+			resultMap.put(key, resultString);
 		}
 		return resultMap;
 	}

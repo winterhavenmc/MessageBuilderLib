@@ -17,109 +17,58 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.bukkit.Bukkit;
+import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
+import com.winterhavenmc.util.messagebuilder.macro.NamespacedKey;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+
 import org.bukkit.Location;
-import org.bukkit.Server;
-
-import java.util.Optional;
 
 
-public class LocationProcessor extends AbstractProcessor implements Processor {
+public class LocationProcessor extends AbstractProcessor {
 
-	public LocationProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public LocationProcessor(QueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap execute(final String key, final ContextMap contextMap, final T value) {
 
 		// create empty result map
 		ResultMap resultMap = new ResultMap();
 
 		// if passed object is not a Location, return empty result map
-		if (!(object instanceof Location location)) {
-			return resultMap;
-		}
+		if (value instanceof Location location) {
 
-		// get location strings
-		String locationWorld = getWorldName(location).orElse(UNKNOWN_VALUE);
-		String locationX = String.valueOf(location.getBlockX());
-		String locationY = String.valueOf(location.getBlockY());
-		String locationZ = String.valueOf(location.getBlockZ());
-		String locationString = locationWorld + " [" + locationX + ", " + locationY + ", " + locationZ + "]";
+			String resultKey = key;
 
-		// if key does not end in _LOCATION or _LOC, add it for location string keys
-		String[] keySuffixes = {"_LOCATION", "_LOC"};
+			// get location strings from location object
+			String locationWorld = queryHandler.getWorldName(location.getWorld()).orElse(UNKNOWN_VALUE);
+			String locationX = String.valueOf(location.getBlockX());
+			String locationY = String.valueOf(location.getBlockY());
+			String locationZ = String.valueOf(location.getBlockZ());
+			String locationString = locationWorld + " [" + locationX + ", " + locationY + ", " + locationZ + "]";
 
-		// put location strings in map
-		for (String keySuffix : keySuffixes) {
-			if (key.endsWith(keySuffix)) {
-				keySuffix = "";
+			// Key naming logic:
+			// if key does end in _LOC, turn it into _LOCATION. The _LOC placeholders are deprecated and being removed.
+			// this check is to ensure any placeholders still using the old _LOC encountered will have their keys placed
+			// in the result map with only _LOCATION. This logic may be removed when backwards compatibility is desired or necessary.
+			if (resultKey.endsWith("_LOC")) {
+				resultKey = resultKey.concat("ATION");
 			}
 
-			resultMap.put(key + keySuffix, locationString);
-			resultMap.put(key + keySuffix + "_WORLD", locationWorld);
-			resultMap.put(key + keySuffix + "_X", locationX);
-			resultMap.put(key + keySuffix + "_Y", locationY);
-			resultMap.put(key + keySuffix + "_Z", locationZ);
+			// if macroName does not end in _LOCATION, tack it on
+			if (!resultKey.endsWith("_LOCATION")) {
+				resultKey = resultKey.concat("_LOCATION");
+			}
+
+			// create new map entries for location string and separate fields
+			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO), locationString);
+			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO) + "_WORLD", locationWorld);
+			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO) + "_X", locationX);
+			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO) + "_Y", locationY);
+			resultMap.put(NamespacedKey.create(resultKey, NamespacedKey.Category.MACRO) + "_Z", locationY);
 		}
-
-		// put original key with location string in resultMap
-		resultMap.put(key, locationString);
-
 		return resultMap;
-	}
-
-
-	/**
-	 * Get world name for location, using Multiverse alias if available
-	 *
-	 * @param location the location used to retrieve world name
-	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
-	 */
-	private Optional<String> getWorldName(final Location location) {
-
-		// check for null parameter
-		if (location == null) {
-			return Optional.empty();
-		}
-
-		// get server instance from static reference to access the plugin manager and worlds
-		// note this is the only processor that needed external access, so we are resorting to static references
-		// in order to avoid otherwise unnecessary dependency injection
-		Server server = Bukkit.getServer();
-
-		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) server.getPluginManager().getPlugin("Multiverse-Core");
-
-		// declare resultString with world name for location
-		String resultString;
-		if (location.getWorld() != null) {
-			resultString = location.getWorld().getName();
-		}
-		else {
-			// get name of first world
-			resultString = server.getWorlds().getFirst().getName();
-		}
-
-		// if Multiverse is enabled, use Multiverse world alias if available
-		if (mvCore != null && mvCore.isEnabled()) {
-
-			// get Multiverse world object
-			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(location.getWorld());
-
-			// if Multiverse alias is not null or empty, set world name to alias if set
-			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
-				resultString = mvWorld.getAlias();
-			}
-		}
-
-		// return resultString
-		return Optional.of(resultString);
 	}
 
 }

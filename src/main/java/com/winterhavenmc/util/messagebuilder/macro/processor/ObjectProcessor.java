@@ -17,22 +17,22 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 
 public class ObjectProcessor extends AbstractProcessor implements Processor {
-	public ObjectProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public ObjectProcessor(final QueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap execute(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object != null) {
-			resultMap.put(key, object.toString());
+		if (value != null) {
+			resultMap.put(key, value.toString());
 		}
 
 		return resultMap;

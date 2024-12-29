@@ -18,51 +18,72 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 
 public class NumberProcessor extends AbstractProcessor implements Processor {
 
-	public NumberProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	private final QueryHandler queryHandler;
+
+	public NumberProcessor(QueryHandler queryHandler) {
+		super(queryHandler);
+		this.queryHandler = queryHandler;
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap execute(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object == null) {
+		if (value == null) {
 			return resultMap;
 		}
 
-		if (object instanceof Long longVar) {
+		if (value instanceof Long longVar) {
 
-			if (key.endsWith("DURATION") || key.endsWith("DURATION_SECONDS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.SECONDS));
-			}
-			else if (key.endsWith("DURATION_TICKS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.TICKS));
-			}
-			else if (key.endsWith("DURATION_MINUTES")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.MINUTES));
-			}
-			else if (key.endsWith("DURATION_HOURS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.HOURS));
-			}
-			else if (key.endsWith("DURATION_DAYS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.DAYS));
-			}
-			else {
-				resultMap.put(key, String.valueOf(longVar));
+			// put string value of longVar in result map, to be overwritten if macroName ends a Duration string match
+			resultMap.put(key, String.valueOf(longVar));
+
+			for (DurationSuffix durationSuffix : DurationSuffix.values()) {
+				String[] keyComponents = key.split(":", 2);
+				String category = keyComponents[0];
+				if (category.endsWith(durationSuffix.name())) {
+					resultMap.put(key, queryHandler.getTimeString(longVar, durationSuffix.getTimeUnit()));
+				}
 			}
 		}
 		else {
-			resultMap.put(key, String.valueOf(object));
+			resultMap.put(key, String.valueOf(value));
 		}
 
 		return resultMap;
+	}
+
+
+	/**
+	 * An enum of macro name suffixes that will result in a TimeString being returned for the corresponding TimeUnit.
+	 * This allows iterating over the suffixes for a matching macro name suffix, and passing the associated TimeUnit to
+	 * {@code queryHandler.getTimeString()}.
+	 */
+	enum DurationSuffix {
+		DURATION(TimeUnit.SECONDS),
+		DURATION_SECONDS(TimeUnit.SECONDS),
+		DURATION_MINUTES(TimeUnit.MINUTES),
+		DURATION_HOURS(TimeUnit.HOURS),
+		DURATION_DAYS(TimeUnit.DAYS),
+		;
+
+		private final TimeUnit timeUnit;
+
+		// constructor
+		DurationSuffix(TimeUnit timeUnit) {
+			this.timeUnit = timeUnit;
+		}
+
+		TimeUnit getTimeUnit() {
+			return this.timeUnit;
+		}
 	}
 
 }

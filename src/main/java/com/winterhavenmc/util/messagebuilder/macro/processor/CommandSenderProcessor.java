@@ -17,24 +17,24 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.command.CommandSender;
 
 
-public class CommandSenderProcessor extends AbstractProcessor implements Processor {
+public class CommandSenderProcessor extends AbstractProcessor {
 
-	public CommandSenderProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public CommandSenderProcessor(QueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap execute(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object instanceof CommandSender commandSender) {
-			resultMap.putAll(mapName(key, commandSender.getName()));
+		if (value instanceof CommandSender commandSender) {
+			resultMap.put(key, commandSender.getName());
 		}
 
 		return resultMap;

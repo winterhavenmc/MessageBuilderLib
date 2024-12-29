@@ -17,25 +17,26 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 import org.bukkit.World;
 
 
 public class WorldProcessor extends AbstractProcessor implements Processor {
 
-	public WorldProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public WorldProcessor(final QueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap execute(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object instanceof World world) {
-			resultMap.put(key, languageHandler.getWorldName(world).orElse(UNKNOWN_VALUE));
+		if (value instanceof World world) {
+			String worldName = queryHandler.getWorldName(world).orElse(UNKNOWN_VALUE);
+			resultMap.put(key, worldName);
 		}
 
 		return resultMap;
