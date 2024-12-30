@@ -17,13 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.loader.LanguageFileLoader;
-import com.winterhavenmc.util.messagebuilder.loader.YamlLanguageFileLoader;
+import com.winterhavenmc.util.messagebuilder.languages.*;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
-
-import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -35,39 +31,26 @@ public class YamlLanguageHandler implements LanguageHandler {
 	// string constant for language key in plugin config file
 	private final static String CONFIG_LANGUAGE_KEY = "language";
 
-	// string constant for configuration section key
-	private final static String LOCATION_SECTION = "LOCATIONS";
-
-	// reference to main plugin
+	// reference to main plugin class
 	private Plugin plugin;
 
 	// language file installer and loader
+	private LanguageFileInstaller languageFileInstaller;
 	private LanguageFileLoader languageFileLoader;
 
-	// configuration object for messages file
+	// configuration object for language file
 	private Configuration configuration;
 
 
 	/**
 	 * class constructor, no parameter
-	 * must use setters for all fields
+	 * must use setters for all fields before use
 	 */
-	public YamlLanguageHandler() { }
-
-
-	/**
-	 * class constructor, one parameter
-	 * must use setters for languageFileInstaller and languageFileLoader fields
-	 *
-	 * @param plugin the plugin main class
-	 */
-	public YamlLanguageHandler(final Plugin plugin) {
-
-		// reference to plugin main class
-		this.plugin = plugin;
-
-		// load message configuration from file loader
-		configuration = new YamlLanguageFileLoader(plugin).getConfiguration();
+	public YamlLanguageHandler() {
+		this.plugin = null;
+		this.languageFileInstaller = null;
+		this.languageFileLoader = null;
+		this.configuration = null;
 	}
 
 
@@ -75,13 +58,17 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 * class constructor, three parameter
 	 * all fields are provided as parameters
 	 *
-	 * @param plugin the plugin main class
+	 * @param plugin                 the plugin main class
+	 * @param languageFileInstaller  the language file installer to be used by the language handler
+	 * @param languageFileLoader     the language file loader to be used by the language handler
 	 */
 	public YamlLanguageHandler(final Plugin plugin,
+							   final LanguageFileInstaller languageFileInstaller,
 	                           final LanguageFileLoader languageFileLoader) {
 
 		// reference to plugin main class
 		this.plugin = plugin;
+		this.languageFileInstaller = languageFileInstaller;
 		this.languageFileLoader = languageFileLoader;
 
 		// load message configuration from file
@@ -89,18 +76,26 @@ public class YamlLanguageHandler implements LanguageHandler {
 	}
 
 	/**
-	 * setter for plugin (do we really need a setter for plugin? maybe for testing.)
+	 * setter for plugin
 	 * @param plugin a new plugin to replace the existing plugin
 	 */
-	void setPlugin(Plugin plugin) {
+	void setPlugin(final Plugin plugin) {
 		this.plugin = plugin;
+	}
+
+	/**
+	 * setter for fileInstaller
+	 * @param languageFileInstaller a new FileLoader to replace the existing fileLoader
+	 */
+	void setFileInstaller(final LanguageFileInstaller languageFileInstaller) {
+		this.languageFileInstaller = languageFileInstaller;
 	}
 
 	/**
 	 * setter for fileLoader
 	 * @param languageFileLoader a new FileLoader to replace the existing fileLoader
 	 */
-	void setFileLoader(LanguageFileLoader languageFileLoader) {
+	void setFileLoader(final LanguageFileLoader languageFileLoader) {
 		this.languageFileLoader = languageFileLoader;
 	}
 
@@ -108,64 +103,38 @@ public class YamlLanguageHandler implements LanguageHandler {
 	boolean isPluginSet() {
 		return this.plugin != null;
 	}
+
 	boolean isFileLoaderSet() {
 		return this.languageFileLoader != null;
 	}
 
+	boolean isFileInstallerSet() {
+		return this.languageFileInstaller != null;
+	}
 
+
+	/**
+	 * Get the language configuration from the configured language yaml file.
+	 *
+	 * @return a configuration object loaded with values from the configured language file, or the default en-US.yml
+	 * language file if the configured file could not be found.
+	 */
 	@Override
 	public Configuration getConfiguration() {
 		return configuration;
 	}
 
 
+	/**
+	 * Get configured language from plugin config.yml file. Note that Locale support is coming, as documented elsewhere.
+	 *
+	 * @return The IETF language tag as a String specifying the language file to load. If the setting could not be found,
+	 * it will default to 'en-US'. An en-US.yml language file should always be included in the plugin's resources, to
+	 * ensure that default messages are displayed by the plugin.
+	 */
 	@Override
 	public String getConfigLanguage() {
 		return plugin.getConfig().getString(CONFIG_LANGUAGE_KEY);
-	}
-
-
-	/**
-	 * Get spawn display name from language file
-	 *
-	 * @return the formatted display name for the world spawn, or empty string if key not found
-	 */
-	@Override
-	public Optional<String> getSpawnDisplayName() {
-		return Optional.ofNullable(configuration.getString(LOCATION_SECTION + ".SPAWN.DISPLAY_NAME"));
-	}
-
-
-	/**
-	 * Get home display name from language file
-	 *
-	 * @return the formatted display name for home, or empty string if key not found
-	 */
-	@Override
-	public Optional<String> getHomeDisplayName() {
-		return Optional.ofNullable(configuration.getString(LOCATION_SECTION + ".HOME.DISPLAY_NAME"));
-	}
-
-
-	/**
-	 * Retrieve an arbitrary string from the language file with the specified key.
-	 *
-	 * @param path the message path for the string being retrieved
-	 * @return the retrieved string, or null if no matching key found
-	 */
-	public Optional<String> getString(final String path) {
-		return Optional.ofNullable(configuration.getString(path));
-	}
-
-
-	/**
-	 * Get List of String by path in message file
-	 *
-	 * @param path the message path for the string list being retrieved
-	 * @return List of String - the string list retrieved by path from message file
-	 */
-	public List<String> getStringList(final String path) {
-		return configuration.getStringList(path);
 	}
 
 
@@ -177,6 +146,7 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public void reload() {
+		new YamlLanguageFileInstaller(plugin).install();
 		configuration = new YamlLanguageFileLoader(plugin).getConfiguration();
 	}
 
