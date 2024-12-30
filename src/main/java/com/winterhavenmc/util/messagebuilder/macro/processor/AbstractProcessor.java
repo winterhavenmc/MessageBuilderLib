@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.Error;
 
 
 /**
@@ -37,6 +38,7 @@ public abstract class AbstractProcessor implements MacroProcessor {
 	 * @param queryHandler the queryHandler used by the classes that extend this abstract class
 	 */
 	AbstractProcessor(final QueryHandler queryHandler) {
+		if (queryHandler == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_QUERY_HANDLER.getMessage()); }
 		this.queryHandler = queryHandler;
 	}
 

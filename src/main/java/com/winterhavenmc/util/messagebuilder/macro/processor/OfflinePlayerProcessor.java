@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.Error;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.OfflinePlayer;
@@ -27,7 +26,6 @@ public class OfflinePlayerProcessor extends AbstractProcessor implements MacroPr
 
 	public OfflinePlayerProcessor(final QueryHandler queryHandler) {
 		super(queryHandler);
-		if (queryHandler == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_QUERY_HANDLER.getMessage()); }
 	}
 
 	@Override
