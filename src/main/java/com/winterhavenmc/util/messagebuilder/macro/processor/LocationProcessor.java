@@ -89,6 +89,8 @@ public class LocationProcessor extends AbstractProcessor {
 	 * <p>
 	 * If the provided key does not end with "_LOCATION", the method automatically appends
 	 * "_LOCATION" to ensure a consistent naming convention for location placeholders.
+	 * Furthermore, other object types that include a location, such as ENTITY or PLAYER,
+	 * may call this processor to add context entries to the map for their locations, if available.
 	 * </p>
 	 *
 	 * @param key         the unique key or namespace for this macro entry
