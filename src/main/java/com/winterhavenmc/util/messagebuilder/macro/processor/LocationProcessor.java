@@ -21,9 +21,7 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.plugin.PluginManager;
 
 
 /**
@@ -108,10 +106,10 @@ public class LocationProcessor extends AbstractProcessor {
 		if (value == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_VALUE.name()); }
 
 		// get server plugin manager
-		PluginManager pluginManager = Bukkit.getPluginManager();
+//		PluginManager pluginManager = Bukkit.getPluginManager();
 
 		// get world name utility
-		WorldNameUtility worldNameUtility = new WorldNameUtility(pluginManager);
+//		WorldNameUtility worldNameUtility = new WorldNameUtility(pluginManager);
 
 		// create empty result map
 		ResultMap resultMap = new ResultMap();
@@ -123,7 +121,13 @@ public class LocationProcessor extends AbstractProcessor {
 			String resultKey = key;
 
 			// Get components
-			String locationWorld = worldNameUtility.getWorldName(location.getWorld()).orElse(UNKNOWN_VALUE);
+			String locationWorld;
+			if (location.getWorld() == null) {
+				locationWorld = UNKNOWN_VALUE;
+			}
+			else {
+				locationWorld = location.getWorld().getName();
+			}
 			String locationX = String.valueOf(location.getBlockX());
 			String locationY = String.valueOf(location.getBlockY());
 			String locationZ = String.valueOf(location.getBlockZ());
