@@ -21,34 +21,30 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 
 import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.TimeString;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.World;
 
+import java.util.List;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.Error.*;
+import static com.winterhavenmc.util.messagebuilder.util.Error.*;
 
 
 public class ConfigurationQueryHandler implements QueryHandler {
 
+	// string constant for configuration section key
 	public static final String ITEM_SECTION = "ITEMS";
+	private final static String LOCATION_SECTION = "LOCATIONS";
 	public static final String MESSAGE_SECTION = "MESSAGES";
 
 	private final Plugin plugin;
 	private final Configuration configuration;
-
-	public enum Section {
-		SETTINGS,
-		LOCATIONS,
-		ITEMS,
-		MESSAGES,
-	}
 
 
 	public ConfigurationQueryHandler(final Plugin plugin, final Configuration configuration) {
@@ -202,6 +198,54 @@ public class ConfigurationQueryHandler implements QueryHandler {
 
 
 	/**
+	 * Get world name for location, using Multiverse alias if available
+	 *
+	 * @param location the location used to retrieve world name
+	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
+	 */
+	private Optional<String> getWorldName(final Location location) {
+
+		// check for null parameter
+		if (location == null) {
+			return Optional.empty();
+		}
+
+		// get server instance from static reference to access the plugin manager and worlds
+		// note this is the only processor that needed external access, so we are resorting to static references
+		// in order to avoid otherwise unnecessary dependency injection
+		Server server = Bukkit.getServer();
+
+		// get reference to Multiverse-Core if installed
+		MultiverseCore mvCore = (MultiverseCore) server.getPluginManager().getPlugin("Multiverse-Core");
+
+		// declare resultString with world name for location
+		String resultString;
+		if (location.getWorld() != null) {
+			resultString = location.getWorld().getName();
+		}
+		else {
+			// get name of first world
+			resultString = server.getWorlds().getFirst().getName();
+		}
+
+		// if Multiverse is enabled, use Multiverse world alias if available
+		if (mvCore != null && mvCore.isEnabled()) {
+
+			// get Multiverse world object
+			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(location.getWorld());
+
+			// if Multiverse alias is not null or empty, set world name to alias if set
+			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
+				resultString = mvWorld.getAlias();
+			}
+		}
+
+		// return resultString
+		return Optional.of(resultString);
+	}
+
+
+	/**
 	 * Format the time string with days, hours, minutes and seconds as necessary
 	 *
 	 * @param duration a time duration in milliseconds
@@ -215,6 +259,54 @@ public class ConfigurationQueryHandler implements QueryHandler {
 	@Override
 	public String getTimeString(final long duration, final TimeUnit timeUnit) {
 		return new TimeString(configuration).getTimeString(duration, timeUnit);
+	}
+
+
+
+
+	/**
+	 * Get spawn display name from language file
+	 *
+	 * @return the formatted display name for the world spawn, or empty string if key not found
+	 */
+	@Override
+	public Optional<String> getSpawnDisplayName() {
+		return Optional.ofNullable(configuration.getString(LOCATION_SECTION + ".SPAWN.DISPLAY_NAME"));
+	}
+
+
+	/**
+	 * Get home display name from language file
+	 *
+	 * @return the formatted display name for home, or empty string if key not found
+	 */
+	@Override
+	public Optional<String> getHomeDisplayName() {
+		return Optional.ofNullable(configuration.getString(LOCATION_SECTION + ".HOME.DISPLAY_NAME"));
+	}
+
+
+	/**
+	 * Retrieve an arbitrary string from the language file with the specified key.
+	 *
+	 * @param path the message path for the string being retrieved
+	 * @return the retrieved string, or null if no matching key found
+	 */
+	@Override
+	public Optional<String> getString(final String path) {
+		return Optional.ofNullable(configuration.getString(path));
+	}
+
+
+	/**
+	 * Get List of String by path in message file
+	 *
+	 * @param path the message path for the string list being retrieved
+	 * @return List of String - the string list retrieved by path from message file
+	 */
+	@Override
+	public List<String> getStringList(final String path) {
+		return configuration.getStringList(path);
 	}
 
 }
