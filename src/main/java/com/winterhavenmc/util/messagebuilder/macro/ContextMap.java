@@ -17,9 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
+import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+
 
 /**
  * This class implements a map of macro objects that have been passed in by the message builder
@@ -29,46 +33,92 @@ import java.util.Set;
 public class ContextMap {
 
 	// Backing store HashMap (ed: linked hash map to maintain insertion order TODO: investigate best map type here
-	private final Map<CompositeKey, Object> contextMap = new LinkedHashMap<>();
+	private final Map<String, ContextContainer<?>> contextMap = new LinkedHashMap<>();
+
 
 	/**
-	 * Inserts an object into the map.
+	 * Puts a new value into the context map with its associated ProcessorType.
 	 *
-	 * @param compositeKey The key
-	 * @param object The object to be processed for replacement strings.
+	 * @param key           the unique key for the value
+	 * @param container     the context container wrapping the value and its ProcessorType
 	 */
-	public void put(CompositeKey compositeKey, Object object) {
-		this.contextMap.put(compositeKey, object);
+	public void put(String key, ContextContainer<?> container) {
+		contextMap.put(key, container);
 	}
 
-	/**
-	 * Retrieves an object from the map by key.
-	 *
-	 * @param compositeKey The enum member plus unique string used as the key.
-	 * @return The object retrieved from the map by key, or {@code null} if not found.
-	 */
-	public Object get(final CompositeKey compositeKey) {
-		return this.contextMap.get(compositeKey);
-	}
 
 	/**
-	 * Checks if an entry exists in the map for the given key.
+	 * Creates and puts a new value with its associated ProcessorType into the context map.
 	 *
-	 * @param compositeKey The enum member + string used as the key.
-	 * @return {@code true} if an entry exists in the map for the key, {@code false} otherwise.
+	 * @param key           the unique key for the value
+	 * @param value         the value to store
+	 * @param processorType the processor type associated with the value
+	 * @param <T>           the type of the value
 	 */
-	public boolean containsKey(final CompositeKey compositeKey) {
-		return this.contextMap.containsKey(compositeKey);
+	public <T> void put(String key, T value, ProcessorType processorType) {
+		contextMap.put(key, ContextContainer.of(value, processorType));
 	}
+
+
+	/**
+	 * Retrieves a context container by its key.
+	 *
+	 * @param key the unique key for the value
+	 * @return an Optional containing the ContextContainer, or empty if not found
+	 */
+	public Optional<ContextContainer<?>> getContainer(String key) {
+		return Optional.ofNullable(contextMap.get(key));
+	}
+
+
+	/**
+	 * Retrieves the value by its key, cast to the specified type.
+	 *
+	 * @param key   the unique key for the value
+	 * @param clazz the expected class type of the value
+	 * @param <T>   the type of the value
+	 * @return an Optional containing the value, or empty if not found or type mismatch
+	 */
+	public <T> Optional<T> getValue(String key, Class<T> clazz) {
+		ContextContainer<?> container = contextMap.get(key);
+		if (container != null && clazz.isInstance(container.value())) {
+			return Optional.of(clazz.cast(container.value()));
+		}
+		return Optional.empty();
+	}
+
+
+	/**
+	 * Retrieves the processor type associated with a given key.
+	 *
+	 * @param key the unique key for the value
+	 * @return an Optional containing the ProcessorType, or empty if not found
+	 */
+	public Optional<ProcessorType> getProcessorType(String key) {
+		ContextContainer<?> container = contextMap.get(key);
+		return container != null ? Optional.of(container.processorType()) : Optional.empty();
+	}
+
+
+	/**
+	 * Checks if the map contains a value for the specified key.
+	 *
+	 * @param key the unique key to check
+	 * @return true if the key exists, false otherwise
+	 */
+	public boolean containsKey(String key) {
+		return contextMap.containsKey(key);
+	}
+
 
 	/**
 	 * Removes an entry from the map by key.
 	 *
-	 * @param compositeKey The enum member used as the key.
+	 * @param key The enum member used as the key.
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
-	public Object remove(final CompositeKey compositeKey) {
-		return this.contextMap.remove(compositeKey);
+	public ContextContainer<?> remove(final String key) {
+		return this.contextMap.remove(key);
 	}
 
 	/**
@@ -76,7 +126,7 @@ public class ContextMap {
 	 *
 	 * @return A set of entries in the map.
 	 */
-	public Set<Map.Entry<CompositeKey, Object>> entrySet() {
+	public Set<Map.Entry<String, ContextContainer<?>>> entrySet() {
 		return this.contextMap.entrySet();
 	}
 
@@ -104,4 +154,5 @@ public class ContextMap {
 	public boolean isEmpty() {
 		return this.contextMap.isEmpty();
 	}
+
 }

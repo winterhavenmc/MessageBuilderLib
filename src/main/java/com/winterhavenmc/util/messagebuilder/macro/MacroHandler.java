@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
-import com.winterhavenmc.util.messagebuilder.macro.processor.Processor;
+import com.winterhavenmc.util.messagebuilder.macro.processor.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorRegistry;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
@@ -79,7 +79,7 @@ public class MacroHandler {
 		this.processorRegistry = new ProcessorRegistry();
 		// populate macro processor registry
 		for (ProcessorType type : ProcessorType.values()) {
-			type.register(plugin, queryHandler, processorRegistry, type);
+			type.register(queryHandler, processorRegistry, type);
 		}
 	}
 
@@ -101,14 +101,15 @@ public class MacroHandler {
 		// only process macro tokens if message string contains a token marker character
 		if (modifiedMessageString.contains(MacroDelimiter.LEFT.toString())) {
 
-			ResultMap macroStringMap = new ResultMap();
+			// final result map of String NameSpacedKeys and processed String values
+			ResultMap replacementStringMap = new ResultMap();
 
 			//TODO: THESE WILL NEED TO BE ADDED ELSEWHERE, LIKE IN THE APPROPRIATE MACRO PROCESSOR
 			// perhaps we need a RECIPIENT type; at any rate, there will need to be a method
 			// to add items to the ContextMap manually, before macros are processed
 //			// put message recipient in macro object map
 //			// create key for recipient in contextMap
-//			CompositeKey compositeKey = new CompositeKey(processorType, "RECIPIENT");
+//			ContextKey compositeKey = new CompositeKey(processorType, "RECIPIENT");
 //
 //			contextMap.put(compositeKey, recipient);
 //
@@ -122,24 +123,27 @@ public class MacroHandler {
 //				contextMap.put("ITEM_NAME", "item_name");
 //			}
 
-			// iterate over macro object map, getting macro value strings based on class type in object map
-			for (Map.Entry<CompositeKey, Object> entry : contextMap.entrySet()) {
+			// iterate over context map, getting macro value strings based on class type in map
+			for (Map.Entry<String, ? extends ContextContainer<?>> entry : contextMap.entrySet()) {
 
-				ProcessorType processorType = entry.getKey().getType();
-				String macroName = entry.getKey().getMacroName();
+				// get name-spaced String key from entry
+				String key = entry.getKey();
 
-				// get processor from registry by ProcessorType
-				Processor processor = processorRegistry.get(processorType);
+				// get macroProcessor type from context container
+				ProcessorType processorType = entry.getValue().processorType();
 
-				// get resultMap from processor execution
-				ResultMap resultMap = processor.execute(macroName, entry.getValue(), contextMap);
+				// get macroProcessor from registry by ProcessorType
+				MacroProcessor macroProcessor = processorRegistry.get(processorType);
+
+				// get resultMap from macroProcessor execution
+				ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, entry.getValue());
 
 				// add all entries of resultMap to macroStringMap
-				macroStringMap.putAll(resultMap);
+				replacementStringMap.putAll(resultMap);
 			}
 
 			// replace macro tokens in message string with macro strings
-			for (Map.Entry<String, String> entry : macroStringMap.entrySet()) {
+			for (Map.Entry<String, String> entry : replacementStringMap.entrySet()) {
 				String macroToken = MacroDelimiter.LEFT + entry.getKey() + MacroDelimiter.RIGHT;
 				modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue());
 			}
