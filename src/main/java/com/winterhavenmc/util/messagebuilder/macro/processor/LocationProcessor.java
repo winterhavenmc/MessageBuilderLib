@@ -19,8 +19,8 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.WorldNameUtility;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.macro.NameSpace;
-import com.winterhavenmc.util.messagebuilder.macro.NameSpaceKey;
+import com.winterhavenmc.util.messagebuilder.macro.Namespace;
+import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 import org.bukkit.Bukkit;
@@ -35,7 +35,7 @@ public class LocationProcessor extends AbstractProcessor {
 	}
 
 	@Override
-	public <T> ResultMap execute(final String key, final ContextMap contextMap, final T value) {
+	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 
 		// get server plugin manager
 		PluginManager pluginManager = Bukkit.getPluginManager();
@@ -72,11 +72,11 @@ public class LocationProcessor extends AbstractProcessor {
 			}
 
 			// create new map entries for location string and separate fields
-			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO), locationString);
-			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO) + "_WORLD", locationWorld);
-			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO) + "_X", locationX);
-			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO) + "_Y", locationY);
-			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO) + "_Z", locationY);
+			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO), locationString);
+			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_WORLD", locationWorld);
+			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_X", locationX);
+			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_Y", locationY);
+			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_Z", locationY);
 		}
 		return resultMap;
 	}

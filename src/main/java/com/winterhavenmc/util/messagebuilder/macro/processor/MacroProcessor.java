@@ -22,6 +22,6 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 
 public interface MacroProcessor {
 
-	<T> ResultMap execute(String key, ContextMap contextMap, T value);
+	<T> ResultMap resolveContext(String key, ContextMap contextMap, T value);
 
 }

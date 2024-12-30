@@ -32,7 +32,7 @@ public class NumberProcessor extends AbstractProcessor implements MacroProcessor
 	}
 
 	@Override
-	public <T> ResultMap execute(final String key, final ContextMap contextMap, final T value) {
+	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
