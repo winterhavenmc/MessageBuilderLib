@@ -17,382 +17,447 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.languages.LanguageFileInstaller;
+import com.winterhavenmc.util.messagebuilder.languages.LanguageFileLoader;
+import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileInstaller;
+import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileLoader;
+import static com.winterhavenmc.util.messagebuilder.mocks.MockPlugin.*;
+import com.winterhavenmc.util.messagebuilder.mocks.MockPlugin;
+
 import org.bukkit.World;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+
+import java.io.IOException;
+import java.util.UUID;
+import java.util.logging.Logger;
+
 import org.junit.jupiter.api.*;
-
-import java.util.List;
-import java.util.Optional;
-
-import static com.winterhavenmc.util.TimeUnit.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import static org.mockito.Mockito.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class YamlLanguageHandlerTests {
 
-	private ServerMock server;
-	private PluginMain plugin;
-	private LanguageHandler languageHandler;
+	private final static String FAIL = "empty optional";
+
+	private Plugin mockPlugin;
+	private World world;
+	private LanguageFileInstaller mockLanguageFileInstaller;
+	private LanguageFileLoader mocklanguageFileLoader;
+	private YamlLanguageHandler languageHandler;
+
+
+	@BeforeAll
+	public static void preSetUp() {
+		MockPlugin.verifyTempDir();
+	}
 
 	@BeforeEach
-	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
+	public void setUp() throws IOException {
 
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
+		// create a new mock plugin
+		mockPlugin = mock(Plugin.class, "MockPlugin");
 
-		// create a language handler instance
-		languageHandler = new YamlLanguageHandler(plugin);
+		// return temporary directory for mock plugin data directory
+		when(mockPlugin.getDataFolder()).thenReturn(MockPlugin.getDataFolder());
 
+		// return real logger for mock plugin
+		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getSimpleName()));
+
+		// create a mock configuration for plugin config.yml
+		FileConfiguration configuration = mock(FileConfiguration.class);
+		when(mockPlugin.getConfig()).thenReturn(configuration);
+		when(configuration.getString("language")).thenReturn("en-US");
+
+		// return real file input streams for mock plugin resources
+		doAnswer(invocation -> getResourceStream(invocation.getArgument(0)))
+				.when(mockPlugin).getResource(anyString());
+
+		// install resource when saveResource is called
+		doAnswer(invocation -> installResource(invocation.getArgument(0)))
+				.when(mockPlugin).saveResource(anyString(), eq(false));
+
+		// create a mock world
+		world = mock(World.class, "MockWorld");
+		when(world.getName()).thenReturn("world");
+		when(world.getUID()).thenReturn(new UUID(1,0));
+
+		// create mock installer and loader
+		mockLanguageFileInstaller = mock(LanguageFileInstaller.class, "MockLanguageFileInstaller");
+		mocklanguageFileLoader = mock(LanguageFileLoader.class, "MockLanguageFileLoader");
+		when(mocklanguageFileLoader.getConfiguration()).thenReturn(getLanguageConfiguration());
+
+		// create a real language handler
+		languageHandler = new YamlLanguageHandler(mockPlugin, mockLanguageFileInstaller, mocklanguageFileLoader);
 	}
+
 
 	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-	}
-
-	@Test
-	void getMessageKeys() {
-		assertFalse(languageHandler.getMessageKeys().isEmpty());
-		assertTrue(languageHandler.getMessageKeys().contains("ENABLED_MESSAGE"));
-	}
-
-	@Nested
-	class IsEnabledTests {
-		@Test
-		void isEnabled() {
-			assertTrue(languageHandler.isEnabled(MessageId.ENABLED_MESSAGE));
-			assertFalse(languageHandler.isEnabled(MessageId.DISABLED_MESSAGE));
-		}
-
-		@Test
-		void isEnabled_null() {
-			assertFalse(languageHandler.isEnabled(null));
-		}
-
-		@Test
-		void isEnabled_unconfigured_message() {
-			assertFalse(languageHandler.isEnabled(MessageId.UNCONFIGURED_MESSAGE));
-		}
-
-
-		@Test
-		void isEnabled_legacy_message() {
-			assertTrue(languageHandler.isEnabled(MessageId.LEGACY_MESSAGE));
-		}
-	}
-
-	@Nested
-	class RepeatDelayTests {
-		@Test
-		void getRepeatDelay() {
-			assertEquals(10, languageHandler.getRepeatDelay(MessageId.REPEAT_DELAYED_MESSAGE));
-		}
-
-		@Test
-		void getRepeatDelay_null_parameter() {
-			assertEquals(0, languageHandler.getRepeatDelay(null));
-		}
-	}
-
-	@Nested
-	class GetMessageTests {
-		@Test
-		void getMessage() {
-			assertEquals("This is an enabled message", languageHandler.getMessage(MessageId.ENABLED_MESSAGE));
-		}
-
-		@Test
-		void getMessage_null_parameter() {
-			assertEquals("", languageHandler.getMessage(null));
-		}
-
-		@Test
-		void getMessage_no_message_string() {
-			assertEquals("", languageHandler.getMessage(MessageId.ENABLED_TITLE));
-		}
-	}
-
-	@Nested
-	class TitleTests {
-		@Test
-		void getTitle() {
-			assertEquals("This is an enabled title", languageHandler.getTitle(MessageId.ENABLED_TITLE));
-		}
-
-		@Test
-		void getTitle_null() {
-			assertEquals("", languageHandler.getTitle(null));
-		}
-
-		@Test
-		void getTitle_no_title_configured() {
-			assertEquals("", languageHandler.getTitle(MessageId.ENABLED_MESSAGE));
-		}
-
-		@Test
-		void getTitle_unconfigured_message() {
-			assertEquals("", languageHandler.getTitle(MessageId.UNCONFIGURED_MESSAGE));
-		}
+		mockPlugin = null;
+		world = null;
+		mockLanguageFileInstaller = null;
+		mocklanguageFileLoader = null;
+		languageHandler = null;
 	}
 
 
 	@Nested
-	class SubtitleTests {
+	class testingEnvironmentTests {
 		@Test
-		void getSubtitle() {
-			assertEquals("This is an enabled subtitle", languageHandler.getSubtitle(MessageId.ENABLED_SUBTITLE));
+		void dataDirectoryTest_exists() {
+			assertTrue(mockPlugin.getDataFolder().isDirectory());
 		}
 
 		@Test
-		void getSubtitle_null_parameter() {
-			assertEquals("", languageHandler.getSubtitle(null));
-		}
-	}
-
-	@Nested
-	class TitleFadeInTests {
-
-		private final int defaultFadeIn = 10;
-
-		@Test
-		void getTitleFadeIn_default() {
-			assertEquals(defaultFadeIn, languageHandler.getTitleFadeIn(MessageId.ENABLED_TITLE));
+		void dataDirectoryTest_exists_static() {
+			assertTrue(MockPlugin.getDataFolder().isDirectory());
 		}
 
 		@Test
-		void getTitleFadeIn_custom() {
-			assertEquals(20, languageHandler.getTitleFadeIn(MessageId.CUSTOM_FADE_TITLE));
-		}
-
-		@Test
-		void getTitleFadeIn_unconfigured_message() {
-			assertEquals(defaultFadeIn, languageHandler.getTitleFadeIn(MessageId.UNCONFIGURED_MESSAGE));
-		}
-
-		@Test
-		void getTitleFadeIn_non_integer_values() {
-			assertEquals(defaultFadeIn, languageHandler.getTitleFadeIn(MessageId.NON_INT_TITLE_FADE_VALUES));
-		}
-
-		@Test
-		void getTitleFadeIn_null() {
-			assertEquals(defaultFadeIn, languageHandler.getTitleFadeIn(null));
+		void languageHandlerTest() {
+			assertNotNull(languageHandler);
 		}
 	}
 
 	@Nested
-	class TitleStayTests {
-
-		private final int defaultStay = 70;
-
+	class constructorTests {
 		@Test
-		void getTitleStay_default() {
-			assertEquals(defaultStay, languageHandler.getTitleStay(MessageId.ENABLED_TITLE));
+		void constructorTest_no_parameter() {
+			YamlLanguageHandler languageHandler = new YamlLanguageHandler();
+			assertNotNull(languageHandler);
+			assertFalse(languageHandler.isPluginSet());
+			assertFalse(languageHandler.isFileInstallerSet());
+			assertFalse(languageHandler.isFileLoaderSet());
 		}
 
 		@Test
-		void getTitleStay_custom() {
-			assertEquals(140, languageHandler.getTitleStay(MessageId.CUSTOM_FADE_TITLE));
-		}
-
-		@Test
-		void getTitleFadeIn_unconfigured_message() {
-			assertEquals(defaultStay, languageHandler.getTitleStay(MessageId.UNCONFIGURED_MESSAGE));
-		}
-
-		@Test
-		void getTitleFadeIn_non_integer_values() {
-			assertEquals(defaultStay, languageHandler.getTitleStay(MessageId.NON_INT_TITLE_FADE_VALUES));
-		}
-
-		@Test
-		void getTitleStay_null() {
-			assertEquals(defaultStay, languageHandler.getTitleStay(null));
+		void constructorTest_three_parameter() {
+			YamlLanguageHandler languageHandler = new YamlLanguageHandler(mockPlugin, mockLanguageFileInstaller, mocklanguageFileLoader);
+			assertNotNull(languageHandler);
+			assertTrue(languageHandler.isPluginSet());
+			assertTrue(languageHandler.isFileInstallerSet());
+			assertTrue(languageHandler.isFileLoaderSet());
 		}
 	}
 
 	@Nested
-	class TitleFadeOutTests {
-
-		private final int defaultFadeOut = 20;
-
+	class setterTests {
 		@Test
-		void getTitleFadeOut_default() {
-			assertEquals(defaultFadeOut, languageHandler.getTitleFadeOut(MessageId.ENABLED_TITLE));
+		void setterTest_plugin() {
+			YamlLanguageHandler yamlLanguageHandler = new YamlLanguageHandler();
+			assertFalse(yamlLanguageHandler.isPluginSet(), "the plugin field is not null.");
+			yamlLanguageHandler.setPlugin(mockPlugin);
+			assertTrue(yamlLanguageHandler.isPluginSet(), "the plugin field is null.");
 		}
 
 		@Test
-		void getTitleFadeOut_custom() {
-			assertEquals(40, languageHandler.getTitleFadeOut(MessageId.CUSTOM_FADE_TITLE));
+		void setterTest_fileInstaller() {
+			YamlLanguageHandler yamlLanguageHandler = new YamlLanguageHandler();
+			assertFalse(yamlLanguageHandler.isFileInstallerSet(), "the fileInstaller field is not null.");
+			yamlLanguageHandler.setFileInstaller(new YamlLanguageFileInstaller(mockPlugin));
+			assertTrue(yamlLanguageHandler.isFileInstallerSet(), "the fileLoader field is null.");
 		}
 
 		@Test
-		void getTitleFadeIn_unconfigured_message() {
-			assertEquals(defaultFadeOut, languageHandler.getTitleFadeOut(MessageId.UNCONFIGURED_MESSAGE));
-		}
-
-		@Test
-		void getTitleFadeIn_non_integer_values() {
-			assertEquals(defaultFadeOut, languageHandler.getTitleFadeOut(MessageId.NON_INT_TITLE_FADE_VALUES));
-		}
-
-		@Test
-		void getTitleFadeOut_null() {
-			assertEquals(defaultFadeOut, languageHandler.getTitleFadeOut(null));
-		}
-	}
-
-	@Nested
-	class ItemMetadataTests {
-		@Test
-		void getItemName() {
-			assertEquals("§aTest Item", languageHandler.getItemName().orElse("fail"));
-		}
-
-		@Test
-		void getItemName_null() {
-			plugin.getConfig().set("item-name", null);
-			assertNull(plugin.getConfig().getString("item-name"));
-			assertEquals("§aTest Item", languageHandler.getItemName(null).orElse("fail"));
-			// this test still passes because the null config entry is supplanted by the default config
-		}
-
-		@Test
-		void getItemNamePlural() {
-			assertEquals("§aTest Items", languageHandler.getItemNamePlural().orElse("fail"));
-		}
-
-		@Test
-		void getInventoryItemName() {
-			assertEquals("§aInventory Item", languageHandler.getInventoryItemName().orElse("fail"));
-		}
-
-		@Test
-		void getItemLore() {
-			assertEquals(List.of("§elore line 1", "§elore line 2"), languageHandler.getItemLore());
-		}
-	}
-
-	@Nested
-	class LocationNameTests {
-		@Test
-		void getSpawnDisplayName() {
-			assertEquals("§aSpawn", languageHandler.getSpawnDisplayName().orElse("fail"));
-		}
-
-		@Test
-		void getHomeDisplayName() {
-			assertEquals("§aHome", languageHandler.getHomeDisplayName().orElse("fail"));
-		}
-	}
-
-	@Nested
-	class TimeStringTests {
-		@Test
-		void getTimeString_with_singular_units() {
-			// test duration
-			long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
-			assertEquals("1 day 1 hour 1 minute 1 second", languageHandler.getTimeString(duration));
-		}
-
-		@Test
-		void getTimeString_with_plural_units() {
-			long duration = DAYS.toMillis(2) + HOURS.toMillis(2) + MINUTES.toMillis(2) + SECONDS.toMillis(2);
-			assertEquals("2 days 2 hours 2 minutes 2 seconds", languageHandler.getTimeString(duration));
-		}
-
-		@Test
-		void getTimeString_with_unlimited_time() {
-			assertEquals("unlimited time", languageHandler.getTimeString(-1));
-		}
-
-		@Test
-		void getTimeString_with_null_timeUnit() {
-			long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
-			assertEquals("1 day 1 hour 1 minute 1 second", languageHandler.getTimeString(duration, null));
-		}
-
-		@Test
-		void getTimeString_with_less_than_second() {
-			assertEquals("less than one second", languageHandler.getTimeString(999));
+		void setterTest_fileLoader() {
+			YamlLanguageHandler yamlLanguageHandler = new YamlLanguageHandler();
+			assertFalse(yamlLanguageHandler.isFileLoaderSet(), "the fileLoader field is not null.");
+			yamlLanguageHandler.setFileLoader(new YamlLanguageFileLoader(mockPlugin));
+			assertTrue(yamlLanguageHandler.isFileLoaderSet(), "the fileLoader field is null.");
 		}
 	}
 
 	@Test
-	void getString() {
-		assertEquals("an arbitrary string", languageHandler.getString("ARBITRARY_STRING").orElse("fail"));
+	void getConfigurationTest() {
+		assertNotNull(languageHandler.getConfiguration());
 	}
 
 	@Test
-	void getStringList() {
-		assertTrue(languageHandler.getStringList("ARBITRARY_STRING_LIST").containsAll(List.of("item 1", "item 2", "item 3")));
-	}
-
-	@Disabled
-	@Nested
-	class mockServerWorldTests {
-		@Test
-		void getWorlds_test_for_empty() {
-			assertFalse(server.getWorlds().isEmpty());
-		}
-		@Test
-		void addSimpleWorld_test_for_null() {
-			assertNotNull(server.addSimpleWorld("test_world"));
-		}
-		@Test
-		void addPlayerTest() {
-			assertNotNull(server.addPlayer("player1"));
-		}
-	}
-
-
-	@Nested
-	class WorldNameTests {
-		@Disabled
-		@Test
-		void getWorldNameTest() {
-			World world = server.getWorld("world");
-			Optional<String> optionalWorldName = languageHandler.getWorldName(world);
-			assertNotNull(world, "The default mock world is null.");
-			assertTrue(optionalWorldName.isPresent());
-			assertEquals("world", optionalWorldName.get());
-		}
-
-		@Test
-		void getWorldName_null() {
-			Optional<String> optionalWorldName = languageHandler.getWorldName(null);
-			assertTrue(optionalWorldName.isEmpty());
-		}
-	}
-
-	@Nested
-	class WorldAliasTests {
-
-		@Disabled
-		@Test
-		void getWorldAliasTest() {
-			World world = server.getWorld("world");
-			assertTrue(languageHandler.getWorldAlias(world).isEmpty());
-		}
-
-		@Test
-		void getWorldAliasTest_null() {
-			assertTrue(languageHandler.getWorldAlias(null).isEmpty());
-		}
+	void getConfigLanguageTest() {
+		assertEquals("en-US", languageHandler.getConfigLanguage());
 	}
 
 	@Test
-	void reload() {
+	void reloadTest() {
+		Configuration configuration = languageHandler.getConfiguration();
+		assertNotNull(configuration);
+		configuration = null;
+		assertNull(configuration);
 		languageHandler.reload();
-		// test that at least one message key exists after reload
-		assertFalse(languageHandler.getMessageKeys().isEmpty());
-		// test that a specific message key exists after reload
-		assertTrue(languageHandler.getMessageKeys().contains("ENABLED_MESSAGE"));
+		configuration = languageHandler.getConfiguration();
+		assertNotNull(configuration);
+	}
+
+//	@Test
+//	void reload() {
+//		// test that at least one message key exists before reload
+//		assertFalse(languageHandler.getMessageKeys().isEmpty());
+//		// test that a specific message key exists before reload
+//		assertTrue(languageHandler.getMessageKeys().contains("ENABLED_MESSAGE"));
+//		languageHandler.reload();
+//		// test that at least one message key exists after reload
+//		assertFalse(languageHandler.getMessageKeys().isEmpty());
+//		// test that a specific message key exists after reload
+//		assertTrue(languageHandler.getMessageKeys().contains("ENABLED_MESSAGE"));
+//	}
+
+	static Configuration getLanguageConfiguration() {
+		FileConfiguration configuration = new YamlConfiguration();
+		try {
+			configuration.loadFromString(getStringFile());
+		} catch (InvalidConfigurationException e) {
+			throw new RuntimeException(e);
+		}
+		return configuration;
+	}
+
+	static String getStringFile() {
+		return
+"""
+# Language configuration file for MessageBuilderLib v1.21.0
+
+##########
+# Settings
+##########
+SETTINGS:
+  DELIMITERS:
+    LEFT: '%'
+    RIGHT: '%'
+
+
+########################
+# Location Display Names
+########################
+LOCATIONS:
+  SPAWN:
+    DISPLAY_NAME: '&aSpawn'
+  HOME:
+    DISPLAY_NAME: '&aHome'
+
+
+##############
+# Item Strings
+##############
+ITEMS:
+  DEFAULT:
+    NAME:
+      SINGULAR: 'Default Item'
+      PLURAL: 'Default Items'
+    INVENTORY_NAME:
+      SINGULAR: 'Default Inventory Item'
+      PLURAL:  'Default Inventory ItemS'
+    ITEM_LORE:
+      - '&edefault lore line 1'
+      - '&edefault lore line 2'
+
+  TEST_ITEM_1:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory Item'
+    ITEM_LORE:
+      - '&etest1 lore line 1'
+      - '&etest1 lore line 2'
+
+  TEST_ITEM_2:
+    NAME:
+      SINGULAR: '&aTest Item 2'
+      PLURAL: '&aTest Items 2'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item 2'
+      PLURAL: '&aInventory Items 2'
+    LORE:
+      - '&etest2 lore line 1'
+      - '&etest2 lore line 2'
+
+  UNDEFINED_ITEM_NAME:
+    NAME:
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory Items'
+    LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_NAME_PLURAL:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory ItemS'
+    LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_INVENTORY_ITEM_NAME:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      PLURAL: '&aInventory ItemS'
+    ITEM_LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_INVENTORY_ITEM_NAME_PLURAL:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+    ITEM_LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_ITEM_LORE:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory Item'
+
+
+##############
+# Time strings
+##############
+TIME_STRINGS:
+  DAY: 'day'
+  DAY_PLURAL: 'days'
+  HOUR: 'hour'
+  HOUR_PLURAL: 'hours'
+  MINUTE: 'minute'
+  MINUTE_PLURAL: 'minutes'
+  SECOND: 'second'
+  SECOND_PLURAL: 'seconds'
+  UNLIMITED: 'unlimited time'
+  LESS_THAN_ONE: 'less than one'
+
+
+###################
+# Arbitrary Strings
+###################
+ARBITRARY_STRING: 'an arbitrary string'
+
+ARBITRARY_STRING_LIST:
+  - "item 1"
+  - "item 2"
+  - "item 3"
+
+
+##########
+# Messages
+##########
+MESSAGES:
+  ENABLED_MESSAGE:
+    enabled: true
+    message: "This is an enabled message"
+
+  DISABLED_MESSAGE:
+    enabled: false
+    message: "This is a disabled message"
+
+  REPEAT_DELAYED_MESSAGE:
+    enabled: true
+    message: "this is a repeat delayed message"
+    repeat-delay: 10
+
+  MACRO_MESSAGE:
+    enabled: true
+    message: "This is a message with a macro replacement %ITEM_NAME%."
+
+  MACRO_MESSAGE_CURLY_BRACE_DELIMITERS:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM_NAME}."
+
+  ENABLED_TITLE:
+    enabled: true
+    title: "This is an enabled title"
+
+  DISABLED_TITLE:
+    enabled: false
+    title: "This is a disabled title"
+
+  ENABLED_SUBTITLE:
+    enabled: true
+    subtitle: "This is an enabled subtitle"
+
+  DISABLED_SUBTITLE:
+    enabled: false
+    subtitle: "This is a disabled subtitle"
+
+  CUSTOM_FADE_TITLE:
+    enabled: true
+    title: "This is a title with custom fade values"
+    title-fade-in: 20
+    title-stay: 140
+    title-fade-out: 40
+
+  NON_INT_TITLE_FADE_VALUES:
+    enabled: true
+    title: "This is a title with non-integer fade values"
+    title-fade-in: "STRING"
+    title-stay: "STRING"
+    title-fade-out: "STRING"
+
+  DURATION_MESSAGE:
+    enabled: true
+    message: "Duration is %DURATION%"
+
+
+  # all number fields are unique from each other and defaults(20, 70, 10)
+  ALL_FIELDS_PRESENT:
+    message: "This entry has all fields present - message"
+    repeat-delay: 14
+    title: "This entry has all fields present - title"
+    title_fade_in: 24
+    title_stay: 34
+    title_fade_out: 44
+    subtitle: "This entry has all fields present - subtitle"
+
+
+  UNDEFINED_FIELD_ENABLED:
+    message: "This entry has no enabled field"
+
+  UNDEFINED_FIELD_MESSAGE:
+    enabled: true
+    title: "This entry has no message field"
+
+  UNDEFINED_FIELD_REPEAT_DELAY:
+    enabled: true
+    message: "This entry has no repeat-delay field"
+
+  UNDEFINED_FIELD_TITLE:
+    enabled: true
+    message: "This entry has no title field"
+
+  UNDEFINED_FIELD_TITLE_FADE_IN:
+    enabled: true
+    message: "This entry has no title-fade-in field"
+
+  UNDEFINED_FIELD_TITLE_STAY:
+    enabled: true
+    message: "This entry has no title-stay field"
+
+  UNDEFINED_FIELD_TITLE_FADE_OUT:
+    enabled: true
+    message: "This entry has no title-fade-out field"
+
+  UNDEFINED_FIELD_SUBTITLE:
+    enabled: true
+    message: "This entry has no subtitle field"
+		""";
 	}
 }
+
