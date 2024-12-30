@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 
 
-public interface Processor {
+public interface MacroProcessor {
 
 	<T> ResultMap execute(String key, ContextMap contextMap, T value);
 
