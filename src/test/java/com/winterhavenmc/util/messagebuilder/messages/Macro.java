@@ -1,16 +1,33 @@
 package com.winterhavenmc.util.messagebuilder.messages;
 
 
-public enum Macro {
+import com.winterhavenmc.util.messagebuilder.macro.MacroKey;
+import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 
-	DURATION,
-	LOCATION,
-	PLUGIN,
-	ITEM_NUMBER,
-	PAGE_NUMBER,
-	PAGE_TOTAL,
-	OWNER,
-	KILLER,
-	VIEWER,
+public enum Macro implements MacroKey {
+
+	DURATION(ProcessorType.NUMBER),
+	LOCATION(ProcessorType.LOCATION),
+	PLUGIN(ProcessorType.STRING),
+	ITEM_NUMBER(ProcessorType.NUMBER),
+	PAGE_NUMBER(ProcessorType.NUMBER),
+	PAGE_TOTAL(ProcessorType.NUMBER),
+	OWNER(ProcessorType.ENTITY),
+	KILLER(ProcessorType.ENTITY),
+	VIEWER(ProcessorType.ENTITY),
+	TOOL(ProcessorType.ITEM_STACK),
+	;
+
+	private final ProcessorType processorType;
+
+	// constructor
+	Macro(ProcessorType processorType) {
+		this.processorType = processorType;
+	}
+
+	@Override
+	public ProcessorType getProcessorType() {
+		return processorType;
+	}
 
 }
