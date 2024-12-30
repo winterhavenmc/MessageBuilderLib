@@ -93,7 +93,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		String key = NamespaceKey.create(macro.toString(), Namespace.Category.MACRO);
 
 		// get macro expected type from macro enum method
-		Class<?> expectedType = macro.getBoundType();
+		Class<?> expectedType = macro.getAssociatedType();
 
 		// check the type against the expected type and throw exception if mismatched
 		if (!expectedType.isInstance(value)) {
