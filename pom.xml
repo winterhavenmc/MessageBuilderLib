@@ -21,6 +21,7 @@
 		<project.author>Tim Savage</project.author>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>21</maven.compiler.release>
+		<mockito.version>5.14.2</mockito.version>
 	</properties>
 
 	<issueManagement>
@@ -82,10 +83,10 @@
 					<id>spigot-repo</id>
 					<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 				</repository>
-				<repository>
-					<id>papermc</id>
-					<url>https://repo.papermc.io/repository/maven-public/</url>
-				</repository>
+<!--				<repository>-->
+<!--					<id>papermc</id>-->
+<!--					<url>https://repo.papermc.io/repository/maven-public/</url>-->
+<!--				</repository>-->
 				<repository>
 					<id>glaremasters-repo</id>
 					<url>https://repo.glaremasters.me/repository/public/</url>
@@ -96,20 +97,20 @@
 
 	<dependencies>
 		<!-- Spigot API -->
-<!--		<dependency>-->
-<!--			<groupId>org.spigotmc</groupId>-->
-<!--			<artifactId>spigot-api</artifactId>-->
-<!--			<version>1.21.3-R0.1-SNAPSHOT</version>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
-
-		<!-- Paper API -->
 		<dependency>
-			<groupId>io.papermc.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>1.21.3-R0.1-SNAPSHOT</version>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.21.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- Paper API -->
+<!--		<dependency>-->
+<!--			<groupId>io.papermc.paper</groupId>-->
+<!--			<artifactId>paper-api</artifactId>-->
+<!--			<version>1.21.4-R0.1-SNAPSHOT</version>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
 
 
 		<!-- Multiverse-Core -->
@@ -128,14 +129,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Mock Bukkit Framework -->
-		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.21</artifactId>
-			<version>3.133.2</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- Mockito Framework -->
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -143,6 +136,20 @@
 			<version>5.14.2</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>5.11.3</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- hamcrest -->
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -237,6 +244,7 @@
 				<configuration>
 					<junitArtifactName>org.junit.jupiter:junit-jupiter</junitArtifactName>
 					<trimStackTrace>false</trimStackTrace>
+					<argLine>@{argLine} -Xshare:off -javaagent:"${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar"</argLine>
 				</configuration>
 			</plugin>
 
@@ -275,6 +283,17 @@
 						<id>kover-verify</id>
 						<goals>
 							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>properties</goal>
 						</goals>
 					</execution>
 				</executions>
