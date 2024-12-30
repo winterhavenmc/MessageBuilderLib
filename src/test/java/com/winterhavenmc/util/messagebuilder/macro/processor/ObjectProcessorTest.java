@@ -17,59 +17,50 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
+import com.winterhavenmc.util.messagebuilder.macro.Namespace;
+import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ObjectProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
-	Processor processor;
+	private QueryHandler mockQueryHandler;
+	private MacroProcessor macroProcessor;
 
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new ObjectProcessor(languageHandler);
+		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
+		macroProcessor = new ObjectProcessor(mockQueryHandler);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		mockQueryHandler = null;
+		macroProcessor = null;
 	}
 
 
 	@Test
-	void execute_integer() {
-		String key = "SOME_INTEGER";
+	void resolveContext_integer() {
+		String keyPath = "SOME_INTEGER";
 		Integer number = 42;
 
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, number);
+		ContextMap contextMap = new ContextMap();
+		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Category.MACRO);
+		contextMap.put(nameSpacedKey, ContextContainer.of(number, ProcessorType.NUMBER));
 
-		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
-		assertTrue(resultMap.containsKey("SOME_INTEGER"));
-		assertEquals("42", resultMap.get("SOME_INTEGER"));
+		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, number);
+		assertTrue(resultMap.containsKey(nameSpacedKey));
+		assertEquals("42", resultMap.get(nameSpacedKey));
 	}
 
 }

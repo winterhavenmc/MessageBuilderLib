@@ -17,72 +17,69 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.macro.*;
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OfflinePlayerProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
+	private Plugin mockPlugin;
+	private QueryHandler mockQueryHandler;
+	private OfflinePlayer mockOfflinePlayer;
 
+	@BeforeEach
+	void setUp() {
+		// mock plugin
+		mockPlugin = mock(Plugin.class);
+		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger("OfflinePlayerProcessorTest"));
 
-	@BeforeAll
-	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
+		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
 
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
+		// mock player for message recipient
+		mockOfflinePlayer = mock(Player.class, "MockPlayer");
+		when(mockOfflinePlayer.getName()).thenReturn("Player One");
+		when(mockOfflinePlayer.getUniqueId()).thenReturn(new UUID(1,1));
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		mockPlugin = null;
+		mockQueryHandler = null;
+		mockOfflinePlayer = null;
 	}
 
 	@Disabled
 	@Test
-	void execute() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(languageHandler);
-
-		String key = "SOME_NAME";
-		OfflinePlayer offlinePlayer = server.getOfflinePlayer(UUID.randomUUID());
-		assertNotNull(offlinePlayer);
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, offlinePlayer);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, offlinePlayer);
-
-		assertTrue(resultMap.containsKey(key), "No match: " + key);
+	void resolveContextTest() {
+		String stringKey = "SOME_NAME";
+		String key = NamespaceKey.create(Macro.OWNER, Namespace.Category.MACRO);
+		MacroProcessor macroProcessor = new StringProcessor(mockQueryHandler);
+		ContextMap contextMap = new ContextMap();
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, stringKey);
+		assertTrue(resultMap.containsKey(key), "No match");
 	}
 
 	@Test
-	void execute_with_null_offlinePlayer() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(languageHandler);
-
-		String key = "SOME_NAME";
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, null);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, null);
-
-		assertFalse(resultMap.containsKey("SOME_NAME"));
+	void resolveContext_with_null_contextMap() {
+		//TODO: pretty sure this is going to throw IllegalArgumentException
+		String keyPath = "SOME_NAME";
+		MacroProcessor macroProcessor = new StringProcessor(mockQueryHandler);
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Category.MACRO);
+		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, null, keyPath);
+		assertFalse(resultMap.containsKey(namespacedKey));
 	}
 
 }

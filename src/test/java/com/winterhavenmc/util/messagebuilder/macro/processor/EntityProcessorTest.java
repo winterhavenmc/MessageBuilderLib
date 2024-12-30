@@ -17,59 +17,33 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EntityProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
-	Processor processor;
+	private QueryHandler mockQueryHandler;
+	private MacroProcessor macroProcessor;
 
 
 	@BeforeAll
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
+		QueryHandler mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
 
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new EntityProcessor(languageHandler);
+		macroProcessor = new EntityProcessor(mockQueryHandler);
 	}
 
 	@AfterAll
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		mockQueryHandler = null;
+		macroProcessor = null;
 	}
 
-	@Disabled
 	@Test
-	void execute() {
-		String key = "SOME_ENTITY";
+	void resolveContext() { }
 
-		PlayerMock player = server.addPlayer("testy");
-		assertNotNull(player);
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, player);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, player);
-		assertTrue(resultMap.containsKey("SOME_ENTITY"));
-		assertEquals("testy", resultMap.get("SOME_ENTITY"));
-		assertTrue(resultMap.containsKey("SOME_ENTITY_NAME"));
-		assertEquals("testy", resultMap.get("SOME_ENTITY_NAME"));
-	}
 }

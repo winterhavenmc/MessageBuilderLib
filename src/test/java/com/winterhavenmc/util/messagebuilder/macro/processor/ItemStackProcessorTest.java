@@ -17,85 +17,72 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ItemStackProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
-	Processor processor;
+	private QueryHandler mockQueryHandler;
+	private MacroProcessor macroProcessor;
 
 
 	@BeforeAll
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new ItemStackProcessor(languageHandler);
+		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
+		macroProcessor = new ItemStackProcessor(mockQueryHandler);
 	}
 
 
 	@AfterAll
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		mockQueryHandler = null;
+		macroProcessor = null;
 	}
 
-	@Disabled
-	@Test
-	void execute_with_item_meta() {
+//	@Disabled
+//	@Test
+//	void execute_with_item_meta() {
+//
+//		ItemStack itemStack = new ItemStack(Material.STONE);
+//		ProcessorType processorType = ProcessorType.matchType(itemStack);
+//		String stringKey = "SOME_ITEM";
+//
+//		ItemMeta itemMeta = itemStack.getItemMeta();
+//		itemMeta.setDisplayName("Some Item Display Name");
+//		itemStack.setItemMeta(itemMeta);
+//
+//		ContextMap contextMap = new ContextMap();
+//		ContextKey compositeKey = new CompositeKey(processorType, stringKey);
+//		contextMap.put(compositeKey, itemStack);
+//
+//		ResultMap resultMap = macroProcessor.execute(stringKey, itemStack, contextMap);
+//
+//		assertFalse(resultMap.isEmpty());
+//		assertTrue(resultMap.containsKey("SOME_ITEM"));
+//		assertEquals("Some Item Display Name", resultMap.get("SOME_ITEM"));
+//	}
 
-		String key = "SOME_ITEM";
-
-		ItemStack itemStack = new ItemStack(Material.STONE);
-
-		ItemMeta itemMeta = itemStack.getItemMeta();
-		itemMeta.setDisplayName("Some Item Display Name");
-		itemStack.setItemMeta(itemMeta);
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, itemStack);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, itemStack);
-
-		assertFalse(resultMap.isEmpty());
-		assertTrue(resultMap.containsKey("SOME_ITEM"));
-		assertEquals("Some Item Display Name", resultMap.get("SOME_ITEM"));
-	}
-
-	@Disabled
-	@Test
-	void execute_with_item_material() {
-		String key = "SOME_ITEM";
-
-		ItemStack itemStack = new ItemStack(Material.STONE);
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, itemStack);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, itemStack);
-
-		assertFalse(resultMap.isEmpty());
-		assertTrue(resultMap.containsKey("SOME_ITEM"));
-		assertEquals("STONE", resultMap.get("SOME_ITEM"));
-	}
+//	@Disabled
+//	@Test
+//	void execute_with_item_material() {
+//		String key = "SOME_ITEM";
+//
+//		ItemStack itemStack = new ItemStack(Material.STONE);
+//
+//		ContextMap contextMap = new ContextMap();
+//
+//		MacroObjectMap macroObjectMap = new MacroObjectMap();
+//		macroObjectMap.put(key, itemStack);
+//
+//		ResultMap resultMap = macroProcessor.execute(key, itemStack, contextMap);
+//
+//		assertFalse(resultMap.isEmpty());
+//		assertTrue(resultMap.containsKey("SOME_ITEM"));
+//		assertEquals("STONE", resultMap.get("SOME_ITEM"));
+//	}
 
 }

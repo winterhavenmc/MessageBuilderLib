@@ -17,38 +17,62 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.*;
 
+import java.util.UUID;
+import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MessageCooldownTest {
 
-	private ServerMock server;
-	private PluginMain plugin;
+	private final static UUID player1Uid = new UUID(1,1);
+
+	private Plugin plugin;
+	private Server server;
+	private PluginManager pluginManager;
+	private Player player1;
+
 	private MessageCooldown<MessageId> messageCooldown;
 
 	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
 
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
+		plugin = mock(Plugin.class, "MockPlugin");
+		server = mock(Server.class, "MockServer");
+		pluginManager = mock(PluginManager.class, "MockPluginManager");
+		player1 = mock(Player.class, "MockPlayer1");
 
-		// instantiate MessageCooldown
-		messageCooldown = new MessageCooldown<>(plugin);
+		// return real logger for mock plugin
+		when(plugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getSimpleName()));
+
+		when(plugin.getServer()).thenReturn(server);
+		when(server.getPluginManager()).thenReturn(pluginManager);
+
+		when(server.getPlayer("player1")).thenReturn(player1);
+
+		when(player1.getName()).thenReturn("Player One");
+		when(player1.getUniqueId()).thenReturn(player1Uid);
+
+		// instantiate real MessageCooldown
+		messageCooldown = MessageCooldown.getInstance(plugin);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		plugin = null;
+		server = null;
+		pluginManager = null;
+		player1 = null;
+		messageCooldown = null;
 	}
 
 
@@ -62,44 +86,42 @@ class MessageCooldownTest {
 		assertNotNull(messageCooldown.getMessageCooldownMap());
 	}
 
-	@Disabled
 	@Test
 	void put() {
-		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
-		PlayerMock player = server.addPlayer("testy");
-		messageCooldown.put(MessageId.ENABLED_MESSAGE, player);
-		assertTrue(messageCooldown.isCooling(player, MessageId.ENABLED_MESSAGE, 10));
-	}
-
-	@Disabled
-	@Test
-	void get() {
-		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
-		PlayerMock player = server.addPlayer("player1");
-		messageCooldown.put(MessageId.ENABLED_MESSAGE, player);
-		assertTrue(messageCooldown.get(MessageId.ENABLED_MESSAGE, player) > 0);
-	}
-
-	@Disabled
-	@Test
-	public void remove() {
-		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
-		PlayerMock player = server.addPlayer("player1");
-		messageCooldown.put(MessageId.ENABLED_MESSAGE, player);
-		assertTrue(messageCooldown.isCooling(player, MessageId.ENABLED_MESSAGE, 10));
-		messageCooldown.remove(player);
-		assertFalse(messageCooldown.isCooling(player, MessageId.ENABLED_MESSAGE, 10));
-	}
-
-	@Disabled
-	@Test
-	void isCooling() {
-		MessageCooldown<MessageId> messageCooldown = new MessageCooldown<>(plugin);
-		PlayerMock player1 = server.addPlayer("player1");
-		PlayerMock player2 = server.addPlayer("player2");
 		messageCooldown.put(MessageId.ENABLED_MESSAGE, player1);
 		assertTrue(messageCooldown.isCooling(player1, MessageId.ENABLED_MESSAGE, 10));
-		assertFalse(messageCooldown.isCooling(player2, MessageId.ENABLED_MESSAGE, 10));
+	}
+
+	@Test
+	void get() {
+		messageCooldown.put(MessageId.ENABLED_MESSAGE, player1);
+		assertTrue(messageCooldown.get(MessageId.ENABLED_MESSAGE, player1) > 0);
+	}
+
+	@Test
+	public void remove() {
+		messageCooldown.put(MessageId.ENABLED_MESSAGE, player1);
+		assertTrue(messageCooldown.isCooling(player1, MessageId.ENABLED_MESSAGE, 10));
+		messageCooldown.remove(player1);
+		assertFalse(messageCooldown.isCooling(player1, MessageId.ENABLED_MESSAGE, 10));
+	}
+
+	@Test
+	public void remove_null_entity() {
+		assertFalse(messageCooldown.remove(null) > 0);
+	}
+
+	@Test
+	void isCooling() {
+		messageCooldown.put(MessageId.ENABLED_MESSAGE, player1);
+		assertTrue(messageCooldown.isCooling(player1, MessageId.ENABLED_MESSAGE, 10));
+	}
+
+	@Test
+	void singletonTest() {
+		MessageCooldown<MessageId> messageCooldown1 = MessageCooldown.getInstance(plugin);
+		MessageCooldown<MessageId> messageCooldown2 = MessageCooldown.getInstance(plugin);
+		assertEquals(messageCooldown1, messageCooldown2);
 	}
 
 }

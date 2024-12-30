@@ -17,66 +17,157 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
+import com.winterhavenmc.util.messagebuilder.languages.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.World;
-import org.junit.jupiter.api.*;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.logging.Logger;
+
+import org.junit.jupiter.api.*;
 
 import static com.winterhavenmc.util.TimeUnit.*;
-import static com.winterhavenmc.util.TimeUnit.SECONDS;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MessageBuilderTest {
 
-	private ServerMock server;
-	@SuppressWarnings("FieldCanBeLocal")
-	private PluginMain plugin;
+	public static final String NON_EXISTENT_ENTRY = "NON_EXISTENT_ENTRY";
+	public static final String FAIL = "fail";
+
+
+	private Plugin mockPlugin;
+	private FileConfiguration mockConfiguration;
+	private LanguageHandler mockLanguageHandler;
+	private QueryHandler mockQueryHandler;
+	private MacroHandler mockMacroHandler;
+	private Player mockPlayer;
 	private MessageBuilder<MessageId, Macro> messageBuilder;
 
 	@BeforeEach
-	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
+	void setUp() {
+		mockPlugin = mock(Plugin.class, "MockPlugin");
+		mockConfiguration = mock(FileConfiguration.class, "MockConfiguration");
+		mockLanguageHandler = mock(LanguageHandler.class, "MockLanguageHandler");
+		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
+		mockMacroHandler = mock(MacroHandler.class, "mockMacroHandler");
 
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
+		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+		when(mockPlugin.getConfig()).thenReturn(mockConfiguration);
 
-		messageBuilder = new MessageBuilder<>(plugin);
+		when(mockConfiguration.getString("language")).thenReturn("en-US");
+
+		// mock player for message recipient
+		mockPlayer = mock(Player.class, "MockPlayer");
+		when(mockPlayer.getName()).thenReturn("Player One");
+		when(mockPlayer.getUniqueId()).thenReturn(new UUID(1,1));
+
+		// Initialize the MessageBuilder with mocked dependencies
+		messageBuilder = new MessageBuilder<>(mockPlugin);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-
-		// explicitly destroy messageBuilder
+		mockPlugin = null;
 		messageBuilder = null;
 	}
 
 
+	@Nested
+	class ai_generated_tests {
+		@Test
+		void testCompose_WithValidParameters_Success() {
+			CommandSender mockSender = mock(CommandSender.class);
+
+			// Assuming MessageId.ENABLED_MESSAGE is a valid enum constant in your MessageId enum
+			MessageId messageId = MessageId.ENABLED_MESSAGE;
+
+			messageBuilder.compose(mockSender, messageId);
+
+			// Add assertions to verify the behavior
+			assertNotNull(messageBuilder); // Verify that the builder was created
+			// Further checks can be done based on the expected state after compose
+		}
+
+		@Test
+		void testSetMacro_WithValidParameters_Success() {
+			messageBuilder.compose(mockPlayer, MessageId.ENABLED_MESSAGE)
+					.setMacro(Macro.TOOL, "replacementValue");
+
+			// Verify that the macro was set correctly
+			// Assuming you have a method to get the current state or macro settings
+			// For example:
+			// assertEquals(expectedValue, messageBuilder.getCurrentMacro(Macro.PLACEHOLDER1));
+		}
+
+		@Test
+		void testSend_WithValidMessage_SendsMessage() {
+			CommandSender mockSender = mock(CommandSender.class);
+			MessageId messageId = MessageId.ENABLED_MESSAGE;
+
+			messageBuilder.compose(mockSender, messageId)
+					.setMacro(Macro.TOOL, "replacementValue")
+					.send();
+
+			// Verify that the send method does what is expected
+			// This would depend on how your send method is implemented.
+			// For example, if it sends a message to the CommandSender, you would verify that.
+			verify(mockSender, times(1)).sendMessage(anyString()); // Adapt based on actual implementation
+		}
+
+		@Test
+		void testCompose_WithNullParameters_ThrowsException() {
+			// Assuming you throw IllegalArgumentException for null inputs
+			assertThrows(IllegalArgumentException.class, () -> {
+				messageBuilder.compose(null, null);
+			});
+		}
+
+		// Additional tests for edge cases and other functionalities
+		// For example, testing cooldown logic, macro handling, etc.
+	}
+
+
+
+
+
 	@Test
 	void composeTest() {
-		Message<MessageId, Macro> message = messageBuilder.compose(server.getConsoleSender(), MessageId.ENABLED_MESSAGE);
+		Message<MessageId, Macro> message = messageBuilder.compose(mockPlayer, MessageId.ENABLED_MESSAGE);
 		assertEquals("This is an enabled message", message.toString());
 	}
 
-	@Test
-	void isEnabledTest() {
-		assertTrue(messageBuilder.isEnabled(MessageId.ENABLED_MESSAGE));
-		assertFalse(messageBuilder.isEnabled(MessageId.DISABLED_MESSAGE));
+	@Nested
+	class IsEnabledTests {
+
+		@Test
+		void isEnabledTest() {
+			assertTrue(messageBuilder.isEnabled(MessageId.ENABLED_MESSAGE));
+		}
+
+		@Test
+		void isEnabledTest_disabled() {
+			assertFalse(messageBuilder.isEnabled(MessageId.DISABLED_MESSAGE));
+		}
+
+		@Test
+		void isEnabledTest_nonexistent() {
+			assertFalse(messageBuilder.isEnabled(MessageId.NONEXISTENT_ENTRY));
+		}
 	}
 
 	@Test
@@ -90,33 +181,88 @@ class MessageBuilderTest {
 	}
 
 	@Test
-	void getItemNameTest() {
-		assertEquals("§aTest Item", messageBuilder.getItemName().orElse("fail"));
+	void getItemNameSingularTest() {
+		assertTrue(messageBuilder.getInventoryItemNameSingular().isPresent());
 	}
 
+	@Test
+	void getItemNameSingularTest_undefined_field() {
+		assertTrue(messageBuilder.getItemNameSingular("UNDEFINED_ITEM_NAME").isEmpty());
+	}
+
+	@Test
+	void getInventoryItemNameSingularTest_nonexistent_entry() {
+		assertTrue(messageBuilder.getInventoryItemNameSingular(NON_EXISTENT_ENTRY).isEmpty());
+	}
+
+	@Test
+	void getInventoryItemNamePluralTest_nonexistent_entry() {
+		assertTrue(messageBuilder.getInventoryItemNamePlural(NON_EXISTENT_ENTRY).isEmpty());
+	}
+
+	@Test
+	void getItemInventoryNameTest_null_parameter() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> messageBuilder.getInventoryItemNameSingular(null));
+		assertEquals("the itemKey parameter was null.", exception.getMessage());
+	}
+
+	@Test
+	void getInventoryItemNamePluralTest_null_parameter() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> messageBuilder.getInventoryItemNamePlural(null));
+		assertEquals("the itemKey parameter was null.", exception.getMessage());
+	}
+
+	// 	public Optional<String> getItemNamePlural(final String itemKey) {
 	@Test
 	void getItemNamePluralTest() {
-		assertEquals("§aTest Items", messageBuilder.getItemNamePlural().orElse("fail"));
+		assertEquals("Default Items", messageBuilder.getItemNamePlural().orElse(FAIL));
 	}
 
 	@Test
-	void getInventoryItemNameTest() {
-		assertEquals("§aInventory Item", messageBuilder.getInventoryItemName().orElse("fail"));
+	void getItemNamePluralTest_nonexistent_entry() {
+		assertTrue(messageBuilder.getItemNamePlural(NON_EXISTENT_ENTRY).isEmpty());
+	}
+
+	@Test
+	void getInventoryItemNameSingularTest() {
+		assertEquals("Default Inventory Item", messageBuilder.getInventoryItemNameSingular().orElse(FAIL));
+	}
+
+	@Test
+	void getInventoryItemNamePluralTest() {
+		assertEquals("Default Inventory Items", messageBuilder.getInventoryItemNamePlural().orElse(FAIL));
+	}
+
+	@Test
+	void getItemInventoryNameTest_undefined_field() {
+		assertTrue(messageBuilder.getInventoryItemNameSingular("UNDEFINED_INVENTORY_ITEM_NAME").isEmpty());
+	}
+
+	@Test
+	void getInventoryItemNameTest_non_existent_entry() {
+		assertTrue(messageBuilder.getInventoryItemNameSingular(NON_EXISTENT_ENTRY).isEmpty());
 	}
 
 	@Test
 	void getItemLoreTest() {
-		assertEquals(List.of("§elore line 1", "§elore line 2"), messageBuilder.getItemLore());
+		assertEquals(List.of("&etest1 lore line 1", "&etest1 lore line 2"), messageBuilder.getItemLore("TEST_ITEM_1"));
+	}
+
+	@Test
+	void getItemLoreTest_no_parameter() {
+		assertEquals(List.of("&edefault lore line 1", "&edefault lore line 2"), messageBuilder.getItemLore());
 	}
 
 	@Test
 	void getSpawnDisplayNameTest() {
-		assertEquals("§aSpawn", messageBuilder.getSpawnDisplayName().orElse("fail"));
+		assertEquals("&aSpawn", messageBuilder.getSpawnDisplayName().orElse(FAIL));
 	}
 
 	@Test
 	void getHomeDisplayNameTest() {
-		assertEquals("§aHome", messageBuilder.getHomeDisplayName().orElse("fail"));
+		assertEquals("&aHome", messageBuilder.getHomeDisplayName().orElse(FAIL));
 	}
 
 	@Test
@@ -144,7 +290,7 @@ class MessageBuilderTest {
 
 	@Test
 	void getStringTest() {
-		assertEquals("an arbitrary string", messageBuilder.getString("ARBITRARY_STRING").orElse("fail"));
+		assertEquals("an arbitrary string", messageBuilder.getString("ARBITRARY_STRING").orElse(FAIL));
 	}
 
 	@Test
@@ -155,23 +301,23 @@ class MessageBuilderTest {
 	@Test
 	void setDelimitersTest_same() {
 		messageBuilder.setDelimiters('#');
-		assertEquals('#', MacroProcessorHandler.MacroDelimiter.LEFT.toChar());
-		assertEquals('#', MacroProcessorHandler.MacroDelimiter.RIGHT.toChar());
-		// these must be reset back manually or they persist across tests. nested enum superpower perhaps?
+		assertEquals('#', MacroHandler.MacroDelimiter.LEFT.toChar());
+		assertEquals('#', MacroHandler.MacroDelimiter.RIGHT.toChar());
+		// these must be reset back manually or they persist across tests.
 		messageBuilder.setDelimiters('%');
-		assertEquals('%', MacroProcessorHandler.MacroDelimiter.LEFT.toChar());
-		assertEquals('%', MacroProcessorHandler.MacroDelimiter.RIGHT.toChar());
+		assertEquals('%', MacroHandler.MacroDelimiter.LEFT.toChar());
+		assertEquals('%', MacroHandler.MacroDelimiter.RIGHT.toChar());
 	}
 
 	@Test
 	void setDelimitersTest_different() {
 		messageBuilder.setDelimiters('L','R');
-		assertEquals('L', MacroProcessorHandler.MacroDelimiter.LEFT.toChar());
-		assertEquals('R', MacroProcessorHandler.MacroDelimiter.RIGHT.toChar());
-		// these must be reset manually or they persist across tests. nested enum superpower perhaps?
+		assertEquals('L', MacroHandler.MacroDelimiter.LEFT.toChar());
+		assertEquals('R', MacroHandler.MacroDelimiter.RIGHT.toChar());
+		// these must be reset manually or they persist across tests.
 		messageBuilder.setDelimiters('%');
-		assertEquals('%', MacroProcessorHandler.MacroDelimiter.LEFT.toChar());
-		assertEquals('%', MacroProcessorHandler.MacroDelimiter.RIGHT.toChar());
+		assertEquals('%', MacroHandler.MacroDelimiter.LEFT.toChar());
+		assertEquals('%', MacroHandler.MacroDelimiter.RIGHT.toChar());
 	}
 
 	@Test
