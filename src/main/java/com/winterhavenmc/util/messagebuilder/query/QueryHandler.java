@@ -18,10 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.query;
 
 import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.MessageRecord;
 import org.bukkit.World;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface QueryHandler {
@@ -32,7 +31,11 @@ public interface QueryHandler {
 	//TODO: Everything below needs to go somewhere else eventually
 
 	Optional<String> getWorldName(final World world);
+	Optional<String> getWorldAlias(final World world);
 	String getTimeString(long duration);
 	String getTimeString(long duration, TimeUnit timeUnit);
-
+	Optional<String> getSpawnDisplayName();
+	Optional<String> getHomeDisplayName();
+	Optional<String> getString(String path);
+	List<String> getStringList(String path);
 }
