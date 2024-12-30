@@ -15,25 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.macro;
 
-/**
- * Enum of errors
- */
-public enum Error {
-	PARAMETER_NULL_ITEM_KEY("the itemKey parameter was null."),
-	PARAMETER_NULL_MESSAGE_ID("the messageId parameter was null."),
-	PARAMETER_NULL_CONFIGURATION("the configuration parameter was null."),
-	;
 
-	private final String messageString;
+public interface ContextKey {
 
-	Error(final String message) {
-		this.messageString = message;
-	}
-
-	public String getMessage() {
-		return this.messageString;
-	}
+	String getKey();
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2022-2024 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.languages;
 
 import org.bukkit.configuration.Configuration;
-
-import java.util.List;
-import java.util.Optional;
 
 
 public interface LanguageHandler {
@@ -39,38 +36,6 @@ public interface LanguageHandler {
 	 */
 	//TODO: change this to (or add) getLocale
 	String getConfigLanguage();
-
-
-	/**
-	 * Get spawn display name from language file
-	 *
-	 * @return the formatted display name for the world spawn, or empty string if key not found
-	 */
-	Optional<String> getSpawnDisplayName();
-
-
-	/**
-	 * Get home display name from language file
-	 *
-	 * @return the formatted display name for home, or empty string if key not found
-	 */
-	Optional<String> getHomeDisplayName();
-
-
-	/**
-	 * Get string by path in message file
-	 * @param path the message path for the string being retrieved
-	 * @return String - the string retrieved by path from message file
-	 */
-	Optional<String> getString(final String path);
-
-
-	/**
-	 * Get List of String by path in message file
-	 * @param path the message path for the string list being retrieved
-	 * @return List of String - the string list retrieved by path from message file
-	 */
-	List<String> getStringList(final String path);
 
 
 	/**

@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.query;
 
 import com.winterhavenmc.util.TimeUnit;
 import org.bukkit.configuration.Configuration;

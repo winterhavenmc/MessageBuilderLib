@@ -15,27 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.languages;
 
-import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.configuration.Configuration;
 
-
-/**
- * The main class for SoundConfigTest plugin
- */
-public class PluginMain extends JavaPlugin {
-
-    MessageBuilder<MessageId, Macro> messageBuilder;
-
-    @Override
-    public void onEnable() {
-
-        saveDefaultConfig();
-
-        // instantiate message builder
-        messageBuilder = new MessageBuilder<>(this);
-    }
-
+public interface LanguageFileLoader {
+	/**
+	 * Get configuration object containing message settings and strings
+	 *
+	 * @return Configuration - message configuration object
+	 */
+	Configuration getConfiguration();
 }

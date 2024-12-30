@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.loader;
+package com.winterhavenmc.util.messagebuilder.languages;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -48,7 +48,6 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 */
 	public YamlLanguageFileLoader(final Plugin plugin) {
 		this.plugin = plugin;
-		new YamlLanguageFileInstaller(plugin).install();
 	}
 
 
@@ -73,14 +72,11 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 		try {
 			newMessagesConfig.load(languageFile);
 			plugin.getLogger().info("Language file " + languageTag + ".yml successfully loaded.");
-		}
-		catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			plugin.getLogger().severe("Language file " + languageTag + ".yml does not exist.");
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			plugin.getLogger().severe("Language file " + languageTag + ".yml could not be read.");
-		}
-		catch (InvalidConfigurationException e) {
+		} catch (InvalidConfigurationException e) {
 			plugin.getLogger().severe("Language file " + languageTag + ".yml is not valid yaml.");
 		}
 
@@ -168,7 +164,7 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 * @return current language file name as String
 	 */
 	static String getLanguageFilename(final String languageTag) {
-		return Paths.get(LANGUAGE_FOLDER,languageTag + ".yml").normalize().toString();
+		return Paths.get(LANGUAGE_FOLDER, languageTag + ".yml").normalize().toString();
 	}
 
 }

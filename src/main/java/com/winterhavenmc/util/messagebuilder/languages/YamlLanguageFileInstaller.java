@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.loader;
+package com.winterhavenmc.util.messagebuilder.languages;
 
 import org.bukkit.plugin.Plugin;
 

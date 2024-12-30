@@ -15,15 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.loader;
+package com.winterhavenmc.util.messagebuilder.macro;
 
-import org.bukkit.configuration.Configuration;
+import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 
-public interface LanguageFileLoader {
-	/**
-	 * Get configuration object containing message settings and strings
-	 *
-	 * @return Configuration - message configuration object
-	 */
-	Configuration getConfiguration();
+public interface MacroKey {
+	ProcessorType getProcessorType();
+
+	default Class<?> getAssociatedType() {
+		return getProcessorType().getExpectedType();
+	}
+
 }
