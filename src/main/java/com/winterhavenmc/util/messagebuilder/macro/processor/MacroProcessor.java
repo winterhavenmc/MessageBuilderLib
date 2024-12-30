@@ -20,8 +20,73 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 
 
+/**
+ * An interface for processing macros in the MessageBuilder library.
+ * <p>
+ * MacroProcessors are responsible for resolving contextual information from
+ * input values and populating a {@link ContextMap} with placeholder
+ * replacements. Each processor focuses on a specific type of input,
+ * such as locations, entities, or custom types, and provides the necessary
+ * mappings to integrate dynamic data into messages.
+ * </p>
+ * <p>
+ * Implementations of this interface must define how placeholders are
+ * generated and resolved based on the input value and its context.
+ * </p>
+ *
+ * <p><b>Examples:</b></p>
+ * <pre>
+ * {@code
+ * // A LocationProcessor might resolve placeholders for a player's position:
+ * // %HOME_LOCATION_WORLD% -> "world"
+ * // %HOME_LOCATION_X% -> "123"
+ * // %HOME_LOCATION_Y% -> "64"
+ * // %HOME_LOCATION_Z% -> "-789"
+ * // %HOME_LOCATION% -> "world:123,64,-789"
+ * }
+ * </pre>
+ *
+ * <p><b>Example 2:</b> Resolving a single placeholder for a number</p>
+ * <pre>
+ * {@code
+ * // A NumberProcessor might resolve a single placeholder for any Java Number:
+ * // Input: 42
+ * // Placeholder: %SCORE%
+ * // Resolved: %SCORE% -> "42"
+ *
+ * public class NumberProcessor implements MacroProcessor {
+ *     @Override
+ *     public <T> ResultMap resolveContext(String key, ContextMap contextMap, T value) {
+ *         if (value instanceof Number number) {
+ *             contextMap.put(key, number.toString());
+ *             return ResultMap.success(key);
+ *         }
+ *         return ResultMap.failure(key, "Value is not a number.");
+ *     }
+ * }
+ * }
+ * </pre>
+
+
+ * @see ContextMap
+ */
 public interface MacroProcessor {
 
+	/**
+	 * Resolves contextual information from the given value and populates the context map.
+	 * <p>
+	 * Implementations should map relevant data from the input value to placeholders,
+	 * using the provided {@code key} as a namespace to prevent collisions. The resolved
+	 * context entries are stored in the {@link ContextMap}, and the method returns
+	 * a {@link ResultMap} to indicate the outcome of the processing.
+	 * </p>
+	 *
+	 * @param key         the unique key or namespace for this macro entry
+	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
+	 * @param value       the input value to resolve into context
+	 * @param <T>         the type of the input value
+	 * @return a {@link ResultMap} containing resolved macros and their replacements
+	 */
 	<T> ResultMap resolveContext(String key, ContextMap contextMap, T value);
 
 }
