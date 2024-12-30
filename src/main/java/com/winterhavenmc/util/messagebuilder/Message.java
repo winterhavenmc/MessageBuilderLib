@@ -17,10 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.macro.CompositeKey;
-import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
+import com.winterhavenmc.util.messagebuilder.macro.*;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
+import com.winterhavenmc.util.messagebuilder.query.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 import org.bukkit.ChatColor;
@@ -82,30 +81,49 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 * set macro for message replacements
 	 *
 	 * @param macro token for placeholder
-	 * @param object object that contains value that will be substituted in message
+	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	public <T> Message<MessageId, Macro> setMacro(final Macro macro, final T object) {
+	public <T> Message<MessageId, Macro> setMacro(final MacroKey macro, final T value) {
+
+		//TODO: if value is an optional, get unwrapped value. to be reimplemented later. see commented code below
+
+		// create name spaced key
+		String key = NamespaceKey.create(macro.toString(), Namespace.Category.MACRO);
+
+		// get macro expected type from macro enum method
+		Class<?> expectedType = macro.getBoundType();
+
+		// check the type against the expected type and throw exception if mismatched
+		if (!expectedType.isInstance(value)) {
+			throw new IllegalArgumentException(
+					"Value type does not match the expected type for macro: " + macro +
+							". Expected: " + expectedType.getName() +
+							", Provided: " + value.getClass().getName());
+		}
 
 		// get matching processor type for object
-		ProcessorType processorType = ProcessorType.matchType(object);
+		ProcessorType processorType = ProcessorType.matchType(value);
 
-		// create composite key
-		CompositeKey compositeKey = new CompositeKey(processorType, macro);
+		// put value and processor type into context map
+		this.contextMap.put(key, value, processorType);
 
-		// if the value being set is an optional, unwrap before placing in the context map
-		if (object instanceof Optional<?> optionalValue) {
-			optionalValue.ifPresentOrElse(
-					unwrappedValue -> contextMap.put(compositeKey, unwrappedValue),
-					() -> contextMap.put(compositeKey, UNKNOWN_VALUE)
-			);
-		}
-		else {
-			contextMap.put(compositeKey, object);
-		}
+		// return this instance of Message class to the builder chain
 		return this;
 	}
+
+		//TODO: old optional unwrap snippet
+//		// if the value being set is an optional, unwrap before placing in the context map
+//		if (value instanceof Optional<?> optionalValue) {
+//			optionalValue.ifPresentOrElse(
+//					unwrappedValue -> contextMap.put(key, processorType, unwrappedValue),
+//					() -> contextMap.put(key, ProcessorType.OBJECT, UNKNOWN_VALUE)
+//			);
+//		}
+//		else {
+//			contextMap.put(key, processorType, value);
+//		}
 
 
 	/**
