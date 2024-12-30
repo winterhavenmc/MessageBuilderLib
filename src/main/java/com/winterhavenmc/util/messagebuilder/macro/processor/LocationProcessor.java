@@ -17,12 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.WorldNameUtility;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.Namespace;
 import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
-
+import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
@@ -36,6 +36,10 @@ public class LocationProcessor extends AbstractProcessor {
 
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+		if (key == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_NAMESPACED_KEY.getMessage()); }
+		if (key.isBlank()) { throw new IllegalArgumentException((Error.PARAMETER_EMPTY_NAMESPACED_KEY.getMessage())); }
+		if (contextMap == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_QUERY_HANDLER.getMessage()); }
+		if (value == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.name()); }
 
 		// get server plugin manager
 		PluginManager pluginManager = Bukkit.getPluginManager();
@@ -58,15 +62,7 @@ public class LocationProcessor extends AbstractProcessor {
 			String locationZ = String.valueOf(location.getBlockZ());
 			String locationString = locationWorld + " [" + locationX + ", " + locationY + ", " + locationZ + "]";
 
-			// Key naming logic:
-			// if key does end in _LOC, turn it into _LOCATION. The _LOC placeholders are deprecated and being removed.
-			// this check is to ensure any placeholders still using the old _LOC encountered will have their keys placed
-			// in the result map with only _LOCATION. This logic may be removed when backwards compatibility is desired or necessary.
-			if (resultKey.endsWith("_LOC")) {
-				resultKey = resultKey.concat("ATION");
-			}
-
-			// if macroName does not end in _LOCATION, tack it on
+			// if macroName does not end in _LOCATION, suffix it to the end of the key
 			if (!resultKey.endsWith("_LOCATION")) {
 				resultKey = resultKey.concat("_LOCATION");
 			}
@@ -78,6 +74,8 @@ public class LocationProcessor extends AbstractProcessor {
 			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_Y", locationY);
 			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_Z", locationY);
 		}
+
+		// return result map
 		return resultMap;
 	}
 
