@@ -18,8 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.macro.Namespace;
-import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
@@ -38,8 +36,8 @@ public class LocationProcessor extends AbstractProcessor {
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 		if (key == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_NAMESPACED_KEY.getMessage()); }
 		if (key.isBlank()) { throw new IllegalArgumentException((Error.PARAMETER_EMPTY_NAMESPACED_KEY.getMessage())); }
-		if (contextMap == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_QUERY_HANDLER.getMessage()); }
-		if (value == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.name()); }
+		if (contextMap == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_CONTEXT_MAP.getMessage()); }
+		if (value == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_VALUE.name()); }
 
 		// get server plugin manager
 		PluginManager pluginManager = Bukkit.getPluginManager();
@@ -53,9 +51,10 @@ public class LocationProcessor extends AbstractProcessor {
 		// if passed object is not a Location, return empty result map
 		if (value instanceof Location location) {
 
+			// copy of original key before appending component field suffixes
 			String resultKey = key;
 
-			// get location strings from location object
+			// Get components
 			String locationWorld = worldNameUtility.getWorldName(location.getWorld()).orElse(UNKNOWN_VALUE);
 			String locationX = String.valueOf(location.getBlockX());
 			String locationY = String.valueOf(location.getBlockY());
@@ -67,12 +66,12 @@ public class LocationProcessor extends AbstractProcessor {
 				resultKey = resultKey.concat("_LOCATION");
 			}
 
-			// create new map entries for location string and separate fields
-			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO), locationString);
-			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_WORLD", locationWorld);
-			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_X", locationX);
-			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_Y", locationY);
-			resultMap.put(NamespaceKey.create(resultKey, Namespace.Category.MACRO) + "_Z", locationY);
+			// Store placeholders
+			resultMap.put(resultKey, locationString);
+			resultMap.put(resultKey.concat("_WORLD"), locationWorld);
+			resultMap.put(resultKey.concat("_X"), locationX);
+			resultMap.put(resultKey.concat("_Y"), locationY);
+			resultMap.put(resultKey.concat("_Z"), locationZ);
 		}
 
 		// return result map
