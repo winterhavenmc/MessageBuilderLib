@@ -18,9 +18,15 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.TimeUnit;
+import com.winterhavenmc.util.messagebuilder.languages.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.query.ConfigurationQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.query.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+
+import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -46,7 +52,7 @@ import java.util.Optional;
  * <p>
  * <i>example:</i>
  * <pre>
- * {@code messageBuilder.compose(recipient, MessageId.MESSAGE_TO_SEND)
+ * {@code messageBuilder.compose(recipient, MessageId.ENABLED_MESSAGE)
  *     .setMacro(Macro.PLACEHOLDER1, object)
  *     .setMacro(Macro.PLACEHOLDER2, replacementString)
  *     .send();
@@ -62,7 +68,6 @@ import java.util.Optional;
  * @param <MessageId> An enum whose members correspond to a message key in a language file
  * @param <Macro>     An enum whose members correspond to a string replacement placeholder in a message string
  */
-@SuppressWarnings("unused")
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	private final static String DEFAULT = "DEFAULT";
@@ -71,6 +76,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	private final LanguageHandler languageHandler;
 	private final QueryHandler queryHandler;
 	private final MacroHandler macroHandler;
+	private final WorldNameUtility worldNameUtility;
 
 
 	/**
@@ -80,9 +86,12 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public MessageBuilder(final Plugin plugin) {
 		this.plugin = plugin;
-		this.languageHandler = new YamlLanguageHandler(plugin);
+		LanguageFileInstaller languageFileInstaller = new YamlLanguageFileInstaller(plugin);
+		LanguageFileLoader languageFileLoader = new YamlLanguageFileLoader(plugin);
+		this.languageHandler = new YamlLanguageHandler(plugin, languageFileInstaller, languageFileLoader);
 		this.queryHandler = new ConfigurationQueryHandler(plugin, languageHandler.getConfiguration());
 		this.macroHandler = new MacroHandler(plugin, queryHandler);
+		worldNameUtility = new WorldNameUtility(plugin.getServer().getPluginManager());
 	}
 
 
@@ -118,7 +127,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
 		if (messageId == null) {
-			throw new IllegalArgumentException(Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
+			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
 		}
 		return new Message<>(plugin, queryHandler, macroHandler, recipient, messageId);
 	}
@@ -132,7 +141,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public boolean isEnabled(final MessageId messageId) {
 		if (messageId == null) {
-			throw new IllegalArgumentException(Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
+			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
 		}
 		return queryHandler.getMessageRecord(messageId).map(MessageRecord::enabled).orElse(false);
 	}
@@ -146,7 +155,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public long getRepeatDelay(final MessageId messageId) {
 		if (messageId == null) {
-			throw new IllegalArgumentException(Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
+			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
 		}
 		return queryHandler.getMessageRecord(messageId).map(MessageRecord::repeatDelay).orElse(0L);
 	}
@@ -160,7 +169,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public String getMessage(final MessageId messageId) {
 		if (messageId == null) {
-			throw new IllegalArgumentException(Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
+			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_NULL_MESSAGE_ID.getMessage());
 		}
 		return queryHandler.getMessageRecord(messageId).map(MessageRecord::message).orElse("");
 	}
@@ -183,7 +192,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Optional<String> getItemNameSingular(final String itemKey) {
 		if (itemKey == null) {
-			throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.getMessage());
+			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_NULL_ITEM_KEY.getMessage());
 		}
 		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemName);
 	}
@@ -206,7 +215,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Optional<String> getItemNamePlural(final String itemKey) {
 		if (itemKey == null) {
-			throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.getMessage());
+			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_NULL_ITEM_KEY.getMessage());
 		}
 		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemNamePlural);
 	}
@@ -229,7 +238,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Optional<String> getInventoryItemNameSingular(final String itemKey) {
 		if (itemKey == null) {
-			throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.getMessage());
+			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_NULL_ITEM_KEY.getMessage());
 		}
 		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemName);
 	}
@@ -251,7 +260,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Optional<String> getInventoryItemNamePlural(final String itemKey) {
 		if (itemKey == null) {
-			throw new IllegalArgumentException(Error.PARAMETER_NULL_ITEM_KEY.getMessage());
+			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_NULL_ITEM_KEY.getMessage());
 		}
 		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemNamePlural);
 	}
@@ -290,7 +299,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return the formatted display name for the world spawn, as a String wrapped in an {@link Optional}
 	 */
 	public Optional<String> getSpawnDisplayName() {
-		return languageHandler.getSpawnDisplayName();
+		return queryHandler.getSpawnDisplayName();
 	}
 
 
@@ -300,7 +309,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return the formatted display name for home, as a String wrapped in an {@link Optional}
 	 */
 	public Optional<String> getHomeDisplayName() {
-		return languageHandler.getHomeDisplayName();
+		return queryHandler.getHomeDisplayName();
 	}
 
 
@@ -334,7 +343,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return {@link String} &ndash; the string retrieved by path from message file, wrapped in an {@link Optional}
 	 */
 	public Optional<String> getString(final String path) {
-		return languageHandler.getString(path);
+		return queryHandler.getString(path);
 	}
 
 
@@ -345,7 +354,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return List of String - the string list retrieved by path from message file
 	 */
 	public List<String> getStringList(final String path) {
-		return languageHandler.getStringList(path);
+		return queryHandler.getStringList(path);
 	}
 
 
@@ -356,7 +365,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return Optional String containing world name or multiverse alias
 	 */
 	public Optional<String> getWorldName(final World world) {
-		return queryHandler.getWorldName(world);
+		return worldNameUtility.getWorldName(world);
 	}
 
 	/**
