@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.entity.Entity;
 
 
-class EntityProcessor extends AbstractProcessor implements Processor {
+class EntityProcessor extends AbstractProcessor implements MacroProcessor {
 
 	public EntityProcessor(final QueryHandler queryHandler) {
 		super(queryHandler);

@@ -17,35 +17,34 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.macro.CompositeKey;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class ResultMap {
 
-	private final Map<CompositeKey, String> internalResultMap = new HashMap<>();
+	private final Map<String, String> internalResultMap = new HashMap<>();
 
 
-	void put(final CompositeKey compositeKey, final String value) {
-		internalResultMap.put(compositeKey, value);
+	void put(final String contextKey, final String value) {
+		internalResultMap.put(contextKey, value);
 	}
 
-	String get(final CompositeKey compositeKey) {
-		return internalResultMap.get(compositeKey);
+
+	String get(final String key) {
+		return internalResultMap.get(key);
 	}
 
 	public void putAll(final ResultMap resultMap) {
-		for (Map.Entry<CompositeKey, String> entry : resultMap.entrySet()) {
+		for (Map.Entry<String, String> entry : resultMap.entrySet()) {
 			internalResultMap.put(entry.getKey(), entry.getValue());
 		}
 	}
 
-	public boolean containsKey(final CompositeKey compositeKey) {
+	public boolean containsKey(final String compositeKey) {
 		return internalResultMap.containsKey(compositeKey);
 	}
 
-	public Iterable<? extends Map.Entry<CompositeKey, String>> entrySet() {
+	public Iterable<? extends Map.Entry<String, String>> entrySet() {
 		return internalResultMap.entrySet();
 	}
 

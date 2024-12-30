@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ItemStackProcessor extends AbstractProcessor implements Processor {
+public class ItemStackProcessor extends AbstractProcessor implements MacroProcessor {
 
 	public ItemStackProcessor(final QueryHandler queryHandler) {
 		super(queryHandler);

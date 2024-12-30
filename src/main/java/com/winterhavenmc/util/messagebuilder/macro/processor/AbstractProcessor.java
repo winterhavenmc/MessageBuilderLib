@@ -25,7 +25,7 @@ import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
  * as well as the UNKNOWN_VALUE string constant.
  * Methods used by all classes may be placed here in the future.
  */
-public abstract class AbstractProcessor implements Processor {
+public abstract class AbstractProcessor implements MacroProcessor {
 
 	final static String UNKNOWN_VALUE = "???";
 

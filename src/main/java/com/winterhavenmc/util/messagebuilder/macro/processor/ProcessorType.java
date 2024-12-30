@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -25,83 +25,91 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
+import javax.lang.model.type.NullType;
+
 
 public enum ProcessorType {
 
-	STRING() {
+	ENTITY(Entity.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new StringProcessor(languageHandler);
+		MacroProcessor create(final QueryHandler queryHandler) {
+			return new EntityProcessor(queryHandler);
 		}
 	},
-	ENTITY() {
+	COMMAND_SENDER(CommandSender.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new EntityProcessor(languageHandler);
+		MacroProcessor create(final QueryHandler queryHandler) {
+			return new CommandSenderProcessor(queryHandler);
 		}
 	},
-	COMMAND_SENDER() {
+	ITEM_STACK(ItemStack.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new CommandSenderProcessor(languageHandler);
+		MacroProcessor create(final QueryHandler queryHandler) {
+			return new ItemStackProcessor(queryHandler);
 		}
 	},
-	ITEM_STACK() {
+	LOCATION(Location.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new ItemStackProcessor(languageHandler);
+		MacroProcessor create(final QueryHandler queryHandler) {
+			return new LocationProcessor(queryHandler);
 		}
 	},
-	LOCATION() {
+	NUMBER(Number.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new LocationProcessor(languageHandler);
+		MacroProcessor create(final QueryHandler queryHandler) {
+			return new NumberProcessor(queryHandler);
 		}
 	},
-	NUMBER() {
+	OFFLINE_PLAYER(OfflinePlayer.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new NumberProcessor(languageHandler);
+		MacroProcessor create(QueryHandler queryHandler) {
+			return new OfflinePlayerProcessor(queryHandler);
 		}
 	},
-	OFFLINE_PLAYER() {
+	WORLD(World.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new OfflinePlayerProcessor(languageHandler);
+		MacroProcessor create(final QueryHandler queryHandler) {
+			return new WorldProcessor(queryHandler);
 		}
 	},
-	WORLD() {
+	STRING(String.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new WorldProcessor(languageHandler);
+		MacroProcessor create(final QueryHandler queryHandler) {
+			return new StringProcessor(queryHandler);
 		}
 	},
-	OBJECT() {
+	OBJECT(Object.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new ObjectProcessor(languageHandler);
+		MacroProcessor create(final QueryHandler queryHandler) {
+			return new ObjectProcessor(queryHandler);
 		}
 	},
-	NULL() {
+	NULL(NullType.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new NullProcessor(languageHandler);
+		MacroProcessor create(final QueryHandler queryHandler) {
+			return new NullProcessor(queryHandler);
 		}
 	};
 
-	abstract Processor create(final LanguageHandler languageHandler);
+	private final Class<?> expectedType;
 
 
-	public void register(final LanguageHandler languageHandler,
+	ProcessorType(Class<?> expectedType) {
+		this.expectedType = expectedType;
+	}
+
+	abstract MacroProcessor create(final QueryHandler queryHandler);
+
+
+	public void register(final QueryHandler queryHandler,
 	                     final ProcessorRegistry macroProcessorRegistry,
 	                     final ProcessorType type) {
-		macroProcessorRegistry.put(type, type.create(languageHandler));
+		macroProcessorRegistry.put(type, type.create(queryHandler));
 	}
 
 
 	public static ProcessorType matchType(final Object object) {
 		return switch (object) {
-			case String ignored -> STRING;
 			case Entity ignored -> ENTITY;
 			case CommandSender ignored -> COMMAND_SENDER;
 			case OfflinePlayer ignored -> OFFLINE_PLAYER;
@@ -109,9 +117,14 @@ public enum ProcessorType {
 			case Location ignored -> LOCATION;
 			case World ignored -> WORLD;
 			case Number ignored -> NUMBER;
+			case String ignored -> STRING;
 			case null -> NULL;
 			default -> OBJECT;
 		};
+	}
+
+	public Class<?> getExpectedType() {
+		return this.expectedType;
 	}
 
 }

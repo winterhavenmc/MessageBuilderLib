@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.messagebuilder.WorldNameUtility;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.NameSpace;
-import com.winterhavenmc.util.messagebuilder.macro.NameSpacedKey;
+import com.winterhavenmc.util.messagebuilder.macro.NameSpaceKey;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 import org.bukkit.Bukkit;
@@ -72,11 +72,11 @@ public class LocationProcessor extends AbstractProcessor {
 			}
 
 			// create new map entries for location string and separate fields
-			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO), locationString);
-			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO) + "_WORLD", locationWorld);
-			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO) + "_X", locationX);
-			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO) + "_Y", locationY);
-			resultMap.put(NameSpacedKey.create(resultKey, NameSpace.Category.MACRO) + "_Z", locationY);
+			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO), locationString);
+			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO) + "_WORLD", locationWorld);
+			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO) + "_X", locationX);
+			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO) + "_Y", locationY);
+			resultMap.put(NameSpaceKey.create(resultKey, NameSpace.Category.MACRO) + "_Z", locationY);
 		}
 		return resultMap;
 	}
