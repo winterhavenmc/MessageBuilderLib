@@ -65,7 +65,7 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContextTest() {
 		String stringKey = "SOME_NAME";
-		String key = NamespaceKey.create(Macro.OWNER, Namespace.Category.MACRO);
+		String key = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
 		MacroProcessor macroProcessor = new StringProcessor(mockQueryHandler);
 		ContextMap contextMap = new ContextMap();
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, stringKey);
@@ -77,7 +77,7 @@ class OfflinePlayerProcessorTest {
 		//TODO: pretty sure this is going to throw IllegalArgumentException
 		String keyPath = "SOME_NAME";
 		MacroProcessor macroProcessor = new StringProcessor(mockQueryHandler);
-		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Category.MACRO);
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
 		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, null, keyPath);
 		assertFalse(resultMap.containsKey(namespacedKey));
 	}
