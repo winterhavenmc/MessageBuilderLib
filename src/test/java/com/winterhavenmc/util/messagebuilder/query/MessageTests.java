@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.mocks.MockPlugin;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import static com.winterhavenmc.util.messagebuilder.mocks.MockPlugin.getDataFolder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -46,47 +45,25 @@ class MessageTests {
 	Plugin plugin;
 	Player player;
 	World world;
-	FileConfiguration configuration;
-
-	// real uuid for player
-	private final static UUID playerUid = new UUID(0, 1);
-
-//	// real location
-//	Location location = new Location(world, 0.0, 0.0, 0.0);
-//
-//	// real uuid for world
-//	private final static UUID worldUid = new UUID(1, 1);
 
 	MessageBuilder<MessageId, Macro> messageBuilder;
 
-
-	@BeforeAll
-	public static void preSetUp() {
-		System.out.println("Temporary data directory exists: " + getDataFolder().isDirectory());
-	}
 
 	@BeforeEach
 	public void setUp() throws IOException {
 
 		// create mocks
-		plugin = mock(Plugin.class, "mockPlugin");
-		player = mock(Player.class, "mockPlayer");
-		world = mock(World.class, "mockWorld");
-		configuration = mock(FileConfiguration.class, "MockConfiguration");
+		plugin = MockUtility.createMockPlugin();
 
-		// return real logger for mock plugin
-		when(plugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+		// create mock world
+		world = MockUtility.createMockWorld("mock_world", new UUID(11, 11));
 
-		// return temporary directory for mock plugin data directory
-		when(plugin.getDataFolder()).thenReturn(MockPlugin.getDataFolder());
-		when(plugin.getConfig()).thenReturn(configuration);
-
-
-		when(player.getName()).thenReturn("player1");
-		when(player.getUniqueId()).thenReturn(playerUid);
+		// create mock player
+		player = MockUtility.createMockPlayer("Player One", new UUID(22,23));
 		when(player.getWorld()).thenReturn(world);
 		when(player.getLocation()).thenReturn(new Location(world, 3.0, 4.0, 5.0));
 
+		// create real instance of MessageBuilder
 		messageBuilder = new MessageBuilder<>(plugin);
 	}
 
