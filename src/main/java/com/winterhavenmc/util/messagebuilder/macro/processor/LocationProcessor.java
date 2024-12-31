@@ -100,10 +100,10 @@ public class LocationProcessor extends AbstractProcessor {
 	 */
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
-		if (key == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_NAMESPACED_KEY.getMessage()); }
-		if (key.isBlank()) { throw new IllegalArgumentException((Error.PARAMETER_EMPTY_NAMESPACED_KEY.getMessage())); }
-		if (contextMap == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_CONTEXT_MAP.getMessage()); }
-		if (value == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_VALUE.name()); }
+		if (key == null) { throw new IllegalArgumentException(Error.PARAMETER_NAMESPACED_KEY_NULL.getMessage()); }
+		if (key.isBlank()) { throw new IllegalArgumentException((Error.PARAMETER_NAMESPACED_KEY_EMPTY.getMessage())); }
+		if (contextMap == null) { throw new IllegalArgumentException(Error.PARAMETER_CONTEXT_MAP_NULL.getMessage()); }
+		if (value == null) { throw new IllegalArgumentException(Error.PARAMETER_VALUE_NULL.name()); }
 
 		// get server plugin manager
 //		PluginManager pluginManager = Bukkit.getPluginManager();
