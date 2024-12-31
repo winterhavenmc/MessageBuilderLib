@@ -35,6 +35,7 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 
 	// the directory name within a plugin data directory where the language yaml files are installed
 	private final static String LANGUAGE_FOLDER = "language";
+	private final static String CONFIG_LOCALE_KEY = "locale";
 	private final static String CONFIG_LANGUAGE_KEY = "language";
 
 	// reference to plugin main class
@@ -48,6 +49,19 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 */
 	public YamlLanguageFileLoader(final Plugin plugin) {
 		this.plugin = plugin;
+		new YamlLanguageFileInstaller(plugin).install();
+	}
+
+
+	/**
+	 * Class constructor
+	 *
+	 * @param plugin reference to plugin main class
+	 * @param installer a language
+	 */
+	public YamlLanguageFileLoader(final Plugin plugin, final LanguageFileInstaller installer) {
+		this.plugin = plugin;
+		installer.install();
 	}
 
 
