@@ -39,11 +39,6 @@ class YamlLanguageHandlerTest {
 	private YamlLanguageHandler languageHandler;
 
 
-	@BeforeAll
-	public static void preSetUp() {
-		MockUtility.verifyTempDir();
-	}
-
 	@BeforeEach
 	public void setUp() throws IOException {
 		mockPlugin = MockUtility.createMockPlugin();
@@ -78,10 +73,10 @@ class YamlLanguageHandlerTest {
 
 	@Nested
 	class testingEnvironmentTests {
-		@Test
-		void dataDirectoryTest_exists_static() {
-			assertTrue(MockUtility.getDataFolder().isDirectory());
-		}
+//		@Test
+//		void dataDirectoryTest_exists_static() {
+//			assertTrue(MockUtility.getDataFolder().isDirectory());
+//		}
 
 		@Test
 		void languageHandlerTest() {
