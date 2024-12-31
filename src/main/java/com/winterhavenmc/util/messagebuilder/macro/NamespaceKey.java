@@ -27,7 +27,7 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
 /**
  * This is a class that implements name-spaced String keys for use in the ContextMap and the ResultMap.
  * <p>
- * This key is composed of a keyDomain, which includes a mandatory category, typically derived from the
+ * This key is composed of a keyDomain, which includes a mandatory domain, typically derived from the
  * name of an enum constant, and any number of optional subcategories, and a keyPath, which is a dot-delimited
  * string representing a full key path from a configuration object.
  * <p>
@@ -35,13 +35,13 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
  * which are referred to as the keyDomain and the keyPath respectively. The key path is a dot delimited
  * String of path components, as returned from a yaml configuration section. They are fully name spaced
  * by their nature of being valid yaml. The left side of the key, or keyDomain, is composed of a colon-delimited
- * main Category, and zero or more subcategories, which are strings passed in as var args in the static create
+ * main Domain, and zero or more subcategories, which are strings passed in as var args in the static create
  * method. Finally, the keyDomain and the keyPath are themselves separated with a colon, unless one or the other
  * side of the key is not present. This should allow for sufficient name-spacing during the transition and moving
  * forward.
  * <p>
  * Key Domain: The portion of the key to the left of the | delimiter.
- * Includes the category and optional subcategories, separated by :.
+ * Includes the domain and optional subcategories, separated by :.
  * Represents the logical or hierarchical "ownership" of the Key Path.
  * <p>
  * Key Path: The portion of the key to the right of the | delimiter.
@@ -50,8 +50,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
  * Note: If the source of the value represented by this key is a yaml configuration file,
  * the keyPath SHALL be identical to the yaml key path used to retrieve the value.
  *<pre>
- * rule: all NameSpaceKeys MUST have at least a Category as the root of their key domain.
- *       If you do not choose a category, one will be chosen for you.
+ * rule: all NameSpaceKeys MUST have at least a Domain as the root of their key domain.
+ *       If you do not choose a domain, one will be chosen for you.
  *
  * rule: all NameSpaceKeys MUST have some token in the key path portion of the key.
  * </pre>
@@ -63,8 +63,8 @@ public class NamespaceKey implements ContextKey {
 	private final static String KEY_PATH_DELIMITER = ".";
 
 	String keyPath;
-	Namespace.Category category;
-	List<String> subcategories;
+	Namespace.Domain domain;
+	List<String> subdomains;
 
 
 	/**
@@ -74,11 +74,11 @@ public class NamespaceKey implements ContextKey {
 	 * The ProcessorType will be assigned the OBJECT constant
 	 *
 	 * @param keyPath  the String key or macroName to be used as the fully name-spaced key
-	 * @param category  the category that forms the root of the keyDomain
+	 * @param domain  the domain that forms the root of the keyDomain
 	 */
-	NamespaceKey(final String keyPath, Namespace.Category category) {
-		this.category = category;
-		this.subcategories = new ArrayList<>();
+	NamespaceKey(final String keyPath, Namespace.Domain domain) {
+		this.domain = domain;
+		this.subdomains = new ArrayList<>();
 		this.keyPath = keyPath;
 	}
 
@@ -90,15 +90,15 @@ public class NamespaceKey implements ContextKey {
 
 
 	public String getKeyDomain() {
-		return String.join(KEY_DOMAIN_DELIMITER, category.name(), String.join(KEY_DOMAIN_DELIMITER, subcategories));
+		return String.join(KEY_DOMAIN_DELIMITER, domain.name(), String.join(KEY_DOMAIN_DELIMITER, subdomains));
 	}
 
-	public Namespace.Category getCategory() {
-		return category;
+	public Namespace.Domain getDomain() {
+		return domain;
 	}
 
-	public List<String> getSubcategories() {
-		return subcategories;
+	public List<String> getSubdomains() {
+		return subdomains;
 	}
 
 	public String getKeyPath() {
@@ -113,30 +113,30 @@ public class NamespaceKey implements ContextKey {
 
 	/**
 	 * Static method to generate a key with a Macro constant name as the keyPath
-	 * and the Category constant MACRO as the keyDomain.
+	 * and the Domain constant MACRO as the keyDomain.
 	 *
 	 * @param macro      the Macro constant whose name will be used as the keyPath (required).
 	 * @return A proper namespaced String key.
 	 */
 	public static <Macro> String create(final Macro macro) {
 		if (macro == null) { throw new IllegalArgumentException(PARAMETER_NULL_MACRO.getMessage()); }
-		return Namespace.Category.MACRO + KEY_BOUNDARY_DELIMITER + macro;
+		return Namespace.Domain.MACRO + KEY_BOUNDARY_DELIMITER + macro;
 	}
 
 
 	/**
 	 * Static method to generate a key with a Macro constant name as the keyPath
-	 * and a Category constant name as the keyDomain.
+	 * and a Domain constant name as the keyDomain.
 	 *
 	 * @param macro      the Macro constant whose name will be used as the keyPath (required).
-	 * @param category   a category to use as the keyDomain (required).
+	 * @param domain   a domain to use as the keyDomain (required).
 	 * @return A proper namespaced String key.
 	 */
-	public static <Macro> String create(final Macro macro, final Namespace.Category category) {
+	public static <Macro> String create(final Macro macro, final Namespace.Domain domain) {
 		if (macro == null) { throw new IllegalArgumentException(PARAMETER_NULL_MACRO.getMessage()); }
-		if (category == null) { throw new IllegalArgumentException(PARAMETER_NULL_CATEGORY.getMessage()); }
+		if (domain == null) { throw new IllegalArgumentException(PARAMETER_NULL_CATEGORY.getMessage()); }
 
-		return category.name() + KEY_BOUNDARY_DELIMITER + macro;
+		return domain.name() + KEY_BOUNDARY_DELIMITER + macro;
 	}
 
 
@@ -144,16 +144,16 @@ public class NamespaceKey implements ContextKey {
 	 * Static method to generate a nameSpacedKey with optional subcategories.
 	 *
 	 * @param keyPath       The keyPath portion of the new key (required).
-	 * @param category      The top-level category that forms the root of the keyDomain (required).
+	 * @param domain      The top-level domain that forms the root of the keyDomain (required).
 	 * @param subcategories Optional subcategories to be added to the keyDomain.
 	 * @return A fully-formed namespaced String key.
 	 */
-	public static String create(String keyPath, Namespace.Category category, String... subcategories) {
+	public static String create(String keyPath, Namespace.Domain domain, String... subcategories) {
 		if (keyPath == null) { throw new IllegalArgumentException(PARAMETER_NULL_KEY_PATH.getMessage()); }
 		if (keyPath.isEmpty()) { throw new IllegalArgumentException(PARAMETER_EMPTY_KEY_PATH.getMessage()); }
-		if (category == null) { throw new IllegalArgumentException(PARAMETER_NULL_CATEGORY.getMessage()); }
+		if (domain == null) { throw new IllegalArgumentException(PARAMETER_NULL_CATEGORY.getMessage()); }
 
-		StringBuilder fullKey = new StringBuilder(category.name());
+		StringBuilder fullKey = new StringBuilder(domain.name());
 		for (String subcategory : subcategories) {
 			if (subcategory == null || subcategory.isEmpty()) {
 				throw new IllegalArgumentException(PARAMETER_NULL_OR_EMPTY_SUBCATEGORY.getMessage());
@@ -172,7 +172,7 @@ public class NamespaceKey implements ContextKey {
 	 * A keyDomain must contain at least one string of alphanumeric characters, and optionally may contain
 	 * one or more additional alphanumeric strings, delimited by a colon (:)
 	 * <p>
-	 * Note: Because category is derived from an enum constant name, it should be formatted in upper snake case,
+	 * Note: Because domain is derived from an enum constant name, it should be formatted in upper snake case,
 	 *       to adhere to the Java naming convention for constants. The subcategories are unrestricted in their
 	 *       case, but obviously must avoid using a colon character to avoid confusion with the domain delimiter.
 	 *
