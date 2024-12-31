@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.query;
 
-import com.winterhavenmc.util.messagebuilder.mocks.MockPlugin;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -43,7 +43,7 @@ class ItemRecordTests {
 
 		// create a real configuration object from a resource
 		try {
-			fileConfiguration = YamlConfiguration.loadConfiguration(MockPlugin.getResourceFile("language/en-US.yml"));
+			fileConfiguration = YamlConfiguration.loadConfiguration(MockUtility.getResourceFile("language/en-US.yml"));
 		} catch (IllegalArgumentException | URISyntaxException e) {
 			System.out.println("a problem was encountered while trying to load the test configuration from resource");
 		}
