@@ -21,21 +21,26 @@ package com.winterhavenmc.util.messagebuilder.util;
  * Enum of errors
  */
 public enum Error {
-	PARAMETER_NULL_ITEM_KEY("The itemKey parameter was null."),
-	PARAMETER_NULL_MESSAGE_ID("The messageId parameter was null."),
-	PARAMETER_NULL_CONFIGURATION("The configuration parameter was null."),
-	PARAMETER_NULL_PLUGIN("The plugin parameter was null."),
-	PARAMETER_NULL_QUERY_HANDLER("The queryHandler parameter was null."),
-	PARAMETER_NULL_KEY_PATH("The keyPath parameter cannot be null."),
-	PARAMETER_EMPTY_KEY_PATH("The keyPath parameter cannot be empty."),
-	PARAMETER_NULL_DOMAIN("Namespace.Domain cannot be null or empty."),
-	PARAMETER_NULL_OR_EMPTY_SUBDOMAIN("Subdomains cannot be null or empty."),
-	PARAMETER_NULL_COMPOSITE_KEY("compositeKey cannot be null."),
-	PARAMETER_NULL_MACRO("macro cannot be null."),
-	PARAMETER_NULL_NAMESPACED_KEY("The key parameter cannot be null."),
-	PARAMETER_EMPTY_NAMESPACED_KEY("The key parameter cannot be empty."),
-	PARAMETER_NULL_CONTEXT_MAP("The contextMap parameter was null."),
-	PARAMETER_NULL_VALUE("the value parameter was null.");
+	PARAMETER_CONFIGURATION_NULL("The configuration parameter was null."),
+	PARAMETER_CONTEXT_MAP_NULL("The contextMap parameter was null."),
+	PARAMETER_DIRECTORY_PATH_NULL("Target directory path cannot be null."),
+	PARAMETER_DOMAIN_NULL("The domain parameter cannot be null."),
+	PARAMETER_ITEM_KEY_NULL("The itemKey parameter was null."),
+	PARAMETER_KEY_PATH_EMPTY("The keyPath parameter cannot be empty."),
+	PARAMETER_KEY_PATH_NULL("The keyPath parameter cannot be null."),
+	PARAMETER_MACRO_NULL("macro cannot be null."),
+	PARAMETER_MESSAGE_ID_NULL("The messageId parameter was null."),
+	PARAMETER_NAMESPACED_KEY_EMPTY("The key parameter cannot be empty."),
+	PARAMETER_NAMESPACED_KEY_NULL("The key parameter cannot be null."),
+	PARAMETER_PLUGIN_NULL("The plugin parameter was null."),
+	PARAMETER_QUERY_HANDLER_NULL("The queryHandler parameter was null."),
+	PARAMETER_RESOURCE_NAME_EMPTY("Resource name cannot be empty."),
+	PARAMETER_SUBDOMAIN_ELEMENT_EMPTY("Subdomains cannot be empty."),
+	PARAMETER_SUBDOMAIN_ELEMENT_NULL("Subdomains cannot be null."),
+	PARAMETER_SUBDOMAINS_NULL("Subdomains array cannot be null."),
+	PARAMETER_RESOURCE_NAME_NULL("Resource name cannot be null."),
+	PARAMETER_VALUE_NULL("the value parameter was null."),
+	;
 
 	private final String messageString;
 
