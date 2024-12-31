@@ -49,7 +49,7 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
  * <p>
  * Note: If the source of the value represented by this key is a yaml configuration file,
  * the keyPath SHALL be identical to the yaml key path used to retrieve the value.
- *<pre>
+ * <pre>
  * rule: all NameSpaceKeys MUST have at least a Domain as the root of their key domain.
  *       If you do not choose a domain, one will be chosen for you.
  *
@@ -73,7 +73,7 @@ public class NamespaceKey implements ContextKey {
 	 * This one parameter constructor is provided as a fallback for when ProcessorType is unavailable.
 	 * The ProcessorType will be assigned the OBJECT constant
 	 *
-	 * @param keyPath  the String key or macroName to be used as the fully name-spaced key
+	 * @param keyPath the String key or macroName to be used as the fully name-spaced key
 	 * @param domain  the domain that forms the root of the keyDomain
 	 */
 	NamespaceKey(final String keyPath, Namespace.Domain domain) {
@@ -115,11 +115,12 @@ public class NamespaceKey implements ContextKey {
 	 * Static method to generate a key with a Macro constant name as the keyPath
 	 * and the Domain constant MACRO as the keyDomain.
 	 *
-	 * @param macro      the Macro constant whose name will be used as the keyPath (required).
+	 * @param macro the Macro constant whose name will be used as the keyPath (required).
 	 * @return A proper namespaced String key.
 	 */
 	public static <Macro> String create(final Macro macro) {
 		if (macro == null) { throw new IllegalArgumentException(PARAMETER_NULL_MACRO.getMessage()); }
+
 		return Namespace.Domain.MACRO + KEY_BOUNDARY_DELIMITER + macro;
 	}
 
@@ -128,13 +129,13 @@ public class NamespaceKey implements ContextKey {
 	 * Static method to generate a key with a Macro constant name as the keyPath
 	 * and a Domain constant name as the keyDomain.
 	 *
-	 * @param macro      the Macro constant whose name will be used as the keyPath (required).
-	 * @param domain   a domain to use as the keyDomain (required).
+	 * @param macro  the Macro constant whose name will be used as the keyPath (required).
+	 * @param domain a domain to use as the keyDomain (required).
 	 * @return A proper namespaced String key.
 	 */
 	public static <Macro> String create(final Macro macro, final Namespace.Domain domain) {
 		if (macro == null) { throw new IllegalArgumentException(PARAMETER_NULL_MACRO.getMessage()); }
-		if (domain == null) { throw new IllegalArgumentException(PARAMETER_NULL_CATEGORY.getMessage()); }
+		if (domain == null) { throw new IllegalArgumentException(PARAMETER_NULL_DOMAIN.getMessage()); }
 
 		return domain.name() + KEY_BOUNDARY_DELIMITER + macro;
 	}
@@ -144,19 +145,19 @@ public class NamespaceKey implements ContextKey {
 	 * Static method to generate a nameSpacedKey with optional subcategories.
 	 *
 	 * @param keyPath       The keyPath portion of the new key (required).
-	 * @param domain      The top-level domain that forms the root of the keyDomain (required).
+	 * @param domain        The top-level domain that forms the root of the keyDomain (required).
 	 * @param subcategories Optional subcategories to be added to the keyDomain.
 	 * @return A fully-formed namespaced String key.
 	 */
 	public static String create(String keyPath, Namespace.Domain domain, String... subcategories) {
 		if (keyPath == null) { throw new IllegalArgumentException(PARAMETER_NULL_KEY_PATH.getMessage()); }
 		if (keyPath.isEmpty()) { throw new IllegalArgumentException(PARAMETER_EMPTY_KEY_PATH.getMessage()); }
-		if (domain == null) { throw new IllegalArgumentException(PARAMETER_NULL_CATEGORY.getMessage()); }
+		if (domain == null) { throw new IllegalArgumentException(PARAMETER_NULL_DOMAIN.getMessage()); }
 
 		StringBuilder fullKey = new StringBuilder(domain.name());
 		for (String subcategory : subcategories) {
 			if (subcategory == null || subcategory.isEmpty()) {
-				throw new IllegalArgumentException(PARAMETER_NULL_OR_EMPTY_SUBCATEGORY.getMessage());
+				throw new IllegalArgumentException(PARAMETER_NULL_OR_EMPTY_SUBDOMAIN.getMessage());
 			}
 			fullKey.append(KEY_DOMAIN_DELIMITER).append(subcategory);
 		}
@@ -173,8 +174,8 @@ public class NamespaceKey implements ContextKey {
 	 * one or more additional alphanumeric strings, delimited by a colon (:)
 	 * <p>
 	 * Note: Because domain is derived from an enum constant name, it should be formatted in upper snake case,
-	 *       to adhere to the Java naming convention for constants. The subcategories are unrestricted in their
-	 *       case, but obviously must avoid using a colon character to avoid confusion with the domain delimiter.
+	 * to adhere to the Java naming convention for constants. The subcategories are unrestricted in their
+	 * case, but obviously must avoid using a colon character to avoid confusion with the domain delimiter.
 	 *
 	 * @param keyDomain the keyDomain to validate
 	 * @return {@code true} if the keyDomain conforms to the naming convention, {@code false} if it does not.
@@ -217,6 +218,5 @@ public class NamespaceKey implements ContextKey {
 			System.out.println("Warning: Key path '" + keyPath + "' does not conform to the allowed naming convention.");
 		}
 	}
-
 
 }
