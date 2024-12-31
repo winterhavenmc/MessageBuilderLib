@@ -90,7 +90,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		//TODO: if value is an optional, get unwrapped value. to be reimplemented later. see commented code below
 
 		// create name spaced key
-		String key = NamespaceKey.create(macro.toString(), Namespace.Category.MACRO);
+		String key = NamespaceKey.create(macro.toString(), Namespace.Domain.MACRO);
 
 		// get macro expected type from macro enum method
 		Class<?> expectedType = macro.getAssociatedType();
