@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2022-2024 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,20 +15,18 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.languages;
 
-import com.winterhavenmc.util.messagebuilder.languages.LanguageFileLoader;
-import com.winterhavenmc.util.messagebuilder.util.MockingUtilities;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
-import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.util.Locale;
 
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -36,35 +34,30 @@ import static org.mockito.Mockito.*;
 class YamlLanguageHandlerTest {
 
 	private Plugin mockPlugin;
-	private LanguageFileLoader mocklanguageFileLoader;
+	private YamlLanguageFileLoader mockLanguageFileLoader;
 
 	private YamlLanguageHandler languageHandler;
 
 
 	@BeforeAll
 	public static void preSetUp() {
-		MockingUtilities.verifyTempDir();
+		MockUtility.verifyTempDir();
 	}
 
 	@BeforeEach
 	public void setUp() throws IOException {
-
-		// create mock plugin
-		mockPlugin = MockingUtilities.createMockPlugin();
-
-		// create mock file loader
-		mocklanguageFileLoader = mock(LanguageFileLoader.class, "MockLanguageFileLoader");
-		when(mocklanguageFileLoader.getConfiguration()).thenReturn(MockingUtilities.loadConfigurationFromResource("language/en-US.yml"));
+		mockPlugin = MockUtility.createMockPlugin();
+		mockLanguageFileLoader = MockUtility.createMockLanguageFileLoader();
 
 		// create a real language handler
-		languageHandler = new YamlLanguageHandler(mockPlugin, mocklanguageFileLoader);
+		languageHandler = new YamlLanguageHandler(mockPlugin, mockLanguageFileLoader);
 	}
 
 
 	@AfterEach
 	public void tearDown() {
 		mockPlugin = null;
-		mocklanguageFileLoader = null;
+		mockLanguageFileLoader = null;
 		languageHandler = null;
 	}
 
@@ -87,7 +80,7 @@ class YamlLanguageHandlerTest {
 	class testingEnvironmentTests {
 		@Test
 		void dataDirectoryTest_exists_static() {
-			assertTrue(MockingUtilities.getDataFolder().isDirectory());
+			assertTrue(MockUtility.getDataFolder().isDirectory());
 		}
 
 		@Test
@@ -121,7 +114,7 @@ class YamlLanguageHandlerTest {
 
 		@Test
 		void constructorTest_three_parameter() {
-			YamlLanguageHandler languageHandler = new YamlLanguageHandler(mockPlugin, mocklanguageFileLoader);
+			YamlLanguageHandler languageHandler = new YamlLanguageHandler(mockPlugin, mockLanguageFileLoader);
 			assertNotNull(languageHandler);
 			assertTrue(languageHandler.isPluginSet());
 			assertTrue(languageHandler.isFileLoaderSet());
@@ -142,7 +135,7 @@ class YamlLanguageHandlerTest {
 		void setterTest_fileLoader() {
 			YamlLanguageHandler yamlLanguageHandler = new YamlLanguageHandler();
 			assertFalse(yamlLanguageHandler.isFileLoaderSet(), "the fileLoader field is not null.");
-			yamlLanguageHandler.setFileLoader(mocklanguageFileLoader);
+			yamlLanguageHandler.setFileLoader(mockLanguageFileLoader);
 			assertTrue(yamlLanguageHandler.isFileLoaderSet(), "the fileLoader field is null.");
 		}
 	}
@@ -155,17 +148,24 @@ class YamlLanguageHandlerTest {
 	@Test
 	void getConfigLanguageTest() {
 		assertEquals("en-US", languageHandler.getConfigLanguage());
+		verify(mockPlugin, atLeastOnce()).getConfig();
 	}
 
 	@Test
 	void reloadTest() {
-		Configuration configuration = languageHandler.getConfiguration();
-		assertNotNull(configuration);
-		configuration = null;
-		assertNull(configuration);
 		languageHandler.reload();
-		configuration = languageHandler.getConfiguration();
-		assertNotNull(configuration);
+		assertNotNull(languageHandler.getConfiguration());
+		verify(mockLanguageFileLoader, atLeastOnce()).reload();
+	}
+
+	@Test
+	void reloadTest_fail() {
+		when(mockLanguageFileLoader.getConfiguration()).thenReturn(null);
+		languageHandler.reload();
+		//TODO: test for logger output here
+		// match string "WARNING: The configuration could not be reloaded. Keeping existing configuration."
+		assertNotNull(languageHandler.getConfiguration());
+		verify(mockLanguageFileLoader, atLeastOnce()).getConfiguration();
 	}
 
 }
