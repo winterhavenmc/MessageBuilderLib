@@ -19,8 +19,8 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.macro.Namespace;
 import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 import org.junit.jupiter.api.*;
@@ -55,7 +55,7 @@ class ObjectProcessorTest {
 		Integer number = 42;
 
 		ContextMap contextMap = new ContextMap();
-		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Category.MACRO);
+		String nameSpacedKey = NamespaceKey.create(Macro.DURATION);
 		contextMap.put(nameSpacedKey, ContextContainer.of(number, ProcessorType.NUMBER));
 
 		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, number);
