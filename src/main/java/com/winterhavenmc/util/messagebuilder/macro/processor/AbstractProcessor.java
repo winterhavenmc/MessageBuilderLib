@@ -38,7 +38,7 @@ public abstract class AbstractProcessor implements MacroProcessor {
 	 * @param queryHandler the queryHandler used by the classes that extend this abstract class
 	 */
 	AbstractProcessor(final QueryHandler queryHandler) {
-		if (queryHandler == null) { throw new IllegalArgumentException(Error.PARAMETER_NULL_QUERY_HANDLER.getMessage()); }
+		if (queryHandler == null) { throw new IllegalArgumentException(Error.PARAMETER_QUERY_HANDLER_NULL.getMessage()); }
 		this.queryHandler = queryHandler;
 	}
 
