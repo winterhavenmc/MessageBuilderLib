@@ -21,6 +21,8 @@ import com.winterhavenmc.util.messagebuilder.languages.*;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Locale;
+
 
 /**
  * provides common methods for the installation and management of
@@ -28,14 +30,17 @@ import org.bukkit.plugin.Plugin;
  */
 public class YamlLanguageHandler implements LanguageHandler {
 
+	// set default locale
+	private Locale locale;
+
 	// string constant for language key in plugin config file
+	private final static String CONFIG_LOCALE_KEY = "locale";
 	private final static String CONFIG_LANGUAGE_KEY = "language";
 
 	// reference to main plugin class
 	private Plugin plugin;
 
-	// language file installer and loader
-	private LanguageFileInstaller languageFileInstaller;
+	// language file loader
 	private LanguageFileLoader languageFileLoader;
 
 	// configuration object for language file
@@ -48,9 +53,9 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 */
 	public YamlLanguageHandler() {
 		this.plugin = null;
-		this.languageFileInstaller = null;
 		this.languageFileLoader = null;
 		this.configuration = null;
+		this.locale = null;
 	}
 
 
@@ -59,16 +64,16 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 * all fields are provided as parameters
 	 *
 	 * @param plugin                 the plugin main class
-	 * @param languageFileInstaller  the language file installer to be used by the language handler
 	 * @param languageFileLoader     the language file loader to be used by the language handler
 	 */
 	public YamlLanguageHandler(final Plugin plugin,
-							   final LanguageFileInstaller languageFileInstaller,
 	                           final LanguageFileLoader languageFileLoader) {
+
+		// set configured Locale here, or default to en-US if config key not found
+		locale = Locale.forLanguageTag(plugin.getConfig().getString(CONFIG_LOCALE_KEY, "en-US"));
 
 		// reference to plugin main class
 		this.plugin = plugin;
-		this.languageFileInstaller = languageFileInstaller;
 		this.languageFileLoader = languageFileLoader;
 
 		// load message configuration from file
@@ -81,14 +86,6 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 */
 	void setPlugin(final Plugin plugin) {
 		this.plugin = plugin;
-	}
-
-	/**
-	 * setter for fileInstaller
-	 * @param languageFileInstaller a new FileLoader to replace the existing fileLoader
-	 */
-	void setFileInstaller(final LanguageFileInstaller languageFileInstaller) {
-		this.languageFileInstaller = languageFileInstaller;
 	}
 
 	/**
@@ -108,8 +105,24 @@ public class YamlLanguageHandler implements LanguageHandler {
 		return this.languageFileLoader != null;
 	}
 
-	boolean isFileInstallerSet() {
-		return this.languageFileInstaller != null;
+
+	/**
+	 * Get the current locale
+	 *
+	 * @return the current locale
+	 */
+	public Locale getLocale() {
+		return this.locale;
+	}
+
+
+	/**
+	 * Set the locale
+	 *
+	 * @param locale the locale to set
+	 */
+	public void setLocale(final Locale locale) {
+		this.locale = locale;
 	}
 
 
@@ -146,8 +159,7 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public void reload() {
-		new YamlLanguageFileInstaller(plugin).install();
-		configuration = new YamlLanguageFileLoader(plugin).getConfiguration();
+		this.configuration = new YamlLanguageFileLoader(plugin, new YamlLanguageFileInstaller(plugin)).getConfiguration();
 	}
 
 }
