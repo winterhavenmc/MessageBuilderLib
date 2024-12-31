@@ -17,55 +17,41 @@
 
 package com.winterhavenmc.util.messagebuilder.languages;
 
-import com.winterhavenmc.util.messagebuilder.mocks.MockPlugin;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Collection;
-import java.util.logging.Logger;
+import java.util.Comparator;
 
-import static com.winterhavenmc.util.messagebuilder.mocks.MockPlugin.*;
+import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 //TODO: Hit that one last branch/line with test coverage to score 100!
 public class YamlLanguageFileInstallerTests {
 
-	private Plugin plugin;
+	private Plugin mockPlugin;
+	private final static File dataDir = MockUtility.getDataDir();
 
 	private YamlLanguageFileInstaller yamlLanguageFileInstaller;
 	private Collection<String> filenames;
 
 
-	@BeforeAll
-	public static void preSetUp() {
-		MockPlugin.verifyTempDir();
-	}
-
 	@BeforeEach
 	public void setUp() throws IOException {
 
 		// create new mock plugin
-		plugin = mock(Plugin.class, "MockPlugin");
+		mockPlugin = MockUtility.createMockPlugin();
 
-		// return temporary directory for mock plugin data directory
-		when(plugin.getDataFolder()).thenReturn(MockPlugin.getDataFolder());
-
-		// return real logger for mock plugin
-		when(plugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-
-		// return real file input streams for mock plugin resources
-		doAnswer(invocation -> getResourceStream(invocation.getArgument(0)))
-				.when(plugin).getResource(anyString());
-
-		// install resource when saveResource is called
-		doAnswer(invocation -> installResource(invocation.getArgument(0)))
-				.when(plugin).saveResource(anyString(), eq(false));
-
-		// create instance of installer
-		yamlLanguageFileInstaller = new YamlLanguageFileInstaller(plugin);
+		// create real instance of installer
+		yamlLanguageFileInstaller = new YamlLanguageFileInstaller(mockPlugin);
 		yamlLanguageFileInstaller.install();
 
 		// get filenames from installer
@@ -74,16 +60,98 @@ public class YamlLanguageFileInstallerTests {
 
 	@AfterEach
 	public void tearDown() {
-		plugin = null;
+		mockPlugin = null;
 		yamlLanguageFileInstaller = null;
 		filenames = null;
 	}
 
 
+	@Nested
+	class MockingSetupTests {
+		@Test
+		void testResourceStream() {
+			System.out.println("testResourceStream test starting...");
+			InputStream resourceStream = MockUtility.getResourceStream("language/en-US.yml");
+			assertNotNull(resourceStream, "Resource stream should not be null");
+		}
+
+
+		@Test
+		void testSaveResource_MocksCorrectly() throws Exception {
+			// Arrange
+			String resourceName = "language/en-US.yml";
+			Path targetFilePath = MockUtility.getDataDir().toPath().resolve(resourceName);
+
+			// Ensure parent directories exist
+			Files.createDirectories(targetFilePath.getParent());
+
+			// Simulate saving the resource by copying it from the test resources
+			try (InputStream resourceStream = MockUtility.getResourceStream(resourceName)) {
+				if (resourceStream == null) {
+					throw new IOException("Resource '" + resourceName + "' not found in the classpath.");
+				}
+				Files.copy(resourceStream, targetFilePath, StandardCopyOption.REPLACE_EXISTING);
+			}
+
+			// Act
+			mockPlugin.saveResource("language/en-US.yml", false);
+
+			// Assert
+			File savedFile = new File(MockUtility.getDataDir(), "language/en-US.yml");
+			assertTrue(savedFile.exists(), "The resource file should be saved to the data directory.");
+		}
+
+	}
+	@Test
+	void testInstallResourceToTempDir() throws IOException {
+		// Act: Install a resource into the temporary data directory
+		boolean result = MockUtility.installResource("language/en-US.yml");
+
+		// Assert: Verify the file exists
+		assertTrue(result);
+		File installedFile = new File(MockUtility.getDataDir(), "language/en-US.yml");
+		assertTrue(installedFile.exists());
+	}
+
+	@Test
+	void testInstallResourceToCustomDir() throws IOException {
+		// Arrange: Create a custom temporary directory
+		Path customDir = Files.createTempDirectory("custom-test-dir");
+
+		// Act: Install a resource into the custom directory
+		boolean result = MockUtility.installResource("language/en-US.yml", customDir);
+
+		// Assert: Verify the file exists
+		assertTrue(result);
+		assertTrue(Files.exists(customDir.resolve("language/en-US.yml")));
+
+		// Cleanup
+		Files.walk(customDir).sorted(Comparator.reverseOrder()).forEach(path -> path.toFile().delete());
+	}
+
+
 	@Test
 	void verifyLanguageDirectoryTest_exists() {
-		assertTrue(new File(getDataFolder(), "language").isDirectory(),
+		assertTrue(new File(getDataDir(), "language").isDirectory(),
 				"the language directory should exist but it does not.");
+	}
+
+	@Test
+	void testInstallResource_CreatesFileSuccessfully() throws Exception {
+		// Arrange: Create a temporary directory for the test
+		Path tempDir = Files.createTempDirectory("installer-test");
+
+		// Act: Install a resource into the temporary directory
+		boolean result = MockUtility.installResource("language/en-US.yml", tempDir);
+
+		// Assert: Verify the file exists and was successfully copied
+		assertTrue(result, "Resource should have been installed successfully.");
+		assertTrue(Files.exists(tempDir.resolve("language/en-US.yml")));
+
+		// Cleanup: Delete the temporary directory and its contents
+		Files.walk(tempDir)
+				.sorted(Comparator.reverseOrder())
+				.forEach(path -> path.toFile().delete());
 	}
 
 	@Nested
@@ -96,42 +164,42 @@ public class YamlLanguageFileInstallerTests {
 		@Test
 		public void autoInstallResourceExistsTest() {
 			assertTrue(yamlLanguageFileInstaller.resourceExists(AUTO_INSTALL_TXT));
-			verify(plugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
+			verify(mockPlugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
 		}
 
 		@Test
 		public void autoInstallResourceExistsTest_null_parameter() {
 			assertFalse(yamlLanguageFileInstaller.resourceExists(null));
-			verify(plugin, atLeastOnce()).getResource(anyString());
+			verify(mockPlugin, atLeastOnce()).getResource(anyString());
 		}
 
 		@Test
 		public void autoInstallResourceExistsTest_null_return() {
 			// return a null File object when language/auto_install.txt resource is fetched, simulating a missing resource
-			when(plugin.getResource(AUTO_INSTALL_TXT)).thenReturn(null);
+			when(mockPlugin.getResource(AUTO_INSTALL_TXT)).thenReturn(null);
 			assertFalse(yamlLanguageFileInstaller.resourceExists(AUTO_INSTALL_TXT));
-			verify(plugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
+			verify(mockPlugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
 		}
 	}
 
 	@Test
 	public void languageResourceExistsTest_null() {
 		// return a null File object when language/en-US.yml resource is fetched, simulating a missing resource
-		when(plugin.getResource(LANGUAGE_EN_US_YML)).thenReturn(null);
+		when(mockPlugin.getResource(LANGUAGE_EN_US_YML)).thenReturn(null);
 		assertFalse(yamlLanguageFileInstaller.resourceExists(LANGUAGE_EN_US_YML));
-		verify(plugin, atLeastOnce()).getResource(LANGUAGE_EN_US_YML);
+		verify(mockPlugin, atLeastOnce()).getResource(LANGUAGE_EN_US_YML);
 	}
 
 	@Test
 	public void getDataFolderTest_not_null() {
-		assertNotNull(plugin.getDataFolder());
-		verify(plugin, atLeastOnce()).getDataFolder();
+		assertNotNull(mockPlugin.getDataFolder());
+		verify(mockPlugin, atLeastOnce()).getDataFolder();
 	}
 
 	@Test
 	public void getDataFolderTest_is_directory() {
-		assertTrue(plugin.getDataFolder().isDirectory());
-		verify(plugin, atLeastOnce()).getDataFolder();
+		assertTrue(mockPlugin.getDataFolder().isDirectory());
+		verify(mockPlugin, atLeastOnce()).getDataFolder();
 	}
 
 	@Test
@@ -159,14 +227,14 @@ public class YamlLanguageFileInstallerTests {
 	@Test
 	void getAutoInstallFilenamesTest() {
 		assertTrue(yamlLanguageFileInstaller.getAutoInstallFilenames().contains("language/en-US.yml"));
-		verify(plugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
+		verify(mockPlugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
 	}
 
 	@Test
 	void getAutoInstallFilenamesTest_no_auto_install_txt() {
-		when(plugin.getResource(AUTO_INSTALL_TXT)).thenReturn(null);
+		when(mockPlugin.getResource(AUTO_INSTALL_TXT)).thenReturn(null);
 		assertTrue(yamlLanguageFileInstaller.getAutoInstallFilenames().isEmpty());
-		verify(plugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
+		verify(mockPlugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
 	}
 
 	@Nested
@@ -174,13 +242,13 @@ public class YamlLanguageFileInstallerTests {
 		@Test
 		void verifyResourceExistsTest() {
 			assertTrue(yamlLanguageFileInstaller.resourceExists(LANGUAGE_EN_US_YML));
-			verify(plugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
+			verify(mockPlugin, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
 		}
 
 		@Test
 		void verifyResourceExistsTest_nonexistent() {
 			assertFalse(yamlLanguageFileInstaller.resourceExists("nonexistent_resource"));
-			verify(plugin, atLeastOnce()).getResource("nonexistent_resource");
+			verify(mockPlugin, atLeastOnce()).getResource("nonexistent_resource");
 		}
 	}
 
