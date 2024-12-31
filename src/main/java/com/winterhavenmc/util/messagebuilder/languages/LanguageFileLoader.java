@@ -20,10 +20,19 @@ package com.winterhavenmc.util.messagebuilder.languages;
 import org.bukkit.configuration.Configuration;
 
 public interface LanguageFileLoader {
+
 	/**
 	 * Get configuration object containing message settings and strings
 	 *
 	 * @return Configuration - message configuration object
 	 */
 	Configuration getConfiguration();
+
+
+	/**
+	 * Reload configuration, reinstalling language files if necessary
+	 * @return the newly loaded configuration for the configured language
+	 */
+	Configuration reload();
+
 }
