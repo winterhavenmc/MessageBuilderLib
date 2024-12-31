@@ -19,8 +19,8 @@ package com.winterhavenmc.util.messagebuilder.languages;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
@@ -28,12 +28,9 @@ import org.junit.jupiter.api.*;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
-import static com.winterhavenmc.util.messagebuilder.mocks.MockPlugin.*;
+import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -43,30 +40,11 @@ public class YamlLanguageFileLoaderTests {
 	private YamlLanguageFileLoader yamlLanguageFileLoader;
 
 
-//	@BeforeAll
-//	public static void preSetUp() {
-//		MockPlugin.verifyTempDir();
-//	}
-
 	@BeforeEach
 	public void setUp() {
 
 		// create new mock plugin
-		plugin = mock(Plugin.class, "MockPlugin");
-		when(plugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-
-		// mock configuration
-		FileConfiguration configuration = mock(FileConfiguration.class);
-		when(plugin.getConfig()).thenReturn(configuration);
-		when(configuration.getString("language")).thenReturn("en-US");
-
-		// return real file input streams for mock plugin resources
-		doAnswer(invocation -> getResourceStream(invocation.getArgument(0)))
-				.when(plugin).getResource(anyString());
-
-		// copy resource to temporary data directory when saveResource method is called
-		doAnswer(invocation -> installResource(invocation.getArgument(0)))
-				.when(plugin).saveResource(anyString(), eq(false));
+		plugin = MockUtility.createMockPlugin();
 
 		// create new real file loader
 		yamlLanguageFileLoader = new YamlLanguageFileLoader(plugin);
@@ -78,14 +56,10 @@ public class YamlLanguageFileLoaderTests {
 		yamlLanguageFileLoader = null;
 	}
 
+
 	@Test
 	void FileLoaderNotNull() {
 		assertNotNull(yamlLanguageFileLoader);
-	}
-
-	@Test
-	void verifyDataDirectoryExistsTest() {
-		assertTrue(getDataFolder().isDirectory());
 	}
 
 	@Test
