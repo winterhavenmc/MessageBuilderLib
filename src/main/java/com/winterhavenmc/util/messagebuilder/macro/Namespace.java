@@ -24,35 +24,13 @@ public class Namespace {
 	 * They are subject to change at this time, and will likely be reduced to an appropriate set as necessary.
 	 * I selected a wide array of categories here until I narrow down those I find useful.
 	 */
-	public enum Category {
+	public enum Domain {
 
-		// from the language file top sections we want to use
-		ITEMS, // in use now
-		CONSTANTS, // in use now
-		MACRO, // in use now
-		LOCATIONS, // could go under constants if we are just setting static text. perhaps a subcategory of constants
+		ITEMS, // values supplied by the yaml language file, from the root level section 'ITEMS'
+		CONSTANTS, //values supplied by the yaml language file, from the root level section 'CONSTANTS'
+		MACRO, // values passed in by calls to the setMacro method
 
-		TYPES, // intriguing. perhaps a method to encode type information in the key.
-
-		// from other sources, both internal and external
-		ENV, // environment variables
-		RUNTIME, // runtime variables
-		SERVER, // server variables
-		PLUGIN, // plugin variables (could use subcategories to hold info about other plugins)
-		LIBRARY, // library variables,
-		RESERVED, // not for you variables?
-	}
-
-
-	// will likely migrate to this from Category
-	public enum Source {
-		// from the language file top sections we want to use
-		ITEMS, // in use now
-		CONSTANTS, // in use now
-		MACRO, // in use now
-		LOCATIONS, // could go under constants if we are just setting static text. perhaps a subcategory of constants
-
-		// from other sources, both internal and external
+		// potential future domains
 //		ENV, // environment variables, such as those made available by the operating system
 //		RUNTIME, // runtime variables, such as those made available by the Java Runtime Environment
 //		SERVER, // server variables, made available by the bukkit server instance running the plugin
