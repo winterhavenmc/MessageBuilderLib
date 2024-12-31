@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.mocks.MockPlugin;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import com.winterhavenmc.util.messagebuilder.query.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,7 +32,7 @@ import static com.winterhavenmc.util.messagebuilder.messages.MessageId.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class MessageRecordTests {
+class MessageRecordTest {
 
 	private ConfigurationSection messageSection;
 
@@ -43,7 +43,7 @@ class MessageRecordTests {
 
 		// create a real configuration object from a resource
 		try {
-			fileConfiguration = YamlConfiguration.loadConfiguration(MockPlugin.getResourceFile("language/en-US.yml"));
+			fileConfiguration = YamlConfiguration.loadConfiguration(MockUtility.getResourceFile("language/en-US.yml"));
 		} catch (IllegalArgumentException | URISyntaxException e) {
 			System.out.println("a problem was encountered while trying to load the test configuration from resource");
 		}
