@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2022-2024 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,9 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.languages;
 
-import com.winterhavenmc.util.messagebuilder.languages.*;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
@@ -159,7 +158,14 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public void reload() {
-		this.configuration = new YamlLanguageFileLoader(plugin, new YamlLanguageFileInstaller(plugin)).getConfiguration();
+		languageFileLoader.reload();
+		Configuration newConfiguration = languageFileLoader.getConfiguration();
+		if (newConfiguration != null) {
+			this.configuration = newConfiguration;
+		}
+		else {
+			plugin.getLogger().warning("The configuration could not be reloaded. Keeping existing configuration.");
+		}
 	}
 
 }
