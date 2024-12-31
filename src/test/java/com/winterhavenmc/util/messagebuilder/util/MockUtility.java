@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.util;
 
 import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileInstaller;
 import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileLoader;
-
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -37,7 +36,6 @@ import java.util.logging.Logger;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.doAnswer;
 
 
 public class MockUtility {
@@ -49,7 +47,8 @@ public class MockUtility {
 	/**
 	 * Private constructor to prevent instantiation
 	 */
-	private MockUtility() { }
+	private MockUtility() {
+	}
 
 
 	/**
@@ -72,7 +71,8 @@ public class MockUtility {
 		@SuppressWarnings("unused") boolean success = tempDir.mkdirs();
 		if (!tempDir.isDirectory()) {
 			throw new RuntimeException("the temporary directory could not be created.");
-		} else {
+		}
+		else {
 			tempDir.deleteOnExit();
 		}
 		return tempDir;
@@ -105,8 +105,8 @@ public class MockUtility {
 	/**
 	 * Installs a resource file from the classpath to the specified target directory.
 	 *
-	 * @param resourceName   the name of the resource file in the classpath
-	 * @param targetDirPath  the target directory where the file should be installed
+	 * @param resourceName  the name of the resource file in the classpath
+	 * @param targetDirPath the target directory where the file should be installed
 	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
@@ -142,94 +142,6 @@ public class MockUtility {
 	}
 
 
-//	/**
-//	 * create a directory in the temporary plugin data directory with the given name
-//	 *
-//	 * @param name the name for the directory
-//	 * @return {@code true} if the directory was successfully created, {@code false) if it was not
-//	 * @throws IOException if an error occurs when creating the directory
-//	 */
-//	private static boolean createDirectory(final String name) throws IOException {
-//		File directory = new File(DATA_DIR, name);
-//		boolean success = directory.mkdirs();
-//		if (!directory.isDirectory()) {
-//			throw new IOException("the directory could not be created.");
-//		}
-//		return success;
-//	}
-
-
-//	/**
-//	 * Create a temporary folder
-//	 * @throws IOException if directory cannot be created
-//	 */
-//	private static File createSubdirectory(String name) throws IOException {
-//
-//		Path parent = Paths.get(name).getParent();
-//
-//		File subdirectory = new File(DATA_DIR, parent.toString());
-//
-//		System.out.println(subdirectory);
-//
-//		@SuppressWarnings("unused") boolean success = subdirectory.mkdirs();
-//		if (!subdirectory.isDirectory()) {
-//			throw new IOException();
-//		}
-//		return subdirectory;
-//	}
-
-
-//	public static void verifyTempDir() {
-//		System.out.println("Temporary plugin data directory successfully created: " + DATA_DIR.isDirectory());
-//	}
-//
-//	public static void verifyLangDir() {
-//		System.out.println("Language directory successfully created: " + new File(getDataFolder(), "language").isDirectory());
-//	}
-
-
-
-
-
-
-
-	//	/**
-//	 * Loads a FileConfiguration from a YAML resource file.
-//	 *
-//	 * @param resourcePath the path to the resource file in the test/resources directory
-//	 * @return the loaded FileConfiguration
-//	 * @throws IOException if the resource cannot be read
-//	 */
-//	public static FileConfiguration loadConfigurationFromResource(String resourcePath) {
-//		InputStream resourceStream = getResourceStream("language/en-US.yml");
-//
-//		if (resourceStream == null) {
-//			throw new IllegalArgumentException("Resource not found: " + resourcePath);
-//		}
-//
-//		// Copy resource to a temporary file to simulate file loading
-//		Path tempFile = null;
-//		try {
-//			tempFile = Files.createTempFile("test-", ".yml");
-//		} catch (IOException e) {
-//			throw new RuntimeException(e);
-//		}
-//
-//
-//		Files.copy(resourceStream, tempFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-//
-//		// Load the temporary file as a FileConfiguration
-//		Configuration configuration;
-//		try {
-//			configuration = YamlConfiguration.loadConfiguration(resourceStream .readAllBytes());
-//		} catch (IOException e) {
-//			throw new RuntimeException(e);
-//		}
-//
-//		return configuration;
-//	}
-
-
 	/**
 	 * Creates a mock Plugin instance with a logger and optional configuration.
 	 *
@@ -253,10 +165,6 @@ public class MockUtility {
 		// return real file input streams for mock plugin resources
 		doAnswer(invocation -> getResourceStream(invocation.getArgument(0)))
 				.when(mockPlugin).getResource(anyString());
-
-//		// install resource when saveResource is called
-//		doAnswer(invocation -> installResource(invocation.getArgument(0)))
-//				.when(mockPlugin).saveResource(anyString(), eq(false));
 
 		return mockPlugin;
 	}
@@ -307,7 +215,7 @@ public class MockUtility {
 	 * Creates a mock World instance for testing
 	 *
 	 * @param worldName the world name to be returned by the {@code getName()} method
-	 * @param worldUid the world UUID to be returned by the {@code getUID()} method
+	 * @param worldUid  the world UUID to be returned by the {@code getUID()} method
 	 * @return a mock World instance
 	 */
 	public static World createMockWorld(final String worldName, final UUID worldUid) {
@@ -322,7 +230,7 @@ public class MockUtility {
 	 * Creates a mock Player instance for testing
 	 *
 	 * @param playerName the player name to be returned by the {@code getName()} method
-	 * @param playerUid the player UUID to be returned by the {@code getUID()} method
+	 * @param playerUid  the player UUID to be returned by the {@code getUID()} method
 	 * @return a mock Player instance
 	 */
 	public static Player createMockPlayer(final String playerName, final UUID playerUid) {
@@ -364,19 +272,5 @@ public class MockUtility {
 		// Load the YAML data directly into a FileConfiguration object
 		return YamlConfiguration.loadConfiguration(new InputStreamReader(resourceStream));
 	}
-
-
-//	/**
-//	 * Retrieves an InputStream for the specified resource path.
-//	 *
-//	 * @param resourcePath the path to the resource file
-//	 * @return an InputStream for the resource, or null if the resource cannot be found
-//	 */
-//	private static InputStream getResourceStream(String resourcePath) {
-//		return getResourceStream("language/en-US.yml");
-//
-////		return MockingUtility.class.getClassLoader().getResourceAsStream(resourcePath);
-//	}
-
 
 }
