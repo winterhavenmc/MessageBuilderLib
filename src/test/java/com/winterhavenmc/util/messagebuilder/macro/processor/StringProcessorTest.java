@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.*;
 import com.winterhavenmc.util.messagebuilder.languages.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 
@@ -71,7 +71,7 @@ class StringProcessorTest {
 		String stringObject = "some name";
 
 		ContextMap contextMap = new ContextMap();
-		String namespacedKey = NamespaceKey.create(keyPath, Namespace.Category.MACRO);
+		String namespacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
 
 		contextMap.put(namespacedKey, ContextContainer.of(stringObject, ProcessorType.STRING));
 
