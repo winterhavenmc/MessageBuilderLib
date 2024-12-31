@@ -38,9 +38,9 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
 
 public class ConfigurationQueryHandler implements QueryHandler {
 
-	// string constant for configuration section key
+	// constants for configuration section keys
 	public static final String ITEM_SECTION = "ITEMS";
-	private final static String LOCATION_SECTION = "LOCATIONS";
+	public static final String CONSTANT_SECTION = "CONSTANTS";
 	public static final String MESSAGE_SECTION = "MESSAGES";
 
 	private final Plugin plugin;
@@ -48,7 +48,7 @@ public class ConfigurationQueryHandler implements QueryHandler {
 
 
 	public ConfigurationQueryHandler(final Plugin plugin, final Configuration configuration) {
-		if (configuration == null) { throw new IllegalArgumentException(PARAMETER_NULL_CONFIGURATION.getMessage()); }
+		if (configuration == null) { throw new IllegalArgumentException(PARAMETER_CONFIGURATION_NULL.getMessage()); }
 		this.plugin = plugin;
 		this.configuration = configuration;
 	}
@@ -56,7 +56,7 @@ public class ConfigurationQueryHandler implements QueryHandler {
 
 	@Override
 	public Optional<ItemRecord> getItemRecord(final String itemKey) {
-		if (itemKey == null) { throw new IllegalArgumentException(PARAMETER_NULL_ITEM_KEY.getMessage()); }
+		if (itemKey == null) { throw new IllegalArgumentException(PARAMETER_ITEM_KEY_NULL.getMessage()); }
 
 		// get configuration section for items
 		ConfigurationSection itemSect = configuration.getConfigurationSection(ITEM_SECTION);
@@ -82,7 +82,7 @@ public class ConfigurationQueryHandler implements QueryHandler {
 
 	@Override
 	public <MessageId extends Enum<MessageId>> Optional<MessageRecord> getMessageRecord(final MessageId messageId) {
-		if (messageId == null) { throw new IllegalArgumentException(PARAMETER_NULL_MESSAGE_ID.getMessage()); }
+		if (messageId == null) { throw new IllegalArgumentException(PARAMETER_MESSAGE_ID_NULL.getMessage()); }
 
 		// get configuration section for message id
 		ConfigurationSection messageSection = configuration.getConfigurationSection(MESSAGE_SECTION);
@@ -271,9 +271,8 @@ public class ConfigurationQueryHandler implements QueryHandler {
 	 */
 	@Override
 	public Optional<String> getSpawnDisplayName() {
-		return Optional.ofNullable(configuration.getString(LOCATION_SECTION + ".SPAWN.DISPLAY_NAME"));
+		return Optional.ofNullable(configuration.getString(CONSTANT_SECTION + ".SPAWN.DISPLAY_NAME"));
 	}
-
 
 	/**
 	 * Get home display name from language file
@@ -282,7 +281,7 @@ public class ConfigurationQueryHandler implements QueryHandler {
 	 */
 	@Override
 	public Optional<String> getHomeDisplayName() {
-		return Optional.ofNullable(configuration.getString(LOCATION_SECTION + ".HOME.DISPLAY_NAME"));
+		return Optional.ofNullable(configuration.getString(CONSTANT_SECTION + ".HOME.DISPLAY_NAME"));
 	}
 
 
