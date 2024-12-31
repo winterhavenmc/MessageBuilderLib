@@ -40,54 +40,150 @@ import static org.mockito.Mockito.*;
 
 public class MockUtility {
 
+	private static final Logger LOGGER = Logger.getLogger(MockUtility.class.getName());
+
 	public final static String LANGUAGE_EN_US_YML = "language/en-US.yml";
 	public final static String AUTO_INSTALL_TXT = "language/auto_install.txt";
+
+	private static File tempDataDir;
 
 
 	/**
 	 * Private constructor to prevent instantiation
 	 */
-	private MockUtility() {
+	private MockUtility() {	}
+
+
+	/**
+	 * Gets or creates the temporary data directory for testing.
+	 *
+	 * @return the temporary data directory as a {@link File}
+	 */
+	public static File getDataDir() {
+		if (tempDataDir == null) {
+			tempDataDir = createTempDataDir();
+			if (tempDataDir.isDirectory()) {
+				LOGGER.info("Temporary data directory successfully created!");
+			}
+		}
+		return tempDataDir;
 	}
 
 
 	/**
-	 * Create a temporary folder
+	 * Installs a resource file from the classpath to the temporary data directory.
 	 *
-	 * @return File object of a temporary plugin data directory, or null if the temporary directory could not be created
+	 * @param resourceName the name of the resource file in the classpath
+	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
+	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
-	public static File createTempDataDir() {
+	public static boolean installResource(final String resourceName) throws IOException {
+		Path targetDirPath = getDataDir().toPath();
+		return installResource(resourceName, targetDirPath);
+	}
 
-		String tempDataDirectoryPath;
 
+	/**
+	 * Installs a resource file from the classpath to the specified target directory.
+	 *
+	 * @param resourceName  the name of the resource file in the classpath
+	 * @param targetDirPath the target directory where the file should be installed
+	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
+	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
+	 */
+	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
+		if (resourceName == null) { throw new IllegalArgumentException(Error.PARAMETER_RESOURCE_NAME_NULL.getMessage()); }
+		if (resourceName.isEmpty()) { throw new IllegalArgumentException(Error.PARAMETER_RESOURCE_NAME_EMPTY.getMessage()); }
+		if (targetDirPath == null) { throw new IllegalArgumentException(Error.PARAMETER_DIRECTORY_PATH_NULL.getMessage()); }
+
+		// Ensure the target directory exists
+		Files.createDirectories(targetDirPath);
+
+		// Get the resource as an InputStream
+		try (var inputStream = getResourceStream(resourceName)) {
+			if (inputStream == null) {
+				throw new IOException("Resource '" + resourceName + "' not found in the classpath.");
+			}
+
+			// Resolve the full path to the target file
+			Path targetFilePath = targetDirPath.resolve(resourceName);
+
+			// create subdirectories
+			Files.createDirectories(targetFilePath.getParent());
+
+			// Copy the resource to the target directory
+			Files.copy(inputStream, targetFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+			return true;
+		}
+	}
+
+
+	/**
+	 * Retrieves an InputStream for the specified resource from the classpath.
+	 *
+	 * @param resourceName the name of the resource file
+	 * @return an InputStream for the resource, or {@code null} if the resource cannot be found
+	 */
+	public static InputStream getResourceStream(final String resourceName) {
+		return MockUtility.class.getClassLoader().getResourceAsStream(resourceName);
+	}
+
+
+	/**
+	 * Creates a temporary data directory for testing.
+	 *
+	 * @return the created directory as a {@link File}
+	 */
+	private static File createTempDataDir() {
 		try {
-			tempDataDirectoryPath = Files.createTempDirectory("PluginData").toFile().getAbsolutePath();
+			Path tempDir = Files.createTempDirectory("test-data");
+//			tempDir.toFile().deleteOnExit();
+			tempDir.toFile();
+			return tempDir.toFile();
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new IllegalStateException("Failed to create temporary data directory.", e);
 		}
-
-
-		File tempDir = new File(tempDataDirectoryPath);
-		@SuppressWarnings("unused") boolean success = tempDir.mkdirs();
-		if (!tempDir.isDirectory()) {
-			throw new RuntimeException("the temporary directory could not be created.");
-		}
-		else {
-			tempDir.deleteOnExit();
-		}
-		return tempDir;
 	}
 
 
-	/**
-	 * Get a resource as an {@link InputStream} for the named resource.
-	 *
-	 * @param name the name of the resource to stream
-	 * @return {@code InputStream} of the named resource
-	 */
-	public static InputStream getResourceStream(final String name) {
-		return Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
-	}
+//	/**
+//	 * Get a resource as an {@link InputStream} for the named resource.
+//	 *
+//	 * @param name the name of the resource to stream
+//	 * @return {@code InputStream} of the named resource
+//	 */
+//	public static InputStream getResourceStream(final String name) {
+//		return Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
+//	}
+
+
+
+//	/**
+//	 * Create a temporary folder
+//	 *
+//	 * @return File object of a temporary plugin data directory, or null if the temporary directory could not be created
+//	 */
+//	public static File createTempDataDir() {
+//
+//		String tempDataDirectoryPath;
+//
+//		try {
+//			tempDataDirectoryPath = Files.createTempDirectory("PluginData").toFile().getAbsolutePath();
+//		} catch (IOException e) {
+//			throw new RuntimeException(e);
+//		}
+//
+//		File tempDir = new File(tempDataDirectoryPath);
+//		@SuppressWarnings("unused") boolean success = tempDir.mkdirs();
+//		if (!tempDir.isDirectory()) {
+//			throw new RuntimeException("the temporary directory could not be created.");
+//		}
+//		else {
+//			LOGGER.info("The temporary directory was successfully created.");
+//			tempDir.deleteOnExit();
+//		}
+//		return tempDir;
+//	}
 
 
 	/**
@@ -102,44 +198,38 @@ public class MockUtility {
 	}
 
 
-	/**
-	 * Installs a resource file from the classpath to the specified target directory.
-	 *
-	 * @param resourceName  the name of the resource file in the classpath
-	 * @param targetDirPath the target directory where the file should be installed
-	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
-	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
-	 */
-	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
-		if (resourceName == null || resourceName.isEmpty()) {
-			throw new IllegalArgumentException("Resource name cannot be null or empty.");
-		}
-
-		if (targetDirPath == null) {
-			throw new IllegalArgumentException("Target directory path cannot be null.");
-		}
-
-		// Get the resource as an InputStream
-		InputStream inputStream = getResourceStream(resourceName);
-		if (inputStream == null) {
-			throw new IOException("Resource '" + resourceName + "' not found in the classpath.");
-		}
-
-		// Ensure the target directory exists
-		Files.createDirectories(targetDirPath);
-
-		// Resolve the full path to the target file
-		Path targetFilePath = targetDirPath.resolve(resourceName);
-
-		// Copy the resource to the target directory
-		try {
-			long bytesCopied = Files.copy(inputStream, targetFilePath, StandardCopyOption.REPLACE_EXISTING);
-			return bytesCopied > 0;
-		} catch (FileAlreadyExistsException e) {
-			Logger.getLogger("MockUtility").warning("File already exists: " + targetFilePath);
-			return false;
-		}
-	}
+//	/**
+//	 * Installs a resource file from the classpath to the specified target directory.
+//	 *
+//	 * @param resourceName  the name of the resource file in the classpath
+//	 * @param targetDirPath the target directory where the file should be installed
+//	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
+//	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
+//	 */
+//	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
+//		if (resourceName == null) {	throw new IllegalArgumentException("Resource name cannot be null or empty."); }
+//		if (resourceName.isEmpty()) { throw new IllegalArgumentException("Resource name cannot be null or empty."); }
+//		if (targetDirPath == null) { throw new IllegalArgumentException("Target directory path cannot be null."); }
+//
+//		// Get the resource as an InputStream
+//		InputStream inputStream = getResourceStream(resourceName);
+//		if (inputStream == null) { throw new IOException("Resource '" + resourceName + "' not found in the classpath."); }
+//
+//		// Ensure the target directory exists
+//		Files.createDirectories(targetDirPath);
+//
+//		// Resolve the full path to the target file
+//		Path targetFilePath = targetDirPath.resolve(resourceName);
+//
+//		// Copy the resource to the target directory
+//		try {
+//			long bytesCopied = Files.copy(inputStream, targetFilePath);
+//			return bytesCopied > 0;
+//		} catch (FileAlreadyExistsException e) {
+//			LOGGER.warning("File already exists: " + targetFilePath);
+//			return false;
+//		}
+//	}
 
 
 	/**
@@ -183,6 +273,9 @@ public class MockUtility {
 		Logger mockLogger = Logger.getLogger("MockPluginLogger");
 		when(mockPlugin.getLogger()).thenReturn(mockLogger);
 
+		// return a temporary data folder
+		when(mockPlugin.getDataFolder()).thenReturn(MockUtility.getDataDir());
+
 		// Mock the configuration
 		FileConfiguration mockPluginConfig = mock(FileConfiguration.class, "MockPluginConfig");
 		when(mockPlugin.getConfig()).thenReturn(mockPluginConfig);
@@ -194,6 +287,10 @@ public class MockUtility {
 		// return real file input streams for mock plugin resources
 		doAnswer(invocation -> getResourceStream(invocation.getArgument(0)))
 				.when(mockPlugin).getResource(anyString());
+
+		// install resource when saveResource is called
+		doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
+				.when(mockPlugin).saveResource(anyString(), eq(false));
 
 		return mockPlugin;
 	}
