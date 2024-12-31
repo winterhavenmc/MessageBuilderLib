@@ -167,4 +167,9 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 		return Paths.get(LANGUAGE_FOLDER, languageTag + ".yml").normalize().toString();
 	}
 
+
+	public Configuration reload() {
+		return getConfiguration();
+	}
+
 }
