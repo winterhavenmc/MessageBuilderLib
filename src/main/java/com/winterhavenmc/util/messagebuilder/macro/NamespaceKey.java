@@ -179,7 +179,7 @@ public class NamespaceKey implements ContextKey {
 	 * @return A proper namespaced String key.
 	 */
 	public static <Macro> String create(final Macro macro) {
-		if (macro == null) { throw new IllegalArgumentException(PARAMETER_NULL_MACRO.getMessage()); }
+		if (macro == null) { throw new IllegalArgumentException(PARAMETER_MACRO_NULL.getMessage()); }
 
 		return Namespace.Domain.MACRO + KEY_BOUNDARY_DELIMITER + macro;
 	}
@@ -194,8 +194,8 @@ public class NamespaceKey implements ContextKey {
 	 * @return A proper namespaced String key.
 	 */
 	public static <Macro> String create(final Macro macro, final Namespace.Domain domain) {
-		if (macro == null) { throw new IllegalArgumentException(PARAMETER_NULL_MACRO.getMessage()); }
-		if (domain == null) { throw new IllegalArgumentException(PARAMETER_NULL_DOMAIN.getMessage()); }
+		if (macro == null) { throw new IllegalArgumentException(PARAMETER_MACRO_NULL.getMessage()); }
+		if (domain == null) { throw new IllegalArgumentException(PARAMETER_DOMAIN_NULL.getMessage()); }
 
 		return domain.name() + KEY_BOUNDARY_DELIMITER + macro;
 	}
@@ -210,14 +210,18 @@ public class NamespaceKey implements ContextKey {
 	 * @return A fully-formed namespaced String key.
 	 */
 	public static String create(String keyPath, Namespace.Domain domain, String... subcategories) {
-		if (keyPath == null) { throw new IllegalArgumentException(PARAMETER_NULL_KEY_PATH.getMessage()); }
-		if (keyPath.isEmpty()) { throw new IllegalArgumentException(PARAMETER_EMPTY_KEY_PATH.getMessage()); }
-		if (domain == null) { throw new IllegalArgumentException(PARAMETER_NULL_DOMAIN.getMessage()); }
+		if (keyPath == null) { throw new IllegalArgumentException(PARAMETER_KEY_PATH_NULL.getMessage()); }
+		if (keyPath.isEmpty()) { throw new IllegalArgumentException(PARAMETER_KEY_PATH_EMPTY.getMessage()); }
+		if (domain == null) { throw new IllegalArgumentException(PARAMETER_DOMAIN_NULL.getMessage()); }
+		if (subcategories == null) { throw new IllegalArgumentException(PARAMETER_SUBDOMAINS_NULL.getMessage()); }
 
 		StringBuilder fullKey = new StringBuilder(domain.name());
 		for (String subcategory : subcategories) {
-			if (subcategory == null || subcategory.isEmpty()) {
-				throw new IllegalArgumentException(PARAMETER_NULL_OR_EMPTY_SUBDOMAIN.getMessage());
+			if (subcategory == null) {
+				throw new IllegalArgumentException(PARAMETER_SUBDOMAIN_ELEMENT_NULL.getMessage());
+			}
+			if (subcategory.isEmpty()) {
+				throw new IllegalArgumentException(PARAMETER_SUBDOMAIN_ELEMENT_EMPTY.getMessage());
 			}
 			fullKey.append(KEY_DOMAIN_DELIMITER).append(subcategory);
 		}
