@@ -9,10 +9,10 @@ SETTINGS:
     RIGHT: '%'
 
 
-########################
-# Location Display Names
-########################
-LOCATIONS:
+##################
+# Constant Strings
+##################
+CONSTANTS:
   SPAWN:
     DISPLAY_NAME: '&aSpawn'
   HOME:
