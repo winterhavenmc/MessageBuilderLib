@@ -62,7 +62,7 @@ class WorldProcessorTest {
 	@Test
 	void resolveContext() {
 		String keyPath = "SOME_WORLD";
-		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Category.MACRO);
+		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
 		ContextMap contextMap = new ContextMap();
 		MacroProcessor macroProcessor = new WorldProcessor(mockQueryHandler);
 		contextMap.put(nameSpacedKey, ContextContainer.of(mockWorld, ProcessorType.WORLD));
@@ -75,7 +75,7 @@ class WorldProcessorTest {
 	@Test
 	void resolveContext_with_null_world() {
 		String keyPath = "SOME_WORLD";
-		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Category.MACRO);
+		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
 		ContextMap contextMap = new ContextMap();
 		MacroProcessor macroProcessor = new WorldProcessor(mockQueryHandler);
 		contextMap.put(nameSpacedKey, ContextContainer.of(mockWorld, ProcessorType.WORLD));
