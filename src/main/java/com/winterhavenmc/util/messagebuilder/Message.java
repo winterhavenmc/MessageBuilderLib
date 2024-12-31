@@ -113,18 +113,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		return this;
 	}
 
-		//TODO: old optional unwrap snippet
-//		// if the value being set is an optional, unwrap before placing in the context map
-//		if (value instanceof Optional<?> optionalValue) {
-//			optionalValue.ifPresentOrElse(
-//					unwrappedValue -> contextMap.put(key, processorType, unwrappedValue),
-//					() -> contextMap.put(key, ProcessorType.OBJECT, UNKNOWN_VALUE)
-//			);
-//		}
-//		else {
-//			contextMap.put(key, processorType, value);
-//		}
-
+		//TODO: add back optional unwrapping
 
 	/**
 	 * Final step of message builder, performs replacements and sends message to recipient
