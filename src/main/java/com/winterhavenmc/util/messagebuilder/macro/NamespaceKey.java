@@ -20,6 +20,7 @@ package com.winterhavenmc.util.messagebuilder.macro;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static com.winterhavenmc.util.messagebuilder.util.Error.*;
 
@@ -62,49 +63,100 @@ public class NamespaceKey implements ContextKey {
 	private final static String KEY_BOUNDARY_DELIMITER = "|";
 	private final static String KEY_PATH_DELIMITER = ".";
 
-	String keyPath;
-	Namespace.Domain domain;
-	List<String> subdomains;
+	private final String keyPath;
+	private final Namespace.Domain keyDomain;
+	private final List<String> subdomains;
 
 
 	/**
 	 * Class constructor
 	 * <p>
-	 * This one parameter constructor is provided as a fallback for when ProcessorType is unavailable.
-	 * The ProcessorType will be assigned the OBJECT constant
+	 *     creates a NamespaceKey with the supplied domain and keyPath. This key will have no
+	 *     subdomains upon creation.
+	 *</p>
+	 * @param keyPath the String key or macroName to be used as the fully name-spaced key
+	 * @param keyDomain  the domain that forms the root of the keyDomain
+	 */
+	NamespaceKey(final String keyPath, Namespace.Domain keyDomain) {
+		this.keyPath = keyPath;
+		this.keyDomain = keyDomain;
+		this.subdomains = new ArrayList<>();
+	}
+
+
+	/**
+	 * Class constructor
+	 * <p>
+	 *     Creates a namespaceKey with the supplied keyPath, domain, and subdomains.
+	 *     Any number of subdomains may be passed to the constructor.
+	 * </p>
 	 *
 	 * @param keyPath the String key or macroName to be used as the fully name-spaced key
-	 * @param domain  the domain that forms the root of the keyDomain
+	 * @param keyDomain  the domain that forms the root of the keyDomain
 	 */
-	NamespaceKey(final String keyPath, Namespace.Domain domain) {
-		this.domain = domain;
-		this.subdomains = new ArrayList<>();
+	NamespaceKey(final String keyPath, Namespace.Domain keyDomain, String... subdomains) {
 		this.keyPath = keyPath;
+		this.keyDomain = keyDomain;
+		this.subdomains = new ArrayList<>(Arrays.stream(subdomains).toList());
 	}
 
 
+	/**
+	 * Get the String representation of this key, composed of its domain and path with delimiters
+	 *
+	 * @return a String representation of this key
+	 */
 	@Override
 	public String getKey() {
-		return String.join(KEY_BOUNDARY_DELIMITER, getKeyDomain(), keyPath);
+		return String.join(KEY_BOUNDARY_DELIMITER, getFullDomain(), keyPath);
 	}
 
 
-	public String getKeyDomain() {
-		return String.join(KEY_DOMAIN_DELIMITER, domain.name(), String.join(KEY_DOMAIN_DELIMITER, subdomains));
+	/**
+	 * Get the full domain component of this key as a String composed of the domain and subdomains with delimiters
+	 *
+	 * @return a String representation of the domain component of this key
+	 */
+	public String getFullDomain() {
+		return String.join(KEY_DOMAIN_DELIMITER, keyDomain.name(), String.join(KEY_DOMAIN_DELIMITER, subdomains));
 	}
 
-	public Namespace.Domain getDomain() {
-		return domain;
+
+	/**
+	 * Get the domain component of this key, as a Namespace.Domain enum constant.
+	 *
+	 * @return the Namespace.Domain enum constant of this key
+	 */
+	public Namespace.Domain getKeyDomain() {
+		return keyDomain;
 	}
 
+
+	/**
+	 * Get the subdomains of the key, as a List of Strings
+	 *
+	 * @return List of Strings containing the subdomains of this key
+	 */
 	public List<String> getSubdomains() {
 		return subdomains;
 	}
 
+
+	/**
+	 * Get the path portion of the key
+	 *
+	 * @return the key path
+	 */
 	public String getKeyPath() {
 		return keyPath;
 	}
 
+
+	/**
+	 * Get the components of the key path as a List of Strings
+	 *
+	 * @return a List of Strings containing the separate key path elements
+	 */
 	public List<String> getKeyPathComponents() {
 		String regex = '\\' + KEY_PATH_DELIMITER;
 		return new ArrayList<>(Arrays.stream(keyPath.split(regex)).toList());
@@ -180,18 +232,24 @@ public class NamespaceKey implements ContextKey {
 	 * @param keyDomain the keyDomain to validate
 	 * @return {@code true} if the keyDomain conforms to the naming convention, {@code false} if it does not.
 	 */
-	public static boolean isValidKeyDomain(String keyDomain) {
+	static boolean isValidKeyDomain(String keyDomain) {
 		String keyDomainPattern = "^[a-zA-Z0-9_]+(:[a-zA-Z0-9_]+)*$";
 		return keyDomain.matches(keyDomainPattern);
 	}
 
 
-	public static void validateKeyDomain(String keyDomain) {
+	/**
+	 * Static method to generate a warning to the log when an invalid key domain is detected
+	 *
+	 * @param keyDomain the key domain to check for validity
+	 */
+	static void validateKeyDomain(String keyDomain) {
 		if (!isValidKeyDomain(keyDomain)) {
 			// Log a warning without modifying the keyPath
 			System.out.println("Warning: Key path '" + keyDomain + "' does not conform to the allowed naming convention.");
 		}
 	}
+
 
 	/**
 	 * Static utility method to check the validity of a key path.
@@ -206,16 +264,21 @@ public class NamespaceKey implements ContextKey {
 	 * @param keyPath the keyPath to validate
 	 * @return {@code true} if the keyPath conforms to the naming convention, {@code false} if it does not.
 	 */
-	public static boolean isValidKeyPath(String keyPath) {
+	static boolean isValidKeyPath(String keyPath) {
 		String keyPathPattern = "^[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$";
 		return keyPath.matches(keyPathPattern);
 	}
 
 
-	public static void validateKeyPath(String keyPath) {
+	/**
+	 * Static method to generate a warning to the log when an invalid key path is detected
+	 *
+	 * @param keyPath the key path to check for validity
+	 */
+	static void validateKeyPath(String keyPath) {
 		if (!isValidKeyPath(keyPath)) {
 			// Log a warning without modifying the keyPath
-			System.out.println("Warning: Key path '" + keyPath + "' does not conform to the allowed naming convention.");
+			Logger.getLogger("NamespaceKey").warning("Key path '" + keyPath + "' does not conform to the allowed naming convention.");
 		}
 	}
 
