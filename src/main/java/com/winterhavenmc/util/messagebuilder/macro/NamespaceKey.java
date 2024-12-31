@@ -26,36 +26,44 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
 
 
 /**
- * This is a class that implements name-spaced String keys for use in the ContextMap and the ResultMap.
+ * A class representing a fully qualified namespace key, used to uniquely identify entries in
+ * various contexts, such as macros, configurations, or other domain-specific resources.
  * <p>
- * This key is composed of a keyDomain, which includes a mandatory domain, typically derived from the
- * name of an enum constant, and any number of optional subcategories, and a keyPath, which is a dot-delimited
- * string representing a full key path from a configuration object.
+ * The namespace key is composed of a {@link Namespace.Domain} (e.g., MACRO, CONFIG), a
+ * {@code keyPath}, and an optional sequence of subcategories. The {@code keyPath} is a
+ * dot-separated string, while subcategories provide additional hierarchical context.
+ * </p>
  * <p>
- * The name-spaced keys are divided into left and right components,
- * which are referred to as the keyDomain and the keyPath respectively. The key path is a dot delimited
- * String of path components, as returned from a yaml configuration section. They are fully name spaced
- * by their nature of being valid yaml. The left side of the key, or keyDomain, is composed of a colon-delimited
- * main Domain, and zero or more subcategories, which are strings passed in as var args in the static create
- * method. Finally, the keyDomain and the keyPath are themselves separated with a colon, unless one or the other
- * side of the key is not present. This should allow for sufficient name-spacing during the transition and moving
- * forward.
+ * Static factory methods are provided to facilitate the creation of namespace keys with varying
+ * levels of detail, ensuring that invalid inputs are rejected with appropriate validation and
+ * warnings. Utility methods are included to validate, construct, and parse components of the
+ * namespace key.
+ * </p>
  * <p>
- * Key Domain: The portion of the key to the left of the | delimiter.
- * Includes the domain and optional subcategories, separated by :.
- * Represents the logical or hierarchical "ownership" of the Key Path.
+ * Guard clauses ensure that invalid inputs such as {@code null} or empty strings are rejected
+ * at runtime, with detailed exception messages provided to aid debugging.
+ * </p>
  * <p>
- * Key Path: The portion of the key to the right of the | delimiter.
- * Dot-delimited structure representing the configuration or resource path.
- * <p>
- * Note: If the source of the value represented by this key is a yaml configuration file,
- * the keyPath SHALL be identical to the yaml key path used to retrieve the value.
+ * Example usage:
  * <pre>
- * rule: all NameSpaceKeys MUST have at least a Domain as the root of their key domain.
- *       If you do not choose a domain, one will be chosen for you.
+ * {@code
+ * NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.MACRO, "sub1", "sub2");
+ * System.out.println(key.getKey()); // Outputs: MACRO:sub1:sub2|test.key
  *
- * rule: all NameSpaceKeys MUST have some token in the key path portion of the key.
+ * String createdKey = NamespaceKey.create("test.key", Namespace.Domain.CONFIG);
+ * System.out.println(createdKey); // Outputs: CONFIG|test.key
+ * }
  * </pre>
+ * </p>
+ * <p>
+ * Validation utilities are included to assist in ensuring the integrity of namespace keys:
+ * <ul>
+ *     <li>{@link #isValidKeyDomain(String)}</li>
+ *     <li>{@link #isValidKeyPath(String)}</li>
+ * </ul>
+ * Warnings are logged for invalid keys, but the keys are never modified, in order to prevent
+ * any potential mismatch, even if the key is malformed.
+ * </p>
  */
 public class NamespaceKey implements ContextKey {
 
@@ -246,7 +254,7 @@ public class NamespaceKey implements ContextKey {
 	static void validateKeyDomain(String keyDomain) {
 		if (!isValidKeyDomain(keyDomain)) {
 			// Log a warning without modifying the keyPath
-			System.out.println("Warning: Key path '" + keyDomain + "' does not conform to the allowed naming convention.");
+			Logger.getLogger("NamespaceKey").warning("Key domain '" + keyDomain + "' does not conform to the allowed naming convention.");
 		}
 	}
 
