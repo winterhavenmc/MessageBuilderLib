@@ -43,7 +43,7 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 
 
 	/**
-	 * Class constructor
+	 * Class constructor, single parameter
 	 *
 	 * @param plugin reference to plugin main class
 	 */
@@ -54,7 +54,7 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 
 
 	/**
-	 * Class constructor
+	 * Class constructor, Two parameter
 	 *
 	 * @param plugin reference to plugin main class
 	 * @param installer a language
