@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.OfflinePlayer;
 
 
-public class OfflinePlayerProcessor extends AbstractProcessor implements MacroProcessor {
+public class OfflinePlayerProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
 	public OfflinePlayerProcessor(final QueryHandler queryHandler) {
 		super(queryHandler);

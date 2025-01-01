@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 
-public class NumberProcessor extends AbstractProcessor implements MacroProcessor {
+public class NumberProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
 	private final QueryHandler queryHandler;
 

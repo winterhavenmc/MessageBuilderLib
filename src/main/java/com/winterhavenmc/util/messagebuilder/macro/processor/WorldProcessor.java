@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.World;
 
 
-public class WorldProcessor extends AbstractProcessor implements MacroProcessor {
+public class WorldProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
 	public WorldProcessor(final QueryHandler queryHandler) {
 		super(queryHandler);

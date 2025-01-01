@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import org.bukkit.command.CommandSender;
 
 
-public class CommandSenderProcessor extends AbstractProcessor {
+public class CommandSenderProcessor extends MacroProcessorTemplate {
 
 	public CommandSenderProcessor(QueryHandler queryHandler) {
 		super(queryHandler);

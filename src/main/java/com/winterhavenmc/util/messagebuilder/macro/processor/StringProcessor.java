@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 
-public class StringProcessor extends AbstractProcessor implements MacroProcessor {
+public class StringProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
 	public StringProcessor(QueryHandler queryHandler) {
 		super(queryHandler);
