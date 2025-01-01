@@ -49,7 +49,7 @@ public class ConfigurationQueryHandler implements QueryHandler {
 
 
 	public ConfigurationQueryHandler(final Plugin plugin, final Configuration configuration) {
-		if (configuration == null) { throw new IllegalArgumentException(PARAMETER_CONFIGURATION_NULL.getMessage()); }
+		if (configuration == null) { throw new IllegalArgumentException(Parameter.NULL_CONFIGURATION.getMessage()); }
 		this.plugin = plugin;
 		this.configuration = configuration;
 	}
@@ -57,7 +57,7 @@ public class ConfigurationQueryHandler implements QueryHandler {
 
 	@Override
 	public Optional<ItemRecord> getItemRecord(final String itemKey) {
-		if (itemKey == null) { throw new IllegalArgumentException(PARAMETER_ITEM_KEY_NULL.getMessage()); }
+		if (itemKey == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
 
 		// get configuration section for items
 		ConfigurationSection itemSect = configuration.getConfigurationSection(ITEM_SECTION);
@@ -83,7 +83,7 @@ public class ConfigurationQueryHandler implements QueryHandler {
 
 	@Override
 	public <MessageId extends Enum<MessageId>> Optional<MessageRecord> getMessageRecord(final MessageId messageId) {
-		if (messageId == null) { throw new IllegalArgumentException(PARAMETER_MESSAGE_ID_NULL.getMessage()); }
+		if (messageId == null) { throw new IllegalArgumentException(Parameter.NULL_MESSAGE_ID.getMessage()); }
 
 		// get configuration section for message id
 		ConfigurationSection messageSection = configuration.getConfigurationSection(MESSAGE_SECTION);
