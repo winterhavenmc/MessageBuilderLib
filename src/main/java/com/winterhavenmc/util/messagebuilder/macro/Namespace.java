@@ -19,6 +19,14 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 public class Namespace {
 
+
+	/**
+	 * This class contains enums that are used as a component to create a unique namespace,
+	 * It is primarily used in the formation of unique keys for use in &lt;K,V&gt; data structures, such as maps.
+ 	 */
+	private Namespace() { }
+
+
 	/**
 	 * This enum represents the top-level categories that must be used as the root of the keyDomain.
 	 * They are subject to change at this time, and will likely be reduced to an appropriate set as necessary.
