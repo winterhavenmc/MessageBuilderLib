@@ -20,6 +20,8 @@ to effect their output. For instance, singular or plural names will be displayed
 associated quantity exists.
 - **Multi-Field Processors**: New placeholders may be created by the processor to hold multiple values. For example, the 
 world name and coordinates for a location object.
+- Planned features: More MacroProcessor types for dates, durations and others object types. Locale setting for localized
+date and number formatting.
 
 ## Usage
 
@@ -42,11 +44,15 @@ any of the messages, and also must be an exact string match for the Macro enum c
 
 example:
 ```java
-public enum MessageId {
-    PLAYER_NAME,
-    PLAYER_LOCATION,
-    ITEM_NAME,
-    WORLD_NAME
+public enum Macro {
+    PLAYER_KILLS,
+    TEAM_NAME,
+    PLAYER,
+    PLUGIN_TOOL_ITEM,
+    ANOTHER_ITEM,
+    ANOTHER_ITEM_QUANTITY, // allows ANOTHER_ITEM to choose plurality
+    WORLD,
+    LOCATION
 }
 ```
 
