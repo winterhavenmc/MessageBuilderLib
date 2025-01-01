@@ -78,7 +78,9 @@ public interface MacroProcessor {
 	 * Implementations should map relevant data from the input value to placeholders,
 	 * using the provided {@code key} as a namespace to prevent collisions. The resolved
 	 * context entries are stored in the {@link ContextMap}, and the method returns
-	 * a {@link ResultMap} to indicate the outcome of the processing.
+	 * a {@link ResultMap} containing the value or values resulting from the processing,
+	 * and any new fields generated for them with a namespaced key which is a child key of
+	 * the original object's namespaced key.
 	 * </p>
 	 *
 	 * @param key         the unique key or namespace for this macro entry
