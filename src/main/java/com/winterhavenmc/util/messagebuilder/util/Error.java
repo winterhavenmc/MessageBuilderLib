@@ -17,41 +17,59 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-/**
- * Enum of errors
- */
-public enum Error {
-	PARAMETER_CONFIGURATION_NULL("The configuration parameter was null."),
-	PARAMETER_CONTEXT_MAP_NULL("The contextMap parameter was null."),
-	PARAMETER_DIRECTORY_PATH_NULL("Target directory path cannot be null."),
-	PARAMETER_DOMAIN_NULL("The domain parameter cannot be null."),
-	PARAMETER_ITEM_KEY_NULL("The itemKey parameter was null."),
-	PARAMETER_KEY_PATH_EMPTY("The keyPath parameter cannot be empty."),
-	PARAMETER_KEY_PATH_NULL("The keyPath parameter cannot be null."),
-	PARAMETER_MACRO_NULL("macro cannot be null."),
-	PARAMETER_MESSAGE_ID_NULL("The messageId parameter was null."),
-	PARAMETER_NAMESPACED_KEY_EMPTY("The key parameter cannot be empty."),
-	PARAMETER_NAMESPACED_KEY_NULL("The key parameter cannot be null."),
-	PARAMETER_PLUGIN_NULL("The plugin parameter was null."),
-	PARAMETER_QUERY_HANDLER_NULL("The queryHandler parameter was null."),
-	PARAMETER_RESOURCE_NAME_EMPTY("Resource name cannot be empty."),
-	PARAMETER_SUBDOMAIN_ELEMENT_EMPTY("Subdomains cannot be empty."),
-	PARAMETER_SUBDOMAIN_ELEMENT_NULL("Subdomains cannot be null."),
-	PARAMETER_SUBDOMAINS_NULL("Subdomains array cannot be null."),
-	PARAMETER_RESOURCE_NAME_NULL("Resource name cannot be null."),
-	PARAMETER_VALUE_NULL("the value parameter was null."),
-	PARAMETER_WORLD_NULL("The world parameter cannot be null."),
-	;
+public class Error {
 
-	private final String messageString;
+	/**
+	 * Enum of parameter errors
+	 */
+	public enum Parameter implements ErrorEnum {
+		EMPTY_KEY_PATH("The keyPath parameter cannot be empty."),
+		EMPTY_NAMESPACED_KEY("The key parameter cannot be empty."),
+		EMPTY_RESOURCE_NAME("Resource name cannot be empty."),
+		EMPTY_SUBDOMAIN_ELEMENT("Subdomains cannot be empty."),
+		NULL_CONFIGURATION("The configuration parameter was null."),
+		NULL_CONTEXT_MAP("The contextMap parameter was null."),
+		NULL_DIRECTORY_PATH("Target directory path cannot be null."),
+		NULL_DOMAIN("The domain parameter cannot be null."),
+		NULL_ITEM_KEY("The itemKey parameter was null."),
+		NULL_KEY_PATH("The keyPath parameter cannot be null."),
+		NULL_MACRO("macro cannot be null."),
+		NULL_MESSAGE_ID("The messageId parameter was null."),
+		NULL_NAMESPACED_KEY("The key parameter cannot be null."),
+		NULL_PLUGIN("The plugin parameter was null."),
+		NULL_QUERY_HANDLER("The queryHandler parameter was null."),
+		NULL_SUBDOMAIN_ELEMENT("Subdomains cannot be null."),
+		NULL_SUBDOMAINS("Subdomains array cannot be null."),
+		NULL_RESOURCE_NAME("Resource name cannot be null."),
+		NULL_VALUE("the value parameter was null."),
+		NULL_WORLD("The world parameter cannot be null."),
+		;
 
+		private final String messageString;
 
-	Error(final String message) {
-		this.messageString = message;
+		Parameter(final String message) {
+			this.messageString = message;
+		}
+
+		public String getMessage() {
+			return this.messageString;
+		}
 	}
 
-	public String getMessage() {
-		return this.messageString;
+
+	public enum LanguageConfiguration implements ErrorEnum {
+		RELOAD_FAILED("The language configuration could not be reloaded. Keeping existing configuration."),
+		;
+
+		private final String messageString;
+
+		LanguageConfiguration(final String message) {
+			this.messageString = message;
+		}
+
+		public String getMessage() {
+			return this.messageString;
+		}
 	}
 
 }
