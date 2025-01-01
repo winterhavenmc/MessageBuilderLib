@@ -20,6 +20,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 
@@ -38,10 +39,7 @@ class CommandSenderProcessorTest {
 
 	@BeforeEach
 	public void setUp() {
-
-		mockPlugin = mock(Plugin.class);
-		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger("MockPlugin"));
-
+		mockPlugin = MockUtility.createMockPlugin();
 		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
 
 		macroProcessor = new CommandSenderProcessor(mockQueryHandler);
