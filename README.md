@@ -13,9 +13,13 @@ MessageBuilderLib is a Java library designed for Bukkit Minecraft server plugin 
 - **Builder Pattern**: Compose messages with an intuitive chaining mechanism.
 - **Macro Replacement**: Use macros for dynamic text substitution, supporting standard Java objects and Bukkit-specific types.
 - **Localization Support**: Automatically manage language files using IETF standard language tags (e.g., `en-US`), with fallback mechanisms for missing translations.
-- **Flexible Data Sources**: Fetch messages and items from YAML-backed `ConfigurationSection`s.
-- **Customizable Context**: Support for multiple entries of the same macro type using composite keys.
-- **Extensibility**: Easily add new `MacroProcessorType` and `Processor` implementations.
+- **Flexible Data Sources**: Messages and custom item strings, among other constant placeholders, are stored in
+a YAML `Configuration` file, and may be edited by server operators, within the limits imposed by the plugin.
+- **Context Aware Placeholders**: Macros may rely on values from other objects placed in the context map 
+to effect their output. For instance, singular or plural names will be displayed for custom items, if an
+associated quantity exists.
+- **Multi-Field Processors**: New placeholders may be created by the processor to hold multiple values. For example, the 
+world name and coordinates for a location object.
 
 ## Usage
 
@@ -144,14 +148,13 @@ ITEMS:
 ```yaml
 MESSAGES:
   WELCOME_MESSAGE:
-    messageKey: "WELCOME_MESSAGE"
     enabled: true
     message: "Welcome, %PLAYER_NAME%!"
-    repeatDelay: 0
+    repeat-delay: 0
     title: "Welcome!"
-    titleFadeIn: 10
-    titleStay: 70
-    titleFadeOut: 20
+    title-fade-in: 10
+    title-stay: 70
+    title-fade-out: 20
     subtitle: "Enjoy your stay at %LOCATION_WORLD%!"
 ```
 
