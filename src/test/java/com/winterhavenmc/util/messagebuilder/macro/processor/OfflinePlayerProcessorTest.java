@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.macro.*;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -43,8 +44,7 @@ class OfflinePlayerProcessorTest {
 	@BeforeEach
 	void setUp() {
 		// mock plugin
-		mockPlugin = mock(Plugin.class);
-		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger("OfflinePlayerProcessorTest"));
+		mockPlugin = MockUtility.createMockPlugin();
 
 		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
 

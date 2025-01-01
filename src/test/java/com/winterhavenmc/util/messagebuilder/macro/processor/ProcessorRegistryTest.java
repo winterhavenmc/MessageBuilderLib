@@ -21,8 +21,10 @@ import com.winterhavenmc.util.messagebuilder.*;
 import com.winterhavenmc.util.messagebuilder.languages.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileInstaller;
 import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileLoader;
+import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.query.ConfigurationQueryHandler;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,7 +42,7 @@ class ProcessorRegistryTest {
 
 	@BeforeAll
 	public void setUp() {
-		plugin = mock(Plugin.class);
+		plugin = MockUtility.createMockPlugin();
 	}
 
 	@AfterAll
@@ -53,14 +55,14 @@ class ProcessorRegistryTest {
 	void notNull() {
 		ProcessorRegistry macroProcessorRegistry = new ProcessorRegistry();
 		assertNotNull(macroProcessorRegistry);
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileInstaller(plugin), new YamlLanguageFileLoader(plugin));
+		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
 		assertNotNull(languageHandler);
 	}
 
 	@Test
 	void put() {
 		ProcessorRegistry macroProcessorRegistry = new ProcessorRegistry();
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileInstaller(plugin), new YamlLanguageFileLoader(plugin));
+		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
 		QueryHandler queryHandler = new ConfigurationQueryHandler(plugin, languageHandler.getConfiguration());
 		macroProcessorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(queryHandler));
 		assertNotNull(macroProcessorRegistry.get(ProcessorType.STRING));
@@ -69,7 +71,7 @@ class ProcessorRegistryTest {
 	@Test
 	void get() {
 		ProcessorRegistry macroProcessorRegistry = new ProcessorRegistry();
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileInstaller(plugin), new YamlLanguageFileLoader(plugin));
+		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
 		QueryHandler queryHandler = new ConfigurationQueryHandler(plugin, languageHandler.getConfiguration());
 		macroProcessorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(queryHandler));
 		assertNotNull(macroProcessorRegistry.get(ProcessorType.STRING));
