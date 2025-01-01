@@ -40,6 +40,7 @@ public enum Error {
 	PARAMETER_SUBDOMAINS_NULL("Subdomains array cannot be null."),
 	PARAMETER_RESOURCE_NAME_NULL("Resource name cannot be null."),
 	PARAMETER_VALUE_NULL("the value parameter was null."),
+	PARAMETER_WORLD_NULL("The world parameter cannot be null."),
 	;
 
 	private final String messageString;
