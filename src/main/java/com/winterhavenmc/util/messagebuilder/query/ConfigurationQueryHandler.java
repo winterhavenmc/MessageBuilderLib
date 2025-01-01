@@ -29,6 +29,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.World;
+import org.bukkit.plugin.PluginManager;
 
 import java.util.List;
 import java.util.Optional;
@@ -174,21 +175,25 @@ public class ConfigurationQueryHandler implements QueryHandler {
 	public Optional<String> getWorldAlias(final World world) {
 		if (world == null) { return Optional.empty(); }
 
-		String worldName = null;
+		String worldName = world.getName();
 
-		plugin.getServer().getPluginManager().isPluginEnabled("Multiverse-Core");
+		Server server = plugin.getServer();
+		PluginManager pluginManager = server.getPluginManager();
 
-		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
+		if (pluginManager.isPluginEnabled("Multiverse-Core")) {
 
-		// if Multiverse is enabled, get MultiverseWorld object
-		if (mvCore != null && mvCore.isEnabled()) {
+			// get reference to Multiverse-Core if installed
+			MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
 
-			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(world);
+			// if Multiverse is enabled, get MultiverseWorld object
+			if (mvCore != null && mvCore.isEnabled()) {
 
-			// if Multiverse alias is not null or empty, set worldName to alias
-			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
-				worldName = mvWorld.getAlias();
+				MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(world);
+
+				// if Multiverse alias is not null or empty, set worldName to alias
+				if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
+					worldName = mvWorld.getAlias();
+				}
 			}
 		}
 
