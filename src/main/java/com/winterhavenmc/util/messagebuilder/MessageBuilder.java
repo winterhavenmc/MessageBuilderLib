@@ -125,7 +125,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
 		if (messageId == null) {
-			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_MESSAGE_ID_NULL.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage());
 		}
 		return new Message<>(plugin, queryHandler, macroHandler, recipient, messageId);
 	}
@@ -139,7 +139,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public boolean isEnabled(final MessageId messageId) {
 		if (messageId == null) {
-			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_MESSAGE_ID_NULL.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage());
 		}
 		return queryHandler.getMessageRecord(messageId).map(MessageRecord::enabled).orElse(false);
 	}
@@ -153,7 +153,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public long getRepeatDelay(final MessageId messageId) {
 		if (messageId == null) {
-			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_MESSAGE_ID_NULL.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage());
 		}
 		return queryHandler.getMessageRecord(messageId).map(MessageRecord::repeatDelay).orElse(0L);
 	}
@@ -167,7 +167,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public String getMessage(final MessageId messageId) {
 		if (messageId == null) {
-			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_MESSAGE_ID_NULL.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage());
 		}
 		return queryHandler.getMessageRecord(messageId).map(MessageRecord::message).orElse("");
 	}
@@ -190,7 +190,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Optional<String> getItemNameSingular(final String itemKey) {
 		if (itemKey == null) {
-			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_ITEM_KEY_NULL.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage());
 		}
 		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemName);
 	}
@@ -213,7 +213,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Optional<String> getItemNamePlural(final String itemKey) {
 		if (itemKey == null) {
-			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_ITEM_KEY_NULL.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage());
 		}
 		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemNamePlural);
 	}
@@ -236,7 +236,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Optional<String> getInventoryItemNameSingular(final String itemKey) {
 		if (itemKey == null) {
-			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_ITEM_KEY_NULL.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage());
 		}
 		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemName);
 	}
@@ -258,7 +258,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public Optional<String> getInventoryItemNamePlural(final String itemKey) {
 		if (itemKey == null) {
-			throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.PARAMETER_ITEM_KEY_NULL.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage());
 		}
 		return queryHandler.getItemRecord(itemKey).flatMap(ItemRecord::itemNamePlural);
 	}
@@ -281,7 +281,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public List<String> getItemLore(final String itemKey) {
 		if (itemKey == null) {
-			throw new IllegalArgumentException(Error.PARAMETER_ITEM_KEY_NULL.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage());
 		}
 		Optional<ItemRecord> itemRecord = queryHandler.getItemRecord(itemKey);
 		if (itemRecord.isEmpty()) {

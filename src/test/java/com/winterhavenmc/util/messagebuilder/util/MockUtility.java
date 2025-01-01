@@ -92,9 +92,9 @@ public class MockUtility {
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
 	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
-		if (resourceName == null) { throw new IllegalArgumentException(Error.PARAMETER_RESOURCE_NAME_NULL.getMessage()); }
-		if (resourceName.isEmpty()) { throw new IllegalArgumentException(Error.PARAMETER_RESOURCE_NAME_EMPTY.getMessage()); }
-		if (targetDirPath == null) { throw new IllegalArgumentException(Error.PARAMETER_DIRECTORY_PATH_NULL.getMessage()); }
+		if (resourceName == null) { throw new IllegalArgumentException(Error.Parameter.NULL_RESOURCE_NAME.getMessage()); }
+		if (resourceName.isEmpty()) { throw new IllegalArgumentException(Error.Parameter.EMPTY_RESOURCE_NAME.getMessage()); }
+		if (targetDirPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_DIRECTORY_PATH.getMessage()); }
 
 		// Ensure the target directory exists
 		Files.createDirectories(targetDirPath);

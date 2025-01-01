@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.languages;
 
+import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
@@ -164,7 +165,7 @@ public class YamlLanguageHandler implements LanguageHandler {
 			this.configuration = newConfiguration;
 		}
 		else {
-			plugin.getLogger().warning("The configuration could not be reloaded. Keeping existing configuration.");
+			plugin.getLogger().warning(Error.LanguageConfiguration.RELOAD_FAILED.getMessage());
 		}
 	}
 
