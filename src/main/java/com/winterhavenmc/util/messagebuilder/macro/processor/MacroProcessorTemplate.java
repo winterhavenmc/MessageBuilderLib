@@ -26,7 +26,7 @@ import com.winterhavenmc.util.messagebuilder.util.Error;
  * as well as the UNKNOWN_VALUE string constant.
  * Methods used by all classes may be placed here in the future.
  */
-public abstract class AbstractProcessor implements MacroProcessor {
+public abstract class MacroProcessorTemplate implements MacroProcessor {
 
 	final static String UNKNOWN_VALUE = "???";
 
@@ -37,8 +37,8 @@ public abstract class AbstractProcessor implements MacroProcessor {
 	 * Abstract class constructor
 	 * @param queryHandler the queryHandler used by the classes that extend this abstract class
 	 */
-	AbstractProcessor(final QueryHandler queryHandler) {
-		if (queryHandler == null) { throw new IllegalArgumentException(Error.PARAMETER_QUERY_HANDLER_NULL.getMessage()); }
+	MacroProcessorTemplate(final QueryHandler queryHandler) {
+		if (queryHandler == null) { throw new IllegalArgumentException(Error.Parameter.NULL_QUERY_HANDLER.getMessage()); }
 		this.queryHandler = queryHandler;
 	}
 
