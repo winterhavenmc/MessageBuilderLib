@@ -137,53 +137,13 @@ public class MockUtility {
 	private static File createTempDataDir() {
 		try {
 			Path tempDir = Files.createTempDirectory("test-data");
-//			tempDir.toFile().deleteOnExit();
+			// tempDir.toFile().deleteOnExit();
 			tempDir.toFile();
 			return tempDir.toFile();
 		} catch (IOException e) {
 			throw new IllegalStateException("Failed to create temporary data directory.", e);
 		}
 	}
-
-
-//	/**
-//	 * Get a resource as an {@link InputStream} for the named resource.
-//	 *
-//	 * @param name the name of the resource to stream
-//	 * @return {@code InputStream} of the named resource
-//	 */
-//	public static InputStream getResourceStream(final String name) {
-//		return Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
-//	}
-
-
-
-//	/**
-//	 * Create a temporary folder
-//	 *
-//	 * @return File object of a temporary plugin data directory, or null if the temporary directory could not be created
-//	 */
-//	public static File createTempDataDir() {
-//
-//		String tempDataDirectoryPath;
-//
-//		try {
-//			tempDataDirectoryPath = Files.createTempDirectory("PluginData").toFile().getAbsolutePath();
-//		} catch (IOException e) {
-//			throw new RuntimeException(e);
-//		}
-//
-//		File tempDir = new File(tempDataDirectoryPath);
-//		@SuppressWarnings("unused") boolean success = tempDir.mkdirs();
-//		if (!tempDir.isDirectory()) {
-//			throw new RuntimeException("the temporary directory could not be created.");
-//		}
-//		else {
-//			LOGGER.info("The temporary directory was successfully created.");
-//			tempDir.deleteOnExit();
-//		}
-//		return tempDir;
-//	}
 
 
 	/**
@@ -198,40 +158,6 @@ public class MockUtility {
 	}
 
 
-//	/**
-//	 * Installs a resource file from the classpath to the specified target directory.
-//	 *
-//	 * @param resourceName  the name of the resource file in the classpath
-//	 * @param targetDirPath the target directory where the file should be installed
-//	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
-//	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
-//	 */
-//	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
-//		if (resourceName == null) {	throw new IllegalArgumentException("Resource name cannot be null or empty."); }
-//		if (resourceName.isEmpty()) { throw new IllegalArgumentException("Resource name cannot be null or empty."); }
-//		if (targetDirPath == null) { throw new IllegalArgumentException("Target directory path cannot be null."); }
-//
-//		// Get the resource as an InputStream
-//		InputStream inputStream = getResourceStream(resourceName);
-//		if (inputStream == null) { throw new IOException("Resource '" + resourceName + "' not found in the classpath."); }
-//
-//		// Ensure the target directory exists
-//		Files.createDirectories(targetDirPath);
-//
-//		// Resolve the full path to the target file
-//		Path targetFilePath = targetDirPath.resolve(resourceName);
-//
-//		// Copy the resource to the target directory
-//		try {
-//			long bytesCopied = Files.copy(inputStream, targetFilePath);
-//			return bytesCopied > 0;
-//		} catch (FileAlreadyExistsException e) {
-//			LOGGER.warning("File already exists: " + targetFilePath);
-//			return false;
-//		}
-//	}
-
-
 	/**
 	 * Creates a mock Plugin instance with a logger and optional configuration.
 	 *
@@ -239,14 +165,14 @@ public class MockUtility {
 	 * @return a mock Plugin instance
 	 */
 	public static Plugin createMockPlugin(java.util.Map<String, Object> configValues) {
-		Plugin mockPlugin = mock(Plugin.class);
+		Plugin mockPlugin = mock(Plugin.class, "MockPlugin");
 
 		// Mock the plugin logger
 		Logger mockLogger = Logger.getLogger("MockPluginLogger");
 		when(mockPlugin.getLogger()).thenReturn(mockLogger);
 
 		// Mock the configuration
-		FileConfiguration mockConfig = mock(FileConfiguration.class);
+		FileConfiguration mockConfig = mock(FileConfiguration.class, "MockPluginConfig");
 		if (configValues != null) {
 			configValues.forEach((key, value) -> when(mockConfig.get(key)).thenReturn(value));
 		}
