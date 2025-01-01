@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -46,21 +47,18 @@ class MessageCooldownTest {
 	@BeforeEach
 	public void setUp() {
 
-		plugin = mock(Plugin.class, "MockPlugin");
+		plugin = MockUtility.createMockPlugin();
+
 		server = mock(Server.class, "MockServer");
-		pluginManager = mock(PluginManager.class, "MockPluginManager");
-		player1 = mock(Player.class, "MockPlayer1");
-
-		// return real logger for mock plugin
-		when(plugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getSimpleName()));
-
 		when(plugin.getServer()).thenReturn(server);
+
+		pluginManager = mock(PluginManager.class, "MockPluginManager");
 		when(server.getPluginManager()).thenReturn(pluginManager);
 
-		when(server.getPlayer("player1")).thenReturn(player1);
-
+		player1 = mock(Player.class, "MockPlayer1");
 		when(player1.getName()).thenReturn("Player One");
 		when(player1.getUniqueId()).thenReturn(player1Uid);
+		when(server.getPlayer("player1")).thenReturn(player1);
 
 		// instantiate real MessageCooldown
 		messageCooldown = MessageCooldown.getInstance(plugin);
