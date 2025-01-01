@@ -76,7 +76,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	private final LanguageHandler languageHandler;
 	private final QueryHandler queryHandler;
 	private final MacroHandler macroHandler;
-	private final WorldNameUtility worldNameUtility;
+//	private final WorldNameUtility worldNameUtility;
 
 
 	/**
@@ -89,7 +89,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		this.languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
 		this.queryHandler = new ConfigurationQueryHandler(plugin, languageHandler.getConfiguration());
 		this.macroHandler = new MacroHandler(plugin, queryHandler);
-		this.worldNameUtility = new WorldNameUtility(plugin.getServer().getPluginManager());
+//		this.worldNameUtility = new WorldNameUtility(plugin.getServer().getPluginManager());
 	}
 
 
@@ -356,15 +356,15 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	}
 
 
-	/**
-	 * Get optional string of world name or multiverse alias if available
-	 *
-	 * @param world the world to retrieve name
-	 * @return Optional String containing world name or multiverse alias
-	 */
-	public Optional<String> getWorldName(final World world) {
-		return worldNameUtility.getWorldName(world);
-	}
+//	/**
+//	 * Get optional string of world name or multiverse alias if available
+//	 *
+//	 * @param world the world to retrieve name
+//	 * @return Optional String containing world name or multiverse alias
+//	 */
+//	public Optional<String> getWorldName(final World world) {
+//		return worldNameUtility.getWorldName(world);
+//	}
 
 	/**
 	 * Reload messages from configured language file
