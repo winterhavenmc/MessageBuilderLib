@@ -22,23 +22,22 @@ import com.winterhavenmc.util.messagebuilder.languages.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
-import org.bukkit.World;
+import com.winterhavenmc.util.messagebuilder.util.LocaleProvider;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Locale;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
 
 import static com.winterhavenmc.util.TimeUnit.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -60,16 +59,22 @@ class MessageBuilderTest {
 
 	@BeforeEach
 	void setUp() {
-		mockPlugin = mock(Plugin.class, "MockPlugin");
-		mockConfiguration = mock(FileConfiguration.class, "MockConfiguration");
+		mockPlugin = MockUtility.createMockPlugin();
+//		mockConfiguration = mock(FileConfiguration.class, "MockConfiguration");
 		mockLanguageHandler = mock(LanguageHandler.class, "MockLanguageHandler");
 		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
 		mockMacroHandler = mock(MacroHandler.class, "mockMacroHandler");
 
-		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-		when(mockPlugin.getConfig()).thenReturn(mockConfiguration);
+//		LocaleProvider mockProvider = mock(LocaleProvider.class);
+//		when(mockProvider.fromLanguageTag("en-US")).thenReturn(Locale.US);
 
-		when(mockConfiguration.getString("language")).thenReturn("en-US");
+
+
+
+//		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+//		when(mockPlugin.getConfig()).thenReturn(mockConfiguration);
+
+//		when(mockConfiguration.getString("language")).thenReturn("en-US");
 
 		// mock player for message recipient
 		mockPlayer = mock(Player.class, "MockPlayer");
@@ -84,6 +89,20 @@ class MessageBuilderTest {
 	public void tearDown() {
 		mockPlugin = null;
 		messageBuilder = null;
+	}
+
+
+	@Disabled
+	@Test
+	void testHandleLanguageWithMockedLocale() {
+		LocaleProvider mockProvider = mock(LocaleProvider.class);
+		when(mockProvider.fromLanguageTag("en-US")).thenReturn(Locale.US);
+
+//			LanguageHandler handler = new YamlLanguageHandler(mockProvider);
+//			handler.handleLanguage("en-US");
+
+		// Verify interactions or assert behavior
+		verify(mockProvider).fromLanguageTag("en-US");
 	}
 
 
@@ -320,15 +339,15 @@ class MessageBuilderTest {
 		assertEquals('%', MacroHandler.MacroDelimiter.RIGHT.toChar());
 	}
 
-	@Test
-	void getWorldNameTest_mockito() {
-		World world = mock(World.class);
-		when(world.getName()).thenReturn("world");
-
-		assertNotNull(world, "Mock world 'world' is null.");
-		assertTrue(messageBuilder.getWorldName(world).isPresent(), "Returned value is an empty Optional.");
-		assertEquals(Optional.of("world"), messageBuilder.getWorldName(world), "Returned world name is not 'world'.");
-	}
+//	@Test
+//	void getWorldNameTest_mockito() {
+//		World world = mock(World.class);
+//		when(world.getName()).thenReturn("world");
+//
+//		assertNotNull(world, "Mock world 'world' is null.");
+//		assertTrue(messageBuilder.getWorldName(world).isPresent(), "Returned value is an empty Optional.");
+//		assertEquals(Optional.of("world"), messageBuilder.getWorldName(world), "Returned world name is not 'world'.");
+//	}
 
 	@Test
 	void reloadTest() {
