@@ -103,7 +103,7 @@ public class LocationProcessor extends MacroProcessorTemplate {
 		if (key == null) { throw new IllegalArgumentException(Error.Parameter.NULL_NAMESPACED_KEY.getMessage()); }
 		if (key.isBlank()) { throw new IllegalArgumentException((Error.Parameter.EMPTY_NAMESPACED_KEY.getMessage())); }
 		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
-		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.name()); }
+		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
 
 		// get server plugin manager
 //		PluginManager pluginManager = Bukkit.getPluginManager();
