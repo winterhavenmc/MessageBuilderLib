@@ -79,10 +79,10 @@ public class NamespaceKey implements ContextKey {
 	/**
 	 * Class constructor
 	 * <p>
-	 *     creates a NamespaceKey with the supplied domain and keyPath. This key will have no
+	 *     creates a NamespaceKey with the supplied keyPath and domain. This key will have no
 	 *     subdomains upon creation.
 	 *</p>
-	 * @param keyPath the String key or macroName to be used as the fully name-spaced key
+	 * @param keyPath a String key to be used as a component the fully name-spaced key
 	 * @param keyDomain  the domain that forms the root of the keyDomain
 	 */
 	NamespaceKey(final String keyPath, Namespace.Domain keyDomain) {
@@ -99,7 +99,7 @@ public class NamespaceKey implements ContextKey {
 	 *     Any number of subdomains may be passed to the constructor.
 	 * </p>
 	 *
-	 * @param keyPath the String key or macroName to be used as the fully name-spaced key
+	 * @param keyPath the String key to be used as a component in the fully name-spaced key
 	 * @param keyDomain  the domain that forms the root of the keyDomain
 	 */
 	NamespaceKey(final String keyPath, Namespace.Domain keyDomain, String... subdomains) {
@@ -110,7 +110,7 @@ public class NamespaceKey implements ContextKey {
 
 
 	/**
-	 * Get the String representation of this key, composed of its domain and path with delimiters
+	 * Get the String representation of this key, composed of its domain and keyPath with delimiters
 	 *
 	 * @return a String representation of this key
 	 */
@@ -204,9 +204,9 @@ public class NamespaceKey implements ContextKey {
 	/**
 	 * Static method to generate a nameSpacedKey with optional subcategories.
 	 *
-	 * @param keyPath       The keyPath portion of the new key (required).
-	 * @param domain        The top-level domain that forms the root of the keyDomain (required).
-	 * @param subcategories Optional subcategories to be added to the keyDomain.
+	 * @param keyPath        The keyPath portion of the new key (required).
+	 * @param domain         The top-level domain that forms the root of the keyDomain (required).
+	 * @param subcategories  Optional subcategories to be added to the keyDomain.
 	 * @return A fully-formed namespaced String key.
 	 */
 	public static String create(String keyPath, Namespace.Domain domain, String... subcategories) {
