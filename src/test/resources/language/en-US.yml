@@ -17,6 +17,10 @@ CONSTANTS:
     DISPLAY_NAME: '&aSpawn'
   HOME:
     DISPLAY_NAME: '&aHome'
+  TEST_LIST:
+    - item 1
+    - item 2
+    - item 3
 
 
 ##############
