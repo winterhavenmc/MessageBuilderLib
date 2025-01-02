@@ -30,7 +30,7 @@ class NamespaceKeyTest {
     void testConstructor_WithDomainAndKeyPath() {
         NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.MACRO);
         assertEquals("test.key", key.getKeyPath());
-        assertEquals(Namespace.Domain.MACRO, key.getKeyDomain());
+        assertEquals(Namespace.Domain.MACRO, key.getDomain());
         assertTrue(key.getSubdomains().isEmpty());
     }
 
@@ -38,7 +38,7 @@ class NamespaceKeyTest {
     void testConstructor_WithDomainKeyPathAndSubdomains() {
         NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.MACRO, "sub1", "sub2");
         assertEquals("test.key", key.getKeyPath());
-        assertEquals(Namespace.Domain.MACRO, key.getKeyDomain());
+        assertEquals(Namespace.Domain.MACRO, key.getDomain());
         assertEquals(List.of("sub1", "sub2"), key.getSubdomains());
     }
 
