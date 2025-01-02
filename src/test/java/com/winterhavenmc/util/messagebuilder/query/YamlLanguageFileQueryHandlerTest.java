@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 class YamlLanguageFileQueryHandlerTest {
 
 	Plugin plugin;
-	LanguageFileQueryHandler languageFileQueryHandler;
+	LanguageFileQueryHandler queryHandler;
 
 
 	@BeforeEach
@@ -51,7 +51,7 @@ class YamlLanguageFileQueryHandlerTest {
 
 		plugin = MockUtility.createMockPlugin(configValues);
 		Configuration languageConfiguration = loadConfigurationFromResource("language/en-US.yml");
-		languageFileQueryHandler = new YamlLangugageFileQueryHandler(plugin, languageConfiguration);
+		queryHandler = new YamlLangugageFileQueryHandler(plugin, languageConfiguration);
 	}
 
 
@@ -76,41 +76,41 @@ class YamlLanguageFileQueryHandlerTest {
 
 	@Test
 	void getItemRecordTest() {
-		Optional<ItemRecord> itemRecord = languageFileQueryHandler.getItemRecord("TEST_ITEM_1");
+		Optional<ItemRecord> itemRecord = queryHandler.getItemRecord("TEST_ITEM_1");
 		assertTrue(itemRecord.isPresent());
 	}
 
 	@Test
 	void getItemRecordTest_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> languageFileQueryHandler.getItemRecord(null)
+				() -> queryHandler.getItemRecord(null)
 		);
 		assertEquals("The itemKey parameter was null.", exception.getMessage());
 	}
 
 	@Test
 	void getMessageRecordTest() {
-		Optional<MessageRecord> messageRecord = languageFileQueryHandler.getMessageRecord(MessageId.ENABLED_MESSAGE);
+		Optional<MessageRecord> messageRecord = queryHandler.getMessageRecord(MessageId.ENABLED_MESSAGE);
 		assertTrue(messageRecord.isPresent());
 	}
 
 	@Test
 	void getIMessageRecordTest_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> languageFileQueryHandler.getMessageRecord(null));
+				() -> queryHandler.getMessageRecord(null));
 		assertEquals("The messageId parameter was null.", exception.getMessage());
 	}
 
 	@Test
 	void getConstantTest() {
-		Optional<String> constantString = languageFileQueryHandler.getString("HOME.DISPLAY_NAME");
+		Optional<String> constantString = queryHandler.getString("HOME.DISPLAY_NAME");
 		assertTrue(constantString.isPresent());
 	}
 
 	@Test
 	void getConstantTest_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> languageFileQueryHandler.getString(null));
+				() -> queryHandler.getString(null));
 		assertEquals("The itemKey parameter was null.", exception.getMessage());
 	}
 
