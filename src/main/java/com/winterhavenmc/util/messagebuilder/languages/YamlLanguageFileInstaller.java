@@ -77,7 +77,8 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
 	private void install(final String resourceName) {
 
 		if (plugin.getResource(resourceName) == null) {
-			plugin.getLogger().warning("The resource " + resourceName + " could not be found by the auto installer!");
+			plugin.getLogger().warning("The resource '" + resourceName
+					+ "' listed in the 'auto_install.txt' file could not be found by the installer.");
 			return;
 		}
 
