@@ -240,24 +240,24 @@ public class NamespaceKey implements ContextKey {
 	 * to adhere to the Java naming convention for constants. The subcategories are unrestricted in their
 	 * case, but obviously must avoid using a colon character to avoid confusion with the domain delimiter.
 	 *
-	 * @param keyDomain the keyDomain to validate
+	 * @param fullDomainString the keyDomain to validate
 	 * @return {@code true} if the keyDomain conforms to the naming convention, {@code false} if it does not.
 	 */
-	static boolean isValidKeyDomain(String keyDomain) {
+	static boolean isValidKeyDomain(String fullDomainString) {
 		String keyDomainPattern = "^[a-zA-Z0-9_]+(:[a-zA-Z0-9_]+)*$";
-		return keyDomain.matches(keyDomainPattern);
+		return fullDomainString.matches(keyDomainPattern);
 	}
 
 
 	/**
 	 * Static method to generate a warning to the log when an invalid key domain is detected
 	 *
-	 * @param keyDomain the key domain to check for validity
+	 * @param fullDomainString the key domain to check for validity
 	 */
-	static void validateKeyDomain(String keyDomain) {
-		if (!isValidKeyDomain(keyDomain)) {
+	static void validateKeyDomain(String fullDomainString) {
+		if (!isValidKeyDomain(fullDomainString)) {
 			// Log a warning without modifying the keyPath
-			Logger.getLogger("NamespaceKey").warning("Key domain '" + keyDomain + "' does not conform to the allowed naming convention.");
+			Logger.getLogger("NamespaceKey").warning("Key domain '" + fullDomainString + "' does not conform to the allowed naming convention.");
 		}
 	}
 
