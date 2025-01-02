@@ -71,9 +71,8 @@ public class NamespaceKey implements ContextKey {
 	private final static String KEY_BOUNDARY_DELIMITER = "|";
 	private final static String KEY_PATH_DELIMITER = "\\."; // escaped dot
 
-	private final Namespace.Domain keyDomain;
+	private final Namespace.Domain domain;
 	private final List<String> subdomains;
-	private final String keyPath;
 	private final List<String> keyPathComponents;
 
 
@@ -84,11 +83,10 @@ public class NamespaceKey implements ContextKey {
 	 *     subdomains upon creation.
 	 *</p>
 	 * @param keyPath a String key to be used as a component the fully name-spaced key
-	 * @param keyDomain  the domain that forms the root of the keyDomain
+	 * @param domain  the domain that forms the root of the keyDomain
 	 */
-	NamespaceKey(final String keyPath, Namespace.Domain keyDomain) {
-		this.keyPath = keyPath;
-		this.keyDomain = keyDomain;
+	NamespaceKey(final String keyPath, Namespace.Domain domain) {
+		this.domain = domain;
 		this.subdomains = new ArrayList<>();
 		this.keyPathComponents = List.of(keyPath.split(KEY_PATH_DELIMITER));
 	}
@@ -102,11 +100,10 @@ public class NamespaceKey implements ContextKey {
 	 * </p>
 	 *
 	 * @param keyPath the String key to be used as a component in the fully name-spaced key
-	 * @param keyDomain  the domain that forms the root of the keyDomain
+	 * @param domain  the domain that forms the root of the keyDomain
 	 */
-	NamespaceKey(final String keyPath, Namespace.Domain keyDomain, String... subdomains) {
-		this.keyPath = keyPath;
-		this.keyDomain = keyDomain;
+	NamespaceKey(final String keyPath, Namespace.Domain domain, String... subdomains) {
+		this.domain = domain;
 		this.subdomains = new ArrayList<>(Arrays.stream(subdomains).toList());
 		this.keyPathComponents = List.of(keyPath.split(KEY_PATH_DELIMITER));
 	}
@@ -119,7 +116,7 @@ public class NamespaceKey implements ContextKey {
 	 */
 	@Override
 	public String getKey() {
-		return String.join(KEY_BOUNDARY_DELIMITER, getFullDomain(), keyPath);
+		return String.join(KEY_BOUNDARY_DELIMITER, getFullDomain(), getKeyPath());
 	}
 
 
@@ -129,7 +126,7 @@ public class NamespaceKey implements ContextKey {
 	 * @return a String representation of the domain component of this key
 	 */
 	public String getFullDomain() {
-		return String.join(KEY_DOMAIN_DELIMITER, keyDomain.name(), String.join(KEY_DOMAIN_DELIMITER, subdomains));
+		return String.join(KEY_DOMAIN_DELIMITER, domain.name(), String.join(KEY_DOMAIN_DELIMITER, subdomains));
 	}
 
 
@@ -138,8 +135,8 @@ public class NamespaceKey implements ContextKey {
 	 *
 	 * @return the Namespace.Domain enum constant of this key
 	 */
-	public Namespace.Domain getKeyDomain() {
-		return keyDomain;
+	public Namespace.Domain getDomain() {
+		return domain;
 	}
 
 
@@ -159,7 +156,7 @@ public class NamespaceKey implements ContextKey {
 	 * @return the key path
 	 */
 	public String getKeyPath() {
-		return keyPath;
+		return String.join(".", keyPathComponents);
 	}
 
 
