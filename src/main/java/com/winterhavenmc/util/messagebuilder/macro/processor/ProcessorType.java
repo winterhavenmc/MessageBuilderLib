@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -32,61 +32,61 @@ public enum ProcessorType {
 
 	ENTITY(Entity.class) {
 		@Override
-		MacroProcessor create(final QueryHandler queryHandler) {
+		MacroProcessor create(final LanguageFileQueryHandler queryHandler) {
 			return new EntityProcessor(queryHandler);
 		}
 	},
 	COMMAND_SENDER(CommandSender.class) {
 		@Override
-		MacroProcessor create(final QueryHandler queryHandler) {
+		MacroProcessor create(final LanguageFileQueryHandler queryHandler) {
 			return new CommandSenderProcessor(queryHandler);
 		}
 	},
 	ITEM_STACK(ItemStack.class) {
 		@Override
-		MacroProcessor create(final QueryHandler queryHandler) {
+		MacroProcessor create(final LanguageFileQueryHandler queryHandler) {
 			return new ItemStackProcessor(queryHandler);
 		}
 	},
 	LOCATION(Location.class) {
 		@Override
-		MacroProcessor create(final QueryHandler queryHandler) {
+		MacroProcessor create(final LanguageFileQueryHandler queryHandler) {
 			return new LocationProcessor(queryHandler);
 		}
 	},
 	NUMBER(Number.class) {
 		@Override
-		MacroProcessor create(final QueryHandler queryHandler) {
+		MacroProcessor create(final LanguageFileQueryHandler queryHandler) {
 			return new NumberProcessor(queryHandler);
 		}
 	},
 	OFFLINE_PLAYER(OfflinePlayer.class) {
 		@Override
-		MacroProcessor create(QueryHandler queryHandler) {
+		MacroProcessor create(LanguageFileQueryHandler queryHandler) {
 			return new OfflinePlayerProcessor(queryHandler);
 		}
 	},
 	WORLD(World.class) {
 		@Override
-		MacroProcessor create(final QueryHandler queryHandler) {
+		MacroProcessor create(final LanguageFileQueryHandler queryHandler) {
 			return new WorldProcessor(queryHandler);
 		}
 	},
 	STRING(String.class) {
 		@Override
-		MacroProcessor create(final QueryHandler queryHandler) {
+		MacroProcessor create(final LanguageFileQueryHandler queryHandler) {
 			return new StringProcessor(queryHandler);
 		}
 	},
 	OBJECT(Object.class) {
 		@Override
-		MacroProcessor create(final QueryHandler queryHandler) {
+		MacroProcessor create(final LanguageFileQueryHandler queryHandler) {
 			return new ObjectProcessor(queryHandler);
 		}
 	},
 	NULL(NullType.class) {
 		@Override
-		MacroProcessor create(final QueryHandler queryHandler) {
+		MacroProcessor create(final LanguageFileQueryHandler queryHandler) {
 			return new NullProcessor(queryHandler);
 		}
 	};
@@ -98,10 +98,10 @@ public enum ProcessorType {
 		this.expectedType = expectedType;
 	}
 
-	abstract MacroProcessor create(final QueryHandler queryHandler);
+	abstract MacroProcessor create(final LanguageFileQueryHandler queryHandler);
 
 
-	public void register(final QueryHandler queryHandler,
+	public void register(final LanguageFileQueryHandler queryHandler,
 	                     final ProcessorRegistry macroProcessorRegistry,
 	                     final ProcessorType type) {
 		macroProcessorRegistry.put(type, type.create(queryHandler));

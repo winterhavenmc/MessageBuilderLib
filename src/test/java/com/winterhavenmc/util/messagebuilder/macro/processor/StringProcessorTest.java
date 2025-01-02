@@ -24,8 +24,8 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.macro.Namespace;
 import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
-import com.winterhavenmc.util.messagebuilder.query.ConfigurationQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.YamlLangugageFileQueryHandler;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
@@ -44,7 +44,7 @@ class StringProcessorTest {
 
 	Plugin mockPlugin;
 	LanguageHandler mockLanguageHandler;
-	QueryHandler queryHandler;
+	LanguageFileQueryHandler queryHandler;
 
 	@BeforeEach
 	public void setUp() {
@@ -54,7 +54,7 @@ class StringProcessorTest {
 		mockLanguageHandler = mock(YamlLanguageHandler.class,"MockLanguageHandler");
 
 		Configuration mockConfiguration = mock(Configuration.class, "MockConfiguration");
-		queryHandler = new ConfigurationQueryHandler(mockPlugin, mockConfiguration);
+		queryHandler = new YamlLangugageFileQueryHandler(mockPlugin, mockConfiguration);
 	}
 
 	@AfterEach
@@ -88,7 +88,7 @@ class StringProcessorTest {
 	void resolveContextWithItem() {
 
 //		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
-//		QueryHandler queryHandler = new ConfigurationQueryHandler(plugin, languageHandler.getConfiguration());
+//		LanguageFileQueryHandler queryHandler = new YamlLangugageFileQueryHandler(plugin, languageHandler.getConfiguration());
 //		MacroProcessor macroProcessor = new StringProcessor(queryHandler);
 //
 //		String stringKey = "ITEM";

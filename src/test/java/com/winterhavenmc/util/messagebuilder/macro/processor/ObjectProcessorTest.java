@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 
 import org.junit.jupiter.api.*;
 
@@ -32,19 +32,19 @@ import static org.mockito.Mockito.mock;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ObjectProcessorTest {
 
-	private QueryHandler mockQueryHandler;
+	private LanguageFileQueryHandler mockLanguageFileQueryHandler;
 	private MacroProcessor macroProcessor;
 
 
 	@BeforeEach
 	public void setUp() {
-		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
-		macroProcessor = new ObjectProcessor(mockQueryHandler);
+		mockLanguageFileQueryHandler = mock(LanguageFileQueryHandler.class, "MockQueryHandler");
+		macroProcessor = new ObjectProcessor(mockLanguageFileQueryHandler);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		mockQueryHandler = null;
+		mockLanguageFileQueryHandler = null;
 		macroProcessor = null;
 	}
 

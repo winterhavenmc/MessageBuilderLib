@@ -17,13 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.*;
 import com.winterhavenmc.util.messagebuilder.languages.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileInstaller;
 import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileLoader;
 import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.query.ConfigurationQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.YamlLangugageFileQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.AfterAll;
@@ -63,7 +61,7 @@ class ProcessorRegistryTest {
 	void put() {
 		ProcessorRegistry macroProcessorRegistry = new ProcessorRegistry();
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
-		QueryHandler queryHandler = new ConfigurationQueryHandler(plugin, languageHandler.getConfiguration());
+		LanguageFileQueryHandler queryHandler = new YamlLangugageFileQueryHandler(plugin, languageHandler.getConfiguration());
 		macroProcessorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(queryHandler));
 		assertNotNull(macroProcessorRegistry.get(ProcessorType.STRING));
 	}
@@ -72,7 +70,7 @@ class ProcessorRegistryTest {
 	void get() {
 		ProcessorRegistry macroProcessorRegistry = new ProcessorRegistry();
 		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
-		QueryHandler queryHandler = new ConfigurationQueryHandler(plugin, languageHandler.getConfiguration());
+		LanguageFileQueryHandler queryHandler = new YamlLangugageFileQueryHandler(plugin, languageHandler.getConfiguration());
 		macroProcessorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(queryHandler));
 		assertNotNull(macroProcessorRegistry.get(ProcessorType.STRING));
 	}

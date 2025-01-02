@@ -19,14 +19,14 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 
 
 public class NumberProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	private final QueryHandler queryHandler;
+	private final LanguageFileQueryHandler queryHandler;
 
-	public NumberProcessor(QueryHandler queryHandler) {
+	public NumberProcessor(LanguageFileQueryHandler queryHandler) {
 		super(queryHandler);
 		this.queryHandler = queryHandler;
 	}
@@ -62,7 +62,7 @@ public class NumberProcessor extends MacroProcessorTemplate implements MacroProc
 
 
 	/**
-	 * An enum of macro name suffixes that will result in a TimeString being returned for the corresponding TimeUnit.
+	 * An enum of macro name suffixes that will result in a TimeStringOld being returned for the corresponding TimeUnit.
 	 * This allows iterating over the suffixes for a matching macro name suffix, and passing the associated TimeUnit to
 	 * {@code queryHandler.getTimeString()}.
 	 */

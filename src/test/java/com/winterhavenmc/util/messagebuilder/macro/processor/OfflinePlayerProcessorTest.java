@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.*;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.OfflinePlayer;
@@ -28,7 +28,6 @@ import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -38,7 +37,7 @@ import static org.mockito.Mockito.when;
 class OfflinePlayerProcessorTest {
 
 	private Plugin mockPlugin;
-	private QueryHandler mockQueryHandler;
+	private LanguageFileQueryHandler mockLanguageFileQueryHandler;
 	private OfflinePlayer mockOfflinePlayer;
 
 	@BeforeEach
@@ -46,7 +45,7 @@ class OfflinePlayerProcessorTest {
 		// mock plugin
 		mockPlugin = MockUtility.createMockPlugin();
 
-		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
+		mockLanguageFileQueryHandler = mock(LanguageFileQueryHandler.class, "MockQueryHandler");
 
 		// mock player for message recipient
 		mockOfflinePlayer = mock(Player.class, "MockPlayer");
@@ -57,7 +56,7 @@ class OfflinePlayerProcessorTest {
 	@AfterEach
 	public void tearDown() {
 		mockPlugin = null;
-		mockQueryHandler = null;
+		mockLanguageFileQueryHandler = null;
 		mockOfflinePlayer = null;
 	}
 
@@ -66,7 +65,7 @@ class OfflinePlayerProcessorTest {
 	void resolveContextTest() {
 		String stringKey = "SOME_NAME";
 		String key = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
-		MacroProcessor macroProcessor = new StringProcessor(mockQueryHandler);
+		MacroProcessor macroProcessor = new StringProcessor(mockLanguageFileQueryHandler);
 		ContextMap contextMap = new ContextMap();
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, stringKey);
 		assertTrue(resultMap.containsKey(key), "No match");
@@ -76,7 +75,7 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_null_contextMap() {
 		//TODO: pretty sure this is going to throw IllegalArgumentException
 		String keyPath = "SOME_NAME";
-		MacroProcessor macroProcessor = new StringProcessor(mockQueryHandler);
+		MacroProcessor macroProcessor = new StringProcessor(mockLanguageFileQueryHandler);
 		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
 		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, null, keyPath);
 		assertFalse(resultMap.containsKey(namespacedKey));

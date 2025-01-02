@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class ResultMap {
 
