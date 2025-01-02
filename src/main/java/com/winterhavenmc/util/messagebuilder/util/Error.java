@@ -36,14 +36,16 @@ public class Error {
 		NULL_MACRO("macro cannot be null."),
 		NULL_MESSAGE_ID("The messageId parameter was null."),
 		NULL_NAMESPACED_KEY("The key parameter cannot be null."),
-		NULL_PLUGIN("The plugin parameter was null."),
-		NULL_QUERY_HANDLER("The queryHandler parameter was null."),
+		NULL_PLUGIN("The plugin parameter cannot be null."),
+		NULL_PLUGIN_MANAGER("The pluginManager parameter was null."),
+		NULL_RECIPIENT("The recipient parameter was null."),
+		NULL_QUERY_HANDLER("The languageFileQueryHandler parameter was null."),
 		NULL_SUBDOMAIN_ELEMENT("Subdomains cannot be null."),
 		NULL_SUBDOMAINS("Subdomains array cannot be null."),
 		NULL_RESOURCE_NAME("Resource name cannot be null."),
 		NULL_VALUE("the value parameter was null."),
 		NULL_WORLD("The world parameter cannot be null."),
-		;
+		NULL_MESSAGE_BUILDER("The messageBuilder parameter cannot be null.");
 
 		private final String messageString;
 
