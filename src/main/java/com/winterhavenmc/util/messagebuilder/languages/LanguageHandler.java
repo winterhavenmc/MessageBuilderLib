@@ -40,7 +40,9 @@ public interface LanguageHandler {
 
 	/**
 	 * Reload messages into Configuration object
+	 *
+	 * @return true if successful, false if not
 	 */
-	void reload();
+	boolean reload();
 
 }
