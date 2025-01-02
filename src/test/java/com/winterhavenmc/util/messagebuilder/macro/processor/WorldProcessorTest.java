@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.Namespace;
 import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -40,14 +40,14 @@ import static org.mockito.Mockito.when;
 class WorldProcessorTest {
 
 	Plugin mockPlugin;
-	QueryHandler mockQueryHandler;
+	LanguageFileQueryHandler mockLanguageFileQueryHandler;
 	World mockWorld;
 
 	@BeforeEach
 	public void setUp() {
 		mockPlugin = mock(Plugin.class, "MockPlugin");
 		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger("WorldProcessorTest"));
-		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
+		mockLanguageFileQueryHandler = mock(LanguageFileQueryHandler.class, "MockQueryHandler");
 		mockWorld = mock(World.class, "MockWorld");
 		when(mockWorld.getName()).thenReturn("test_world");
 	}
@@ -64,7 +64,7 @@ class WorldProcessorTest {
 		String keyPath = "SOME_WORLD";
 		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
 		ContextMap contextMap = new ContextMap();
-		MacroProcessor macroProcessor = new WorldProcessor(mockQueryHandler);
+		MacroProcessor macroProcessor = new WorldProcessor(mockLanguageFileQueryHandler);
 		contextMap.put(nameSpacedKey, ContextContainer.of(mockWorld, ProcessorType.WORLD));
 		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
 
@@ -77,7 +77,7 @@ class WorldProcessorTest {
 		String keyPath = "SOME_WORLD";
 		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
 		ContextMap contextMap = new ContextMap();
-		MacroProcessor macroProcessor = new WorldProcessor(mockQueryHandler);
+		MacroProcessor macroProcessor = new WorldProcessor(mockLanguageFileQueryHandler);
 		contextMap.put(nameSpacedKey, ContextContainer.of(mockWorld, ProcessorType.WORLD));
 		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
 
