@@ -69,11 +69,12 @@ public class NamespaceKey implements ContextKey {
 
 	private final static String KEY_DOMAIN_DELIMITER = ":";
 	private final static String KEY_BOUNDARY_DELIMITER = "|";
-	private final static String KEY_PATH_DELIMITER = ".";
+	private final static String KEY_PATH_DELIMITER = "\\."; // escaped dot
 
-	private final String keyPath;
 	private final Namespace.Domain keyDomain;
 	private final List<String> subdomains;
+	private final String keyPath;
+	private final List<String> keyPathComponents;
 
 
 	/**
@@ -89,6 +90,7 @@ public class NamespaceKey implements ContextKey {
 		this.keyPath = keyPath;
 		this.keyDomain = keyDomain;
 		this.subdomains = new ArrayList<>();
+		this.keyPathComponents = List.of(keyPath.split(KEY_PATH_DELIMITER));
 	}
 
 
@@ -106,6 +108,7 @@ public class NamespaceKey implements ContextKey {
 		this.keyPath = keyPath;
 		this.keyDomain = keyDomain;
 		this.subdomains = new ArrayList<>(Arrays.stream(subdomains).toList());
+		this.keyPathComponents = List.of(keyPath.split(KEY_PATH_DELIMITER));
 	}
 
 
@@ -166,8 +169,7 @@ public class NamespaceKey implements ContextKey {
 	 * @return a List of Strings containing the separate key path elements
 	 */
 	public List<String> getKeyPathComponents() {
-		String regex = '\\' + KEY_PATH_DELIMITER;
-		return new ArrayList<>(Arrays.stream(keyPath.split(regex)).toList());
+		return keyPathComponents;
 	}
 
 
