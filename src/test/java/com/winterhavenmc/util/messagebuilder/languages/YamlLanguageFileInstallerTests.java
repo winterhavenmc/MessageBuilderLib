@@ -90,7 +90,7 @@ public class YamlLanguageFileInstallerTests {
 				if (resourceStream == null) {
 					throw new IOException("Resource '" + resourceName + "' not found in the classpath.");
 				}
-				Files.copy(resourceStream, targetFilePath, StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(resourceStream, targetFilePath); // DO NOT REPLACE EXISTING FILES
 			}
 
 			// Act

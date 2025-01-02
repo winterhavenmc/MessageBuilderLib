@@ -115,7 +115,7 @@ public class MockUtility {
 			Files.createDirectories(targetFilePath.getParent());
 
 			// Copy the resource to the target directory
-			Files.copy(inputStream, targetFilePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(inputStream, targetFilePath); // DO NOT REPLACE EXISTING FILES
 			return true;
 		}
 	}
