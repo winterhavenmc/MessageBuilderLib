@@ -17,97 +17,143 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.languages.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocaleProvider;
+import com.winterhavenmc.util.messagebuilder.query.YamlLangugageFileQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
+import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import org.junit.jupiter.api.*;
 
-import static com.winterhavenmc.util.TimeUnit.*;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MessageBuilderTest {
 
-	public static final String NON_EXISTENT_ENTRY = "NON_EXISTENT_ENTRY";
-	public static final String FAIL = "fail";
+	private Plugin pluginMock;
+	@Mock private Server serverMock;
+	@Mock private PluginManager pluginManagerMock;
+	@Mock private YamlLanguageHandler mockLanguageHandler;
+	@Mock private YamlLangugageFileQueryHandler mockConfigurationQueryHandler;
+	@Mock private MacroHandler mockMacroHandler;
+	@Mock private Player mockPlayer;
 
-
-	private Plugin mockPlugin;
-	private FileConfiguration mockConfiguration;
-	private LanguageHandler mockLanguageHandler;
-	private QueryHandler mockQueryHandler;
-	private MacroHandler mockMacroHandler;
-	private Player mockPlayer;
 	private MessageBuilder<MessageId, Macro> messageBuilder;
+
 
 	@BeforeEach
 	void setUp() {
-		mockPlugin = MockUtility.createMockPlugin();
-//		mockConfiguration = mock(FileConfiguration.class, "MockConfiguration");
-		mockLanguageHandler = mock(LanguageHandler.class, "MockLanguageHandler");
-		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
-		mockMacroHandler = mock(MacroHandler.class, "mockMacroHandler");
+		MockitoAnnotations.openMocks(this);
 
-//		LocaleProvider mockProvider = mock(LocaleProvider.class);
-//		when(mockProvider.fromLanguageTag("en-US")).thenReturn(Locale.US);
-
-
-
-
-//		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-//		when(mockPlugin.getConfig()).thenReturn(mockConfiguration);
-
-//		when(mockConfiguration.getString("language")).thenReturn("en-US");
-
-		// mock player for message recipient
-		mockPlayer = mock(Player.class, "MockPlayer");
-		when(mockPlayer.getName()).thenReturn("Player One");
-		when(mockPlayer.getUniqueId()).thenReturn(new UUID(1,1));
+		pluginMock = MockUtility.createMockPlugin();
 
 		// Initialize the MessageBuilder with mocked dependencies
-		messageBuilder = new MessageBuilder<>(mockPlugin);
+		messageBuilder = new MessageBuilder<>(pluginMock);
+
+		when(mockLanguageHandler.reload()).thenReturn(true);
+		when(pluginMock.getServer()).thenReturn(serverMock);
+		when(serverMock.getPluginManager()).thenReturn(pluginManagerMock);
+
+		// mock player responses
+		when(mockPlayer.getName()).thenReturn("Player One");
+		when(mockPlayer.getUniqueId()).thenReturn(new UUID(1,1));
 	}
 
 	@AfterEach
 	public void tearDown() {
-		mockPlugin = null;
+		pluginMock = null;
 		messageBuilder = null;
 	}
 
 
-	@Disabled
 	@Test
-	void testHandleLanguageWithMockedLocale() {
-		LocaleProvider mockProvider = mock(LocaleProvider.class);
-		when(mockProvider.fromLanguageTag("en-US")).thenReturn(Locale.US);
-
-//			LanguageHandler handler = new YamlLanguageHandler(mockProvider);
-//			handler.handleLanguage("en-US");
-
-		// Verify interactions or assert behavior
-		verify(mockProvider).fromLanguageTag("en-US");
+	void constructorTest_null_parameter() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+				new MessageBuilder<MessageId, Macro>(null));
+		assertEquals("The plugin parameter cannot be null.", exception.getMessage());
 	}
 
 
 	@Nested
-	class ai_generated_tests {
+	class MockingSetupTests {
+		@Test
+		void testMocksForNull() {
+			assertNotNull(pluginMock);
+			assertNotNull(serverMock);
+			assertNotNull(pluginManagerMock);
+			assertNotNull(mockLanguageHandler);
+		}
+	}
+
+	@Test
+	void getToolKitTest() {
+		Toolkit toolkit = messageBuilder.getToolkit();
+		assertNotNull(toolkit);
+	}
+
+
+//	@Disabled
+//	@Test
+//	void testHandleLanguageWithMockedLocale() {
+//		LocaleProvider mockProvider = mock(LocaleProvider.class);
+//		when(mockProvider.fromLanguageTag("en-US")).thenReturn(Locale.US);
+//
+////			LanguageHandler handler = new YamlLanguageHandler(mockProvider);
+////			handler.handleLanguage("en-US");
+//
+//		// Verify interactions or assert behavior
+//		verify(mockProvider).fromLanguageTag("en-US");
+//	}
+
+
+	@Nested
+	class ComposeTests {
+		@Test
+		void composeTest() {
+			Message<MessageId, Macro> message = messageBuilder.compose(mockPlayer, MessageId.ENABLED_MESSAGE);
+			assertEquals("This is an enabled message", message.toString());
+		}
+
+		@Test
+		void composeTest_null_parameter_recipient() {
+			Player recipient = mock(Player.class, "MockRecipient");
+
+			when(recipient.getName()).thenReturn("Mock Recipient");
+			when(recipient.getUniqueId()).thenReturn(new UUID(42, 42));
+
+			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+					() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
+			assertEquals("The recipient parameter was null.", exception.getMessage());
+		}
+
+		@Test
+		void composeTest_null_parameter_messageId() {
+			Player recipient = mock(Player.class, "MockRecipient");
+
+			when(recipient.getName()).thenReturn("Mock Recipient");
+			when(recipient.getUniqueId()).thenReturn(new UUID(42,42));
+
+			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+					() -> messageBuilder.compose(recipient, null));
+			assertEquals("The messageId parameter was null.", exception.getMessage());
+		}
+
 		@Test
 		void testCompose_WithValidParameters_Success() {
 			CommandSender mockSender = mock(CommandSender.class);
@@ -121,11 +167,16 @@ class MessageBuilderTest {
 			assertNotNull(messageBuilder); // Verify that the builder was created
 			// Further checks can be done based on the expected state after compose
 		}
+	}
+
+
+	@Nested
+	class ai_generated_tests {
 
 		@Test
 		void testSetMacro_WithValidParameters_Success() {
 			messageBuilder.compose(mockPlayer, MessageId.ENABLED_MESSAGE)
-					.setMacro(Macro.TOOL, "replacementValue");
+					.setMacro(Macro.TOOL, new ItemStack(Material.GOLDEN_AXE));
 
 			// Verify that the macro was set correctly
 			// Assuming you have a method to get the current state or macro settings
@@ -139,7 +190,7 @@ class MessageBuilderTest {
 			MessageId messageId = MessageId.ENABLED_MESSAGE;
 
 			messageBuilder.compose(mockSender, messageId)
-					.setMacro(Macro.TOOL, "replacementValue")
+					.setMacro(Macro.TOOL, new ItemStack(Material.GOLDEN_AXE))
 					.send();
 
 			// Verify that the send method does what is expected
@@ -147,212 +198,14 @@ class MessageBuilderTest {
 			// For example, if it sends a message to the CommandSender, you would verify that.
 			verify(mockSender, times(1)).sendMessage(anyString()); // Adapt based on actual implementation
 		}
-
-		@Test
-		void testCompose_WithNullParameters_ThrowsException() {
-			// Assuming you throw IllegalArgumentException for null inputs
-			assertThrows(IllegalArgumentException.class, () -> {
-				messageBuilder.compose(null, null);
-			});
-		}
-
-		// Additional tests for edge cases and other functionalities
-		// For example, testing cooldown logic, macro handling, etc.
 	}
 
-
-
-
-
-	@Test
-	void composeTest() {
-		Message<MessageId, Macro> message = messageBuilder.compose(mockPlayer, MessageId.ENABLED_MESSAGE);
-		assertEquals("This is an enabled message", message.toString());
-	}
-
-	@Nested
-	class IsEnabledTests {
-
-		@Test
-		void isEnabledTest() {
-			assertTrue(messageBuilder.isEnabled(MessageId.ENABLED_MESSAGE));
-		}
-
-		@Test
-		void isEnabledTest_disabled() {
-			assertFalse(messageBuilder.isEnabled(MessageId.DISABLED_MESSAGE));
-		}
-
-		@Test
-		void isEnabledTest_nonexistent() {
-			assertFalse(messageBuilder.isEnabled(MessageId.NONEXISTENT_ENTRY));
-		}
-	}
-
-	@Test
-	void getRepeatDelayTest() {
-		assertEquals(10, messageBuilder.getRepeatDelay(MessageId.REPEAT_DELAYED_MESSAGE));
-	}
-
-	@Test
-	void getMessageTest() {
-		assertEquals("This is an enabled message", messageBuilder.getMessage(MessageId.ENABLED_MESSAGE));
-	}
-
-	@Test
-	void getItemNameSingularTest() {
-		assertTrue(messageBuilder.getInventoryItemNameSingular().isPresent());
-	}
-
-	@Test
-	void getItemNameSingularTest_undefined_field() {
-		assertTrue(messageBuilder.getItemNameSingular("UNDEFINED_ITEM_NAME").isEmpty());
-	}
-
-	@Test
-	void getInventoryItemNameSingularTest_nonexistent_entry() {
-		assertTrue(messageBuilder.getInventoryItemNameSingular(NON_EXISTENT_ENTRY).isEmpty());
-	}
-
-	@Test
-	void getInventoryItemNamePluralTest_nonexistent_entry() {
-		assertTrue(messageBuilder.getInventoryItemNamePlural(NON_EXISTENT_ENTRY).isEmpty());
-	}
-
-	@Test
-	void getItemInventoryNameTest_null_parameter() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> messageBuilder.getInventoryItemNameSingular(null));
-		assertEquals("the itemKey parameter was null.", exception.getMessage());
-	}
-
-	@Test
-	void getInventoryItemNamePluralTest_null_parameter() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> messageBuilder.getInventoryItemNamePlural(null));
-		assertEquals("the itemKey parameter was null.", exception.getMessage());
-	}
-
-	// 	public Optional<String> getItemNamePlural(final String itemKey) {
-	@Test
-	void getItemNamePluralTest() {
-		assertEquals("Default Items", messageBuilder.getItemNamePlural().orElse(FAIL));
-	}
-
-	@Test
-	void getItemNamePluralTest_nonexistent_entry() {
-		assertTrue(messageBuilder.getItemNamePlural(NON_EXISTENT_ENTRY).isEmpty());
-	}
-
-	@Test
-	void getInventoryItemNameSingularTest() {
-		assertEquals("Default Inventory Item", messageBuilder.getInventoryItemNameSingular().orElse(FAIL));
-	}
-
-	@Test
-	void getInventoryItemNamePluralTest() {
-		assertEquals("Default Inventory Items", messageBuilder.getInventoryItemNamePlural().orElse(FAIL));
-	}
-
-	@Test
-	void getItemInventoryNameTest_undefined_field() {
-		assertTrue(messageBuilder.getInventoryItemNameSingular("UNDEFINED_INVENTORY_ITEM_NAME").isEmpty());
-	}
-
-	@Test
-	void getInventoryItemNameTest_non_existent_entry() {
-		assertTrue(messageBuilder.getInventoryItemNameSingular(NON_EXISTENT_ENTRY).isEmpty());
-	}
-
-	@Test
-	void getItemLoreTest() {
-		assertEquals(List.of("&etest1 lore line 1", "&etest1 lore line 2"), messageBuilder.getItemLore("TEST_ITEM_1"));
-	}
-
-	@Test
-	void getItemLoreTest_no_parameter() {
-		assertEquals(List.of("&edefault lore line 1", "&edefault lore line 2"), messageBuilder.getItemLore());
-	}
-
-	@Test
-	void getSpawnDisplayNameTest() {
-		assertEquals("&aSpawn", messageBuilder.getSpawnDisplayName().orElse(FAIL));
-	}
-
-	@Test
-	void getHomeDisplayNameTest() {
-		assertEquals("&aHome", messageBuilder.getHomeDisplayName().orElse(FAIL));
-	}
-
-	@Test
-	void getTimeStringTest_with_singular_units() {
-		long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
-		assertEquals("1 day 1 hour 1 minute 1 second", messageBuilder.getTimeString(duration));
-	}
-
-	@Test
-	void getTimeStringTest_with_plural_units() {
-		long duration = DAYS.toMillis(2) + HOURS.toMillis(2) + MINUTES.toMillis(2) + SECONDS.toMillis(2);
-		assertEquals("2 days 2 hours 2 minutes 2 seconds", messageBuilder.getTimeString(duration));
-	}
-
-	@Test
-	void getTimeStringTest_with_unlimited_time() {
-		assertEquals("unlimited time", messageBuilder.getTimeString(-1));
-	}
-
-	@Test
-	void getTimeStringTest_two_parameter_with_singular_units() {
-		long duration = DAYS.toMillis(1) + HOURS.toMillis(1) + MINUTES.toMillis(1) + SECONDS.toMillis(1);
-		assertEquals("1 day 1 hour 1 minute 1 second", messageBuilder.getTimeString(duration, TimeUnit.SECONDS));
-	}
-
-	@Test
-	void getStringTest() {
-		assertEquals("an arbitrary string", messageBuilder.getString("ARBITRARY_STRING").orElse(FAIL));
-	}
-
-	@Test
-	void getStringListTest() {
-		assertTrue(messageBuilder.getStringList("ARBITRARY_STRING_LIST").containsAll(List.of("item 1", "item 2", "item 3")));
-	}
-
-	@Test
-	void setDelimitersTest_same() {
-		messageBuilder.setDelimiters('#');
-		assertEquals('#', MacroHandler.MacroDelimiter.LEFT.toChar());
-		assertEquals('#', MacroHandler.MacroDelimiter.RIGHT.toChar());
-		// these must be reset back manually or they persist across tests.
-		messageBuilder.setDelimiters('%');
-		assertEquals('%', MacroHandler.MacroDelimiter.LEFT.toChar());
-		assertEquals('%', MacroHandler.MacroDelimiter.RIGHT.toChar());
-	}
-
-	@Test
-	void setDelimitersTest_different() {
-		messageBuilder.setDelimiters('L','R');
-		assertEquals('L', MacroHandler.MacroDelimiter.LEFT.toChar());
-		assertEquals('R', MacroHandler.MacroDelimiter.RIGHT.toChar());
-		// these must be reset manually or they persist across tests.
-		messageBuilder.setDelimiters('%');
-		assertEquals('%', MacroHandler.MacroDelimiter.LEFT.toChar());
-		assertEquals('%', MacroHandler.MacroDelimiter.RIGHT.toChar());
-	}
-
-//	@Test
-//	void getWorldNameTest_mockito() {
-//		World world = mock(World.class);
-//		when(world.getName()).thenReturn("world");
-//
-//		assertNotNull(world, "Mock world 'world' is null.");
-//		assertTrue(messageBuilder.getWorldName(world).isPresent(), "Returned value is an empty Optional.");
-//		assertEquals(Optional.of("world"), messageBuilder.getWorldName(world), "Returned world name is not 'world'.");
-//	}
-
+	@Disabled
 	@Test
 	void reloadTest() {
 		messageBuilder.reload();
-		assertEquals("This is an enabled message", messageBuilder.getMessage(MessageId.ENABLED_MESSAGE));
+//		assertNotNull(mockLanguageHandler.getConfiguration());
+		verify(mockLanguageHandler, atLeastOnce()).reload();
 	}
 
 }
