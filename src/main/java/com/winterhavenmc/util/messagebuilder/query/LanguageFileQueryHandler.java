@@ -23,19 +23,22 @@ import org.bukkit.World;
 import java.util.List;
 import java.util.Optional;
 
-public interface QueryHandler {
+public interface LanguageFileQueryHandler {
+
+	List<String> getStringList(String key);
 
 	Optional<ItemRecord> getItemRecord(String itemKey);
 	<MessageId extends Enum<MessageId>> Optional<MessageRecord> getMessageRecord(MessageId messageId);
+
+	Optional<String> getString(final String key);
+
 
 	//TODO: Everything below needs to go somewhere else eventually
 
 	Optional<String> getWorldName(final World world);
 	Optional<String> getWorldAlias(final World world);
+
 	String getTimeString(long duration);
 	String getTimeString(long duration, TimeUnit timeUnit);
-	Optional<String> getSpawnDisplayName();
-	Optional<String> getHomeDisplayName();
-	Optional<String> getString(String path);
-	List<String> getStringList(String path);
+
 }

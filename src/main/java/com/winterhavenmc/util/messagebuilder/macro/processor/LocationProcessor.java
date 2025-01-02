@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 import org.bukkit.Location;
@@ -71,7 +71,7 @@ import org.bukkit.Location;
  */
 public class LocationProcessor extends MacroProcessorTemplate {
 
-	public LocationProcessor(QueryHandler queryHandler) {
+	public LocationProcessor(LanguageFileQueryHandler queryHandler) {
 		super(queryHandler);
 	}
 

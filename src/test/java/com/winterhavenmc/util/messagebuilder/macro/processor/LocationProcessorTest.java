@@ -18,17 +18,15 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
-import org.mockito.stubbing.OngoingStubbing;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -41,14 +39,14 @@ class LocationProcessorTest {
 
 	private LocationProcessor locationProcessor;
 	private ContextMap contextMap;
-	private QueryHandler queryHandler;
+	private LanguageFileQueryHandler queryHandler;
 	private World mockWorld;
 	private Location mockLocation;
 
 	@BeforeEach
 	void setUp() {
 		// Mock dependencies
-		queryHandler = mock(QueryHandler.class);
+		queryHandler = mock(LanguageFileQueryHandler.class);
 		contextMap = mock(ContextMap.class);
 		mockWorld = mock(World.class);
 		mockLocation = mock(Location.class);

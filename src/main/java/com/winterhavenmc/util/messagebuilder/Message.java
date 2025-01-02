@@ -19,8 +19,8 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.macro.*;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 import com.winterhavenmc.util.messagebuilder.query.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -45,7 +45,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	// required parameters
 	private final CommandSender recipient;
 	private final MessageId messageId;
-	private final QueryHandler queryHandler;
+	private final LanguageFileQueryHandler queryHandler;
 	private final MacroHandler macroHandler;
 
 	// optional parameters
@@ -64,7 +64,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 * @param messageId    message identifier
 	 */
 	public Message(final Plugin plugin,
-				final QueryHandler queryHandler,
+				final LanguageFileQueryHandler queryHandler,
                 final MacroHandler macroHandler,
                 final CommandSender recipient,
                 final MessageId messageId) {

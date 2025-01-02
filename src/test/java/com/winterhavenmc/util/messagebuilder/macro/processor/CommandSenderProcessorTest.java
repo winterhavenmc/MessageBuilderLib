@@ -18,31 +18,28 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 
-import java.util.logging.Logger;
-
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommandSenderProcessorTest {
 
 	Plugin mockPlugin;
-	QueryHandler mockQueryHandler;
+	LanguageFileQueryHandler mockLanguageFileQueryHandler;
 	MacroProcessor macroProcessor;
 
 	@BeforeEach
 	public void setUp() {
 		mockPlugin = MockUtility.createMockPlugin();
-		mockQueryHandler = mock(QueryHandler.class, "MockQueryHandler");
+		mockLanguageFileQueryHandler = mock(LanguageFileQueryHandler.class, "MockQueryHandler");
 
-		macroProcessor = new CommandSenderProcessor(mockQueryHandler);
+		macroProcessor = new CommandSenderProcessor(mockLanguageFileQueryHandler);
 	}
 
 	@AfterEach

@@ -22,8 +22,7 @@ import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 
 import com.winterhavenmc.util.TimeUnit;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import com.winterhavenmc.util.messagebuilder.util.TimeString;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.configuration.Configuration;
@@ -31,27 +30,53 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.Error.*;
 
 
-public class ConfigurationQueryHandler implements QueryHandler {
+public class YamlLangugageFileQueryHandler implements LanguageFileQueryHandler {
 
 	// constants for configuration section keys
 	public static final String ITEM_SECTION = "ITEMS";
 	public static final String CONSTANT_SECTION = "CONSTANTS";
 	public static final String MESSAGE_SECTION = "MESSAGES";
+	public static final String MULTIVERSE_CORE = "Multiverse-Core";
 
 	private final Plugin plugin;
 	private final Configuration configuration;
 
 
-	public ConfigurationQueryHandler(final Plugin plugin, final Configuration configuration) {
+	public YamlLangugageFileQueryHandler(final Plugin plugin, final Configuration configuration) {
+		if (plugin == null) { throw new IllegalArgumentException(Parameter.NULL_PLUGIN.getMessage()); }
 		if (configuration == null) { throw new IllegalArgumentException(Parameter.NULL_CONFIGURATION.getMessage()); }
+
 		this.plugin = plugin;
 		this.configuration = configuration;
+	}
+
+
+	@Override
+	public Optional<String> getString(final String key) {
+		if (key == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
+
+		ConfigurationSection constantSection = configuration.getConfigurationSection(CONSTANT_SECTION);
+		if (constantSection == null) { return Optional.empty();	}
+
+		return Optional.ofNullable(constantSection.getString(key));
+	}
+
+
+	@Override
+	public List<String> getStringList(final String key) {
+		if (key == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
+
+		ConfigurationSection constantSection = configuration.getConfigurationSection(CONSTANT_SECTION);
+		if (constantSection == null) { return Collections.emptyList();	}
+
+		return constantSection.getStringList(key);
 	}
 
 
@@ -60,16 +85,12 @@ public class ConfigurationQueryHandler implements QueryHandler {
 		if (itemKey == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
 
 		// get configuration section for items
-		ConfigurationSection itemSect = configuration.getConfigurationSection(ITEM_SECTION);
-		if (itemSect == null) {
-			return Optional.empty();
-		}
+		ConfigurationSection itemSection = configuration.getConfigurationSection(ITEM_SECTION);
+		if (itemSection == null) { return Optional.empty();	}
 
 		// get configuration section for item key
-		ConfigurationSection itemEntry = itemSect.getConfigurationSection(itemKey);
-		if (itemEntry == null) {
-			return Optional.empty();
-		}
+		ConfigurationSection itemEntry = itemSection.getConfigurationSection(itemKey);
+		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
 		return Optional.of(new ItemRecord(itemKey,
@@ -166,6 +187,19 @@ public class ConfigurationQueryHandler implements QueryHandler {
 		return Optional.of(getWorldAlias(world).orElse(world.getName()));
 	}
 
+
+	/**
+	 * Check if Multiverse-Core plugin is enabled
+	 * @param pluginManager an instance of the server's plugin manager
+	 * @return {@code true} if the Multiverse-Core plugin is installed and enabled, {@code false} if not
+	 */
+	boolean isMultiverseInstalled(final PluginManager pluginManager) {
+		if (pluginManager == null) { throw new IllegalArgumentException(Parameter.NULL_PLUGIN_MANAGER.getMessage()); }
+
+		return pluginManager.isPluginEnabled(MULTIVERSE_CORE);
+	}
+
+
 	/**
 	 * Get world name from world object, using Multiverse alias if available
 	 *
@@ -180,10 +214,10 @@ public class ConfigurationQueryHandler implements QueryHandler {
 		Server server = plugin.getServer();
 		PluginManager pluginManager = server.getPluginManager();
 
-		if (pluginManager.isPluginEnabled("Multiverse-Core")) {
+		if (pluginManager.isPluginEnabled(MULTIVERSE_CORE)) {
 
 			// get reference to Multiverse-Core if installed
-			MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
+			MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin(MULTIVERSE_CORE);
 
 			// if Multiverse is enabled, get MultiverseWorld object
 			if (mvCore != null && mvCore.isEnabled()) {
@@ -203,54 +237,6 @@ public class ConfigurationQueryHandler implements QueryHandler {
 
 
 	/**
-	 * Get world name for location, using Multiverse alias if available
-	 *
-	 * @param location the location used to retrieve world name
-	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
-	 */
-	private Optional<String> getWorldName(final Location location) {
-
-		// check for null parameter
-		if (location == null) {
-			return Optional.empty();
-		}
-
-		// get server instance from static reference to access the plugin manager and worlds
-		// note this is the only processor that needed external access, so we are resorting to static references
-		// in order to avoid otherwise unnecessary dependency injection
-		Server server = Bukkit.getServer();
-
-		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) server.getPluginManager().getPlugin("Multiverse-Core");
-
-		// declare resultString with world name for location
-		String resultString;
-		if (location.getWorld() != null) {
-			resultString = location.getWorld().getName();
-		}
-		else {
-			// get name of first world
-			resultString = server.getWorlds().getFirst().getName();
-		}
-
-		// if Multiverse is enabled, use Multiverse world alias if available
-		if (mvCore != null && mvCore.isEnabled()) {
-
-			// get Multiverse world object
-			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(location.getWorld());
-
-			// if Multiverse alias is not null or empty, set world name to alias if set
-			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
-				resultString = mvWorld.getAlias();
-			}
-		}
-
-		// return resultString
-		return Optional.of(resultString);
-	}
-
-
-	/**
 	 * Format the time string with days, hours, minutes and seconds as necessary
 	 *
 	 * @param duration a time duration in milliseconds
@@ -258,59 +244,12 @@ public class ConfigurationQueryHandler implements QueryHandler {
 	 */
 	@Override
 	public String getTimeString(final long duration) {
-		return new TimeString(configuration).getTimeString(duration, TimeUnit.SECONDS);
+		return new TimeString(this).getTimeString(duration, TimeUnit.SECONDS);
 	}
 
 	@Override
 	public String getTimeString(final long duration, final TimeUnit timeUnit) {
-		return new TimeString(configuration).getTimeString(duration, timeUnit);
-	}
-
-
-
-
-	/**
-	 * Get spawn display name from language file
-	 *
-	 * @return the formatted display name for the world spawn, or empty string if key not found
-	 */
-	@Override
-	public Optional<String> getSpawnDisplayName() {
-		return Optional.ofNullable(configuration.getString(CONSTANT_SECTION + ".SPAWN.DISPLAY_NAME"));
-	}
-
-	/**
-	 * Get home display name from language file
-	 *
-	 * @return the formatted display name for home, or empty string if key not found
-	 */
-	@Override
-	public Optional<String> getHomeDisplayName() {
-		return Optional.ofNullable(configuration.getString(CONSTANT_SECTION + ".HOME.DISPLAY_NAME"));
-	}
-
-
-	/**
-	 * Retrieve an arbitrary string from the language file with the specified key.
-	 *
-	 * @param path the message path for the string being retrieved
-	 * @return the retrieved string, or null if no matching key found
-	 */
-	@Override
-	public Optional<String> getString(final String path) {
-		return Optional.ofNullable(configuration.getString(path));
-	}
-
-
-	/**
-	 * Get List of String by path in message file
-	 *
-	 * @param path the message path for the string list being retrieved
-	 * @return List of String - the string list retrieved by path from message file
-	 */
-	@Override
-	public List<String> getStringList(final String path) {
-		return configuration.getStringList(path);
+		return new TimeString(this).getTimeString(duration, timeUnit);
 	}
 
 }

@@ -18,13 +18,13 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 import org.bukkit.command.CommandSender;
 
 
 public class CommandSenderProcessor extends MacroProcessorTemplate {
 
-	public CommandSenderProcessor(QueryHandler queryHandler) {
+	public CommandSenderProcessor(LanguageFileQueryHandler queryHandler) {
 		super(queryHandler);
 	}
 

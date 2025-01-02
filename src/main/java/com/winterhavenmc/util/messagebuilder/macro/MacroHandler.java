@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorRegistry;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -74,7 +74,7 @@ public class MacroHandler {
 	/**
 	 * Class constructor
 	 */
-	public MacroHandler(final Plugin plugin, final QueryHandler queryHandler) {
+	public MacroHandler(final Plugin plugin, final LanguageFileQueryHandler queryHandler) {
 		// instantiate macro processor registry
 		this.processorRegistry = new ProcessorRegistry();
 		// populate macro processor registry
