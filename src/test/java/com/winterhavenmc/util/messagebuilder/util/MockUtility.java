@@ -20,6 +20,8 @@ package com.winterhavenmc.util.messagebuilder.util;
 import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileInstaller;
 import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageFileLoader;
 import org.bukkit.World;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -31,6 +33,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.*;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -136,7 +139,7 @@ public class MockUtility {
 	 */
 	private static File createTempDataDir() {
 		try {
-			Path tempDir = Files.createTempDirectory("test-data");
+			Path tempDir = Files.createTempDirectory("getQueryHandler-data");
 			// tempDir.toFile().deleteOnExit();
 			tempDir.toFile();
 			return tempDir.toFile();
@@ -164,7 +167,7 @@ public class MockUtility {
 	 * @param configValues a map of configuration keys and values, or null for no configuration
 	 * @return a mock Plugin instance
 	 */
-	public static Plugin createMockPlugin(java.util.Map<String, Object> configValues) {
+	public static Plugin createMockPlugin(Map<String, Object> configValues) {
 		Plugin mockPlugin = mock(Plugin.class, "MockPlugin");
 
 		// Mock the plugin logger
@@ -202,13 +205,29 @@ public class MockUtility {
 		// return a temporary data folder
 		when(mockPlugin.getDataFolder()).thenReturn(MockUtility.getDataDir());
 
-		// Mock the configuration
-		FileConfiguration mockPluginConfig = mock(FileConfiguration.class, "MockPluginConfig");
-		when(mockPlugin.getConfig()).thenReturn(mockPluginConfig);
-		when(mockPluginConfig.getString("locale")).thenReturn("en-US");
-		when(mockPluginConfig.getString("language")).thenReturn("en-US");
-		when(mockPluginConfig.getString("locale", "en-US")).thenReturn("en-US");
-		when(mockPluginConfig.getString("language", "en-US")).thenReturn("en-US");
+		// create a real pluginConfig
+		FileConfiguration pluginConfig = new YamlConfiguration();
+		pluginConfig.set("locale", "en-US");
+		pluginConfig.set("language", "en-US");
+
+		// create a real default configuration
+		Configuration defaultConfiguration = new MemoryConfiguration();
+		pluginConfig.set("locale", "en-US");
+		pluginConfig.set("language", "en-US");
+
+		// set the pluginConfig defaults to defaultConfiguration
+		pluginConfig.addDefaults(defaultConfiguration);
+
+		// return pluginConfig for plugin.getConfig()
+		when(mockPlugin.getConfig()).thenReturn(pluginConfig);
+
+//		// Mock the configuration
+//		FileConfiguration mockPluginConfig = mock(FileConfiguration.class, "MockPluginConfig");
+//		when(mockPlugin.getConfig()).thenReturn(mockPluginConfig);
+//		when(mockPluginConfig.getString("locale")).thenReturn("en-US");
+//		when(mockPluginConfig.getString("language")).thenReturn("en-US");
+//		when(mockPluginConfig.getString("locale", "en-US")).thenReturn("en-US");
+//		when(mockPluginConfig.getString("language", "en-US")).thenReturn("en-US");
 
 		// return real file input streams for mock plugin resources
 		doAnswer(invocation -> getResourceStream(invocation.getArgument(0)))
@@ -281,7 +300,7 @@ public class MockUtility {
 	 * This method is intended for testing and mocking purposes, providing a strict boundary where
 	 * higher-level classes only work with {@link FileConfiguration} objects.
 	 *
-	 * @param resourcePath the path to the YAML resource file, relative to the test classpath
+	 * @param resourcePath the path to the YAML resource file, relative to the getQueryHandler classpath
 	 * @return a {@link FileConfiguration} object containing the parsed YAML data
 	 * @throws IllegalArgumentException if the resource cannot be found or read
 	 */
