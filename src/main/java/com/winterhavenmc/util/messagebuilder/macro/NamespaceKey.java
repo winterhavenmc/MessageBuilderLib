@@ -293,4 +293,24 @@ public class NamespaceKey implements ContextKey {
 		}
 	}
 
+
+	@Override
+	public boolean equals(Object object) {
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
+
+		NamespaceKey that = (NamespaceKey) object;
+		return domain == that.domain && subdomains.equals(that.subdomains) && keyPathComponents.equals(that.keyPathComponents);
+	}
+
+
+	@Override
+	public int hashCode() {
+		int result = domain.hashCode();
+		result = 31 * result + subdomains.hashCode();
+		result = 31 * result + keyPathComponents.hashCode();
+		return result;
+	}
+
 }
