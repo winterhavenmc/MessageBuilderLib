@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
+
+import java.util.*;
 import java.util.logging.Logger;
 
 import static com.winterhavenmc.util.messagebuilder.util.Error.*;
@@ -30,8 +30,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
  * various contexts, such as macros, configurations, or other domain-specific resources.
  * <p>
  * The namespace key is composed of a {@link Namespace.Domain} (e.g., MACRO, CONFIG), a
- * {@code keyPath}, and an optional sequence of subcategories. The {@code keyPath} is a
- * dot-separated string, while subcategories provide additional hierarchical context.
+ * {@code keyPath}, and an optional sequence of subdomains. The {@code keyPath} is a
+ * dot-separated string, while subdomains provide additional hierarchical context.
  * </p>
  * <p>
  * Static factory methods are provided to facilitate the creation of namespace keys with varying
@@ -67,13 +67,44 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
  */
 public class NamespaceKey implements ContextKey {
 
-	private final static String KEY_DOMAIN_DELIMITER = ":";
-	private final static String KEY_BOUNDARY_DELIMITER = "|";
-	private final static String KEY_PATH_DELIMITER = "\\."; // escaped dot
+	private final static Character KEY_DOMAIN_DELIMITER = ':';
+	private final static Character KEY_BOUNDARY_DELIMITER = '|';
+	private final static Character KEY_PATH_DELIMITER = '.';
 
 	private final Namespace.Domain domain;
 	private final List<String> subdomains;
-	private final List<String> keyPathComponents;
+	private final List<String> pathComponents;
+
+
+	/**
+	 * Class constructor
+	 * <p>
+	 *     creates a NamespaceKey with the supplied String representation of a full key.
+	 *</p>
+	 * @param fullKeyString a full String key to be used to derive a NamespaceKey's components
+	 */
+	NamespaceKey(final String fullKeyString) {
+		if (!containsExactlyOne(fullKeyString, KEY_BOUNDARY_DELIMITER)) {
+			throw new IllegalArgumentException("parameter fullKeyString is an invalid namespace key string.");
+		}
+
+		String[] keyHalves = fullKeyString.split(KEY_BOUNDARY_DELIMITER.toString(), 2);
+		String[] domainComponents = keyHalves[0].split(KEY_DOMAIN_DELIMITER.toString(), 2);
+
+		// get matching Domain constant from string
+		this.domain = Namespace.Domain.valueOf(domainComponents[0]);
+
+		// split subdomains into list if any
+		if (domainComponents.length > 1) {
+			this.subdomains = List.of(domainComponents[1].split(KEY_DOMAIN_DELIMITER.toString()));
+		}
+		else {
+			this.subdomains = Collections.emptyList();
+		}
+
+		// split path components into list
+		this.pathComponents = List.of(keyHalves[1].split("\\" + KEY_PATH_DELIMITER));
+	}
 
 
 	/**
@@ -88,7 +119,8 @@ public class NamespaceKey implements ContextKey {
 	NamespaceKey(final String keyPath, Namespace.Domain domain) {
 		this.domain = domain;
 		this.subdomains = new ArrayList<>();
-		this.keyPathComponents = List.of(keyPath.split(KEY_PATH_DELIMITER));
+		this.pathComponents = List.of(keyPath.split("\\" + KEY_PATH_DELIMITER));
+		System.out.println(pathComponents);
 	}
 
 
@@ -105,7 +137,7 @@ public class NamespaceKey implements ContextKey {
 	NamespaceKey(final String keyPath, Namespace.Domain domain, String... subdomains) {
 		this.domain = domain;
 		this.subdomains = new ArrayList<>(Arrays.stream(subdomains).toList());
-		this.keyPathComponents = List.of(keyPath.split(KEY_PATH_DELIMITER));
+		this.pathComponents = List.of(keyPath.split("\\" + KEY_PATH_DELIMITER));
 	}
 
 
@@ -116,7 +148,7 @@ public class NamespaceKey implements ContextKey {
 	 */
 	@Override
 	public String getKey() {
-		return String.join(KEY_BOUNDARY_DELIMITER, getFullDomain(), getKeyPath());
+		return String.join(KEY_BOUNDARY_DELIMITER.toString(), getFullDomain(), getPath());
 	}
 
 
@@ -126,7 +158,7 @@ public class NamespaceKey implements ContextKey {
 	 * @return a String representation of the domain component of this key
 	 */
 	public String getFullDomain() {
-		return String.join(KEY_DOMAIN_DELIMITER, domain.name(), String.join(KEY_DOMAIN_DELIMITER, subdomains));
+		return String.join(KEY_DOMAIN_DELIMITER.toString(), domain.name(), String.join(KEY_DOMAIN_DELIMITER.toString(), subdomains));
 	}
 
 
@@ -155,8 +187,8 @@ public class NamespaceKey implements ContextKey {
 	 *
 	 * @return the key path
 	 */
-	public String getKeyPath() {
-		return String.join(".", keyPathComponents);
+	public String getPath() {
+		return String.join(".", pathComponents);
 	}
 
 
@@ -165,8 +197,8 @@ public class NamespaceKey implements ContextKey {
 	 *
 	 * @return a List of Strings containing the separate key path elements
 	 */
-	public List<String> getKeyPathComponents() {
-		return keyPathComponents;
+	public List<String> getPathComponents() {
+		return pathComponents;
 	}
 
 
@@ -180,7 +212,7 @@ public class NamespaceKey implements ContextKey {
 	public static <Macro> String create(final Macro macro) {
 		if (macro == null) { throw new IllegalArgumentException(Parameter.NULL_MACRO.getMessage()); }
 
-		return Namespace.Domain.MACRO + KEY_BOUNDARY_DELIMITER + macro;
+		return Namespace.Domain.MACRO + KEY_BOUNDARY_DELIMITER.toString() + macro;
 	}
 
 
@@ -201,25 +233,25 @@ public class NamespaceKey implements ContextKey {
 
 
 	/**
-	 * Static method to generate a nameSpacedKey with optional subcategories.
+	 * Static method to generate a nameSpacedKey with optional subdomains.
 	 *
 	 * @param keyPath        The keyPath portion of the new key (required).
 	 * @param domain         The top-level domain that forms the root of the keyDomain (required).
-	 * @param subcategories  Optional subcategories to be added to the keyDomain.
+	 * @param subdomains  Optional subdomains to be added to the keyDomain.
 	 * @return A fully-formed namespaced String key.
 	 */
-	public static String create(String keyPath, Namespace.Domain domain, String... subcategories) {
+	public static String create(String keyPath, Namespace.Domain domain, String... subdomains) {
 		if (keyPath == null) { throw new IllegalArgumentException(Parameter.NULL_KEY_PATH.getMessage()); }
-		if (keyPath.isEmpty()) { throw new IllegalArgumentException(Parameter.EMPTY_KEY_PATH.getMessage()); }
+		if (keyPath.isBlank()) { throw new IllegalArgumentException(Parameter.EMPTY_KEY_PATH.getMessage()); }
 		if (domain == null) { throw new IllegalArgumentException(Parameter.NULL_DOMAIN.getMessage()); }
-		if (subcategories == null) { throw new IllegalArgumentException(Parameter.NULL_SUBDOMAINS.getMessage()); }
+		if (subdomains == null) { throw new IllegalArgumentException(Parameter.NULL_SUBDOMAINS.getMessage()); }
 
 		StringBuilder fullKey = new StringBuilder(domain.name());
-		for (String subcategory : subcategories) {
+		for (String subcategory : subdomains) {
 			if (subcategory == null) {
 				throw new IllegalArgumentException(Parameter.NULL_SUBDOMAIN_ELEMENT.getMessage());
 			}
-			if (subcategory.isEmpty()) {
+			if (subcategory.isBlank()) {
 				throw new IllegalArgumentException(Parameter.EMPTY_SUBDOMAIN_ELEMENT.getMessage());
 			}
 			fullKey.append(KEY_DOMAIN_DELIMITER).append(subcategory);
@@ -233,31 +265,32 @@ public class NamespaceKey implements ContextKey {
 	 * Static utility method to check the validity of a key domain.
 	 * <p>
 	 * Logic:<br>
-	 * A keyDomain must contain at least one string of alphanumeric characters, and optionally may contain
-	 * one or more additional alphanumeric strings, delimited by a colon (:)
+	 * A keyDomain must contain at least one string of alphanumeric characters, which is a string representation
+	 * of a constant of the enum {@link Namespace.Domain}, and optionally may contain one or more additional
+	 * subdomains as alphanumeric strings, with the domain and any subdomains delimited by a colon (:)
 	 * <p>
 	 * Note: Because domain is derived from an enum constant name, it should be formatted in upper snake case,
-	 * to adhere to the Java naming convention for constants. The subcategories are unrestricted in their
+	 * to adhere to the Java naming convention for constants. The subdomains are unrestricted in their
 	 * case, but obviously must avoid using a colon character to avoid confusion with the domain delimiter.
 	 *
-	 * @param fullDomainString the keyDomain to validate
+	 * @param fullDomain the keyDomain to validate
 	 * @return {@code true} if the keyDomain conforms to the naming convention, {@code false} if it does not.
 	 */
-	static boolean isValidKeyDomain(String fullDomainString) {
+	static boolean isValidKeyDomain(String fullDomain) {
 		String keyDomainPattern = "^[a-zA-Z0-9_]+(:[a-zA-Z0-9_]+)*$";
-		return fullDomainString.matches(keyDomainPattern);
+		return fullDomain.matches(keyDomainPattern);
 	}
 
 
 	/**
 	 * Static method to generate a warning to the log when an invalid key domain is detected
 	 *
-	 * @param fullDomainString the key domain to check for validity
+	 * @param fullDomain the key domain to check for validity
 	 */
-	static void validateKeyDomain(String fullDomainString) {
-		if (!isValidKeyDomain(fullDomainString)) {
+	static void logInvalidDomainPath(String fullDomain) {
+		if (!isValidKeyDomain(fullDomain)) {
 			// Log a warning without modifying the keyPath
-			Logger.getLogger("NamespaceKey").warning("Key domain '" + fullDomainString + "' does not conform to the allowed naming convention.");
+			Logger.getLogger("NamespaceKey").warning("Key domain '" + fullDomain + "' does not conform to the allowed naming convention.");
 		}
 	}
 
@@ -286,7 +319,7 @@ public class NamespaceKey implements ContextKey {
 	 *
 	 * @param keyPath the key path to check for validity
 	 */
-	static void validateKeyPath(String keyPath) {
+	static void logInvalidKeyPath(String keyPath) {
 		if (!isValidKeyPath(keyPath)) {
 			// Log a warning without modifying the keyPath
 			Logger.getLogger("NamespaceKey").warning("Key path '" + keyPath + "' does not conform to the allowed naming convention.");
@@ -294,23 +327,32 @@ public class NamespaceKey implements ContextKey {
 	}
 
 
-	@Override
-	public boolean equals(Object object) {
-		if (object == null || getClass() != object.getClass()) {
-			return false;
-		}
+	public static boolean containsExactlyOne(String input, char target) {
+		return input.chars()
+				.filter(c -> c == target)
+				.count() == 1;
+	}
 
-		NamespaceKey that = (NamespaceKey) object;
-		return domain == that.domain && subdomains.equals(that.subdomains) && keyPathComponents.equals(that.keyPathComponents);
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true; // Same object
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false; // Null or different class
+		}
+		NamespaceKey that = (NamespaceKey) obj;
+
+		return domain == that.domain && // Enums are compared by reference
+				Objects.equals(subdomains, that.subdomains) && // Safe list comparison
+				Objects.equals(pathComponents, that.pathComponents); // Safe list comparison
 	}
 
 
 	@Override
 	public int hashCode() {
-		int result = domain.hashCode();
-		result = 31 * result + subdomains.hashCode();
-		result = 31 * result + keyPathComponents.hashCode();
-		return result;
+		return Objects.hash(domain, subdomains, pathComponents);
 	}
 
 }
