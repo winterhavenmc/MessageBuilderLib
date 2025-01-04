@@ -22,6 +22,7 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 import com.winterhavenmc.util.messagebuilder.query.MessageRecord;
 
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -30,17 +31,14 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
-@SuppressWarnings("unused")
-public final class Message<MessageId extends Enum<MessageId>, Macro> {
 
-	// string constant
-	private final static String UNKNOWN_VALUE = "???";
+public final class Message<MessageId extends Enum<MessageId>, Macro> {
 
 	// reference to plugin main class
 	private final Plugin plugin;
 
 	// context map
-	private final ContextMap contextMap = new ContextMap();
+	private final ContextMap contextMap;
 
 	// required parameters
 	private final CommandSender recipient;
@@ -74,6 +72,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		this.macroHandler = macroHandler;
 		this.recipient = recipient;
 		this.messageId = messageId;
+		this.contextMap = new ContextMap(recipient);
 	}
 
 
@@ -84,12 +83,11 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
-	@SuppressWarnings("UnusedReturnValue")
 	public <T> Message<MessageId, Macro> setMacro(final MacroKey macro, final T value) {
 
 		//TODO: if value is an optional, get unwrapped value. to be reimplemented later. see commented code below
 
-		// create name spaced key
+		// create nameSingular spaced key
 		String key = NamespaceKey.create(macro.toString(), Namespace.Domain.MACRO);
 
 		// get macro expected type from macro enum method
@@ -156,8 +154,6 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	private void displayTitle() {
 
 		if (recipient instanceof Entity) {
-
-			ProcessorType processorType = ProcessorType.ENTITY;
 
 			// get title string
 			String titleString;
@@ -231,7 +227,6 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 */
 	private String getMessageString() {
 
-		ProcessorType processorType = ProcessorType.STRING;
 		String messageString;
 
 		if (altMessage != null && !altMessage.isEmpty()) {
