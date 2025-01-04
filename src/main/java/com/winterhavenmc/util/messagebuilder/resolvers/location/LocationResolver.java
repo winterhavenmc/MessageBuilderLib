@@ -36,5 +36,5 @@ public class LocationResolver {
 		};
 	}
 
-	public static record LocationObjectLocationResolver(Location location) implements Locatable { }
+	public record LocationObjectLocationResolver(Location location) implements Locatable { }
 }
