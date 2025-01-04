@@ -23,16 +23,18 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Entity;
 
+import java.util.Optional;
+
 
 public class LocationResolver {
-	public static Locatable asLocatable(Object obj) {
+	public static Optional<Locatable> asLocatable(Object obj) {
 		return switch (obj) {
-			case Location location -> new LocationObjectLocationResolver(location);
-			case Entity entity -> entity::getLocation;
-			case Block block -> block::getLocation;
-			case BlockState blockState -> blockState::getLocation;
-			case DoubleChest doubleChest -> doubleChest::getLocation;
-			case null, default -> null;
+			case Location location -> Optional.of(new LocationObjectLocationResolver(location));
+			case Entity entity -> Optional.of(entity::getLocation);
+			case Block block -> Optional.of(block::getLocation);
+			case BlockState blockState -> Optional.of(blockState::getLocation);
+			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
+			case null, default -> Optional.empty();
 		};
 	}
 
