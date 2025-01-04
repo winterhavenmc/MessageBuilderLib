@@ -21,15 +21,16 @@ import org.bukkit.Nameable;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 public class DisplayNameResolver {
 
-	public static DisplayNameable asDisplayNameable(Object obj) {
+	public static Optional<DisplayNameable> asDisplayNameable(Object obj) {
 		return switch (obj) {
-			case Player player -> player::getDisplayName;
-			case Nameable nameable -> nameable::getCustomName;
-			case World world -> world::getName; //TODO: get Multiverse alias for world DisplayName, else use regular name
-			case null, default -> null;
+			case Player player -> Optional.of(player::getDisplayName);
+			case Nameable nameable -> Optional.of(nameable::getCustomName);
+			case World world -> Optional.of(world::getName); //TODO: get Multiverse alias for world DisplayName, else use regular name
+			case null, default -> Optional.empty();
 		};
 	}
-
 }
