@@ -23,7 +23,6 @@ import com.winterhavenmc.util.messagebuilder.query.YamlLangugageFileQueryHandler
 import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
-import com.winterhavenmc.util.messagebuilder.util.TimeString;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -64,7 +63,6 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	private final Plugin plugin;
 	private final LanguageHandler languageHandler;
-	private final TimeString timeString;
 	final LanguageFileQueryHandler queryHandler;
 	private final MacroHandler macroHandler;
 
@@ -80,7 +78,6 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
 		this.queryHandler = new YamlLangugageFileQueryHandler(plugin, languageHandler.getConfiguration());
-		this.timeString = new TimeString(queryHandler);
 		this.macroHandler = new MacroHandler(plugin, queryHandler);
 	}
 
@@ -110,7 +107,12 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	}
 
 
-	public LanguageFileQueryHandler getQueryHandler() {
+	/**
+	 * Return an instance of the language file query handler
+	 *
+	 * @return the query handler for the language file
+	 */
+	LanguageFileQueryHandler getQueryHandler() {
 		return this.queryHandler;
 	}
 
