@@ -239,14 +239,21 @@ public class YamlLangugageFileQueryHandler implements LanguageFileQueryHandler {
 	/**
 	 * Format the time string with days, hours, minutes and seconds as necessary
 	 *
-	 * @param duration a time duration in milliseconds
-	 * @return formatted time string
+	 * @param duration {@code long} a time duration in milliseconds
+	 * @return formatted time String
 	 */
 	@Override
 	public String getTimeString(final long duration) {
 		return new TimeString(this).getTimeString(duration, TimeUnit.SECONDS);
 	}
 
+
+	/**
+	 * Format the time string with days, hours, minutes and seconds as necessary
+	 *
+	 * @param duration {@code long} a time duration in milliseconds
+	 * @return formatted time String
+	 */
 	@Override
 	public String getTimeString(final long duration, final TimeUnit timeUnit) {
 		return new TimeString(this).getTimeString(duration, timeUnit);
