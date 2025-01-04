@@ -28,7 +28,7 @@ import java.util.Optional;
  * Resolver for Identifiable objects with an associated UUID. Any object that has a known method for retrieving
  * a UUID will be returned as an Identifiable object type, with a getUniqueID method. This method will be mapped
  * to the actual method of the object that returns a UUID, regardless of its signature. Any object that is not
- * known to have a UUID will result in a null being returned from the asIdentifiable method.
+ * known to have a UUID will result in an empty {@code Optional} being returned from the asIdentifiable method.
  */
 public class UUIDResolver {
 
