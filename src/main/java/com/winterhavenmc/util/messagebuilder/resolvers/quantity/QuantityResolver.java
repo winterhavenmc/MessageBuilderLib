@@ -29,9 +29,4 @@ public class QuantityResolver {
 			case null, default -> null;
 		};
 	}
-
-	public static String getPlaceHolder() {
-		return "QUANTITY";
-	}
-
 }
