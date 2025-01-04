@@ -24,6 +24,10 @@ import com.winterhavenmc.util.messagebuilder.util.Error;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Provides an instance of a MessageBuilderToolkit, that allows some access to internal library functions.
+ */
 public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> implements Toolkit {
 
 	public static final String SPAWN_DISPLAY_NAME = "SPAWN.DISPLAY_NAME";
@@ -31,8 +35,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	private final LanguageFileQueryHandler queryHandler;
 
 
-	public
-	MessageBuilderToolkit(final MessageBuilder<MessageId, Macro> messageBuilder) {
+	public MessageBuilderToolkit(final MessageBuilder<MessageId, Macro> messageBuilder) {
 		if (messageBuilder == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_BUILDER.getMessage()); }
 
 		this.queryHandler = messageBuilder.getQueryHandler();
@@ -75,10 +78,10 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 
 
 	/**
-	 * Retrieve the display name for spawn from the language file CONSTANTS section with the
+	 * Retrieve the display nameSingular for spawn from the language file CONSTANTS section with the
 	 * key path 'SPAWN.DISPLAY_NAME'
 	 *
-	 * @return an Optional of String containing the spawn name, or an empty Optional if no value was found
+	 * @return an Optional of String containing the spawn nameSingular, or an empty Optional if no value was found
 	 */
 	@Override
 	public Optional<String> getSpawnDisplayName() {
@@ -87,10 +90,10 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 
 
 	/**
-	 * Retrieve the display name for home from the language file CONSTANTS section with the
+	 * Retrieve the display nameSingular for home from the language file CONSTANTS section with the
 	 * key path 'HOME.DISPLAY_NAME'
 	 *
-	 * @return an Optional of String containing the home name, or an empty Optional if no value was found
+	 * @return an Optional of String containing the home nameSingular, or an empty Optional if no value was found
 	 */
 	@Override
 	public Optional<String> getHomeDisplayName() {
