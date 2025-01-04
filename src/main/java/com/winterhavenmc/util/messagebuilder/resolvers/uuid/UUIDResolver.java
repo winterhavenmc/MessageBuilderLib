@@ -22,7 +22,23 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.profile.PlayerProfile;
 
+
+/**
+ * Resolver for Identifiable objects with an associated UUID. Any object that has a known method for retrieving
+ * a UUID will be returned as an Identifiable object type, with a getUniqueID method. This method will be mapped
+ * to the actual method of the object that returns a UUID, regardless of its signature. Any object that is not
+ * known to have a UUID will result in a null being returned from the asIdentifiable method.
+ */
 public class UUIDResolver {
+
+	/**
+	 * Static method that returns an object of type Identifiable, or null if the passed object is not known to have
+	 * an associated UUID.
+	 *
+	 * @param obj the object being evaluated as being Identifiable
+	 * @return the object, wrapped in a Identifiable type, with its method to retrieve a UUID mapped to
+	 * the getUniqueId() method of the Identifiable type.
+	 */
 	public static Identifiable asIdentifiable(Object obj) {
 		return switch (obj) {
 			case Entity entity -> entity::getUniqueId;
