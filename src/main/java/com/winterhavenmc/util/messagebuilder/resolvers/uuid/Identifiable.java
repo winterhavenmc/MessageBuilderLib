@@ -19,6 +19,9 @@ package com.winterhavenmc.util.messagebuilder.resolvers.uuid;
 
 import java.util.UUID;
 
+/**
+ * An interface that describes objects that have a {@code getUniqueId()} method that returns a valid UUID.
+ */
 public interface Identifiable {
 	UUID getUniqueId();
 }
