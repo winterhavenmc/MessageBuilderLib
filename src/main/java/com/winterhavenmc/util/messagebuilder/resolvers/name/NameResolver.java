@@ -28,7 +28,7 @@ public class NameResolver {
 
 	public static Optional<Nameable> asNameable(Object obj) {
 		return switch (obj) {
-			case CommandSender commandSender -> Optional.of(commandSender::getName); // players/entities, console, command blocks, etc
+			case CommandSender commandSender -> Optional.of(commandSender::getName); // includes players, entities, console, command blocks, etc
 			case World world -> Optional.of(world::getName);
 			case Server server -> Optional.of(server::getName);
 			case Plugin plugin -> Optional.of(plugin::getName);
