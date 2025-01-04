@@ -22,15 +22,17 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Optional;
+
 public class NameResolver {
 
-	public static Nameable asNameable(Object obj) {
+	public static Optional<Nameable> asNameable(Object obj) {
 		return switch (obj) {
-			case CommandSender commandSender -> commandSender::getName; // players/entities, console, command blocks, etc
-			case World world -> world::getName;
-			case Server server -> server::getName;
-			case Plugin plugin -> plugin::getName;
-			case null, default -> null;
+			case CommandSender commandSender -> Optional.of(commandSender::getName); // players/entities, console, command blocks, etc
+			case World world -> Optional.of(world::getName);
+			case Server server -> Optional.of(server::getName);
+			case Plugin plugin -> Optional.of(plugin::getName);
+			case null, default -> Optional.empty();
 		};
 	}
 }

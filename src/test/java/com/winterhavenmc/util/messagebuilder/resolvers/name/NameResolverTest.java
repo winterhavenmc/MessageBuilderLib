@@ -25,6 +25,8 @@ import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
@@ -41,9 +43,9 @@ public class NameResolverTest {
 			String name = "";
 
 			// Act
-			Nameable resolver = NameResolver.asNameable(commandSenderMock);
-			if (resolver != null) {
-				name = resolver.getName();
+			Optional<Nameable> resolver = NameResolver.asNameable(commandSenderMock);
+			if (resolver.isPresent()) {
+				name = resolver.get().getName();
 			}
 
 			// Assert
@@ -59,9 +61,9 @@ public class NameResolverTest {
 			String name = null;
 
 			// Act
-			Nameable resolver = NameResolver.asNameable(nullPlayer);
-			if (resolver != null) {
-				name = resolver.getName();
+			Optional<Nameable> resolver = NameResolver.asNameable(nullPlayer);
+			if (resolver.isPresent()) {
+				name = resolver.get().getName();
 			}
 
 			// Assert
@@ -81,9 +83,9 @@ public class NameResolverTest {
 			String name = "";
 
 			// Act
-			Nameable resolver = NameResolver.asNameable(worldMock);
-			if (resolver != null) {
-				name = resolver.getName();
+			Optional<Nameable> resolver = NameResolver.asNameable(worldMock);
+			if (resolver.isPresent()) {
+				name = resolver.get().getName();
 			}
 
 			// Assert
@@ -102,9 +104,9 @@ public class NameResolverTest {
 			String name = "";
 
 			// Act
-			Nameable resolver = NameResolver.asNameable(serverMock);
-			if (resolver != null) {
-				name = resolver.getName();
+			Optional<Nameable> resolver = NameResolver.asNameable(serverMock);
+			if (resolver.isPresent()) {
+				name = resolver.get().getName();
 			}
 
 			// Assert
@@ -123,9 +125,9 @@ public class NameResolverTest {
 			String name = "";
 
 			// Act
-			Nameable resolver = NameResolver.asNameable(pluginMock);
-			if (resolver != null) {
-				name = resolver.getName();
+			Optional<Nameable> resolver = NameResolver.asNameable(pluginMock);
+			if (resolver.isPresent()) {
+				name = resolver.get().getName();
 			}
 
 			// Assert
