@@ -17,6 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.resolvers.displayname;
 
+/**
+ * An interface that describes objects that have a {@code getDisplayName()}
+ * method that returns a valid display name as a string.
+ */
 public interface DisplayNameable {
 	String getDisplayName();
 }
