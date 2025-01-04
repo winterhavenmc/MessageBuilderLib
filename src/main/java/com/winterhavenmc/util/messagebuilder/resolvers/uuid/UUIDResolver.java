@@ -22,6 +22,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.profile.PlayerProfile;
 
+import java.util.Optional;
 
 /**
  * Resolver for Identifiable objects with an associated UUID. Any object that has a known method for retrieving
@@ -39,13 +40,13 @@ public class UUIDResolver {
 	 * @return the object, wrapped in a Identifiable type, with its method to retrieve a UUID mapped to
 	 * the getUniqueId() method of the Identifiable type.
 	 */
-	public static Identifiable asIdentifiable(Object obj) {
+	public static Optional<Identifiable> asIdentifiable(Object obj) {
 		return switch (obj) {
-			case Entity entity -> entity::getUniqueId;
-			case PlayerProfile playerProfile -> playerProfile::getUniqueId;
-			case OfflinePlayer offlinePlayer -> offlinePlayer::getUniqueId;
-			case World world -> world::getUID;
-			case null, default -> null;
+			case Entity entity -> Optional.of(entity::getUniqueId);
+			case PlayerProfile playerProfile -> Optional.of(playerProfile::getUniqueId);
+			case OfflinePlayer offlinePlayer -> Optional.of(offlinePlayer::getUniqueId);
+			case World world -> Optional.of(world::getUID);
+			case null, default -> Optional.empty();
 		};
 	}
 }
