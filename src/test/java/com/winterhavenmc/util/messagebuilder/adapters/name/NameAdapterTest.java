@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.name;
+package com.winterhavenmc.util.messagebuilder.adapters.name;
 
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -31,10 +31,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
-public class NameResolverTest {
+public class NameAdapterTest {
 
 	@Nested
-	class CommandSenderNameResolverTests {
+	class CommandSenderNameAdapterTests {
 		@Test
 		public void testGetDisplayName_withValidCommandSender() {
 			// Arrange
@@ -43,7 +43,7 @@ public class NameResolverTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> resolver = NameResolver.asNameable(commandSenderMock);
+			Optional<Nameable> resolver = NameAdapter.asNameable(commandSenderMock);
 			if (resolver.isPresent()) {
 				name = resolver.get().getName();
 			}
@@ -61,7 +61,7 @@ public class NameResolverTest {
 			String name = null;
 
 			// Act
-			Optional<Nameable> resolver = NameResolver.asNameable(nullPlayer);
+			Optional<Nameable> resolver = NameAdapter.asNameable(nullPlayer);
 			if (resolver.isPresent()) {
 				name = resolver.get().getName();
 			}
@@ -83,7 +83,7 @@ public class NameResolverTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> resolver = NameResolver.asNameable(worldMock);
+			Optional<Nameable> resolver = NameAdapter.asNameable(worldMock);
 			if (resolver.isPresent()) {
 				name = resolver.get().getName();
 			}
@@ -104,7 +104,7 @@ public class NameResolverTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> resolver = NameResolver.asNameable(serverMock);
+			Optional<Nameable> resolver = NameAdapter.asNameable(serverMock);
 			if (resolver.isPresent()) {
 				name = resolver.get().getName();
 			}
@@ -125,7 +125,7 @@ public class NameResolverTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> resolver = NameResolver.asNameable(pluginMock);
+			Optional<Nameable> resolver = NameAdapter.asNameable(pluginMock);
 			if (resolver.isPresent()) {
 				name = resolver.get().getName();
 			}
