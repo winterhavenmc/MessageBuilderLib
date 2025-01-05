@@ -59,8 +59,8 @@ import org.bukkit.plugin.Plugin;
  * @param <MessageId> An enum whose members correspond to a message key in a language file
  * @param <Macro>     An enum whose members correspond to a string replacement placeholder in a message string
  */
+//TODO: ONLY THE RELOAD METHOD NEEDS TESTING FOR FULL COVERAGE OF THIS CLASS
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
-
 	private final Plugin plugin;
 	private final LanguageHandler languageHandler;
 	final LanguageFileQueryHandler queryHandler;
