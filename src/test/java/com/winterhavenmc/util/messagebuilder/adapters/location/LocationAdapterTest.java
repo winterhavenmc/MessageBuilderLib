@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.location;
+package com.winterhavenmc.util.messagebuilder.adapters.location;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-class LocationResolverTest {
+class LocationAdapterTest {
 
 	@Test
 	public void testGetLocation_withValidLocation() {
@@ -42,13 +42,13 @@ class LocationResolverTest {
 		Location location = new Location(worldMock, 1,2,3);
 
 		// Act
-		Optional<Locatable> resolver = LocationResolver.asLocatable(location);
+		Optional<Locatable> resolver = LocationAdapter.asLocatable(location);
 		if (resolver.isPresent()) {
-			location = resolver.get().location();
+			location = resolver.get().gatLocation();
 		}
 
 		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the location from the Location.");
+		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the Location.");
 	}
 
 	@Test
@@ -60,13 +60,13 @@ class LocationResolverTest {
 		Location location = null;
 
 		// Act
-		Optional<Locatable> resolver = LocationResolver.asLocatable(playerMock);
+		Optional<Locatable> resolver = LocationAdapter.asLocatable(playerMock);
 		if (resolver.isPresent()) {
-			location = resolver.get().location();
+			location = resolver.get().gatLocation();
 		}
 
 		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the location from the Player.");
+		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the Player.");
 	}
 
 	@Test
@@ -78,13 +78,13 @@ class LocationResolverTest {
 		Location location = null;
 
 		// Act
-		Optional<Locatable> resolver = LocationResolver.asLocatable(blockMock);
+		Optional<Locatable> resolver = LocationAdapter.asLocatable(blockMock);
 		if (resolver.isPresent()) {
-			location = resolver.get().location();
+			location = resolver.get().gatLocation();
 		}
 
 		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the location from the Block.");
+		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the Block.");
 	}
 
 	@Test
@@ -96,13 +96,13 @@ class LocationResolverTest {
 		Location location = null;
 
 		// Act
-		Optional<Locatable> resolver = LocationResolver.asLocatable(blockStateMock);
+		Optional<Locatable> resolver = LocationAdapter.asLocatable(blockStateMock);
 		if (resolver.isPresent()) {
-			location = resolver.get().location();
+			location = resolver.get().gatLocation();
 		}
 
 		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the location from the BlockState.");
+		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the BlockState.");
 	}
 
 	@Test
@@ -114,13 +114,13 @@ class LocationResolverTest {
 		Location location = null;
 
 		// Act
-		Optional<Locatable> resolver = LocationResolver.asLocatable(doubleChestMock);
+		Optional<Locatable> resolver = LocationAdapter.asLocatable(doubleChestMock);
 		if (resolver.isPresent()) {
-			location = resolver.get().location();
+			location = resolver.get().gatLocation();
 		}
 
 		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the location from the DoubleChest.");
+		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the DoubleChest.");
 	}
 
 	@Test
@@ -129,9 +129,9 @@ class LocationResolverTest {
 		Location location = null;
 
 		// Act & Assert
-		Optional<Locatable> resolver = LocationResolver.asLocatable(null);
+		Optional<Locatable> resolver = LocationAdapter.asLocatable(null);
 		if (resolver.isPresent()) {
-			location = resolver.get().location();
+			location = resolver.get().gatLocation();
 		}
 		assertNull(location);
 	}
