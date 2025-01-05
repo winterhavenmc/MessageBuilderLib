@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.quantity;
+package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 
 /**
  * An interface that describes objects that have a {@code getQuantity()}

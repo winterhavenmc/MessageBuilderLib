@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.location;
+package com.winterhavenmc.util.messagebuilder.adapters.location;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -27,13 +27,13 @@ import java.util.Optional;
 
 
 /**
- * Resolver for Locatable objects with an associated location. Any object that has a known method
- * for retrieving a {@code Location} will be returned as a Locatable object type, with a
- * getLocation method. This method will be mapped to the actual method of the object that returns a
- * {@code Location}, regardless of its actual method name. Any object that is not known to have a
+ * Adapter for {@link Locatable} objects with an associated location. Any object that has a known method
+ * for retrieving a {@link Location} will be returned as an Optional Locatable object type, with a
+ * {@code getLocation()} method. This method will be mapped to the actual method of the object that returns a
+ * {@code Location}, regardless of its real method name. Any object that is not known to have a
  * location will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
  */
-public class LocationResolver {
+public class LocationAdapter {
 
 	/**
 	 * Static method that returns an {@link Optional} of {@code Locatable}, or an empty Optional if the passed
@@ -54,5 +54,4 @@ public class LocationResolver {
 			case null, default -> Optional.empty();
 		};
 	}
-
 }

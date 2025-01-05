@@ -15,12 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.displayname;
+package com.winterhavenmc.util.messagebuilder.adapters.uuid;
+
+import java.util.UUID;
 
 /**
- * An interface that describes objects that have a {@code getDisplayName()}
- * method that returns a valid display name as a string.
+ * An interface that describes objects
+ * that have a {@code getUniqueId()}
+ * method that returns a valid UUID.
  */
-public interface DisplayNameable {
-	String getDisplayName();
+public interface Identifiable {
+	UUID getUniqueId();
 }

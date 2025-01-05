@@ -15,15 +15,14 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.uuid;
+package com.winterhavenmc.util.messagebuilder.adapters.location;
 
-import java.util.UUID;
+import org.bukkit.Location;
 
 /**
- * An interface that describes objects
- * that have a {@code getUniqueId()}
- * method that returns a valid UUID.
+ * An interface that describes objects that have a {@code getLocation()}
+ * method that returns a valid Bukkit location.
  */
-public interface Identifiable {
-	UUID getUniqueId();
+public interface Locatable {
+	Location location();
 }

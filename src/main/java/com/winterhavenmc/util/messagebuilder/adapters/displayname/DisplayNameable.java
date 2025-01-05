@@ -15,12 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.name;
+package com.winterhavenmc.util.messagebuilder.adapters.displayname;
 
 /**
- * An interface that describes objects that have a {@code getName()}
- * method that returns a valid name as a string.
+ * An interface that describes objects that have a {@code getDisplayName()}
+ * method that returns a valid display name as a string.
  */
-public interface Nameable {
-	String getName();
+public interface DisplayNameable {
+	String getDisplayName();
 }

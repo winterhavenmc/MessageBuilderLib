@@ -15,14 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.location;
-
-import org.bukkit.Location;
+package com.winterhavenmc.util.messagebuilder.adapters.name;
 
 /**
- * An interface that describes objects that have a {@code getLocation()}
- * method that returns a valid Bukkit location.
+ * An interface that describes objects that have a {@code getName()}
+ * method that returns a valid name as a {@code String}.
  */
-public interface Locatable {
-	Location location();
+public interface Nameable {
+	String getName();
 }
