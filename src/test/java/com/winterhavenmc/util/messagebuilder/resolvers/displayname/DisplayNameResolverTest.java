@@ -23,6 +23,8 @@ import org.bukkit.entity.Player;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
@@ -40,9 +42,9 @@ public class DisplayNameResolverTest {
 			String displayName = "";
 
 			// Act
-			DisplayNameable resolver = DisplayNameResolver.asDisplayNameable(playerMock);
-			if (resolver != null) {
-				displayName = resolver.getDisplayName();
+			Optional<DisplayNameable> resolver = DisplayNameResolver.asDisplayNameable(playerMock);
+			if (resolver.isPresent()) {
+				displayName = resolver.get().getDisplayName();
 			}
 
 			// Assert
@@ -56,9 +58,9 @@ public class DisplayNameResolverTest {
 			String displayName = null;
 
 			// Act
-			DisplayNameable resolver = DisplayNameResolver.asDisplayNameable(nullPlayer);
-			if (resolver != null) {
-				displayName = resolver.getDisplayName();
+			Optional<DisplayNameable> resolver = DisplayNameResolver.asDisplayNameable(nullPlayer);
+			if (resolver.isPresent()) {
+				displayName = resolver.get().getDisplayName();
 			}
 
 			// Assert
@@ -71,9 +73,9 @@ public class DisplayNameResolverTest {
 			String displayName = null;
 
 			// Act
-			DisplayNameable resolver = DisplayNameResolver.asDisplayNameable(null);
-			if (resolver != null) {
-				displayName = resolver.getDisplayName();
+			Optional<DisplayNameable> resolver = DisplayNameResolver.asDisplayNameable(null);
+			if (resolver.isPresent()) {
+				displayName = resolver.get().getDisplayName();
 			}
 
 			// assert
@@ -93,9 +95,9 @@ public class DisplayNameResolverTest {
 			String displayName = "";
 
 			// Act
-			DisplayNameable resolver = DisplayNameResolver.asDisplayNameable(entityMock);
-			if (resolver != null) {
-				displayName = resolver.getDisplayName();
+			Optional<DisplayNameable> resolver = DisplayNameResolver.asDisplayNameable(entityMock);
+			if (resolver.isPresent()) {
+				displayName = resolver.get().getDisplayName();
 			}
 
 			// Assert
@@ -114,9 +116,9 @@ public class DisplayNameResolverTest {
 			String displayName = "";
 
 			// Act
-			DisplayNameable resolver = DisplayNameResolver.asDisplayNameable(worldMock);
-			if (resolver != null) {
-				displayName = resolver.getDisplayName();
+			Optional<DisplayNameable> resolver = DisplayNameResolver.asDisplayNameable(worldMock);
+			if (resolver.isPresent()) {
+				displayName = resolver.get().getDisplayName();
 			}
 
 			// Assert
