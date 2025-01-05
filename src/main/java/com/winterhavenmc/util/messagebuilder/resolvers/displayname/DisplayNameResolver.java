@@ -23,8 +23,25 @@ import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
+
+/**
+ * Resolver for DisplayNameable objects with an associated display name. Any object that has a known method
+ * for retrieving a {@code String} display name will be returned as an DisplayNameable object type, with a
+ * getDisplayName method. This method will be mapped to the actual method of the object that returns a
+ * {@code String} display name, regardless of its actual method name. Any object that is not known to have a
+ * display name will result in an empty {@code Optional} being returned from the static {@code asDisplayNameable} method.
+ */
 public class DisplayNameResolver {
 
+	/**
+	 * Static method that returns an {@link Optional} of {@code DisplayNameable}, or an empty Optional if the passed
+	 * object is not known to have an associated display name. The Optional value, if present, implements the
+	 * {@code DisplayNameable} Interface, and is guaranteed to have a {@code getDisplayName()} method.
+	 *
+	 * @param obj the object being evaluated as being DisplayNameable
+	 * @return an Optional of the object as a {@code DisplayNameable}, or an empty {Optional if the passed
+	 * object does not have a known method of retrieving a display name.
+	 */
 	public static Optional<DisplayNameable> asDisplayNameable(Object obj) {
 		return switch (obj) {
 			case Player player -> Optional.of(player::getDisplayName);
