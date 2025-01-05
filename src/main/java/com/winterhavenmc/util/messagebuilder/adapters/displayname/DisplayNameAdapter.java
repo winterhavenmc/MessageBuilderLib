@@ -39,7 +39,7 @@ public class DisplayNameAdapter {
 	 * {@code DisplayNameable} Interface, and is guaranteed to have a {@code getDisplayName()} method.
 	 *
 	 * @param obj the object being evaluated as to be DisplayNameable
-	 * @return an Optional of the object as a {@code DisplayNameable}, or an empty {Optional if the passed
+	 * @return {@code Optional} of the object as a {@code DisplayNameable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a display name.
 	 */
 	public static Optional<DisplayNameable> asDisplayNameable(Object obj) {
