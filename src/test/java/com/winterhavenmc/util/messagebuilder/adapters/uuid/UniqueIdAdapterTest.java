@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.uuid;
+package com.winterhavenmc.util.messagebuilder.adapters.uuid;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -24,13 +24,14 @@ import org.bukkit.profile.PlayerProfile;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class UUIDResolverTest {
+class UniqueIdAdapterTest {
 
 	@Test
 	public void testGetUUID_withValidEntity() {
@@ -40,15 +41,15 @@ class UUIDResolverTest {
 		UUID uuid = null;
 
 		// Act
-		Identifiable resolver = UUIDResolver.asIdentifiable(entityMock);
-		if (resolver != null) {
-			uuid = resolver.getUniqueId();
+		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(entityMock);
+		if (resolver.isPresent()) {
+			uuid = resolver.get().getUniqueId();
 		}
 
 		// Assert
 		assertEquals(new UUID(0, 1), uuid, "The resolver should return a UUID from the Entity.");
 
-		// verify
+		// Verify
 		verify(entityMock, atLeastOnce()).getUniqueId();
 	}
 
@@ -61,15 +62,15 @@ class UUIDResolverTest {
 		UUID uuid = null;
 
 		// Act
-		Identifiable resolver = UUIDResolver.asIdentifiable(playerProfileMock);
-		if (resolver != null) {
-			uuid = resolver.getUniqueId();
+		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(playerProfileMock);
+		if (resolver.isPresent()) {
+			uuid = resolver.get().getUniqueId();
 		}
 
 		// Assert
 		assertEquals(new UUID(0, 1), uuid, "The resolver should return a UUID from the PlayerProfile.");
 
-		// verify
+		// Verify
 		verify(playerProfileMock, atLeastOnce()).getUniqueId();
 	}
 
@@ -82,15 +83,15 @@ class UUIDResolverTest {
 		UUID uuid = null;
 
 		// Act
-		Identifiable resolver = UUIDResolver.asIdentifiable(offlinePlayerMock);
-		if (resolver != null) {
-			uuid = resolver.getUniqueId();
+		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(offlinePlayerMock);
+		if (resolver.isPresent()) {
+			uuid = resolver.get().getUniqueId();
 		}
 
 		// Assert
 		assertEquals(new UUID(0, 1), uuid, "The resolver should return a UUID from the OfflinePlayer.");
 
-		// verify
+		// Verify
 		verify(offlinePlayerMock, atLeastOnce()).getUniqueId();
 	}
 
@@ -103,15 +104,15 @@ class UUIDResolverTest {
 		UUID uuid = null;
 
 		// Act
-		Identifiable resolver = UUIDResolver.asIdentifiable(worldMock);
-		if (resolver != null) {
-			uuid = resolver.getUniqueId();
+		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(worldMock);
+		if (resolver.isPresent()) {
+			uuid = resolver.get().getUniqueId();
 		}
 
 		// Assert
 		assertEquals(new UUID(1, 1), uuid, "The resolver should return a UUID from the World.");
 
-		// verify
+		// Verify
 		verify(worldMock, atLeastOnce()).getUID();
 	}
 
@@ -122,9 +123,9 @@ class UUIDResolverTest {
 		UUID uuid = null;
 
 		// Act
-		Identifiable resolver = UUIDResolver.asIdentifiable(null);
-		if (resolver != null) {
-			uuid = resolver.getUniqueId();
+		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(null);
+		if (resolver.isPresent()) {
+			uuid = resolver.get().getUniqueId();
 		}
 
 		// Assert
