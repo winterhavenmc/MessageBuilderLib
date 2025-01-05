@@ -17,6 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.resolvers.name;
 
+/**
+ * An interface that describes objects that have a {@code getName()}
+ * method that returns a valid name as a string.
+ */
 public interface Nameable {
 	String getName();
 }
