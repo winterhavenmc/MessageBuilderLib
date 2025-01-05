@@ -31,6 +31,8 @@ import java.util.Optional;
  */
 public class QuantityAdapter {
 
+	private QuantityAdapter() { /* private constructor to prevent instantiation */ }
+
 	/**
 	 * Static method that returns an {@link Optional} of {@code Quantifiable}, or an empty {@code Optional} if the passed
 	 * object is not known to have an associated quantity. The {@code Optional} value, if present, implements the

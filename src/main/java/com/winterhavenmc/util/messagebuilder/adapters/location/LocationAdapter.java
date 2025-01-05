@@ -35,6 +35,8 @@ import java.util.Optional;
  */
 public class LocationAdapter {
 
+	private LocationAdapter() { /* private constructor to prevent instantiation */ }
+
 	/**
 	 * Static method that returns an {@link Optional} of {@code Locatable}, or an empty Optional if the passed
 	 * object is not known to have an associated gatLocation. The Optional value, if present, implements the

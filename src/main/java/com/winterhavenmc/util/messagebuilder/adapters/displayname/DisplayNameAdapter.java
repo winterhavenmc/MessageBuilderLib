@@ -33,6 +33,8 @@ import java.util.Optional;
  */
 public class DisplayNameAdapter {
 
+	private DisplayNameAdapter() { /* private constructor to prevent instantiation */ }
+
 	/**
 	 * Static method that returns an {@link Optional} of {@code DisplayNameable}, or an empty Optional if the passed
 	 * object is not known to have an associated display name. The Optional value, if present, implements the
