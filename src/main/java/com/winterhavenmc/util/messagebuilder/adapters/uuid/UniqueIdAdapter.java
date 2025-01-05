@@ -30,7 +30,9 @@ import java.util.Optional;
  * to the actual method of the object that returns a UUID, regardless of its method name. Any object that is not
  * known to have a UUID will result in an empty {@code Optional} being returned from the asIdentifiable method.
  */
-public class UUIDResolver {
+public class UniqueIdAdapter {
+
+	private UniqueIdAdapter() { /* private constructor to prevent instantiation */ }
 
 	/**
 	 * Static method that returns an object of type Identifiable, or null if the passed object is not known to have
