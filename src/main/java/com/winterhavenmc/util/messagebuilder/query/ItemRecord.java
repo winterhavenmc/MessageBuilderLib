@@ -23,8 +23,8 @@ import java.util.Optional;
 
 public record ItemRecord(
 		String key,
-		Optional<String> itemName,
-		Optional<String> itemNamePlural,
+		Optional<String> nameSingular,
+		Optional<String> namePlural,
 		Optional<String> inventoryItemSingular,
 		Optional<String> inventoryItemPlural,
-		List<String> itemLore) { }
+		List<String> itemLore) implements Pluralizable { }
