@@ -49,9 +49,10 @@ final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listen
 
 
 	/**
-	 * private class constructor, registers class as bukkit event listener
+	 * private class constructor prevents instantiation of singleton
+	 * registers class as bukkit event listener
 	 */
-	private MessageCooldown(final Plugin plugin) {
+	private MessageCooldown(Plugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
@@ -93,7 +94,8 @@ final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listen
 		Map<UUID, Long> tempMap = new ConcurrentHashMap<>();
 
 		// put current time in HashMap with entity UUID as key
-		tempMap.put(entity.getUniqueId(), System.currentTimeMillis());
+		long currentTime = System.currentTimeMillis(); // NOTE: Don't inline this, it can cause a deadlock
+		tempMap.put(entity.getUniqueId(), currentTime);
 
 		// put HashMap in cooldown map with messageId as key
 		messageCooldownMap.put(messageId, tempMap);
