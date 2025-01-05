@@ -27,22 +27,22 @@ import java.util.Optional;
 
 
 /**
- * Adapter for {@link Locatable} objects with an associated location. Any object that has a known method
+ * Adapter for {@link Locatable} objects with an associated gatLocation. Any object that has a known method
  * for retrieving a {@link Location} will be returned as an Optional Locatable object type, with a
  * {@code getLocation()} method. This method will be mapped to the actual method of the object that returns a
  * {@code Location}, regardless of its real method name. Any object that is not known to have a
- * location will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
+ * gatLocation will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
  */
 public class LocationAdapter {
 
 	/**
 	 * Static method that returns an {@link Optional} of {@code Locatable}, or an empty Optional if the passed
-	 * object is not known to have an associated location. The Optional value, if present, implements the
+	 * object is not known to have an associated gatLocation. The Optional value, if present, implements the
 	 * {@code Locatable} Interface, and is guaranteed to have a {@code getLocation()} method.
 	 *
 	 * @param obj the object being evaluated as being Locatable
 	 * @return an {@code Optional} of the object as a {@code Locatable}, or an empty Optional if the passed
-	 * object does not have a known method of retrieving a location.
+	 * object does not have a known method of retrieving a gatLocation.
 	 */
 	public static Optional<Locatable> asLocatable(Object obj) {
 		return switch (obj) {

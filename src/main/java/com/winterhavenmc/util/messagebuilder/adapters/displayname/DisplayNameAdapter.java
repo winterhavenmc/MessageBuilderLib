@@ -26,9 +26,9 @@ import java.util.Optional;
 
 /**
  * Adapter for DisplayNameable objects with an associated display name. Any object that has a known method
- * for retrieving a {@code String} display name will be returned as an DisplayNameable object type, with a
- * {@code getDisplayName()} method. This method will be mapped to the actual method of the object that returns a
- * {@code String} display name, regardless of its real method name. Any object that is not known to have a
+ * for retrieving a {@code String} display name will be returned as an {@link Optional} DisplayNameable object type, with a
+ * {@code getDisplayName()} method. This method will be mapped to the method of the object that returns a
+ * {@code String} display name, regardless of its actual method name. Any object that is not known to have a
  * display name will result in an empty {@code Optional} being returned from the static {@code asDisplayNameable} method.
  */
 public class DisplayNameAdapter {

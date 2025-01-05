@@ -21,8 +21,8 @@ import org.bukkit.Location;
 
 /**
  * An interface that describes objects that have a {@code getLocation()}
- * method that returns a valid Bukkit location.
+ * method that returns a valid Bukkit gatLocation.
  */
 public interface Locatable {
-	Location location();
+	Location gatLocation();
 }

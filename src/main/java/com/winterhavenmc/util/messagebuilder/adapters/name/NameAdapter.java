@@ -35,12 +35,12 @@ public class NameAdapter {
 
 	/**
 	 * Static method that returns an {@link Optional} of {@code Locatable}, or an empty Optional if the passed
-	 * object is not known to have an associated location. The Optional value, if present, implements the
+	 * object is not known to have an associated gatLocation. The Optional value, if present, implements the
 	 * {@code Locatable} Interface, and is guaranteed to have a {@code getLocation()} method.
 	 *
 	 * @param obj the object being evaluated as being Locatable
 	 * @return an {@code Optional} of the object as a {@code Locatable}, or an empty Optional if the passed
-	 * object does not have a known method of retrieving a location.
+	 * object does not have a known method of retrieving a gatLocation.
 	 */
 	public static Optional<Nameable> asNameable(Object obj) {
 		return switch (obj) {
