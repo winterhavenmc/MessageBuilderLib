@@ -22,10 +22,14 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -33,13 +37,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 
+@ExtendWith(MockitoExtension.class)
 class ContextMapTest {
 
+	@Mock private CommandSender commandSenderMock;
 	private ContextMap contextMap;
 
 	@BeforeEach
 	void setUp() {
-		contextMap = new ContextMap();
+		contextMap = new ContextMap(commandSenderMock);
 	}
 
 	@Test
