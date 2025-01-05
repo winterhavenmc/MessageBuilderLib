@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class YamlLanguageFileLoaderTests {
+public class YamlLanguageFileLoaderTest {
 
 	private Plugin plugin;
 	private YamlLanguageFileLoader yamlLanguageFileLoader;
@@ -125,16 +125,16 @@ public class YamlLanguageFileLoaderTests {
 
 	@Test
 	@DisplayName("getResourceName test")
-	void getResourceNameTest() {
-		assertNotNull(yamlLanguageFileLoader.getResourceName("en-US"));
-		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageFileLoader.getResourceName("en-US"));
+	void getValidResourceNameTest() {
+		assertNotNull(yamlLanguageFileLoader.getValidResourceName("en-US"));
+		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageFileLoader.getValidResourceName("en-US"));
 	}
 
 	@Test
 	@DisplayName("getResourceName test 2")
-	void getResourceNameTest_nonexistent() {
-		assertNotNull(yamlLanguageFileLoader.getResourceName("not-a-valid-tag"));
-		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageFileLoader.getResourceName("not-a-valid-tag"));
+	void getValidResourceNameTest_nonexistent() {
+		assertNotNull(yamlLanguageFileLoader.getValidResourceName("not-a-valid-tag"));
+		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageFileLoader.getValidResourceName("not-a-valid-tag"));
 	}
 
 
@@ -175,6 +175,24 @@ public class YamlLanguageFileLoaderTests {
 				assertTrue(getConfigMessageNames().contains(messageName),
 						messageName + " is contained in messages config file.");
 			}
+		}
+	}
+
+	@Nested
+	class GetResourceNameTests {
+		@Test
+		void TestGetResourceName_valid_language_tag() {
+			assertEquals("language/en-US.yml", yamlLanguageFileLoader.getValidResourceName("en-US"));
+		}
+
+		@Test
+		void TestGetResourceName_valid_language_tag_no_file() {
+			assertEquals("language/en-US.yml", yamlLanguageFileLoader.getValidResourceName("en-UK"));
+		}
+
+		@Test
+		void TestGetResourceName_invalid_language_tag() {
+			assertEquals("language/en-US.yml", yamlLanguageFileLoader.getValidResourceName("invalid-tag"));
 		}
 	}
 
