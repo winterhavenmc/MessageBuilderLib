@@ -17,34 +17,137 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+/**
+ * This class contains enums that are used as a component to create a unique namespace,
+ * It is primarily used in the formation of unique keys for use in &lt;K,V&gt; data structures, such as maps.
+ */
 public class Namespace {
 
+	private Namespace() { /* private constructor to prevent instantiation */ }
 
 	/**
-	 * This class contains enums that are used as a component to create a unique namespace,
-	 * It is primarily used in the formation of unique keys for use in &lt;K,V&gt; data structures, such as maps.
- 	 */
-	private Namespace() { }
-
-
-	/**
-	 * This enum represents the top-level categories that must be used as the root of the keyDomain.
+	 * This enum represents the top-level domains that must be used as the root of the keyDomain.
 	 * They are subject to change at this time, and will likely be reduced to an appropriate set as necessary.
-	 * I selected a wide array of categories here until I narrow down those I find useful.
+	 * I selected a wide array of domains here until I narrow down those I find useful.
 	 */
 	public enum Domain {
-
 		ITEMS, // values supplied by the yaml language file, from the root level section 'ITEMS'
 		CONSTANTS, //values supplied by the yaml language file, from the root level section 'CONSTANTS'
 		MACRO, // values passed in by calls to the setMacro method
+		//MESSAGES, // probably should be here eventually
 
 		// potential future domains
 //		ENV, // environment variables, such as those made available by the operating system
 //		RUNTIME, // runtime variables, such as those made available by the Java Runtime Environment
 //		SERVER, // server variables, made available by the bukkit server instance running the plugin
-//		PLUGIN, // plugin variables (could use subcategories to hold info about other plugins)
+//		PLUGIN, // plugin variables (could use subdomains to hold info about other plugins)
 //		LIBRARY, // library variables, those specific to this library
 //		RESERVED, // not for you variables?
+	}
+
+
+	// these should reflect the field names as they will be used as suffixes in the context keys
+	// required should mean that the retrieved value may be null. if this meaning is inappropriate
+	// for the field 'required', a new field should be added to positively identify nullable fields.
+	public static class Item {
+		public enum Field {
+			// fields in source
+			NAME_SINGULAR("NAME.SINGULAR", String.class, true), // required
+			NAME_PLURAL("NAME.PLURAL", String.class, true), // required
+			INVENTORY_NAME_SINGULAR("INVENTORY_NAME.SINGULAR", String.class, false), // if not found, use NAME_SINGULAR
+			INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL", String.class, false), // if not found, use NAME_PLURAL
+			QUANTITY("QUANTITY", Integer.class, false), // if not found, use one (1)
+			// synthetic fields derived from context
+			NAME("NAME", String.class, false), // this will be populated with the singular/plural depending on QUANTITY
+			DISPLAY_NAME("DISPLAY_NAME", String.class, false), // relies on QUANTITY to choose NAME_SINGULAR or NAME_PLURAL
+			INVENTORY_DISPLAY_NAME("INVENTORY_DISPLAY_NAME", String.class, false), // relies on QUANTITY to choose INVENTORY_NAME_SINGULAR or INVENTORY_NAME_PLURAL
+			;
+
+			private final String keyPath;
+			private final Class<?> type;
+			private final boolean required;
+			//private final boolean immutable;
+
+			private Field(final String keyPath, final Class<?> type, final boolean required) {
+				this.keyPath = keyPath;
+				this.type = type;
+				this.required = required;
+				//this.immutable = immutable;
+			}
+
+			public String getKeyPath() {
+				return keyPath;
+			}
+
+			public Class<?> getType() {
+				return type;
+			}
+
+			public boolean isRequired() {
+				return this.required;
+			}
+		}
+	}
+
+
+	/**
+	 * ContextMap fields for a Location object. The ContextMap key for each field is derived by appending
+	 * the field nameSingular to the existing key path for this Macro. The field values are derived from a Location object
+	 * by the LocationProcessor.
+	 */
+	public static class Location {
+		public enum Field {
+			FORMATTED(String.class),
+			WORLD(String.class),
+			X(String.class),
+			Y(String.class),
+			Z(String.class),
+			;
+
+			private final Class<?> type;
+
+			private Field(final Class<?> type) {
+				this.type = type;
+			}
+		}
+	}
+
+	public static class Recipient {
+		public enum Field {
+			NAME("RECIPIENT.NAME", String.class, "The name of the recipient"),
+			NAME_DISPLAYNAME("RECIPIENT.DISPLAYNAME", String.class, "The display name of the recipient (if applicable)"),
+			UUID("RECIPIENT.UUID", java.util.UUID.class, "The UUID of the recipient (if applicable)"),
+			LOCATION("RECIPIENT.LOCATION", Location.class, "The Location of the recipient (if applicable)"),
+			LOCATION_WORLD("RECIPIENT.LOCATION.WORLD", String.class, "The world of the recipient location (if applicable)"),
+			LOCATION_X("RECIPIENT.LOCATION.X", Double.class, "The X-coordinate of the recipient location (if applicable)"),
+			LOCATION_Y("RECIPIENT.LOCATION.Y", Double.class, "The Y-coordinate of the recipient location (if applicable)"),
+			LOCATION_Z("RECIPIENT.LOCATION.Z", Double.class, "The Z-coordinate of the recipient location (if applicable)"),
+			LOCATION_FORMATTED("RECIPIENT.LOCATION.FORMATTED", String.class,
+					"The Location of the recipient as a formatted String (if applicable)"),
+			;
+
+			private final String keyPath;
+			private final Class<?> type;
+			private final String description;
+
+			Field(String keyPath, Class<?> type, String description) {
+				this.keyPath = keyPath;
+				this.type = type;
+				this.description = description;
+			}
+
+			public String getKeyPath() {
+				return keyPath;
+			}
+
+			public Class<?> getType() {
+				return type;
+			}
+
+			public String getDescription() {
+				return description;
+			}
+		}
 	}
 
 }
