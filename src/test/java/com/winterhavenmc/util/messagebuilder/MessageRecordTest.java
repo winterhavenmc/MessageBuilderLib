@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import com.winterhavenmc.util.messagebuilder.query.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,7 +25,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +44,7 @@ class MessageRecordTest {
 
 		// create a real configuration object from a resource
 		try {
-			fileConfiguration = YamlConfiguration.loadConfiguration(MockUtility.getResourceFile("language/en-US.yml"));
+			fileConfiguration = YamlConfiguration.loadConfiguration(getResourceFile("language/en-US.yml"));
 		} catch (IllegalArgumentException | URISyntaxException e) {
 			System.out.println("a problem was encountered while trying to load the test configuration from resource");
 		}
@@ -73,6 +74,18 @@ class MessageRecordTest {
 				44,
 				"this is a test subtitle");
 		assertNotNull(testRecord, "the newly created record is null.");
+	}
+
+
+	/**
+	 * Get a resource as a File object for the named resource
+	 *
+	 * @param name the nameSingular of the resource to return as a file object
+	 * @return a file object for the named resource
+	 * @throws URISyntaxException Let's hope it doesn't.
+	 */
+	public static File getResourceFile(final String name) throws URISyntaxException {
+		return Paths.get(Thread.currentThread().getContextClassLoader().getResource(name).toURI()).toAbsolutePath().toFile();
 	}
 
 }
