@@ -26,10 +26,27 @@ import org.bukkit.entity.Entity;
 import java.util.Optional;
 
 
+/**
+ * Resolver for Locatable objects with an associated location. Any object that has a known method
+ * for retrieving a {@code Location} will be returned as a Locatable object type, with a
+ * getLocation method. This method will be mapped to the actual method of the object that returns a
+ * {@code Location}, regardless of its actual method name. Any object that is not known to have a
+ * location will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
+ */
 public class LocationResolver {
+
+	/**
+	 * Static method that returns an {@link Optional} of {@code Locatable}, or an empty Optional if the passed
+	 * object is not known to have an associated location. The Optional value, if present, implements the
+	 * {@code Locatable} Interface, and is guaranteed to have a {@code getLocation()} method.
+	 *
+	 * @param obj the object being evaluated as being Locatable
+	 * @return an Optional of the object as a {@code Locatable}, or an empty {@code Optional} if the passed
+	 * object does not have a known method of retrieving a location.
+	 */
 	public static Optional<Locatable> asLocatable(Object obj) {
 		return switch (obj) {
-			case Location location -> Optional.of(new LocationObjectLocationResolver(location));
+			case Location location -> Optional.of(location::clone);
 			case Entity entity -> Optional.of(entity::getLocation);
 			case Block block -> Optional.of(block::getLocation);
 			case BlockState blockState -> Optional.of(blockState::getLocation);
@@ -38,5 +55,4 @@ public class LocationResolver {
 		};
 	}
 
-	public record LocationObjectLocationResolver(Location location) implements Locatable { }
 }
