@@ -18,11 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
+import org.bukkit.command.CommandSender;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -32,8 +33,14 @@ import java.util.Set;
  */
 public class ContextMap {
 
+	private final CommandSender recipient;
+
 	// Backing store HashMap (ed: linked hash map to maintain insertion order TODO: investigate best map type here
-	private final Map<String, ContextContainer<?>> contextMap = new LinkedHashMap<>();
+	private final Map<String, ContextContainer<?>> contextMap = new ConcurrentHashMap<>();
+
+	public ContextMap(CommandSender recipient) {
+		this.recipient = recipient;
+	}
 
 
 	/**
