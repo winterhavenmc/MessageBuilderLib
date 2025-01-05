@@ -25,6 +25,7 @@ import org.mockito.Mockito;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -40,9 +41,9 @@ public class QuantityResolverTest {
 
 			// Act
 			int quantity = -888;
-			Quantifiable resolver = QuantityResolver.asQuantifiable(collection);
-			if (resolver != null) {
-				quantity = resolver.getQuantity();
+			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(collection);
+			if (resolver.isPresent()) {
+				quantity = resolver.get().getQuantity();
 			}
 
 			// Assert
@@ -56,9 +57,9 @@ public class QuantityResolverTest {
 
 			// Act
 			int quantity = -777;
-			Quantifiable resolver = QuantityResolver.asQuantifiable(collection);
-			if (resolver != null) {
-				quantity = resolver.getQuantity();
+			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(collection);
+			if (resolver.isPresent()) {
+				quantity = resolver.get().getQuantity();
 			}
 
 			// Assert
@@ -70,9 +71,9 @@ public class QuantityResolverTest {
 			// Act & Assert
 			int quantity = -999;
 			Collection<String> collection = null;
-			Quantifiable resolver = QuantityResolver.asQuantifiable(collection);
-			if (resolver != null) {
-				quantity = resolver.getQuantity();
+			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(collection);
+			if (resolver.isPresent()) {
+				quantity = resolver.get().getQuantity();
 			}
 			assertEquals(-999, quantity);
 		}
@@ -90,9 +91,9 @@ public class QuantityResolverTest {
 
 			// Act
 			int quantity = -888;
-			Quantifiable resolver = QuantityResolver.asQuantifiable(itemStackMock);
-			if (resolver != null) {
-				quantity = resolver.getQuantity();
+			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(itemStackMock);
+			if (resolver.isPresent()) {
+				quantity = resolver.get().getQuantity();
 			}
 
 			// Assert
@@ -107,9 +108,9 @@ public class QuantityResolverTest {
 
 			// Act
 			int quantity = -777;
-			Quantifiable resolver = QuantityResolver.asQuantifiable(itemStackMock);
-			if (resolver != null) {
-				quantity = resolver.getQuantity();
+			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(itemStackMock);
+			if (resolver.isPresent()) {
+				quantity = resolver.get().getQuantity();
 			}
 
 			// Assert
@@ -120,9 +121,9 @@ public class QuantityResolverTest {
 		public void testConstructor_withNullItemStack() {
 			// Act & Assert
 			int quantity = -999;
-			Quantifiable resolver = QuantityResolver.asQuantifiable(null);
-			if (resolver != null) {
-				quantity = resolver.getQuantity();
+			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(null);
+			if (resolver.isPresent()) {
+				quantity = resolver.get().getQuantity();
 			}
 			assertEquals(-999, quantity);
 		}
