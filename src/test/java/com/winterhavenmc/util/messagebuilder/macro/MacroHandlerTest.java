@@ -84,7 +84,7 @@ class MacroHandlerTest {
 
 	@Test
 	void replaceMacrosTest() {
-		ContextMap contextMap = new ContextMap();
+		ContextMap contextMap = new ContextMap(player);
 
 		String resultString = macroHandler.replaceMacros(player, contextMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
@@ -92,7 +92,7 @@ class MacroHandlerTest {
 
 	@Test
 	void replaceMacrosTest_item_already_in_map() {
-		ContextMap contextMap = new ContextMap();
+		ContextMap contextMap = new ContextMap(player);
 		String key = "MACRO:My_Item";
 		contextMap.put(key, ContextContainer.of("TEST_STRING", ProcessorType.STRING));
 
@@ -102,7 +102,7 @@ class MacroHandlerTest {
 
 	@Test
 	void replaceMacrosTest_item_no_delimiter() {
-		ContextMap contextMap = new ContextMap();
+		ContextMap contextMap = new ContextMap(player);
 		String resultString = macroHandler.replaceMacros(player, contextMap, "Replace this: ITEM_NAME");
 		assertEquals("Replace this: ITEM_NAME", resultString);
 	}
@@ -113,7 +113,7 @@ class MacroHandlerTest {
 		when(entity.getUniqueId()).thenReturn(new UUID(123,123));
 		when(entity.getName()).thenReturn("player1");
 
-		ContextMap contextMap = new ContextMap();
+		ContextMap contextMap = new ContextMap(player);
 		String resultString = macroHandler.replaceMacros(player, contextMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
