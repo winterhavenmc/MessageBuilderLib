@@ -19,6 +19,10 @@ package com.winterhavenmc.util.messagebuilder.resolvers.location;
 
 import org.bukkit.Location;
 
+/**
+ * An interface that describes objects that have a {@code getLocation()}
+ * method that returns a valid Bukkit location.
+ */
 public interface Locatable {
 	Location location();
 }
