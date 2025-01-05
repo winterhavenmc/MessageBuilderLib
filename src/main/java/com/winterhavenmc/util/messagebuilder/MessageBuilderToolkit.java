@@ -57,6 +57,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 *
 	 * @param character the character to use for both delimiters
 	 */
+	//TODO: Consider making this a parameter (or a component of a settings object) passed to a MessageBuilder constructor.
 	@Override
 	public void setDelimiters(final Character character) {
 		MacroHandler.MacroDelimiter.LEFT.set(character);
