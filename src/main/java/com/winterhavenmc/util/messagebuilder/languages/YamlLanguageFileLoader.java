@@ -19,9 +19,9 @@ package com.winterhavenmc.util.messagebuilder.languages;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 /**
  * An implementation of the LanguageFileLoader interface for loading the message configuration from yaml files
  */
+//TODO: This class needs more test coverage. It's mostly null checks and throws missing, and the reload command.
 public class YamlLanguageFileLoader implements LanguageFileLoader {
 
 	// the directory name within a plugin data directory where the language yaml files are installed
@@ -94,13 +95,19 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 			plugin.getLogger().severe("Language file " + languageTag + ".yml is not valid yaml.");
 		}
 
-		// Set defaults to embedded resource file
+		// get resource path name for language tag
+		final String resourceName = getValidResourceName(languageTag);
 
-		final String resourceName = getResourceName(languageTag);
+		// get resource input stream by name
+		InputStream resource = plugin.getResource(resourceName);
+
+		if (resource == null) {
+			plugin.getLogger().warning("Could not open resource " + resourceName);
+			return new MemoryConfiguration();
+		}
 
 		// get input stream reader for embedded resource file
-		//noinspection ConstantConditions
-		Reader defaultConfigStream = new InputStreamReader(plugin.getResource(resourceName), StandardCharsets.UTF_8);
+		Reader defaultConfigStream = new InputStreamReader(resource, StandardCharsets.UTF_8);
 
 		// load embedded resource stream into Configuration object
 		Configuration defaultConfig = YamlConfiguration.loadConfiguration(defaultConfigStream);
@@ -109,19 +116,6 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 		newMessagesConfig.setDefaults(defaultConfig);
 
 		return newMessagesConfig;
-	}
-
-
-	@NotNull
-	String getResourceName(String languageTag) {
-		// get embedded resource file name; note that forward slash (/) is always used, regardless of platform
-		String resourceName = LANGUAGE_FOLDER + "/" + languageTag + ".yml";
-
-		// check if specified language resource exists, otherwise use en-US
-		if (plugin.getResource(resourceName) == null) {
-			resourceName = LANGUAGE_FOLDER + "/" + "en-US.yml";
-		}
-		return resourceName;
 	}
 
 
@@ -144,7 +138,7 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 
 
 	/**
-	 * Check if a file exists for the provided IETF language tag (ex: fr-CA).
+	 * Check if a file exists in the plugin data directory for the provided IETF language tag (ex: fr-CA).
 	 * If a file does not exist for the configured language tag, the default (en-US) will be returned.
 	 * A resource should always be included in the plugin for the default language tag (en-US) when using this library.
 	 *
@@ -165,6 +159,36 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 		return "en-US";
 	}
 
+
+	/**
+	 * Check if a language resource exists for a given language tag, and return its name as {@code String} if
+	 * the file exists, or else return the name for the default language file 'language/en-US.yml', which
+	 * should always be included in the plugin resource directory of any plugin using this library.
+	 *
+	 * @param languageTag the IETF Language Tag to specify a language file associated with the language tag
+	 * @return the resource name for a file associated with the language tag if it exists, or the default
+	 * language file, 'language/en-US.yml'.
+	 */
+	String getValidResourceName(String languageTag) {
+		// get embedded resource file name; note that forward slash (/) is always used, regardless of platform
+		String resourceName = String.join("/",LANGUAGE_FOLDER, languageTag).concat(".yml");
+
+		// check if specified language resource exists, otherwise use en-US
+		if (plugin.getResource(resourceName) == null) {
+			resourceName = LANGUAGE_FOLDER + "/" + "en-US.yml";
+		}
+		return resourceName;
+	}
+
+
+	/**
+	 * Get a {@code File} object for the language file installed in the plugin data directory for
+	 * the given IETF language tag. If a file does not exist for the given language tag, the default
+	 * language file 'language/en-US.yml' will be used.
+	 *
+	 * @param languageTag the IETF language tag to convert to a filename
+	 * @return {@code File} the filename corresponding to the IETF language tag given
+	 */
 	File getLanguageFile(final String languageTag) {
 		return new File(plugin.getDataFolder(), getLanguageFilename(languageTag));
 	}
@@ -183,6 +207,7 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 
 
 	public Configuration reload() {
+		//TODO: Is this right? Needs test case at any rate.
 		return getConfiguration();
 	}
 
