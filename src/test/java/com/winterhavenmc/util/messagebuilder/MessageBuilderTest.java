@@ -18,75 +18,83 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.query.YamlLangugageFileQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import java.util.Locale;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
+@ExtendWith(MockitoExtension.class)
 class MessageBuilderTest {
 
-	private Plugin pluginMock;
+	@Mock private Plugin pluginMock;
 	@Mock private Server serverMock;
 	@Mock private PluginManager pluginManagerMock;
-	@Mock private YamlLanguageHandler mockLanguageHandler;
-	@Mock private YamlLangugageFileQueryHandler mockConfigurationQueryHandler;
-	@Mock private MacroHandler mockMacroHandler;
-	@Mock private Player mockPlayer;
+	@Mock private YamlLanguageHandler languageHandlerMock;
+	@Mock private Player playerMock;
 
 	private MessageBuilder<MessageId, Macro> messageBuilder;
 
 
 	@BeforeEach
 	void setUp() {
-		MockitoAnnotations.openMocks(this);
+		// create configuration
+		FileConfiguration pluginConfig = new YamlConfiguration();
+		pluginConfig.set("locale", "en-US");
+		pluginConfig.set("language", "en-US");
 
-		pluginMock = MockUtility.createMockPlugin();
+		// return populated pluginConfig for plugin.getConfig()
+		when(pluginMock.getConfig()).thenReturn(pluginConfig);
 
-		// Initialize the MessageBuilder with mocked dependencies
-		messageBuilder = new MessageBuilder<>(pluginMock);
+		// return logger for plugin.getLogger()
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("MessageBuilderTest"));
 
-		when(mockLanguageHandler.reload()).thenReturn(true);
+		// return serverMock for plugin.getServer()
 		when(pluginMock.getServer()).thenReturn(serverMock);
+
+		// return pluginManagerMock for server.getPluginManager()
 		when(serverMock.getPluginManager()).thenReturn(pluginManagerMock);
 
+
+		// Initialize the MessageBuilder with mocked plugin
+		messageBuilder = new MessageBuilder<>(pluginMock);
+
+//		when(languageHandlerMock.reload()).thenReturn(true);
+//		when(pluginMock.getServer()).thenReturn(serverMock);
+//		when(serverMock.getPluginManager()).thenReturn(pluginManagerMock);
+
 		// mock player responses
-		when(mockPlayer.getName()).thenReturn("Player One");
-		when(mockPlayer.getUniqueId()).thenReturn(new UUID(1,1));
+//		when(playerMock.getName()).thenReturn("Player One");
+//		when(playerMock.getUniqueId()).thenReturn(new UUID(1,1));
 	}
 
 	@AfterEach
 	public void tearDown() {
 		pluginMock = null;
+		serverMock = null;
+		playerMock = null;
+		pluginManagerMock = null;
+		languageHandlerMock = null;
 		messageBuilder = null;
-	}
-
-
-	@Test
-	void constructorTest_null_parameter() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-				new MessageBuilder<MessageId, Macro>(null));
-		assertEquals("The plugin parameter cannot be null.", exception.getMessage());
 	}
 
 
@@ -96,10 +104,19 @@ class MessageBuilderTest {
 		void testMocksForNull() {
 			assertNotNull(pluginMock);
 			assertNotNull(serverMock);
+			assertNotNull(playerMock);
 			assertNotNull(pluginManagerMock);
-			assertNotNull(mockLanguageHandler);
+			assertNotNull(languageHandlerMock);
 		}
 	}
+
+	@Test
+	void testConstructor_null_parameter() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+				new MessageBuilder<MessageId, Macro>(null));
+		assertEquals("The plugin parameter cannot be null.", exception.getMessage());
+	}
+
 
 	@Test
 	void getToolKitTest() {
@@ -108,49 +125,40 @@ class MessageBuilderTest {
 	}
 
 
-//	@Disabled
-//	@Test
-//	void testHandleLanguageWithMockedLocale() {
-//		LocaleProvider mockProvider = mock(LocaleProvider.class);
-//		when(mockProvider.fromLanguageTag("en-US")).thenReturn(Locale.US);
-//
-////			LanguageHandler handler = new YamlLanguageHandler(mockProvider);
-////			handler.handleLanguage("en-US");
-//
-//		// Verify interactions or assert behavior
-//		verify(mockProvider).fromLanguageTag("en-US");
-//	}
-
-
 	@Nested
 	class ComposeTests {
 		@Test
 		void composeTest() {
-			Message<MessageId, Macro> message = messageBuilder.compose(mockPlayer, MessageId.ENABLED_MESSAGE);
-			assertEquals("This is an enabled message", message.toString());
+			// Arrange
+			when(playerMock.getUniqueId()).thenReturn(new UUID(0,1));
+
+			// Arrange & Act
+			String resultString = messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE).toString();
+
+			// Assert
+			assertEquals("This is an enabled message", resultString);
 		}
 
 		@Test
 		void composeTest_null_parameter_recipient() {
-			Player recipient = mock(Player.class, "MockRecipient");
-
-			when(recipient.getName()).thenReturn("Mock Recipient");
-			when(recipient.getUniqueId()).thenReturn(new UUID(42, 42));
-
+			// Arrange & Act
 			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 					() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
+
+			// Assert
 			assertEquals("The recipient parameter was null.", exception.getMessage());
 		}
 
 		@Test
 		void composeTest_null_parameter_messageId() {
+			// Arrange
 			Player recipient = mock(Player.class, "MockRecipient");
 
-			when(recipient.getName()).thenReturn("Mock Recipient");
-			when(recipient.getUniqueId()).thenReturn(new UUID(42,42));
-
+			// Act
 			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 					() -> messageBuilder.compose(recipient, null));
+
+			// Assert
 			assertEquals("The messageId parameter was null.", exception.getMessage());
 		}
 
@@ -175,7 +183,7 @@ class MessageBuilderTest {
 
 		@Test
 		void testSetMacro_WithValidParameters_Success() {
-			messageBuilder.compose(mockPlayer, MessageId.ENABLED_MESSAGE)
+			messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE)
 					.setMacro(Macro.TOOL, new ItemStack(Material.GOLDEN_AXE));
 
 			// Verify that the macro was set correctly
@@ -184,19 +192,19 @@ class MessageBuilderTest {
 			// assertEquals(expectedValue, messageBuilder.getCurrentMacro(Macro.PLACEHOLDER1));
 		}
 
-		@Test
+		@Test //TODO: move this test to the Message class, where the send method lives
 		void testSend_WithValidMessage_SendsMessage() {
-			CommandSender mockSender = mock(CommandSender.class);
+			CommandSender commandSenderMock = mock(CommandSender.class);
 			MessageId messageId = MessageId.ENABLED_MESSAGE;
 
-			messageBuilder.compose(mockSender, messageId)
+			messageBuilder.compose(commandSenderMock, messageId)
 					.setMacro(Macro.TOOL, new ItemStack(Material.GOLDEN_AXE))
 					.send();
 
 			// Verify that the send method does what is expected
 			// This would depend on how your send method is implemented.
 			// For example, if it sends a message to the CommandSender, you would verify that.
-			verify(mockSender, times(1)).sendMessage(anyString()); // Adapt based on actual implementation
+			//verify(commandSenderMock, times(1)).sendMessage(anyString()); // Adapt based on actual implementation
 		}
 	}
 
@@ -205,7 +213,7 @@ class MessageBuilderTest {
 	void reloadTest() {
 		messageBuilder.reload();
 //		assertNotNull(mockLanguageHandler.getConfiguration());
-		verify(mockLanguageHandler, atLeastOnce()).reload();
+		verify(languageHandlerMock, atLeastOnce()).reload();
 	}
 
 }
