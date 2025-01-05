@@ -1,4 +1,4 @@
-# Language configuration file for ${project.name} v${project.version}
+# Language configuration file for ${project.nameSingular} v${project.version}
 
 ##########
 # Settings
@@ -48,6 +48,7 @@ ITEMS:
     ITEM_LORE:
       - '&etest1 lore line 1'
       - '&etest1 lore line 2'
+    QUANTITY: 1
 
   TEST_ITEM_2:
     NAME:
