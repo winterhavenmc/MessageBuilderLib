@@ -41,16 +41,16 @@ public class LocationResolver {
 	 * {@code Locatable} Interface, and is guaranteed to have a {@code getLocation()} method.
 	 *
 	 * @param obj the object being evaluated as being Locatable
-	 * @return an Optional of the object as a {@code Locatable}, or an empty {@code Optional} if the passed
+	 * @return an {@code Optional} of the object as a {@code Locatable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a location.
 	 */
 	public static Optional<Locatable> asLocatable(Object obj) {
 		return switch (obj) {
-			case Location location -> Optional.of(location::clone);
 			case Entity entity -> Optional.of(entity::getLocation);
 			case Block block -> Optional.of(block::getLocation);
 			case BlockState blockState -> Optional.of(blockState::getLocation);
 			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
+			case Location location -> Optional.of(location::clone);
 			case null, default -> Optional.empty();
 		};
 	}
