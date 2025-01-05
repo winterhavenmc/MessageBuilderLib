@@ -105,12 +105,6 @@ public class LocationProcessor extends MacroProcessorTemplate {
 		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
 		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
 
-		// get server plugin manager
-//		PluginManager pluginManager = Bukkit.getPluginManager();
-
-		// get world name utility
-//		WorldNameUtility worldNameUtility = new WorldNameUtility(pluginManager);
-
 		// create empty result map
 		ResultMap resultMap = new ResultMap();
 
