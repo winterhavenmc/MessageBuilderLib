@@ -30,12 +30,12 @@ import java.util.Locale;
  */
 public class YamlLanguageHandler implements LanguageHandler {
 
-	// set default locale
-	private Locale locale;
-
 	// string constant for language key in plugin config file
 	private final static String CONFIG_LOCALE_KEY = "locale";
 	private final static String CONFIG_LANGUAGE_KEY = "language";
+
+	// default locale
+	private Locale locale = Locale.US;
 
 	// reference to main plugin class
 	private Plugin plugin;
@@ -69,9 +69,6 @@ public class YamlLanguageHandler implements LanguageHandler {
 	public YamlLanguageHandler(final Plugin plugin,
 	                           final LanguageFileLoader languageFileLoader) {
 
-		// set configured Locale here, or default to en-US if config key not found
-		locale = Locale.forLanguageTag(plugin.getConfig().getString(CONFIG_LOCALE_KEY, "en-US"));
-
 		// reference to plugin main class
 		this.plugin = plugin;
 		this.languageFileLoader = languageFileLoader;
@@ -96,6 +93,23 @@ public class YamlLanguageHandler implements LanguageHandler {
 		this.languageFileLoader = languageFileLoader;
 	}
 
+	/**
+	 * Setter for locale
+	 * @param locale the locale to set
+	 */
+	public void setLocale(final Locale locale) {
+		this.locale = locale;
+	}
+
+	/**
+	 * Get the current locale
+	 * @return the current locale
+	 */
+	public Locale getLocale() {
+		return this.locale;
+	}
+
+
 	// for testing setters
 	boolean isPluginSet() {
 		return this.plugin != null;
@@ -105,24 +119,8 @@ public class YamlLanguageHandler implements LanguageHandler {
 		return this.languageFileLoader != null;
 	}
 
-
-	/**
-	 * Get the current locale
-	 *
-	 * @return the current locale
-	 */
-	public Locale getLocale() {
-		return this.locale;
-	}
-
-
-	/**
-	 * Set the locale
-	 *
-	 * @param locale the locale to set
-	 */
-	public void setLocale(final Locale locale) {
-		this.locale = locale;
+	boolean isLocaleSet() {
+		return this.locale != null;
 	}
 
 
@@ -156,16 +154,20 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 * does not exist in the plugin data directory, it will be re-copied from the jar resource.
 	 * If a file does not exist and a resource cannot be found, the en-US language file
 	 * or resource will be used to load the configuration.
+	 *
+	 * @return {@code true} if the reload was successful, {@code false} if it was not
 	 */
 	@Override
-	public void reload() {
+	public boolean reload() {
 		languageFileLoader.reload();
 		Configuration newConfiguration = languageFileLoader.getConfiguration();
 		if (newConfiguration != null) {
 			this.configuration = newConfiguration;
+			return true;
 		}
 		else {
 			plugin.getLogger().warning(Error.LanguageConfiguration.RELOAD_FAILED.getMessage());
+			return false;
 		}
 	}
 
