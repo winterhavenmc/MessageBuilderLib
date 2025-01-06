@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 import com.winterhavenmc.util.messagebuilder.query.MessageRecord;
 
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
