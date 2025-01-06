@@ -31,6 +31,7 @@ public class Error {
 		NULL_CONTEXT_MAP("The contextMap parameter was null."),
 		NULL_DIRECTORY_PATH("Target directory path cannot be null."),
 		NULL_DOMAIN("The domain parameter cannot be null."),
+		NULL_DURATION("The duration parameter cannot be null."),
 		NULL_ITEM_KEY("The itemKey parameter was null."),
 		NULL_KEY_PATH("The keyPath parameter cannot be null."),
 		NULL_MACRO("macro cannot be null."),
@@ -40,12 +41,14 @@ public class Error {
 		NULL_PLUGIN_MANAGER("The pluginManager parameter was null."),
 		NULL_RECIPIENT("The recipient parameter was null."),
 		NULL_QUERY_HANDLER("The queryHandler parameter was null."),
+		NULL_RESOURCE_NAME("Resource name cannot be null."),
 		NULL_SUBDOMAIN_ELEMENT("Subdomains cannot be null."),
 		NULL_SUBDOMAINS("Subdomains array cannot be null."),
-		NULL_RESOURCE_NAME("Resource name cannot be null."),
+		NULL_TIME_UNIT("The timeUnit parameter cannot be null."),
 		NULL_VALUE("the value parameter was null."),
 		NULL_WORLD("The world parameter cannot be null."),
-		NULL_MESSAGE_BUILDER("The messageBuilder parameter cannot be null.");
+		NULL_MESSAGE_BUILDER("The messageBuilder parameter cannot be null."),
+		;
 
 		private final String messageString;
 
