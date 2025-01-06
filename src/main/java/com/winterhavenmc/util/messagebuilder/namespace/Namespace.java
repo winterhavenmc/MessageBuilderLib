@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.namespace;
 
 /**
  * This class contains enums that are used as a component to create a unique namespace,
@@ -44,6 +44,42 @@ public class Namespace {
 //		LIBRARY, // library variables, those specific to this library
 //		RESERVED, // not for you variables?
 	}
+
+
+	public static class Time {
+		// this enum contains the default en-US singular and plural names of time units.
+		// It is used only for testing at this time, to confirm the correct singular and
+		// plural names are being returned by methods under test.
+		public enum Unit {
+			MILLISECONDS("millisecond", "milliseconds"),
+			TICKS("tick", "ticks"),
+			SECONDS("second", "seconds"),
+			MINUTES("minute", "minutes"),
+			HOURS("hour","hours"),
+			DAYS("day","days"),
+			WEEKS("week", "weeks"),
+			MONTHS("month", "months"),
+			YEARS("year", "years"),
+			;
+
+			private final String singular;
+			private final String plural;
+
+			Unit(final String singular, final String plural) {
+				this.singular = singular;
+				this.plural = plural;
+			}
+
+			public String getPlural() {
+				return plural;
+			}
+
+			public String getSingular() {
+				return singular;
+			}
+		}
+	}
+
 
 
 	// these should reflect the field names as they will be used as suffixes in the context keys
