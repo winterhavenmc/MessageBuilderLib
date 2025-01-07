@@ -40,9 +40,11 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
 public class YamlLangugageFileQueryHandler implements LanguageFileQueryHandler {
 
 	// constants for configuration section keys
-	public static final String ITEM_SECTION = "ITEMS";
-	public static final String CONSTANT_SECTION = "CONSTANTS";
-	public static final String MESSAGE_SECTION = "MESSAGES";
+	public static final String CONSTANT_SECTION = Namespace.Domain.CONSTANTS.toString();
+	public static final String ITEM_SECTION = Namespace.Domain.ITEMS.toString();
+	public static final String MESSAGE_SECTION = Namespace.Domain.MESSAGES.toString();
+	public static final String TIME_SECTION = Namespace.Domain.TIME.toString();
+
 	public static final String MULTIVERSE_CORE = "Multiverse-Core";
 
 	private final Plugin plugin;
