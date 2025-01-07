@@ -37,7 +37,7 @@ import java.util.Optional;
 import static com.winterhavenmc.util.messagebuilder.util.Error.*;
 
 
-public class YamlLangugageFileQueryHandler implements LanguageFileQueryHandler {
+public class YamlLanguageFileQueryHandler implements LanguageFileQueryHandler {
 
 	// constants for configuration section keys
 	public static final String CONSTANT_SECTION = Namespace.Domain.CONSTANTS.toString();
