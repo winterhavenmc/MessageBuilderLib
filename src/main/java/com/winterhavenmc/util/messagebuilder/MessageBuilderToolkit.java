@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.TimeQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import java.util.List;
@@ -49,6 +50,12 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 */
 	public LanguageFileQueryHandler getQueryHandler() {
 		return this.queryHandler;
+	}
+
+
+	@Override
+	public TimeQueryHandler getTimeQueryHandler() {
+		return this.queryHandler.getTimeQueryHandler();
 	}
 
 
