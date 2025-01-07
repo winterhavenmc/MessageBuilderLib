@@ -17,6 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.query;
 
+import com.winterhavenmc.util.messagebuilder.util.Error;
+import org.bukkit.configuration.ConfigurationSection;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +30,49 @@ public record ItemRecord(
 		Optional<String> namePlural,
 		Optional<String> inventoryItemSingular,
 		Optional<String> inventoryItemPlural,
-		List<String> itemLore) implements Pluralizable { }
+		List<String> itemLore) implements Pluralizable {
+
+
+	enum Field {
+		NAME_SINGULAR("NAME.SINGULAR"),
+		NAME_PLURAL("NAME.PLURAL"),
+		INVENTORY_NAME_SINGULAR("INVENTORY_NAME_SINGULAR.SINGULAR"),
+		INVENTORY_NAME_PLURAL("INVENTORY_NAME_SINGULAR.PLURAL"),
+		LORE("LORE");
+
+		private final String keyPath;
+		Field(String keyPath) {
+			this.keyPath = keyPath;
+		}
+		String getKeyPath() {
+			return this.keyPath;
+		}
+	}
+
+
+	/**
+	 * Static method for retrieving an ItemRecord from the language file. Return an ItemRecord if one can be found
+	 * for the itemKey, or returns an empty {@link Optional} if no record could be found.
+	 *
+	 * @param itemKey the key for the item to be retrieved
+	 * @param itemSection the ITEMS section of the language file
+	 * @return An {@code ItemRecord} from the language file, or an empty Optional if no record could be found
+	 * for the provided key in the provided {@code ConfigurationSection}.
+	 */
+	public static Optional<ItemRecord> getItemRecord(final String itemKey, final ConfigurationSection itemSection) {
+		if (itemKey == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
+
+		// get configuration section for item key
+		ConfigurationSection itemEntry = itemSection.getConfigurationSection(itemKey);
+		if (itemEntry == null) { return Optional.empty(); }
+
+		// return new ItemRecord
+		return Optional.of(new ItemRecord(itemKey,
+				Optional.ofNullable(itemEntry.getString(Field.NAME_SINGULAR.getKeyPath())),
+				Optional.ofNullable(itemEntry.getString(Field.NAME_PLURAL.getKeyPath())),
+				Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath())),
+				Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_PLURAL.getKeyPath())),
+				itemEntry.getStringList(Field.LORE.getKeyPath())));
+	}
+
+}
