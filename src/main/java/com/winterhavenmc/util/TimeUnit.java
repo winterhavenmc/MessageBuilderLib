@@ -96,5 +96,32 @@ public enum TimeUnit {
 		return this.millis;
 	}
 
-}
+	public final boolean isLessThan(final long millis) {
+		return this.millis < millis;
+	}
 
+	public final boolean isGreaterThan(final long millis) {
+		return this.millis > millis;
+	}
+
+	public final boolean isLessThan(final TimeUnit timeUnit) {
+		return this.millis < timeUnit.millis;
+	}
+
+	public final boolean isGreaterThan(final TimeUnit timeUnit) {
+		return this.millis > timeUnit.millis;
+	}
+
+	public final long times(int multiplier) {
+		return this.millis * multiplier;
+	}
+
+	public final long justShyOf(int number) {
+		return this.millis * number - 1;
+	}
+
+	public final long one() {
+		return this.millis;
+	}
+
+}
