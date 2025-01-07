@@ -24,6 +24,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
+
 /**
  * Adapter for {@link Nameable} objects with an associated name. Any object that has a known method
  * for retrieving a name as a {@code String} will be returned as an {@link Optional} {@code Nameable} object type, with a
@@ -45,12 +46,13 @@ public class NameAdapter {
 	 * object does not have a known method of retrieving a gatLocation.
 	 */
 	public static Optional<Nameable> asNameable(Object obj) {
+		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case CommandSender commandSender -> Optional.of(commandSender::getName); // includes players, entities, console, command blocks, etc
 			case World world -> Optional.of(world::getName);
 			case Server server -> Optional.of(server::getName);
 			case Plugin plugin -> Optional.of(plugin::getName);
-			case null, default -> Optional.empty();
+			default -> Optional.empty();
 		};
 	}
 }

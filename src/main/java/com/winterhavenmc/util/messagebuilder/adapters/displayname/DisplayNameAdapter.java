@@ -45,11 +45,12 @@ public class DisplayNameAdapter {
 	 * object does not have a known method of retrieving a display name.
 	 */
 	public static Optional<DisplayNameable> asDisplayNameable(Object obj) {
+		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case Player player -> Optional.of(player::getDisplayName);
 			case Nameable nameable -> Optional.of(nameable::getCustomName);
 			case World world -> Optional.of(world::getName); //TODO: get Multiverse alias for world DisplayName, else use regular name
-			case null, default -> Optional.empty();
+			default -> Optional.empty();
 		};
 	}
 }

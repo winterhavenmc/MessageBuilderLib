@@ -47,13 +47,14 @@ public class LocationAdapter {
 	 * object does not have a known method of retrieving a gatLocation.
 	 */
 	public static Optional<Locatable> asLocatable(Object obj) {
+		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case Entity entity -> Optional.of(entity::getLocation);
 			case Block block -> Optional.of(block::getLocation);
 			case BlockState blockState -> Optional.of(blockState::getLocation);
 			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
 			case Location location -> Optional.of(location::clone);
-			case null, default -> Optional.empty();
+			default -> Optional.empty();
 		};
 	}
 }

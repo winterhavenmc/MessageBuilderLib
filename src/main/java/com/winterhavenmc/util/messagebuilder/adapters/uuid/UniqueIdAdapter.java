@@ -24,6 +24,7 @@ import org.bukkit.profile.PlayerProfile;
 
 import java.util.Optional;
 
+
 /**
  * Resolver for Identifiable objects with an associated UUID. Any object that has a known method for retrieving
  * a UUID will be returned as an Identifiable object type, with a getUniqueID method. This method will be mapped
@@ -43,12 +44,13 @@ public class UniqueIdAdapter {
 	 * the getUniqueId() method of the Identifiable type.
 	 */
 	public static Optional<Identifiable> asIdentifiable(Object obj) {
+		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case Entity entity -> Optional.of(entity::getUniqueId);
 			case PlayerProfile playerProfile -> Optional.of(playerProfile::getUniqueId);
 			case OfflinePlayer offlinePlayer -> Optional.of(offlinePlayer::getUniqueId);
 			case World world -> Optional.of(world::getUID);
-			case null, default -> Optional.empty();
+			default -> Optional.empty();
 		};
 	}
 }

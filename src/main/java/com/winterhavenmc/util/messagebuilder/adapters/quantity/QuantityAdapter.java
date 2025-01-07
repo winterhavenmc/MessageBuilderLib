@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Collection;
 import java.util.Optional;
 
+
 /**
  * Adapter for {@link Quantifiable} objects with an associated quantity. Any object that has a known method
  * for retrieving an {@code int} quantity will be returned as an {@link Optional} {@code Quantifiable} object type,
@@ -43,10 +44,11 @@ public class QuantityAdapter {
 	 * object does not have a known method of retrieving a quantity.
 	 */
 	public static Optional<Quantifiable> asQuantifiable(Object obj) {
+		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case ItemStack itemStack -> Optional.of(itemStack::getAmount);
 			case Collection<?> collection -> Optional.of(collection::size);
-			case null, default -> Optional.empty();
+			default -> Optional.empty();
 		};
 	}
 }
