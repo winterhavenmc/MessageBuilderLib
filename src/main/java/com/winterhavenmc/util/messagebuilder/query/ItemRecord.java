@@ -54,9 +54,9 @@ public record ItemRecord(
 		INVENTORY_NAME_PLURAL("INVENTORY_NAME_SINGULAR.PLURAL"),
 		LORE("LORE");
 
-		private final String keyPath;
-		Field(String keyPath) { this.keyPath = keyPath; }
-		String getKeyPath() { return this.keyPath; }
+		Field(String keyPath) { this.keyPath = keyPath; } // constructor for enum constants
+		private final String keyPath; // keyPath field
+		String getKeyPath() { return this.keyPath; } // getter for keyPath field
 	}
 
 
