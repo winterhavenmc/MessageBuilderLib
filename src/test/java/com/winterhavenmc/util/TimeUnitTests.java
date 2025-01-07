@@ -19,6 +19,7 @@ package com.winterhavenmc.util;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -272,6 +273,63 @@ class TimeUnitTests {
 		String expectedMessage = "No enum constant";
 
 		assertTrue(actualMessage.startsWith(expectedMessage));
+	}
+
+	@Nested
+	class ComparisonTests {
+		@Test
+		void testIsLessThan_TimeUnit() {
+			assertTrue(SECONDS.isLessThan(MINUTES));
+			assertTrue(MILLISECONDS.isLessThan(SECONDS));
+			assertFalse(DAYS.isLessThan(HOURS));
+			assertFalse(HOURS.isLessThan(HOURS));
+		}
+
+		@Test
+		void testIsGreaterThan_TimeUnit() {
+			assertTrue(MINUTES.isGreaterThan(SECONDS));
+			assertTrue(HOURS.isGreaterThan(MINUTES));
+			assertFalse(DAYS.isGreaterThan(YEARS));
+			assertFalse(HOURS.isGreaterThan(HOURS));
+		}
+
+		@Test
+		void testIsLessThan_duration() {
+			assertTrue(SECONDS.isLessThan(1001));
+			assertTrue(MINUTES.isLessThan(60_001));
+			assertFalse(SECONDS.isLessThan(999));
+			assertFalse(HOURS.isLessThan(HOURS));
+		}
+
+		@Test
+		void testIsGreaterThan_duration() {
+			assertTrue(MINUTES.isGreaterThan(59_999));
+			assertTrue(SECONDS.isGreaterThan(999));
+			assertFalse(SECONDS.isGreaterThan(1001));
+			assertFalse(SECONDS.isGreaterThan(1000));
+		}
+	}
+
+	@Test
+	void testMultiplier() {
+		assertEquals(600_000, MINUTES.times(10));
+		assertEquals(5000, SECONDS.times(5));
+		assertEquals(400, MILLISECONDS.times(400));
+		assertNotEquals(5, DAYS.times(5));
+	}
+
+	@Test
+	void testJustShyOf() {
+		assertEquals(5999, SECONDS.justShyOf(6));
+		assertEquals(120_000 - 1, MINUTES.justShyOf(2) );
+		assertNotEquals(50, TICKS.justShyOf(1));
+	}
+
+	@Test
+	void testReturnOne() {
+		assertEquals(60_000, MINUTES.one());
+		assertEquals(86_400_000, DAYS.one());
+		assertNotEquals(999, SECONDS.one());
 	}
 
 }
