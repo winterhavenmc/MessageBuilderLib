@@ -24,6 +24,17 @@ import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * A data object record for item information contained in the language file. This class also contains
+ * an enum of fields with their corresponding path key, and a static method for retrieving a record.
+ *
+ * @param key the keyPath in the language file for this record
+ * @param nameSingular the singular name of this item
+ * @param namePlural the plural name of this item
+ * @param inventoryItemSingular the singular inventory name of this item
+ * @param inventoryItemPlural the plural inventory name of this item
+ * @param itemLore a List of Strings containing the lines of lore for this item
+ */
 public record ItemRecord(
 		String key,
 		Optional<String> nameSingular,
@@ -33,6 +44,9 @@ public record ItemRecord(
 		List<String> itemLore) implements Pluralizable {
 
 
+	/**
+	 * Enum of ItemRecord fields and their corresponding keyPath
+	 */
 	enum Field {
 		NAME_SINGULAR("NAME.SINGULAR"),
 		NAME_PLURAL("NAME.PLURAL"),
@@ -41,12 +55,8 @@ public record ItemRecord(
 		LORE("LORE");
 
 		private final String keyPath;
-		Field(String keyPath) {
-			this.keyPath = keyPath;
-		}
-		String getKeyPath() {
-			return this.keyPath;
-		}
+		Field(String keyPath) { this.keyPath = keyPath; }
+		String getKeyPath() { return this.keyPath; }
 	}
 
 
@@ -59,7 +69,7 @@ public record ItemRecord(
 	 * @return An {@code ItemRecord} from the language file, or an empty Optional if no record could be found
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
-	public static Optional<ItemRecord> getItemRecord(final String itemKey, final ConfigurationSection itemSection) {
+	public static Optional<ItemRecord> getRecord(final String itemKey, final ConfigurationSection itemSection) {
 		if (itemKey == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
 
 		// get configuration section for item key
