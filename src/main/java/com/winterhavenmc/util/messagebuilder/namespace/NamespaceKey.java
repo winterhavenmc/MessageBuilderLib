@@ -116,7 +116,7 @@ public class NamespaceKey implements ContextKey {
 	 * @param keyPath a String key to be used as a component the fully name-spaced key
 	 * @param domain  the domain that forms the root of the keyDomain
 	 */
-	NamespaceKey(final String keyPath, Namespace.Domain domain) {
+	public NamespaceKey(final String keyPath, final Namespace.Domain domain) {
 		this.domain = domain;
 		this.subdomains = new ArrayList<>();
 		this.pathComponents = List.of(keyPath.split("\\" + KEY_PATH_DELIMITER));
@@ -134,7 +134,7 @@ public class NamespaceKey implements ContextKey {
 	 * @param keyPath the String key to be used as a component in the fully name-spaced key
 	 * @param domain  the domain that forms the root of the keyDomain
 	 */
-	NamespaceKey(final String keyPath, Namespace.Domain domain, String... subdomains) {
+	public NamespaceKey(final String keyPath, final Namespace.Domain domain, final String... subdomains) {
 		this.domain = domain;
 		this.subdomains = new ArrayList<>(Arrays.stream(subdomains).toList());
 		this.pathComponents = List.of(keyPath.split("\\" + KEY_PATH_DELIMITER));
@@ -240,7 +240,9 @@ public class NamespaceKey implements ContextKey {
 	 * @param subdomains  Optional subdomains to be added to the keyDomain.
 	 * @return A fully-formed namespaced String key.
 	 */
-	public static String create(String keyPath, Namespace.Domain domain, String... subdomains) {
+	public static String create(final String keyPath,
+	                            final Namespace.Domain domain,
+	                            final String... subdomains) {
 		if (keyPath == null) { throw new IllegalArgumentException(Parameter.NULL_KEY_PATH.getMessage()); }
 		if (keyPath.isBlank()) { throw new IllegalArgumentException(Parameter.EMPTY_KEY_PATH.getMessage()); }
 		if (domain == null) { throw new IllegalArgumentException(Parameter.NULL_DOMAIN.getMessage()); }
@@ -276,7 +278,7 @@ public class NamespaceKey implements ContextKey {
 	 * @param fullDomain the keyDomain to validate
 	 * @return {@code true} if the keyDomain conforms to the naming convention, {@code false} if it does not.
 	 */
-	static boolean isValidKeyDomain(String fullDomain) {
+	public static boolean isValidKeyDomain(final String fullDomain) {
 		String keyDomainPattern = "^[a-zA-Z0-9_]+(:[a-zA-Z0-9_]+)*$";
 		return fullDomain.matches(keyDomainPattern);
 	}
@@ -287,7 +289,7 @@ public class NamespaceKey implements ContextKey {
 	 *
 	 * @param fullDomain the key domain to check for validity
 	 */
-	static void logInvalidDomainPath(String fullDomain) {
+	static void logInvalidDomainPath(final String fullDomain) {
 		if (!isValidKeyDomain(fullDomain)) {
 			// Log a warning without modifying the keyPath
 			Logger.getLogger("NamespaceKey").warning("Key domain '" + fullDomain + "' does not conform to the allowed naming convention.");
@@ -308,7 +310,7 @@ public class NamespaceKey implements ContextKey {
 	 * @param keyPath the keyPath to validate
 	 * @return {@code true} if the keyPath conforms to the naming convention, {@code false} if it does not.
 	 */
-	static boolean isValidKeyPath(String keyPath) {
+	public static boolean isValidKeyPath(final String keyPath) {
 		String keyPathPattern = "^[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$";
 		return keyPath.matches(keyPathPattern);
 	}
@@ -319,7 +321,7 @@ public class NamespaceKey implements ContextKey {
 	 *
 	 * @param keyPath the key path to check for validity
 	 */
-	static void logInvalidKeyPath(String keyPath) {
+	public static void logInvalidKeyPath(final String keyPath) {
 		if (!isValidKeyPath(keyPath)) {
 			// Log a warning without modifying the keyPath
 			Logger.getLogger("NamespaceKey").warning("Key path '" + keyPath + "' does not conform to the allowed naming convention.");
@@ -327,7 +329,7 @@ public class NamespaceKey implements ContextKey {
 	}
 
 
-	public static boolean containsExactlyOne(String input, char target) {
+	public static boolean containsExactlyOne(final String input, final char target) {
 		return input.chars()
 				.filter(c -> c == target)
 				.count() == 1;
@@ -335,7 +337,7 @@ public class NamespaceKey implements ContextKey {
 
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true; // Same object
 		}
