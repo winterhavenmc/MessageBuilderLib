@@ -51,7 +51,7 @@ class YamlLanguageFileQueryHandlerTest {
 
 		plugin = MockUtility.createMockPlugin(configValues);
 		Configuration languageConfiguration = loadConfigurationFromResource("language/en-US.yml");
-		queryHandler = new YamlLangugageFileQueryHandler(plugin, languageConfiguration);
+		queryHandler = new YamlLanguageFileQueryHandler(plugin, languageConfiguration);
 	}
 
 
