@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+
 public class Error {
 
 	/**
@@ -27,9 +29,12 @@ public class Error {
 		EMPTY_NAMESPACED_KEY("The key parameter cannot be empty."),
 		EMPTY_RESOURCE_NAME("Resource name cannot be empty."),
 		EMPTY_SUBDOMAIN_ELEMENT("Subdomains cannot be empty."),
-		INVALID_ITEM_SECTION("The itemSection parameter was an invalid 'ITEMS' section."),
+		INVALID_SECTION_CONSTANTS("The constantSection parameter was an invalid '" + Namespace.Domain.CONSTANTS + "' section."),
+		INVALID_SECTION_ITEMS("The itemSection parameter was an invalid '" + Namespace.Domain.ITEMS + "' section."),
+		INVALID_SECTION_MESSAGES("The messageSection parameter was an invalid '" + Namespace.Domain.MESSAGES + "' section."),
+		INVALID_SECTION_TIME("The timeSection parameter was an invalid '" + Namespace.Domain.TIME + "' section."),
 		NULL_CONFIGURATION("The configuration parameter was null."),
-		NULL_CONFIGURATION_SECTION("The configuration parameter was null."),
+		NULL_CONFIGURATION_SECTION("The configurationSection parameter was null."),
 		NULL_CONTEXT_MAP("The contextMap parameter was null."),
 		NULL_DIRECTORY_PATH("Target directory path cannot be null."),
 		NULL_DOMAIN("The domain parameter cannot be null."),
@@ -37,20 +42,25 @@ public class Error {
 		NULL_ITEM_KEY("The itemKey parameter was null."),
 		NULL_KEY_PATH("The keyPath parameter cannot be null."),
 		NULL_MACRO("macro cannot be null."),
-		NULL_MESSAGE_ID("The messageId parameter was null."),
+		NULL_MESSAGE_BUILDER("The messageBuilder parameter cannot be null."),
+		NULL_MESSAGE_ID("The messageId parameter cannot null."),
+		NULL_MESSAGE_KEY("The messageKey parameter cannot be null."),
 		NULL_NAMESPACED_KEY("The key parameter cannot be null."),
+		NULL_OBJECT("The object parameter cannot be null."),
 		NULL_PLUGIN("The plugin parameter cannot be null."),
 		NULL_PLUGIN_MANAGER("The pluginManager parameter was null."),
 		NULL_RECIPIENT("The recipient parameter was null."),
 		NULL_QUERY_HANDLER("The queryHandler parameter was null."),
 		NULL_RESOURCE_NAME("Resource name cannot be null."),
+		NULL_SECTION_CONSTANTS("The constantSection parameter cannot be null."),
+		NULL_SECTION_ITEMS("The itemSection parameter cannot be null."),
+		NULL_SECTION_MESSAGES("The messageSection parameter cannot be null."),
+		NULL_SECTION_TIME("The timeSection parameter cannot be null."),
 		NULL_SUBDOMAIN_ELEMENT("Subdomains cannot be null."),
 		NULL_SUBDOMAINS("Subdomains array cannot be null."),
 		NULL_TIME_UNIT("The timeUnit parameter cannot be null."),
 		NULL_VALUE("the value parameter was null."),
 		NULL_WORLD("The world parameter cannot be null."),
-		NULL_MESSAGE_BUILDER("The messageBuilder parameter cannot be null."),
-		NULL_CONSTANT_SECTION("The constantSection parameter cannot be null."),
 		;
 
 		private final String messageString;
