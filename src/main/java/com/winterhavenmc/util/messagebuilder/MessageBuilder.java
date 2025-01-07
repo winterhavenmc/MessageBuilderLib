@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.languages.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
-import com.winterhavenmc.util.messagebuilder.query.YamlLangugageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.YamlLanguageFileQueryHandler;
 import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
@@ -77,7 +77,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
-		this.queryHandler = new YamlLangugageFileQueryHandler(plugin, languageHandler.getConfiguration());
+		this.queryHandler = new YamlLanguageFileQueryHandler(plugin, languageHandler.getConfiguration());
 		this.macroHandler = new MacroHandler(plugin, queryHandler);
 	}
 
