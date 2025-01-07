@@ -45,13 +45,15 @@ public record ItemRecord(
 
 
 	/**
-	 * Enum of ItemRecord fields and their corresponding keyPath
+	 * Enum of ItemRecord fields and their corresponding keyPath. This enum is the source of truth for
+	 * item record field constants and their corresponding keyPaths. Other field metadata may be
+	 * encapsulated in this enum in the future.
 	 */
 	enum Field {
 		NAME_SINGULAR("NAME.SINGULAR"),
 		NAME_PLURAL("NAME.PLURAL"),
-		INVENTORY_NAME_SINGULAR("INVENTORY_NAME_SINGULAR.SINGULAR"),
-		INVENTORY_NAME_PLURAL("INVENTORY_NAME_SINGULAR.PLURAL"),
+		INVENTORY_NAME_SINGULAR("INVENTORY_NAME.SINGULAR"),
+		INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL"),
 		LORE("LORE");
 
 		Field(String keyPath) { this.keyPath = keyPath; } // constructor for enum constants
