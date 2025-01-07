@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.messagebuilder.query.TimeQueryHandler;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -32,4 +34,7 @@ public interface Toolkit {
 	Optional<String> getString(String key);
 
 	List<String> getStringList(String key);
+
+	TimeQueryHandler getTimeQueryHandler();
+
 }
