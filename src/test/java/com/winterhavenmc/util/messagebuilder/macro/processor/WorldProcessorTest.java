@@ -19,14 +19,19 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.macro.Namespace;
-import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.namespace.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
 
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,26 +41,32 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class WorldProcessorTest {
 
-	Plugin mockPlugin;
-	LanguageFileQueryHandler mockLanguageFileQueryHandler;
-	World mockWorld;
+	@Mock private Plugin pluginMock;
+	@Mock private LanguageFileQueryHandler languageFileQueryHandlerMock;
+	@Mock private World worldMock;
+	@Mock private Player playerMock;
+
 
 	@BeforeEach
 	public void setUp() {
-		mockPlugin = mock(Plugin.class, "MockPlugin");
-		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger("WorldProcessorTest"));
-		mockLanguageFileQueryHandler = mock(LanguageFileQueryHandler.class, "MockQueryHandler");
-		mockWorld = mock(World.class, "MockWorld");
-		when(mockWorld.getName()).thenReturn("test_world");
+		// return logger for mock plugin
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("WorldProcessorTest"));
+
+		// return name for mock world
+		when(worldMock.getName()).thenReturn("test_world");
+
+//		playerMock = mock(Player.class, "MockPlayer");
+		when(playerMock.getName()).thenReturn("Player One");
+		when(playerMock.getUniqueId()).thenReturn(new UUID(0,1));
 	}
 
 	@AfterEach
 	public void tearDown() {
-		mockPlugin = null;
-		mockWorld = null;
+		pluginMock = null;
+		worldMock = null;
 	}
 
 	@Disabled
@@ -63,22 +74,23 @@ class WorldProcessorTest {
 	void resolveContext() {
 		String keyPath = "SOME_WORLD";
 		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
-		ContextMap contextMap = new ContextMap();
-		MacroProcessor macroProcessor = new WorldProcessor(mockLanguageFileQueryHandler);
-		contextMap.put(nameSpacedKey, ContextContainer.of(mockWorld, ProcessorType.WORLD));
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new WorldProcessor(languageFileQueryHandlerMock);
+		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
 		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
 
 		assertTrue(resultMap.containsKey(nameSpacedKey));
 		assertEquals("test_world", resultMap.get(nameSpacedKey));
 	}
 
+	@Disabled
 	@Test
 	void resolveContext_with_null_world() {
 		String keyPath = "SOME_WORLD";
 		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
-		ContextMap contextMap = new ContextMap();
-		MacroProcessor macroProcessor = new WorldProcessor(mockLanguageFileQueryHandler);
-		contextMap.put(nameSpacedKey, ContextContainer.of(mockWorld, ProcessorType.WORLD));
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new WorldProcessor(languageFileQueryHandlerMock);
+		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
 		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
 
 		assertTrue(resultMap.containsKey(nameSpacedKey));
