@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2024-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro;
+package com.winterhavenmc.util.messagebuilder.namespace;
 
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
+import com.winterhavenmc.util.messagebuilder.macro.ContextKey;
 
 import java.util.*;
 import java.util.logging.Logger;
