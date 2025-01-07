@@ -50,7 +50,7 @@ public class DisplayNameAdapter {
 			case Player player -> Optional.of(player::getDisplayName);
 			case Nameable nameable -> Optional.of(nameable::getCustomName);
 			case World world -> Optional.of(world::getName); //TODO: get Multiverse alias for world DisplayName, else use regular name
-			default -> Optional.empty();
+			case null, default -> Optional.empty();
 		};
 	}
 }

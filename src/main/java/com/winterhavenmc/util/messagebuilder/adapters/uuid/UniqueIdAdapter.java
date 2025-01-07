@@ -50,7 +50,7 @@ public class UniqueIdAdapter {
 			case PlayerProfile playerProfile -> Optional.of(playerProfile::getUniqueId);
 			case OfflinePlayer offlinePlayer -> Optional.of(offlinePlayer::getUniqueId);
 			case World world -> Optional.of(world::getUID);
-			default -> Optional.empty();
+			case null, default -> Optional.empty();
 		};
 	}
 }

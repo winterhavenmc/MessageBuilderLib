@@ -52,7 +52,7 @@ public class NameAdapter {
 			case World world -> Optional.of(world::getName);
 			case Server server -> Optional.of(server::getName);
 			case Plugin plugin -> Optional.of(plugin::getName);
-			default -> Optional.empty();
+			case null, default -> Optional.empty();
 		};
 	}
 }

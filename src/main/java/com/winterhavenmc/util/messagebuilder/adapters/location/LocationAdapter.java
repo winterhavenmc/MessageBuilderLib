@@ -54,7 +54,7 @@ public class LocationAdapter {
 			case BlockState blockState -> Optional.of(blockState::getLocation);
 			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
 			case Location location -> Optional.of(location::clone);
-			default -> Optional.empty();
+			case null, default -> Optional.empty();
 		};
 	}
 }

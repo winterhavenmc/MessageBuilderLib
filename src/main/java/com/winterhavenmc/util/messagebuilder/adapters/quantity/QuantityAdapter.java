@@ -48,7 +48,7 @@ public class QuantityAdapter {
 		return switch (obj) {
 			case ItemStack itemStack -> Optional.of(itemStack::getAmount);
 			case Collection<?> collection -> Optional.of(collection::size);
-			default -> Optional.empty();
+			case null, default -> Optional.empty();
 		};
 	}
 }
