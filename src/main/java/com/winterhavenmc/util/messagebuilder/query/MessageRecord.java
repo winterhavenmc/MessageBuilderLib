@@ -18,6 +18,25 @@
 package com.winterhavenmc.util.messagebuilder.query;
 
 
+import com.winterhavenmc.util.messagebuilder.util.Error;
+import org.bukkit.configuration.ConfigurationSection;
+
+import java.util.Optional;
+
+/**
+ * A data object record for message information contained in the language file. This class also contains
+ * an enum of fields with their corresponding path key, and a static method for retrieving a record.
+ *
+ * @param messageKey the key for the message
+ * @param enabled the enabled setting for the message
+ * @param message the raw message string, with placeholders
+ * @param repeatDelay the repeat delay setting for the message
+ * @param title the raw title string, with placeholders
+ * @param titleFadeIn the title fade in setting for the message
+ * @param titleStay the title stay setting for the message
+ * @param titleFadeOut the title fade out setting for the message
+ * @param subtitle the subtitle for the message
+ */
 public record MessageRecord(
 		String messageKey,
 		boolean enabled,
