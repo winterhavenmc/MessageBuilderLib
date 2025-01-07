@@ -24,6 +24,45 @@ CONSTANTS:
 
 
 ##############
+# Time Strings
+##############
+TIME:
+  UNITS:
+    MILLISECONDS:
+      SINGULAR: "millisecond"
+      PLURAL: "milliseconds"
+    TICKS:
+      SINGULAR: "tick"
+      PLURAL: "ticks"
+    SECONDS:
+      SINGULAR: "second"
+      PLURAL: "seconds"
+    MINUTES:
+      SINGULAR: "minute"
+      PLURAL: "minutes"
+    HOURS:
+      SINGULAR: "hour"
+      PLURAL: "hours"
+    DAYS:
+      SINGULAR: "day"
+      PLURAL: "days"
+    WEEKS:
+      SINGULAR: "week"
+      PLURAL: "weeks"
+    MONTHS:
+      SINGULAR: "month"
+      PLURAL: "months"
+    YEARS:
+      SINGULAR: "year"
+      PLURAL: "years"
+    UNLIMITED: "unlimited time"
+    OTHER:
+      LESS_THAN: "less than"
+      LESS_THAN_ONE: "less than one"
+  # All additional subsections under the TIME section are reserved for future use at this time
+
+
+##############
 # Item Strings
 ##############
 ITEMS:
@@ -109,22 +148,6 @@ ITEMS:
     INVENTORY_NAME:
       SINGULAR: '&aInventory Item'
       PLURAL: '&aInventory Item'
-
-
-##############
-# Time strings
-##############
-TIME_STRINGS:
-  DAY: 'day'
-  DAY_PLURAL: 'days'
-  HOUR: 'hour'
-  HOUR_PLURAL: 'hours'
-  MINUTE: 'minute'
-  MINUTE_PLURAL: 'minutes'
-  SECOND: 'second'
-  SECOND_PLURAL: 'seconds'
-  UNLIMITED: 'unlimited time'
-  LESS_THAN_ONE: 'less than one'
 
 
 ###################
