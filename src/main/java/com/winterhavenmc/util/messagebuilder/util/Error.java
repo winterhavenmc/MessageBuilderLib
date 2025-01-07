@@ -27,7 +27,9 @@ public class Error {
 		EMPTY_NAMESPACED_KEY("The key parameter cannot be empty."),
 		EMPTY_RESOURCE_NAME("Resource name cannot be empty."),
 		EMPTY_SUBDOMAIN_ELEMENT("Subdomains cannot be empty."),
+		INVALID_ITEM_SECTION("The itemSection parameter was an invalid 'ITEMS' section."),
 		NULL_CONFIGURATION("The configuration parameter was null."),
+		NULL_CONFIGURATION_SECTION("The configuration parameter was null."),
 		NULL_CONTEXT_MAP("The contextMap parameter was null."),
 		NULL_DIRECTORY_PATH("Target directory path cannot be null."),
 		NULL_DOMAIN("The domain parameter cannot be null."),
@@ -48,6 +50,7 @@ public class Error {
 		NULL_VALUE("the value parameter was null."),
 		NULL_WORLD("The world parameter cannot be null."),
 		NULL_MESSAGE_BUILDER("The messageBuilder parameter cannot be null."),
+		NULL_CONSTANT_SECTION("The constantSection parameter cannot be null."),
 		;
 
 		private final String messageString;
