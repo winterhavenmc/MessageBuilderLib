@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.languages;
+package com.winterhavenmc.util.messagebuilder.language;
 
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.Configuration;

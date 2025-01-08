@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2022-2024 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,24 +15,34 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.languages;
+package com.winterhavenmc.util.messagebuilder.language;
 
 import org.bukkit.configuration.Configuration;
 
-public interface LanguageFileLoader {
+
+public interface LanguageHandler {
 
 	/**
-	 * Get configuration object containing message settings and strings
+	 * Get Configuration object for current language file
 	 *
-	 * @return Configuration - message configuration object
+	 * @return {@code Configuration} the configuration object for the current language file
 	 */
 	Configuration getConfiguration();
 
+	/**
+	 * Get setting for language from plugin config file
+	 *
+	 * @return a string containing the IETF language tag set in the plugin config file
+	 */
+	//TODO: change this to (or add) getLocale
+	String getConfigLanguage();
+
 
 	/**
-	 * Reload configuration, reinstalling language files if necessary
-	 * @return the newly loaded configuration for the configured language
+	 * Reload messages into Configuration object
+	 *
+	 * @return true if successful, false if not
 	 */
-	Configuration reload();
+	boolean reload();
 
 }
