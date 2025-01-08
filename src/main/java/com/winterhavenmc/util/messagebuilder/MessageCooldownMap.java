@@ -40,9 +40,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @param <MessageId> An enum representing message identifiers defined in the client
  */
-final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listener {
+final class MessageCooldownMap<MessageId extends Enum<MessageId>> implements Listener {
 
-	private static MessageCooldown<? extends Enum<?>> INSTANCE;
+	private static MessageCooldownMap<? extends Enum<?>> INSTANCE;
 
 	// cooldown enum map
 	private final Map<MessageId, Map<UUID, Long>> messageCooldownMap = new ConcurrentHashMap<>();
@@ -52,7 +52,7 @@ final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listen
 	 * private class constructor prevents instantiation of singleton
 	 * registers class as bukkit event listener
 	 */
-	private MessageCooldown(Plugin plugin) {
+	private MessageCooldownMap(Plugin plugin) {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
@@ -63,11 +63,11 @@ final class MessageCooldown<MessageId extends Enum<MessageId>> implements Listen
 	 * @return instance of this class
 	 */
 	@SuppressWarnings("unchecked")
-	static synchronized <MessageId extends Enum<MessageId>> MessageCooldown<MessageId> getInstance(final Plugin plugin) {
+	static synchronized <MessageId extends Enum<MessageId>> MessageCooldownMap<MessageId> getInstance(final Plugin plugin) {
 		if (INSTANCE == null) {
-			INSTANCE = new MessageCooldown<>(plugin);
+			INSTANCE = new MessageCooldownMap<>(plugin);
 		}
-		return (MessageCooldown<MessageId>) INSTANCE;
+		return (MessageCooldownMap<MessageId>) INSTANCE;
 	}
 
 
