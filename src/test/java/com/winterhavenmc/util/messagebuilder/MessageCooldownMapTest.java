@@ -38,7 +38,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class MessageCooldownTest {
+class MessageCooldownMapTest {
 
 	private final static UUID player1Uid = new UUID(1,1);
 
@@ -47,8 +47,8 @@ class MessageCooldownTest {
 	@Mock private PluginManager pluginManagerMock;
 	@Mock private Player playerMock;
 
-	// get real instance of MessageCooldown
-	private MessageCooldown<MessageId> messageCooldown;
+	// get real instance of MessageCooldownMap
+	private MessageCooldownMap<MessageId> messageCooldownMap;
 
 	@BeforeEach
 	public void setUp() {
@@ -58,8 +58,8 @@ class MessageCooldownTest {
 		// return pluginManagerMock for server.getPluginManager()
 		when(serverMock.getPluginManager()).thenReturn(pluginManagerMock);
 
-		// instantiate real MessageCooldown
-		messageCooldown = MessageCooldown.getInstance(pluginMock);
+		// instantiate real MessageCooldownMap
+		messageCooldownMap = MessageCooldownMap.getInstance(pluginMock);
 	}
 
 	@AfterEach
@@ -68,18 +68,18 @@ class MessageCooldownTest {
 		serverMock = null;
 		pluginManagerMock = null;
 		playerMock = null;
-		messageCooldown = null;
+		messageCooldownMap = null;
 	}
 
 
 	@Test
 	void getInstance() {
-		assertNotNull(MessageCooldown.getInstance(pluginMock));
+		assertNotNull(MessageCooldownMap.getInstance(pluginMock));
 	}
 
 	@Test
 	void getMessageCooldownMap() {
-		assertNotNull(messageCooldown.getMessageCooldownMap());
+		assertNotNull(messageCooldownMap.getMessageCooldownMap());
 	}
 
 	@Test
@@ -88,10 +88,10 @@ class MessageCooldownTest {
 		when(playerMock.getUniqueId()).thenReturn(player1Uid);
 
 		// Act
-		messageCooldown.put(MessageId.ENABLED_MESSAGE, playerMock);
+		messageCooldownMap.put(MessageId.ENABLED_MESSAGE, playerMock);
 
 		// Assert
-		assertTrue(messageCooldown.isCooling(playerMock, MessageId.ENABLED_MESSAGE, 10));
+		assertTrue(messageCooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE, 10));
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();
@@ -103,10 +103,10 @@ class MessageCooldownTest {
 		when(playerMock.getUniqueId()).thenReturn(player1Uid);
 
 		// Act
-		messageCooldown.put(MessageId.ENABLED_MESSAGE, playerMock);
+		messageCooldownMap.put(MessageId.ENABLED_MESSAGE, playerMock);
 
 		// Assert
-		assertTrue(messageCooldown.get(MessageId.ENABLED_MESSAGE, playerMock) > 0);
+		assertTrue(messageCooldownMap.get(MessageId.ENABLED_MESSAGE, playerMock) > 0);
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();
@@ -118,12 +118,12 @@ class MessageCooldownTest {
 		when(playerMock.getUniqueId()).thenReturn(player1Uid);
 
 		// Act
-		messageCooldown.put(MessageId.ENABLED_MESSAGE, playerMock);
-		assertTrue(messageCooldown.isCooling(playerMock, MessageId.ENABLED_MESSAGE, 10));
-		messageCooldown.remove(playerMock);
+		messageCooldownMap.put(MessageId.ENABLED_MESSAGE, playerMock);
+		assertTrue(messageCooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE, 10));
+		messageCooldownMap.remove(playerMock);
 
 		// Assert
-		assertFalse(messageCooldown.isCooling(playerMock, MessageId.ENABLED_MESSAGE, 10));
+		assertFalse(messageCooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE, 10));
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();
@@ -133,7 +133,7 @@ class MessageCooldownTest {
 	@Test
 	public void remove_null_entity() {
 		// Act & Assert
-		assertFalse(messageCooldown.remove(null) > 0);
+		assertFalse(messageCooldownMap.remove(null) > 0);
 	}
 
 
@@ -143,10 +143,10 @@ class MessageCooldownTest {
 		when(playerMock.getUniqueId()).thenReturn(player1Uid);
 
 		// Act
-		messageCooldown.put(MessageId.ENABLED_MESSAGE, playerMock);
+		messageCooldownMap.put(MessageId.ENABLED_MESSAGE, playerMock);
 
 		// assert
-		assertTrue(messageCooldown.isCooling(playerMock, MessageId.ENABLED_MESSAGE, 10));
+		assertTrue(messageCooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE, 10));
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();
@@ -156,11 +156,11 @@ class MessageCooldownTest {
 	@Test
 	void singletonTest() {
 		// Arrange & Act
-		MessageCooldown<MessageId> messageCooldown1 = MessageCooldown.getInstance(pluginMock);
-		MessageCooldown<MessageId> messageCooldown2 = MessageCooldown.getInstance(pluginMock);
+		MessageCooldownMap<MessageId> messageCooldownMap1 = MessageCooldownMap.getInstance(pluginMock);
+		MessageCooldownMap<MessageId> messageCooldownMap2 = MessageCooldownMap.getInstance(pluginMock);
 
 		// Assert
-		assertEquals(messageCooldown1, messageCooldown2);
+		assertEquals(messageCooldownMap1, messageCooldownMap2);
 	}
 
 }
