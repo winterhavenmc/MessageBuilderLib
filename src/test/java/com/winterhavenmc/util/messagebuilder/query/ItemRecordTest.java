@@ -17,20 +17,20 @@
 
 package com.winterhavenmc.util.messagebuilder.query;
 
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.query.domain.item.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.*;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ItemRecordTests {
+class ItemRecordTest {
 
 	private final static String TEST_ITEM = "TEST_ITEM_1";
 
@@ -38,18 +38,11 @@ class ItemRecordTests {
 
 	@BeforeEach
 	void setUp() {
-		// create new yaml configuration
-		FileConfiguration fileConfiguration = new YamlConfiguration();
-
-		// create a real configuration object from a resource
-		try {
-			fileConfiguration = YamlConfiguration.loadConfiguration(MockUtility.getResourceFile("language/en-US.yml"));
-		} catch (IllegalArgumentException | URISyntaxException e) {
-			System.out.println("a problem was encountered while trying to load the test configuration from resource");
-		}
+		// create real configuration from resource
+		FileConfiguration fileConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
 		// get item section of configuration
-		itemSection = fileConfiguration.getConfigurationSection("ITEMS");
+		itemSection = fileConfiguration.getConfigurationSection(Namespace.Domain.ITEMS.name());
 	}
 
 	@AfterEach
