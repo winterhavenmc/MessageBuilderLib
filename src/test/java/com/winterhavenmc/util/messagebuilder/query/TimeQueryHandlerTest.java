@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.query;
 
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.query.domain.time.TimeQueryHandler;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.AfterEach;
@@ -38,13 +39,12 @@ class TimeQueryHandlerTest {
 
 		ConfigurationSection timeSection = new MemoryConfiguration();
 
-		timeSection.set("UNLIMITED", "unlimited time");
 		timeSection.set("OTHER.LESS_THAN_ONE", "less than one");
 		timeSection.set("OTHER.LESS_THAN", "less than");
-		timeSection.set("TICKS.SINGULAR", "tick");
-		timeSection.set("TICKS.PLURAL", "ticks");
 		timeSection.set("MILLISECONDS.SINGULAR", "millisecond");
 		timeSection.set("MILLISECONDS.PLURAL", "milliseconds");
+		timeSection.set("TICKS.SINGULAR", "tick");
+		timeSection.set("TICKS.PLURAL", "ticks");
 		timeSection.set("SECONDS.SINGULAR", "second");
 		timeSection.set("SECONDS.PLURAL", "seconds");
 		timeSection.set("MINUTES.SINGULAR", "minute");
@@ -59,6 +59,7 @@ class TimeQueryHandlerTest {
 		timeSection.set("MONTHS.PLURAL", "months");
 		timeSection.set("YEARS.SINGULAR", "year");
 		timeSection.set("YEARS.PLURAL", "years");
+		timeSection.set("UNLIMITED", "unlimited time");
 
 		timeQueryHandler = new TimeQueryHandler(timeSection);
 	}
@@ -74,9 +75,9 @@ class TimeQueryHandlerTest {
 	}
 
 	@Test
-	void testGetLessThanOne() {
-		assertEquals("less than one", timeQueryHandler.getLessThanOne());
-		assertNotEquals("not less than one", timeQueryHandler.getLessThanOne());
+	void testGetLessThanOneString() {
+		assertEquals("less than one", timeQueryHandler.getLessThanOneString());
+		assertNotEquals("not less than one", timeQueryHandler.getLessThanOneString());
 	}
 
 	@Test
@@ -231,12 +232,12 @@ class TimeQueryHandlerTest {
 
 	@ParameterizedTest
 	@EnumSource
-	void testGetLessThanOne(TimeUnit timeUnit) {
+	void testGetLessThanOneString(TimeUnit timeUnit) {
 		// Arrange
 		long duration = timeUnit.justShyOf(1);
 
 		// Act
-		String resultString = timeQueryHandler.getLessThanOne(timeUnit);
+		String resultString = timeQueryHandler.getLessThanOneString(timeUnit);
 
 		// Assert
 		assertEquals("less than one " + timeQueryHandler.getSingular(timeUnit), resultString);
@@ -244,9 +245,9 @@ class TimeQueryHandlerTest {
 
 
 	@Test
-	void testGetLessThanOne_null_parameter() {
+	void testGetLessThanOne_String_null_parameter() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> timeQueryHandler.getLessThanOne(null));
+				() -> timeQueryHandler.getLessThanOneString(null));
 		assertEquals("The timeUnit parameter cannot be null.", exception.getMessage());
 	}
 
