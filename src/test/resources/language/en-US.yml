@@ -1,17 +1,18 @@
-# Language configuration file for ${project.nameSingular} v${project.version}
+# Language configuration file for ${project.name} v${project.version}
 
 ##########
 # Settings
 ##########
 SETTINGS:
   DELIMITERS:
-    LEFT: '%'
-    RIGHT: '%'
+    LEFT: '{'
+    RIGHT: '}'
 
 
-##################
+#################################
 # Constant Strings
-##################
+# { in the future, placeholders }
+#################################
 CONSTANTS:
   SPAWN:
     DISPLAY_NAME: '&aSpawn'
@@ -21,6 +22,7 @@ CONSTANTS:
     - item 1
     - item 2
     - item 3
+  TEST_INT: 42
 
 
 ##############
@@ -178,13 +180,49 @@ MESSAGES:
     message: "this is a repeat delayed message"
     repeat-delay: 10
 
-  MACRO_MESSAGE:
+  CONSTANT_MESSAGE:
     enabled: true
-    message: "This is a message with a macro replacement %ITEM_NAME%."
+    message: "This is a message with a constant replacement {CONSTANT:SPAWN.DISPLAY_NAME}."
 
-  MACRO_MESSAGE_CURLY_BRACE_DELIMITERS:
+  ITEM_MESSAGE:
     enabled: true
-    message: "This is a message with a macro replacement {ITEM_NAME}."
+    message: "This is a message with a constant replacement {ITEM:TEST_ITEM_1}."
+
+  TIME_MESSAGE:
+    enabled: true
+    message: "This is a message with a constant replacement {TIME:DURATION}."
+
+  MACRO_MESSAGE_ITEM:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM}."
+
+  MACRO_MESSAGE_ITEM_NAME:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM.NAME}."
+
+  MACRO_MESSAGE_ITEM_NAME_QUANTITY:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM.QUANTITY}."
+
+  MACRO_MESSAGE_ITEM_ALT:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM:DEFAULT}."
+
+  MACRO_MESSAGE_ITEM_NAME_ALT:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME}."
+
+  MACRO_MESSAGE_ITEM_NAME_SINGULAR:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.SINGULAR}."
+
+  MACRO_MESSAGE_ITEM_NAME_PLURAL:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.PLURAL}."
+
+  MACRO_MESSAGE_ITEM_NAME_QUANTITY_ALT:
+    enabled: true
+    message: "This is a message with a macro replacement {ITEM:ITEM.QUANTITY}."
 
   ENABLED_TITLE:
     enabled: true
