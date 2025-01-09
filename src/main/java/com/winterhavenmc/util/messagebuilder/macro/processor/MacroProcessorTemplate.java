@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 
@@ -30,14 +30,14 @@ public abstract class MacroProcessorTemplate implements MacroProcessor {
 
 	final static String UNKNOWN_VALUE = "???";
 
-	public final LanguageFileQueryHandler queryHandler;
+	public final LanguageQueryHandler queryHandler;
 
 
 	/**
 	 * Abstract class constructor
-	 * @param queryHandler the LanguageFileQueryHandler used by the classes that extend this abstract class
+	 * @param queryHandler the LanguageQueryHandler used by the classes that extend this abstract class
 	 */
-	MacroProcessorTemplate(final LanguageFileQueryHandler queryHandler) {
+	MacroProcessorTemplate(final LanguageQueryHandler queryHandler) {
 		if (queryHandler == null) { throw new IllegalArgumentException(Error.Parameter.NULL_QUERY_HANDLER.getMessage()); }
 		this.queryHandler = queryHandler;
 	}
