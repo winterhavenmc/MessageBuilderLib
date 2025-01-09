@@ -19,14 +19,14 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
 
 public class NumberProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	private final LanguageFileQueryHandler queryHandler;
+	private final LanguageQueryHandler queryHandler;
 
-	public NumberProcessor(LanguageFileQueryHandler queryHandler) {
+	public NumberProcessor(LanguageQueryHandler queryHandler) {
 		super(queryHandler);
 		this.queryHandler = queryHandler;
 	}
@@ -49,6 +49,8 @@ public class NumberProcessor extends MacroProcessorTemplate implements MacroProc
 				String[] keyComponents = key.split(":", 2);
 				String category = keyComponents[0];
 				if (category.endsWith(durationSuffix.name())) {
+
+
 					resultMap.put(key, queryHandler.getTimeString(longVar, durationSuffix.getTimeUnit()));
 				}
 			}
