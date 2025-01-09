@@ -15,15 +15,13 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.languages;
+package com.winterhavenmc.util.messagebuilder.language;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +35,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class YamlLanguageHandlerTest {
 
-	@Mock private Plugin pluginMock;
 	@Mock private YamlLanguageFileLoader languageFileLoaderMock;
 
 	// real language handler
@@ -59,32 +56,34 @@ class YamlLanguageHandlerTest {
 		languageConfig.set("ITEMS.DEFAULT.NAME.SINGULAR", "default_item");
 		languageConfig.set("ITEMS.DEFAULT.NAME.PLURAL", "default_items");
 
-//		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(getClass().getName()));
-
-//		when(pluginMock.getConfig()).thenReturn(pluginConfig);
-//		when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfig);
-
 		// instantiate real language handler with mocked parameters
-		languageHandler = new YamlLanguageHandler(pluginMock, languageFileLoaderMock);
+		languageHandler = new YamlLanguageHandler(pluginConfig, languageFileLoaderMock);
 	}
 
 
 	@AfterEach
 	public void tearDown() {
-		pluginMock = null;
+		pluginConfig = null;
 		languageFileLoaderMock = null;
 		languageHandler = null;
 	}
 
+
+	@Test
+	void testLanguageHandler_not_null() {
+		assertNotNull(languageHandler);
+	}
+
+
 	@Nested
 	class LocaleTests {
 		@Test
-		void getLocaleTest() {
+		void testGetLocale() {
 			assertEquals(Locale.US, languageHandler.getLocale());
 		}
 
 		@Test
-		void setLocaleTest() {
+		void TestSetLocale() {
 			assertEquals(Locale.US, languageHandler.getLocale());
 			languageHandler.setLocale(Locale.UK);
 			assertEquals(Locale.UK, languageHandler.getLocale());
@@ -92,42 +91,10 @@ class YamlLanguageHandlerTest {
 	}
 
 	@Nested
-	class testingEnvironmentTests {
-//		@Test
-//		void dataDirectoryTest_exists_static() {
-//			assertTrue(MockUtility.getDataFolder().isDirectory());
-//		}
-
+	class LanguageTests {
 		@Test
-		void languageHandlerTest() {
-			assertNotNull(languageHandler);
-		}
-	}
-
-	@Nested
-	class mockPluginConfigTests {
-		@Test
-		void getLocaleSetting_test() {
-			// Arrange
-			when(pluginMock.getConfig()).thenReturn(pluginConfig);
-
-			// Act & Assert
-			assertEquals("en-US", pluginMock.getConfig().getString("locale"));
-
-			// Verify
-			verify(pluginMock, atLeastOnce()).getConfig();
-		}
-
-		@Test
-		void getLanguageSetting_test() {
-			// Arrange
-			when(pluginMock.getConfig()).thenReturn(pluginConfig);
-
-			// Act & Assert
-			assertEquals("en-US", pluginMock.getConfig().getString("language"));
-
-			// Verify
-			verify(pluginMock, atLeastOnce()).getConfig();
+		void testGetLanguage() {
+			assertEquals(Locale.US.toLanguageTag(), languageHandler.getConfigLanguage());
 		}
 	}
 
@@ -138,33 +105,20 @@ class YamlLanguageHandlerTest {
 		void constructorTest_no_parameter() {
 			YamlLanguageHandler languageHandler = new YamlLanguageHandler();
 			assertNotNull(languageHandler);
-			assertFalse(languageHandler.isPluginSet());
 			assertFalse(languageHandler.isFileLoaderSet());
 		}
 
 		@Test
 		void constructorTest_three_parameter() {
-			YamlLanguageHandler languageHandler = new YamlLanguageHandler(pluginMock, languageFileLoaderMock);
+			YamlLanguageHandler languageHandler = new YamlLanguageHandler(pluginConfig, languageFileLoaderMock);
 			assertNotNull(languageHandler);
-			assertTrue(languageHandler.isPluginSet());
 			assertTrue(languageHandler.isFileLoaderSet());
 		}
 	}
 
+
 	@Nested
 	class setterTests {
-		@Test
-		void setterTest_plugin() {
-			// Arrange
-			YamlLanguageHandler yamlLanguageHandler = new YamlLanguageHandler();
-			assertFalse(yamlLanguageHandler.isPluginSet(), "the plugin field is not null and it should be.");
-
-			// Act
-			yamlLanguageHandler.setPlugin(pluginMock);
-
-			// Assert
-			assertTrue(yamlLanguageHandler.isPluginSet(), "the plugin field is null and it should not be.");
-		}
 
 		@Test
 		void setterTest_fileLoader() {
@@ -197,41 +151,43 @@ class YamlLanguageHandlerTest {
 
 	@Test
 	void getConfigLanguageTest() {
-		// Arrange
-		when(pluginMock.getConfig()).thenReturn(pluginConfig);
-
 		// Act & Assert
 		assertEquals("en-US", languageHandler.getConfigLanguage());
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
 	}
 
-	@Test
-	void reloadTest() {
-		// Arrange
-		when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfig);
+	@Nested
+	class ReloadTests {
+		@Test
+		void reloadTest() {
+			// Arrange
+			when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfig);
 
-		// Act
-		languageHandler.reload();
+			// Act
+			boolean success = languageHandler.reload();
 
-		// Assert
-		assertNotNull(languageHandler.getConfiguration());
+			// Assert
+			assertTrue(success);
+			assertNotNull(languageHandler.getConfiguration());
 
-		// Verify
-		verify(languageFileLoaderMock, atLeastOnce()).reload();
-	}
+			// Verify
+			verify(languageFileLoaderMock, atLeastOnce()).reload();
+		}
 
-	@Disabled
-	@Test
-	void reloadTest_fail() {
-		when(languageFileLoaderMock.getConfiguration()).thenReturn(null);
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(getClass().getName()));
-		languageHandler.reload();
-		//TODO: test for logger output here; update: it's throwing an npe now after updating mocks
-		// match string "WARNING: The configuration could not be reloaded. Keeping existing configuration."
-		assertNotNull(languageHandler.getConfiguration());
-		verify(languageFileLoaderMock, atLeastOnce()).getConfiguration();
+		@Test
+		void reloadTest_fail() {
+			// Arrange
+			when(languageFileLoaderMock.getConfiguration()).thenReturn(null);
+
+			// Act
+			boolean success = languageHandler.reload();
+
+			// Assert
+			assertFalse(success);
+			assertNull(languageHandler.getConfiguration());
+
+			// Verify
+			verify(languageFileLoaderMock, atLeastOnce()).getConfiguration();
+		}
 	}
 
 }
