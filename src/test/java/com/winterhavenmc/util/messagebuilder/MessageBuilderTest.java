@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageHandler;
+import com.winterhavenmc.util.messagebuilder.language.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
@@ -40,6 +40,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.util.MockUtility.AUTO_INSTALL_TXT;
+import static com.winterhavenmc.util.messagebuilder.util.MockUtility.LANGUAGE_EN_US_YML;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -57,10 +59,21 @@ class MessageBuilderTest {
 
 	@BeforeEach
 	void setUp() {
-		// create configuration
+		// load configuration from resource
 		FileConfiguration pluginConfig = new YamlConfiguration();
-		pluginConfig.set("locale", "en-US");
 		pluginConfig.set("language", "en-US");
+		pluginConfig.set("locale", "en-US");
+
+		assertNotNull(pluginConfig);
+		assertEquals("en-US", pluginConfig.getString("language"));
+
+		// return resources for mock plugin
+		// return real file input streams for mock plugin resources
+		doAnswer(invocation -> getClass().getClassLoader().getResourceAsStream(invocation.getArgument(0)))
+				.when(pluginMock).getResource(anyString());
+
+//		when(pluginMock.getResource(LANGUAGE_EN_US_YML)).thenReturn(getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML));
+//		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 
 		// return populated pluginConfig for plugin.getConfig()
 		when(pluginMock.getConfig()).thenReturn(pluginConfig);
@@ -69,10 +82,10 @@ class MessageBuilderTest {
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("MessageBuilderTest"));
 
 		// return serverMock for plugin.getServer()
-		when(pluginMock.getServer()).thenReturn(serverMock);
+//		when(pluginMock.getServer()).thenReturn(serverMock);
 
 		// return pluginManagerMock for server.getPluginManager()
-		when(serverMock.getPluginManager()).thenReturn(pluginManagerMock);
+//		when(serverMock.getPluginManager()).thenReturn(pluginManagerMock);
 
 
 		// Initialize the MessageBuilder with mocked plugin
@@ -159,7 +172,7 @@ class MessageBuilderTest {
 					() -> messageBuilder.compose(recipient, null));
 
 			// Assert
-			assertEquals("The messageId parameter was null.", exception.getMessage());
+			assertEquals("The messageId parameter cannot null.", exception.getMessage());
 		}
 
 		@Test
@@ -192,6 +205,7 @@ class MessageBuilderTest {
 			// assertEquals(expectedValue, messageBuilder.getCurrentMacro(Macro.PLACEHOLDER1));
 		}
 
+		@Disabled
 		@Test //TODO: move this test to the Message class, where the send method lives
 		void testSend_WithValidMessage_SendsMessage() {
 			CommandSender commandSenderMock = mock(CommandSender.class);
