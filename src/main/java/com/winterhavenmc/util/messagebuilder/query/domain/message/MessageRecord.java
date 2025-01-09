@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2024-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,13 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.query.domain.message;
 
 
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
 import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSection;
+import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSectionAdapter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
@@ -65,17 +68,18 @@ public record MessageRecord(
 		SUBTITLE("subtitle"),
 		;
 
+		private final String key;
+
+		// class constructor
 		Field(final String key) {
 			this.key = key;
-		} // class constructor
-		private final String key; // key field
+		}
+
+		// getter for key
 		public String toKey() {
 			return key;
-		} // getter for key
+		}
 	}
-
-	// constant for messages section top level key
-	private final static String MESSAGE_SECTION = "MESSAGES";
 
 
 	/**
@@ -89,29 +93,30 @@ public record MessageRecord(
 	public static // scope
 	<MessageId extends Enum<MessageId>> // parameter type
 	Optional<MessageRecord> // return type
-	getMessageRecord(final MessageId messageId, final ConfigurationSection messageSection) {
+	getRecord(final MessageId messageId, final ReadOnlyConfigurationSection messageSection) {
 		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage()); }
 		if (messageSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
 
+		//TODO: Identify a reliable check to ensure the proper section has been passed
 
 		// check if messageSection is MESSAGES section of configuration
-		if (messageSection.getName().equals(MESSAGE_SECTION)) {
-			throw new IllegalArgumentException("The configuration section is NOT the MESSAGES section of the language configuration!");
+		if (messageSection.getName().equals(Namespace.Domain.MESSAGES.name())) {
+			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
 
 		// get entry for messageId
-		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId.toString());
-		if (messageEntry == null) { return Optional.empty(); }
+		ReadOnlyConfigurationSection messageEntry = ReadOnlyConfigurationSectionAdapter.of(messageSection.getConfigurationSection(messageId.toString()));
+//		if (messageEntry == null) { return Optional.empty(); }
 
 		return Optional.of(new MessageRecord(messageId.toString(),
-				messageEntry.getBoolean(MessageRecord.Field.ENABLED.toKey()),
-				messageEntry.getString(MessageRecord.Field.MESSAGE.toKey()),
-				messageEntry.getLong(MessageRecord.Field.REPEAT_DELAY.toKey()),
-				messageEntry.getString(MessageRecord.Field.TITLE.toKey()),
-				messageEntry.getInt(MessageRecord.Field.TITLE_FADE_IN.toKey()),
-				messageEntry.getInt(MessageRecord.Field.TITLE_STAY.toKey()),
-				messageEntry.getInt(MessageRecord.Field.TITLE_FADE_OUT.toKey()),
-				messageEntry.getString(MessageRecord.Field.SUBTITLE.toKey())));
+				messageEntry.getBoolean(Field.ENABLED.toKey()),
+				messageEntry.getString(Field.MESSAGE.toKey()),
+				messageEntry.getLong(Field.REPEAT_DELAY.toKey()),
+				messageEntry.getString(Field.TITLE.toKey()),
+				messageEntry.getInt(Field.TITLE_FADE_IN.toKey()),
+				messageEntry.getInt(Field.TITLE_STAY.toKey()),
+				messageEntry.getInt(Field.TITLE_FADE_OUT.toKey()),
+				messageEntry.getString(Field.SUBTITLE.toKey())));
 	}
 
 }
