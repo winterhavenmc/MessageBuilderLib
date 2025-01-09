@@ -29,25 +29,28 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class ProcessorTypeTest {
 
-	Plugin plugin;
+	@Mock Plugin pluginMock;
 
 	@BeforeEach
 	public void setUp() {
-		plugin = mock(Plugin.class, "MockPlugin");
+
 	}
 
 	@AfterEach
 	public void tearDown() {
-		plugin = null;
+		pluginMock = null;
 	}
 
 
