@@ -17,6 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.namespace;
 
+import com.winterhavenmc.util.messagebuilder.query.domain.constant.ConstantQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.domain.item.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.domain.message.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.domain.time.TimeQueryHandler;
+
 /**
  * This class contains enums that are used as a component to create a unique namespace,
  * It is primarily used in the formation of unique keys for use in &lt;K,V&gt; data structures, such as maps.
@@ -35,11 +40,28 @@ public class Namespace {
 	 * </P>
 	 */
 	public enum Domain {
-		CONSTANTS, //values supplied by the yaml language file, from the root level section 'CONSTANTS'
-		ITEMS, // values supplied by the yaml language file, from the root level section 'ITEMS'
-		MACRO, // values passed in by calls to the setMacro method
-		MESSAGES, // values supplied by the yaml language file. from the root level section 'MESSAGES'
-		TIME, // string values for time units supplied by the yaml language file, from the root level section 'TIME'
+		CONSTANTS("CONSTANT", ConstantQueryHandler.class), //values supplied by the yaml language file, from the root level section 'CONSTANTS'
+		ITEMS("ITEM", ItemQueryHandler.class), // values supplied by the yaml language file, from the root level section 'ITEMS'
+		MACRO("MACRO", null), // values passed in by calls to the setMacro method
+		MESSAGES("MESSAGE", MessageQueryHandler.class), // values supplied by the yaml language file. from the root level section 'MESSAGES'
+		TIME("TIME", TimeQueryHandler.class), // string values for time units supplied by the yaml language file, from the root level section 'TIME'
+		;
+
+		// placeholder prefix to prevent name collisions between domains
+		private final String prefix;
+		private final Class<?> type;
+
+		Domain(final String prefix, final Class<?> type) {
+			this.prefix = prefix;
+			this.type = type;
+		}
+		public String getPrefix() {
+			return this.prefix;
+		}
+
+		public Class<?> getType() {
+			return this.type;
+		}
 	}
 
 
@@ -144,7 +166,7 @@ public class Namespace {
 
 	/**
 	 * ContextMap fields for a Location object. The ContextMap key for each field is derived by appending
-	 * the field nameSingular to the existing key path for this Macro. The field values are derived from a Location object
+	 * the field name to the existing key path for this Macro. The field values are derived from a Location object
 	 * by the LocationProcessor.
 	 */
 	public static class Location {
