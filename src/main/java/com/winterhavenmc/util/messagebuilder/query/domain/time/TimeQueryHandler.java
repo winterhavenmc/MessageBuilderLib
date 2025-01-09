@@ -15,9 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.query.domain.time;
 
 import com.winterhavenmc.util.TimeUnit;
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.time.Duration;
@@ -26,7 +29,15 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_DU
 import static com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_TIME_UNIT;
 
 
-public class LanguageFileTimeQueryHandler implements TimeQueryHandler {
+/**
+ * A ItemRecord handler that is solely responsible for the {@code TIME} section of the language file. Provides methods
+ * for retrieving String translations related to time, and to produce a time string from a {@code long} millisecond
+ * duration, listing the appropriate time units and their singular or plural names down to the granularity
+ * specified by the provided TimeUnit constant.
+ */
+public class TimeQueryHandler implements DomainQueryHandler<String> {
+
+	public static final Namespace.Domain domain = Namespace.Domain.TIME;
 
 	public static final String LESS_THAN_ONE_KEY = "OTHER.LESS_THAN_ONE";
 	public static final String LESS_THAN_KEY = "OTHER.LESS_THAN";
@@ -40,10 +51,21 @@ public class LanguageFileTimeQueryHandler implements TimeQueryHandler {
 	 *
 	 * @param timeSection the TIME section of the configuration file, for which this class is solely responsible
 	 */
-	public LanguageFileTimeQueryHandler(final ConfigurationSection timeSection) {
-		if (timeSection == null) { throw new IllegalArgumentException("The timeSection parameter cannot be null."); }
+	public TimeQueryHandler(final ConfigurationSection timeSection) {
+		if (timeSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
 
 		this.timeSection = timeSection;
+	}
+
+
+	/**
+	 * Get the namespace domain for this query handler
+	 *
+	 * @return the namespace domain for this query handler
+	 */
+	@Override
+	public Namespace.Domain getDomain() {
+		return domain;
 	}
 
 
@@ -52,8 +74,7 @@ public class LanguageFileTimeQueryHandler implements TimeQueryHandler {
 	 *
 	 * @return String containing 'less than one' in the currently configured language
 	 */
-	@Override
-	public String getLessThanOne() {
+	public String getLessThanOneString() {
 		return timeSection.getString(LESS_THAN_ONE_KEY);
 	}
 
@@ -63,7 +84,6 @@ public class LanguageFileTimeQueryHandler implements TimeQueryHandler {
 	 *
 	 * @return String containing 'less than' in the currently configured language
 	 */
-	@Override
 	public String getLessThan() {
 		return timeSection.getString(LESS_THAN_KEY);
 	}
@@ -74,37 +94,42 @@ public class LanguageFileTimeQueryHandler implements TimeQueryHandler {
 	 *
 	 * @return String containing 'unlimited time' in the currently configured language
 	 */
-	@Override
 	public String getUnlimited() {
 		return timeSection.getString(UNLIMITED_KEY);
 	}
 
 
 	/**
-	 * Get the singular name for the given TimeUnit.
+	 * Get the singular name for the provided TimeUnit.
 	 *
 	 * @param timeUnit The TimeUnit for which to retrieve the singular name
-	 * @return String containing the singular name of the given TimeUnit in the currently configured language.
+	 * @return String containing the singular name of the provided TimeUnit in the currently configured language.
 	 */
-	@Override
 	public String getSingular(final TimeUnit timeUnit) {
 		return timeSection.getString(timeUnit.name() + ".SINGULAR");
 	}
 
 
 	/**
-	 * Get the plural name for the given TimeUnit.
+	 * Get the plural name for the provided TimeUnit.
 	 *
 	 * @param timeUnit The TimeUnit for which to retrieve the singular name
-	 * @return String containing the singular name of the given TimeUnit in the currently configured language.
+	 * @return String containing the singular name of the provided TimeUnit in the currently configured language.
 	 */
-	@Override
+	
 	public String getPlural(final TimeUnit timeUnit) {
 		return timeSection.getString(timeUnit.name() + ".PLURAL");
 	}
 
 
-	@Override
+	/**
+	 * Get the plural or singular version of a {@code TimeUnit} appropriate for the provided duration.
+	 *
+	 * @param duration the duration for which a pluralized TimeUnit name will be returned
+	 * @param timeUnit the TimeUnit for which to retrieve a pluralized name
+	 * @return the singular or plural version of a TimeUnit name, appropriate for the provided duration.
+	 */
+	
 	public String getPluralized(final long duration, final TimeUnit timeUnit) {
 		// if duration is one, return singular name for timeUnit
 		if (duration == timeUnit.one()) {
@@ -115,40 +140,19 @@ public class LanguageFileTimeQueryHandler implements TimeQueryHandler {
 
 
 	/**
-	 * Get a formatted time string for a {@code long} duration to the granularity
-	 * of a constant in the {@link TimeUnit} enum.
+	 * Retrieve the localized String from the language file for the phrase 'less than one {timeUnit}'
+	 * for the provided {@code TimeUnit} in the currently configured language.
 	 *
-	 * @param duration the duration in milliseconds to be used to calculate the time string
-	 * @param timeUnit a {@code TimeUnit} constant representing the minimum granularity to include in the returned time string
-	 * @return {@code String} representation of the duration, using time units returned from the
-	 * language file, to the specified granularity
+	 * @param timeUnit the time unit name to append to the phrase
+	 * @return a localized String containing the phrase 'less than one {timeUnit}' equivalent in the
+	 * currently configured language.
 	 */
-	@Override
-	public String getTimeString(final Long duration, final TimeUnit timeUnit) {
-		if (duration == null) { throw new IllegalArgumentException(NULL_DURATION.getMessage()); }
-		if (timeUnit == null) { throw new IllegalArgumentException(NULL_TIME_UNIT.getMessage()); }
-
-		// if duration is negative, return string for unlimited time
-		if (duration < 0) {
-			return getUnlimited();
-		}
-
-		// if duration is less than duration of timeUnit, return string 'less than one {timeUnit.SINGULAR}'
-		if (duration < timeUnit.getMillis()) {
-			return getLessThanOne(timeUnit);
-		}
-
-		// I think we're good to here
-		return getFormattedTimeString(duration, timeUnit);
-	}
-
-
-	@Override
-	public String getLessThanOne(TimeUnit timeUnit) {
+	
+	public String getLessThanOneString(TimeUnit timeUnit) {
 		if (timeUnit == null) { throw new IllegalArgumentException(NULL_TIME_UNIT.getMessage()); }
 
 		// get 'less than one' string from TIME section language file
-		String lessThanOne = getLessThanOne();
+		String lessThanOne = getLessThanOneString();
 
 		// if no string could be found for LESS_THAN_ONE key, return mathematical expression for less than one
 		if (lessThanOne == null) {
@@ -168,6 +172,45 @@ public class LanguageFileTimeQueryHandler implements TimeQueryHandler {
 	}
 
 
+	/**
+	 * Get a formatted time string for a {@code long} duration to the granularity
+	 * of a constant in the {@link TimeUnit} enum.
+	 *
+	 * @param duration the duration in milliseconds to be used to calculate the time string
+	 * @param timeUnit a {@code TimeUnit} constant representing the minimum granularity to include in the returned time string
+	 * @return {@code String} representation of the duration, using time units returned from the
+	 * language file, to the specified granularity
+	 */
+	
+	public String getTimeString(final Long duration, final TimeUnit timeUnit) {
+		if (duration == null) { throw new IllegalArgumentException(NULL_DURATION.getMessage()); }
+		if (timeUnit == null) { throw new IllegalArgumentException(NULL_TIME_UNIT.getMessage()); }
+
+		// if duration is negative, return string for unlimited time
+		if (duration < 0) {
+			return getUnlimited();
+		}
+
+		// if duration is less than duration of timeUnit, return string 'less than one {timeUnit.SINGULAR}'
+		if (duration < timeUnit.getMillis()) {
+			return getLessThanOneString(timeUnit);
+		}
+
+		// I think we're good to here
+		return getFormattedTimeString(duration, timeUnit);
+	}
+
+
+	/**
+	 * This method produces the formatted time string, and backs the getTimeString method after any
+	 * tests for alternatives to the formatted time string, such as 'less than one' or 'unlimited',
+	 * have been exasperated.
+	 *
+	 * @param durationMillis the duration in milliseconds for which to produce a time string
+	 * @param timeUnit the minimum granularity of the time string. No TimeUnits will be appended
+	 *                 after this TimeUnit has been reached.
+	 * @return the formatted time string
+	 */
 	private String getFormattedTimeString(final long durationMillis, final TimeUnit timeUnit) {
 
 		// convert long millis to duration
@@ -215,6 +258,16 @@ public class LanguageFileTimeQueryHandler implements TimeQueryHandler {
 	}
 
 
+	/**
+	 * Append a time unit and its appropriate singular or plural name from the language file for the
+	 * currently configured language. If the value representing the duration of TimeUnits to be displayed
+	 * is one (1), the singular name for the TimeUnit is used. If the value is any other number, the plural
+	 * name for the TimeUnit will be used.
+	 *
+	 * @param sb a StringBuilder that holds the time string as constructed thus far
+	 * @param value the duration of TimeUnits to be displayed for this
+	 * @param timeUnit the TimeUnit and its duration to be appended to the StringBuilder
+	 */
 	private void appendUnit(StringBuilder sb, long value, TimeUnit timeUnit) {
 
 		// add delimiter before adding this unit unless this is the first unit to be added
