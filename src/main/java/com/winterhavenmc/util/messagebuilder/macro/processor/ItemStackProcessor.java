@@ -18,13 +18,13 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemStackProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	public ItemStackProcessor(final LanguageFileQueryHandler queryHandler) {
+	public ItemStackProcessor(final LanguageQueryHandler queryHandler) {
 		super(queryHandler);
 	}
 
