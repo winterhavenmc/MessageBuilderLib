@@ -18,12 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
 
 public class NullProcessor extends MacroProcessorTemplate {
 
-	public NullProcessor(final LanguageFileQueryHandler queryHandler) {
+	public NullProcessor(final LanguageQueryHandler queryHandler) {
 		super(queryHandler);
 	}
 
