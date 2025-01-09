@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorRegistry;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -40,6 +40,7 @@ public class MacroHandler {
 	/**
 	 * Enum that contains settable LEFT and RIGHT macro delimiter characters
 	 */
+	//TODO: get rid of this enum. it was a fun experiment.
 	public enum MacroDelimiter {
 		LEFT('%'),
 		RIGHT('%');
@@ -74,7 +75,7 @@ public class MacroHandler {
 	/**
 	 * Class constructor
 	 */
-	public MacroHandler(final Plugin plugin, final LanguageFileQueryHandler queryHandler) {
+	public MacroHandler(final Plugin plugin, final LanguageQueryHandler queryHandler) {
 		// instantiate macro processor registry
 		this.processorRegistry = new ProcessorRegistry();
 		// populate macro processor registry
@@ -124,7 +125,7 @@ public class MacroHandler {
 //			}
 
 			// iterate over context map, getting macro value strings based on class type in map
-			for (Map.Entry<String, ? extends ContextContainer<?>> entry : contextMap.entrySet()) {
+			for (Map.Entry<String, ContextContainer<?>> entry : contextMap.entrySet()) {
 
 				// get name-spaced String key from entry
 				String key = entry.getKey();
