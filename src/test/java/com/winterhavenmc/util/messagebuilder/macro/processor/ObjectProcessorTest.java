@@ -19,32 +19,37 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.namespace.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
+import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class ObjectProcessorTest {
 
-	private LanguageFileQueryHandler mockLanguageFileQueryHandler;
+	@Mock private LanguageQueryHandler queryHandlerMock;
+	@Mock private Player playerMock;
 	private MacroProcessor macroProcessor;
 
 
 	@BeforeEach
 	public void setUp() {
-		mockLanguageFileQueryHandler = mock(LanguageFileQueryHandler.class, "MockQueryHandler");
-		macroProcessor = new ObjectProcessor(mockLanguageFileQueryHandler);
+
+		macroProcessor = new ObjectProcessor(queryHandlerMock);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		mockLanguageFileQueryHandler = null;
+		queryHandlerMock = null;
 		macroProcessor = null;
 	}
 
@@ -54,7 +59,7 @@ class ObjectProcessorTest {
 		String keyPath = "SOME_INTEGER";
 		Integer number = 42;
 
-		ContextMap contextMap = new ContextMap();
+		ContextMap contextMap = new ContextMap(playerMock);
 		String nameSpacedKey = NamespaceKey.create(Macro.DURATION);
 		contextMap.put(nameSpacedKey, ContextContainer.of(number, ProcessorType.NUMBER));
 
