@@ -18,18 +18,22 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.OfflinePlayer;
 
 
 public class OfflinePlayerProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	public OfflinePlayerProcessor(final LanguageFileQueryHandler queryHandler) {
+	public OfflinePlayerProcessor(final LanguageQueryHandler queryHandler) {
 		super(queryHandler);
 	}
 
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+		if (key == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
+		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
+		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
 
 		ResultMap resultMap = new ResultMap();
 
