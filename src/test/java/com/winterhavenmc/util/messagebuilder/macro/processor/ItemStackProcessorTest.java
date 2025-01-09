@@ -17,29 +17,29 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.YamlLanguageQueryHandler;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
 
-
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class ItemStackProcessorTest {
 
-	private LanguageFileQueryHandler mockLanguageFileQueryHandler;
+	@Mock private YamlLanguageQueryHandler queryHandlerMock;
 	private MacroProcessor macroProcessor;
 
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
-		mockLanguageFileQueryHandler = mock(LanguageFileQueryHandler.class, "MockQueryHandler");
-		macroProcessor = new ItemStackProcessor(mockLanguageFileQueryHandler);
+		macroProcessor = new ItemStackProcessor(queryHandlerMock);
 	}
 
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
-		mockLanguageFileQueryHandler = null;
+		queryHandlerMock = null;
 		macroProcessor = null;
 	}
 
