@@ -17,50 +17,44 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.languages.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.languages.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.macro.Namespace;
-import com.winterhavenmc.util.messagebuilder.macro.NamespaceKey;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.YamlLangugageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.namespace.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.YamlLanguageQueryHandler;
 
 import org.bukkit.configuration.Configuration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.logging.Logger;
-
+import static com.winterhavenmc.util.messagebuilder.util.MockUtility.loadConfigurationFromResource;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class StringProcessorTest {
 
-	Plugin mockPlugin;
-	LanguageHandler mockLanguageHandler;
-	LanguageFileQueryHandler queryHandler;
+	@Mock Plugin pluginMock;
+	@Mock Player playerMock;
+
+	LanguageQueryHandler queryHandler;
 
 	@BeforeEach
 	public void setUp() {
-
-		mockPlugin = mock(Plugin.class, "MockPlugin");
-		when(mockPlugin.getLogger()).thenReturn(Logger.getLogger("StringProcessorTest"));
-		mockLanguageHandler = mock(YamlLanguageHandler.class,"MockLanguageHandler");
-
-		Configuration mockConfiguration = mock(Configuration.class, "MockConfiguration");
-		queryHandler = new YamlLangugageFileQueryHandler(mockPlugin, mockConfiguration);
+		Configuration languageConfiguration = loadConfigurationFromResource("language/en-US.yml");
+		queryHandler = new YamlLanguageQueryHandler(pluginMock, languageConfiguration);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		mockPlugin = null;
-		mockLanguageHandler = null;
+		pluginMock = null;
 		queryHandler = null;
 	}
 
@@ -70,7 +64,7 @@ class StringProcessorTest {
 		String keyPath = "SOME_NAME";
 		String stringObject = "some name";
 
-		ContextMap contextMap = new ContextMap();
+		ContextMap contextMap = new ContextMap(playerMock);
 		String namespacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
 
 		contextMap.put(namespacedKey, ContextContainer.of(stringObject, ProcessorType.STRING));
@@ -88,7 +82,7 @@ class StringProcessorTest {
 	void resolveContextWithItem() {
 
 //		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
-//		LanguageFileQueryHandler queryHandler = new YamlLangugageFileQueryHandler(plugin, languageHandler.getConfiguration());
+//		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(plugin, languageHandler.getConfiguration());
 //		MacroProcessor macroProcessor = new StringProcessor(queryHandler);
 //
 //		String stringKey = "ITEM";
