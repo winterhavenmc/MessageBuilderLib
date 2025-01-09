@@ -17,12 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.query.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface Toolkit {
+
 	void setDelimiters(Character character);
 
 	void setDelimiters(Character leftCharacter, Character rightCharacter);
@@ -35,6 +37,6 @@ public interface Toolkit {
 
 	List<String> getStringList(String key);
 
-	TimeQueryHandler getTimeQueryHandler();
+	DomainQueryHandler<?> getQueryHandler(Namespace.Domain domain);
 
 }
