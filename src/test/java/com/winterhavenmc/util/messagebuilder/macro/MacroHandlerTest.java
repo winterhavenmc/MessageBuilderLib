@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
-import com.winterhavenmc.util.messagebuilder.languages.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.language.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
-import com.winterhavenmc.util.messagebuilder.query.YamlLangugageFileQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.YamlLanguageQueryHandler;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -55,7 +55,7 @@ class MacroHandlerTest {
 		languageHandler = mock(LanguageHandler.class, "MockLanguageHandler");
 
 		// real objects
-		LanguageFileQueryHandler queryHandler = new YamlLangugageFileQueryHandler(plugin, languageHandler.getConfiguration());
+		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(plugin, languageHandler.getConfiguration());
 		macroHandler = new MacroHandler(plugin, queryHandler);
 	}
 
