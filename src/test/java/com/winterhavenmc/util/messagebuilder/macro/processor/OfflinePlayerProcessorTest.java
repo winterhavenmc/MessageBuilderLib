@@ -19,66 +19,64 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.*;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.namespace.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
-
-import java.util.UUID;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class OfflinePlayerProcessorTest {
 
-	private Plugin pluginMock;
-	private LanguageFileQueryHandler languageFileQueryHandlerMock;
-	private Player playerMock;
+	@Mock private LanguageQueryHandler languageQueryHandlerMock;
+	@Mock private Player playerMock;
 
 	@BeforeEach
 	void setUp() {
-		// mock plugin
-		pluginMock = MockUtility.createMockPlugin();
 
-		languageFileQueryHandlerMock = mock(LanguageFileQueryHandler.class, "MockQueryHandler");
-
-		// mock player for message recipient
-		playerMock = mock(Player.class, "MockPlayer");
-		when(playerMock.getName()).thenReturn("Player One");
-		when(playerMock.getUniqueId()).thenReturn(new UUID(1,1));
 	}
 
 	@AfterEach
 	public void tearDown() {
-		pluginMock = null;
-		languageFileQueryHandlerMock = null;
+		languageQueryHandlerMock = null;
 		playerMock = null;
 	}
 
-	@Disabled
 	@Test
 	void resolveContextTest() {
+		// Arrange
 		String stringKey = "SOME_NAME";
 		String key = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
-		MacroProcessor macroProcessor = new StringProcessor(languageFileQueryHandlerMock);
+		MacroProcessor macroProcessor = new StringProcessor(languageQueryHandlerMock);
 		ContextMap contextMap = new ContextMap(playerMock);
+
+		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, stringKey);
+
+		// Assert
 		assertTrue(resultMap.containsKey(key), "No match");
 	}
 
 	@Test
 	void resolveContext_with_null_contextMap() {
-		//TODO: pretty sure this is going to throw IllegalArgumentException
+		// Arrange
 		String keyPath = "SOME_NAME";
-		MacroProcessor macroProcessor = new StringProcessor(languageFileQueryHandlerMock);
+		MacroProcessor macroProcessor = new StringProcessor(languageQueryHandlerMock);
 		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
-		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, null, keyPath);
-		assertFalse(resultMap.containsKey(namespacedKey));
+
+		// Act
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> macroProcessor.resolveContext(namespacedKey, null, keyPath));
+
+		// Assert
+		assertEquals("The contextMap cannot be null.", exception.getMessage());
 	}
 
 }
