@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.*;
 class MessageBuilderToolkitTest {
 
 	@Mock private MessageBuilder<MessageId, Macro> messageBuilderMock;
-	@Mock private LanguageFileQueryHandler queryHandlerMock;
+	@Mock private LanguageQueryHandler queryHandlerMock;
 
 	private MessageBuilderToolkit<MessageId, Macro> toolkit;
 
