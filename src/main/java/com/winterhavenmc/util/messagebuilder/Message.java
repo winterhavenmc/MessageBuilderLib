@@ -19,10 +19,11 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.macro.*;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.MessageRecord;
-
+import com.winterhavenmc.util.messagebuilder.namespace.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.domain.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -32,6 +33,12 @@ import org.bukkit.plugin.Plugin;
 import java.util.Optional;
 
 
+/**
+ * The message object being built with builder pattern
+ *
+ * @param <MessageId> the unique identifier of a message in the language file
+ * @param <Macro> a macro placeholder value to be added to the context map
+ */
 public final class Message<MessageId extends Enum<MessageId>, Macro> {
 
 	// reference to plugin main class
@@ -43,7 +50,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	// required parameters
 	private final CommandSender recipient;
 	private final MessageId messageId;
-	private final LanguageFileQueryHandler queryHandler;
+	private final LanguageQueryHandler queryHandler;
 	private final MacroHandler macroHandler;
 
 	// optional parameters
@@ -56,13 +63,13 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 * Class constructor
 	 *
 	 * @param plugin       reference to plugin main class
-	 * @param queryHandler the query handler for message records
+	 * @param queryHandler the ItemRecord handler for message records
 	 * @param macroHandler reference to macro processor class
 	 * @param recipient    message recipient
 	 * @param messageId    message identifier
 	 */
 	public Message(final Plugin plugin,
-				final LanguageFileQueryHandler queryHandler,
+				final LanguageQueryHandler queryHandler,
                 final MacroHandler macroHandler,
                 final CommandSender recipient,
                 final MessageId messageId) {
@@ -85,27 +92,32 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 */
 	public <T> Message<MessageId, Macro> setMacro(final MacroKey macro, final T value) {
 
-		//TODO: if value is an optional, get unwrapped value. to be reimplemented later. see commented code below
+		Object unwrappedValue = value;
 
-		// create nameSingular spaced key
+		// if value is an optional, get unwrapped value
+		if (value instanceof Optional<?> opt && opt.isPresent()) {
+			unwrappedValue = opt.get();
+		}
+
+		// create name spaced key
 		String key = NamespaceKey.create(macro.toString(), Namespace.Domain.MACRO);
 
 		// get macro expected type from macro enum method
 		Class<?> expectedType = macro.getAssociatedType();
 
 		// check the type against the expected type and throw exception if mismatched
-		if (!expectedType.isInstance(value)) {
+		if (!expectedType.isInstance(unwrappedValue)) {
 			throw new IllegalArgumentException(
 					"Value type does not match the expected type for macro: " + macro +
 							". Expected: " + expectedType.getName() +
-							", Provided: " + value.getClass().getName());
+							", Provided: " + unwrappedValue.getClass().getName());
 		}
 
 		// get matching processor type for object
-		ProcessorType processorType = ProcessorType.matchType(value);
+		ProcessorType processorType = ProcessorType.matchType(unwrappedValue);
 
 		// put value and processor type into context map
-		this.contextMap.put(key, value, processorType);
+		this.contextMap.put(key, unwrappedValue, processorType);
 
 		// return this instance of Message class to the builder chain
 		return this;
@@ -127,10 +139,10 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		}
 
 		// get cooldown instance
-		MessageCooldown<MessageId> messageCooldown = MessageCooldown.getInstance(plugin);
+		MessageCooldownMap<MessageId> messageCooldownMap = MessageCooldownMap.getInstance(plugin);
 
 		// if message is not cooled, do nothing and return
-		if (messageCooldown.isCooling(recipient, messageId, messageRecord.get().repeatDelay())) {
+		if (messageCooldownMap.isCooling(recipient, messageId, messageRecord.get().repeatDelay())) {
 			return;
 		}
 
@@ -146,7 +158,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 
 		// if message repeat delay value is greater than zero and recipient is entity, add entry to messageCooldownMap
 		if (messageRecord.get().repeatDelay() > 0 && recipient instanceof Entity) {
-			messageCooldown.put(messageId, (Entity) recipient);
+			messageCooldownMap.put(messageId, (Entity) recipient);
 		}
 	}
 
