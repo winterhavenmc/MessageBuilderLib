@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.language;
 
+import org.bukkit.plugin.Plugin;
+
 public interface LanguageFileInstaller {
 	/**
 	 * Install resource files from plugin jar to plugin data directory
@@ -25,4 +27,5 @@ public interface LanguageFileInstaller {
 	 */
 	@SuppressWarnings("UnusedReturnValue")
 	int install();
+
 }
