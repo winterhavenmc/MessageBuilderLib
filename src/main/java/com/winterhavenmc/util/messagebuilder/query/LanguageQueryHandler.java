@@ -18,26 +18,36 @@
 package com.winterhavenmc.util.messagebuilder.query;
 
 import com.winterhavenmc.util.TimeUnit;
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.domain.item.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.query.domain.message.MessageRecord;
 import org.bukkit.World;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface LanguageFileQueryHandler {
+public interface LanguageQueryHandler {
 
-	Optional<String> getString(final String key);
-
-	List<String> getStringList(String key);
-
-	String getTimeString(long duration);
-
-	String getTimeString(long duration, TimeUnit timeUnit);
+	/**
+	 * Get a query type handler based on the namespaced Domain passed
+	 *
+	 * @param domain the namespace Domain that dictates the query handler type to be returned
+	 * @return a query handler of the type dictated by the passed namespace Domain
+	 */
+	DomainQueryHandler<?> getQueryHandler(Namespace.Domain domain);
 
 	Optional<ItemRecord> getItemRecord(String itemKey);
 
 	<MessageId extends Enum<MessageId>> Optional<MessageRecord> getMessageRecord(MessageId messageId);
 
-	LanguageFileTimeQueryHandler getTimeQueryHandler();
+	String getTimeString(long duration);
+
+	String getTimeString(long duration, TimeUnit timeUnit);
+
+	Optional<String> getString(final String key);
+
+	List<String> getStringList(String key);
 
 	//TODO: Everything below needs to go somewhere else
 
