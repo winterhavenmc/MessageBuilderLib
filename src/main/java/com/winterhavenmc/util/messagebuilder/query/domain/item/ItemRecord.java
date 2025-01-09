@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2024-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.query.domain.item;
 
+import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 import com.winterhavenmc.util.messagebuilder.util.Error;
-import org.bukkit.configuration.ConfigurationSection;
+import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSection;
+import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSectionAdapter;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,9 +58,13 @@ public record ItemRecord(
 		INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL"),
 		LORE("LORE");
 
-		Field(String keyPath) { this.keyPath = keyPath; } // constructor for enum constants
 		private final String keyPath; // keyPath field
-		String getKeyPath() { return this.keyPath; } // getter for keyPath field
+
+		// constructor for enum constants
+		Field(String keyPath) { this.keyPath = keyPath; }
+
+		// getter for keyPath field
+		String getKeyPath() { return this.keyPath; }
 	}
 
 
@@ -71,12 +77,13 @@ public record ItemRecord(
 	 * @return An {@code ItemRecord} from the language file, or an empty Optional if no record could be found
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
-	public static Optional<ItemRecord> getRecord(final String itemKey, final ConfigurationSection itemSection) {
+	public static Optional<ItemRecord> query(final String itemKey, final ReadOnlyConfigurationSection itemSection) {
 		if (itemKey == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
+		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage()); }
 
 		// get configuration section for item key
-		ConfigurationSection itemEntry = itemSection.getConfigurationSection(itemKey);
-		if (itemEntry == null) { return Optional.empty(); }
+		ReadOnlyConfigurationSection itemEntry = ReadOnlyConfigurationSectionAdapter.of(itemSection.getConfigurationSection(itemKey));
+//		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
 		return Optional.of(new ItemRecord(itemKey,
