@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.languages;
+package com.winterhavenmc.util.messagebuilder.language;
 
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
@@ -39,10 +39,7 @@ import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-//TODO: This is the only test suite that requires the actual creation of a temporary plugin data directory
-//      So lets get all tempDataDir methods out of MockUtility and placed here
 
-//TODO: Hit that one last branch/line with test coverage to score 100!
 @ExtendWith(MockitoExtension.class)
 public class YamlLanguageFileInstallerTest {
 
@@ -116,10 +113,6 @@ public class YamlLanguageFileInstallerTest {
 
 			// Ensure parent directories exist
 			Files.createDirectories(targetFilePath.getParent());
-
-			// return real file input streams for mock plugin resources
-//			doAnswer(invocation -> getResourceStream(invocation.getArgument(0)))
-//					.when(pluginMock).getResource(anyString());
 
 			// Simulate saving the resource by copying it from the test resources
 			try (InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML)) {
@@ -392,7 +385,7 @@ public class YamlLanguageFileInstallerTest {
 	/**
 	 * Installs a resource file from the classpath to the specified target directory.
 	 *
-	 * @param resourceName  the nameSingular of the resource file in the classpath
+	 * @param resourceName  the name of the resource file in the classpath
 	 * @param targetDirPath the target directory where the file should be installed
 	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
@@ -423,5 +416,15 @@ public class YamlLanguageFileInstallerTest {
 		}
 	}
 
+
+	/**
+	 * Retrieves an InputStream for the specified resource from the classpath.
+	 *
+	 * @param resourceName the name of the resource file
+	 * @return an InputStream for the resource, or {@code null} if the resource cannot be found
+	 */
+	public static InputStream getResourceStream(final String resourceName) {
+		return YamlLanguageFileInstallerTest.class.getClassLoader().getResourceAsStream(resourceName);
+	}
 
 }
