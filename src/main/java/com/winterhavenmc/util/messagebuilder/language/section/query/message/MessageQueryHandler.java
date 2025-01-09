@@ -15,13 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query.domain.message;
+package com.winterhavenmc.util.messagebuilder.language.section.query.message;
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSection;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSectionAdapter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
@@ -32,8 +30,8 @@ import java.util.Optional;
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * message section.
  */
-public class MessageQueryHandler implements DomainQueryHandler<MessageRecord> {
-	private final static Namespace.Domain domain = Namespace.Domain.MESSAGES;
+public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
+	private final static Section SECTION = Section.MESSAGES;
 	private final ConfigurationSection messageSection;
 
 
@@ -44,26 +42,20 @@ public class MessageQueryHandler implements DomainQueryHandler<MessageRecord> {
 	 */
 	public MessageQueryHandler(ConfigurationSection messageSection) {
 		if (messageSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
+		System.out.println("section name: " + messageSection.getName());
+		System.out.println("section path: " + messageSection.getCurrentPath());
+		System.out.println(" domain name: " + SECTION.name());
 
+		//TODO: find method to get passed messageSection key to compare with domain.name()
 		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
-		String currentPath = messageSection.getName();
-		if (!currentPath.equals(domain.toString())) {
+		System.out.println("domain.name() equals section.getName(): " + SECTION.name().equals(messageSection.getName()));
+		if (!SECTION.name().equals(messageSection.getName())) {
+			System.out.println("then why you thowin', bro?");
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
 
 		// set field from parameter
 		this.messageSection = messageSection;
-	}
-
-
-	/**
-	 * Get the namespace domain for this query handler
-	 *
-	 * @return the namespace domain for this query handler
-	 */
-	@Override
-	public Namespace.Domain getDomain() {
-		return domain;
 	}
 
 
@@ -74,16 +66,34 @@ public class MessageQueryHandler implements DomainQueryHandler<MessageRecord> {
 	 * @return the message record for the MessageId
 	 * @param <MessageId> an enum member that is used as a key to retrieve messages from the language file
 	 */
-	public <MessageId extends Enum<MessageId>>
-	Optional<MessageRecord> getRecord(final MessageId messageId) {
+	public <MessageId extends Enum<MessageId>> Optional<MessageRecord> getRecord(final MessageId messageId) {
 		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_KEY.getMessage()); }
 
 		// get configuration section for MessageId
-		ReadOnlyConfigurationSection messageEntry = ReadOnlyConfigurationSectionAdapter.of(messageSection.getConfigurationSection(messageId.name()));
-//		if (messageEntry == null) { return Optional.empty(); }
+		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId.name());
+		if (messageEntry == null) { return Optional.empty(); }
 
 		// return new MessageRecord
 		return MessageRecord.getRecord(messageId, messageEntry);
+	}
+
+
+	/**
+	 * Get the namespace domain for this query handler
+	 *
+	 * @return the namespace domain for this query handler
+	 */
+	@Override
+	public Section getSection() {
+		return SECTION;
+	}
+
+	/**
+	 * @return
+	 */
+	@Override
+	public Class<MessageRecord> getHandledType() {
+		return null;
 	}
 
 }

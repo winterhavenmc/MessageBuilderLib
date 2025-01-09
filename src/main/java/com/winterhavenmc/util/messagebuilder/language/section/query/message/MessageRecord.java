@@ -15,13 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query.domain.message;
+package com.winterhavenmc.util.messagebuilder.language.section.query.message;
 
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.language.section.Section;
 import com.winterhavenmc.util.messagebuilder.util.Error;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSection;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSectionAdapter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
@@ -93,19 +91,19 @@ public record MessageRecord(
 	public static // scope
 	<MessageId extends Enum<MessageId>> // parameter type
 	Optional<MessageRecord> // return type
-	getRecord(final MessageId messageId, final ReadOnlyConfigurationSection messageSection) {
+	getRecord(final MessageId messageId, final ConfigurationSection messageSection) {
 		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage()); }
 		if (messageSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
 
 		//TODO: Identify a reliable check to ensure the proper section has been passed
 
 		// check if messageSection is MESSAGES section of configuration
-		if (messageSection.getName().equals(Namespace.Domain.MESSAGES.name())) {
+		if (messageSection.getName().equals(Section.MESSAGES.name())) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
 
 		// get entry for messageId
-		ReadOnlyConfigurationSection messageEntry = ReadOnlyConfigurationSectionAdapter.of(messageSection.getConfigurationSection(messageId.toString()));
+		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId.toString());
 //		if (messageEntry == null) { return Optional.empty(); }
 
 		return Optional.of(new MessageRecord(messageId.toString(),

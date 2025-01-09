@@ -15,23 +15,21 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query.domain.constant;
+package com.winterhavenmc.util.messagebuilder.language.section.query.constant;
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSection;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSectionAdapter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ConstantQueryHandler implements DomainQueryHandler<String> {
+public class ConstantQueryHandler implements SectionQueryHandler<String> {
 
-	private final static Namespace.Domain domain = Namespace.Domain.CONSTANTS;
+	private final static Section SECTION = Section.CONSTANTS;
 
-	private final ReadOnlyConfigurationSection section;
+	private final ConfigurationSection section;
 
 
 	/**
@@ -44,17 +42,17 @@ public class ConstantQueryHandler implements DomainQueryHandler<String> {
 
 		// ensure only the 'CONSTANTS' section is passed in
 		// TODO: Don't think this is working
-		if (!section.getName().equals(domain.name())) {
+		if (!section.getName().equals(SECTION.name())) {
 			System.out.println("Section name: " + section.getName() + " does not equal domain.name()");
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
 		}
 
-		this.section = ReadOnlyConfigurationSectionAdapter.of(section);
+		this.section = section;
 	}
 
 	@Override
-	public Namespace.Domain getDomain() {
-		return domain;
+	public Section getSection() {
+		return SECTION;
 	}
 
 

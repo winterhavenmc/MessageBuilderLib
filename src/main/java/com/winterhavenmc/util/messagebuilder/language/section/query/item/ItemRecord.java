@@ -15,12 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query.domain.item;
+package com.winterhavenmc.util.messagebuilder.language.section.query.item;
 
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 import com.winterhavenmc.util.messagebuilder.util.Error;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSection;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSectionAdapter;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,13 +76,13 @@ public record ItemRecord(
 	 * @return An {@code ItemRecord} from the language file, or an empty Optional if no record could be found
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
-	public static Optional<ItemRecord> query(final String itemKey, final ReadOnlyConfigurationSection itemSection) {
+	public static Optional<ItemRecord> query(final String itemKey, final ConfigurationSection itemSection) {
 		if (itemKey == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
 		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage()); }
 
 		// get configuration section for item key
-		ReadOnlyConfigurationSection itemEntry = ReadOnlyConfigurationSectionAdapter.of(itemSection.getConfigurationSection(itemKey));
-//		if (itemEntry == null) { return Optional.empty(); }
+		ConfigurationSection itemEntry = itemSection.getConfigurationSection(itemKey);
+		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
 		return Optional.of(new ItemRecord(itemKey,

@@ -15,13 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query.domain.item;
+package com.winterhavenmc.util.messagebuilder.language.section.query.item;
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSection;
-import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSectionAdapter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
@@ -32,11 +30,11 @@ import java.util.Optional;
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * item section.
  */
-public class ItemQueryHandler implements DomainQueryHandler<ItemRecord> {
+public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
 
-	private final static Namespace.Domain domain = Namespace.Domain.ITEMS;
+	private final static Section SECTION = Section.ITEMS;
 
-	private final ReadOnlyConfigurationSection itemSection;
+	private final ConfigurationSection itemSection;
 
 
 	/**
@@ -48,19 +46,19 @@ public class ItemQueryHandler implements DomainQueryHandler<ItemRecord> {
 		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
 
 		// only allow the 'ITEMS' section of the language file to be passed as the constructor parameter
-		if (!itemSection.getName().equals(domain.toString())) {
+		if (!itemSection.getName().equals(SECTION.toString())) {
 			System.out.println("Item section: " + itemSection.getName());
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
 		}
 
 		// set field
-		this.itemSection = ReadOnlyConfigurationSectionAdapter.of(itemSection);
+		this.itemSection = itemSection;
 	}
 
 
 	@Override
-	public Namespace.Domain getDomain() {
-		return domain;
+	public Section getSection() {
+		return SECTION;
 	}
 
 

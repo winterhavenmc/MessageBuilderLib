@@ -1,25 +1,25 @@
 /*
  * Copyright (c) 2025 Tim Savage.
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * This program is free software: you can redistribute it and/or modify  
+ * it under the terms of the GNU General Public License as published by  
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * This program is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query.domain.time;
+package com.winterhavenmc.util.messagebuilder.language.section.query.time;
 
 import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -35,9 +35,9 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_TI
  * duration, listing the appropriate time units and their singular or plural names down to the granularity
  * specified by the provided TimeUnit constant.
  */
-public class TimeQueryHandler implements DomainQueryHandler<String> {
+public class TimeQueryHandler implements SectionQueryHandler<String> {
 
-	public static final Namespace.Domain domain = Namespace.Domain.TIME;
+	public static final Section SECTION = Section.TIME;
 
 	public static final String LESS_THAN_ONE_KEY = "OTHER.LESS_THAN_ONE";
 	public static final String LESS_THAN_KEY = "OTHER.LESS_THAN";
@@ -64,8 +64,8 @@ public class TimeQueryHandler implements DomainQueryHandler<String> {
 	 * @return the namespace domain for this query handler
 	 */
 	@Override
-	public Namespace.Domain getDomain() {
-		return domain;
+	public Section getSection() {
+		return SECTION;
 	}
 
 
