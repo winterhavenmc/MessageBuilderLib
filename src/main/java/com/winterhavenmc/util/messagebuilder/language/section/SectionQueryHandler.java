@@ -15,24 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query.domain;
+package com.winterhavenmc.util.messagebuilder.language.section;
+
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-
-public class DefaultDomainQueryHandler implements DomainQueryHandler<Void> {
-
-	private final Namespace.Domain domain;
-
-	public DefaultDomainQueryHandler(Namespace.Domain domain) {
-		this.domain = domain;
-	}
-
-	public Void query(String key) {
-		throw new UnsupportedOperationException("No query handler available for domain: " + domain);
-	}
-
-	public Namespace.Domain getDomain() {
-		return domain;
-	}
+public interface SectionQueryHandler<T> extends QueryHandler<T> {
+	Section getSection();
+	Class<T> getHandledType();
 }
