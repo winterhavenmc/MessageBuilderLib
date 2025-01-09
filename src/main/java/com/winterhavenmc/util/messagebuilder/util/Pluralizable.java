@@ -15,10 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.name;
+package com.winterhavenmc.util.messagebuilder.util;
 
-import org.bukkit.plugin.Plugin;
+import java.util.Optional;
 
-public record PluginNameResolver(Plugin plugin) implements Nameable {
-	@Override public String getName() { return plugin.getName(); }
+public interface Pluralizable {
+	Optional<String> nameSingular();
+	Optional<String> namePlural();
 }
