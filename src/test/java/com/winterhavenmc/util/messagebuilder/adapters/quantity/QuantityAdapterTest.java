@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resolvers.quantity;
+package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.Nested;
@@ -30,10 +30,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class QuantityResolverTest {
+public class QuantityAdapterTest {
 
 	@Nested
-	class CollectionQuantityResolverTests {
+	class CollectionQuantityAdapterTests {
 		@Test
 		public void testGetQuantity_withValidCollection() {
 			// Arrange
@@ -41,7 +41,7 @@ public class QuantityResolverTest {
 
 			// Act
 			int quantity = -888;
-			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(collection);
+			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(collection);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -57,7 +57,7 @@ public class QuantityResolverTest {
 
 			// Act
 			int quantity = -777;
-			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(collection);
+			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(collection);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -71,7 +71,7 @@ public class QuantityResolverTest {
 			// Act & Assert
 			int quantity = -999;
 			Collection<String> collection = null;
-			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(collection);
+			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(collection);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -81,7 +81,7 @@ public class QuantityResolverTest {
 
 
 	@Nested
-	class ItemStackQuantityResolverTest {
+	class ItemStackQuantityAdapterTest {
 
 		@Test
 		public void testGetQuantity_withValidItemStack() {
@@ -91,7 +91,7 @@ public class QuantityResolverTest {
 
 			// Act
 			int quantity = -888;
-			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(itemStackMock);
+			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(itemStackMock);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -108,7 +108,7 @@ public class QuantityResolverTest {
 
 			// Act
 			int quantity = -777;
-			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(itemStackMock);
+			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(itemStackMock);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -121,7 +121,7 @@ public class QuantityResolverTest {
 		public void testConstructor_withNullItemStack() {
 			// Act & Assert
 			int quantity = -999;
-			Optional<Quantifiable> resolver = QuantityResolver.asQuantifiable(null);
+			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(null);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
