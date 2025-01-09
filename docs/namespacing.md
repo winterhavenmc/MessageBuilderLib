@@ -74,7 +74,7 @@ public enum LocationField {
     Y("location.y", "Double", "The Y-coordinate of the location"),
     Z("location.z", "Double", "The Z-coordinate of the location");
 
-    private final String yamlPath; // Dot-delimited field nameSingular
+    private final String yamlPath; // Dot-delimited field name
     private final String type;     // Data type
     private final String description; // Field description
 
