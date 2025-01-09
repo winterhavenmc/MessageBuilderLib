@@ -17,9 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.language;
 
-import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Locale;
 
@@ -37,14 +35,40 @@ public class YamlLanguageHandler implements LanguageHandler {
 	// default locale
 	private Locale locale = Locale.US;
 
-	// reference to main plugin class
-	private Plugin plugin;
+	// plugin configuration
+	private final Configuration pluginConfig;
+
+	// language configuration
+	private Configuration languageConfig;
 
 	// language file loader
 	private LanguageFileLoader languageFileLoader;
 
-	// configuration object for language file
-	private Configuration configuration;
+
+	/**
+	 * class constructor, three parameter
+	 * all fields are provided as parameters
+	 *
+	 * @param pluginConfig           the plugin configuration
+	 * @param languageFileLoader     the language file loader to be used by the language handler
+	 */
+	public YamlLanguageHandler(final Configuration pluginConfig,
+	                           final LanguageFileLoader languageFileLoader) {
+
+		// set fields from parameters
+		this.pluginConfig = pluginConfig;
+		this.languageFileLoader = languageFileLoader;
+
+		// load message configuration from file
+		languageConfig = languageFileLoader.getConfiguration();
+
+		// get locale from plugin configuration if set
+		//TODO: Mock static method to enable and test this
+//		String languageTag = pluginConfig.getString(CONFIG_LOCALE_KEY);
+//		if (languageTag != null) {
+//			locale = Locale.forLanguageTag(languageTag);
+//		}
+	}
 
 
 	/**
@@ -52,37 +76,10 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 * must use setters for all fields before use
 	 */
 	public YamlLanguageHandler() {
-		this.plugin = null;
+		this.pluginConfig = null;
 		this.languageFileLoader = null;
-		this.configuration = null;
+		this.languageConfig = null;
 		this.locale = null;
-	}
-
-
-	/**
-	 * class constructor, three parameter
-	 * all fields are provided as parameters
-	 *
-	 * @param plugin                 the plugin main class
-	 * @param languageFileLoader     the language file loader to be used by the language handler
-	 */
-	public YamlLanguageHandler(final Plugin plugin,
-	                           final LanguageFileLoader languageFileLoader) {
-
-		// reference to plugin main class
-		this.plugin = plugin;
-		this.languageFileLoader = languageFileLoader;
-
-		// load message configuration from file
-		configuration = languageFileLoader.getConfiguration();
-	}
-
-	/**
-	 * setter for plugin
-	 * @param plugin a new plugin to replace the existing plugin
-	 */
-	void setPlugin(final Plugin plugin) {
-		this.plugin = plugin;
 	}
 
 	/**
@@ -110,11 +107,6 @@ public class YamlLanguageHandler implements LanguageHandler {
 	}
 
 
-	// for testing setters
-	boolean isPluginSet() {
-		return this.plugin != null;
-	}
-
 	boolean isFileLoaderSet() {
 		return this.languageFileLoader != null;
 	}
@@ -125,14 +117,14 @@ public class YamlLanguageHandler implements LanguageHandler {
 
 
 	/**
-	 * Get the language configuration from the configured language yaml file.
+	 * Get the language configuration held by this language handler.
 	 *
 	 * @return a configuration object loaded with values from the configured language file, or the default en-US.yml
 	 * language file if the configured file could not be found.
 	 */
 	@Override
 	public Configuration getConfiguration() {
-		return configuration;
+		return languageConfig;
 	}
 
 
@@ -145,7 +137,7 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public String getConfigLanguage() {
-		return plugin.getConfig().getString(CONFIG_LANGUAGE_KEY);
+		return pluginConfig.getString(CONFIG_LANGUAGE_KEY);
 	}
 
 
@@ -162,13 +154,10 @@ public class YamlLanguageHandler implements LanguageHandler {
 		languageFileLoader.reload();
 		Configuration newConfiguration = languageFileLoader.getConfiguration();
 		if (newConfiguration != null) {
-			this.configuration = newConfiguration;
+			this.languageConfig = newConfiguration;
 			return true;
 		}
-		else {
-			plugin.getLogger().warning(Error.LanguageConfiguration.RELOAD_FAILED.getMessage());
-			return false;
-		}
+		return false;
 	}
 
 }
