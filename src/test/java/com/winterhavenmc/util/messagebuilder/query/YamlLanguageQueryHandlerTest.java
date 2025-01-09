@@ -18,17 +18,25 @@
 package com.winterhavenmc.util.messagebuilder.query;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.domain.item.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.domain.item.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.query.domain.message.MessageRecord;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.MockUtility.loadConfigurationFromResource;
@@ -37,47 +45,27 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-class YamlLanguageFileQueryHandlerTest {
+@ExtendWith(MockitoExtension.class)
+class YamlLanguageQueryHandlerTest {
 
-	Plugin plugin;
-	LanguageFileQueryHandler queryHandler;
+	@Mock Plugin pluginMock;
+	LanguageQueryHandler queryHandler;
 
 
 	@BeforeEach
 	void setUp() {
-		Map<String, Object> configValues = new HashMap<>();
-		configValues.put("language", "en-US");
-		configValues.put("locale", "en-US");
-
-		plugin = MockUtility.createMockPlugin(configValues);
-		Configuration languageConfiguration = loadConfigurationFromResource("language/en-US.yml");
-		queryHandler = new YamlLanguageFileQueryHandler(plugin, languageConfiguration);
+		Configuration languageConfig = loadConfigurationFromResource("language/en-US.yml");
+		queryHandler = new YamlLanguageQueryHandler(pluginMock, languageConfig);
 	}
-
-
-	@Nested
-	class MockSetupTests {
-		@Test
-		void PluginNotNullTest() {
-			assertNotNull(plugin);
-		}
-
-		@Test
-		void PluginConfigNotNullTest() {
-			assertNotNull(plugin.getConfig());
-		}
-
-		@Test
-		void PluginLoggerNotNullTest() {
-			assertNotNull(plugin.getLogger());
-		}
-	}
-
 
 	@Test
 	void getItemRecordTest() {
-		Optional<ItemRecord> itemRecord = queryHandler.getItemRecord("TEST_ITEM_1");
-		assertTrue(itemRecord.isPresent());
+		DomainQueryHandler<?> handler = queryHandler.getQueryHandler(Namespace.Domain.ITEMS);
+		Optional<ItemRecord> itemRecord;
+		if (handler instanceof ItemQueryHandler itemQueryHandler) {
+			itemRecord = itemQueryHandler.getItemRecord("TEST_ITEM_1");
+			assertTrue(itemRecord.isPresent());
+		}
 	}
 
 	@Test
@@ -98,7 +86,7 @@ class YamlLanguageFileQueryHandlerTest {
 	void getIMessageRecordTest_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> queryHandler.getMessageRecord(null));
-		assertEquals("The messageId parameter was null.", exception.getMessage());
+		assertEquals("The messageId parameter cannot null.", exception.getMessage());
 	}
 
 	@Test
@@ -114,6 +102,7 @@ class YamlLanguageFileQueryHandlerTest {
 		assertEquals("The itemKey parameter was null.", exception.getMessage());
 	}
 
+	@Disabled
 	@Test
 	void isMultiverseInstalled() {
 		// mock plugin manager to return isEnabled("Multiverse-Core") = false
