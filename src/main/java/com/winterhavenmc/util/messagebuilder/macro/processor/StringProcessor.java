@@ -18,12 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
 
 public class StringProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	public StringProcessor(LanguageFileQueryHandler queryHandler) {
+	public StringProcessor(LanguageQueryHandler queryHandler) {
 		super(queryHandler);
 	}
 
