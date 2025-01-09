@@ -18,8 +18,9 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import java.util.List;
@@ -33,9 +34,14 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 
 	public static final String SPAWN_DISPLAY_NAME = "SPAWN.DISPLAY_NAME";
 	public static final String HOME_DISPLAY_NAME = "HOME.DISPLAY_NAME";
-	private final LanguageFileQueryHandler queryHandler;
+	private final LanguageQueryHandler queryHandler;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param messageBuilder the MessageBuilder instance
+	 */
 	public MessageBuilderToolkit(final MessageBuilder<MessageId, Macro> messageBuilder) {
 		if (messageBuilder == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_BUILDER.getMessage()); }
 
@@ -44,18 +50,23 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 
 
 	/**
-	 * Get query handler for fetching values from the language file
+	 * Get ItemRecord handler for fetching values from the language file
 	 *
-	 * @return a {@link LanguageFileQueryHandler} instance
+	 * @return a {@link LanguageQueryHandler} instance
 	 */
-	public LanguageFileQueryHandler getQueryHandler() {
+	public LanguageQueryHandler getQueryHandler() {
 		return this.queryHandler;
 	}
 
 
-	@Override
-	public TimeQueryHandler getTimeQueryHandler() {
-		return this.queryHandler.getTimeQueryHandler();
+	/**
+	 * Get query handler for domain
+	 *
+	 * @param domain the domain of the query handler requested
+	 * @return the domain query handler
+	 */
+	public DomainQueryHandler<?> getQueryHandler(Namespace.Domain domain) {
+		return queryHandler.getQueryHandler(domain);
 	}
 
 
@@ -86,10 +97,10 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 
 
 	/**
-	 * Retrieve the display nameSingular for spawn from the language file CONSTANTS section with the
+	 * Retrieve the display name for spawn from the language file CONSTANTS section with the
 	 * key path 'SPAWN.DISPLAY_NAME'
 	 *
-	 * @return an Optional of String containing the spawn nameSingular, or an empty Optional if no value was found
+	 * @return an Optional of String containing the spawn name, or an empty Optional if no value was found
 	 */
 	@Override
 	public Optional<String> getSpawnDisplayName() {
@@ -98,10 +109,10 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 
 
 	/**
-	 * Retrieve the display nameSingular for home from the language file CONSTANTS section with the
+	 * Retrieve the display name for home from the language file CONSTANTS section with the
 	 * key path 'HOME.DISPLAY_NAME'
 	 *
-	 * @return an Optional of String containing the home nameSingular, or an empty Optional if no value was found
+	 * @return an Optional of String containing the home name, or an empty Optional if no value was found
 	 */
 	@Override
 	public Optional<String> getHomeDisplayName() {
