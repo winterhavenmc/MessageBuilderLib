@@ -19,24 +19,25 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 
 /**
  * This class implements a map of macro objects that have been passed in by the message builder
  * to be processed for replacement strings. The map key is an enum member, and the corresponding value
  * is the object to be processed. It is backed by a HashMap.
  */
-public class ContextMap {
+public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
 
 	private final CommandSender recipient;
 
-	// Backing store HashMap (ed: linked hash map to maintain insertion order TODO: investigate best map type here
-	private final Map<String, ContextContainer<?>> contextMap = new ConcurrentHashMap<>();
+	// Backing store map (use linked hash map to maintain insertion order) TODO: investigate best map type here
+	private final Map<String, ContextContainer<?>> internalMap = new ConcurrentHashMap<>();
 
 	public ContextMap(CommandSender recipient) {
 		this.recipient = recipient;
@@ -49,8 +50,11 @@ public class ContextMap {
 	 * @param key           the unique key for the value
 	 * @param container     the context container wrapping the value and its ProcessorType
 	 */
-	public void put(String key, ContextContainer<?> container) {
-		contextMap.put(key, container);
+	@Override
+	public ContextContainer<?> put(String key, ContextContainer<?> container) {
+		ContextContainer<?> previousValue = internalMap.get(key);
+		internalMap.put(key, container);
+		return previousValue;
 	}
 
 
@@ -63,7 +67,7 @@ public class ContextMap {
 	 * @param <T>           the type of the value
 	 */
 	public <T> void put(String key, T value, ProcessorType processorType) {
-		contextMap.put(key, ContextContainer.of(value, processorType));
+		internalMap.put(key, ContextContainer.of(value, processorType));
 	}
 
 
@@ -74,7 +78,7 @@ public class ContextMap {
 	 * @return an Optional containing the ContextContainer, or empty if not found
 	 */
 	public Optional<ContextContainer<?>> getContainer(String key) {
-		return Optional.ofNullable(contextMap.get(key));
+		return Optional.ofNullable(internalMap.get(key));
 	}
 
 
@@ -87,7 +91,7 @@ public class ContextMap {
 	 * @return an Optional containing the value, or empty if not found or type mismatch
 	 */
 	public <T> Optional<T> getValue(String key, Class<T> clazz) {
-		ContextContainer<?> container = contextMap.get(key);
+		ContextContainer<?> container = internalMap.get(key);
 		if (container != null && clazz.isInstance(container.value())) {
 			return Optional.of(clazz.cast(container.value()));
 		}
@@ -102,7 +106,7 @@ public class ContextMap {
 	 * @return an Optional containing the ProcessorType, or empty if not found
 	 */
 	public Optional<ProcessorType> getProcessorType(String key) {
-		ContextContainer<?> container = contextMap.get(key);
+		ContextContainer<?> container = internalMap.get(key);
 		return container != null ? Optional.of(container.processorType()) : Optional.empty();
 	}
 
@@ -114,7 +118,7 @@ public class ContextMap {
 	 * @return true if the key exists, false otherwise
 	 */
 	public boolean containsKey(String key) {
-		return contextMap.containsKey(key);
+		return internalMap.containsKey(key);
 	}
 
 
@@ -125,23 +129,27 @@ public class ContextMap {
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
 	public ContextContainer<?> remove(final String key) {
-		return this.contextMap.remove(key);
+		return internalMap.remove(key);
 	}
+
 
 	/**
 	 * Returns a set view of the mappings in the map.
 	 *
 	 * @return A set of entries in the map.
 	 */
-	public Set<Map.Entry<String, ContextContainer<?>>> entrySet() {
-		return this.contextMap.entrySet();
+	@Override
+	public @NotNull Set<Map.Entry<String, ContextContainer<?>>> entrySet() {
+		return internalMap.entrySet();
 	}
+
 
 	/**
 	 * Clears all entries in the map.
 	 */
+	@Override
 	public void clear() {
-		this.contextMap.clear();
+		internalMap.clear();
 	}
 
 	/**
@@ -149,8 +157,9 @@ public class ContextMap {
 	 *
 	 * @return The size of the map.
 	 */
+	@Override
 	public int size() {
-		return this.contextMap.size();
+		return this.internalMap.size();
 	}
 
 	/**
@@ -158,8 +167,9 @@ public class ContextMap {
 	 *
 	 * @return {@code true} if the map contains no entries, {@code false} otherwise.
 	 */
+	@Override
 	public boolean isEmpty() {
-		return this.contextMap.isEmpty();
+		return this.internalMap.isEmpty();
 	}
 
 }
