@@ -18,48 +18,40 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
 
-
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class CommandSenderProcessorTest {
 
-	Plugin mockPlugin;
-	LanguageFileQueryHandler mockLanguageFileQueryHandler;
+	@Mock Plugin pluginMock;
+	@Mock
+	LanguageQueryHandler queryHandlerMock;
+
 	MacroProcessor macroProcessor;
 
 	@BeforeEach
 	public void setUp() {
-		mockPlugin = MockUtility.createMockPlugin();
-		mockLanguageFileQueryHandler = mock(LanguageFileQueryHandler.class, "MockQueryHandler");
-
-		macroProcessor = new CommandSenderProcessor(mockLanguageFileQueryHandler);
+		macroProcessor = new CommandSenderProcessor(queryHandlerMock);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		mockPlugin = null;
+		pluginMock = null;
+		queryHandlerMock = null;
+		macroProcessor = null;
 	}
 
 
 	@Disabled
 	@Test
 	void resolveContext() {
-//		String key = "SOME_SENDER";
-//
-//		PlayerMock player = serverMock.addPlayer("testy");
-//
-//		MacroObjectMap macroObjectMap = new MacroObjectMap();
-//		macroObjectMap.put(key, player);
-//
-//		ResultMap resultMap = macroProcessor.execute(macroObjectMap, key, player);
-//		assertTrue(resultMap.containsKey("SOME_SENDER"));
-//		assertEquals("testy", resultMap.get("SOME_SENDER"));
+
 	}
 }
