@@ -22,10 +22,12 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.logging.Logger;
 
 
 /**
@@ -33,6 +35,8 @@ import java.nio.file.Paths;
  */
 //TODO: This class needs more test coverage. It's mostly null checks and throws missing, and the reload command.
 public class YamlLanguageFileLoader implements LanguageFileLoader {
+
+	private final static Logger logger = Logger.getLogger(YamlLanguageFileLoader.class.getName());
 
 	// the directory name within a plugin data directory where the language yaml files are installed
 	private final static String LANGUAGE_FOLDER = "language";
@@ -44,11 +48,12 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 
 
 	/**
-	 * Class constructor, single parameter
+	 * Class constructor, single plugin parameter
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public YamlLanguageFileLoader(final Plugin plugin) {
+	public YamlLanguageFileLoader(final Plugin plugin)
+	{
 		this.plugin = plugin;
 		new YamlLanguageFileInstaller(plugin).install();
 	}
@@ -57,10 +62,10 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	/**
 	 * Class constructor, Two parameter
 	 *
-	 * @param plugin reference to plugin main class
 	 * @param installer a language
 	 */
-	public YamlLanguageFileLoader(final Plugin plugin, final LanguageFileInstaller installer) {
+	public YamlLanguageFileLoader(final Plugin plugin, final LanguageFileInstaller installer)
+	{
 		this.plugin = plugin;
 		installer.install();
 	}
@@ -72,40 +77,72 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 * @return Configuration - message configuration object
 	 */
 	@Override
-	public Configuration getConfiguration() {
-
+	public Configuration getConfiguration()
+	{
 		// get valid language tag using configured language
 		String languageTag = getValidLanguageTag(getConfiguredLanguage(plugin));
 
 		// get file object for configured language file
 		File languageFile = new File(getLanguageFilename(languageTag));
 
+		return loadLanguageConfiguration(languageFile, languageTag);
+	}
+
+
+	/**
+	 * Retrieve language configuration from file for String languageTag
+	 *
+	 * @param languageFile the language file to load into the configuration
+	 * @param languageTag a String containing the IETF language tag for the language file to be loaded
+	 * @return {@link MemoryConfiguration} containing the configuration loaded from the language file
+	 */
+	private @NotNull MemoryConfiguration loadLanguageConfiguration(File languageFile, String languageTag)
+	{
 		// create new YamlConfiguration object
 		YamlConfiguration newMessagesConfig = new YamlConfiguration();
 
-		// try to load specified language file into new YamlConfiguration object
-		try {
+		try // to load specified language file into new YamlConfiguration object
+		{
 			newMessagesConfig.load(languageFile);
-			plugin.getLogger().info("Language file " + languageTag + ".yml successfully loaded.");
-		} catch (FileNotFoundException e) {
-			plugin.getLogger().severe("Language file " + languageTag + ".yml does not exist.");
-		} catch (IOException e) {
-			plugin.getLogger().severe("Language file " + languageTag + ".yml could not be read.");
-		} catch (InvalidConfigurationException e) {
-			plugin.getLogger().severe("Language file " + languageTag + ".yml is not valid yaml.");
+			logger.info("Language file " + languageTag + ".yml successfully loaded.");
+		}
+		catch (FileNotFoundException e)
+		{
+			logger.severe("Language file " + languageTag + ".yml does not exist.");
+		}
+		catch (IOException e)
+		{
+			logger.severe("Language file " + languageTag + ".yml could not be read.");
+		}
+		catch (InvalidConfigurationException e)
+		{
+			logger.severe("Language file " + languageTag + ".yml is not valid yaml.");
 		}
 
 		// get resource path name for language tag
 		final String resourceName = getValidResourceName(languageTag);
 
 		// get resource input stream by name
-		InputStream resource = plugin.getResource(resourceName);
+		InputStream inputStream = plugin.getResource(resourceName);
 
-		if (resource == null) {
-			plugin.getLogger().warning("Could not open resource " + resourceName);
+		if (inputStream == null) {
+			logger.warning("Could not open resource " + resourceName);
 			return new MemoryConfiguration();
 		}
 
+		return readConfiguration(inputStream, newMessagesConfig);
+	}
+
+
+	/**
+	 * Read a configuration from a resource
+	 *
+	 * @param resource the input stream for the resource
+	 * @param newMessagesConfig the newly created message configuration
+	 * @return
+	 */
+	private static @NotNull YamlConfiguration readConfiguration(InputStream resource, YamlConfiguration newMessagesConfig)
+	{
 		// get input stream reader for embedded resource file
 		Reader defaultConfigStream = new InputStreamReader(resource, StandardCharsets.UTF_8);
 
@@ -132,7 +169,8 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 * @param plugin reference to plugin main class
 	 * @return IETF language tag as string from config.yml
 	 */
-	private String getConfiguredLanguage(final Plugin plugin) {
+	private String getConfiguredLanguage(final Plugin plugin)
+	{
 		return plugin.getConfig().getString(CONFIG_LANGUAGE_KEY);
 	}
 
@@ -145,14 +183,14 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 * @param languageTag the IETF language tag
 	 * @return if file exists for language tag, return the language tag; else return the default tag (en-US)
 	 */
-	String getValidLanguageTag(final String languageTag) {
-
+	String getValidLanguageTag(final String languageTag)
+	{
 		// if a language file exists for the language tag, return the language tag
 		if (getLanguageFile(languageTag).exists()) {
 			return languageTag;
 		}
 		// output language file not found message to log
-		plugin.getLogger().warning("Language file '"
+		logger.warning("Language file '"
 				+ getLanguageFilename(languageTag) + "' does not exist. Defaulting to en-US.");
 
 		// return default language tag (en-US)
@@ -169,7 +207,8 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 * @return the resource name for a file associated with the language tag if it exists, or the default
 	 * language file, 'language/en-US.yml'.
 	 */
-	String getValidResourceName(String languageTag) {
+	String getValidResourceName(String languageTag)
+	{
 		// get embedded resource file name; note that forward slash (/) is always used, regardless of platform
 		String resourceName = String.join("/",LANGUAGE_FOLDER, languageTag).concat(".yml");
 
@@ -189,7 +228,8 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 * @param languageTag the IETF language tag to convert to a filename
 	 * @return {@code File} the filename corresponding to the IETF language tag given
 	 */
-	File getLanguageFile(final String languageTag) {
+	File getLanguageFile(final String languageTag)
+	{
 		return new File(plugin.getDataFolder(), getLanguageFilename(languageTag));
 	}
 
@@ -201,12 +241,14 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 * @param languageTag IETF language tag
 	 * @return current language file name as String
 	 */
-	static String getLanguageFilename(final String languageTag) {
+	static String getLanguageFilename(final String languageTag)
+	{
 		return Paths.get(LANGUAGE_FOLDER, languageTag + ".yml").normalize().toString();
 	}
 
 
-	public Configuration reload() {
+	public Configuration reload()
+	{
 		//TODO: Is this right? Needs test case at any rate.
 		return getConfiguration();
 	}
