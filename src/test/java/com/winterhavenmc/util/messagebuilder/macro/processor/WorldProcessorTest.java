@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
 import com.winterhavenmc.util.messagebuilder.namespace.NamespaceKey;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 class WorldProcessorTest {
 
 	@Mock private Plugin pluginMock;
-	@Mock private LanguageFileQueryHandler languageFileQueryHandlerMock;
+	@Mock private LanguageQueryHandler languageQueryHandlerMock;
 	@Mock private World worldMock;
 	@Mock private Player playerMock;
 
@@ -74,7 +74,7 @@ class WorldProcessorTest {
 		String keyPath = "SOME_WORLD";
 		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
 		ContextMap contextMap = new ContextMap(playerMock);
-		MacroProcessor macroProcessor = new WorldProcessor(languageFileQueryHandlerMock);
+		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
 		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
 		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
 
@@ -88,7 +88,7 @@ class WorldProcessorTest {
 		String keyPath = "SOME_WORLD";
 		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
 		ContextMap contextMap = new ContextMap(playerMock);
-		MacroProcessor macroProcessor = new WorldProcessor(languageFileQueryHandlerMock);
+		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
 		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
 		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
 

@@ -18,14 +18,14 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
 import org.bukkit.World;
 
 
 public class WorldProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	public WorldProcessor(final LanguageFileQueryHandler queryHandler) {
+	public WorldProcessor(final LanguageQueryHandler queryHandler) {
 		super(queryHandler);
 	}
 
