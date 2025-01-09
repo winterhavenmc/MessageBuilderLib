@@ -15,27 +15,46 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.query.domain.constant;
 
+import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSection;
+import com.winterhavenmc.util.messagebuilder.util.ReadOnlyConfigurationSectionAdapter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ConstantQueryHandler {
+public class ConstantQueryHandler implements DomainQueryHandler<String> {
 
-	private final ConfigurationSection constantSection;
+	private final static Namespace.Domain domain = Namespace.Domain.CONSTANTS;
+
+	private final ReadOnlyConfigurationSection section;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param constantSection the 'CONSTANTS' section of the language file
+	 * @param section the 'CONSTANTS' section of the language file
 	 */
-	public ConstantQueryHandler(final ConfigurationSection constantSection) {
-		if (constantSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONSTANT_SECTION.getMessage()); }
-		this.constantSection = constantSection;
+	public ConstantQueryHandler(final ConfigurationSection section) {
+		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
+
+		// ensure only the 'CONSTANTS' section is passed in
+		// TODO: Don't think this is working
+		if (!section.getName().equals(domain.name())) {
+			System.out.println("Section name: " + section.getName() + " does not equal domain.name()");
+			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
+		}
+
+		this.section = ReadOnlyConfigurationSectionAdapter.of(section);
+	}
+
+	@Override
+	public Namespace.Domain getDomain() {
+		return domain;
 	}
 
 
@@ -48,7 +67,7 @@ public class ConstantQueryHandler {
 	 */
 	public Optional<String> getString(final String keyPath) {
 		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
-		return Optional.ofNullable(constantSection.getString(keyPath));
+		return Optional.ofNullable(section.getString(keyPath));
 	}
 
 
@@ -61,7 +80,7 @@ public class ConstantQueryHandler {
 	 */
 	public List<String> getStringList(final String keyPath) {
 		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
-		return constantSection.getStringList(keyPath);
+		return section.getStringList(keyPath);
 	}
 
 
@@ -74,7 +93,7 @@ public class ConstantQueryHandler {
 	 */
 	public int getInt(final String keyPath) {
 		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
-		return constantSection.getInt(keyPath);
+		return section.getInt(keyPath);
 	}
 
 }
