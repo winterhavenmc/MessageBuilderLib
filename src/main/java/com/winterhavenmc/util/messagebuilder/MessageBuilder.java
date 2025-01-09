@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.languages.*;
+import com.winterhavenmc.util.messagebuilder.language.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
-import com.winterhavenmc.util.messagebuilder.query.YamlLanguageFileQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import org.bukkit.command.CommandSender;
@@ -59,11 +59,11 @@ import org.bukkit.plugin.Plugin;
  * @param <MessageId> An enum whose members correspond to a message key in a language file
  * @param <Macro>     An enum whose members correspond to a string replacement placeholder in a message string
  */
-//TODO: ONLY THE RELOAD METHOD NEEDS TESTING FOR FULL COVERAGE OF THIS CLASS
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
+
 	private final Plugin plugin;
 	private final LanguageHandler languageHandler;
-	final LanguageFileQueryHandler queryHandler;
+	private final LanguageQueryHandler queryHandler;
 	private final MacroHandler macroHandler;
 
 
@@ -76,8 +76,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (plugin == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
 
 		this.plugin = plugin;
-		this.languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
-		this.queryHandler = new YamlLanguageFileQueryHandler(plugin, languageHandler.getConfiguration());
+		this.languageHandler = new YamlLanguageHandler(plugin.getConfig(), new YamlLanguageFileLoader(plugin));
+		this.queryHandler = new YamlLanguageQueryHandler(plugin, languageHandler.getConfiguration());
 		this.macroHandler = new MacroHandler(plugin, queryHandler);
 	}
 
@@ -108,11 +108,11 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 
 	/**
-	 * Return an instance of the language file query handler
+	 * Return an instance of the language file ItemRecord handler
 	 *
-	 * @return the query handler for the language file
+	 * @return the ItemRecord handler for the language file
 	 */
-	LanguageFileQueryHandler getQueryHandler() {
+	LanguageQueryHandler getQueryHandler() {
 		return this.queryHandler;
 	}
 
