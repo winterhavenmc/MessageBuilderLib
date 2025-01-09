@@ -18,15 +18,16 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
-import com.winterhavenmc.util.messagebuilder.query.LanguageFileQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.entity.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -35,43 +36,45 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
+@ExtendWith(MockitoExtension.class)
 class LocationProcessorTest {
 
+	@Mock private LanguageQueryHandler queryHandlerMock;
+	@Mock private World worldMock;
+	@Mock private Location locationMock;
+	@Mock private Player playerMock;
+
+	// real location processor
 	private LocationProcessor locationProcessor;
 	private ContextMap contextMap;
-	private LanguageFileQueryHandler queryHandler;
-	private World mockWorld;
-	private Location mockLocation;
+
 
 	@BeforeEach
 	void setUp() {
-		// Mock dependencies
-		queryHandler = mock(LanguageFileQueryHandler.class);
-		contextMap = mock(ContextMap.class);
-		mockWorld = mock(World.class);
-		mockLocation = mock(Location.class);
+
+		// real context map
+		contextMap = new ContextMap(playerMock);
 
 		// Initialize the processor
-		locationProcessor = new LocationProcessor(queryHandler);
+		locationProcessor = new LocationProcessor(queryHandlerMock);
 
-		// Mock Bukkit's PluginManager and WorldNameUtility
-		try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
-			PluginManager mockPluginManager = mock(PluginManager.class);
-			mockedBukkit.when(Bukkit::getPluginManager).thenReturn(mockPluginManager);
-			when(mockWorld.getName()).thenReturn("world");
-		}
+//		// Mock Bukkit's PluginManager and WorldNameUtility
+//		try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
+//			PluginManager mockPluginManager = mock(PluginManager.class);
+//			mockedBukkit.when(Bukkit::getPluginManager).thenReturn(mockPluginManager);
+//		}
 	}
 
 	@Test
 	void testResolveContext_ValidLocation() {
 		// Arrange
-		when(mockLocation.getWorld()).thenReturn(mockWorld);
-		when(mockLocation.getBlockX()).thenReturn(123);
-		when(mockLocation.getBlockY()).thenReturn(64);
-		when(mockLocation.getBlockZ()).thenReturn(-789);
+		when(locationMock.getWorld()).thenReturn(worldMock);
+		when(locationMock.getBlockX()).thenReturn(123);
+		when(locationMock.getBlockY()).thenReturn(64);
+		when(locationMock.getBlockZ()).thenReturn(-789);
 
 		// Act
-		ResultMap result = locationProcessor.resolveContext("HOME", contextMap, mockLocation);
+		ResultMap result = locationProcessor.resolveContext("HOME", contextMap, locationMock);
 
 		// Assert
 		assertThat(result, is(notNullValue()));
@@ -94,13 +97,13 @@ class LocationProcessorTest {
 	@Test
 	void testResolveContext_MissingWorld() {
 		// Arrange
-		when(mockLocation.getWorld()).thenReturn(null);
-		when(mockLocation.getBlockX()).thenReturn(123);
-		when(mockLocation.getBlockY()).thenReturn(64);
-		when(mockLocation.getBlockZ()).thenReturn(-789);
+		when(locationMock.getWorld()).thenReturn(null);
+		when(locationMock.getBlockX()).thenReturn(123);
+		when(locationMock.getBlockY()).thenReturn(64);
+		when(locationMock.getBlockZ()).thenReturn(-789);
 
 		// Act
-		ResultMap result = locationProcessor.resolveContext("HOME", contextMap, mockLocation);
+		ResultMap result = locationProcessor.resolveContext("HOME", contextMap, locationMock);
 
 		// Assert
 		assertThat(result.get("HOME_LOCATION_WORLD"), is("UNKNOWN_VALUE"));
@@ -111,7 +114,7 @@ class LocationProcessorTest {
 	void testResolveContext_EmptyKey() {
 		// Act & Assert
 		assertThrows(IllegalArgumentException.class,
-				() -> locationProcessor.resolveContext("", contextMap, mockLocation),
+				() -> locationProcessor.resolveContext("", contextMap, locationMock),
 				"Expected resolveContext to throw IllegalArgumentException for empty key"
 		);
 	}
@@ -119,13 +122,13 @@ class LocationProcessorTest {
 	@Test
 	void testResolveContext_KeyWithoutLocationSuffix() {
 		// Arrange
-		when(mockLocation.getWorld()).thenReturn(mockWorld);
-		when(mockLocation.getBlockX()).thenReturn(123);
-		when(mockLocation.getBlockY()).thenReturn(64);
-		when(mockLocation.getBlockZ()).thenReturn(-789);
+		when(locationMock.getWorld()).thenReturn(worldMock);
+		when(locationMock.getBlockX()).thenReturn(123);
+		when(locationMock.getBlockY()).thenReturn(64);
+		when(locationMock.getBlockZ()).thenReturn(-789);
 
 		// Act
-		ResultMap result = locationProcessor.resolveContext("HOME", contextMap, mockLocation);
+		ResultMap result = locationProcessor.resolveContext("HOME", contextMap, locationMock);
 
 		// Assert
 		assertThat(result.get("HOME_LOCATION_WORLD"), is("world"));
