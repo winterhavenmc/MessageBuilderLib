@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2024-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,19 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.query;
 
-import com.winterhavenmc.util.messagebuilder.query.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.query.domain.message.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,12 +38,7 @@ class MessageRecordTest {
 		// create new yaml configuration
 		FileConfiguration fileConfiguration = new YamlConfiguration();
 
-		// create a real configuration object from a resource
-		try {
-			fileConfiguration = YamlConfiguration.loadConfiguration(getResourceFile("language/en-US.yml"));
-		} catch (IllegalArgumentException | URISyntaxException e) {
-			System.out.println("a problem was encountered while trying to load the test configuration from resource");
-		}
+
 
 		// get messages section of configuration
 		messageSection = fileConfiguration.getConfigurationSection("MESSAGES");
@@ -76,16 +67,5 @@ class MessageRecordTest {
 		assertNotNull(testRecord, "the newly created record is null.");
 	}
 
-
-	/**
-	 * Get a resource as a File object for the named resource
-	 *
-	 * @param name the nameSingular of the resource to return as a file object
-	 * @return a file object for the named resource
-	 * @throws URISyntaxException Let's hope it doesn't.
-	 */
-	public static File getResourceFile(final String name) throws URISyntaxException {
-		return Paths.get(Thread.currentThread().getContextClassLoader().getResource(name).toURI()).toAbsolutePath().toFile();
-	}
 
 }
