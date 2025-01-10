@@ -103,8 +103,8 @@ public record MessageRecord(
 		}
 
 		// get entry for messageId
-		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId.toString());
-//		if (messageEntry == null) { return Optional.empty(); }
+		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId.name());
+		if (messageEntry == null) { return Optional.empty(); }
 
 		return Optional.of(new MessageRecord(messageId.toString(),
 				messageEntry.getBoolean(Field.ENABLED.toKey()),

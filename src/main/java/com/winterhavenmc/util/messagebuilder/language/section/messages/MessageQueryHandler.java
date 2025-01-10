@@ -79,7 +79,7 @@ public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
 	 * @return the MESSAGES Section constant, establishing this query handler type
 	 */
 	@Override
-	public Section getSection() {
+	public Section getSectionType() {
 		return Section.MESSAGES;
 	}
 
