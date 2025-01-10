@@ -67,7 +67,7 @@ public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
 		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
-		return ItemRecord.query(keyPath, itemSection);
+		return ItemRecord.getRecord(keyPath, itemSection);
 	}
 
 
@@ -77,7 +77,7 @@ public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
 	 * @return the ITEMS Section constant, establishing this query handler type
 	 */
 	@Override
-	public Section getSection() {
+	public Section getSectionType() {
 		return Section.ITEMS;
 	}
 

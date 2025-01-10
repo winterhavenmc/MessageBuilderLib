@@ -68,24 +68,24 @@ public record ItemRecord(
 
 
 	/**
-	 * Static method for retrieving an ItemRecord from the language file. Return an ItemRecord if one can be found
+	 * Static method for retrieving an {@link ItemRecord} from the language file. Return an ItemRecord if one can be found
 	 * for the itemKey, or returns an empty {@link Optional} if no record could be found.
 	 *
-	 * @param itemKey the key for the item to be retrieved
+	 * @param keyPath the key for the item record to be retrieved
 	 * @param itemSection the ITEMS section of the language file
 	 * @return An {@code ItemRecord} from the language file, or an empty Optional if no record could be found
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
-	public static Optional<ItemRecord> query(final String itemKey, final ConfigurationSection itemSection) {
-		if (itemKey == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
+	public static Optional<ItemRecord> getRecord(final String keyPath, final ConfigurationSection itemSection) {
+		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
 		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage()); }
 
 		// get configuration section for item key
-		ConfigurationSection itemEntry = itemSection.getConfigurationSection(itemKey);
+		ConfigurationSection itemEntry = itemSection.getConfigurationSection(keyPath);
 		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
-		return Optional.of(new ItemRecord(itemKey,
+		return Optional.of(new ItemRecord(keyPath,
 				Optional.ofNullable(itemEntry.getString(Field.NAME_SINGULAR.getKeyPath())),
 				Optional.ofNullable(itemEntry.getString(Field.NAME_PLURAL.getKeyPath())),
 				Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath())),
