@@ -32,7 +32,7 @@ import java.util.Map;
 
 
 public class SectionQueryHandlerFactory {
-	private final Map<Namespace.Domain, QueryHandler<?>> domainHandlerCache = new EnumMap<>(Namespace.Domain.class);
+	private final Map<Section, QueryHandler<?>> domainHandlerCache = new EnumMap<>(Section.class);
 	private final Configuration configuration;
 
 	public SectionQueryHandlerFactory(Configuration configuration) {
@@ -43,17 +43,18 @@ public class SectionQueryHandlerFactory {
 	/**
 	 * Creates a query handler based on the provided domain.
 	 *
-	 * @param domain the domain for which the query handler is to be created
+	 * @param section the domain for which the query handler is to be created
 	 * @return the corresponding SectionQueryHandler
 	 * @throws IllegalArgumentException if no handler can be created for the given domain
 	 */
-	public SectionQueryHandler<?> createHandler(Namespace.Domain domain) {
-		return switch (domain) {
-			case CONSTANTS -> new ConstantQueryHandler(configuration.getConfigurationSection(domain.name()));
-			case ITEMS -> new ItemQueryHandler(configuration.getConfigurationSection(domain.name()));
-			case MESSAGES -> new MessageQueryHandler(configuration.getConfigurationSection(domain.name()));
-			case TIME -> new TimeQueryHandler(configuration.getConfigurationSection(domain.name()));
-			default -> throw new IllegalArgumentException("No handler available for domain: " + domain);
+	public SectionQueryHandler<?> createHandler(Section section) {
+		return switch (section) {
+			case CONSTANTS -> new ConstantQueryHandler(configuration.getConfigurationSection(section.name()));
+			case ITEMS -> new ItemQueryHandler(configuration.getConfigurationSection(section.name()));
+			case MESSAGES -> new MessageQueryHandler(configuration.getConfigurationSection(section.name()));
+			case TIME -> new TimeQueryHandler(configuration.getConfigurationSection(section.name()));
+			// leaving this default commented, because we want a compile time error if there is not an assigned query handler
+			//default -> throw new IllegalArgumentException("No handler available for section: " + section);
 		};
 	}
 
