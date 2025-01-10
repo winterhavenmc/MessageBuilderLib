@@ -17,12 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.language.section;
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.query.constant.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.query.item.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.query.message.MessageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.query.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.constants.ConstantQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.item.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.message.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import org.bukkit.configuration.Configuration;
@@ -31,14 +30,27 @@ import java.util.EnumMap;
 import java.util.Map;
 
 
+/**
+ * A factory that produces section query handlers for each top level section of the language file,
+ * as enumerated by the constants of the {@link Section} enum
+ */
 public class SectionQueryHandlerFactory {
 	private final Map<Section, QueryHandler<?>> domainHandlerCache = new EnumMap<>(Section.class);
 	private final Configuration configuration;
 
+
+	/**
+	 * Class constructor for the section query handler factory. The constructor accepts a Bukkit Configuration
+	 * as a parameter, and passes the appropriate top level ConfigurationSection to the constructor of the
+	 * section query handler being produced.
+	 *
+	 * @param configuration the language configuration
+	 */
 	public SectionQueryHandlerFactory(Configuration configuration) {
 		if (configuration == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION.getMessage()); }
 		this.configuration = configuration;
 	}
+
 
 	/**
 	 * Creates a query handler based on the provided domain.
