@@ -63,17 +63,7 @@ public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
 	public <MessageId extends Enum<MessageId>> Optional<MessageRecord> getRecord(final MessageId messageId) {
 		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_KEY.getMessage()); }
 
-		// get configuration section for MessageId
-		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId.name());
-		if (messageEntry == null) { return Optional.empty(); }
-
-		// get message factory
-
-
-		// return new MessageRecord
-
-
-		return MessageRecord.getRecord(messageId, messageEntry);
+		return MessageRecord.getRecord(messageId, messageSection);
 	}
 
 
