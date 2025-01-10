@@ -21,7 +21,6 @@ import com.winterhavenmc.util.messagebuilder.language.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.section.items.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageRecord;
-import org.bukkit.World;
 
 import java.util.Optional;
 
