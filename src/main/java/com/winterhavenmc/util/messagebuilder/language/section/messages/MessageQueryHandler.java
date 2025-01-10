@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.language.section.messages;
 
 import com.winterhavenmc.util.messagebuilder.language.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.items.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.ConfigurationSection;
 
