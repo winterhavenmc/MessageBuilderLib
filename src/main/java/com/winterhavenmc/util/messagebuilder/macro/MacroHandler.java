@@ -75,7 +75,7 @@ public class MacroHandler {
 	/**
 	 * Class constructor
 	 */
-	public MacroHandler(final Plugin plugin, final LanguageQueryHandler queryHandler) {
+	public MacroHandler(final LanguageQueryHandler queryHandler) {
 		// instantiate macro processor registry
 		this.processorRegistry = new ProcessorRegistry();
 		// populate macro processor registry
