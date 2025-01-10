@@ -47,7 +47,7 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 	/**
 	 * Class constructor
 	 *
-	 * @param timeSection the TIME section of the configuration file, for which this class is solely responsible
+	 * @param timeSection the 'TIME' section of the configuration file, for which this class is solely responsible
 	 */
 	public TimeQueryHandler(final ConfigurationSection timeSection) {
 		if (timeSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }

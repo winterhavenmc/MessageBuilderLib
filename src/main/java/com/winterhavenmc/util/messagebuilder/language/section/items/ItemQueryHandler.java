@@ -38,7 +38,7 @@ public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
 	/**
 	 * Class constructor
 	 *
-	 * @param itemSection the "ITEMS" configuration section of the language file.
+	 * @param itemSection the 'ITEMS' configuration section of the language file.
 	 */
 	public ItemQueryHandler(ConfigurationSection itemSection) {
 		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
