@@ -57,10 +57,10 @@ TIME:
     YEARS:
       SINGULAR: "year"
       PLURAL: "years"
+  OTHER:
     UNLIMITED: "unlimited time"
-    OTHER:
-      LESS_THAN: "less than"
-      LESS_THAN_ONE: "less than one"
+    LESS_THAN: "less than"
+    LESS_THAN_ONE: "less than one"
   # All additional subsections under the TIME section are reserved for future use at this time
 
 
