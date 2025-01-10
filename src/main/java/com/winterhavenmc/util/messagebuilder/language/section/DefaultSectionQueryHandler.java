@@ -18,21 +18,35 @@
 package com.winterhavenmc.util.messagebuilder.language.section;
 
 
+import java.util.List;
+
 public class DefaultSectionQueryHandler implements SectionQueryHandler<Void> {
+
 
 	public Void query() {
 		throw new UnsupportedOperationException("No query handler available for domain section.");
 	}
 
+	/**
+	 * @return null
+	 */
 	public Section getSection() {
 		return null;
 	}
 
 	/**
-	 * @return handler primary type type
+	 * @return null
 	 */
 	@Override
 	public Class<Void> getHandledType() {
 		return null;
+	}
+
+	/**
+	 * @return empty list
+	 */
+	@Override
+	public List<Class<?>> listHandledTypes() {
+		return List.of();
 	}
 }
