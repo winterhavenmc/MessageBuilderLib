@@ -68,7 +68,12 @@ public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
 		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId.name());
 		if (messageEntry == null) { return Optional.empty(); }
 
+		// get message factory
+
+
 		// return new MessageRecord
+
+
 		return MessageRecord.getRecord(messageId, messageEntry);
 	}
 
