@@ -22,6 +22,10 @@ import com.winterhavenmc.util.messagebuilder.language.section.item.ItemQueryHand
 import com.winterhavenmc.util.messagebuilder.language.section.message.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
 
+
+/**
+ * An enumeration of Sections that correspond directly to each top level {@code ConfigurationSection} of the language file.
+ */
 public enum Section {
 	CONSTANTS(ConstantQueryHandler.class),
 	ITEMS(ItemQueryHandler.class),
