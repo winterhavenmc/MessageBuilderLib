@@ -64,7 +64,7 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 	 * @return the TIME Section constant, establishing this query handler type
 	 */
 	@Override
-	public Section getSection() {
+	public Section getSectionType() {
 		return Section.TIME;
 	}
 
