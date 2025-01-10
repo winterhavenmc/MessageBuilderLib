@@ -41,7 +41,9 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 
 	public static final String LESS_THAN_ONE_KEY = "OTHER.LESS_THAN_ONE";
 	public static final String LESS_THAN_KEY = "OTHER.LESS_THAN";
-	public static final String UNLIMITED_KEY = "UNLIMITED";
+	public static final String UNLIMITED_KEY = "OTHER.UNLIMITED";
+	public static final String UNIT_SECTION = "UNITS";
+	public static final String PATH_DELIMITER = ".";
 
 	private final ConfigurationSection timeSection;
 
