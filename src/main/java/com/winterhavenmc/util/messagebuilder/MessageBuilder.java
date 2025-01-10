@@ -19,8 +19,8 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.language.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
-import com.winterhavenmc.util.messagebuilder.query.YamlLanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import org.bukkit.command.CommandSender;
@@ -77,8 +77,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin.getConfig(), new YamlLanguageFileLoader(plugin));
-		this.queryHandler = new YamlLanguageQueryHandler(plugin, languageHandler.getConfiguration());
-		this.macroHandler = new MacroHandler(plugin, queryHandler);
+		this.queryHandler = new YamlLanguageQueryHandler(languageHandler.getConfiguration());
+		this.macroHandler = new MacroHandler(queryHandler);
 	}
 
 
