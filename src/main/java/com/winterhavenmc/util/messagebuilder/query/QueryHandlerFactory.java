@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.query;
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.language.section.Section;
 
 public interface QueryHandlerFactory {
 
-	<T> QueryHandler<T> createQueryHandler(Namespace.Domain domain);
+	<T> QueryHandler<T> createQueryHandler(Section section);
 
 }
