@@ -95,10 +95,8 @@ public record MessageRecord(
 		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage()); }
 		if (messageSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
 
-		//TODO: Identify a reliable check to ensure the proper section has been passed
-
-		// check if messageSection is MESSAGES section of configuration
-		if (messageSection.getName().equals(Section.MESSAGES.name())) {
+		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
+		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
 
