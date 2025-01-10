@@ -56,6 +56,11 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 	public TimeQueryHandler(final ConfigurationSection timeSection) {
 		if (timeSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
 
+		// only allow the 'TIME' section of the language file to be passed as the constructor parameter
+		if (!Section.TIME.name().equals(timeSection.getName())) {
+			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_TIME.getMessage());
+		}
+
 		this.timeSection = timeSection;
 	}
 
