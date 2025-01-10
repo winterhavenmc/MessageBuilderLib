@@ -79,7 +79,7 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 	 */
 	@Override
 	public Class<String> getHandledType() {
-		return null;
+		return String.class;
 	}
 
 
