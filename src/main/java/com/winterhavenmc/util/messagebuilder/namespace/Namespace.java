@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.namespace;
 
-import com.winterhavenmc.util.messagebuilder.query.domain.constant.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.domain.item.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.domain.message.MessageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.domain.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.constants.ConstantQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.items.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
 
 /**
  * This class contains enums that are used as a component to create a unique namespace,
@@ -40,27 +40,21 @@ public class Namespace {
 	 * </P>
 	 */
 	public enum Domain {
-		CONSTANTS("CONSTANT", ConstantQueryHandler.class), //values supplied by the yaml language file, from the root level section 'CONSTANTS'
-		ITEMS("ITEM", ItemQueryHandler.class), // values supplied by the yaml language file, from the root level section 'ITEMS'
-		MACRO("MACRO", null), // values passed in by calls to the setMacro method
-		MESSAGES("MESSAGE", MessageQueryHandler.class), // values supplied by the yaml language file. from the root level section 'MESSAGES'
-		TIME("TIME", TimeQueryHandler.class), // string values for time units supplied by the yaml language file, from the root level section 'TIME'
+		CONSTANTS(ConstantQueryHandler.class), // values supplied by the yaml language file, from the root level section 'CONSTANTS'
+		ITEMS(ItemQueryHandler.class), // values supplied by the yaml language file, from the root level section 'ITEMS'
+		MACRO(null), // values passed in by calls to the setMacro method
+		MESSAGES(MessageQueryHandler.class), // values supplied by the yaml language file. from the root level section 'MESSAGES'
+		TIME(TimeQueryHandler.class), // string values for time units supplied by the yaml language file, from the root level section 'TIME'
 		;
 
 		// placeholder prefix to prevent name collisions between domains
-		private final String prefix;
-		private final Class<?> type;
+		private final Class<?> queryHandler;
 
-		Domain(final String prefix, final Class<?> type) {
-			this.prefix = prefix;
-			this.type = type;
+		Domain(final Class<?> queryHandler) {
+			this.queryHandler = queryHandler;
 		}
-		public String getPrefix() {
-			return this.prefix;
-		}
-
-		public Class<?> getType() {
-			return this.type;
+		public Class<?> getQueryHandler() {
+			return this.queryHandler;
 		}
 	}
 
