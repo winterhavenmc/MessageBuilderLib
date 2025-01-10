@@ -22,8 +22,8 @@ import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
 import com.winterhavenmc.util.messagebuilder.namespace.NamespaceKey;
-import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.YamlLanguageQueryHandler;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -49,7 +49,7 @@ class StringProcessorTest {
 	@BeforeEach
 	public void setUp() {
 		Configuration languageConfiguration = loadConfigurationFromResource("language/en-US.yml");
-		queryHandler = new YamlLanguageQueryHandler(pluginMock, languageConfiguration);
+		queryHandler = new YamlLanguageQueryHandler(languageConfiguration);
 	}
 
 	@AfterEach

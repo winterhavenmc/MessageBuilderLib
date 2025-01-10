@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2024-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.language.section.items;
 
 import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.query.domain.item.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

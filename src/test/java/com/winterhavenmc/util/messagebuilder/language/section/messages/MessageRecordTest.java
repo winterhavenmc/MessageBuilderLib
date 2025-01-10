@@ -15,9 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.language.section.messages;
 
-import com.winterhavenmc.util.messagebuilder.query.domain.message.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
