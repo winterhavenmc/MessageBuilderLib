@@ -20,22 +20,16 @@ package com.winterhavenmc.util.messagebuilder.language.section;
 
 public class DefaultSectionQueryHandler implements SectionQueryHandler<Void> {
 
-	private final Section section;
-
-	public DefaultSectionQueryHandler(Section section) {
-		this.section = section;
-	}
-
-	public Void query(String key) {
-		throw new UnsupportedOperationException("No query handler available for domain: " + section);
+	public Void query() {
+		throw new UnsupportedOperationException("No query handler available for domain section.");
 	}
 
 	public Section getSection() {
-		return section;
+		return null;
 	}
 
 	/**
-	 * @return
+	 * @return handler primary type type
 	 */
 	@Override
 	public Class<Void> getHandledType() {

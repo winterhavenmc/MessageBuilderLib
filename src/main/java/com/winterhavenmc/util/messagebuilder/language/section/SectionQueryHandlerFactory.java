@@ -19,8 +19,8 @@ package com.winterhavenmc.util.messagebuilder.language.section;
 
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.section.constants.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.item.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.message.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.items.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
@@ -65,8 +65,8 @@ public class SectionQueryHandlerFactory {
 			case ITEMS -> new ItemQueryHandler(configuration.getConfigurationSection(section.name()));
 			case MESSAGES -> new MessageQueryHandler(configuration.getConfigurationSection(section.name()));
 			case TIME -> new TimeQueryHandler(configuration.getConfigurationSection(section.name()));
-			// leaving this default commented, because we want a compile time error if there is not an assigned query handler
-			//default -> throw new IllegalArgumentException("No handler available for section: " + section);
+			// leaving line below commented so any new section declared in the Section enum needs an explicit handler here
+			//default -> new DefaultSectionQueryHandler();
 		};
 	}
 

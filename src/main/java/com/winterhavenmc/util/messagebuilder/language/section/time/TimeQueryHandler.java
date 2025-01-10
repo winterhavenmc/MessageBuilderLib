@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.query.time;
+package com.winterhavenmc.util.messagebuilder.language.section.time;
 
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.language.section.Section;
@@ -37,8 +37,6 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_TI
  */
 public class TimeQueryHandler implements SectionQueryHandler<String> {
 
-	public static final Section SECTION = Section.TIME;
-
 	public static final String LESS_THAN_ONE_KEY = "OTHER.LESS_THAN_ONE";
 	public static final String LESS_THAN_KEY = "OTHER.LESS_THAN";
 	public static final String UNLIMITED_KEY = "UNLIMITED";
@@ -59,13 +57,25 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 
 
 	/**
-	 * Get the namespace domain for this query handler
+	 * Return the Section constant for this query handler type
 	 *
-	 * @return the namespace domain for this query handler
+	 * @return the TIME Section constant, establishing this query handler type
 	 */
 	@Override
 	public Section getSection() {
-		return SECTION;
+		return Section.TIME;
+	}
+
+
+	/**
+	 * The primary type returned by this query handler. A query handler may provide methods that return
+	 * values of other types.
+	 *
+	 * @return String.class as the primary type returned by this query handler
+	 */
+	@Override
+	public Class<String> getHandledType() {
+		return null;
 	}
 
 

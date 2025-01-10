@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.query.message;
+package com.winterhavenmc.util.messagebuilder.language.section.messages;
 
 
 import com.winterhavenmc.util.messagebuilder.language.section.Section;

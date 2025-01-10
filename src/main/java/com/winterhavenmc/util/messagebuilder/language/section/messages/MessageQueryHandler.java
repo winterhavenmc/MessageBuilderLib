@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.query.message;
+package com.winterhavenmc.util.messagebuilder.language.section.messages;
 
 import com.winterhavenmc.util.messagebuilder.language.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
@@ -31,7 +31,7 @@ import java.util.Optional;
  * message section.
  */
 public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
-	private final static Section SECTION = Section.MESSAGES;
+
 	private final ConfigurationSection messageSection;
 
 
@@ -44,12 +44,12 @@ public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
 		if (messageSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
 		System.out.println("section name: " + messageSection.getName());
 		System.out.println("section path: " + messageSection.getCurrentPath());
-		System.out.println(" domain name: " + SECTION.name());
+		System.out.println(" domain name: " + Section.MESSAGES.name());
 
 		//TODO: find method to get passed messageSection key to compare with domain.name()
 		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
-		System.out.println("domain.name() equals section.getName(): " + SECTION.name().equals(messageSection.getName()));
-		if (!SECTION.name().equals(messageSection.getName())) {
+		System.out.println("domain.name() equals section.getName(): " + Section.MESSAGES.name().equals(messageSection.getName()));
+		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
 			System.out.println("then why you thowin', bro?");
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
@@ -79,21 +79,25 @@ public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
 
 
 	/**
-	 * Get the namespace domain for this query handler
+	 * Return the Section enum constant for this query handler type
 	 *
-	 * @return the namespace domain for this query handler
+	 * @return the MESSAGES Section constant, establishing this query handler type
 	 */
 	@Override
 	public Section getSection() {
-		return SECTION;
+		return Section.MESSAGES;
 	}
 
+
 	/**
-	 * @return
+	 * The primary type returned by this query handler. A query handler may provide methods that return
+	 * values of other types.
+	 *
+	 * @return MessageRecord.class as the primary type returned by this query handler
 	 */
 	@Override
 	public Class<MessageRecord> getHandledType() {
-		return null;
+		return MessageRecord.class;
 	}
 
 }

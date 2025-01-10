@@ -18,8 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.language.section;
 
 import com.winterhavenmc.util.messagebuilder.language.section.constants.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.item.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.message.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.items.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
 
 

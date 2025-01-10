@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.query.item;
+package com.winterhavenmc.util.messagebuilder.language.section.items;
 
 import com.winterhavenmc.util.messagebuilder.language.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
@@ -32,8 +32,6 @@ import java.util.Optional;
  */
 public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
 
-	private final static Section SECTION = Section.ITEMS;
-
 	private final ConfigurationSection itemSection;
 
 
@@ -43,62 +41,55 @@ public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
 	 * @param itemSection the "ITEMS" configuration section of the language file.
 	 */
 	public ItemQueryHandler(ConfigurationSection itemSection) {
-		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
+		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
 
 		// only allow the 'ITEMS' section of the language file to be passed as the constructor parameter
-		if (!itemSection.getName().equals(SECTION.toString())) {
-			System.out.println("Item section: " + itemSection.getName());
+		if (!Section.ITEMS.name().equals(itemSection.getName())) {
+			System.out.println("Invalid 'ITEMS' section: " + itemSection.getName());
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
 		}
-
-		// set field
 		this.itemSection = itemSection;
 	}
 
 
+	/**
+	 * Retrieve an item record from the language file for the currently configured language. If a record cannot be
+	 * found for the itemKey, an empty Optional will be returned.
+	 * @param keyPath the itemKey for the item record in the language file
+	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
+	 */
+	public Optional<ItemRecord> getRecord(final String keyPath) {
+		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
+
+		// get configuration section for item key
+		ConfigurationSection itemEntry = itemSection.getConfigurationSection(keyPath);
+		if (itemEntry == null) { return Optional.empty(); }
+
+		// return new ItemRecord
+		return ItemRecord.query(keyPath, itemSection);
+	}
+
+
+	/**
+	 * Return the Section enum constant for this query handler type
+	 *
+	 * @return the ITEMS Section constant, establishing this query handler type
+	 */
 	@Override
 	public Section getSection() {
-		return SECTION;
-	}
-
-
-	public Optional<ItemRecord> ItemRecord(final String keyPath) {
-		return getRecord(keyPath);
+		return Section.ITEMS;
 	}
 
 
 	/**
-	 * Retrieve an item record from the language file for the currently configured language. If a record cannot be
-	 * found for the itemKey, an empty Optional will be returned.
-	 * @param itemKey the itemKey for the item record in the language file
-	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
+	 * The primary type returned by this query handler. A query handler may provide methods that return
+	 * values of other types.
+	 *
+	 * @return ItemRecord.class as the primary type returned by this query handler
 	 */
-	public Optional<ItemRecord> getRecord(final String itemKey) {
-		if (itemKey == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
-
-		// get configuration section for item key
-		ConfigurationSection itemEntry = itemSection.getConfigurationSection(itemKey);
-		if (itemEntry == null) { return Optional.empty(); }
-
-		// return new ItemRecord
-		return ItemRecord.query(itemKey, itemSection);
-	}
-
-	/**
-	 * Retrieve an item record from the language file for the currently configured language. If a record cannot be
-	 * found for the itemKey, an empty Optional will be returned.
-	 * @param itemKey the itemKey for the item record in the language file
-	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
-	 */
-	public Optional<ItemRecord> getItemRecord(final String itemKey) {
-		if (itemKey == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
-
-		// get configuration section for item key
-		ConfigurationSection itemEntry = itemSection.getConfigurationSection(itemKey);
-		if (itemEntry == null) { return Optional.empty(); }
-
-		// return new ItemRecord
-		return ItemRecord.query(itemKey, itemSection);
+	@Override
+	public Class<ItemRecord> getHandledType() {
+		return ItemRecord.class;
 	}
 
 }

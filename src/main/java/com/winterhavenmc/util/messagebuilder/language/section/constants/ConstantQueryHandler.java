@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.query.constant;
+package com.winterhavenmc.util.messagebuilder.language.section.constants;
 
 import com.winterhavenmc.util.messagebuilder.language.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class ConstantQueryHandler implements SectionQueryHandler<String> {
-
-	private final static Section SECTION = Section.CONSTANTS;
 
 	private final ConfigurationSection section;
 
@@ -41,8 +39,7 @@ public class ConstantQueryHandler implements SectionQueryHandler<String> {
 		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
 
 		// ensure only the 'CONSTANTS' section is passed in
-		// TODO: Don't think this is working
-		if (!section.getName().equals(SECTION.name())) {
+		if (!section.getName().equals(Section.CONSTANTS.name())) {
 			System.out.println("Section name: " + section.getName() + " does not equal domain.name()");
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
 		}
@@ -50,9 +47,27 @@ public class ConstantQueryHandler implements SectionQueryHandler<String> {
 		this.section = section;
 	}
 
+
+	/**
+	 * Return the Section constant for this query handler type
+	 *
+	 * @return the CONSTANTS Section constant, establishing this query handler type
+	 */
 	@Override
 	public Section getSection() {
-		return SECTION;
+		return Section.CONSTANTS;
+	}
+
+
+	/**
+	 * The primary type returned by this query handler. A query handler may provide methods that return
+	 * values of other types.
+	 *
+	 * @return String.class as the primary type returned by this query handler
+	 */
+	@Override
+	public Class<String> getHandledType() {
+		return String.class;
 	}
 
 
