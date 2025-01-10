@@ -27,21 +27,50 @@ import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHand
  * An enumeration of Sections that correspond directly to each top level {@code ConfigurationSection} of the language file.
  */
 public enum Section {
-	CONSTANTS(ConstantQueryHandler.class),
-	ITEMS(ItemQueryHandler.class),
-	MESSAGES(MessageQueryHandler.class),
-	TIME(TimeQueryHandler.class),
+	CONSTANTS(ConstantQueryHandler.class, "Constant", "Constants", "CONST"),
+	ITEMS(ItemQueryHandler.class, "Item", "Items", "ITEM"),
+	MESSAGES(MessageQueryHandler.class, "Message", "Messages", "MSG"),
+	TIME(TimeQueryHandler.class, "Time", "Time", "TIME"),
 	;
 
 	private final Class<? extends SectionQueryHandler<?>> handlerClass;
+	private final String singularName;
+	private final String pluralName;
+	private final String placeholderPrefix;
 
 
-	Section(final Class<? extends SectionQueryHandler<?>> handlerClass) {
+	Section(final Class<? extends SectionQueryHandler<?>> handlerClass,
+	        final String singularName,
+	        final String pluralName,
+	        final String placeholderPrefix) {
 		this.handlerClass = handlerClass;
+		this.singularName = singularName;
+		this.pluralName = pluralName;
+		this.placeholderPrefix = placeholderPrefix;
+
+		// Validate the First Law of the Library
+		if (!SectionQueryHandler.class.isAssignableFrom(handlerClass)) {
+			throw new IllegalArgumentException(
+					handlerClass.getSimpleName() + " must implement SectionQueryHandler"
+			);
+		}
 	}
+
 
 	public Class<? extends SectionQueryHandler<?>> getHandlerClass() {
 		return handlerClass;
+	}
+
+	public String getSingularName() {
+		return singularName;
+	}
+
+	public String getPluralName() {
+		return pluralName;
+	}
+
+	public String getPlaceholderPrefix() {
+		return placeholderPrefix;
 	}
 
 }
