@@ -40,8 +40,4 @@ public interface LanguageQueryHandler {
 
 	<MessageId extends Enum<MessageId>> Optional<MessageRecord> getMessageRecord(MessageId messageId);
 
-	//TODO: Everything below needs to go somewhere else
-
-	Optional<String> getWorldName(final World world);
-
 }

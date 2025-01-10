@@ -178,20 +178,20 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 //	}
 
 
-	/**
-	 * Get Multiverse alias or bukkit world name as Optional String
-	 * @param world the world whose alias or name being fetching
-	 * @return Optional String containing the world alias or name, or empty if not found
-	 */
-	@Override
-	public Optional<String> getWorldName(final World world) {
-		// if world is null, return empty optional
-		if (world == null) {
-			return Optional.empty();
-		}
-		// return multiverse alias or bukkit world name as optional string
-		return Optional.of(getWorldAlias(world).orElse(world.getName()));
-	}
+//	/**
+//	 * Get Multiverse alias or bukkit world name as Optional String
+//	 * @param world the world whose alias or name being fetching
+//	 * @return Optional String containing the world alias or name, or empty if not found
+//	 */
+//	@Override
+//	public Optional<String> getWorldName(final World world) {
+//		// if world is null, return empty optional
+//		if (world == null) {
+//			return Optional.empty();
+//		}
+//		// return multiverse alias or bukkit world name as optional string
+//		return Optional.of(getWorldAlias(world).orElse(world.getName()));
+//	}
 
 
 	/**
