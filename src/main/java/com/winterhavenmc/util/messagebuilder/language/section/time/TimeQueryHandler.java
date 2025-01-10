@@ -21,9 +21,11 @@ import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.language.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.time.Duration;
+import java.util.List;
 
 import static com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_DURATION;
 import static com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_TIME_UNIT;
@@ -76,6 +78,18 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 	@Override
 	public Class<String> getHandledType() {
 		return null;
+	}
+
+
+	/**
+	 * A list of the types returned by this query handler. A query handler should not provide methods that return
+	 * values of other types.
+	 *
+	 * @return {@code List} of class types that are handled by this query handler
+	 */
+	@Override
+	public List<Class<?>> listHandledTypes() {
+		return List.of(String.class);
 	}
 
 

@@ -22,6 +22,7 @@ import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandle
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -90,6 +91,17 @@ public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
 	@Override
 	public Class<ItemRecord> getHandledType() {
 		return ItemRecord.class;
+	}
+
+	/**
+	 * A list of the types returned by this query handler. A query handler should not provide methods that return
+	 * values of other types.
+	 *
+	 * @return {@code List} of class types that are handled by this query handler
+	 */
+	@Override
+	public List<Class<?>> listHandledTypes() {
+		return List.of(ItemRecord.class);
 	}
 
 }

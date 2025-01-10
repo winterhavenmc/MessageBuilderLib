@@ -19,8 +19,12 @@ package com.winterhavenmc.util.messagebuilder.language.section;
 
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 
+import java.util.List;
+
 
 public interface SectionQueryHandler<T> extends QueryHandler<T> {
 	Section getSection();
 	Class<T> getHandledType();
+
+	List<Class<?>> listHandledTypes();
 }

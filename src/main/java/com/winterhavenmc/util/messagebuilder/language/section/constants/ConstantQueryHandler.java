@@ -72,6 +72,18 @@ public class ConstantQueryHandler implements SectionQueryHandler<String> {
 
 
 	/**
+	 * A list of the types returned by this query handler. A query handler should not provide methods that return
+	 * values of other types.
+	 *
+	 * @return {@code List} of class types that are handled by this query handler
+	 */
+	@Override
+	public List<Class<?>> listHandledTypes() {
+		return List.of(String.class, List.class, Integer.class);
+	}
+
+
+	/**
 	 * Query the constants section of the language file for a String with keyPath
 	 *
 	 * @param keyPath the keyPath of the String to be retrieved
