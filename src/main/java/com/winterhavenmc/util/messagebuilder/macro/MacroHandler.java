@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorRegistry;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
-import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
