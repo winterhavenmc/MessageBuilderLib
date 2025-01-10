@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.query.item;
+package com.winterhavenmc.util.messagebuilder.language.section.item;
 
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 import com.winterhavenmc.util.messagebuilder.util.Error;
