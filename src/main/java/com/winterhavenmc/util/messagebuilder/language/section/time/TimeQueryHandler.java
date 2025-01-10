@@ -132,7 +132,7 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 	 * @return String containing the singular name of the provided TimeUnit in the currently configured language.
 	 */
 	public String getSingular(final TimeUnit timeUnit) {
-		return timeSection.getString(timeUnit.name() + ".SINGULAR");
+		return timeSection.getString(String.join(PATH_DELIMITER,UNIT_SECTION, timeUnit.name(), "SINGULAR"));
 	}
 
 
@@ -144,7 +144,7 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 	 */
 	
 	public String getPlural(final TimeUnit timeUnit) {
-		return timeSection.getString(timeUnit.name() + ".PLURAL");
+		return timeSection.getString(String.join(PATH_DELIMITER, UNIT_SECTION, timeUnit.name(), "PLURAL"));
 	}
 
 
