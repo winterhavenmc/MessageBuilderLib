@@ -20,11 +20,16 @@ package com.winterhavenmc.util.messagebuilder.language.section.constants;
 import com.winterhavenmc.util.messagebuilder.language.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Query handler for the 'CONSTANTS' section of the language file.
+ */
 public class ConstantQueryHandler implements SectionQueryHandler<String> {
 
 	private final ConfigurationSection section;
@@ -34,14 +39,14 @@ public class ConstantQueryHandler implements SectionQueryHandler<String> {
 	 * Class constructor
 	 *
 	 * @param section the 'CONSTANTS' section of the language file
+	 * @throws IllegalArgumentException if the {@code ConfigurationSection} parameter is null or invalid
 	 */
 	public ConstantQueryHandler(final ConfigurationSection section) {
 		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
 
 		// ensure only the 'CONSTANTS' section is passed in
 		if (!section.getName().equals(Section.CONSTANTS.name())) {
-			System.out.println("Section name: " + section.getName() + " does not equal domain.name()");
-			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
+			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage());
 		}
 
 		this.section = section;
@@ -54,7 +59,7 @@ public class ConstantQueryHandler implements SectionQueryHandler<String> {
 	 * @return the CONSTANTS Section constant, establishing this query handler type
 	 */
 	@Override
-	public Section getSection() {
+	public Section getSectionType() {
 		return Section.CONSTANTS;
 	}
 
