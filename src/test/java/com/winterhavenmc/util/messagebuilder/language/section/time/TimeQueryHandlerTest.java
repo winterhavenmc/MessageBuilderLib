@@ -15,81 +15,102 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.language.section.time;
 
 import com.winterhavenmc.util.TimeUnit;
+import com.winterhavenmc.util.messagebuilder.language.section.Section;
 import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.query.domain.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 class TimeQueryHandlerTest {
 
-	TimeQueryHandler timeQueryHandler;
+	FileConfiguration configuration;
+	ConfigurationSection section;
+	TimeQueryHandler queryHandler;
 
 	@BeforeEach
 	void setUp() {
-
-		ConfigurationSection timeSection = new MemoryConfiguration();
-
-		timeSection.set("OTHER.LESS_THAN_ONE", "less than one");
-		timeSection.set("OTHER.LESS_THAN", "less than");
-		timeSection.set("MILLISECONDS.SINGULAR", "millisecond");
-		timeSection.set("MILLISECONDS.PLURAL", "milliseconds");
-		timeSection.set("TICKS.SINGULAR", "tick");
-		timeSection.set("TICKS.PLURAL", "ticks");
-		timeSection.set("SECONDS.SINGULAR", "second");
-		timeSection.set("SECONDS.PLURAL", "seconds");
-		timeSection.set("MINUTES.SINGULAR", "minute");
-		timeSection.set("MINUTES.PLURAL", "minutes");
-		timeSection.set("HOURS.SINGULAR", "hour");
-		timeSection.set("HOURS.PLURAL", "hours");
-		timeSection.set("DAYS.SINGULAR", "day");
-		timeSection.set("DAYS.PLURAL", "days");
-		timeSection.set("WEEKS.SINGULAR", "week");
-		timeSection.set("WEEKS.PLURAL", "weeks");
-		timeSection.set("MONTHS.SINGULAR", "month");
-		timeSection.set("MONTHS.PLURAL", "months");
-		timeSection.set("YEARS.SINGULAR", "year");
-		timeSection.set("YEARS.PLURAL", "years");
-		timeSection.set("UNLIMITED", "unlimited time");
-
-		timeQueryHandler = new TimeQueryHandler(timeSection);
+		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		section = configuration.getConfigurationSection(Section.TIME.name());
+		queryHandler = new TimeQueryHandler(section);
 	}
 
 	@AfterEach
 	void tearDown() {
-		timeQueryHandler = null;
+		configuration = null;
+		section = null;
+		queryHandler = null;
+	}
+
+
+	@Test
+	void testConstructor_parameter_null() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> new TimeQueryHandler(null));
+		assertEquals("The configurationSection parameter was null.", exception.getMessage());
+	}
+
+	@Test
+	void testConstructor_parameter_invalid() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> new TimeQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
+		assertEquals("The timeSection parameter was an invalid 'TIME' section.", exception.getMessage());
 	}
 
 	@Test
 	void testTimeQueryHandler() {
-		assertNotNull(timeQueryHandler);
+		assertNotNull(queryHandler);
 	}
 
 	@Test
-	void testGetLessThanOneString() {
-		assertEquals("less than one", timeQueryHandler.getLessThanOneString());
-		assertNotEquals("not less than one", timeQueryHandler.getLessThanOneString());
+	void testGetSectionType() {
+		assertEquals("TIME", queryHandler.getSectionType().name());
+	}
+
+	@Test
+	void getHandledType() {
+		assertEquals(String.class, queryHandler.getHandledType());
+	}
+
+	@Test
+	void listHandledTypes() {
+		assertEquals(List.of(String.class), queryHandler.listHandledTypes());
+	}
+
+	@Test
+	void testGetLessThanOneString_minute() {
+		assertEquals("less than one minute", queryHandler.getLessThanOneString(TimeUnit.MINUTES));
+	}
+
+	@Test
+	void testGetLessThanOneString_no_parameter() {
+		assertEquals("less than one", queryHandler.getLessThanOneString());
+		assertNotEquals("not less than one", queryHandler.getLessThanOneString());
 	}
 
 	@Test
 	void testGetLessThan() {
-		assertEquals("less than", timeQueryHandler.getLessThan());
-		assertNotEquals("not less than", timeQueryHandler.getLessThan());
+		assertEquals("less than", queryHandler.getLessThan());
+		assertNotEquals("not less than", queryHandler.getLessThan());
 	}
 
 	@Test
 	void testGetUnlimited() {
-		assertEquals("unlimited time", timeQueryHandler.getUnlimited());
-		assertNotEquals("not unlimited time", timeQueryHandler.getUnlimited());
+		assertEquals("unlimited time", queryHandler.getUnlimited());
+		assertNotEquals("not unlimited time", queryHandler.getUnlimited());
 	}
 
 	@ParameterizedTest
@@ -98,8 +119,8 @@ class TimeQueryHandlerTest {
 		// Arrange
 		TimeUnit match = match(namespaceTimeUnit);
 
-		assertEquals(namespaceTimeUnit.getSingular(), timeQueryHandler.getSingular(match));
-		assertNotEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getSingular(match));
+		assertEquals(namespaceTimeUnit.getSingular(), queryHandler.getSingular(match));
+		assertNotEquals(namespaceTimeUnit.getPlural(), queryHandler.getSingular(match));
 	}
 
 	@ParameterizedTest
@@ -109,8 +130,8 @@ class TimeQueryHandlerTest {
 		TimeUnit match = match(namespaceTimeUnit);
 
 		// Act & Assert
-		assertEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPlural(match));
-		assertNotEquals(namespaceTimeUnit.getSingular(), timeQueryHandler.getPlural(match));
+		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPlural(match));
+		assertNotEquals(namespaceTimeUnit.getSingular(), queryHandler.getPlural(match));
 	}
 
 	@ParameterizedTest
@@ -120,8 +141,8 @@ class TimeQueryHandlerTest {
 		TimeUnit match = match(namespaceTimeUnit);
 
 		// Act & Assert
-		assertEquals(namespaceTimeUnit.getSingular(), timeQueryHandler.getPluralized(match.one(), match));
-		assertNotEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPluralized(match.one(), match));
+		assertEquals(namespaceTimeUnit.getSingular(), queryHandler.getPluralized(match.one(), match));
+		assertNotEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.one(), match));
 	}
 
 	@ParameterizedTest
@@ -131,11 +152,11 @@ class TimeQueryHandlerTest {
 		TimeUnit match = match(namespaceTimeUnit);
 
 		// Act & Assert
-		assertEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPluralized(match.justShyOf(0), match));
-		assertEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPluralized(match.justShyOf(1), match));
+		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(0), match));
+		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(1), match));
 		//TODO: Just shy of two (2) gives undetermined output depending on TimeUnit; 2 will always fail for millis
-		assertEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPluralized(match.justShyOf(3), match));
-		assertNotEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPluralized(match.one(), match));
+		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(3), match));
+		assertNotEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.one(), match));
 	}
 
 	@ParameterizedTest
@@ -145,10 +166,10 @@ class TimeQueryHandlerTest {
 		TimeUnit match = match(namespaceTimeUnit);
 
 		// Act & Assert
-		assertEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPluralized(match.times(0), match));
-		assertNotEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPluralized(match.times(1), match));
-		assertEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPluralized(match.times(2), match));
-		assertEquals(namespaceTimeUnit.getPlural(), timeQueryHandler.getPluralized(match.times(3), match));
+		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.times(0), match));
+		assertNotEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.times(1), match));
+		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.times(2), match));
+		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.times(3), match));
 	}
 
 	@Test
@@ -157,7 +178,7 @@ class TimeQueryHandlerTest {
 		long duration = TimeUnit.DAYS.times(2) + TimeUnit.HOURS.times(4) + TimeUnit.MINUTES.times(18);
 
 		// Act
-		String resultString = timeQueryHandler.getTimeString(duration, TimeUnit.MINUTES);
+		String resultString = queryHandler.getTimeString(duration, TimeUnit.MINUTES);
 
 		// Assert
 		assertEquals("2 days, 4 hours, 18 minutes", resultString);
@@ -170,7 +191,7 @@ class TimeQueryHandlerTest {
 		long duration = TimeUnit.DAYS.times(1);
 
 		// Act
-		String resultString = timeQueryHandler.getTimeString(duration, TimeUnit.MINUTES);
+		String resultString = queryHandler.getTimeString(duration, TimeUnit.MINUTES);
 
 		// Assert
 		assertEquals("1 day", resultString);
@@ -183,7 +204,7 @@ class TimeQueryHandlerTest {
 		long duration = TimeUnit.DAYS.justShyOf(1);
 
 		// Act
-		String resultString = timeQueryHandler.getTimeString(duration, TimeUnit.SECONDS);
+		String resultString = queryHandler.getTimeString(duration, TimeUnit.SECONDS);
 
 		// Assert
 		assertEquals("23 hours, 59 minutes, 59 seconds", resultString);
@@ -196,7 +217,7 @@ class TimeQueryHandlerTest {
 		long duration = TimeUnit.DAYS.justShyOf(1);
 
 		// Act
-		String resultString = timeQueryHandler.getTimeString(duration, TimeUnit.MINUTES);
+		String resultString = queryHandler.getTimeString(duration, TimeUnit.MINUTES);
 
 		// Assert
 		assertEquals("23 hours, 59 minutes", resultString);
@@ -209,7 +230,7 @@ class TimeQueryHandlerTest {
 		long duration = TimeUnit.MINUTES.justShyOf(1);
 
 		// Act
-		String resultString = timeQueryHandler.getTimeString(duration, TimeUnit.MINUTES);
+		String resultString = queryHandler.getTimeString(duration, TimeUnit.MINUTES);
 
 		// Assert
 		assertEquals("less than one minute", resultString);
@@ -223,7 +244,7 @@ class TimeQueryHandlerTest {
 		long duration = -1;
 
 		// Act
-		String resultString = timeQueryHandler.getTimeString(duration, timeUnit);
+		String resultString = queryHandler.getTimeString(duration, timeUnit);
 
 		// Assert
 		assertEquals("unlimited time", resultString);
@@ -237,17 +258,17 @@ class TimeQueryHandlerTest {
 		long duration = timeUnit.justShyOf(1);
 
 		// Act
-		String resultString = timeQueryHandler.getLessThanOneString(timeUnit);
+		String resultString = queryHandler.getLessThanOneString(timeUnit);
 
 		// Assert
-		assertEquals("less than one " + timeQueryHandler.getSingular(timeUnit), resultString);
+		assertEquals("less than one " + queryHandler.getSingular(timeUnit), resultString);
 	}
 
 
 	@Test
 	void testGetLessThanOne_String_null_parameter() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> timeQueryHandler.getLessThanOneString(null));
+				() -> queryHandler.getLessThanOneString(null));
 		assertEquals("The timeUnit parameter cannot be null.", exception.getMessage());
 	}
 
@@ -256,7 +277,7 @@ class TimeQueryHandlerTest {
 	void testGetTimeString_null_duration() {
 		// Arrange & Act
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> timeQueryHandler.getTimeString(null, TimeUnit.MINUTES) );
+				() -> queryHandler.getTimeString(null, TimeUnit.MINUTES) );
 
 		// Assert
 		assertEquals("The duration parameter cannot be null.", exception.getMessage());
@@ -267,7 +288,7 @@ class TimeQueryHandlerTest {
 	void testGetTimeString_null_timeUnit() {
 		// Arrange & Act
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> timeQueryHandler.getTimeString(TimeUnit.MINUTES.one(), null) );
+				() -> queryHandler.getTimeString(TimeUnit.MINUTES.one(), null) );
 
 		// Assert
 		assertEquals("The timeUnit parameter cannot be null.", exception.getMessage());
@@ -277,4 +298,5 @@ class TimeQueryHandlerTest {
 	private static TimeUnit match(Namespace.Time.Unit unit) {
 		return TimeUnit.valueOf(unit.name());
 	}
+
 }
