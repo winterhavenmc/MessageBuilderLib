@@ -44,15 +44,8 @@ public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
 	 */
 	public MessageQueryHandler(ConfigurationSection messageSection) {
 		if (messageSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
-		System.out.println("section name: " + messageSection.getName());
-		System.out.println("section path: " + messageSection.getCurrentPath());
-		System.out.println(" domain name: " + Section.MESSAGES.name());
 
-		//TODO: find method to get passed messageSection key to compare with domain.name()
-		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
-		System.out.println("domain.name() equals section.getName(): " + Section.MESSAGES.name().equals(messageSection.getName()));
 		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
-			System.out.println("then why you thowin', bro?");
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
 
