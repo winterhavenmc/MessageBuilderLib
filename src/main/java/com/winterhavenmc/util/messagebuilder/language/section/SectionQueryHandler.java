@@ -23,7 +23,7 @@ import java.util.List;
 
 
 public interface SectionQueryHandler<T> extends QueryHandler<T> {
-	Section getSection();
+	Section getSectionType();
 	Class<T> getHandledType();
 
 	List<Class<?>> listHandledTypes();
