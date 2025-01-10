@@ -30,7 +30,7 @@ public class DefaultSectionQueryHandler implements SectionQueryHandler<Void> {
 	/**
 	 * @return null
 	 */
-	public Section getSection() {
+	public Section getSectionType() {
 		return null;
 	}
 
