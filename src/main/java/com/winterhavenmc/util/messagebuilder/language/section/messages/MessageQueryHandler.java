@@ -44,6 +44,7 @@ public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
 	public MessageQueryHandler(ConfigurationSection messageSection) {
 		if (messageSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
 
+		// allow only 'MESSAGES' configuration section to be passed into constructor
 		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
