@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +29,6 @@ import org.junit.jupiter.api.Test;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -49,8 +46,6 @@ class MessageBuilderToolkitTest {
 		MockitoAnnotations.openMocks(this);
 
 		when(messageBuilderMock.getQueryHandler()).thenReturn(queryHandlerMock);
-		when(queryHandlerMock.getString("some-key")).thenReturn(Optional.of("SOME_VALUE"));
-		when(queryHandlerMock.getStringList("TEST_LIST")).thenReturn(List.of("item 1", "item 2", "item 3"));
 
 		toolkit = new MessageBuilderToolkit<>(messageBuilderMock);
 	}
@@ -100,38 +95,5 @@ class MessageBuilderToolkitTest {
 		assertNotNull(toolkit.getQueryHandler());
 	}
 
-	@Test
-	void getStringTest() {
-		Optional<String> optString = toolkit.getString("some-key");
-		assertTrue(optString.isPresent());
-		assertEquals("SOME_VALUE", optString.get());
-		verify(queryHandlerMock, atLeastOnce()).getString("some-key");
-	}
-
-	@Test
-	void getStringListTest() {
-		List<String> stringList = toolkit.getStringList("TEST_LIST");
-		assertFalse(stringList.isEmpty());
-		assertEquals(List.of("item 1", "item 2", "item 3"), stringList);
-		verify(queryHandlerMock, atLeastOnce()).getStringList("TEST_LIST");
-	}
-
-	@Test
-	void getSpawnDisplaynameTest() {
-		when(queryHandlerMock.getString("SPAWN.DISPLAY_NAME")).thenReturn(Optional.of("Spawn"));
-		Optional<String> optString = toolkit.getSpawnDisplayName();
-		assertTrue(optString.isPresent());
-		assertEquals("Spawn", optString.get());
-		verify(queryHandlerMock, atLeastOnce()).getString("SPAWN.DISPLAY_NAME");
-	}
-
-	@Test
-	void getHomeDisplaynameTest() {
-		when(queryHandlerMock.getString("HOME.DISPLAY_NAME")).thenReturn(Optional.of("Home"));
-		Optional<String> optString = toolkit.getHomeDisplayName();
-		assertTrue(optString.isPresent());
-		assertEquals("Home", optString.get());
-		verify(queryHandlerMock, atLeastOnce()).getString("HOME.DISPLAY_NAME");
-	}
 
 }
