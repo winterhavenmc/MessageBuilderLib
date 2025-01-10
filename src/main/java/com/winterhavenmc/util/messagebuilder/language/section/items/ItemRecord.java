@@ -86,6 +86,8 @@ public record ItemRecord(
 
 		// return new ItemRecord
 		return Optional.of(new ItemRecord(keyPath,
+				// looping over these would be nice, and checking types against those listed in the query handler would be too
+				// any fields that do not match a type listed in the query handler will be returned as an empty optional or empty list or throw an exception
 				Optional.ofNullable(itemEntry.getString(Field.NAME_SINGULAR.getKeyPath())),
 				Optional.ofNullable(itemEntry.getString(Field.NAME_PLURAL.getKeyPath())),
 				Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath())),
