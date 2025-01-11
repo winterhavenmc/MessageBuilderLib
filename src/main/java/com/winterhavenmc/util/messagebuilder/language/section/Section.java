@@ -21,12 +21,13 @@ import com.winterhavenmc.util.messagebuilder.language.section.constants.Constant
 import com.winterhavenmc.util.messagebuilder.language.section.items.ItemQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandlerRegistryKey;
 
 
 /**
  * An enumeration of Sections that correspond directly to each top level {@code ConfigurationSection} of the language file.
  */
-public enum Section {
+public enum Section implements QueryHandlerRegistryKey {
 	CONSTANTS(ConstantQueryHandler.class, "Constant", "Constants", "CONST"),
 	ITEMS(ItemQueryHandler.class, "Item", "Items", "ITEM"),
 	MESSAGES(MessageQueryHandler.class, "Message", "Messages", "MSG"),
@@ -36,17 +37,25 @@ public enum Section {
 	private final Class<? extends SectionQueryHandler<?>> handlerClass;
 	private final String singularName;
 	private final String pluralName;
-	private final String placeholderPrefix;
+	private final String mnemonic;
 
 
+	/**
+	 * Constructor for enum constant instances
+	 * @param handlerClass the Class of {@link SectionQueryHandler} that is immutably bound to this enum constant
+	 * @param singularName the singular name of this section (ex: Item)
+	 * @param pluralName the plural name for this section (ex: Items)
+	 * @param mnemonic the short mnemonic for this section. To be used in key generation, or other programmatic purposes.
+	 */
 	Section(final Class<? extends SectionQueryHandler<?>> handlerClass,
 	        final String singularName,
 	        final String pluralName,
-	        final String placeholderPrefix) {
+	        final String mnemonic
+	) {
 		this.handlerClass = handlerClass;
 		this.singularName = singularName;
 		this.pluralName = pluralName;
-		this.placeholderPrefix = placeholderPrefix;
+		this.mnemonic = mnemonic;
 
 		// Validate the First Law of the Library
 		if (!SectionQueryHandler.class.isAssignableFrom(handlerClass)) {
@@ -69,8 +78,8 @@ public enum Section {
 		return pluralName;
 	}
 
-	public String getPlaceholderPrefix() {
-		return placeholderPrefix;
+	public String getMnemonic() {
+		return mnemonic;
 	}
 
 }
