@@ -18,8 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
 import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
 
@@ -52,10 +52,10 @@ public class NumberProcessor extends MacroProcessorTemplate implements MacroProc
 				String category = keyComponents[0];
 				if (category.endsWith(durationSuffix.name())) {
 
-					// get TimeQueryHandler from SectionQueryFactory
-					TimeQueryHandler timeQueryHandler = (TimeQueryHandler) queryHandler.getQueryHandler(Section.TIME);
-					if (timeQueryHandler != null) {
-						resultMap.put(key, timeQueryHandler.getTimeString(longVar, durationSuffix.getTimeUnit()));
+					// get TimeSectionQueryHandler from SectionQueryFactory
+					TimeSectionQueryHandler timeSectionQueryHandler = (TimeSectionQueryHandler) queryHandler.getQueryHandler(Section.TIME);
+					if (timeSectionQueryHandler != null) {
+						resultMap.put(key, timeSectionQueryHandler.getTimeString(longVar, durationSuffix.getTimeUnit()));
 					}
 				}
 			}
