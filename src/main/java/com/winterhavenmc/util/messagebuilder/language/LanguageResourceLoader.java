@@ -17,15 +17,22 @@
 
 package com.winterhavenmc.util.messagebuilder.language;
 
-import org.bukkit.plugin.Plugin;
+import org.bukkit.configuration.Configuration;
 
-public interface LanguageFileInstaller {
+public interface LanguageResourceLoader {
+
 	/**
-	 * Install resource files from plugin jar to plugin data directory
+	 * Get configuration object containing message settings and strings
 	 *
-	 * @return {@code int} the number of resource files installed
+	 * @return Configuration - message configuration object
 	 */
-	@SuppressWarnings("UnusedReturnValue")
-	int install();
+	Configuration getConfiguration();
+
+
+	/**
+	 * Reload configuration, reinstalling language files if necessary
+	 * @return the newly loaded configuration for the configured language
+	 */
+	Configuration reload();
 
 }
