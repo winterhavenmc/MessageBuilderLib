@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.util;
 
 import java.util.List;
 import java.util.Optional;
