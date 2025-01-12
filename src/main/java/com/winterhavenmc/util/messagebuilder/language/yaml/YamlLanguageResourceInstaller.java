@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.LanguageFileInstaller;
+import com.winterhavenmc.util.messagebuilder.language.LanguageResourceInstaller;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -31,7 +31,7 @@ import java.util.*;
  * that are stored as a resource within a /language subdirectory in the plugin jar archive will be
  * copied to the /language subdirectory of the plugin data directory.
  */
-public class YamlLanguageFileInstaller implements LanguageFileInstaller {
+public class YamlLanguageResourceInstaller implements LanguageResourceInstaller {
 
 	private final static String AUTO_INSTALL_TXT = "language/auto_install.txt";
 
@@ -42,7 +42,7 @@ public class YamlLanguageFileInstaller implements LanguageFileInstaller {
 	 * Class constructor
 	 * @param plugin reference to plugin main class
 	 */
-	public YamlLanguageFileInstaller(final Plugin plugin) {
+	public YamlLanguageResourceInstaller(final Plugin plugin) {
 		this.plugin = plugin;
 	}
 

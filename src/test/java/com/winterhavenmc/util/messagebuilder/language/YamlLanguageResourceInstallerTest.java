@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.language;
 
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageResourceInstaller;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import org.bukkit.plugin.Plugin;
@@ -41,11 +42,11 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class YamlLanguageFileInstallerTest {
+public class YamlLanguageResourceInstallerTest {
 
 	@Mock private Plugin pluginMock;
 
-	private YamlLanguageFileInstaller fileInstaller;
+	private YamlLanguageResourceInstaller fileInstaller;
 	private File tempDataDir;
 
 	@BeforeEach
@@ -53,13 +54,13 @@ public class YamlLanguageFileInstallerTest {
 
 		tempDataDir = Files.createTempDirectory("MessageBuilderLib_").toFile();
 
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("YamlLanguageFileInstallerTest"));
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("YamlLanguageResourceInstallerTest"));
 		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 		when(pluginMock.getResource(LANGUAGE_EN_US_YML)).thenReturn(getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML));
 
 		// create real instance of installer
-		fileInstaller = new YamlLanguageFileInstaller(pluginMock);
+		fileInstaller = new YamlLanguageResourceInstaller(pluginMock);
 		fileInstaller.install();
 	}
 
@@ -424,7 +425,7 @@ public class YamlLanguageFileInstallerTest {
 	 * @return an InputStream for the resource, or {@code null} if the resource cannot be found
 	 */
 	public static InputStream getResourceStream(final String resourceName) {
-		return YamlLanguageFileInstallerTest.class.getClassLoader().getResourceAsStream(resourceName);
+		return YamlLanguageResourceInstallerTest.class.getClassLoader().getResourceAsStream(resourceName);
 	}
 
 }

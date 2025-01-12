@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.LanguageFileInstaller;
-import com.winterhavenmc.util.messagebuilder.language.LanguageFileLoader;
+import com.winterhavenmc.util.messagebuilder.language.LanguageResourceInstaller;
+import com.winterhavenmc.util.messagebuilder.language.LanguageResourceLoader;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -33,12 +33,12 @@ import java.util.logging.Logger;
 
 
 /**
- * An implementation of the LanguageFileLoader interface for loading the message configuration from yaml files
+ * An implementation of the LanguageResourceLoader interface for loading the message configuration from yaml files
  */
 //TODO: This class needs more test coverage. It's mostly null checks and throws missing, and the reload command.
-public class YamlLanguageFileLoader implements LanguageFileLoader {
+public class YamlLanguageResourceLoader implements LanguageResourceLoader {
 
-	private final static Logger logger = Logger.getLogger(YamlLanguageFileLoader.class.getName());
+	private final static Logger logger = Logger.getLogger(YamlLanguageResourceLoader.class.getName());
 
 	// the directory name within a plugin data directory where the language yaml files are installed
 	private final static String LANGUAGE_FOLDER = "language";
@@ -54,10 +54,10 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public YamlLanguageFileLoader(final Plugin plugin)
+	public YamlLanguageResourceLoader(final Plugin plugin)
 	{
 		this.plugin = plugin;
-		new YamlLanguageFileInstaller(plugin).install();
+		new YamlLanguageResourceInstaller(plugin).install();
 	}
 
 
@@ -66,7 +66,7 @@ public class YamlLanguageFileLoader implements LanguageFileLoader {
 	 *
 	 * @param installer a language
 	 */
-	public YamlLanguageFileLoader(final Plugin plugin, final LanguageFileInstaller installer)
+	public YamlLanguageResourceLoader(final Plugin plugin, final LanguageResourceInstaller installer)
 	{
 		this.plugin = plugin;
 		installer.install();

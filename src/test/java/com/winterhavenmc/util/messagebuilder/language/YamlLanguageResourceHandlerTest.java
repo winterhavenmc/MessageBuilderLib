@@ -17,6 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.language;
 
+import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageResourceHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageResourceLoader;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -33,12 +36,12 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class YamlLanguageHandlerTest {
+class YamlLanguageResourceHandlerTest {
 
-	@Mock private YamlLanguageFileLoader languageFileLoaderMock;
+	@Mock private YamlLanguageResourceLoader languageFileLoaderMock;
 
 	// real language handler
-	private YamlLanguageHandler languageHandler;
+	private YamlLanguageResourceHandler languageHandler;
 	private FileConfiguration languageConfig;
 	private FileConfiguration pluginConfig;
 
@@ -57,7 +60,7 @@ class YamlLanguageHandlerTest {
 		languageConfig.set("ITEMS.DEFAULT.NAME.PLURAL", "default_items");
 
 		// instantiate real language handler with mocked parameters
-		languageHandler = new YamlLanguageHandler(pluginConfig, languageFileLoaderMock);
+		languageHandler = new YamlLanguageResourceHandler(pluginConfig, languageFileLoaderMock);
 	}
 
 
@@ -103,14 +106,14 @@ class YamlLanguageHandlerTest {
 	class constructorTests {
 		@Test
 		void constructorTest_no_parameter() {
-			YamlLanguageHandler languageHandler = new YamlLanguageHandler();
+			YamlLanguageResourceHandler languageHandler = new YamlLanguageResourceHandler();
 			assertNotNull(languageHandler);
 			assertFalse(languageHandler.isFileLoaderSet());
 		}
 
 		@Test
 		void constructorTest_three_parameter() {
-			YamlLanguageHandler languageHandler = new YamlLanguageHandler(pluginConfig, languageFileLoaderMock);
+			YamlLanguageResourceHandler languageHandler = new YamlLanguageResourceHandler(pluginConfig, languageFileLoaderMock);
 			assertNotNull(languageHandler);
 			assertTrue(languageHandler.isFileLoaderSet());
 		}
@@ -123,17 +126,18 @@ class YamlLanguageHandlerTest {
 		@Test
 		void setterTest_fileLoader() {
 			// Arrange
-			YamlLanguageHandler yamlLanguageHandler = new YamlLanguageHandler();
-			assertFalse(yamlLanguageHandler.isFileLoaderSet(), "the fileLoader field is not null.");
+			YamlLanguageResourceHandler yamlLanguageResourceHandler = new YamlLanguageResourceHandler();
+			assertFalse(yamlLanguageResourceHandler.isFileLoaderSet(), "the fileLoader field is not null.");
 
 			// Act
-			yamlLanguageHandler.setFileLoader(languageFileLoaderMock);
+			yamlLanguageResourceHandler.setFileLoader(languageFileLoaderMock);
 
 			// Assert
-			assertTrue(yamlLanguageHandler.isFileLoaderSet(), "the fileLoader field is null.");
+			assertTrue(yamlLanguageResourceHandler.isFileLoaderSet(), "the fileLoader field is null.");
 		}
 	}
 
+	//TODO: getConfiguration may go away, replaced by getConfigurationSuppler. refactor tests accordingly
 	@Test
 	void getConfigurationTest() {
 		// Arrange
@@ -144,6 +148,22 @@ class YamlLanguageHandlerTest {
 
 		// Assert
 		assertNotNull(languageHandler.getConfiguration());
+
+		// Verify
+		verify(languageFileLoaderMock, atLeastOnce()).getConfiguration();
+	}
+
+	@Test
+	void testGetConfigurationSupplier() {
+		// Arrange
+		when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfig);
+
+		// Act
+		ConfigurationSupplier configurationSupplier = languageHandler.getConfigurationSupplier();
+
+		// Assert
+		assertNotNull(configurationSupplier);
+		assertNotNull(configurationSupplier.get());
 
 		// Verify
 		verify(languageFileLoaderMock, atLeastOnce()).getConfiguration();

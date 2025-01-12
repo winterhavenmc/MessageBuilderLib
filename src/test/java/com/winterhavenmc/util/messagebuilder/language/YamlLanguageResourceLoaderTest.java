@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.language;
 
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageResourceLoader;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
@@ -31,45 +32,45 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class YamlLanguageFileLoaderTest {
+public class YamlLanguageResourceLoaderTest {
 
 	@Mock Plugin pluginMock;
 
-	private YamlLanguageFileLoader yamlLanguageFileLoader;
+	private YamlLanguageResourceLoader yamlLanguageResourceLoader;
 
 
 	@BeforeEach
 	public void setUp() {
 		// create new real file loader
-		yamlLanguageFileLoader = new YamlLanguageFileLoader(pluginMock);
+		yamlLanguageResourceLoader = new YamlLanguageResourceLoader(pluginMock);
 	}
 
 	@AfterEach
 	public void tearDown() {
 		pluginMock = null;
-		yamlLanguageFileLoader = null;
+		yamlLanguageResourceLoader = null;
 	}
 
 
 	@Test
 	void FileLoaderNotNull() {
-		assertNotNull(yamlLanguageFileLoader);
+		assertNotNull(yamlLanguageResourceLoader);
 	}
 
 	@Test
 	void getLanguageFilenameTest() {
-		assertEquals("language/en-US.yml", YamlLanguageFileLoader.getLanguageFilename("en-US"),
+		assertEquals("language/en-US.yml", YamlLanguageResourceLoader.getLanguageFilename("en-US"),
 				"an incorrect filename was returned.");
-		assertEquals("language/es-ES.yml", YamlLanguageFileLoader.getLanguageFilename("es-ES"),
+		assertEquals("language/es-ES.yml", YamlLanguageResourceLoader.getLanguageFilename("es-ES"),
 				"an incorrect filename was returned.");
-		assertEquals("language/invalid_tag.yml", YamlLanguageFileLoader.getLanguageFilename("invalid_tag"),
+		assertEquals("language/invalid_tag.yml", YamlLanguageResourceLoader.getLanguageFilename("invalid_tag"),
 				"an incorrect filename was returned.");
 	}
 
 	@Test
 	void languageFileExistsTest_valid_tag() {
 		// Act
-		String resultString = yamlLanguageFileLoader.getValidLanguageTag("en-US");
+		String resultString = yamlLanguageResourceLoader.getValidLanguageTag("en-US");
 
 		// Assert
 		assertEquals("en-US", resultString,"language file 'en-US.yml' does not exist.");
@@ -78,9 +79,9 @@ public class YamlLanguageFileLoaderTest {
 	@Test
 	void languageFileExistsTest_nonexistent_tag() {
 		// Act & Assert
-		assertNotEquals("bs-ES", yamlLanguageFileLoader.getValidLanguageTag("bs-ES"),
+		assertNotEquals("bs-ES", yamlLanguageResourceLoader.getValidLanguageTag("bs-ES"),
 				"wrong language tag returned.");
-		assertEquals("en-US", yamlLanguageFileLoader.getValidLanguageTag("bs-ES"),
+		assertEquals("en-US", yamlLanguageResourceLoader.getValidLanguageTag("bs-ES"),
 				"wrong language tag returned.");
 	}
 
@@ -88,35 +89,35 @@ public class YamlLanguageFileLoaderTest {
 	@DisplayName("file loader get current filename not null.")
 	void GetLanguageFilenameTest() {
 		assertEquals("language" + File.separator + "en-US.yml",
-				YamlLanguageFileLoader.getLanguageFilename("en-US"));
+				YamlLanguageResourceLoader.getLanguageFilename("en-US"));
 	}
 
 	@Test
 	@DisplayName("file loader get current filename non-existent.")
 	void GetLanguageFilenameTest_nonexistent() {
 		assertEquals("language" + File.separator + "not-a-valid-tag.yml",
-				YamlLanguageFileLoader.getLanguageFilename("not-a-valid-tag"));
+				YamlLanguageResourceLoader.getLanguageFilename("not-a-valid-tag"));
 	}
 
 	@Test
 	@DisplayName("languageFileExists test")
 	void languageFileExistsTests_nonexistent() {
-		assertNotNull(yamlLanguageFileLoader.getValidLanguageTag("not-a-valid-tag"));
-		assertEquals("en-US", yamlLanguageFileLoader.getValidLanguageTag("not-a-valid-tag"));
+		assertNotNull(yamlLanguageResourceLoader.getValidLanguageTag("not-a-valid-tag"));
+		assertEquals("en-US", yamlLanguageResourceLoader.getValidLanguageTag("not-a-valid-tag"));
 	}
 
 	@Test
 	@DisplayName("getResourceName test")
 	void getValidResourceNameTest() {
-		assertNotNull(yamlLanguageFileLoader.getValidResourceName("en-US"));
-		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageFileLoader.getValidResourceName("en-US"));
+		assertNotNull(yamlLanguageResourceLoader.getValidResourceName("en-US"));
+		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageResourceLoader.getValidResourceName("en-US"));
 	}
 
 	@Test
 	@DisplayName("getResourceName test 2")
 	void getValidResourceNameTest_nonexistent() {
-		assertNotNull(yamlLanguageFileLoader.getValidResourceName("not-a-valid-tag"));
-		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageFileLoader.getValidResourceName("not-a-valid-tag"));
+		assertNotNull(yamlLanguageResourceLoader.getValidResourceName("not-a-valid-tag"));
+		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageResourceLoader.getValidResourceName("not-a-valid-tag"));
 	}
 
 
@@ -124,17 +125,17 @@ public class YamlLanguageFileLoaderTest {
 	class GetResourceNameTests {
 		@Test
 		void TestGetResourceName_valid_language_tag() {
-			assertEquals("language/en-US.yml", yamlLanguageFileLoader.getValidResourceName("en-US"));
+			assertEquals("language/en-US.yml", yamlLanguageResourceLoader.getValidResourceName("en-US"));
 		}
 
 		@Test
 		void TestGetResourceName_valid_language_tag_no_file() {
-			assertEquals("language/en-US.yml", yamlLanguageFileLoader.getValidResourceName("en-UK"));
+			assertEquals("language/en-US.yml", yamlLanguageResourceLoader.getValidResourceName("en-UK"));
 		}
 
 		@Test
 		void TestGetResourceName_invalid_language_tag() {
-			assertEquals("language/en-US.yml", yamlLanguageFileLoader.getValidResourceName("invalid-tag"));
+			assertEquals("language/en-US.yml", yamlLanguageResourceLoader.getValidResourceName("invalid-tag"));
 		}
 	}
 

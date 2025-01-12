@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.LanguageFileLoader;
-import com.winterhavenmc.util.messagebuilder.language.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.language.LanguageResourceLoader;
+import com.winterhavenmc.util.messagebuilder.language.LanguageResourceHandler;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandlerFactory;
 import org.bukkit.configuration.Configuration;
 
@@ -29,7 +29,7 @@ import java.util.Locale;
  * provides common methods for the installation and management of
  * localized language files for bukkit plugins.
  */
-public class YamlLanguageHandler implements LanguageHandler {
+public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 
 	// string constant for language key in plugin config file
 	private final static String CONFIG_LOCALE_KEY = "locale";
@@ -48,7 +48,7 @@ public class YamlLanguageHandler implements LanguageHandler {
 	ConfigurationSupplier configurationSupplier;
 
 	// language file loader
-	private LanguageFileLoader languageFileLoader;
+	private LanguageResourceLoader languageResourceLoader;
 
 
 
@@ -57,18 +57,19 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 * all fields are provided as parameters
 	 *
 	 * @param pluginConfig           the plugin configuration
-	 * @param languageFileLoader     the language file loader to be used by the language handler
+	 * @param languageResourceLoader     the language file loader to be used by the language handler
 	 */
-	public YamlLanguageHandler(final Configuration pluginConfig,
-	                           final LanguageFileLoader languageFileLoader) {
+	public YamlLanguageResourceHandler(final Configuration pluginConfig,
+	                                   final LanguageResourceLoader languageResourceLoader
+	) {
 
 		// set fields from parameters
 		this.pluginConfig = pluginConfig;
-		this.languageFileLoader = languageFileLoader;
+		this.languageResourceLoader = languageResourceLoader;
 
 		// TODO: move this to MessageBuilder and inject it into this class via constructor
 		// instantiate supplier
-		configurationSupplier = new ConfigurationSupplier(languageFileLoader.getConfiguration());
+		configurationSupplier = new ConfigurationSupplier(languageResourceLoader.getConfiguration());
 
 		// instantiate QueryHandlerFactory
 		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(configurationSupplier);
@@ -76,7 +77,7 @@ public class YamlLanguageHandler implements LanguageHandler {
 
 
 		// load message configuration from file
-//		languageConfig = languageFileLoader.getConfiguration();
+//		languageConfig = languageResourceLoader.getConfiguration();
 
 		// get locale from plugin configuration if set
 		//TODO: Mock static method to enable and test this
@@ -101,9 +102,9 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 * class constructor, no parameter
 	 * must use setters for all fields before use
 	 */
-	public YamlLanguageHandler() {
+	public YamlLanguageResourceHandler() {
 		this.pluginConfig = null;
-		this.languageFileLoader = null;
+		this.languageResourceLoader = null;
 		this.configurationSupplier = null;
 //		this.languageConfig = null;
 		this.locale = null;
@@ -111,10 +112,10 @@ public class YamlLanguageHandler implements LanguageHandler {
 
 	/**
 	 * setter for fileLoader
-	 * @param languageFileLoader a new FileLoader to replace the existing fileLoader
+	 * @param languageResourceLoader a new FileLoader to replace the existing fileLoader
 	 */
-	void setFileLoader(final LanguageFileLoader languageFileLoader) {
-		this.languageFileLoader = languageFileLoader;
+	void setFileLoader(final LanguageResourceLoader languageResourceLoader) {
+		this.languageResourceLoader = languageResourceLoader;
 	}
 
 	/**
@@ -135,7 +136,7 @@ public class YamlLanguageHandler implements LanguageHandler {
 
 
 	boolean isFileLoaderSet() {
-		return this.languageFileLoader != null;
+		return this.languageResourceLoader != null;
 	}
 
 	boolean isLocaleSet() {
@@ -189,8 +190,8 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public boolean reload() {
-		languageFileLoader.reload();
-		Configuration newConfiguration = languageFileLoader.getConfiguration();
+		languageResourceLoader.reload();
+		Configuration newConfiguration = languageResourceLoader.getConfiguration();
 		if (newConfiguration != null) {
 			configurationSupplier = new ConfigurationSupplier(newConfiguration);
 			return true;
