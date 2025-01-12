@@ -29,6 +29,8 @@ import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+import java.util.logging.Logger;
+
 
 /**
  * A class that implements a builder pattern for messages to be sent to a player or console.
@@ -65,6 +67,7 @@ import org.bukkit.plugin.Plugin;
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	private final Plugin plugin;
+	private static Logger pluginLogger;
 	private final LanguageResourceHandler languageResourceHandler;
 	private final LanguageQueryHandler languageQueryHandler;
 	private final MacroHandler macroQueryHandler;
@@ -79,6 +82,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (plugin == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
 
 		this.plugin = plugin;
+		MessageBuilder.pluginLogger = plugin.getLogger();
 		this.languageResourceHandler = new YamlLanguageResourceHandler(plugin.getConfig(), new YamlLanguageResourceLoader(plugin));
 		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceHandler.getConfigurationSupplier());
 		this.macroQueryHandler = new MacroHandler(languageQueryHandler);
@@ -127,6 +131,15 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (!languageResourceHandler.reload()) {
 			plugin.getLogger().warning(Error.LanguageConfiguration.RELOAD_FAILED.getMessage());
 		}
+	}
+
+
+	/**
+	 * Static method to retrieve an instance of the plugin logger
+	 * @return the plugin logger
+	 */
+	public static Logger getPluginLogger() {
+		return pluginLogger;
 	}
 
 }
