@@ -17,10 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.language.YamlLanguageHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageResourceHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
+import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -40,8 +41,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.util.messagebuilder.util.MockUtility.AUTO_INSTALL_TXT;
-import static com.winterhavenmc.util.messagebuilder.util.MockUtility.LANGUAGE_EN_US_YML;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -51,7 +50,7 @@ class MessageBuilderTest {
 	@Mock private Plugin pluginMock;
 	@Mock private Server serverMock;
 	@Mock private PluginManager pluginManagerMock;
-	@Mock private YamlLanguageHandler languageHandlerMock;
+	@Mock private YamlLanguageResourceHandler languageHandlerMock;
 	@Mock private Player playerMock;
 
 	private MessageBuilder<MessageId, Macro> messageBuilder;
