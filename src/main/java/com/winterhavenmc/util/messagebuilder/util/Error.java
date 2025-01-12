@@ -52,6 +52,7 @@ public class Error {
 		NULL_RECIPIENT("The recipient parameter was null."),
 		NULL_QUERY_HANDLER("The queryHandler parameter was null."),
 		NULL_RESOURCE_NAME("Resource name cannot be null."),
+		NULL_SECTION("The section parameter cannot be null."),
 		NULL_SECTION_CONSTANTS("The constantSection parameter cannot be null."),
 		NULL_SECTION_ITEMS("The itemSection parameter cannot be null."),
 		NULL_SECTION_MESSAGES("The messageSection parameter cannot be null."),
