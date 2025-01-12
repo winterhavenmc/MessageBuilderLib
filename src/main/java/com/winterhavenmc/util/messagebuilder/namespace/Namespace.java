@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.namespace;
 
-import com.winterhavenmc.util.messagebuilder.language.section.constants.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.items.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeSectionQueryHandler;
 
 /**
  * This class contains enums that are used as a component to create a unique namespace,
@@ -40,11 +40,11 @@ public class Namespace {
 	 * </P>
 	 */
 	public enum Domain {
-		CONSTANTS(ConstantQueryHandler.class), // values supplied by the yaml language file, from the root level section 'CONSTANTS'
-		ITEMS(ItemQueryHandler.class), // values supplied by the yaml language file, from the root level section 'ITEMS'
+		CONSTANTS(ConstantSectionQueryHandler.class), // values supplied by the yaml language file, from the root level section 'CONSTANTS'
+		ITEMS(ItemSectionQueryHandler.class), // values supplied by the yaml language file, from the root level section 'ITEMS'
 		MACRO(null), // values passed in by calls to the setMacro method
-		MESSAGES(MessageQueryHandler.class), // values supplied by the yaml language file. from the root level section 'MESSAGES'
-		TIME(TimeQueryHandler.class), // string values for time units supplied by the yaml language file, from the root level section 'TIME'
+		MESSAGES(MessageSectionQueryHandler.class), // values supplied by the yaml language file. from the root level section 'MESSAGES'
+		TIME(TimeSectionQueryHandler.class), // string values for time units supplied by the yaml language file, from the root level section 'TIME'
 		;
 
 		// placeholder prefix to prevent name collisions between domains
