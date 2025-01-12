@@ -17,11 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.macro.*;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.namespace.NamespaceKey;
-import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.domain.message.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
 
 import org.bukkit.ChatColor;
@@ -129,36 +131,40 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 * Final step of message builder, performs replacements and sends message to recipient
 	 */
 	public void send() {
+		// get message query handler
+		MessageSectionQueryHandler sectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getQueryHandler(Section.MESSAGES);
+		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
 
-		// get optional message record
-		Optional<MessageRecord> messageRecord = queryHandler.getMessageRecord(messageId);
+			// get optional message record
+			Optional<MessageRecord> messageRecord = messageSectionQueryHandler.getRecord(messageId);
 
-		// if message record is empty or not enabled, return
-		if (messageRecord.isEmpty() || !messageRecord.get().enabled()) {
-			return;
-		}
+			// if message record is empty or not enabled, return
+			if (messageRecord.isEmpty() || !messageRecord.get().enabled()) {
+				return;
+			}
 
-		// get cooldown instance
-		MessageCooldownMap<MessageId> messageCooldownMap = MessageCooldownMap.getInstance(plugin);
+			// get cooldown instance
+			MessageCooldownMap<MessageId> messageCooldownMap = MessageCooldownMap.getInstance(plugin);
 
-		// if message is not cooled, do nothing and return
-		if (messageCooldownMap.isCooling(recipient, messageId, messageRecord.get().repeatDelay())) {
-			return;
-		}
+			// if message is not cooled, do nothing and return
+			if (messageCooldownMap.isCooling(recipient, messageId, messageRecord.get().repeatDelay())) {
+				return;
+			}
 
-		// send message to player
-		if (!this.toString().isEmpty()) {
-			recipient.sendMessage(this.toString());
-		}
+			// send message to player
+			if (!this.toString().isEmpty()) {
+				recipient.sendMessage(this.toString());
+			}
 
-		// if titles enabled in config, display titles
-		if (plugin.getConfig().getBoolean("titles-enabled")) {
-			displayTitle();
-		}
+			// if titles enabled in config, display titles
+			if (plugin.getConfig().getBoolean("titles-enabled")) {
+				displayTitle();
+			}
 
-		// if message repeat delay value is greater than zero and recipient is entity, add entry to messageCooldownMap
-		if (messageRecord.get().repeatDelay() > 0 && recipient instanceof Entity) {
-			messageCooldownMap.put(messageId, (Entity) recipient);
+			// if message repeat delay value is greater than zero and recipient is entity, add entry to messageCooldownMap
+			if (messageRecord.get().repeatDelay() > 0 && recipient instanceof Entity) {
+				messageCooldownMap.put(messageId, (Entity) recipient);
+			}
 		}
 	}
 
