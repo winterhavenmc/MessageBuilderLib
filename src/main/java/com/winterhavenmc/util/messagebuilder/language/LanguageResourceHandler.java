@@ -30,7 +30,7 @@ public interface LanguageResourceHandler {
 	 * @return a string containing the IETF language tag set in the plugin config file
 	 */
 	//TODO: change this to (or add) getLocale
-	String getConfigLanguage();
+	String getConfiguredLanguage();
 
 
 	/**
