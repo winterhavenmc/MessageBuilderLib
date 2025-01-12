@@ -18,19 +18,11 @@
 package com.winterhavenmc.util.messagebuilder.language;
 
 import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
-import org.bukkit.configuration.Configuration;
 
 
 public interface LanguageResourceHandler {
 
-	YamlConfigurationSupplier getSupplier();
-
-	/**
-	 * Get Configuration object for current language file
-	 *
-	 * @return {@code Configuration} the configuration object for the current language file
-	 */
-	Configuration getConfiguration();
+	YamlConfigurationSupplier getConfigurationSupplier();
 
 	/**
 	 * Get setting for language from plugin config file
