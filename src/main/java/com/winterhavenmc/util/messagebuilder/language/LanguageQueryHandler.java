@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.language;
 
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.items.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageRecord;
 
 import java.util.Optional;
 

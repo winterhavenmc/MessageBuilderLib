@@ -15,10 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.items;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section.items;
 
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -39,17 +40,17 @@ public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
 	/**
 	 * Class constructor
 	 *
-	 * @param itemSection the 'ITEMS' configuration section of the language file.
+	 * @param configurationSupplier the supplier for the configuration object of the language file.
 	 */
-	public ItemQueryHandler(ConfigurationSection itemSection) {
-		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
+	public ItemQueryHandler(ConfigurationSupplier configurationSupplier) {
+		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
 
 		// only allow the 'ITEMS' section of the language file to be passed as the constructor parameter
-		if (!Section.ITEMS.name().equals(itemSection.getName())) {
-			System.out.println("Invalid 'ITEMS' section: " + itemSection.getName());
+		if (!Section.ITEMS.name().equals(configurationSupplier.get().getName())) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
 		}
-		this.itemSection = itemSection;
+
+		this.itemSection = configurationSupplier.getSection(Section.ITEMS);
 	}
 
 

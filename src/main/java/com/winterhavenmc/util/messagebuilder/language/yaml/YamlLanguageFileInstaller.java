@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2024 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language;
+package com.winterhavenmc.util.messagebuilder.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.language.LanguageFileInstaller;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;

@@ -15,16 +15,14 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.constants.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.items.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
-
-import org.bukkit.configuration.Configuration;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -35,8 +33,8 @@ import java.util.Map;
  * as enumerated by the constants of the {@link Section} enum
  */
 public class SectionQueryHandlerFactory {
-	private final Map<Section, QueryHandler<?>> domainHandlerCache = new EnumMap<>(Section.class);
-	private final Configuration configuration;
+	private final Map<Section, SectionQueryHandler<?>> sectionHandlerCache = new EnumMap<>(Section.class);
+	private final ConfigurationSupplier configurationSupplier;
 
 
 	/**
@@ -44,11 +42,23 @@ public class SectionQueryHandlerFactory {
 	 * as a parameter, and passes the appropriate top level ConfigurationSection to the constructor of the
 	 * section query handler being produced.
 	 *
-	 * @param configuration the language configuration
+	 * @param configurationSupplier the provider of the language configuration
 	 */
-	public SectionQueryHandlerFactory(Configuration configuration) {
-		if (configuration == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION.getMessage()); }
-		this.configuration = configuration;
+	public SectionQueryHandlerFactory(ConfigurationSupplier configurationSupplier) {
+		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION.getMessage()); }
+		this.configurationSupplier = configurationSupplier;
+	}
+
+
+	/**
+	 * Get a section query handler. If the requested query handler is not in the cache, a new instance is created
+	 * to be returned and placed in the cache.
+	 *
+	 * @param section A constant of the Section enum specifying which SectionQueryHandler to return
+	 * @return The requested SectionQueryHandler
+	 */
+	public SectionQueryHandler<?> getQueryHandler(Section section) {
+		return sectionHandlerCache.computeIfAbsent(section, this::createSectionHandler);
 	}
 
 
@@ -59,12 +69,12 @@ public class SectionQueryHandlerFactory {
 	 * @return the corresponding SectionQueryHandler
 	 * @throws IllegalArgumentException if no handler can be created for the given domain
 	 */
-	public SectionQueryHandler<?> createHandler(Section section) {
+	public SectionQueryHandler<?> createSectionHandler(Section section) {
 		return switch (section) {
-			case CONSTANTS -> new ConstantQueryHandler(configuration.getConfigurationSection(section.name()));
-			case ITEMS -> new ItemQueryHandler(configuration.getConfigurationSection(section.name()));
-			case MESSAGES -> new MessageQueryHandler(configuration.getConfigurationSection(section.name()));
-			case TIME -> new TimeQueryHandler(configuration.getConfigurationSection(section.name()));
+			case CONSTANTS -> new ConstantQueryHandler(configurationSupplier);
+			case ITEMS -> new ItemQueryHandler(configurationSupplier);
+			case MESSAGES -> new MessageQueryHandler(configurationSupplier);
+			case TIME -> new TimeQueryHandler(configurationSupplier);
 			// leaving line below commented so any new section declared in the Section enum needs an explicit handler here
 			//default -> new DefaultSectionQueryHandler();
 		};
@@ -79,7 +89,7 @@ public class SectionQueryHandlerFactory {
 	 * @param <T> The Type of the section query handler being produced
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> SectionQueryHandler<T> createSectionHandler(Section section) {
+	public <T> SectionQueryHandler<T> createSectionHandlerDynamically(Section section) {
 		try {
 			return (SectionQueryHandler<T>) section.getHandlerClass().getDeclaredConstructor().newInstance();
 		} catch (Exception e) {

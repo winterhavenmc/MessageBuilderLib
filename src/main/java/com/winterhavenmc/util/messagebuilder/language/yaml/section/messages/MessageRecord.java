@@ -15,10 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.messages;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section.messages;
 
 
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.ConfigurationSection;
 

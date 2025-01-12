@@ -15,9 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandlerRegistry;
+import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -26,7 +28,7 @@ import java.util.Map;
 /**
  * A registry to manage QueryHandler instances.
  */
-public class SectionQueryHandlerRegistry {
+public class SectionQueryHandlerRegistry implements QueryHandlerRegistry {
 
 	private final Map<Section, QueryHandler<?>> handlers = new EnumMap<>(Section.class);
 
@@ -38,7 +40,8 @@ public class SectionQueryHandlerRegistry {
 	 * @param handler the QueryHandler instance
 	 * @throws IllegalArgumentException if a handler is already registered for the section
 	 */
-	public void registerHandler(Section section, QueryHandler<?> handler) {
+	@Override
+	public void registerQueryHandler(Section section, QueryHandler<?> handler) {
 		if (handlers.containsKey(section)) {
 			throw new IllegalArgumentException("Handler already registered for section: " + section);
 		}
@@ -54,9 +57,11 @@ public class SectionQueryHandlerRegistry {
 	 * @return an Optional containing the QueryHandler, or empty if none is registered
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> QueryHandler<T> getHandler(Section section) {
-		QueryHandler<?> handler = handlers.get(section);
-		return handler != null ? (QueryHandler<T>) handler : null;
+	@Override
+	public <T> QueryHandler<T> getQueryHandler(Section section) {
+		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION.getMessage()); }
+
+		return (SectionQueryHandler<T>) handlers.get(section);
 	}
 
 
@@ -66,7 +71,8 @@ public class SectionQueryHandlerRegistry {
 	 * @param section the section to check
 	 * @return true if a handler is registered, false otherwise
 	 */
-	public boolean hasHandler(Section section) {
+	@Override
+	public boolean hasQueryHandler(Section section) {
 		return handlers.containsKey(section);
 	}
 
@@ -74,7 +80,8 @@ public class SectionQueryHandlerRegistry {
 	/**
 	 * Clears all registered handlers.
 	 */
-	public void clearHandlers() {
+	@Override
+	public void clearQueryHandlers() {
 		handlers.clear();
 	}
 

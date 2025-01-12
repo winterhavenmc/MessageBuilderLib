@@ -15,12 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.language.section.constants.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.items.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeQueryHandler;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandlerRegistryKey;
 
 

@@ -15,11 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.time;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section.time;
 
 import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -51,17 +52,17 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 	/**
 	 * Class constructor
 	 *
-	 * @param timeSection the 'TIME' section of the configuration file, for which this class is solely responsible
+	 * @param configurationSupplier the supplier for the configuration object for the language file
 	 */
-	public TimeQueryHandler(final ConfigurationSection timeSection) {
-		if (timeSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
+	public TimeQueryHandler(final ConfigurationSupplier configurationSupplier) {
+		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
 
 		// only allow the 'TIME' section of the language file to be passed as the constructor parameter
-		if (!Section.TIME.name().equals(timeSection.getName())) {
+		if (!Section.TIME.name().equals(configurationSupplier.getSection(Section.TIME).getName())) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_TIME.getMessage());
 		}
 
-		this.timeSection = timeSection;
+		this.timeSection = configurationSupplier.getSection(Section.TIME);
 	}
 
 

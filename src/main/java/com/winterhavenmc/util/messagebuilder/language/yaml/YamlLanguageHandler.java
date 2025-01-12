@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2024 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language;
+package com.winterhavenmc.util.messagebuilder.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.language.LanguageFileLoader;
+import com.winterhavenmc.util.messagebuilder.language.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandlerFactory;
 import org.bukkit.configuration.Configuration;
 
 import java.util.Locale;
@@ -39,10 +42,14 @@ public class YamlLanguageHandler implements LanguageHandler {
 	private final Configuration pluginConfig;
 
 	// language configuration
-	private Configuration languageConfig;
+//	private Configuration languageConfig;
+
+	// configuration supplier
+	ConfigurationSupplier configurationSupplier;
 
 	// language file loader
 	private LanguageFileLoader languageFileLoader;
+
 
 
 	/**
@@ -59,8 +66,17 @@ public class YamlLanguageHandler implements LanguageHandler {
 		this.pluginConfig = pluginConfig;
 		this.languageFileLoader = languageFileLoader;
 
+		// TODO: move this to MessageBuilder and inject it into this class via constructor
+		// instantiate supplier
+		configurationSupplier = new ConfigurationSupplier(languageFileLoader.getConfiguration());
+
+		// instantiate QueryHandlerFactory
+		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(configurationSupplier);
+
+
+
 		// load message configuration from file
-		languageConfig = languageFileLoader.getConfiguration();
+//		languageConfig = languageFileLoader.getConfiguration();
 
 		// get locale from plugin configuration if set
 		//TODO: Mock static method to enable and test this
@@ -72,13 +88,24 @@ public class YamlLanguageHandler implements LanguageHandler {
 
 
 	/**
+	 * get configuration supplier
+	 *
+	 * @return the configuration supplier
+	 */
+	@Override
+	public ConfigurationSupplier getSupplier() {
+		return this.configurationSupplier;
+	}
+
+	/**
 	 * class constructor, no parameter
 	 * must use setters for all fields before use
 	 */
 	public YamlLanguageHandler() {
 		this.pluginConfig = null;
 		this.languageFileLoader = null;
-		this.languageConfig = null;
+		this.configurationSupplier = null;
+//		this.languageConfig = null;
 		this.locale = null;
 	}
 
@@ -124,7 +151,18 @@ public class YamlLanguageHandler implements LanguageHandler {
 	 */
 	@Override
 	public Configuration getConfiguration() {
-		return languageConfig;
+		return configurationSupplier.get();
+	}
+
+
+	/**
+	 * Get the language configuration held by this language handler.
+	 *
+	 * @return a configuration object loaded with values from the configured language file, or the default en-US.yml
+	 * language file if the configured file could not be found.
+	 */
+	public ConfigurationSupplier getConfigurationSupplier() {
+		return configurationSupplier;
 	}
 
 
@@ -154,7 +192,7 @@ public class YamlLanguageHandler implements LanguageHandler {
 		languageFileLoader.reload();
 		Configuration newConfiguration = languageFileLoader.getConfiguration();
 		if (newConfiguration != null) {
-			this.languageConfig = newConfiguration;
+			configurationSupplier = new ConfigurationSupplier(newConfiguration);
 			return true;
 		}
 		return false;
