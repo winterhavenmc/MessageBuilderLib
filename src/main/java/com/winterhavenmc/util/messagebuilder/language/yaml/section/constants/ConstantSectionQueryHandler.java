@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml.section.constants;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
@@ -38,19 +38,19 @@ public class ConstantSectionQueryHandler implements SectionQueryHandler<String> 
 	/**
 	 * Class constructor
 	 *
-	 * @param configurationSupplier the 'CONSTANTS' section of the language file
+	 * @param yamlConfigurationSupplier the 'CONSTANTS' section of the language file
 	 * @throws IllegalArgumentException if the {@code ConfigurationSection} parameter is null or invalid
 	 */
-	public ConstantSectionQueryHandler(final ConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
+	public ConstantSectionQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
+		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
 
 		// ensure the 'CONSTANTS' section exists in the configuration provided by the supplier
-		if (configurationSupplier.getSection(Section.CONSTANTS) == null) {
+		if (yamlConfigurationSupplier.getSection(Section.CONSTANTS) == null) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage());
 		}
 
 		// get configuration
-		this.section = configurationSupplier.getSection(Section.CONSTANTS);
+		this.section = yamlConfigurationSupplier.getSection(Section.CONSTANTS);
 	}
 
 

@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.LanguageResourceInstaller;
-import com.winterhavenmc.util.messagebuilder.language.LanguageResourceLoader;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -36,7 +34,7 @@ import java.util.logging.Logger;
  * An implementation of the LanguageResourceLoader interface for loading the message configuration from yaml files
  */
 //TODO: This class needs more test coverage. It's mostly null checks and throws missing, and the reload command.
-public class YamlLanguageResourceLoader implements LanguageResourceLoader {
+public class YamlLanguageResourceLoader {
 
 	private final static Logger logger = Logger.getLogger(YamlLanguageResourceLoader.class.getName());
 
@@ -61,16 +59,18 @@ public class YamlLanguageResourceLoader implements LanguageResourceLoader {
 	}
 
 
-	/**
-	 * Class constructor, Two parameter
-	 *
-	 * @param installer a language
-	 */
-	public YamlLanguageResourceLoader(final Plugin plugin, final LanguageResourceInstaller installer)
-	{
-		this.plugin = plugin;
-		installer.install();
-	}
+	// Note: uncomment this constructor and make class YamlLanguageResourceInstaller public to use dependency injection
+	// of the installer as a parameter to this constructor
+//	/**
+//	 * Class constructor, Two parameter
+//	 *
+//	 * @param installer a language
+//	 */
+//	public YamlLanguageResourceLoader(final Plugin plugin, final YamlLanguageResourceInstaller installer)
+//	{
+//		this.plugin = plugin;
+//		installer.install();
+//	}
 
 
 	/**
@@ -78,7 +78,6 @@ public class YamlLanguageResourceLoader implements LanguageResourceLoader {
 	 *
 	 * @return Configuration - message configuration object
 	 */
-	@Override
 	public Configuration getConfiguration()
 	{
 		// get valid language tag using configured language
@@ -140,21 +139,21 @@ public class YamlLanguageResourceLoader implements LanguageResourceLoader {
 	 * Read a configuration from a resource
 	 *
 	 * @param resource the input stream for the resource
-	 * @param newMessagesConfig the newly created message configuration
-	 * @return
+	 * @param newLanguageConfiguration the newly created language configuration
+	 * @return yamlConfiguration the
 	 */
-	private static @NotNull YamlConfiguration readConfiguration(InputStream resource, YamlConfiguration newMessagesConfig)
+	private static @NotNull YamlConfiguration readConfiguration(InputStream resource, YamlConfiguration newLanguageConfiguration)
 	{
 		// get input stream reader for embedded resource file
 		Reader defaultConfigStream = new InputStreamReader(resource, StandardCharsets.UTF_8);
 
 		// load embedded resource stream into Configuration object
-		Configuration defaultConfig = YamlConfiguration.loadConfiguration(defaultConfigStream);
+		Configuration languageConfiguration = YamlConfiguration.loadConfiguration(defaultConfigStream);
 
-		// set Configuration object as defaults for messages configuration
-		newMessagesConfig.setDefaults(defaultConfig);
+		// set Configuration object as defaults for language configuration TODO: do we want language configuration defaults? I don't think so.
+		newLanguageConfiguration.setDefaults(languageConfiguration);
 
-		return newMessagesConfig;
+		return newLanguageConfiguration;
 	}
 
 
@@ -248,6 +247,15 @@ public class YamlLanguageResourceLoader implements LanguageResourceLoader {
 		return Paths.get(LANGUAGE_FOLDER, languageTag + ".yml").normalize().toString();
 	}
 
+
+	private void validateKeys(Configuration configuration)
+	{
+		for (String key : configuration.getKeys(true)) {
+			if (!key.matches("[A-Z0-9_]+")) {
+				Logger.getLogger(getClass().getName() + "Nonconforming key detected: " + key);
+			}
+		}
+	}
 
 	public Configuration reload()
 	{

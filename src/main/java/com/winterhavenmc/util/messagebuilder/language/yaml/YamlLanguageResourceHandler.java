@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.LanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.language.LanguageResourceHandler;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandlerFactory;
 import org.bukkit.configuration.Configuration;
@@ -41,14 +40,11 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	// plugin configuration
 	private final Configuration pluginConfig;
 
-	// language configuration
-//	private Configuration languageConfig;
-
 	// configuration supplier
-	ConfigurationSupplier configurationSupplier;
+	YamlConfigurationSupplier languageYamlConfigurationSupplier;
 
 	// language file loader
-	private LanguageResourceLoader languageResourceLoader;
+	private YamlLanguageResourceLoader languageResourceLoader;
 
 
 
@@ -60,7 +56,7 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * @param languageResourceLoader     the language file loader to be used by the language handler
 	 */
 	public YamlLanguageResourceHandler(final Configuration pluginConfig,
-	                                   final LanguageResourceLoader languageResourceLoader
+	                                   final YamlLanguageResourceLoader languageResourceLoader
 	) {
 
 		// set fields from parameters
@@ -69,10 +65,10 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 
 		// TODO: move this to MessageBuilder and inject it into this class via constructor
 		// instantiate supplier
-		configurationSupplier = new ConfigurationSupplier(languageResourceLoader.getConfiguration());
+		languageYamlConfigurationSupplier = new YamlConfigurationSupplier(languageResourceLoader.getConfiguration());
 
 		// instantiate QueryHandlerFactory
-		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(configurationSupplier);
+		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageYamlConfigurationSupplier);
 
 
 
@@ -94,8 +90,8 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * @return the configuration supplier
 	 */
 	@Override
-	public ConfigurationSupplier getSupplier() {
-		return this.configurationSupplier;
+	public YamlConfigurationSupplier getSupplier() {
+		return this.languageYamlConfigurationSupplier;
 	}
 
 	/**
@@ -105,7 +101,7 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	public YamlLanguageResourceHandler() {
 		this.pluginConfig = null;
 		this.languageResourceLoader = null;
-		this.configurationSupplier = null;
+		this.languageYamlConfigurationSupplier = null;
 //		this.languageConfig = null;
 		this.locale = null;
 	}
@@ -114,7 +110,7 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * setter for fileLoader
 	 * @param languageResourceLoader a new FileLoader to replace the existing fileLoader
 	 */
-	void setFileLoader(final LanguageResourceLoader languageResourceLoader) {
+	void setFileLoader(final YamlLanguageResourceLoader languageResourceLoader) {
 		this.languageResourceLoader = languageResourceLoader;
 	}
 
@@ -152,7 +148,7 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 */
 	@Override
 	public Configuration getConfiguration() {
-		return configurationSupplier.get();
+		return languageYamlConfigurationSupplier.get();
 	}
 
 
@@ -162,8 +158,8 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * @return a configuration object loaded with values from the configured language file, or the default en-US.yml
 	 * language file if the configured file could not be found.
 	 */
-	public ConfigurationSupplier getConfigurationSupplier() {
-		return configurationSupplier;
+	public YamlConfigurationSupplier getLanguageConfigurationSupplier() {
+		return languageYamlConfigurationSupplier;
 	}
 
 
@@ -193,7 +189,7 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 		languageResourceLoader.reload();
 		Configuration newConfiguration = languageResourceLoader.getConfiguration();
 		if (newConfiguration != null) {
-			configurationSupplier = new ConfigurationSupplier(newConfiguration);
+			languageYamlConfigurationSupplier = new YamlConfigurationSupplier(newConfiguration);
 			return true;
 		}
 		return false;

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml.section.items;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
@@ -40,17 +40,17 @@ public class ItemSectionQueryHandler implements SectionQueryHandler<ItemRecord> 
 	/**
 	 * Class constructor
 	 *
-	 * @param configurationSupplier the supplier for the configuration object of the language file.
+	 * @param yamlConfigurationSupplier the supplier for the configuration object of the language file.
 	 */
-	public ItemSectionQueryHandler(ConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
+	public ItemSectionQueryHandler(YamlConfigurationSupplier yamlConfigurationSupplier) {
+		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
 
 		// only allow the 'ITEMS' section of the language file to be passed as the constructor parameter
-		if (!Section.ITEMS.name().equals(configurationSupplier.get().getName())) {
+		if (!Section.ITEMS.name().equals(yamlConfigurationSupplier.get().getName())) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
 		}
 
-		this.itemSection = configurationSupplier.getSection(Section.ITEMS);
+		this.itemSection = yamlConfigurationSupplier.getSection(Section.ITEMS);
 	}
 
 

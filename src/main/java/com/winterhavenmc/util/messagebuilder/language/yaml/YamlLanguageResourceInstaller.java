@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.LanguageResourceInstaller;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -31,7 +30,7 @@ import java.util.*;
  * that are stored as a resource within a /language subdirectory in the plugin jar archive will be
  * copied to the /language subdirectory of the plugin data directory.
  */
-public class YamlLanguageResourceInstaller implements LanguageResourceInstaller {
+class YamlLanguageResourceInstaller {
 
 	private final static String AUTO_INSTALL_TXT = "language/auto_install.txt";
 
@@ -42,7 +41,7 @@ public class YamlLanguageResourceInstaller implements LanguageResourceInstaller 
 	 * Class constructor
 	 * @param plugin reference to plugin main class
 	 */
-	public YamlLanguageResourceInstaller(final Plugin plugin) {
+	YamlLanguageResourceInstaller(final Plugin plugin) {
 		this.plugin = plugin;
 	}
 
@@ -50,7 +49,7 @@ public class YamlLanguageResourceInstaller implements LanguageResourceInstaller 
 	 * package-private getter for auto install filename constant (for testing)
 	 * @return the auto install filename
 	 */
-	public String getAutoInstallFilename() {
+	String getAutoInstallFilename() {
 		return AUTO_INSTALL_TXT;
 	}
 
@@ -59,8 +58,7 @@ public class YamlLanguageResourceInstaller implements LanguageResourceInstaller 
 	 *
 	 * @return {@code int} the number of files installed
 	 */
-	@Override
-	public int install() {
+	int install() {
 		int count = 0;
 		// iterate over list of language files and install from jar if not already present
 		for (String filename : getAutoInstallFilenames()) {

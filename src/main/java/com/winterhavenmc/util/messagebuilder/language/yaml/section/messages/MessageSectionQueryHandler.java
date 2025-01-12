@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml.section.messages;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
@@ -40,18 +40,18 @@ public class MessageSectionQueryHandler implements SectionQueryHandler<MessageRe
 	/**
 	 * Class constructor
 	 *
-	 * @param configurationSupplier the configuration supplier that provides access to the configuration object for the language file.
+	 * @param yamlConfigurationSupplier the configuration supplier that provides access to the configuration object for the language file.
 	 */
-	public MessageSectionQueryHandler(ConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
+	public MessageSectionQueryHandler(YamlConfigurationSupplier yamlConfigurationSupplier) {
+		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
 
 		// allow only 'MESSAGES' configuration section to be passed into constructor
-		if (!Section.MESSAGES.name().equals(configurationSupplier.getSection(Section.MESSAGES).getName())) {
+		if (!Section.MESSAGES.name().equals(yamlConfigurationSupplier.getSection(Section.MESSAGES).getName())) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
 
 		// set field from parameter
-		this.messageSection = configurationSupplier.getSection(Section.MESSAGES);
+		this.messageSection = yamlConfigurationSupplier.getSection(Section.MESSAGES);
 	}
 
 

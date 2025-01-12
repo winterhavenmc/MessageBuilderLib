@@ -17,13 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.language;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
 import org.bukkit.configuration.Configuration;
 
 
 public interface LanguageResourceHandler {
 
-	ConfigurationSupplier getSupplier();
+	YamlConfigurationSupplier getSupplier();
 
 	/**
 	 * Get Configuration object for current language file

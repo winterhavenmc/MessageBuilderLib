@@ -40,16 +40,16 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	/**
 	 * Class constructor
 	 *
-	 * @param configurationSupplier the language configuration
+	 * @param yamlConfigurationSupplier the language configuration
 	 */
-	public YamlLanguageQueryHandler(final ConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Parameter.NULL_CONFIGURATION.getMessage()); }
+	public YamlLanguageQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
+		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Parameter.NULL_CONFIGURATION.getMessage()); }
 
 		// create the query handler registry
 		sectionQueryHandlerRegistry = new SectionQueryHandlerRegistry();
 
 		// create the section factory
-		SectionQueryHandlerFactory sectionQueryHandlerFactory = new SectionQueryHandlerFactory(configurationSupplier);
+		SectionQueryHandlerFactory sectionQueryHandlerFactory = new SectionQueryHandlerFactory(yamlConfigurationSupplier);
 
 		// Register the section handlers in the registry
 		for (Section section : Section.values()) {

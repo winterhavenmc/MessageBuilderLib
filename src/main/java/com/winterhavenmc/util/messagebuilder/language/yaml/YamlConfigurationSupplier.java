@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 /**
  * Class that implements the Java Supplier interface to provide the Bukkit {@link Configuration} object to consumers
  */
-public class ConfigurationSupplier implements Supplier<Configuration> {
+public class YamlConfigurationSupplier implements Supplier<Configuration> {
 	private final Configuration configuration;
 
 
@@ -36,7 +36,7 @@ public class ConfigurationSupplier implements Supplier<Configuration> {
 	 *
 	 * @param configuration the Configuration object loaded from the yaml language configuration file
 	 */
-	public ConfigurationSupplier(Configuration configuration) {
+	public YamlConfigurationSupplier(Configuration configuration) {
 		this.configuration = configuration;
 	}
 

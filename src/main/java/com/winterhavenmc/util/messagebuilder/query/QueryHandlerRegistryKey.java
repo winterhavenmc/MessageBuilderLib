@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,24 +15,6 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language;
+package com.winterhavenmc.util.messagebuilder.query;
 
-import org.bukkit.configuration.Configuration;
-
-public interface LanguageResourceLoader {
-
-	/**
-	 * Get configuration object containing message settings and strings
-	 *
-	 * @return Configuration - message configuration object
-	 */
-	Configuration getConfiguration();
-
-
-	/**
-	 * Reload configuration, reinstalling language files if necessary
-	 * @return the newly loaded configuration for the configured language
-	 */
-	Configuration reload();
-
-}
+public interface QueryHandlerRegistryKey { /* marker interface */ }
