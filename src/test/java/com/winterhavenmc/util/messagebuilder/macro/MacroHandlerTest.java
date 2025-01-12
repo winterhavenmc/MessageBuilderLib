@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
-import com.winterhavenmc.util.messagebuilder.language.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.language.LanguageResourceHandler;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageQueryHandler;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -40,7 +40,7 @@ class MacroHandlerTest {
 
 	private Plugin plugin;
 	private Player player;
-	private LanguageHandler languageHandler;
+	private LanguageResourceHandler languageResourceHandler;
 
 	private MacroHandler macroHandler;
 
@@ -52,10 +52,10 @@ class MacroHandlerTest {
 		when(player.getUniqueId()).thenReturn(new UUID(1, 1));
 		when(player.getName()).thenReturn("Player One");
 
-		languageHandler = mock(LanguageHandler.class, "MockLanguageHandler");
+		languageResourceHandler = mock(LanguageResourceHandler.class, "MockLanguageHandler");
 
 		// real objects
-		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(languageHandler.getConfiguration());
+		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(languageResourceHandler.getConfiguration());
 		macroHandler = new MacroHandler(queryHandler);
 	}
 
@@ -63,7 +63,7 @@ class MacroHandlerTest {
 	public void tearDown() {
 		plugin = null;
 		player = null;
-		languageHandler = null;
+		languageResourceHandler = null;
 		macroHandler = null;
 	}
 
