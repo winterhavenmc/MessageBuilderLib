@@ -60,7 +60,7 @@ public class YamlLanguageResourceLoader {
 
 
 	// Note: uncomment this constructor and make class YamlLanguageResourceInstaller public to use dependency injection
-	// of the installer as a parameter to this constructor
+	// of the installer as a parameter to this constructor. Commented to prevent scope warning.
 //	/**
 //	 * Class constructor, Two parameter
 //	 *
