@@ -45,7 +45,7 @@ class MessageBuilderToolkitTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 
-		when(messageBuilderMock.getQueryHandler()).thenReturn(queryHandlerMock);
+		when(messageBuilderMock.getLanguageQueryHandler()).thenReturn(queryHandlerMock);
 
 		toolkit = new MessageBuilderToolkit<>(messageBuilderMock);
 	}
