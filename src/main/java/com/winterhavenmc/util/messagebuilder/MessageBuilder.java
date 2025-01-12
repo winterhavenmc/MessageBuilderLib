@@ -18,11 +18,14 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.language.*;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageResourceHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
-import com.winterhavenmc.util.messagebuilder.language.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
+import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -62,9 +65,9 @@ import org.bukkit.plugin.Plugin;
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	private final Plugin plugin;
-	private final LanguageHandler languageHandler;
-	private final LanguageQueryHandler queryHandler;
-	private final MacroHandler macroHandler;
+	private final LanguageResourceHandler languageResourceHandler;
+	private final LanguageQueryHandler languageQueryHandler;
+	private final MacroHandler macroQueryHandler;
 
 
 	/**
@@ -76,9 +79,9 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (plugin == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
 
 		this.plugin = plugin;
-		this.languageHandler = new YamlLanguageHandler(plugin.getConfig(), new YamlLanguageFileLoader(plugin));
-		this.queryHandler = new YamlLanguageQueryHandler(languageHandler.getConfiguration());
-		this.macroHandler = new MacroHandler(queryHandler);
+		this.languageResourceHandler = new YamlLanguageResourceHandler(plugin.getConfig(), new YamlLanguageResourceLoader(plugin));
+		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceHandler.getConfigurationSupplier());
+		this.macroQueryHandler = new MacroHandler(languageQueryHandler);
 	}
 
 
@@ -93,7 +96,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (recipient == null) { throw new IllegalArgumentException(Error.Parameter.NULL_RECIPIENT.getMessage()); }
 		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage()); }
 
-		return new Message<>(plugin, queryHandler, macroHandler, recipient, messageId);
+		return new Message<>(plugin, languageQueryHandler, macroQueryHandler, recipient, messageId);
 	}
 
 
@@ -112,8 +115,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the ItemRecord handler for the language file
 	 */
-	LanguageQueryHandler getQueryHandler() {
-		return this.queryHandler;
+	LanguageQueryHandler getLanguageQueryHandler() {
+		return this.languageQueryHandler;
 	}
 
 
@@ -121,7 +124,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * Reload messages from configured language file
 	 */
 	public void reload() {
-		if (!languageHandler.reload()) {
+		if (!languageResourceHandler.reload()) {
 			plugin.getLogger().warning(Error.LanguageConfiguration.RELOAD_FAILED.getMessage());
 		}
 	}
