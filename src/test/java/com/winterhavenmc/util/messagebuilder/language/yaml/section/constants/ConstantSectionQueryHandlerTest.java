@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.constants;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section.constants;
 
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantSectionQueryHandler;

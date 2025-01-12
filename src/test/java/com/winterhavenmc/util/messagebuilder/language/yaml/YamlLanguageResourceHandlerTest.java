@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2024 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,11 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language;
+package com.winterhavenmc.util.messagebuilder.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageResourceHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageResourceLoader;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -159,11 +156,11 @@ class YamlLanguageResourceHandlerTest {
 		when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfig);
 
 		// Act
-		ConfigurationSupplier configurationSupplier = languageHandler.getConfigurationSupplier();
+		YamlConfigurationSupplier yamlConfigurationSupplier = languageHandler.getLanguageConfigurationSupplier();
 
 		// Assert
-		assertNotNull(configurationSupplier);
-		assertNotNull(configurationSupplier.get());
+		assertNotNull(yamlConfigurationSupplier);
+		assertNotNull(yamlConfigurationSupplier.get());
 
 		// Verify
 		verify(languageFileLoaderMock, atLeastOnce()).getConfiguration();

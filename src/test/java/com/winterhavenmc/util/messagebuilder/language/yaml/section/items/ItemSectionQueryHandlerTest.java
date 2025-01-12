@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.items;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section.items;
 
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;

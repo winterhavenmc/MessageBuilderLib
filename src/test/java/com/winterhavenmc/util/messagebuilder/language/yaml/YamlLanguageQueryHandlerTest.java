@@ -15,14 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language;
+package com.winterhavenmc.util.messagebuilder.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.language.section.items.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.items.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.language.section.messages.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageRecord;
 
 import org.bukkit.configuration.Configuration;
 
@@ -62,11 +63,11 @@ class YamlLanguageQueryHandlerTest {
 	@Test
 	void getItemRecordTest() {
 		// Arrange
-		ItemQueryHandler itemQueryHandler = (ItemQueryHandler) queryHandler.getQueryHandler(Section.ITEMS);
-		assertNotNull(itemQueryHandler);
+		ItemSectionQueryHandler itemSectionQueryHandler = (ItemSectionQueryHandler) queryHandler.getQueryHandler(Section.ITEMS);
+		assertNotNull(itemSectionQueryHandler);
 
 		// Act
-		Optional<ItemRecord> itemRecord = itemQueryHandler.getRecord("TEST_ITEM_1");
+		Optional<ItemRecord> itemRecord = itemSectionQueryHandler.getRecord("TEST_ITEM_1");
 
 		// Assert
 		assertTrue(itemRecord.isPresent());
@@ -76,12 +77,12 @@ class YamlLanguageQueryHandlerTest {
 	@Test
 	void getItemRecordTest_null() {
 		// Arrange
-		ItemQueryHandler itemQueryHandler = (ItemQueryHandler) queryHandler.getQueryHandler(Section.ITEMS);
-		assertNotNull(itemQueryHandler);
+		ItemSectionQueryHandler itemSectionQueryHandler = (ItemSectionQueryHandler) queryHandler.getQueryHandler(Section.ITEMS);
+		assertNotNull(itemSectionQueryHandler);
 
 		// Act
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> itemQueryHandler.getRecord(null));
+				() -> itemSectionQueryHandler.getRecord(null));
 
 		// Assert
 		assertEquals("The itemKey parameter was null.", exception.getMessage());
@@ -90,11 +91,11 @@ class YamlLanguageQueryHandlerTest {
 	@Test
 	void getMessageRecordTest() {
 		// Arrange
-		MessageQueryHandler messageQueryHandler = (MessageQueryHandler) queryHandler.getQueryHandler(Section.MESSAGES);
-		assertNotNull(messageQueryHandler);
+		MessageSectionQueryHandler messageSectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getQueryHandler(Section.MESSAGES);
+		assertNotNull(messageSectionQueryHandler);
 
 		// Act
-		Optional<MessageRecord> messageRecord = messageQueryHandler.getRecord(MessageId.ENABLED_MESSAGE);
+		Optional<MessageRecord> messageRecord = messageSectionQueryHandler.getRecord(MessageId.ENABLED_MESSAGE);
 
 		// Assert
 		assertTrue(messageRecord.isPresent());
@@ -103,12 +104,12 @@ class YamlLanguageQueryHandlerTest {
 	@Test
 	void getMessageRecordTest_null() {
 		// Arrange
-		MessageQueryHandler messageQueryHandler = (MessageQueryHandler) queryHandler.getQueryHandler(Section.MESSAGES);
-		assertNotNull(messageQueryHandler);
+		MessageSectionQueryHandler messageSectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getQueryHandler(Section.MESSAGES);
+		assertNotNull(messageSectionQueryHandler);
 
 		// Act
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() ->messageQueryHandler.getRecord(null));
+				() -> messageSectionQueryHandler.getRecord(null));
 
 		// Assert
 		assertEquals("The messageKey parameter cannot be null.", exception.getMessage());

@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.time;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section.time;
 
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;

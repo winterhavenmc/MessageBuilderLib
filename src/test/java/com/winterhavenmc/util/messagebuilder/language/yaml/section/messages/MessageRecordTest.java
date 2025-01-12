@@ -15,38 +15,38 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.section.items;
+package com.winterhavenmc.util.messagebuilder.language.yaml.section.messages;
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.junit.jupiter.api.*;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Optional;
-
+import static com.winterhavenmc.util.messagebuilder.messages.MessageId.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ItemRecordTest {
+class MessageRecordTest {
 
-	private final static String TEST_ITEM = "TEST_ITEM_1";
-
-	private ConfigurationSection itemSection;
+	private ConfigurationSection messageSection;
 
 	@BeforeEach
 	void setUp() {
-		// create real configuration from resource
-		FileConfiguration fileConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		// create new yaml configuration
+		FileConfiguration fileConfiguration = new YamlConfiguration();
 
-		// get item section of configuration
-		itemSection = fileConfiguration.getConfigurationSection(Namespace.Domain.ITEMS.name());
+
+
+		// get messages section of configuration
+		messageSection = fileConfiguration.getConfigurationSection("MESSAGES");
 	}
 
 	@AfterEach
 	void tearDown() {
-		itemSection = null;
+		messageSection = null;
 	}
 
 	//TODO: Each test should have its own distinct test entries in the language configuration resource
@@ -54,16 +54,18 @@ class ItemRecordTest {
 
 	@Test
 	void constructorTest() {
-
-		ItemRecord testRecord = new ItemRecord(
-				TEST_ITEM,
-				Optional.of("Test Item"),
-				Optional.of("Test Items"),
-				Optional.of("Inventory Test Item"),
-				Optional.of("Inventory Test Items"),
-				List.of("Lore line 1", "Lore line 2"));
-
+		MessageRecord testRecord = new MessageRecord(
+				ENABLED_MESSAGE.toString(),
+				true,
+				"this is a test message",
+				11,
+				"this is a test title",
+				22,
+				33,
+				44,
+				"this is a test subtitle");
 		assertNotNull(testRecord, "the newly created record is null.");
 	}
+
 
 }
