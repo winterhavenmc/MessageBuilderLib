@@ -17,10 +17,29 @@
 
 package com.winterhavenmc.util.messagebuilder.query;
 
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandlerFactory;
 
-public interface QueryHandlerFactory {
+import java.util.HashMap;
+import java.util.Map;
 
-	<T> QueryHandler<T> createQueryHandler(Section section);
+public class QueryHandlerFactory {
+	private final Map<Class<?>, Object> factories = new HashMap<>();
+	private final YamlConfigurationSupplier yamlConfigurationSupplier;
 
+	public QueryHandlerFactory(final YamlConfigurationSupplier yamlConfigurationSupplier) {
+		this.yamlConfigurationSupplier = yamlConfigurationSupplier;
+	};
+
+	@SuppressWarnings("unchecked")
+	public <T> T getQueryHandlerFactory(Class<T> factoryType) {
+		return (T) factories.computeIfAbsent(factoryType, this::createQueryHandlerFactory);
+	}
+
+	private Object createQueryHandlerFactory(Class<?> factoryType) {
+		if (factoryType == SectionQueryHandlerFactory.class) {
+			return new SectionQueryHandlerFactory(yamlConfigurationSupplier);
+		}
+		throw new IllegalArgumentException("Unknown factory type: " + factoryType);
+	}
 }
