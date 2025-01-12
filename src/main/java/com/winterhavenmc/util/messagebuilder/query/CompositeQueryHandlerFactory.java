@@ -17,25 +17,26 @@
 
 package com.winterhavenmc.util.messagebuilder.query;
 
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.SectionQueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandlerRegistry;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandlerFactory;
 
 import java.util.Map;
 
 
 public class CompositeQueryHandlerFactory {
 	private final Map<Section, SectionQueryHandlerFactory> sectionFactories;
-	private final QueryHandlerRegistry registry;
+	private final SectionQueryHandlerRegistry registry;
 
 
 	/**
 	 * Class constructor
 	 * @param sectionFactories Map of section query handler factories, keyed by section
-	 * @param registry the QueryHandlerRegistry
+	 * @param registry the SectionQueryHandlerRegistry
 	 */
 	public CompositeQueryHandlerFactory(Map<Section, SectionQueryHandlerFactory> sectionFactories,
-	                                    QueryHandlerRegistry registry) {
+	                                    SectionQueryHandlerRegistry registry) {
 		this.sectionFactories = sectionFactories;
 		this.registry = registry;
 	}
@@ -58,7 +59,7 @@ public class CompositeQueryHandlerFactory {
 		}
 
 		// Create the handler using the section factory
-		SectionQueryHandler<?> handler = factory.createHandler(section);
+		SectionQueryHandler<?> handler = factory.createSectionHandler(section);
 
 		// Ensure the handler matches the requested type
 		if (!type.isAssignableFrom(handler.getHandledType())) {
@@ -72,7 +73,7 @@ public class CompositeQueryHandlerFactory {
 		SectionQueryHandler<T> typedHandler = (SectionQueryHandler<T>) handler;
 
 		// Register the handler in the registry
-		registry.registerHandler(section, typedHandler);
+		registry.registerQueryHandler(section, typedHandler);
 
 		return typedHandler;
 	}
@@ -86,8 +87,8 @@ public class CompositeQueryHandlerFactory {
 			Section section = entry.getKey();
 			SectionQueryHandlerFactory factory = entry.getValue();
 
-			SectionQueryHandler<?> handler = factory.createHandler(section);
-			registry.registerHandler(section, handler);
+			SectionQueryHandler<?> handler = factory.createSectionHandler(section);
+			registry.registerQueryHandler(section, handler);
 		}
 	}
 }
