@@ -31,7 +31,7 @@ import java.util.Optional;
 /**
  * Query handler for the 'CONSTANTS' section of the language file.
  */
-public class ConstantQueryHandler implements SectionQueryHandler<String> {
+public class ConstantSectionQueryHandler implements SectionQueryHandler<String> {
 
 	private final ConfigurationSection section;
 
@@ -41,7 +41,7 @@ public class ConstantQueryHandler implements SectionQueryHandler<String> {
 	 * @param configurationSupplier the 'CONSTANTS' section of the language file
 	 * @throws IllegalArgumentException if the {@code ConfigurationSection} parameter is null or invalid
 	 */
-	public ConstantQueryHandler(final ConfigurationSupplier configurationSupplier) {
+	public ConstantSectionQueryHandler(final ConfigurationSupplier configurationSupplier) {
 		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
 
 		// ensure the 'CONSTANTS' section exists in the configuration provided by the supplier
@@ -60,7 +60,7 @@ public class ConstantQueryHandler implements SectionQueryHandler<String> {
 //	 * @param section the 'CONSTANTS' section of the language file
 //	 * @throws IllegalArgumentException if the {@code ConfigurationSection} parameter is null or invalid
 //	 */
-//	public ConstantQueryHandler(final ConfigurationSection section) {
+//	public ConstantSectionQueryHandler(final ConfigurationSection section) {
 //		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
 //
 //		// ensure only the 'CONSTANTS' section is passed in

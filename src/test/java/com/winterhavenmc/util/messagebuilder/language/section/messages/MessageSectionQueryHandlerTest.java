@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.language.section.messages;
 
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.section.items.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.section.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.ConfigurationSection;
@@ -33,17 +33,17 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MessageQueryHandlerTest {
+class MessageSectionQueryHandlerTest {
 
 	ConfigurationSection section;
-	MessageQueryHandler queryHandler;
+	MessageSectionQueryHandler queryHandler;
 	FileConfiguration configuration;
 
 	@BeforeEach
 	void setUp() {
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		section = configuration.getConfigurationSection(Section.MESSAGES.name());
-		queryHandler = new MessageQueryHandler(section);
+		queryHandler = new MessageSectionQueryHandler(section);
 	}
 
 	@AfterEach
@@ -56,14 +56,14 @@ class MessageQueryHandlerTest {
 	@Test
 	void testConstructor_parameter_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new MessageQueryHandler(null));
+				() -> new MessageSectionQueryHandler(null));
 		assertEquals("The messageSection parameter cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void testConstructor_parameter_invalid() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new MessageQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
+				() -> new MessageSectionQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
 		assertEquals("The messageSection parameter was an invalid 'MESSAGES' section.", exception.getMessage());
 	}
 

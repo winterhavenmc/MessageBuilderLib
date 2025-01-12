@@ -32,7 +32,7 @@ import java.util.Optional;
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * message section.
  */
-public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
+public class MessageSectionQueryHandler implements SectionQueryHandler<MessageRecord> {
 
 	private final ConfigurationSection messageSection;
 
@@ -42,7 +42,7 @@ public class MessageQueryHandler implements SectionQueryHandler<MessageRecord> {
 	 *
 	 * @param configurationSupplier the configuration supplier that provides access to the configuration object for the language file.
 	 */
-	public MessageQueryHandler(ConfigurationSupplier configurationSupplier) {
+	public MessageSectionQueryHandler(ConfigurationSupplier configurationSupplier) {
 		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
 
 		// allow only 'MESSAGES' configuration section to be passed into constructor

@@ -18,10 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.language.yaml.ConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import java.util.EnumMap;
@@ -71,10 +71,10 @@ public class SectionQueryHandlerFactory {
 	 */
 	public SectionQueryHandler<?> createSectionHandler(Section section) {
 		return switch (section) {
-			case CONSTANTS -> new ConstantQueryHandler(configurationSupplier);
-			case ITEMS -> new ItemQueryHandler(configurationSupplier);
-			case MESSAGES -> new MessageQueryHandler(configurationSupplier);
-			case TIME -> new TimeQueryHandler(configurationSupplier);
+			case CONSTANTS -> new ConstantSectionQueryHandler(configurationSupplier);
+			case ITEMS -> new ItemSectionQueryHandler(configurationSupplier);
+			case MESSAGES -> new MessageSectionQueryHandler(configurationSupplier);
+			case TIME -> new TimeSectionQueryHandler(configurationSupplier);
 			// leaving line below commented so any new section declared in the Section enum needs an explicit handler here
 			//default -> new DefaultSectionQueryHandler();
 		};

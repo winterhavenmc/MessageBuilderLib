@@ -38,7 +38,7 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_TI
  * duration, listing the appropriate time units and their singular or plural names down to the granularity
  * specified by the provided TimeUnit constant.
  */
-public class TimeQueryHandler implements SectionQueryHandler<String> {
+public class TimeSectionQueryHandler implements SectionQueryHandler<String> {
 
 	public static final String LESS_THAN_ONE_KEY = "OTHER.LESS_THAN_ONE";
 	public static final String LESS_THAN_KEY = "OTHER.LESS_THAN";
@@ -54,7 +54,7 @@ public class TimeQueryHandler implements SectionQueryHandler<String> {
 	 *
 	 * @param configurationSupplier the supplier for the configuration object for the language file
 	 */
-	public TimeQueryHandler(final ConfigurationSupplier configurationSupplier) {
+	public TimeSectionQueryHandler(final ConfigurationSupplier configurationSupplier) {
 		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
 
 		// only allow the 'TIME' section of the language file to be passed as the constructor parameter

@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandlerRegistryKey;
 
 
@@ -28,10 +28,10 @@ import com.winterhavenmc.util.messagebuilder.query.QueryHandlerRegistryKey;
  * An enumeration of Sections that correspond directly to each top level {@code ConfigurationSection} of the language file.
  */
 public enum Section implements QueryHandlerRegistryKey {
-	CONSTANTS(ConstantQueryHandler.class, "Constant", "Constants", "CONST"),
-	ITEMS(ItemQueryHandler.class, "Item", "Items", "ITEM"),
-	MESSAGES(MessageQueryHandler.class, "Message", "Messages", "MSG"),
-	TIME(TimeQueryHandler.class, "Time", "Time", "TIME"),
+	CONSTANTS(ConstantSectionQueryHandler.class, "Constant", "Constants", "CONST"),
+	ITEMS(ItemSectionQueryHandler.class, "Item", "Items", "ITEM"),
+	MESSAGES(MessageSectionQueryHandler.class, "Message", "Messages", "MSG"),
+	TIME(TimeSectionQueryHandler.class, "Time", "Time", "TIME"),
 	;
 
 	private final Class<? extends SectionQueryHandler<?>> handlerClass;

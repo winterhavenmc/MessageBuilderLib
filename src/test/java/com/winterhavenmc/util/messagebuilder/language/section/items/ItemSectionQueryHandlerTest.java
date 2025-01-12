@@ -17,7 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.language.section.items;
 
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -30,10 +32,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ItemQueryHandlerTest {
+class ItemSectionQueryHandlerTest {
 
 	ConfigurationSection section;
-	ItemQueryHandler queryHandler;
+	ItemSectionQueryHandler queryHandler;
 	FileConfiguration configuration;
 
 
@@ -41,7 +43,7 @@ class ItemQueryHandlerTest {
 	void setUp() {
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		section = configuration.getConfigurationSection("ITEMS");
-		queryHandler = new ItemQueryHandler(section);
+		queryHandler = new ItemSectionQueryHandler(section);
 	}
 
 	@AfterEach
@@ -64,14 +66,14 @@ class ItemQueryHandlerTest {
 	@Test
 	void testConstructor_parameter_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new ItemQueryHandler(null));
+				() -> new ItemSectionQueryHandler(null));
 		assertEquals("The itemSection parameter cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void testConstructor_parameter_invalid() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new ItemQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
+				() -> new ItemSectionQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
 		assertEquals("The itemSection parameter was an invalid 'ITEMS' section.", exception.getMessage());
 	}
 

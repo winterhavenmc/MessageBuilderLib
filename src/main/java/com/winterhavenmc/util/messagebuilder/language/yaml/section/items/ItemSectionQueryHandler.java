@@ -32,7 +32,7 @@ import java.util.Optional;
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * item section.
  */
-public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
+public class ItemSectionQueryHandler implements SectionQueryHandler<ItemRecord> {
 
 	private final ConfigurationSection itemSection;
 
@@ -42,7 +42,7 @@ public class ItemQueryHandler implements SectionQueryHandler<ItemRecord> {
 	 *
 	 * @param configurationSupplier the supplier for the configuration object of the language file.
 	 */
-	public ItemQueryHandler(ConfigurationSupplier configurationSupplier) {
+	public ItemSectionQueryHandler(ConfigurationSupplier configurationSupplier) {
 		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
 
 		// only allow the 'ITEMS' section of the language file to be passed as the constructor parameter

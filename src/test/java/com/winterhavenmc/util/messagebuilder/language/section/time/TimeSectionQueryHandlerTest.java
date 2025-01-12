@@ -18,7 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.language.section.time;
 
 import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.language.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.ConfigurationSection;
@@ -35,17 +36,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-class TimeQueryHandlerTest {
+class TimeSectionQueryHandlerTest {
 
 	FileConfiguration configuration;
 	ConfigurationSection section;
-	TimeQueryHandler queryHandler;
+	TimeSectionQueryHandler queryHandler;
 
 	@BeforeEach
 	void setUp() {
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		section = configuration.getConfigurationSection(Section.TIME.name());
-		queryHandler = new TimeQueryHandler(section);
+		queryHandler = new TimeSectionQueryHandler(section);
 	}
 
 	@AfterEach
@@ -59,14 +60,14 @@ class TimeQueryHandlerTest {
 	@Test
 	void testConstructor_parameter_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new TimeQueryHandler(null));
+				() -> new TimeSectionQueryHandler(null));
 		assertEquals("The configurationSection parameter was null.", exception.getMessage());
 	}
 
 	@Test
 	void testConstructor_parameter_invalid() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new TimeQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
+				() -> new TimeSectionQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
 		assertEquals("The timeSection parameter was an invalid 'TIME' section.", exception.getMessage());
 	}
 
