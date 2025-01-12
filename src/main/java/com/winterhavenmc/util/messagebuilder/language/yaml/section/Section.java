@@ -42,6 +42,7 @@ public enum Section implements QueryHandlerRegistryKey {
 
 	/**
 	 * Constructor for enum constant instances
+	 *
 	 * @param handlerClass the Class of {@link SectionQueryHandler} that is immutably bound to this enum constant
 	 * @param singularName the singular name of this section (ex: Item)
 	 * @param pluralName the plural name for this section (ex: Items)
