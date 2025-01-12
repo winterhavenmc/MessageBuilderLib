@@ -17,40 +17,38 @@
 
 package com.winterhavenmc.util.messagebuilder.query;
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.query.domain.DefaultDomainQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
 
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Set;
+public interface QueryHandlerRegistry {
+	/**
+	 * Registers a QueryHandler for a specific section.
+	 *
+	 * @param section the section associated with the handler
+	 * @param handler the QueryHandler instance
+	 * @throws IllegalArgumentException if a handler is already registered for the section
+	 */
+	void registerQueryHandler(Section section, QueryHandler<?> handler);
 
-public class QueryHandlerRegistry {
-
-	private final Map<Namespace.Domain, DomainQueryHandler<?>> domainHandlers = new EnumMap<>(Namespace.Domain.class);
-	private final DefaultDomainQueryHandler defaultHandler;
-
-	public QueryHandlerRegistry(Set<DomainQueryHandler<?>> handlers) {
-		for (DomainQueryHandler<?> handler : handlers) {
-			domainHandlers.put(handler.getDomain(), handler);
-		}
-		defaultHandler = new DefaultDomainQueryHandler(null); // Default domain is `null` for generic use.
-	}
-
-	public QueryHandlerRegistry(DomainQueryHandlerFactory factory) {
-		for (Namespace.Domain domain : Namespace.Domain.values()) {
-			DomainQueryHandler<?> handler = (DomainQueryHandler<?>) factory.createQueryHandler(domain);
-			if (handler != null) {
-				domainHandlers.put(domain, handler);
-			}
-		}
-		defaultHandler = new DefaultDomainQueryHandler(null);
-	}
-
+	/**
+	 * Retrieves the QueryHandler for the specified section.
+	 *
+	 * @param section the section to retrieve the handler for
+	 * @param <T>     the type of the handler
+	 * @return an Optional containing the QueryHandler, or empty if none is registered
+	 */
 	@SuppressWarnings("unchecked")
-	public <T> DomainQueryHandler<T> getDomainHandler(Namespace.Domain domain) {
-		return (DomainQueryHandler<T>) domainHandlers.getOrDefault(domain, new DefaultDomainQueryHandler(domain));
-	}
+	<T> QueryHandler<T> getQueryHandler(Section section);
 
+	/**
+	 * Checks whether a QueryHandler is registered for the specified section.
+	 *
+	 * @param section the section to check
+	 * @return true if a handler is registered, false otherwise
+	 */
+	boolean hasQueryHandler(Section section);
+
+	/**
+	 * Clears all registered handlers.
+	 */
+	void clearQueryHandlers();
 }
