@@ -38,10 +38,10 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	private Locale locale = Locale.US;
 
 	// plugin configuration
-	private final Configuration pluginConfig;
+	private final Configuration pluginConfiguration;
 
 	// configuration supplier
-	YamlConfigurationSupplier languageYamlConfigurationSupplier;
+	YamlConfigurationSupplier yamlLanguageConfigurationSupplier;
 
 	// language file loader
 	private YamlLanguageResourceLoader languageResourceLoader;
@@ -52,23 +52,21 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * class constructor, three parameter
 	 * all fields are provided as parameters
 	 *
-	 * @param pluginConfig           the plugin configuration
+	 * @param pluginConfiguration        the plugin configuration
 	 * @param languageResourceLoader     the language file loader to be used by the language handler
 	 */
-	public YamlLanguageResourceHandler(final Configuration pluginConfig,
-	                                   final YamlLanguageResourceLoader languageResourceLoader
-	) {
-
+	public YamlLanguageResourceHandler(final Configuration pluginConfiguration,
+	                                   final YamlLanguageResourceLoader languageResourceLoader)
+	{
 		// set fields from parameters
-		this.pluginConfig = pluginConfig;
+		this.pluginConfiguration = pluginConfiguration;
 		this.languageResourceLoader = languageResourceLoader;
 
-		// TODO: move this to MessageBuilder and inject it into this class via constructor
 		// instantiate supplier
-		languageYamlConfigurationSupplier = new YamlConfigurationSupplier(languageResourceLoader.getConfiguration());
+		yamlLanguageConfigurationSupplier = new YamlConfigurationSupplier(languageResourceLoader.getConfiguration());
 
 		// instantiate QueryHandlerFactory
-		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageYamlConfigurationSupplier);
+		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(yamlLanguageConfigurationSupplier);
 
 
 
@@ -91,7 +89,7 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 */
 	@Override
 	public YamlConfigurationSupplier getConfigurationSupplier() {
-		return this.languageYamlConfigurationSupplier;
+		return this.yamlLanguageConfigurationSupplier;
 	}
 
 	/**
@@ -99,10 +97,9 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * must use setters for all fields before use
 	 */
 	public YamlLanguageResourceHandler() {
-		this.pluginConfig = null;
+		this.pluginConfiguration = null;
 		this.languageResourceLoader = null;
-		this.languageYamlConfigurationSupplier = null;
-//		this.languageConfig = null;
+		this.yamlLanguageConfigurationSupplier = null;
 		this.locale = null;
 	}
 
@@ -146,8 +143,8 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * @return a configuration object loaded with values from the configured language file, or the default en-US.yml
 	 * language file if the configured file could not be found.
 	 */
-	public Configuration getConfiguration() {
-		return languageYamlConfigurationSupplier.get();
+	public Configuration getPluginConfiguration() {
+		return yamlLanguageConfigurationSupplier.get();
 	}
 
 
@@ -158,7 +155,7 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * language file if the configured file could not be found.
 	 */
 	public YamlConfigurationSupplier getLanguageConfigurationSupplier() {
-		return languageYamlConfigurationSupplier;
+		return yamlLanguageConfigurationSupplier;
 	}
 
 
@@ -170,8 +167,8 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * ensure that default messages are displayed by the plugin.
 	 */
 	@Override
-	public String getConfigLanguage() {
-		return pluginConfig.getString(CONFIG_LANGUAGE_KEY);
+	public String getConfiguredLanguage() {
+		return pluginConfiguration.getString(CONFIG_LANGUAGE_KEY);
 	}
 
 
@@ -188,7 +185,7 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 		languageResourceLoader.reload();
 		Configuration newConfiguration = languageResourceLoader.getConfiguration();
 		if (newConfiguration != null) {
-			languageYamlConfigurationSupplier = new YamlConfigurationSupplier(newConfiguration);
+			yamlLanguageConfigurationSupplier = new YamlConfigurationSupplier(newConfiguration);
 			return true;
 		}
 		return false;
