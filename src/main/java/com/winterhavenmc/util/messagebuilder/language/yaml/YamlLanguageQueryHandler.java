@@ -22,9 +22,9 @@ import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandlerRegistry;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageRecord;
 
 import java.util.Optional;
@@ -73,8 +73,8 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 		if (itemKey == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
 
 		SectionQueryHandler<?> queryHandler = getQueryHandler(Section.ITEMS);
-		if (queryHandler instanceof ItemQueryHandler itemQueryHandler) {
-			return itemQueryHandler.getRecord(itemKey);
+		if (queryHandler instanceof ItemSectionQueryHandler itemSectionQueryHandler) {
+			return itemSectionQueryHandler.getRecord(itemKey);
 		}
 		return Optional.empty();
 	}
@@ -85,8 +85,8 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 		if (messageId == null) { throw new IllegalArgumentException(Parameter.NULL_MESSAGE_ID.getMessage()); }
 
 		SectionQueryHandler<?> queryHandler = getQueryHandler(Section.MESSAGES);
-		if (queryHandler instanceof MessageQueryHandler messageQueryHandler) {
-			return messageQueryHandler.getRecord(messageId);
+		if (queryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
+			return messageSectionQueryHandler.getRecord(messageId);
 		}
 		return Optional.empty();
 	}
