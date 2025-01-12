@@ -94,7 +94,7 @@ class YamlLanguageResourceHandlerTest {
 	class LanguageTests {
 		@Test
 		void testGetLanguage() {
-			assertEquals(Locale.US.toLanguageTag(), languageHandler.getConfigLanguage());
+			assertEquals(Locale.US.toLanguageTag(), languageHandler.getConfiguredLanguage());
 		}
 	}
 
@@ -144,7 +144,7 @@ class YamlLanguageResourceHandlerTest {
 		languageHandler.reload(); //TODO: check if it's normal that languageHandler.getConfiguration() returned null before being reloaded
 
 		// Assert
-		assertNotNull(languageHandler.getConfiguration());
+		assertNotNull(languageHandler.getPluginConfiguration());
 
 		// Verify
 		verify(languageFileLoaderMock, atLeastOnce()).getConfiguration();
@@ -167,9 +167,9 @@ class YamlLanguageResourceHandlerTest {
 	}
 
 	@Test
-	void getConfigLanguageTest() {
+	void getConfiguredLanguageTest() {
 		// Act & Assert
-		assertEquals("en-US", languageHandler.getConfigLanguage());
+		assertEquals("en-US", languageHandler.getConfiguredLanguage());
 	}
 
 	@Nested
@@ -184,7 +184,7 @@ class YamlLanguageResourceHandlerTest {
 
 			// Assert
 			assertTrue(success);
-			assertNotNull(languageHandler.getConfiguration());
+			assertNotNull(languageHandler.getPluginConfiguration());
 
 			// Verify
 			verify(languageFileLoaderMock, atLeastOnce()).reload();
@@ -200,7 +200,7 @@ class YamlLanguageResourceHandlerTest {
 
 			// Assert
 			assertFalse(success);
-			assertNull(languageHandler.getConfiguration());
+			assertNull(languageHandler.getPluginConfiguration());
 
 			// Verify
 			verify(languageFileLoaderMock, atLeastOnce()).getConfiguration();
