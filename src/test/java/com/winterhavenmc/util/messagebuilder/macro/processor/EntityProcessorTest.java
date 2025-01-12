@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageQueryHandler;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
