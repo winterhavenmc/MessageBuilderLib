@@ -17,12 +17,15 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.query.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.domain.DomainQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +48,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	public MessageBuilderToolkit(final MessageBuilder<MessageId, Macro> messageBuilder) {
 		if (messageBuilder == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_BUILDER.getMessage()); }
 
-		this.queryHandler = messageBuilder.getQueryHandler();
+		this.queryHandler = messageBuilder.getLanguageQueryHandler();
 	}
 
 
@@ -60,13 +63,13 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 
 
 	/**
-	 * Get query handler for domain
+	 * Get query handler for section
 	 *
-	 * @param domain the domain of the query handler requested
-	 * @return the domain query handler
+	 * @param section the section of the query handler requested
+	 * @return the section query handler
 	 */
-	public DomainQueryHandler<?> getQueryHandler(Namespace.Domain domain) {
-		return queryHandler.getQueryHandler(domain);
+	public SectionQueryHandler<?> getQueryHandler(Section section) {
+		return queryHandler.getQueryHandler(section);
 	}
 
 
@@ -104,7 +107,11 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 */
 	@Override
 	public Optional<String> getSpawnDisplayName() {
-		return getQueryHandler().getString(SPAWN_DISPLAY_NAME);
+		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getQueryHandler(Section.CONSTANTS);
+		if (constantSectionQueryHandler != null) {
+			return constantSectionQueryHandler.getString(SPAWN_DISPLAY_NAME);
+		}
+		return Optional.empty();
 	}
 
 
@@ -116,31 +123,43 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 */
 	@Override
 	public Optional<String> getHomeDisplayName() {
-		return getQueryHandler().getString(HOME_DISPLAY_NAME);
+		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getQueryHandler(Section.CONSTANTS);
+		if (constantSectionQueryHandler != null) {
+			return constantSectionQueryHandler.getString(HOME_DISPLAY_NAME);
+		}
+		return Optional.empty();
 	}
 
 
 	/**
 	 * Retrieve any value as a string at the supplied key path within the CONSTANTS section of the language file
 	 *
-	 * @param key a dot-delimited key path for the value to be retrieved
+	 * @param keyPath a dot-delimited key path for the value to be retrieved
 	 * @return an Optional of String containing the value, or an empty Optional if no value was found
 	 */
 	@Override
-	public Optional<String> getString(String key) {
-		return getQueryHandler().getString(key);
+	public Optional<String> getString(String keyPath) {
+		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getQueryHandler(Section.CONSTANTS);
+		if (constantSectionQueryHandler != null) {
+			return constantSectionQueryHandler.getString(keyPath);
+		}
+		return Optional.empty();
 	}
 
 
 	/**
 	 * Retrieve a List of String at the supplied key path within the CONSTANTS section of the language file
 	 *
-	 * @param key a dot-delimited key path for the List to be retrieved
+	 * @param keyPath a dot-delimited key path for the List to be retrieved
 	 * @return a List of String containing the values, or an empty list if no values were found
 	 */
 	@Override
-	public List<String> getStringList(String key) {
-		return getQueryHandler().getStringList(key);
+	public List<String> getStringList(String keyPath) {
+		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getQueryHandler(Section.CONSTANTS);
+		if (constantSectionQueryHandler != null) {
+			return constantSectionQueryHandler.getStringList("TEST_LIST");
+		}
+		return Collections.emptyList();
 	}
 
 }
