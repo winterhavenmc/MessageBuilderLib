@@ -22,7 +22,13 @@ import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupp
 
 public interface LanguageResourceHandler {
 
+	/**
+	 * Retrieve the configuration supplier
+	 *
+	 * @return {@code YamlConfigurationSupplier}
+	 */
 	YamlConfigurationSupplier getConfigurationSupplier();
+
 
 	/**
 	 * Get setting for language from plugin config file

@@ -28,15 +28,30 @@ import java.util.Optional;
 public interface LanguageQueryHandler {
 
 	/**
-	 * Get a query type handler based on the namespaced Section passed
+	 * Get a section query handler for a section type
 	 *
 	 * @param section the namespace Section that dictates the query handler type to be returned
 	 * @return a query handler of the type dictated by the passed namespace Section
 	 */
 	SectionQueryHandler<?> getQueryHandler(Section section);
 
-	Optional<ItemRecord> getItemRecord(final String itemKey);
 
+	/**
+	 * Convenience method to retrieve an item record
+	 *
+	 * @param keyPath the keyPath of the item record to retrieve
+	 * @return an {@link Optional} containing the item record, or an empty {@code Optional} if no record could be found.
+	 */
+	Optional<ItemRecord> getItemRecord(final String keyPath);
+
+
+	/**
+	 * Convenience method to retrieve a message record
+	 *
+	 * @param messageId the MessageId of the message to be retrieved
+	 * @return  an {@link Optional} containing the message record, or an empty {@code Optional} if no record could be found.
+	 * @param <MessageId> An enum constant representing the message identifier in the language file
+	 */
 	<MessageId extends Enum<MessageId>> Optional<MessageRecord> getMessageRecord(MessageId messageId);
 
 }
