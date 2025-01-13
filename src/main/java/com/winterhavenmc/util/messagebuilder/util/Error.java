@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-
 public class Error {
 
 	/**

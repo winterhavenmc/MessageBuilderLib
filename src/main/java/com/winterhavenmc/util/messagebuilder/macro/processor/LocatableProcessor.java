@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.adapters.location.Locatable;
 import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
-import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;

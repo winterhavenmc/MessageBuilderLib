@@ -17,13 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.processor.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorRegistry;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
 import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
 
@@ -40,7 +41,6 @@ public class MacroHandler {
 	/**
 	 * Enum that contains settable LEFT and RIGHT macro delimiter characters
 	 */
-	//TODO: get rid of this enum. it was a fun experiment.
 	public enum MacroDelimiter {
 		LEFT('%'),
 		RIGHT('%');
