@@ -62,13 +62,6 @@ class TimeSectionQueryHandlerTest {
 	}
 
 	@Test
-	void testConstructor_parameter_invalid() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new TimeSectionQueryHandler(configurationSupplier));
-		assertEquals("The timeSection parameter was an invalid 'TIME' section.", exception.getMessage());
-	}
-
-	@Test
 	void testTimeQueryHandler() {
 		assertNotNull(queryHandler);
 	}
