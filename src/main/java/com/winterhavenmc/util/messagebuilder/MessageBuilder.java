@@ -17,13 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.language.*;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
+import com.winterhavenmc.util.messagebuilder.resources.language.*;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
