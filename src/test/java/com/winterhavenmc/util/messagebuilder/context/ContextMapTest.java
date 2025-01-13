@@ -31,7 +31,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -153,4 +155,129 @@ class ContextMapTest {
 		assertFalse(contextMap.getProcessorType("SomeKey").isPresent(), "Empty map should return empty Optional for processor type");
 		assertFalse(contextMap.getValue("SomeKey", Object.class).isPresent(), "Empty map should return empty Optional for values");
 	}
+
+
+
+	@Test
+	void testEntrySet() {
+		// Arrange
+		String key1 = "MACRO|NUMBER1";
+		Integer number1 = 41;
+		ProcessorType processorType = ProcessorType.NUMBER;
+		ContextContainer<Number> container1 = ContextContainer.of(number1, processorType);
+		contextMap.put(key1, container1);
+
+		String key2 = "MACRO|NUMBER2";
+		Integer number2 = 42;
+		ContextContainer<Number> container2 = ContextContainer.of(number2, processorType);
+		contextMap.put(key2, container2);
+
+		// Act
+		Set<Map.Entry<String, ContextContainer<?>>> entrySet = contextMap.entrySet();
+
+		// Assert
+		assertEquals(2, entrySet.size());
+	}
+
+	@Test
+	void testRemove() {
+		// Arrange
+		String key1 = "MACRO|NUMBER1";
+		Integer number1 = 41;
+		ProcessorType processorType = ProcessorType.NUMBER;
+		ContextContainer<Number> container1 = ContextContainer.of(number1, processorType);
+		contextMap.put(key1, container1);
+
+		String key2 = "MACRO|NUMBER2";
+		Integer number2 = 42;
+		ContextContainer<Number> container2 = ContextContainer.of(number2, processorType);
+		contextMap.put(key2, container2);
+
+		assertFalse(contextMap.isEmpty());
+		assertEquals(2, contextMap.size());
+
+		// Act
+		contextMap.remove(key1);
+
+		// Assert
+		assertEquals(1, contextMap.size());
+		assertFalse(contextMap.containsKey(key1));
+		assertTrue(contextMap.containsKey(key2));
+	}
+
+	@Test
+	void testRemove_nonexistent() {
+		// Arrange
+		String key1 = "MACRO|NUMBER1";
+		Integer number1 = 41;
+		ProcessorType processorType = ProcessorType.NUMBER;
+		ContextContainer<Number> container1 = ContextContainer.of(number1, processorType);
+		contextMap.put(key1, container1);
+
+		// Act
+		ContextContainer<?> removedContainer = contextMap.remove("NONEXISTENT_KEY");
+
+		// Assert
+		assertNull(removedContainer);
+	}
+
+	@Test
+	void testClear() {
+		String key1 = "MACRO|NUMBER1";
+		Integer number1 = 41;
+		ProcessorType processorType = ProcessorType.NUMBER;
+		ContextContainer<Number> container1 = ContextContainer.of(number1, processorType);
+		contextMap.put(key1, container1);
+
+		String key2 = "MACRO|NUMBER2";
+		Integer number2 = 42;
+		ContextContainer<Number> container2 = ContextContainer.of(number2, processorType);
+		contextMap.put(key2, container2);
+
+		assertFalse(contextMap.isEmpty());
+		assertEquals(2, contextMap.size());
+		contextMap.clear();
+
+		assertTrue(contextMap.isEmpty());
+	}
+
+	@Test
+	void testSize_empty() {
+		assertEquals(0, contextMap.size());
+	}
+
+	@Test
+	void testSize_not_empty() {
+		String key = "MACRO|NUMBER";
+		Integer number =42;
+		ProcessorType processorType = ProcessorType.NUMBER;
+		ContextContainer<Number> container = ContextContainer.of(number, processorType);
+
+		// Act
+		contextMap.put(key, container);
+
+		// Assert
+		assertEquals(1, contextMap.size());
+	}
+
+	@Test
+	void testIsEmpty() {
+		assertTrue(contextMap.isEmpty());
+	}
+
+	@Test
+	void testIsEmpty_not_empty() {
+		// Arrange
+		String key = "MACRO|NUMBER";
+		Integer number =42;
+		ProcessorType processorType = ProcessorType.NUMBER;
+		ContextContainer<Number> container = ContextContainer.of(number, processorType);
+
+		// Act
+		contextMap.put(key, container);
+
+		// Assert
+		assertFalse(contextMap.isEmpty());
+	}
+
 }
