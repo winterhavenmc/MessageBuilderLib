@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
@@ -38,11 +39,11 @@ class ItemSectionQueryHandlerTest {
 
 	YamlConfigurationSupplier configurationSupplier;
 	ItemSectionQueryHandler queryHandler;
-
+	Configuration configuration;
 
 	@BeforeEach
 	void setUp() {
-		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		queryHandler = new ItemSectionQueryHandler(configurationSupplier);
 	}
@@ -64,6 +65,17 @@ class ItemSectionQueryHandlerTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new ItemSectionQueryHandler(null));
 		assertEquals("The itemSection parameter cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testConstructor_supplier_contains_null() {
+		// Arrange
+		configuration.set("ITEMS", null);
+		YamlConfigurationSupplier supplier = new YamlConfigurationSupplier(configuration);
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() ->  new ItemSectionQueryHandler(supplier));
+		assertEquals("The itemSection parameter was an invalid 'ITEMS' section.", exception.getMessage());
 	}
 
 	@Test
