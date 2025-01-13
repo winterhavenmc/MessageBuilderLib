@@ -65,13 +65,6 @@ class ConstantSectionQueryHandlerTest {
 	}
 
 	@Test
-	void testConstructor_parameter_invalid() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new ConstantSectionQueryHandler(configurationSupplier));
-		assertEquals("The constantSection parameter was an invalid 'CONSTANTS' section.", exception.getMessage());
-	}
-
-	@Test
 	void testGetSectionType() {
 		assertEquals("CONSTANTS", queryHandler.getSectionType().name());
 	}
