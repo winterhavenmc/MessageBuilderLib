@@ -43,7 +43,7 @@ public class ItemSectionQueryHandler implements SectionQueryHandler<ItemRecord> 
 	 *
 	 * @param configurationSupplier the supplier for the configuration object of the language file.
 	 */
-	public ItemSectionQueryHandler(YamlConfigurationSupplier configurationSupplier) {
+	public ItemSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier) {
 		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
 
 		// check that 'ITEMS' section returned by the configuration supplier is not null
