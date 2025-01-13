@@ -35,7 +35,7 @@ import java.util.Map;
 public class SectionQueryHandlerFactory {
 
 	private final Map<Section, SectionQueryHandler<?>> sectionHandlerCache = new EnumMap<>(Section.class);
-	private final YamlConfigurationSupplier yamlConfigurationSupplier;
+	private final YamlConfigurationSupplier configurationSupplier;
 
 
 	/**
@@ -43,11 +43,11 @@ public class SectionQueryHandlerFactory {
 	 * as a parameter, and passes the appropriate top level ConfigurationSection to the constructor of the
 	 * section query handler being produced.
 	 *
-	 * @param yamlConfigurationSupplier the provider of the language configuration
+	 * @param configurationSupplier the provider of the language configuration
 	 */
-	public SectionQueryHandlerFactory(YamlConfigurationSupplier yamlConfigurationSupplier) {
-		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION.getMessage()); }
-		this.yamlConfigurationSupplier = yamlConfigurationSupplier;
+	public SectionQueryHandlerFactory(YamlConfigurationSupplier configurationSupplier) {
+		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION.getMessage()); }
+		this.configurationSupplier = configurationSupplier;
 	}
 
 
@@ -72,10 +72,10 @@ public class SectionQueryHandlerFactory {
 	 */
 	public SectionQueryHandler<?> createSectionHandler(Section section) {
 		return switch (section) {
-			case CONSTANTS -> new ConstantSectionQueryHandler(yamlConfigurationSupplier);
-			case ITEMS -> new ItemSectionQueryHandler(yamlConfigurationSupplier);
-			case MESSAGES -> new MessageSectionQueryHandler(yamlConfigurationSupplier);
-			case TIME -> new TimeSectionQueryHandler(yamlConfigurationSupplier);
+			case CONSTANTS -> new ConstantSectionQueryHandler(configurationSupplier);
+			case ITEMS -> new ItemSectionQueryHandler(configurationSupplier);
+			case MESSAGES -> new MessageSectionQueryHandler(configurationSupplier);
+			case TIME -> new TimeSectionQueryHandler(configurationSupplier);
 			// leaving line below commented so any new section declared in the Section enum needs an explicit handler here
 			//default -> new DefaultSectionQueryHandler();
 		};

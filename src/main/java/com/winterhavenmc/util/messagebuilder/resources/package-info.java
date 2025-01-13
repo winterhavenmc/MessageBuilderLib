@@ -16,6 +16,8 @@
  */
 
 /**
- * This package contains packages that pertain to resource handling and queries
+ * This package contains packages that pertain to resources and their handlers and
+ * query handlers. At this time, the only resource is the yaml language file, divided into
+ * sections each having their own query handler.
  */
 package com.winterhavenmc.util.messagebuilder.resources;
