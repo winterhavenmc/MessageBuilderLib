@@ -17,13 +17,17 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,17 +35,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MessageRecordTest {
 
+	private Configuration configuration;
 	private ConfigurationSection messageSection;
 
 	@BeforeEach
 	void setUp() {
-		// create new yaml configuration
-		FileConfiguration fileConfiguration = new YamlConfiguration();
-
-
+		// create real configuration from resource
+		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
 		// get messages section of configuration
-		messageSection = fileConfiguration.getConfigurationSection("MESSAGES");
+		messageSection = configuration.getConfigurationSection("MESSAGES");
 	}
 
 	@AfterEach
@@ -67,5 +70,45 @@ class MessageRecordTest {
 		assertNotNull(testRecord, "the newly created record is null.");
 	}
 
+	@Test
+	void testGetRecord_parameter_valid() {
+		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(MessageId.ENABLED_MESSAGE, messageSection);
+		assertTrue(messageRecord.isPresent());
+	}
+
+	@Test
+	void testGetRecord_parameter_keyPath_null() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() ->  MessageRecord.getRecord(null, messageSection));
+
+		assertEquals("The messageId parameter cannot null.", exception.getMessage());
+	}
+
+	@Test
+	void testGetRecord_parameter_keyPath_invalid() {
+		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(NONEXISTENT_ENTRY, messageSection);
+		assertTrue(messageRecord.isEmpty());
+	}
+
+	@Test
+	void testGetRecord_parameter_itemSection_null() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() ->  MessageRecord.getRecord(ENABLED_MESSAGE, null));
+
+		assertEquals("The messageSection parameter cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testGetRecord_parameter_itemSection_invalid() {
+		// Arrange
+		messageSection = configuration.getConfigurationSection("ITEMS");
+
+		// Act
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() ->  MessageRecord.getRecord(ENABLED_MESSAGE, messageSection));
+
+		// Assert
+		assertEquals("The messageSection parameter was an invalid 'MESSAGES' section.", exception.getMessage());
+	}
 
 }

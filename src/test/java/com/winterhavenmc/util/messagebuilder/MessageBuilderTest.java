@@ -17,14 +17,17 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
+
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -36,13 +39,14 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
-
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class MessageBuilderTest {
@@ -55,7 +59,6 @@ class MessageBuilderTest {
 
 	private MessageBuilder<MessageId, Macro> messageBuilder;
 
-
 	@BeforeEach
 	void setUp() {
 		// load configuration from resource
@@ -63,22 +66,26 @@ class MessageBuilderTest {
 		pluginConfig.set("language", "en-US");
 		pluginConfig.set("locale", "en-US");
 
-		assertNotNull(pluginConfig);
-		assertEquals("en-US", pluginConfig.getString("language"));
+		// create real language configuration
+		Configuration languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		when(languageHandlerMock.getConfigurationSupplier()).thenReturn(new YamlConfigurationSupplier(languageConfiguration));
 
-		// return resources for mock plugin
-		// return real file input streams for mock plugin resources
-		doAnswer(invocation -> getClass().getClassLoader().getResourceAsStream(invocation.getArgument(0)))
-				.when(pluginMock).getResource(anyString());
-
-//		when(pluginMock.getResource(LANGUAGE_EN_US_YML)).thenReturn(getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML));
-//		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
+		// return logger for plugin.getLogger()
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("MessageBuilderTest"));
 
 		// return populated pluginConfig for plugin.getConfig()
 		when(pluginMock.getConfig()).thenReturn(pluginConfig);
 
-		// return logger for plugin.getLogger()
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("MessageBuilderTest"));
+		// return resources for mock plugin
+		// return real file input streams for mock plugin resources
+		doAnswer(invocation -> this.getClass().getClassLoader().getResourceAsStream(invocation.getArgument(0)))
+				.when(pluginMock).getResource(anyString());
+
+
+
+
+//		when(pluginMock.getResource(LANGUAGE_EN_US_YML)).thenReturn(getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML));
+//		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 
 		// return serverMock for plugin.getServer()
 //		when(pluginMock.getServer()).thenReturn(serverMock);
