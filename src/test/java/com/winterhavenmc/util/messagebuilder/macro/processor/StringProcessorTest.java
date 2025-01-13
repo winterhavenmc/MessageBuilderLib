@@ -17,13 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.macro.ContextContainer;
-import com.winterhavenmc.util.messagebuilder.macro.ContextMap;
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
-import com.winterhavenmc.util.messagebuilder.namespace.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
+import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageQueryHandler;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -48,8 +49,9 @@ class StringProcessorTest {
 
 	@BeforeEach
 	public void setUp() {
-		Configuration languageConfiguration = loadConfigurationFromResource("language/en-US.yml");
-		queryHandler = new YamlLanguageQueryHandler(languageConfiguration);
+		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
+		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
+		queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
 	}
 
 	@AfterEach
@@ -81,7 +83,7 @@ class StringProcessorTest {
 	@Test
 	void resolveContextWithItem() {
 
-//		LanguageHandler languageHandler = new YamlLanguageHandler(plugin, new YamlLanguageFileLoader(plugin));
+//		LanguageResourceHandler languageHandler = new YamlLanguageResourceHandler(plugin, new YamlLanguageResourceLoader(plugin));
 //		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(plugin, languageHandler.getConfiguration());
 //		MacroProcessor macroProcessor = new StringProcessor(queryHandler);
 //

@@ -17,12 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml.section.items;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
+
+import org.bukkit.configuration.Configuration;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,23 +31,23 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class ItemSectionQueryHandlerTest {
 
-	ConfigurationSection section;
+	YamlConfigurationSupplier configurationSupplier;
 	ItemSectionQueryHandler queryHandler;
-	FileConfiguration configuration;
 
 
 	@BeforeEach
 	void setUp() {
-		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		section = configuration.getConfigurationSection("ITEMS");
-		queryHandler = new ItemSectionQueryHandler(section);
+		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		configurationSupplier = new YamlConfigurationSupplier(configuration);
+		queryHandler = new ItemSectionQueryHandler(configurationSupplier);
 	}
 
 	@AfterEach
 	void tearDown() {
-		section = null;
+		configurationSupplier = null;
 		queryHandler = null;
 	}
 
@@ -56,11 +55,6 @@ class ItemSectionQueryHandlerTest {
 	@Test
 	void testNotNull() {
 		assertNotNull(queryHandler);
-	}
-
-	@Test
-	void testSectionName_equals_Section() {
-		assertEquals(Section.ITEMS.name(), section.getName());
 	}
 
 	@Test
@@ -73,7 +67,7 @@ class ItemSectionQueryHandlerTest {
 	@Test
 	void testConstructor_parameter_invalid() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new ItemSectionQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
+				() -> new ItemSectionQueryHandler(configurationSupplier));
 		assertEquals("The itemSection parameter was an invalid 'ITEMS' section.", exception.getMessage());
 	}
 

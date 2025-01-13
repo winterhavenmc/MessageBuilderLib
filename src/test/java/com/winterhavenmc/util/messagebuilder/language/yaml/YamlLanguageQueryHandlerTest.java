@@ -48,8 +48,9 @@ class YamlLanguageQueryHandlerTest {
 
 	@BeforeEach
 	void setUp() {
-		Configuration languageConfig = loadConfigurationFromResource("language/en-US.yml");
-		queryHandler = new YamlLanguageQueryHandler(languageConfig);
+		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
+		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
+		queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
 	}
 
 

@@ -33,24 +33,26 @@ import java.util.Optional;
  */
 public class ConstantSectionQueryHandler implements SectionQueryHandler<String> {
 
-	private final ConfigurationSection section;
+	private final static Section section = Section.CONSTANTS;
+	private final YamlConfigurationSupplier configurationSupplier;
+
 
 	/**
 	 * Class constructor
 	 *
-	 * @param yamlConfigurationSupplier the 'CONSTANTS' section of the language file
-	 * @throws IllegalArgumentException if the {@code ConfigurationSection} parameter is null or invalid
+	 * @param yamlConfigurationSupplier the provider of the current language configuration object
+	 * @throws IllegalArgumentException if the {@code yamlConfigurationSupplier} parameter is null or invalid
 	 */
 	public ConstantSectionQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
 		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
 
 		// ensure the 'CONSTANTS' section exists in the configuration provided by the supplier
-		if (yamlConfigurationSupplier.getSection(Section.CONSTANTS) == null) {
+		if (yamlConfigurationSupplier.getSection(section) == null) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage());
 		}
 
-		// get configuration
-		this.section = yamlConfigurationSupplier.getSection(Section.CONSTANTS);
+		// get configuration supplier
+		this.configurationSupplier = yamlConfigurationSupplier;
 	}
 
 
@@ -64,7 +66,7 @@ public class ConstantSectionQueryHandler implements SectionQueryHandler<String> 
 //		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
 //
 //		// ensure only the 'CONSTANTS' section is passed in
-//		if (!section.getName().equals(Section.CONSTANTS.name())) {
+//		if (!section.getName().equals(this.section.name())) {
 //			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage());
 //		}
 //
@@ -79,7 +81,7 @@ public class ConstantSectionQueryHandler implements SectionQueryHandler<String> 
 	 */
 	@Override
 	public Section getSectionType() {
-		return Section.CONSTANTS;
+		return section;
 	}
 
 
@@ -116,7 +118,7 @@ public class ConstantSectionQueryHandler implements SectionQueryHandler<String> 
 	 */
 	public Optional<String> getString(final String keyPath) {
 		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
-		return Optional.ofNullable(section.getString(keyPath));
+		return Optional.ofNullable(configurationSupplier.getSection(section).getString(keyPath));
 	}
 
 
@@ -129,7 +131,7 @@ public class ConstantSectionQueryHandler implements SectionQueryHandler<String> 
 	 */
 	public List<String> getStringList(final String keyPath) {
 		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
-		return section.getStringList(keyPath);
+		return configurationSupplier.getSection(section).getStringList(keyPath);
 	}
 
 
@@ -142,7 +144,7 @@ public class ConstantSectionQueryHandler implements SectionQueryHandler<String> 
 	 */
 	public int getInt(final String keyPath) {
 		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
-		return section.getInt(keyPath);
+		return configurationSupplier.getSection(section).getInt(keyPath);
 	}
 
 }

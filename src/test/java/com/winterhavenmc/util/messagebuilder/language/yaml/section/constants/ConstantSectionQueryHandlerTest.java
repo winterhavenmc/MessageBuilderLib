@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml.section.constants;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
+
+import org.bukkit.configuration.Configuration;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,23 +32,22 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class ConstantSectionQueryHandlerTest {
 
-	FileConfiguration configuration;
-	ConfigurationSection section;
+	YamlConfigurationSupplier configurationSupplier;
 	ConstantSectionQueryHandler queryHandler;
 
 	@BeforeEach
 	void setUp() {
-		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		section = configuration.getConfigurationSection(Section.CONSTANTS.name());
-		queryHandler = new ConstantSectionQueryHandler(section);
+		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		configurationSupplier = new YamlConfigurationSupplier(configuration);
+		queryHandler = new ConstantSectionQueryHandler(configurationSupplier);
 	}
 
 	@AfterEach
 	void tearDown() {
-		configuration = null;
-		section = null;
+		configurationSupplier = null;
 		queryHandler = null;
 	}
 
@@ -68,13 +67,8 @@ class ConstantSectionQueryHandlerTest {
 	@Test
 	void testConstructor_parameter_invalid() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new ConstantSectionQueryHandler(configuration.getConfigurationSection(Section.ITEMS.name())));
+				() -> new ConstantSectionQueryHandler(configurationSupplier));
 		assertEquals("The constantSection parameter was an invalid 'CONSTANTS' section.", exception.getMessage());
-	}
-
-	@Test
-	void testSectionName_equals_Section() {
-		assertEquals(Section.CONSTANTS.name(), section.getName());
 	}
 
 	@Test

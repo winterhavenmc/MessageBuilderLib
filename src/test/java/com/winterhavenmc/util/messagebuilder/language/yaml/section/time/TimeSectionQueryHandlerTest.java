@@ -18,12 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.language.yaml.section.time;
 
 import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.time.TimeSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.namespace.Namespace;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
+
+import org.bukkit.configuration.Configuration;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,21 +38,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TimeSectionQueryHandlerTest {
 
-	FileConfiguration configuration;
-	ConfigurationSection section;
+	YamlConfigurationSupplier configurationSupplier;
 	TimeSectionQueryHandler queryHandler;
 
 	@BeforeEach
 	void setUp() {
-		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		section = configuration.getConfigurationSection(Section.TIME.name());
-		queryHandler = new TimeSectionQueryHandler(section);
+		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		configurationSupplier = new YamlConfigurationSupplier(configuration);
+		queryHandler = new TimeSectionQueryHandler(configurationSupplier);
 	}
 
 	@AfterEach
 	void tearDown() {
-		configuration = null;
-		section = null;
 		queryHandler = null;
 	}
 
@@ -67,7 +64,7 @@ class TimeSectionQueryHandlerTest {
 	@Test
 	void testConstructor_parameter_invalid() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new TimeSectionQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
+				() -> new TimeSectionQueryHandler(configurationSupplier));
 		assertEquals("The timeSection parameter was an invalid 'TIME' section.", exception.getMessage());
 	}
 
@@ -255,10 +252,7 @@ class TimeSectionQueryHandlerTest {
 	@ParameterizedTest
 	@EnumSource
 	void testGetLessThanOneString(TimeUnit timeUnit) {
-		// Arrange
-		long duration = timeUnit.justShyOf(1);
-
-		// Act
+		// Arrange & Act
 		String resultString = queryHandler.getLessThanOneString(timeUnit);
 
 		// Assert

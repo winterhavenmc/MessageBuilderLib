@@ -17,9 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml.section.messages;
 
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.ConfigurationSection;
@@ -36,14 +35,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class MessageSectionQueryHandlerTest {
 
 	ConfigurationSection section;
+	YamlConfigurationSupplier configurationSupplier;
 	MessageSectionQueryHandler queryHandler;
-	FileConfiguration configuration;
 
 	@BeforeEach
 	void setUp() {
-		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		FileConfiguration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		section = configuration.getConfigurationSection(Section.MESSAGES.name());
-		queryHandler = new MessageSectionQueryHandler(section);
+		queryHandler = new MessageSectionQueryHandler(configurationSupplier);
 	}
 
 	@AfterEach
@@ -63,7 +63,7 @@ class MessageSectionQueryHandlerTest {
 	@Test
 	void testConstructor_parameter_invalid() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new MessageSectionQueryHandler(configuration.getConfigurationSection(Section.CONSTANTS.name())));
+				() -> new MessageSectionQueryHandler(configurationSupplier));
 		assertEquals("The messageSection parameter was an invalid 'MESSAGES' section.", exception.getMessage());
 	}
 

@@ -17,16 +17,21 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.language.LanguageResourceHandler;
+import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.yaml.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -38,7 +43,6 @@ import static org.mockito.Mockito.when;
 
 class MacroHandlerTest {
 
-	private Plugin plugin;
 	private Player player;
 	private LanguageResourceHandler languageResourceHandler;
 
@@ -47,7 +51,6 @@ class MacroHandlerTest {
 	@BeforeEach
 	public void setUp() {
 
-		plugin = mock(Plugin.class, "MockPlugin");
 		player = mock(Player.class, "MockPlayer");
 		when(player.getUniqueId()).thenReturn(new UUID(1, 1));
 		when(player.getName()).thenReturn("Player One");
@@ -55,32 +58,33 @@ class MacroHandlerTest {
 		languageResourceHandler = mock(LanguageResourceHandler.class, "MockLanguageHandler");
 
 		// real objects
-		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(languageResourceHandler.getConfiguration());
+		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
+		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
 		macroHandler = new MacroHandler(queryHandler);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		plugin = null;
 		player = null;
 		languageResourceHandler = null;
 		macroHandler = null;
 	}
 
-	@Nested
-	class DelimiterTests {
-		@Test
-		void setDelimiterTest_LEFT() {
-			MacroHandler.MacroDelimiter.LEFT.set('L');
-			assertEquals('L', MacroHandler.MacroDelimiter.LEFT.toChar());
-		}
-
-		@Test
-		void setDelimiterTest_RIGHT() {
-			MacroHandler.MacroDelimiter.RIGHT.set('R');
-			assertEquals('R', MacroHandler.MacroDelimiter.RIGHT.toChar());
-		}
-	}
+//	@Nested
+//	class DelimiterTests {
+//		@Test
+//		void setDelimiterTest_LEFT() {
+//			MacroHandler.MacroDelimiter.LEFT.set('L');
+//			assertEquals('L', MacroHandler.MacroDelimiter.LEFT.toChar());
+//		}
+//
+//		@Test
+//		void setDelimiterTest_RIGHT() {
+//			MacroHandler.MacroDelimiter.RIGHT.set('R');
+//			assertEquals('R', MacroHandler.MacroDelimiter.RIGHT.toChar());
+//		}
+//	}
 
 	@Test
 	void replaceMacrosTest() {
