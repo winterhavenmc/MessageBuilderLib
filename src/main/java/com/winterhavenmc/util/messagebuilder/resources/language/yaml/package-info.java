@@ -19,4 +19,4 @@
  * This package provides an implementation of a language resource package, including
  * implementations of {@code LanguageResourceHandler} and {@code LanguageQueryHandler}.
  */
-package com.winterhavenmc.util.messagebuilder.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml;

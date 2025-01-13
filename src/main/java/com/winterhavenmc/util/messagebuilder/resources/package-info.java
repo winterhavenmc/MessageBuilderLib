@@ -15,19 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.yaml.section;
-
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
-
-import java.util.List;
-
-
-public interface SectionQueryHandler<T> extends QueryHandler<T> {
-
-
-	Section getSectionType();
-
-	Class<T> getHandledType();
-
-	List<Class<?>> listHandledTypes();
-}
+/**
+ * This package contains packages that pertain to resource handling and queries
+ */
+package com.winterhavenmc.util.messagebuilder.resources;

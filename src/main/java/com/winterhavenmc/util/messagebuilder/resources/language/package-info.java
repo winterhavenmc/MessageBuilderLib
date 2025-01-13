@@ -21,4 +21,4 @@
  * for an implementation of language resource and query handlers, respectively.
  * At this time, there is only one implementation of a language resource package, the yaml package.
  */
-package com.winterhavenmc.util.messagebuilder.language;
+package com.winterhavenmc.util.messagebuilder.resources.language;

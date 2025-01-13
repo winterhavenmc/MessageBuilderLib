@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml.section.constants;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;

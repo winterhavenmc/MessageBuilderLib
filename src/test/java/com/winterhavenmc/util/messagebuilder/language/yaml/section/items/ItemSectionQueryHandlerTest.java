@@ -17,7 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml.section.items;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;

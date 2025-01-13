@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.query;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandlerFactory;
 
 import java.util.HashMap;
 import java.util.Map;

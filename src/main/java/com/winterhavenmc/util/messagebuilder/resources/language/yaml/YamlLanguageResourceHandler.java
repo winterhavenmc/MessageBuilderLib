@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.LanguageResourceHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceHandler;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandlerFactory;
 import org.bukkit.configuration.Configuration;
 

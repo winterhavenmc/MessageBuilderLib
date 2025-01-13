@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.query;
 
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 
 public interface QueryHandlerRegistry {
 	/**

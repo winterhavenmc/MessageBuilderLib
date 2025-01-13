@@ -15,17 +15,17 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandlerFactory;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandlerRegistry;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandlerRegistry;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 
 import java.util.Optional;
 

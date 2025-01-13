@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.yaml.section.items;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 import com.winterhavenmc.util.messagebuilder.util.Error;

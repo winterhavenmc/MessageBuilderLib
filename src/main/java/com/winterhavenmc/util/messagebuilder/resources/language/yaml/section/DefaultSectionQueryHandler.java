@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 
 import java.util.List;
