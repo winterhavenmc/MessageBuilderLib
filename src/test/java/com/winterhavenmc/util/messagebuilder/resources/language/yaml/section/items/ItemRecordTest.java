@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
@@ -44,7 +45,7 @@ class ItemRecordTest {
 		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
 		// get item section of configuration
-		itemSection = configuration.getConfigurationSection(Namespace.Domain.ITEMS.name());
+		itemSection = configuration.getConfigurationSection(Section.ITEMS.name());
 	}
 
 	@AfterEach
