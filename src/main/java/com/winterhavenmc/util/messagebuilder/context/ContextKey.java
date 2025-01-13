@@ -18,8 +18,15 @@
 package com.winterhavenmc.util.messagebuilder.context;
 
 
+/**
+ * Interface that defines keys for use in the context map
+ */
 public interface ContextKey {
 
 	String getKey();
+
+	boolean equals(final Object obj);
+
+	int hashCode();
 
 }
