@@ -15,9 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.namespace;
+package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import java.util.List;

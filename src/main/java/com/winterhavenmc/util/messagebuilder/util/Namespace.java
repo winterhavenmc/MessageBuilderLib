@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.namespace;
+package com.winterhavenmc.util.messagebuilder.util;
 
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.items.ItemSectionQueryHandler;
