@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -36,12 +35,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConstantSectionQueryHandlerTest {
 
+	Configuration configuration;
 	YamlConfigurationSupplier configurationSupplier;
 	ConstantSectionQueryHandler queryHandler;
 
 	@BeforeEach
 	void setUp() {
-		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		queryHandler = new ConstantSectionQueryHandler(configurationSupplier);
 	}
@@ -63,6 +63,17 @@ class ConstantSectionQueryHandlerTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new ConstantSectionQueryHandler(null));
 		assertEquals("The constantSection parameter cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testConstructor_supplier_contains_null() {
+		// Arrange
+		configuration.set("CONSTANTS", null);
+		YamlConfigurationSupplier supplier = new YamlConfigurationSupplier(configuration);
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() ->  new ConstantSectionQueryHandler(supplier));
+		assertEquals("The constantSection parameter was an invalid 'CONSTANTS' section.", exception.getMessage());
 	}
 
 	@Test
