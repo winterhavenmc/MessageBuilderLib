@@ -56,10 +56,6 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 		for (Section section : Section.values()) {
 			sectionQueryHandlerRegistry.registerQueryHandler(section, sectionQueryHandlerFactory.createSectionHandler(section));
 		}
-//		sectionQueryHandlerRegistry.registerQueryHandler(Section.CONSTANTS, sectionQueryHandlerFactory.createSectionHandler(Section.CONSTANTS));
-//		sectionQueryHandlerRegistry.registerQueryHandler(Section.ITEMS, sectionQueryHandlerFactory.createSectionHandler(Section.ITEMS));
-//		sectionQueryHandlerRegistry.registerQueryHandler(Section.MESSAGES, sectionQueryHandlerFactory.createSectionHandler(Section.MESSAGES));
-//		sectionQueryHandlerRegistry.registerQueryHandler(Section.TIME, sectionQueryHandlerFactory.createSectionHandler(Section.TIME));
 	}
 
 
