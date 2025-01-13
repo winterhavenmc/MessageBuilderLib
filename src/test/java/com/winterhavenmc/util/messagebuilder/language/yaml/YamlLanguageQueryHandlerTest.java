@@ -27,6 +27,7 @@ import com.winterhavenmc.util.messagebuilder.language.yaml.section.messages.Mess
 
 import org.bukkit.configuration.Configuration;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +52,19 @@ class YamlLanguageQueryHandlerTest {
 		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
 		queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
+	}
+
+	@AfterEach
+	void tearDown() {
+		queryHandler = null;
+	}
+
+	@Test
+	void testConstructor_parameter_null() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> new YamlLanguageQueryHandler(null));
+
+		assertEquals("The configuration parameter was null.", exception.getMessage());
 	}
 
 
@@ -86,7 +100,7 @@ class YamlLanguageQueryHandlerTest {
 				() -> itemSectionQueryHandler.getRecord(null));
 
 		// Assert
-		assertEquals("The itemKey parameter was null.", exception.getMessage());
+		assertEquals("The keyPath parameter was null.", exception.getMessage());
 	}
 
 	@Test
@@ -116,4 +130,11 @@ class YamlLanguageQueryHandlerTest {
 		assertEquals("The messageKey parameter cannot be null.", exception.getMessage());
 	}
 
+	@Test
+	void testGetItemRecord() {
+	}
+
+	@Test
+	void testGetMessageRecord() {
+	}
 }
