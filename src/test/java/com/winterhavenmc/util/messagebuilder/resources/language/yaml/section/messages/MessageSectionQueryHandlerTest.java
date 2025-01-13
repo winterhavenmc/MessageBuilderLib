@@ -20,9 +20,11 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.me
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.junit.jupiter.api.AfterEach;
@@ -39,10 +41,11 @@ class MessageSectionQueryHandlerTest {
 	ConfigurationSection section;
 	YamlConfigurationSupplier configurationSupplier;
 	MessageSectionQueryHandler queryHandler;
+	Configuration configuration;
 
 	@BeforeEach
 	void setUp() {
-		FileConfiguration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		section = configuration.getConfigurationSection(Section.MESSAGES.name());
 		queryHandler = new MessageSectionQueryHandler(configurationSupplier);
@@ -61,6 +64,18 @@ class MessageSectionQueryHandlerTest {
 				() -> new MessageSectionQueryHandler(null));
 		assertEquals("The messageSection parameter cannot be null.", exception.getMessage());
 	}
+
+	@Test
+	void testConstructor_supplier_contains_null() {
+		// Arrange
+		configuration.set("MESSAGES", null);
+		YamlConfigurationSupplier supplier = new YamlConfigurationSupplier(configuration);
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() ->  new MessageSectionQueryHandler(supplier));
+		assertEquals("The messageSection parameter was an invalid 'MESSAGES' section.", exception.getMessage());
+	}
+
 
 	@Test
 	void testGetRecord_parameter_valid() {
