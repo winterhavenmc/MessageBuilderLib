@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.language.yaml.YamlConfigurationSupp
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
@@ -34,23 +35,23 @@ import java.util.Optional;
  */
 public class ItemSectionQueryHandler implements SectionQueryHandler<ItemRecord> {
 
-	private final ConfigurationSection itemSection;
+	private final YamlConfigurationSupplier configurationSupplier;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param yamlConfigurationSupplier the supplier for the configuration object of the language file.
+	 * @param configurationSupplier the supplier for the configuration object of the language file.
 	 */
-	public ItemSectionQueryHandler(YamlConfigurationSupplier yamlConfigurationSupplier) {
-		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
+	public ItemSectionQueryHandler(YamlConfigurationSupplier configurationSupplier) {
+		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
 
-		// only allow the 'ITEMS' section of the language file to be passed as the constructor parameter
-		if (!Section.ITEMS.name().equals(yamlConfigurationSupplier.get().getName())) {
-			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
+		// check that 'ITEMS' section returned by the configuration supplier is not null
+		if (configurationSupplier.getSection(Section.ITEMS) == null) {
+				throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
 		}
 
-		this.itemSection = yamlConfigurationSupplier.getSection(Section.ITEMS);
+		this.configurationSupplier = configurationSupplier;
 	}
 
 
@@ -65,11 +66,11 @@ public class ItemSectionQueryHandler implements SectionQueryHandler<ItemRecord> 
 		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
 
 		// get configuration section for item key
-		ConfigurationSection itemEntry = itemSection.getConfigurationSection(keyPath);
+		ConfigurationSection itemEntry = configurationSupplier.getSection(Section.ITEMS).getConfigurationSection(keyPath);
 		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
-		return ItemRecord.getRecord(keyPath, itemSection);
+		return ItemRecord.getRecord(keyPath, configurationSupplier.getSection(Section.ITEMS));
 	}
 
 
