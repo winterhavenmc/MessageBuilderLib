@@ -69,7 +69,7 @@ public record ItemRecord(
 
 	/**
 	 * Static method for retrieving an {@link ItemRecord} from the language file. Return an ItemRecord if one can be found
-	 * for the itemKey, or returns an empty {@link Optional} if no record could be found.
+	 * for the kepPath, or returns an empty {@link Optional} if no record could be found.
 	 *
 	 * @param keyPath the key for the item record to be retrieved
 	 * @param itemSection the ITEMS section of the language file
