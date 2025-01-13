@@ -45,31 +45,13 @@ public class ConstantSectionQueryHandler implements SectionQueryHandler<String> 
 		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
 
 		// ensure the 'CONSTANTS' section exists in the configuration provided by the supplier
-		if (yamlConfigurationSupplier.getSection(section) == null) {
+		if (yamlConfigurationSupplier.getSection(Section.CONSTANTS) == null) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage());
 		}
 
 		// get configuration supplier
 		this.configurationSupplier = yamlConfigurationSupplier;
 	}
-
-
-//	/**
-//	 * Class constructor
-//	 *
-//	 * @param section the 'CONSTANTS' section of the language file
-//	 * @throws IllegalArgumentException if the {@code ConfigurationSection} parameter is null or invalid
-//	 */
-//	public ConstantSectionQueryHandler(final ConfigurationSection section) {
-//		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
-//
-//		// ensure only the 'CONSTANTS' section is passed in
-//		if (!section.getName().equals(this.section.name())) {
-//			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage());
-//		}
-//
-//		this.section = section;
-//	}
 
 
 	/**
