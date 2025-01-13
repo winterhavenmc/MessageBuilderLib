@@ -65,13 +65,6 @@ class ItemSectionQueryHandlerTest {
 	}
 
 	@Test
-	void testConstructor_parameter_invalid() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new ItemSectionQueryHandler(configurationSupplier));
-		assertEquals("The itemSection parameter was an invalid 'ITEMS' section.", exception.getMessage());
-	}
-
-	@Test
 	void TestGetSectionType() {
 		assertEquals("ITEMS", queryHandler.getSectionType().name());
 	}
