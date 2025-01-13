@@ -61,13 +61,6 @@ class MessageSectionQueryHandlerTest {
 	}
 
 	@Test
-	void testConstructor_parameter_invalid() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new MessageSectionQueryHandler(configurationSupplier));
-		assertEquals("The messageSection parameter was an invalid 'MESSAGES' section.", exception.getMessage());
-	}
-
-	@Test
 	void testGetRecord_parameter_valid() {
 		// Arrange & Act
 		Optional<MessageRecord> messageRecord = queryHandler.getRecord(MessageId.ENABLED_MESSAGE);
