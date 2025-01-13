@@ -36,8 +36,6 @@ import java.util.logging.Logger;
 //TODO: This class needs more test coverage. It's mostly null checks and throws missing, and the reload command.
 public class YamlLanguageResourceLoader {
 
-	private final static Logger logger = Logger.getLogger(YamlLanguageResourceLoader.class.getName());
-
 	// the directory name within a plugin data directory where the language yaml files are installed
 	private final static String LANGUAGE_FOLDER = "language";
 	private final static String CONFIG_LOCALE_KEY = "locale";
@@ -83,77 +81,59 @@ public class YamlLanguageResourceLoader {
 		// get valid language tag using configured language
 		String languageTag = getValidLanguageTag(getConfiguredLanguage(plugin));
 
+		return getConfiguration(languageTag);
+	}
+
+
+	/**
+	 * Retrieve language configuration from file for the provided IETF language tag, without loading
+	 * configuration defaults
+	 *
+	 * @return {@link MemoryConfiguration} containing the configuration loaded from the language file
+	 */
+	private @NotNull MemoryConfiguration getConfiguration(final String languageTag) {
+
 		// get file object for configured language file
 		File languageFile = new File(getLanguageFilename(languageTag));
 
-		return loadLanguageConfiguration(languageFile, languageTag);
-	}
-
-
-	/**
-	 * Retrieve language configuration from file for String languageTag
-	 *
-	 * @param languageFile the language file to load into the configuration
-	 * @param languageTag a String containing the IETF language tag for the language file to be loaded
-	 * @return {@link MemoryConfiguration} containing the configuration loaded from the language file
-	 */
-	private @NotNull MemoryConfiguration loadLanguageConfiguration(File languageFile, String languageTag)
-	{
 		// create new YamlConfiguration object
-		YamlConfiguration newMessagesConfig = new YamlConfiguration();
+		YamlConfiguration configuration = new YamlConfiguration();
 
 		try // to load specified language file into new YamlConfiguration object
 		{
-			newMessagesConfig.load(languageFile);
-			logger.info("Language file " + languageTag + ".yml successfully loaded.");
-		}
-		catch (FileNotFoundException e)
-		{
-			logger.severe("Language file " + languageTag + ".yml does not exist.");
-		}
-		catch (IOException e)
-		{
-			logger.severe("Language file " + languageTag + ".yml could not be read.");
-		}
-		catch (InvalidConfigurationException e)
-		{
-			logger.severe("Language file " + languageTag + ".yml is not valid yaml.");
+			configuration.load(languageFile);
+			plugin.getLogger().info("Language file " + languageTag + ".yml successfully loaded.");
+		} catch (FileNotFoundException e) {
+			plugin.getLogger().severe("Language file " + languageTag + ".yml does not exist.");
+		} catch (IOException e) {
+			plugin.getLogger().severe("Language file " + languageTag + ".yml could not be read.");
+		} catch (InvalidConfigurationException e) {
+			plugin.getLogger().severe("Language file " + languageTag + ".yml is not valid yaml.");
 		}
 
-		// get resource path name for language tag
-		final String resourceName = getValidResourceName(languageTag);
-
-		// get resource input stream by name
-		InputStream inputStream = plugin.getResource(resourceName);
-
-		if (inputStream == null) {
-			logger.warning("Could not open resource " + resourceName);
-			return new MemoryConfiguration();
-		}
-
-		return readConfiguration(inputStream, newMessagesConfig);
+		return configuration;
 	}
 
 
 	/**
-	 * Read a configuration from a resource
+	 * Load a default configuration from a resource into an existing configuration
 	 *
 	 * @param resource the input stream for the resource
-	 * @param newLanguageConfiguration the newly created language configuration
-	 * @return yamlConfiguration the
+	 * @param configuration the newly created language configuration
+	 * @return the configuration with a default configuration loaded from the resource, if available
 	 */
-	private static @NotNull YamlConfiguration readConfiguration(InputStream resource, YamlConfiguration newLanguageConfiguration)
+	private Configuration getConfigurationDefaults(InputStream resource, Configuration configuration)
 	{
 		// get input stream reader for embedded resource file
-		Reader defaultConfigStream = new InputStreamReader(resource, StandardCharsets.UTF_8);
+		Reader inputStreamReader = new InputStreamReader(resource, StandardCharsets.UTF_8);
 
 		// load embedded resource stream into Configuration object
-		Configuration languageConfiguration = YamlConfiguration.loadConfiguration(defaultConfigStream);
+		Configuration defaultConfiguration = YamlConfiguration.loadConfiguration(inputStreamReader);
 
-		// set Configuration object as defaults for language configuration TODO: do we want language configuration defaults? I don't think so.
-		newLanguageConfiguration.setDefaults(languageConfiguration);
+		// set Configuration object as defaults for language configuration
+		configuration.setDefaults(defaultConfiguration);
 
-		return newLanguageConfiguration;
+		return configuration;
 	}
 
 
@@ -191,7 +171,7 @@ public class YamlLanguageResourceLoader {
 			return languageTag;
 		}
 		// output language file not found message to log
-		logger.warning("Language file '"
+		plugin.getLogger().warning("Language file '"
 				+ getLanguageFilename(languageTag) + "' does not exist. Defaulting to en-US.");
 
 		// return default language tag (en-US)
