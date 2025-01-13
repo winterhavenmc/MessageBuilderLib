@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.yaml.section.messages;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;

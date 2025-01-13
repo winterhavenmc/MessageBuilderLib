@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.language.yaml.section.items;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
