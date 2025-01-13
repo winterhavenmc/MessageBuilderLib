@@ -95,4 +95,13 @@ public record ItemRecord(
 				itemEntry.getStringList(Field.LORE.getKeyPath())));
 	}
 
+
+	@Override
+	public Optional<String> getPluralized(int quantity) {
+		if (quantity != 1) {
+			return namePlural;
+		}
+		return nameSingular;
+	}
+
 }
