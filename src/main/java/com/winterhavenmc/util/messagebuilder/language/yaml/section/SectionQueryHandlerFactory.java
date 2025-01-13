@@ -33,6 +33,7 @@ import java.util.Map;
  * as enumerated by the constants of the {@link Section} enum
  */
 public class SectionQueryHandlerFactory {
+
 	private final Map<Section, SectionQueryHandler<?>> sectionHandlerCache = new EnumMap<>(Section.class);
 	private final YamlConfigurationSupplier yamlConfigurationSupplier;
 
@@ -63,11 +64,11 @@ public class SectionQueryHandlerFactory {
 
 
 	/**
-	 * Creates a query handler based on the provided domain.
+	 * Creates a query handler based on the provided section.
 	 *
-	 * @param section the domain for which the query handler is to be created
+	 * @param section the section for which the query handler is to be created
 	 * @return the corresponding SectionQueryHandler
-	 * @throws IllegalArgumentException if no handler can be created for the given domain
+	 * @throws IllegalArgumentException if no handler can be created for the given section
 	 */
 	public SectionQueryHandler<?> createSectionHandler(Section section) {
 		return switch (section) {
