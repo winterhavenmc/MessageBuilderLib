@@ -25,6 +25,14 @@ CONSTANTS:
   TEST_INT: 42
 
 
+################
+# Macro Defaults
+################
+DEFAULTS:
+  WORLD.NAME: "unknown world"
+  PLAYER.NAME: "a player"
+
+
 ##############
 # Time Strings
 ##############
