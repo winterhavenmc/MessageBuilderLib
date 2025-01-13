@@ -40,18 +40,18 @@ public class MessageSectionQueryHandler implements SectionQueryHandler<MessageRe
 	/**
 	 * Class constructor
 	 *
-	 * @param yamlConfigurationSupplier the configuration supplier that provides access to the configuration object for the language file.
+	 * @param configurationSupplier the configuration supplier that provides access to the configuration object for the language file.
 	 */
-	public MessageSectionQueryHandler(YamlConfigurationSupplier yamlConfigurationSupplier) {
-		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
+	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier) {
+		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
 
-		// allow only 'MESSAGES' configuration section to be passed into constructor
-		if (!Section.MESSAGES.name().equals(yamlConfigurationSupplier.getSection(Section.MESSAGES).getName())) {
+		// check that 'ITEMS' section returned by the configuration supplier is not null
+		if (configurationSupplier.getSection(Section.MESSAGES) == null) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
 
 		// set field from parameter
-		this.messageSection = yamlConfigurationSupplier.getSection(Section.MESSAGES);
+		this.messageSection = configurationSupplier.getSection(Section.MESSAGES);
 	}
 
 
