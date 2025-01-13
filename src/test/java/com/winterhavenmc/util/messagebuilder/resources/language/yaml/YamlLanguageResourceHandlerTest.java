@@ -17,9 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -76,6 +73,23 @@ class YamlLanguageResourceHandlerTest {
 	@Test
 	void testLanguageHandler_not_null() {
 		assertNotNull(languageHandler);
+	}
+
+
+	@Test
+	void isLocaleSet() {
+		assertTrue(languageHandler.isLocaleSet());
+		languageHandler.setLocale(null);
+		assertFalse(languageHandler.isLocaleSet());
+	}
+
+	@Test
+	void getConfigurationSupplier() {
+		// Act
+		YamlConfigurationSupplier configurationSupplier = languageHandler.getConfigurationSupplier();
+
+		// Assert
+		assertNotNull(configurationSupplier);
 	}
 
 
