@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -39,7 +41,7 @@ class YamlLanguageResourceHandlerTest {
 
 	// real language handler
 	private YamlLanguageResourceHandler languageHandler;
-	private FileConfiguration languageConfig;
+	private Configuration languageConfiguration;
 	private FileConfiguration pluginConfig;
 
 
@@ -52,9 +54,8 @@ class YamlLanguageResourceHandlerTest {
 		pluginConfig.set("language", "en-US");
 
 		// create real language configuration
-		languageConfig = new YamlConfiguration();
-		languageConfig.set("ITEMS.DEFAULT.NAME.SINGULAR", "default_item");
-		languageConfig.set("ITEMS.DEFAULT.NAME.PLURAL", "default_items");
+		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+
 
 		// instantiate real language handler with mocked parameters
 		languageHandler = new YamlLanguageResourceHandler(pluginConfig, languageFileLoaderMock);
@@ -138,7 +139,7 @@ class YamlLanguageResourceHandlerTest {
 	@Test
 	void getConfigurationTest() {
 		// Arrange
-		when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfig);
+		when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfiguration);
 
 		// Act
 		languageHandler.reload(); //TODO: check if it's normal that languageHandler.getConfiguration() returned null before being reloaded
@@ -152,11 +153,8 @@ class YamlLanguageResourceHandlerTest {
 
 	@Test
 	void testGetConfigurationSupplier() {
-		// Arrange
-		when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfig);
-
-		// Act
-		YamlConfigurationSupplier yamlConfigurationSupplier = languageHandler.getLanguageConfigurationSupplier();
+		// Arrange & Act
+		YamlConfigurationSupplier yamlConfigurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
 
 		// Assert
 		assertNotNull(yamlConfigurationSupplier);
@@ -177,7 +175,7 @@ class YamlLanguageResourceHandlerTest {
 		@Test
 		void reloadTest() {
 			// Arrange
-			when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfig);
+			when(languageFileLoaderMock.getConfiguration()).thenReturn(languageConfiguration);
 
 			// Act
 			boolean success = languageHandler.reload();
