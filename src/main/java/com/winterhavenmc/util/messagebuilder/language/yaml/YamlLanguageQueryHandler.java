@@ -40,7 +40,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	/**
 	 * Class constructor
 	 *
-	 * @param yamlConfigurationSupplier the language configuration
+	 * @param yamlConfigurationSupplier the language configuration supplier
 	 */
 	public YamlLanguageQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
 		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Parameter.NULL_CONFIGURATION.getMessage()); }
@@ -52,6 +52,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 		SectionQueryHandlerFactory sectionQueryHandlerFactory = new SectionQueryHandlerFactory(yamlConfigurationSupplier);
 
 		// Register the section handlers in the registry
+		//TODO: this will be replaced by cached lazy-loading
 		for (Section section : Section.values()) {
 			sectionQueryHandlerRegistry.registerQueryHandler(section, sectionQueryHandlerFactory.createSectionHandler(section));
 		}
@@ -69,12 +70,12 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 
 
 	@Override
-	public Optional<ItemRecord> getItemRecord(final String itemKey) {
-		if (itemKey == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
+	public Optional<ItemRecord> getItemRecord(final String keyPath) {
+		if (keyPath == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
 
 		SectionQueryHandler<?> queryHandler = getQueryHandler(Section.ITEMS);
 		if (queryHandler instanceof ItemSectionQueryHandler itemSectionQueryHandler) {
-			return itemSectionQueryHandler.getRecord(itemKey);
+			return itemSectionQueryHandler.getRecord(keyPath);
 		}
 		return Optional.empty();
 	}
