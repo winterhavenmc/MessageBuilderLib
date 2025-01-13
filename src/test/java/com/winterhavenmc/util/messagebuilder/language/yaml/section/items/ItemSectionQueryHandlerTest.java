@@ -93,7 +93,7 @@ class ItemSectionQueryHandlerTest {
 	void testGetRecord_parameter_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> queryHandler.getRecord(null));
-		assertEquals("The itemKey parameter was null.", exception.getMessage());
+		assertEquals("The keyPath parameter was null.", exception.getMessage());
 	}
 
 	@Test
