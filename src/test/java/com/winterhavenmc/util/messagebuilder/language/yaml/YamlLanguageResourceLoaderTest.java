@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -29,6 +30,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
@@ -131,14 +133,12 @@ public class YamlLanguageResourceLoaderTest {
 	}
 
 	@Test
-	@DisplayName("file loader get current filename non-existent.")
 	void GetLanguageFilenameTest_nonexistent() {
 		assertEquals("language" + File.separator + "not-a-valid-tag.yml",
 				YamlLanguageResourceLoader.getLanguageFilename("not-a-valid-tag"));
 	}
 
 	@Test
-	@DisplayName("languageFileExists test")
 	void languageFileExistsTests_nonexistent() {
 		// Arrange
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
@@ -149,17 +149,77 @@ public class YamlLanguageResourceLoaderTest {
 	}
 
 	@Test
-	@DisplayName("getResourceName test")
-	void getValidResourceNameTest() {
-		assertNotNull(yamlLanguageResourceLoader.getValidResourceName("en-US"));
-		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageResourceLoader.getValidResourceName("en-US"));
+	void testGetConfigurationDefaults() {
+		// Arrange
+		Configuration testConfiguration = new MemoryConfiguration();
+		testConfiguration.set("TEST_KEY_!", true);
+		testConfiguration.set("TEST_KEY_2", "a string value");
+
+		InputStream resourceStream = MockUtility.getResourceStream("language/en-US.yml");
+
+		// Act
+		yamlLanguageResourceLoader.getConfigurationDefaults(resourceStream, testConfiguration);
+
+		// Assert
+		assertTrue(testConfiguration.contains("CONSTANTS.SPAWN.DISPLAY_NAME"));
 	}
 
-	@Test
-	@DisplayName("getResourceName test 2")
-	void getValidResourceNameTest_nonexistent() {
-		assertNotNull(yamlLanguageResourceLoader.getValidResourceName("not-a-valid-tag"));
-		assertEquals(LANGUAGE_EN_US_YML, yamlLanguageResourceLoader.getValidResourceName("not-a-valid-tag"));
+
+	@Nested
+	class ValidateKeysTests {
+		@Test
+		void validateKeys_valid() {
+			// Arrange
+			Configuration testConfiguration = new MemoryConfiguration();
+			testConfiguration.set("VALID_KEYS_ONLY", true);
+			testConfiguration.set("ANOTHER_VALID_KEY", "a string value");
+
+			// Act
+			boolean result = yamlLanguageResourceLoader.validateKeys(testConfiguration);
+
+			// Assert
+			assertTrue(result);
+		}
+
+		@Test
+		void validateKeys_invalid() {
+			// Arrange
+			Configuration testConfiguration = new MemoryConfiguration();
+			testConfiguration.set("invalid-keys-only", false);
+			testConfiguration.set("A_VALID_KEY", "a string value");
+
+			// Act
+			boolean result = yamlLanguageResourceLoader.validateKeys(testConfiguration);
+
+			// Assert
+			assertFalse(result);
+		}
+	}
+
+
+
+	@Nested
+	class GetValidResourceNameTests {
+		@Test
+		void testGetValidResourceName() {
+			assertNotNull(yamlLanguageResourceLoader.getValidResourceName("en-US"));
+			assertEquals(LANGUAGE_EN_US_YML, yamlLanguageResourceLoader.getValidResourceName("en-US"));
+		}
+
+		@Test
+		void testGetValidResourceName_nonexistent() {
+			assertNotNull(yamlLanguageResourceLoader.getValidResourceName("not-a-valid-tag"));
+			assertEquals(LANGUAGE_EN_US_YML, yamlLanguageResourceLoader.getValidResourceName("not-a-valid-tag"));
+		}
+
+		@Test
+		void testGetValidResourceName_parameter_null() {
+			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+					() -> yamlLanguageResourceLoader.getValidResourceName(null));
+
+			// Assert
+			assertEquals("Resource name cannot be null.", exception.getMessage());
+		}
 	}
 
 
