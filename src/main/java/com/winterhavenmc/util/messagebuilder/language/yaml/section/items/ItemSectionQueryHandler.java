@@ -57,9 +57,9 @@ public class ItemSectionQueryHandler implements SectionQueryHandler<ItemRecord> 
 
 	/**
 	 * Retrieve an item record from the language file for the currently configured language. If a record cannot be
-	 * found for the itemKey, an empty Optional will be returned.
+	 * found for the keyPath, an empty Optional will be returned.
 	 *
-	 * @param keyPath the itemKey for the item record in the language file
+	 * @param keyPath the keyPath for the item record in the language file
 	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	public Optional<ItemRecord> getRecord(final String keyPath) {
