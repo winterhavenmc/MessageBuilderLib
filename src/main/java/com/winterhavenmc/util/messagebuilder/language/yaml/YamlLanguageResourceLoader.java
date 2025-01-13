@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -122,7 +123,7 @@ public class YamlLanguageResourceLoader {
 	 * @param configuration the newly created language configuration
 	 * @return the configuration with a default configuration loaded from the resource, if available
 	 */
-	private Configuration getConfigurationDefaults(InputStream resource, Configuration configuration)
+	Configuration getConfigurationDefaults(InputStream resource, Configuration configuration)
 	{
 		// get input stream reader for embedded resource file
 		Reader inputStreamReader = new InputStreamReader(resource, StandardCharsets.UTF_8);
@@ -130,7 +131,7 @@ public class YamlLanguageResourceLoader {
 		// load embedded resource stream into Configuration object
 		Configuration defaultConfiguration = YamlConfiguration.loadConfiguration(inputStreamReader);
 
-		// set Configuration object as defaults for language configuration
+		// set Configuration object as defaults for configuration
 		configuration.setDefaults(defaultConfiguration);
 
 		return configuration;
@@ -190,6 +191,8 @@ public class YamlLanguageResourceLoader {
 	 */
 	String getValidResourceName(String languageTag)
 	{
+		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_RESOURCE_NAME.getMessage()); }
+
 		// get embedded resource file name; note that forward slash (/) is always used, regardless of platform
 		String resourceName = String.join("/",LANGUAGE_FOLDER, languageTag).concat(".yml");
 
@@ -228,13 +231,15 @@ public class YamlLanguageResourceLoader {
 	}
 
 
-	private void validateKeys(Configuration configuration)
+	boolean validateKeys(Configuration configuration)
 	{
 		for (String key : configuration.getKeys(true)) {
 			if (!key.matches("[A-Z0-9_]+")) {
 				Logger.getLogger(getClass().getName() + "Nonconforming key detected: " + key);
+				return false;
 			}
 		}
+		return true;
 	}
 
 	public Configuration reload()
