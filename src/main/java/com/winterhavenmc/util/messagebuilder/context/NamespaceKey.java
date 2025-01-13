@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.namespace;
+package com.winterhavenmc.util.messagebuilder.context;
 
-import com.winterhavenmc.util.messagebuilder.macro.ContextKey;
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -289,7 +289,7 @@ public class NamespaceKey implements ContextKey {
 	 *
 	 * @param fullDomain the key domain to check for validity
 	 */
-	static void logInvalidDomainPath(final String fullDomain) {
+	public static void logInvalidDomainPath(final String fullDomain) {
 		if (!isValidKeyDomain(fullDomain)) {
 			// Log a warning without modifying the keyPath
 			Logger.getLogger("NamespaceKey").warning("Key domain '" + fullDomain + "' does not conform to the allowed naming convention.");
