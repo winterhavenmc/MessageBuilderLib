@@ -83,16 +83,6 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 
 
 	/**
-	 * get configuration supplier
-	 *
-	 * @return the configuration supplier
-	 */
-	@Override
-	public YamlConfigurationSupplier getConfigurationSupplier() {
-		return this.yamlLanguageConfigurationSupplier;
-	}
-
-	/**
 	 * class constructor, no parameter
 	 * must use setters for all fields before use
 	 */
@@ -154,8 +144,9 @@ public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 	 * @return a configuration object loaded with values from the configured language file, or the default en-US.yml
 	 * language file if the configured file could not be found.
 	 */
-	public YamlConfigurationSupplier getLanguageConfigurationSupplier() {
-		return yamlLanguageConfigurationSupplier;
+	@Override
+	public YamlConfigurationSupplier getConfigurationSupplier() {
+		return this.yamlLanguageConfigurationSupplier;
 	}
 
 
