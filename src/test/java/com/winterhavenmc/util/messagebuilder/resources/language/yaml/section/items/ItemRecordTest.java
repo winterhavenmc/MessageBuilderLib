@@ -17,12 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,10 +41,10 @@ class ItemRecordTest {
 	@BeforeEach
 	void setUp() {
 		// create real configuration from resource
-		FileConfiguration fileConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
 		// get item section of configuration
-		itemSection = fileConfiguration.getConfigurationSection(Namespace.Domain.ITEMS.name());
+		itemSection = configuration.getConfigurationSection(Namespace.Domain.ITEMS.name());
 	}
 
 	@AfterEach
@@ -69,19 +71,52 @@ class ItemRecordTest {
 
 	@Test
 	void testGetRecord_parameter_valid() {
-
-//		ItemRecord.getRecord(itemSection, "TEST_ITEM_1");
-
+		Optional<ItemRecord> itemRecord = ItemRecord.getRecord("TEST_ITEM_1", itemSection);
+		assertTrue(itemRecord.isPresent());
 	}
 
 	@Test
-	void testGetRecord_parameter_null() {
+	void testGetRecord_parameter_keyPath_null() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() ->  ItemRecord.getRecord(null, itemSection));
 
+		assertEquals("The keyPath parameter was null.", exception.getMessage());
 	}
 
 	@Test
-	void testGetRecord_parameter_invalid() {
+	void testGetRecord_parameter_keyPath_invalid() {
+		Optional<ItemRecord> itemRecord = ItemRecord.getRecord("INVALID_ITEM", itemSection);
+		assertTrue(itemRecord.isEmpty());
+	}
 
+	@Test
+	void testGetRecord_parameter_itemSection_null() {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() ->  ItemRecord.getRecord("TEST_ITEM_1", null));
+
+		assertEquals("The itemSection parameter was an invalid 'ITEMS' section.", exception.getMessage());
+	}
+
+	@ParameterizedTest
+	@EnumSource
+	void testFields(ItemRecord.Field field) {
+		String keyPath = field.getKeyPath();
+		assertTrue(keyPath.matches("[A-Z0-9_.]+"));
+	}
+
+	@Test
+	void testPluralized() {
+		ItemRecord testRecord = new ItemRecord(
+				TEST_ITEM,
+				Optional.of("Test Item"),
+				Optional.of("Test Items"),
+				Optional.of("Inventory Test Item"),
+				Optional.of("Inventory Test Items"),
+				List.of("Lore line 1", "Lore line 2"));
+
+		assertEquals(Optional.of("Test Items"), testRecord.getPluralized(0));
+		assertEquals(Optional.of("Test Item"), testRecord.getPluralized(1));
+		assertEquals(Optional.of("Test Items"), testRecord.getPluralized(2));
 	}
 
 }
