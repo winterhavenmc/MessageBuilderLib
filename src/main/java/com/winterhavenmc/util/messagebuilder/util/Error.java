@@ -37,7 +37,7 @@ public class Error {
 		NULL_DIRECTORY_PATH("Target directory path cannot be null."),
 		NULL_DOMAIN("The domain parameter cannot be null."),
 		NULL_DURATION("The duration parameter cannot be null."),
-		NULL_ITEM_KEY("The itemKey parameter was null."),
+		NULL_ITEM_KEY("The keyPath parameter was null."),
 		NULL_KEY_PATH("The keyPath parameter cannot be null."),
 		NULL_MACRO("macro cannot be null."),
 		NULL_MESSAGE_BUILDER("The messageBuilder parameter cannot be null."),
