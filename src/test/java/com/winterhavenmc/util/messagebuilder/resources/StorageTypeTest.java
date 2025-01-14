@@ -17,20 +17,19 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageStorageType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LanguageStorageTypeTest {
+class StorageTypeTest {
 
 	@Test
 	void values() {
-		assertEquals(1, LanguageStorageType.values().length);
+		assertEquals(1, StorageType.values().length);
 	}
 
 	@Test
 	void valueOf() {
-		assertEquals(LanguageStorageType.YAML, LanguageStorageType.valueOf("YAML"));
+		assertEquals(StorageType.YAML, StorageType.valueOf("YAML"));
 	}
 }

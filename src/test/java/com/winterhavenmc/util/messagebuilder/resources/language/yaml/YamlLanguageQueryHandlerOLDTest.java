@@ -17,9 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandlerOLD;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
@@ -44,9 +42,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class YamlLanguageQueryHandlerTest {
+class YamlLanguageQueryHandlerOLDTest {
 
-	LanguageQueryHandler queryHandler;
+	LanguageQueryHandlerOLD queryHandler;
 
 
 	@BeforeEach
