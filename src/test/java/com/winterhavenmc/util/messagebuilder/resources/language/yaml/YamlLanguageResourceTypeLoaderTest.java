@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-public class YamlLanguageResourceLoaderTest {
+public class YamlLanguageResourceTypeLoaderTest {
 
 	@Mock Plugin pluginMock;
 
@@ -200,7 +200,7 @@ public class YamlLanguageResourceLoaderTest {
 
 
 	@Nested
-	class GetValidResourceNameTests {
+	class GetValidResourceTypeNameTests {
 		@Test
 		void testGetValidResourceName() {
 			assertNotNull(yamlLanguageResourceLoader.getValidResourceName("en-US"));
@@ -219,13 +219,13 @@ public class YamlLanguageResourceLoaderTest {
 					() -> yamlLanguageResourceLoader.getValidResourceName(null));
 
 			// Assert
-			assertEquals("Resource name cannot be null.", exception.getMessage());
+			assertEquals("ResourceType name cannot be null.", exception.getMessage());
 		}
 	}
 
 
 	@Nested
-	class GetResourceNameTests {
+	class GetResourceTypeNameTests {
 		@Test
 		void TestGetResourceName_valid_language_tag() {
 			assertEquals("language/en-US.yml", yamlLanguageResourceLoader.getValidResourceName("en-US"));

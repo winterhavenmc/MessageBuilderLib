@@ -41,7 +41,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class YamlLanguageResourceInstallerTest {
+public class YamlLanguageResourceTypeInstallerTest {
 
 	@Mock private Plugin pluginMock;
 
@@ -53,7 +53,7 @@ public class YamlLanguageResourceInstallerTest {
 
 		tempDataDir = Files.createTempDirectory("MessageBuilderLib_").toFile();
 
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("YamlLanguageResourceInstallerTest"));
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("YamlLanguageResourceTypeInstallerTest"));
 		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 		when(pluginMock.getResource(LANGUAGE_EN_US_YML)).thenReturn(getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML));
@@ -97,7 +97,7 @@ public class YamlLanguageResourceInstallerTest {
 		@Test
 		void testResourceStream() {
 			InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML);
-			assertNotNull(resourceStream, "Resource stream should not be null");
+			assertNotNull(resourceStream, "ResourceType stream should not be null");
 			try {
 				resourceStream.close();
 			} catch (IOException e) {
@@ -117,7 +117,7 @@ public class YamlLanguageResourceInstallerTest {
 			// Simulate saving the resource by copying it from the test resources
 			try (InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML)) {
 				if (resourceStream == null) {
-					throw new IOException("Resource '" + LANGUAGE_EN_US_YML + "' not found in the classpath.");
+					throw new IOException("ResourceType '" + LANGUAGE_EN_US_YML + "' not found in the classpath.");
 				}
 				Files.copy(resourceStream, targetFilePath); // DO NOT REPLACE EXISTING FILES
 			}
@@ -181,7 +181,7 @@ public class YamlLanguageResourceInstallerTest {
 		boolean result = installResource(LANGUAGE_EN_US_YML, tempDir);
 
 		// Assert: Verify the file exists and was successfully copied
-		assertTrue(result, "Resource should have been installed successfully.");
+		assertTrue(result, "ResourceType should have been installed successfully.");
 		assertTrue(Files.exists(tempDir.resolve(LANGUAGE_EN_US_YML)));
 
 		// Cleanup: Delete the temporary directory and its contents
@@ -191,7 +191,7 @@ public class YamlLanguageResourceInstallerTest {
 	}
 
 	@Nested
-	class AutoInstallResourceTests {
+	class AutoInstallResourceTypeTests {
 		@Test
 		void getAutoInstallFilename() {
 			assertEquals("language/auto_install.txt", fileInstaller.getAutoInstallFilename());
@@ -323,7 +323,7 @@ public class YamlLanguageResourceInstallerTest {
 	}
 
 	@Nested
-	class VerifyResourceExistsTests {
+	class VerifyResourceTypeExistsTests {
 		@Test
 		void verifyResourceExistsTest() {
 			assertTrue(fileInstaller.resourceExists(LANGUAGE_EN_US_YML));
@@ -338,7 +338,7 @@ public class YamlLanguageResourceInstallerTest {
 	}
 
 	@Nested
-	class VerifyResourceInstalledTests {
+	class VerifyResourceTypeInstalledTests {
 		@Test
 		void verifyResourceInstalledTest() {
 			// Arrange
@@ -401,7 +401,7 @@ public class YamlLanguageResourceInstallerTest {
 		// Get the resource as an InputStream
 		try (var inputStream = getResourceStream(resourceName)) {
 			if (inputStream == null) {
-				throw new IOException("Resource '" + resourceName + "' not found in the classpath.");
+				throw new IOException("ResourceType '" + resourceName + "' not found in the classpath.");
 			}
 
 			// Resolve the full path to the target file
@@ -424,7 +424,7 @@ public class YamlLanguageResourceInstallerTest {
 	 * @return an InputStream for the resource, or {@code null} if the resource cannot be found
 	 */
 	public static InputStream getResourceStream(final String resourceName) {
-		return YamlLanguageResourceInstallerTest.class.getClassLoader().getResourceAsStream(resourceName);
+		return YamlLanguageResourceTypeInstallerTest.class.getClassLoader().getResourceAsStream(resourceName);
 	}
 
 }

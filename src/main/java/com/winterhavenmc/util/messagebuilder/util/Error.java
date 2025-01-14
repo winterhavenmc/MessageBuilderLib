@@ -27,7 +27,7 @@ public class Error {
 	public enum Parameter implements ErrorEnum {
 		EMPTY_KEY_PATH("The keyPath parameter cannot be empty."),
 		EMPTY_NAMESPACED_KEY("The key parameter cannot be empty."),
-		EMPTY_RESOURCE_NAME("Resource name cannot be empty."),
+		EMPTY_RESOURCE_NAME("ResourceType name cannot be empty."),
 		EMPTY_SUBDOMAIN_ELEMENT("Subdomains cannot be empty."),
 		INVALID_SECTION_CONSTANTS("The constantSection returned by the configuration supplier was an invalid '" + Section.CONSTANTS + "' section."),
 		INVALID_SECTION_ITEMS("The itemSection returned by the configuration supplier was an invalid '" + Section.ITEMS + "' section."),
@@ -51,7 +51,7 @@ public class Error {
 		NULL_PLUGIN_MANAGER("The pluginManager parameter was null."),
 		NULL_RECIPIENT("The recipient parameter was null."),
 		NULL_QUERY_HANDLER("The queryHandler parameter was null."),
-		NULL_RESOURCE_NAME("Resource name cannot be null."),
+		NULL_RESOURCE_NAME("ResourceType name cannot be null."),
 		NULL_SECTION("The section parameter cannot be null."),
 		NULL_SECTION_CONSTANTS("The constantSection parameter cannot be null."),
 		NULL_SECTION_ITEMS("The itemSection parameter cannot be null."),

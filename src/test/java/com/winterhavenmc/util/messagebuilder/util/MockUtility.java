@@ -54,7 +54,7 @@ public final class MockUtility {
 		InputStream resourceStream = getResourceStream(resourcePath);
 
 		if (resourceStream == null) {
-			throw new IllegalArgumentException("Resource not found: " + resourcePath);
+			throw new IllegalArgumentException("ResourceType not found: " + resourcePath);
 		}
 
 		// Load the YAML data directly into a FileConfiguration object

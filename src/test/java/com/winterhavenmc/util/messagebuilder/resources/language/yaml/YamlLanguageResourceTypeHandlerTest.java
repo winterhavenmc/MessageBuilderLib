@@ -35,7 +35,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class YamlLanguageResourceHandlerTest {
+class YamlLanguageResourceTypeHandlerTest {
 
 	@Mock private YamlLanguageResourceLoader languageFileLoaderMock;
 

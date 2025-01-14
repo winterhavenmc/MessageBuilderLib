@@ -17,6 +17,20 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-public enum Resource {
-	LANGUAGE,
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResourceTypeTest {
+
+	@Test
+	void values() {
+		assertEquals(1, ResourceType.values().length);
+	}
+
+	@Test
+	void valueOf() {
+		assertEquals(ResourceType.LANGUAGE, ResourceType.valueOf("LANGUAGE"));
+	}
+
 }
