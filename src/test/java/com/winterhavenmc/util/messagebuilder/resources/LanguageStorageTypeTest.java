@@ -17,6 +17,20 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-public enum StorageType {
-	YAML,
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageStorageType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class LanguageStorageTypeTest {
+
+	@Test
+	void values() {
+		assertEquals(1, LanguageStorageType.values().length);
+	}
+
+	@Test
+	void valueOf() {
+		assertEquals(LanguageStorageType.YAML, LanguageStorageType.valueOf("YAML"));
+	}
 }

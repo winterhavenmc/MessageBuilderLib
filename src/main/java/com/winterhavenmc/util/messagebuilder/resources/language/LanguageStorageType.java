@@ -15,21 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources;
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-class StorageTypeTest {
-
-	@Test
-	void values() {
-		assertEquals(1, StorageType.values().length);
-	}
-
-	@Test
-	void valueOf() {
-		assertEquals(StorageType.YAML, StorageType.valueOf("YAML"));
-	}
+public enum LanguageStorageType {
+	YAML,
 }
