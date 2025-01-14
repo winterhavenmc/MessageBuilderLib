@@ -15,8 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language;
+package com.winterhavenmc.util.messagebuilder.resources;
 
-public enum LanguageStorageType {
+public enum StorageType {
 	YAML,
 }
