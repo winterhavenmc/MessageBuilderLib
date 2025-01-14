@@ -52,17 +52,17 @@ public class TimeSectionQueryHandler implements SectionQueryHandler<String> {
 	/**
 	 * Class constructor
 	 *
-	 * @param yamlConfigurationSupplier the supplier for the configuration object for the language file
+	 * @param configurationSupplier the supplier for the configuration object for the language file
 	 */
-	public TimeSectionQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
-		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
+	public TimeSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier) {
+		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
 
-		// only allow the 'TIME' section of the language file to be passed as the constructor parameter
-		if (!Section.TIME.name().equals(yamlConfigurationSupplier.getSection(Section.TIME).getName())) {
+		// check that 'TIME' section returned by the configuration supplier is not null
+		if (configurationSupplier.getSection(Section.TIME) == null) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_TIME.getMessage());
 		}
 
-		this.timeSection = yamlConfigurationSupplier.getSection(Section.TIME);
+		this.timeSection = configurationSupplier.getSection(Section.TIME);
 	}
 
 

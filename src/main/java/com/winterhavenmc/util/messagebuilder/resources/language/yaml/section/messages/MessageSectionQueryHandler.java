@@ -45,7 +45,7 @@ public class MessageSectionQueryHandler implements SectionQueryHandler<MessageRe
 	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier) {
 		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
 
-		// check that 'ITEMS' section returned by the configuration supplier is not null
+		// check that 'MESSAGES' section returned by the configuration supplier is not null
 		if (configurationSupplier.getSection(Section.MESSAGES) == null) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
 		}
