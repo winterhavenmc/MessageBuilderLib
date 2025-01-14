@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ti
 
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time.TimeSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
@@ -41,10 +40,11 @@ class TimeSectionQueryHandlerTest {
 
 	YamlConfigurationSupplier configurationSupplier;
 	TimeSectionQueryHandler queryHandler;
+	Configuration configuration;
 
 	@BeforeEach
 	void setUp() {
-		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		queryHandler = new TimeSectionQueryHandler(configurationSupplier);
 	}
@@ -60,6 +60,17 @@ class TimeSectionQueryHandlerTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new TimeSectionQueryHandler(null));
 		assertEquals("The configurationSection parameter was null.", exception.getMessage());
+	}
+
+	@Test
+	void testConstructor_supplier_contains_null() {
+		// Arrange
+		configuration.set("TIME", null);
+		YamlConfigurationSupplier supplier = new YamlConfigurationSupplier(configuration);
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() ->  new TimeSectionQueryHandler(supplier));
+		assertEquals("The timeSection returned by the configuration supplier was an invalid 'TIME' section.", exception.getMessage());
 	}
 
 	@Test

@@ -73,7 +73,7 @@ class MessageSectionQueryHandlerTest {
 
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  new MessageSectionQueryHandler(supplier));
-		assertEquals("The messageSection parameter was an invalid 'MESSAGES' section.", exception.getMessage());
+		assertEquals("The messageSection returned by the configuration supplier was an invalid 'MESSAGES' section.", exception.getMessage());
 	}
 
 

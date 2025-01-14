@@ -73,7 +73,7 @@ class ConstantSectionQueryHandlerTest {
 
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  new ConstantSectionQueryHandler(supplier));
-		assertEquals("The constantSection parameter was an invalid 'CONSTANTS' section.", exception.getMessage());
+		assertEquals("The constantSection returned by the configuration supplier was an invalid 'CONSTANTS' section.", exception.getMessage());
 	}
 
 	@Test

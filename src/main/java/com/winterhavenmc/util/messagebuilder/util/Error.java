@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+
 public class Error {
 
 	/**
@@ -27,10 +29,10 @@ public class Error {
 		EMPTY_NAMESPACED_KEY("The key parameter cannot be empty."),
 		EMPTY_RESOURCE_NAME("Resource name cannot be empty."),
 		EMPTY_SUBDOMAIN_ELEMENT("Subdomains cannot be empty."),
-		INVALID_SECTION_CONSTANTS("The constantSection parameter was an invalid '" + Namespace.Domain.CONSTANTS + "' section."),
-		INVALID_SECTION_ITEMS("The itemSection parameter was an invalid '" + Namespace.Domain.ITEMS + "' section."),
-		INVALID_SECTION_MESSAGES("The messageSection parameter was an invalid '" + Namespace.Domain.MESSAGES + "' section."),
-		INVALID_SECTION_TIME("The timeSection parameter was an invalid '" + Namespace.Domain.TIME + "' section."),
+		INVALID_SECTION_CONSTANTS("The constantSection returned by the configuration supplier was an invalid '" + Section.CONSTANTS + "' section."),
+		INVALID_SECTION_ITEMS("The itemSection returned by the configuration supplier was an invalid '" + Section.ITEMS + "' section."),
+		INVALID_SECTION_MESSAGES("The messageSection returned by the configuration supplier was an invalid '" + Section.MESSAGES + "' section."),
+		INVALID_SECTION_TIME("The timeSection returned by the configuration supplier was an invalid '" + Section.TIME + "' section."),
 		NULL_CONFIGURATION("The configuration parameter was null."),
 		NULL_CONFIGURATION_SECTION("The configurationSection parameter was null."),
 		NULL_CONTEXT_MAP("The contextMap parameter was null."),
