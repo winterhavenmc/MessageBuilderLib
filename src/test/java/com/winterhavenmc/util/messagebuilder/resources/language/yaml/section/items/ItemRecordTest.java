@@ -94,7 +94,7 @@ class ItemRecordTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  ItemRecord.getRecord("TEST_ITEM_1", null));
 
-		assertEquals("The itemSection parameter was an invalid 'ITEMS' section.", exception.getMessage());
+		assertEquals("The itemSection returned by the configuration supplier was an invalid 'ITEMS' section.", exception.getMessage());
 	}
 
 	@ParameterizedTest

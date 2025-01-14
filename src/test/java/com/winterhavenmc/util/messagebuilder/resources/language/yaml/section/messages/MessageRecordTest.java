@@ -108,7 +108,7 @@ class MessageRecordTest {
 				() ->  MessageRecord.getRecord(ENABLED_MESSAGE, messageSection));
 
 		// Assert
-		assertEquals("The messageSection parameter was an invalid 'MESSAGES' section.", exception.getMessage());
+		assertEquals("The messageSection returned by the configuration supplier was an invalid 'MESSAGES' section.", exception.getMessage());
 	}
 
 }
