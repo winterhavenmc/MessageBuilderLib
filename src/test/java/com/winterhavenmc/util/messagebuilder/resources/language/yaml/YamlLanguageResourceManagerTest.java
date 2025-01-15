@@ -36,13 +36,13 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class YamlLanguageResourceHandlerTest {
+class YamlLanguageResourceManagerTest {
 
 	@Mock Plugin pluginMock;
 	@Mock YamlLanguageResourceLoader languageResourceLoaderMock;
 
 	// real language handler
-	YamlLanguageResourceHandler languageHandler;
+	YamlLanguageResourceManager languageHandler;
 	Configuration languageConfiguration;
 	FileConfiguration pluginConfiguration;
 
@@ -65,7 +65,7 @@ class YamlLanguageResourceHandlerTest {
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
 		// instantiate real language handler with mocked parameters
-		languageHandler = YamlLanguageResourceHandler.getInstance(pluginMock);
+		languageHandler = YamlLanguageResourceManager.getInstance(pluginMock);
 		assertNotNull(languageHandler);
 	}
 

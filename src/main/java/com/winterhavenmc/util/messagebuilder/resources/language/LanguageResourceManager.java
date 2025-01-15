@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.resources.language;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 
 
-public interface LanguageResourceHandler {
+public interface LanguageResourceManager {
 
 	/**
 	 * Retrieve the configuration supplier
@@ -35,7 +35,6 @@ public interface LanguageResourceHandler {
 	 *
 	 * @return a string containing the IETF language tag set in the plugin config file
 	 */
-	//TODO: change this to (or add) getLocale
 	String getConfiguredLanguage();
 
 

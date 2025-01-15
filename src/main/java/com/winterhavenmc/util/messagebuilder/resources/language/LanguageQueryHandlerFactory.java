@@ -15,6 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources;
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
-public interface QueryHandlerRegistryKey { /* marker interface */ }
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
+
+public interface LanguageQueryHandlerFactory extends QueryHandlerFactory {
+
+}
