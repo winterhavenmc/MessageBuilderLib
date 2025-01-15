@@ -32,7 +32,9 @@ import java.util.*;
  */
 class YamlLanguageResourceInstaller {
 
-	private final static String AUTO_INSTALL_TXT = "language/auto_install.txt";
+	// THIS IS THE OFFICIAL DECLARATION OF THE LANGUAGE SUBDIRECTORY IN RESOURCES AND PLUGIN DATA DIRECTORY
+	final static String SUBDIRECTORY = "language";
+	private final static String AUTO_INSTALL_TXT = SUBDIRECTORY + "/auto_install.txt";
 
 	private final Plugin plugin;
 
@@ -58,7 +60,7 @@ class YamlLanguageResourceInstaller {
 	 *
 	 * @return {@code int} the number of files installed
 	 */
-	int install() {
+	int autoInstall() {
 		int count = 0;
 		// iterate over list of language files and install from jar if not already present
 		for (String filename : getAutoInstallFilenames()) {
@@ -73,7 +75,7 @@ class YamlLanguageResourceInstaller {
 	 * Install resource from plugin jar to plugin data directory
 	 * @param resourceName {@code String} the path name of the resource to be installed
 	 */
-	private void install(final String resourceName) {
+	void install(final String resourceName) {
 
 		if (plugin.getResource(resourceName) == null) {
 			plugin.getLogger().warning("The resource '" + resourceName
