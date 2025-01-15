@@ -55,6 +55,19 @@ class YamlLanguageResourceInstaller {
 		return AUTO_INSTALL_TXT;
 	}
 
+
+	/**
+	 * Install a resource with the given filename if not already installed
+	 *
+	 * @param filename the resource pathname to install in the plugin data directory
+	 */
+	void installIfMissing(final String filename) {
+		if (!verifyResourceInstalled(filename)) {
+			install(filename);
+		}
+	}
+
+
 	/**
 	 * Install resource files from plugin jar to plugin data directory
 	 *
