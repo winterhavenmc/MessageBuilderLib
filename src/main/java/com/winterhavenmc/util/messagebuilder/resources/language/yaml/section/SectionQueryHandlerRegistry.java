@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandlerRegistry;
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerRegistry;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import java.util.EnumMap;
