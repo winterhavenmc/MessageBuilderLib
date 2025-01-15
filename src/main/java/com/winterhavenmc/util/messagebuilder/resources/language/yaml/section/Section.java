@@ -17,27 +17,32 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time.TimeSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandlerRegistryKey;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.function.Supplier;
 
 
 /**
  * An enumeration of Sections that correspond directly to each top level {@code ConfigurationSection} of the language file.
  */
-public enum Section implements QueryHandlerRegistryKey {
+public enum Section {
 	CONSTANTS(ConstantSectionQueryHandler.class, "Constant", "Constants", "CONST"),
 	ITEMS(ItemSectionQueryHandler.class, "Item", "Items", "ITEM"),
 	MESSAGES(MessageSectionQueryHandler.class, "Message", "Messages", "MSG"),
 	TIME(TimeSectionQueryHandler.class, "Time", "Time", "TIME"),
 	;
 
-	private final Class<? extends SectionQueryHandler<?>> handlerClass;
+	private final Class<? extends SectionQueryHandler> handlerClass;
 	private final String singularName;
 	private final String pluralName;
 	private final String mnemonic;
+	private Supplier<? extends SectionQueryHandler> handlerSupplier;
 
 
 	/**
@@ -45,13 +50,14 @@ public enum Section implements QueryHandlerRegistryKey {
 	 *
 	 * @param handlerClass the Class of {@link SectionQueryHandler} that is immutably bound to this enum constant
 	 * @param singularName the singular name of this section (ex: Item)
-	 * @param pluralName the plural name for this section (ex: Items)
-	 * @param mnemonic the short mnemonic for this section. To be used in key generation, or other programmatic purposes.
+	 * @param pluralName   the plural name for this section (ex: Items)
+	 * @param mnemonic     the short mnemonic for this section. To be used in key generation, or other programmatic purposes.
 	 */
-	Section(final Class<? extends SectionQueryHandler<?>> handlerClass,
-	        final String singularName,
-	        final String pluralName,
-	        final String mnemonic
+	Section(
+			final Class<? extends SectionQueryHandler> handlerClass,
+			final String singularName,
+			final String pluralName,
+			final String mnemonic
 	) {
 		this.handlerClass = handlerClass;
 		this.singularName = singularName;
@@ -67,7 +73,7 @@ public enum Section implements QueryHandlerRegistryKey {
 	}
 
 
-	public Class<? extends SectionQueryHandler<?>> getHandlerClass() {
+	public Class<? extends SectionQueryHandler> getHandlerClass() {
 		return handlerClass;
 	}
 
@@ -81,6 +87,36 @@ public enum Section implements QueryHandlerRegistryKey {
 
 	public String getMnemonic() {
 		return mnemonic;
+	}
+
+
+	public <T extends SectionQueryHandler> T getHandler(YamlConfigurationSupplier configurationSupplier) {
+		if (handlerSupplier == null) {
+			synchronized (this) {
+				if (handlerSupplier == null) {
+					handlerSupplier = () -> {
+						try {
+							// Verify constructor exists and is accessible
+							Constructor<? extends SectionQueryHandler> constructor =
+									handlerClass.getConstructor(YamlConfigurationSupplier.class);
+
+							// Create a new instance of the handler
+							return constructor.newInstance(configurationSupplier);
+						} catch (NoSuchMethodException e) {
+							throw new IllegalStateException(
+									"Handler class " + handlerClass.getName() +
+											" does not have a constructor accepting YamlConfigurationSupplier", e);
+						} catch (InstantiationException | IllegalAccessException |
+						         InvocationTargetException e) {
+							throw new IllegalStateException(
+									"Failed to instantiate handler for " + name(), e);
+						}
+					};
+				}
+			}
+		}
+		// Return the cached handler instance
+		return (T) handlerClass.cast(handlerSupplier.get());
 	}
 
 }
