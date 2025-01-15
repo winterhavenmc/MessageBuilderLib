@@ -33,7 +33,7 @@ public interface LanguageQueryHandler {
 	 * @param section the namespace Section that dictates the query handler type to be returned
 	 * @return a query handler of the type dictated by the passed namespace Section
 	 */
-	SectionQueryHandler<?> getQueryHandler(Section section);
+	SectionQueryHandler getQueryHandler(Section section);
 
 
 	/**

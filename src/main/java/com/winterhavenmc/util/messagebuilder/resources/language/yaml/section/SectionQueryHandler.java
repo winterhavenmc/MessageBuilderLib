@@ -17,17 +17,16 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 
 import java.util.List;
 
 
-public interface SectionQueryHandler<T> extends QueryHandler<T> {
-
+public interface SectionQueryHandler extends QueryHandler {
 
 	Section getSectionType();
 
-	Class<T> getHandledType();
+	Class<?> getHandledType();
 
 	List<Class<?>> listHandledTypes();
 }

@@ -33,7 +33,7 @@ import java.util.Optional;
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * item section.
  */
-public class ItemSectionQueryHandler implements SectionQueryHandler<ItemRecord> {
+public class ItemSectionQueryHandler implements SectionQueryHandler {
 
 	private final YamlConfigurationSupplier configurationSupplier;
 
@@ -92,7 +92,7 @@ public class ItemSectionQueryHandler implements SectionQueryHandler<ItemRecord> 
 	 * @return ItemRecord.class as the primary type returned by this query handler
 	 */
 	@Override
-	public Class<ItemRecord> getHandledType() {
+	public Class<?> getHandledType() {
 		return ItemRecord.class;
 	}
 

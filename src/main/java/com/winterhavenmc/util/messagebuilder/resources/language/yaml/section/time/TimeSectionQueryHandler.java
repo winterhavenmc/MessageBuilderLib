@@ -38,7 +38,7 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_TI
  * duration, listing the appropriate time units and their singular or plural names down to the granularity
  * specified by the provided TimeUnit constant.
  */
-public class TimeSectionQueryHandler implements SectionQueryHandler<String> {
+public class TimeSectionQueryHandler implements SectionQueryHandler {
 
 	public static final String LESS_THAN_ONE_KEY = "OTHER.LESS_THAN_ONE";
 	public static final String LESS_THAN_KEY = "OTHER.LESS_THAN";
@@ -84,7 +84,7 @@ public class TimeSectionQueryHandler implements SectionQueryHandler<String> {
 	 * @return String.class as the primary type returned by this query handler
 	 */
 	@Override
-	public Class<String> getHandledType() {
+	public Class<?> getHandledType() {
 		return String.class;
 	}
 

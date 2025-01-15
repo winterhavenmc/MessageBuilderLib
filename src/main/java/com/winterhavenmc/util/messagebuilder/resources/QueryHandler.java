@@ -15,8 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.resources;
 
-public interface QueryHandler<T> {
+public interface QueryHandler {
 	// no methods declared
 }

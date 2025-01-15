@@ -29,7 +29,7 @@ import java.util.Optional;
 /**
  * Query handler for the 'CONSTANTS' section of the language file.
  */
-public class ConstantSectionQueryHandler implements SectionQueryHandler<String> {
+public class ConstantSectionQueryHandler implements SectionQueryHandler {
 
 	private final static Section section = Section.CONSTANTS;
 	private final YamlConfigurationSupplier configurationSupplier;
@@ -72,7 +72,7 @@ public class ConstantSectionQueryHandler implements SectionQueryHandler<String> 
 	 * @return String.class as the primary type returned by this query handler
 	 */
 	@Override
-	public Class<String> getHandledType() {
+	public Class<?> getHandledType() {
 		return String.class;
 	}
 

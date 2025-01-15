@@ -68,7 +68,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 * @param section the section of the query handler requested
 	 * @return the section query handler
 	 */
-	public SectionQueryHandler<?> getQueryHandler(Section section) {
+	public SectionQueryHandler getQueryHandler(Section section) {
 		return queryHandler.getQueryHandler(section);
 	}
 

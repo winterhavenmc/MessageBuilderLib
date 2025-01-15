@@ -32,7 +32,7 @@ import java.util.Optional;
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * message section.
  */
-public class MessageSectionQueryHandler implements SectionQueryHandler<MessageRecord> {
+public class MessageSectionQueryHandler implements SectionQueryHandler {
 
 	private final ConfigurationSection messageSection;
 
@@ -87,7 +87,7 @@ public class MessageSectionQueryHandler implements SectionQueryHandler<MessageRe
 	 * @return MessageRecord.class as the primary type returned by this query handler
 	 */
 	@Override
-	public Class<MessageRecord> getHandledType() {
+	public Class<?> getHandledType() {
 		return MessageRecord.class;
 	}
 

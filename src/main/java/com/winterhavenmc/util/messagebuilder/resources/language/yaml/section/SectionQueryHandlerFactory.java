@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class SectionQueryHandlerFactory {
 
-	private final Map<Section, SectionQueryHandler<?>> sectionHandlerCache = new EnumMap<>(Section.class);
+	private final Map<Section, SectionQueryHandler> sectionHandlerCache = new EnumMap<>(Section.class);
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
@@ -58,7 +58,7 @@ public class SectionQueryHandlerFactory {
 	 * @param section A constant of the Section enum specifying which SectionQueryHandler to return
 	 * @return The requested SectionQueryHandler
 	 */
-	public SectionQueryHandler<?> getQueryHandler(Section section) {
+	public SectionQueryHandler getQueryHandler(Section section) {
 		return sectionHandlerCache.computeIfAbsent(section, this::createSectionHandler);
 	}
 
@@ -70,7 +70,7 @@ public class SectionQueryHandlerFactory {
 	 * @return the corresponding SectionQueryHandler
 	 * @throws IllegalArgumentException if no handler can be created for the given section
 	 */
-	public SectionQueryHandler<?> createSectionHandler(Section section) {
+	public SectionQueryHandler createSectionHandler(Section section) {
 		return switch (section) {
 			case CONSTANTS -> new ConstantSectionQueryHandler(configurationSupplier);
 			case ITEMS -> new ItemSectionQueryHandler(configurationSupplier);
@@ -87,12 +87,10 @@ public class SectionQueryHandlerFactory {
 	 *
 	 * @param section a constant of the {@code Section} enum
 	 * @return {@code SectionQueryHandler} of the appropriate type for the section
-	 * @param <T> The Type of the section query handler being produced
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> SectionQueryHandler<T> createSectionHandlerDynamically(Section section) {
+	public SectionQueryHandler createSectionHandlerDynamically(Section section) {
 		try {
-			return (SectionQueryHandler<T>) section.getHandlerClass().getDeclaredConstructor().newInstance();
+			return section.getHandlerClass().getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			throw new IllegalStateException("Failed to create handler for section: " + section, e);
 		}

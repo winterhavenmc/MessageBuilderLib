@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import java.util.List;
 
-public class DefaultSectionQueryHandler implements SectionQueryHandler<Void> {
+public class DefaultSectionQueryHandler implements SectionQueryHandler {
 
 
 	public Void query() {
