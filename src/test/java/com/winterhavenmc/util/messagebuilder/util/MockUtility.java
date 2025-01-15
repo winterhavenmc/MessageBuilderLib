@@ -17,12 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstallerTest;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -95,6 +97,41 @@ public final class MockUtility {
 		configuration.set("language", "en-US");
 
 		return configuration;
+	}
+
+
+	/**
+	 * Installs a resource file from the classpath to the specified target directory.
+	 *
+	 * @param resourceName  the name of the resource file in the classpath
+	 * @param targetDirPath the target directory where the file should be installed
+	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
+	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
+	 */
+	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
+		if (resourceName == null) { throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_RESOURCE_NAME.getMessage()); }
+		if (resourceName.isEmpty()) { throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.Parameter.EMPTY_RESOURCE_NAME.getMessage()); }
+		if (targetDirPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_DIRECTORY_PATH.getMessage()); }
+
+		// Ensure the target directory exists
+		Files.createDirectories(targetDirPath);
+
+		// Get the resource as an InputStream
+		try (var inputStream = getResourceStream(resourceName)) {
+			if (inputStream == null) {
+				throw new IOException("ResourceType '" + resourceName + "' not found in the classpath.");
+			}
+
+			// Resolve the full path to the target file
+			Path targetFilePath = targetDirPath.resolve(resourceName);
+
+			// create subdirectories
+			Files.createDirectories(targetFilePath.getParent());
+
+			// Copy the resource to the target directory
+			Files.copy(inputStream, targetFilePath); // DO NOT REPLACE EXISTING FILES
+			return true;
+		}
 	}
 
 }
