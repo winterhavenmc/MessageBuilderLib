@@ -62,8 +62,8 @@ import org.bukkit.plugin.Plugin;
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	private final Plugin plugin;
-	private final LanguageResourceHandler languageResourceHandler;
-	private final LanguageQueryHandler languageQueryHandler;
+	private final YamlLanguageResourceHandler languageResourceHandler;
+	private final YamlLanguageQueryHandler languageQueryHandler;
 	private final MacroHandler macroQueryHandler;
 
 
@@ -76,10 +76,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (plugin == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
 
 		this.plugin = plugin;
-		this.languageResourceHandler = new YamlLanguageResourceHandler(plugin.getConfig(), new YamlLanguageResourceLoader(plugin));
-		YamlConfigurationSupplier configurationSupplier = languageResourceHandler.getConfigurationSupplier();
-		this.languageQueryHandler = new YamlLanguageQueryHandler(configurationSupplier);
-
+		this.languageResourceHandler = YamlLanguageResourceHandler.getInstance(plugin);
+		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceHandler.getConfigurationSupplier());
 		this.macroQueryHandler = new MacroHandler(languageQueryHandler);
 	}
 
