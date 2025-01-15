@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -27,6 +26,7 @@ import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -40,9 +40,10 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-public class YamlLanguageResourceTypeLoaderTest {
+public class YamlLanguageResourceLoaderTest {
 
 	@Mock Plugin pluginMock;
+	@Mock YamlLanguageResourceInstaller resourceInstallerMock;
 
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;
@@ -61,7 +62,8 @@ public class YamlLanguageResourceTypeLoaderTest {
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
 		// create new real file loader
-		yamlLanguageResourceLoader = new YamlLanguageResourceLoader(pluginMock);
+		yamlLanguageResourceLoader = new YamlLanguageResourceLoader(pluginMock, resourceInstallerMock);
+		yamlLanguageResourceLoader.setup();
 	}
 
 	@AfterEach
@@ -163,6 +165,12 @@ public class YamlLanguageResourceTypeLoaderTest {
 
 		// Assert
 		assertTrue(testConfiguration.contains("CONSTANTS.SPAWN.DISPLAY_NAME"));
+	}
+
+	@Test
+	void fileAbsent() {
+		assertTrue(yamlLanguageResourceLoader.fileAbsent("en-US"));
+//		when(resourceInstallerMock.verifyResourceInstalled(Paths.get("language","en-US.yml").toString())).thenReturn(false);
 	}
 
 

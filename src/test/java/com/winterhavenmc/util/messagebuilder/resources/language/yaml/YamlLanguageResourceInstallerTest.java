@@ -17,11 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.util.Error;
-
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -41,26 +40,25 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class YamlLanguageResourceTypeInstallerTest {
+public class YamlLanguageResourceInstallerTest {
 
+	@TempDir
+	File tempDataDir;
 	@Mock private Plugin pluginMock;
 
 	private YamlLanguageResourceInstaller fileInstaller;
-	private File tempDataDir;
 
 	@BeforeEach
 	public void setUp() throws IOException {
 
-		tempDataDir = Files.createTempDirectory("MessageBuilderLib_").toFile();
-
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("YamlLanguageResourceTypeInstallerTest"));
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("YamlLanguageResourceInstallerTest"));
 		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 		when(pluginMock.getResource(LANGUAGE_EN_US_YML)).thenReturn(getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML));
 
 		// create real instance of installer
 		fileInstaller = new YamlLanguageResourceInstaller(pluginMock);
-		fileInstaller.install();
+		fileInstaller.autoInstall();
 	}
 
 	@AfterEach
@@ -349,7 +347,7 @@ public class YamlLanguageResourceTypeInstallerTest {
 					.when(pluginMock).saveResource(anyString(), eq(false));
 
 			// Act
-			fileInstaller.install();
+			fileInstaller.autoInstall();
 
 			// Assert
 			assertTrue(fileInstaller.verifyResourceInstalled(LANGUAGE_EN_US_YML));
@@ -379,52 +377,6 @@ public class YamlLanguageResourceTypeInstallerTest {
 		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-
-	/**
-	 * Installs a resource file from the classpath to the specified target directory.
-	 *
-	 * @param resourceName  the name of the resource file in the classpath
-	 * @param targetDirPath the target directory where the file should be installed
-	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
-	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
-	 */
-	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
-		if (resourceName == null) { throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_RESOURCE_NAME.getMessage()); }
-		if (resourceName.isEmpty()) { throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.Parameter.EMPTY_RESOURCE_NAME.getMessage()); }
-		if (targetDirPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_DIRECTORY_PATH.getMessage()); }
-
-		// Ensure the target directory exists
-		Files.createDirectories(targetDirPath);
-
-		// Get the resource as an InputStream
-		try (var inputStream = getResourceStream(resourceName)) {
-			if (inputStream == null) {
-				throw new IOException("ResourceType '" + resourceName + "' not found in the classpath.");
-			}
-
-			// Resolve the full path to the target file
-			Path targetFilePath = targetDirPath.resolve(resourceName);
-
-			// create subdirectories
-			Files.createDirectories(targetFilePath.getParent());
-
-			// Copy the resource to the target directory
-			Files.copy(inputStream, targetFilePath); // DO NOT REPLACE EXISTING FILES
-			return true;
-		}
-	}
-
-
-	/**
-	 * Retrieves an InputStream for the specified resource from the classpath.
-	 *
-	 * @param resourceName the name of the resource file
-	 * @return an InputStream for the resource, or {@code null} if the resource cannot be found
-	 */
-	public static InputStream getResourceStream(final String resourceName) {
-		return YamlLanguageResourceTypeInstallerTest.class.getClassLoader().getResourceAsStream(resourceName);
 	}
 
 }
