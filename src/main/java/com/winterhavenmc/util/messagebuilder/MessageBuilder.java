@@ -20,11 +20,16 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.resources.language.*;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Optional;
 
 
 /**
@@ -62,7 +67,7 @@ import org.bukkit.plugin.Plugin;
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	private final Plugin plugin;
-	private final YamlLanguageResourceHandler languageResourceHandler;
+	private final LanguageResourceManager languageResourceManager;
 	private final YamlLanguageQueryHandler languageQueryHandler;
 	private final MacroHandler macroQueryHandler;
 
@@ -76,8 +81,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (plugin == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
 
 		this.plugin = plugin;
-		this.languageResourceHandler = YamlLanguageResourceHandler.getInstance(plugin);
-		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceHandler.getConfigurationSupplier());
+		this.languageResourceManager = YamlLanguageResourceManager.getInstance(plugin);
+		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
 		this.macroQueryHandler = new MacroHandler(languageQueryHandler);
 	}
 
@@ -121,7 +126,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * Reload messages from configured language file
 	 */
 	public void reload() {
-		if (!languageResourceHandler.reload()) {
+		if (!languageResourceManager.reload()) {
 			plugin.getLogger().warning(Error.LanguageConfiguration.RELOAD_FAILED.getMessage());
 		}
 	}
