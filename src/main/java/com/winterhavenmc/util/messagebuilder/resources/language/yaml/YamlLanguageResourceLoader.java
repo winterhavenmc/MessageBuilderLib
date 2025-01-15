@@ -20,15 +20,15 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
+
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller.SUBDIRECTORY;
 
 
 /**
@@ -37,65 +37,77 @@ import java.util.logging.Logger;
 //TODO: This class needs more test coverage. It's mostly null checks and throws missing, and the reload command.
 public class YamlLanguageResourceLoader {
 
-	// the directory name within a plugin data directory where the language yaml files are installed
-	private final static String LANGUAGE_FOLDER = "language";
+	// constants for plugin configuration keys
 	private final static String CONFIG_LOCALE_KEY = "locale";
 	private final static String CONFIG_LANGUAGE_KEY = "language";
 
 	// reference to plugin main class
 	private final Plugin plugin;
 
+	YamlLanguageResourceInstaller resourceInstaller;
+
 
 	/**
-	 * Class constructor, single plugin parameter
+	 * Class constructor, Two parameter
 	 *
-	 * @param plugin reference to plugin main class
+	 * @param plugin an instance of the plugin
+	 * @param resourceInstaller a language
 	 */
-	public YamlLanguageResourceLoader(final Plugin plugin)
+	YamlLanguageResourceLoader(final Plugin plugin, final YamlLanguageResourceInstaller resourceInstaller)
 	{
 		this.plugin = plugin;
-		new YamlLanguageResourceInstaller(plugin).install();
+		this.resourceInstaller = resourceInstaller;
 	}
 
 
-	// Note: uncomment this constructor and make class YamlLanguageResourceInstaller public to use dependency injection
-	// of the installer as a parameter to this constructor. Commented to prevent scope warning.
-//	/**
-//	 * Class constructor, Two parameter
-//	 *
-//	 * @param installer a language
-//	 */
-//	public YamlLanguageResourceLoader(final Plugin plugin, final YamlLanguageResourceInstaller installer)
-//	{
-//		this.plugin = plugin;
-//		installer.install();
-//	}
+	// avoid creating installer if the file we need is already installed
+	public void setup()
+	{
+		// get new instance of installer
+		this.resourceInstaller = new YamlLanguageResourceInstaller(plugin);
+
+		// install any language resource files listed in auto_install.txt to plugin data directory
+		resourceInstaller.autoInstall();
+	}
 
 
 	/**
-	 * Get configuration object containing message settings and strings
+	 * Load the language configuration object for the configured language from file and return it, withou
+	 * loading configuration defaults
 	 *
 	 * @return Configuration - message configuration object
 	 */
-	public Configuration getConfiguration()
+	Configuration loadConfiguration()
 	{
 		// get valid language tag using configured language
 		String languageTag = getValidLanguageTag(getConfiguredLanguage(plugin));
 
-		return getConfiguration(languageTag);
+		return loadConfiguration(languageTag);
 	}
 
 
 	/**
-	 * Retrieve language configuration from file for the provided IETF language tag, without loading
+	 * Load the language configuration object for the given IETF language tag and return it, without loading
 	 * configuration defaults
 	 *
-	 * @return {@link MemoryConfiguration} containing the configuration loaded from the language file
+	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
-	private @NotNull MemoryConfiguration getConfiguration(final String languageTag) {
+	Configuration loadConfiguration(final String languageTag) {
+
+		// get filename for language tag
+		String filename = getLanguageFilename(languageTag);
+
+		// if file not installed for language tag in plugin data directory, try to install from resource
+		resourceInstaller.installIfMissing(filename);
+
+		// if file is still not installed, use en-US
+		if (fileAbsent(filename)) {
+			filename = getLanguageFilename("en-US");
+			resourceInstaller.installIfMissing(filename);
+		}
 
 		// get file object for configured language file
-		File languageFile = new File(getLanguageFilename(languageTag));
+		File languageFile = new File(filename);
 
 		// create new YamlConfiguration object
 		YamlConfiguration configuration = new YamlConfiguration();
@@ -151,7 +163,7 @@ public class YamlLanguageResourceLoader {
 	 * @param plugin reference to plugin main class
 	 * @return IETF language tag as string from config.yml
 	 */
-	private String getConfiguredLanguage(final Plugin plugin)
+	String getConfiguredLanguage(final Plugin plugin)
 	{
 		return plugin.getConfig().getString(CONFIG_LANGUAGE_KEY);
 	}
@@ -194,11 +206,11 @@ public class YamlLanguageResourceLoader {
 		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_RESOURCE_NAME.getMessage()); }
 
 		// get embedded resource file name; note that forward slash (/) is always used, regardless of platform
-		String resourceName = String.join("/",LANGUAGE_FOLDER, languageTag).concat(".yml");
+		String resourceName = String.join("/",SUBDIRECTORY, languageTag).concat(".yml");
 
 		// check if specified language resource exists, otherwise use en-US
 		if (plugin.getResource(resourceName) == null) {
-			resourceName = LANGUAGE_FOLDER + "/" + "en-US.yml";
+			resourceName = SUBDIRECTORY + "/" + "en-US.yml";
 		}
 		return resourceName;
 	}
@@ -227,7 +239,12 @@ public class YamlLanguageResourceLoader {
 	 */
 	static String getLanguageFilename(final String languageTag)
 	{
-		return Paths.get(LANGUAGE_FOLDER, languageTag + ".yml").normalize().toString();
+		return Paths.get(SUBDIRECTORY, languageTag + ".yml").normalize().toString();
+	}
+
+
+	boolean fileAbsent(final String languageTag) {
+		return !this.resourceInstaller.verifyResourceInstalled(getLanguageFilename(languageTag));
 	}
 
 
@@ -245,7 +262,7 @@ public class YamlLanguageResourceLoader {
 	public Configuration reload()
 	{
 		//TODO: Is this right? Needs test case at any rate.
-		return getConfiguration();
+		return loadConfiguration();
 	}
 
 }
