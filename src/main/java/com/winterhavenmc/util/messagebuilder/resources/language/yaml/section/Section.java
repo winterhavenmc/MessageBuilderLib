@@ -90,7 +90,7 @@ public enum Section {
 	}
 
 
-	public <T extends SectionQueryHandler> T getHandler(YamlConfigurationSupplier configurationSupplier) {
+	public <T extends SectionQueryHandler> T getQueryHandler(YamlConfigurationSupplier configurationSupplier) {
 		if (handlerSupplier == null) {
 			synchronized (this) {
 				if (handlerSupplier == null) {
