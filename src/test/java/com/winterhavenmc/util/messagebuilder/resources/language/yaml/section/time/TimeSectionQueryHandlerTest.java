@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ti
 
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -118,61 +117,61 @@ class TimeSectionQueryHandlerTest {
 
 	@ParameterizedTest
 	@EnumSource
-	void testGetSingular(Namespace.Time.Unit namespaceTimeUnit) {
+	void testGetSingular(TestTimeUnit testTimeUnit) {
 		// Arrange
-		TimeUnit match = match(namespaceTimeUnit);
+		TimeUnit match = match(testTimeUnit);
 
-		assertEquals(namespaceTimeUnit.getSingular(), queryHandler.getSingular(match));
-		assertNotEquals(namespaceTimeUnit.getPlural(), queryHandler.getSingular(match));
+		assertEquals(testTimeUnit.getSingular(), queryHandler.getSingular(match));
+		assertNotEquals(testTimeUnit.getPlural(), queryHandler.getSingular(match));
 	}
 
 	@ParameterizedTest
 	@EnumSource
-	void testGetPlural(Namespace.Time.Unit namespaceTimeUnit) {
+	void testGetPlural(TestTimeUnit testTimeUnit) {
 		// Arrange
-		TimeUnit match = match(namespaceTimeUnit);
+		TimeUnit match = match(testTimeUnit);
 
 		// Act & Assert
-		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPlural(match));
-		assertNotEquals(namespaceTimeUnit.getSingular(), queryHandler.getPlural(match));
+		assertEquals(testTimeUnit.getPlural(), queryHandler.getPlural(match));
+		assertNotEquals(testTimeUnit.getSingular(), queryHandler.getPlural(match));
 	}
 
 	@ParameterizedTest
 	@EnumSource
-	void testGetPluralized_one(Namespace.Time.Unit namespaceTimeUnit) {
+	void testGetPluralized_one(TestTimeUnit testTimeUnit) {
 		// Arrange
-		TimeUnit match = match(namespaceTimeUnit);
+		TimeUnit match = match(testTimeUnit);
 
 		// Act & Assert
-		assertEquals(namespaceTimeUnit.getSingular(), queryHandler.getPluralized(match.one(), match));
-		assertNotEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.one(), match));
+		assertEquals(testTimeUnit.getSingular(), queryHandler.getPluralized(match.one(), match));
+		assertNotEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.one(), match));
 	}
 
 	@ParameterizedTest
 	@EnumSource
-	void tstGetPluralized_DAY_just_shy_of(Namespace.Time.Unit namespaceTimeUnit) {
+	void tstGetPluralized_DAY_just_shy_of(TestTimeUnit testTimeUnit) {
 		// Arrange
-		TimeUnit match = match(namespaceTimeUnit);
+		TimeUnit match = match(testTimeUnit);
 
 		// Act & Assert
-		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(0), match));
-		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(1), match));
+		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(0), match));
+		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(1), match));
 		//TODO: Just shy of two (2) gives undetermined output depending on TimeUnit; 2 will always fail for millis
-		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(3), match));
-		assertNotEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.one(), match));
+		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(3), match));
+		assertNotEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.one(), match));
 	}
 
 	@ParameterizedTest
 	@EnumSource
-	void testGetPluralized_DAY_times_x(Namespace.Time.Unit namespaceTimeUnit) {
+	void testGetPluralized_DAY_times_x(TestTimeUnit testTimeUnit) {
 		// Arrange
-		TimeUnit match = match(namespaceTimeUnit);
+		TimeUnit match = match(testTimeUnit);
 
 		// Act & Assert
-		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.times(0), match));
-		assertNotEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.times(1), match));
-		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.times(2), match));
-		assertEquals(namespaceTimeUnit.getPlural(), queryHandler.getPluralized(match.times(3), match));
+		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.times(0), match));
+		assertNotEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.times(1), match));
+		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.times(2), match));
+		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.times(3), match));
 	}
 
 	@Test
@@ -295,8 +294,40 @@ class TimeSectionQueryHandlerTest {
 	}
 
 
-	private static TimeUnit match(Namespace.Time.Unit unit) {
-		return TimeUnit.valueOf(unit.name());
+	private static TimeUnit match(TestTimeUnit testTimeUnit) {
+		return TimeUnit.valueOf(testTimeUnit.name());
 	}
 
+
+	// this enum contains the default en-US singular and plural names of time units.
+	// It is used only for testing at this time, to confirm the correct singular and
+	// plural names are being returned by methods under test.
+	public enum TestTimeUnit {
+		MILLISECONDS("millisecond", "milliseconds"),
+		TICKS("tick", "ticks"),
+		SECONDS("second", "seconds"),
+		MINUTES("minute", "minutes"),
+		HOURS("hour","hours"),
+		DAYS("day","days"),
+		WEEKS("week", "weeks"),
+		MONTHS("month", "months"),
+		YEARS("year", "years"),
+		;
+
+		private final String singular;
+		private final String plural;
+
+		TestTimeUnit(final String singular, final String plural) {
+			this.singular = singular;
+			this.plural = plural;
+		}
+
+		public String getPlural() {
+			return plural;
+		}
+
+		public String getSingular() {
+			return singular;
+		}
+	}
 }

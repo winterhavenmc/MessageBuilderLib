@@ -92,12 +92,12 @@ public class YamlLanguageResourceLoaderTest {
 
 
 	@Test
-	void testGetConfiguration() {
+	void testLoadConfiguration() {
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
 		// Arrange & Act
-		Configuration configuration = yamlLanguageResourceLoader.getConfiguration();
+		Configuration configuration = yamlLanguageResourceLoader.loadConfiguration();
 
 		// Assert
 		assertNotNull(configuration);
@@ -152,7 +152,7 @@ public class YamlLanguageResourceLoaderTest {
 	}
 
 	@Test
-	void testGetConfigurationDefaults() {
+	void testLoadConfigurationDefaults() {
 		// Arrange
 		Configuration testConfiguration = new MemoryConfiguration();
 		testConfiguration.set("TEST_KEY_!", true);

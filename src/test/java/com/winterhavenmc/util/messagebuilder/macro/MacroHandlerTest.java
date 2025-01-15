@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 class MacroHandlerTest {
 
 	private Player player;
-	private LanguageResourceHandler languageResourceHandler;
+	private LanguageResourceManager languageResourceManager;
 
 	private MacroHandler macroHandler;
 
@@ -55,7 +55,7 @@ class MacroHandlerTest {
 		when(player.getUniqueId()).thenReturn(new UUID(1, 1));
 		when(player.getName()).thenReturn("Player One");
 
-		languageResourceHandler = mock(LanguageResourceHandler.class, "MockLanguageHandler");
+		languageResourceManager = mock(LanguageResourceManager.class, "MockLanguageHandler");
 
 		// real objects
 		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
@@ -67,7 +67,7 @@ class MacroHandlerTest {
 	@AfterEach
 	public void tearDown() {
 		player = null;
-		languageResourceHandler = null;
+		languageResourceManager = null;
 		macroHandler = null;
 	}
 

@@ -45,12 +45,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class YamlLanguageQueryHandlerTest {
 
 	LanguageQueryHandler queryHandler;
+	YamlConfigurationSupplier configurationSupplier;
 
 
 	@BeforeEach
 	void setUp() {
 		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
-		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
+		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
 	}
 
