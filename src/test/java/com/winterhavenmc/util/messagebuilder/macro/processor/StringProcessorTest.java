@@ -18,12 +18,16 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.context.ContextKey;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 
 import org.bukkit.configuration.Configuration;
@@ -80,9 +84,9 @@ class StringProcessorTest {
 	}
 
 
-	@Test
-	void resolveContextWithItem() {
-
+//	@Test
+//	void resolveContextWithItem() {
+//
 //		LanguageResourceHandler languageHandler = new YamlLanguageResourceHandler(plugin, new YamlLanguageResourceLoader(plugin));
 //		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(plugin, languageHandler.getConfiguration());
 //		MacroProcessor macroProcessor = new StringProcessor(queryHandler);
@@ -100,7 +104,7 @@ class StringProcessorTest {
 //		assertEquals("§aTest Item", stringMap.get(stringKey));
 //		assertTrue(stringMap.containsKey("ITEM_NAME"));
 //		assertEquals("§aTest Item", stringMap.get("ITEM_NAME"));
-
-	}
+//
+//	}
 
 }
