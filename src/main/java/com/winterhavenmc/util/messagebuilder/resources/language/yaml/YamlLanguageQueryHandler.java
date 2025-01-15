@@ -20,8 +20,6 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandlerFactory;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandlerRegistry;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
@@ -34,8 +32,7 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.*;
 
 public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 
-	private final SectionQueryHandlerRegistry sectionQueryHandlerRegistry;
-
+	private final YamlConfigurationSupplier yamlConfigurationSupplier;
 
 	/**
 	 * Class constructor
@@ -45,23 +42,13 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	public YamlLanguageQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
 		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Parameter.NULL_CONFIGURATION.getMessage()); }
 
-		// create the query handler registry
-		sectionQueryHandlerRegistry = new SectionQueryHandlerRegistry();
-
-		// create the section factory
-		SectionQueryHandlerFactory sectionQueryHandlerFactory = new SectionQueryHandlerFactory(yamlConfigurationSupplier);
-
-		// Register the section handlers in the registry
-		//TODO: this will be replaced by cached lazy-loading
-		for (Section section : Section.values()) {
-			sectionQueryHandlerRegistry.registerQueryHandler(section, sectionQueryHandlerFactory.createSectionHandler(section));
-		}
+		this.yamlConfigurationSupplier = yamlConfigurationSupplier;
 	}
 
 
 	@Override
-	public SectionQueryHandler<?> getQueryHandler(Section section) {
-		return (SectionQueryHandler<?>) sectionQueryHandlerRegistry.getQueryHandler(section);
+	public SectionQueryHandler getQueryHandler(Section section) {
+		return section.getQueryHandler(yamlConfigurationSupplier);
 	}
 
 
@@ -69,11 +56,8 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	public Optional<ItemRecord> getItemRecord(final String keyPath) {
 		if (keyPath == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
 
-		SectionQueryHandler<?> queryHandler = getQueryHandler(Section.ITEMS);
-		if (queryHandler instanceof ItemSectionQueryHandler itemSectionQueryHandler) {
-			return itemSectionQueryHandler.getRecord(keyPath);
-		}
-		return Optional.empty();
+		ItemSectionQueryHandler itemSectionQueryHandler = Section.ITEMS.getQueryHandler(yamlConfigurationSupplier);
+		return itemSectionQueryHandler.getRecord(keyPath);
 	}
 
 
@@ -81,11 +65,8 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	public <MessageId extends Enum<MessageId>> Optional<MessageRecord> getMessageRecord(final MessageId messageId) {
 		if (messageId == null) { throw new IllegalArgumentException(Parameter.NULL_MESSAGE_ID.getMessage()); }
 
-		SectionQueryHandler<?> queryHandler = getQueryHandler(Section.MESSAGES);
-		if (queryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
-			return messageSectionQueryHandler.getRecord(messageId);
-		}
-		return Optional.empty();
+		MessageSectionQueryHandler messageSectionQueryHandler = Section.MESSAGES.getQueryHandler(yamlConfigurationSupplier);
+		return messageSectionQueryHandler.getRecord(messageId);
 	}
 
 }
