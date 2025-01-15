@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,168 +18,76 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceHandler;
-import com.winterhavenmc.util.messagebuilder.query.QueryHandlerFactory;
-import org.bukkit.configuration.Configuration;
-
-import java.util.Locale;
+import org.bukkit.plugin.Plugin;
 
 
-/**
- * provides common methods for the installation and management of
- * localized language files for bukkit plugins.
- */
 public class YamlLanguageResourceHandler implements LanguageResourceHandler {
 
-	// string constant for language key in plugin config file
-	private final static String CONFIG_LOCALE_KEY = "locale";
-	private final static String CONFIG_LANGUAGE_KEY = "language";
+	private static YamlLanguageResourceHandler instance;
 
-	// default locale
-	private Locale locale = Locale.US;
-
-	// plugin configuration
-	private final Configuration pluginConfiguration;
-
-	// configuration supplier
-	YamlConfigurationSupplier yamlLanguageConfigurationSupplier;
-
-	// language file loader
-	private YamlLanguageResourceLoader languageResourceLoader;
-
+	private final Plugin plugin;
+	private final YamlLanguageResourceLoader languageResourceLoader;
+	private YamlConfigurationSupplier configurationSupplier;
 
 
 	/**
-	 * class constructor, three parameter
-	 * all fields are provided as parameters
+	 * Private constructor prevents instantiation except from within this class
 	 *
-	 * @param pluginConfiguration        the plugin configuration
-	 * @param languageResourceLoader     the language file loader to be used by the language handler
+	 * @param plugin an instance of the plugin
 	 */
-	public YamlLanguageResourceHandler(final Configuration pluginConfiguration,
-	                                   final YamlLanguageResourceLoader languageResourceLoader)
-	{
-		// set fields from parameters
-		this.pluginConfiguration = pluginConfiguration;
-		this.languageResourceLoader = languageResourceLoader;
+	private YamlLanguageResourceHandler(Plugin plugin) {
+		this.plugin = plugin;
 
-		// instantiate supplier
-		yamlLanguageConfigurationSupplier = new YamlConfigurationSupplier(languageResourceLoader.getConfiguration());
+		// instantiate resource loader and setup
+		this.languageResourceLoader = new YamlLanguageResourceLoader(plugin, new YamlLanguageResourceInstaller(plugin));
+		this.languageResourceLoader.setup();
 
-		// instantiate QueryHandlerFactory
-		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(yamlLanguageConfigurationSupplier);
-
-
-
-		// load message configuration from file
-//		languageConfig = languageResourceLoader.getConfiguration();
-
-		// get locale from plugin configuration if set
-		//TODO: Mock static method to enable and test this
-//		String languageTag = pluginConfig.getString(CONFIG_LOCALE_KEY);
-//		if (languageTag != null) {
-//			locale = Locale.forLanguageTag(languageTag);
-//		}
+		// instantiate supplier with language configuration from resource loader, and assign to field
+		this.configurationSupplier = new YamlConfigurationSupplier(languageResourceLoader.getConfiguration());
 	}
 
 
 	/**
-	 * class constructor, no parameter
-	 * must use setters for all fields before use
-	 */
-	public YamlLanguageResourceHandler() {
-		this.pluginConfiguration = null;
-		this.languageResourceLoader = null;
-		this.yamlLanguageConfigurationSupplier = null;
-		this.locale = null;
-	}
-
-	/**
-	 * setter for fileLoader
-	 * @param languageResourceLoader a new FileLoader to replace the existing fileLoader
-	 */
-	void setFileLoader(final YamlLanguageResourceLoader languageResourceLoader) {
-		this.languageResourceLoader = languageResourceLoader;
-	}
-
-	/**
-	 * Setter for locale
-	 * @param locale the locale to set
-	 */
-	public void setLocale(final Locale locale) {
-		this.locale = locale;
-	}
-
-	/**
-	 * Get the current locale
-	 * @return the current locale
-	 */
-	public Locale getLocale() {
-		return this.locale;
-	}
-
-
-	boolean isFileLoaderSet() {
-		return this.languageResourceLoader != null;
-	}
-
-	boolean isLocaleSet() {
-		return this.locale != null;
-	}
-
-
-	/**
-	 * Get the language configuration held by this language handler.
+	 * Static method to retrieve an instance of this singleton
 	 *
-	 * @return a configuration object loaded with values from the configured language file, or the default en-US.yml
-	 * language file if the configured file could not be found.
+	 * @param plugin an instance of the plugin
+	 * @return a new or cached instance of this singleton
 	 */
-	public Configuration getPluginConfiguration() {
-		return yamlLanguageConfigurationSupplier.get();
+	public static YamlLanguageResourceHandler getInstance(Plugin plugin) {
+		if (instance == null) {
+			synchronized (YamlLanguageResourceHandler.class) {
+				if (instance == null) {
+					instance = new YamlLanguageResourceHandler(plugin);
+				}
+			}
+		}
+		return instance;
 	}
 
 
-	/**
-	 * Get the language configuration held by this language handler.
-	 *
-	 * @return a configuration object loaded with values from the configured language file, or the default en-US.yml
-	 * language file if the configured file could not be found.
-	 */
-	@Override
+	public boolean reload() {
+		// Reload the configuration and update the supplier.
+		languageResourceLoader.reload();
+		if (languageResourceLoader.getConfiguration() == null) {
+			return false;
+		}
+		configurationSupplier = new YamlConfigurationSupplier(languageResourceLoader.getConfiguration());
+		return true;
+	}
+
+
 	public YamlConfigurationSupplier getConfigurationSupplier() {
-		return this.yamlLanguageConfigurationSupplier;
+		return configurationSupplier;
 	}
 
-
 	/**
-	 * Get configured language from plugin config.yml file. Note that Locale support is coming, as documented elsewhere.
+	 * Get setting for language from plugin config file
 	 *
-	 * @return The IETF language tag as a String specifying the language file to load. If the setting could not be found,
-	 * it will default to 'en-US'. An en-US.yml language file should always be included in the plugin's resources, to
-	 * ensure that default messages are displayed by the plugin.
+	 * @return a string containing the IETF language tag set in the plugin config file
 	 */
 	@Override
 	public String getConfiguredLanguage() {
-		return pluginConfiguration.getString(CONFIG_LANGUAGE_KEY);
-	}
-
-
-	/**
-	 * Reload messages from yaml file into Configuration object. If the yaml language file
-	 * does not exist in the plugin data directory, it will be re-copied from the jar resource.
-	 * If a file does not exist and a resource cannot be found, the en-US language file
-	 * or resource will be used to load the configuration.
-	 *
-	 * @return {@code true} if the reload was successful, {@code false} if it was not
-	 */
-	@Override
-	public boolean reload() {
-		languageResourceLoader.reload();
-		Configuration newConfiguration = languageResourceLoader.getConfiguration();
-		if (newConfiguration != null) {
-			yamlLanguageConfigurationSupplier = new YamlConfigurationSupplier(newConfiguration);
-			return true;
-		}
-		return false;
+		return plugin.getConfig().getString("language");
 	}
 
 }
