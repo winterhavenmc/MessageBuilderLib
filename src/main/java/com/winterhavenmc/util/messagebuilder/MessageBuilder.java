@@ -20,16 +20,11 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.resources.language.*;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
-
-import java.util.Optional;
 
 
 /**
