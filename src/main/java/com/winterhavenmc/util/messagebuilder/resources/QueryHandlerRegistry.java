@@ -15,11 +15,13 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 
+
 public interface QueryHandlerRegistry {
+
 	/**
 	 * Registers a QueryHandler for a specific section.
 	 *
@@ -36,7 +38,6 @@ public interface QueryHandlerRegistry {
 	 * @param <T>     the type of the handler
 	 * @return an Optional containing the QueryHandler, or empty if none is registered
 	 */
-	@SuppressWarnings("unchecked")
 	<T> QueryHandler<T> getQueryHandler(Section section);
 
 	/**

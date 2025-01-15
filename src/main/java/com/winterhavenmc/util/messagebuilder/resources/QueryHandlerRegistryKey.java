@@ -15,6 +15,6 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.query;
+package com.winterhavenmc.util.messagebuilder.resources;
 
 public interface QueryHandlerRegistryKey { /* marker interface */ }
