@@ -22,7 +22,6 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.Locale;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.Plugin;
@@ -42,7 +41,7 @@ class YamlLanguageResourceManagerTest {
 	@Mock YamlLanguageResourceLoader languageResourceLoaderMock;
 
 	// real language handler
-	YamlLanguageResourceManager languageHandler;
+	YamlLanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
 	FileConfiguration pluginConfiguration;
 
@@ -65,8 +64,8 @@ class YamlLanguageResourceManagerTest {
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
 		// instantiate real language handler with mocked parameters
-		languageHandler = YamlLanguageResourceManager.getInstance(pluginMock);
-		assertNotNull(languageHandler);
+		resourceManager = YamlLanguageResourceManager.getInstance(pluginMock);
+		assertNotNull(resourceManager);
 	}
 
 
@@ -74,7 +73,7 @@ class YamlLanguageResourceManagerTest {
 	void tearDown() {
 		pluginMock = null;
 		languageResourceLoaderMock = null;
-		languageHandler = null;
+		resourceManager = null;
 		languageConfiguration = null;
 		pluginConfiguration = null;
 	}
@@ -87,56 +86,54 @@ class YamlLanguageResourceManagerTest {
 
 
 	@Test
-	void getConfigurationSupplier() {
-		// Act
-		YamlConfigurationSupplier configurationSupplier = languageHandler.getConfigurationSupplier();
-
-		// Assert
-		assertNotNull(configurationSupplier);
+	void testGetConfiguredLanguage() {
+		// Act & Assert
+		assertEquals("en-US", resourceManager.getConfiguredLanguage());
 	}
-
-
-	@Nested
-	class LanguageTests {
-		@Test
-		void testGetLanguage() {
-			assertEquals(Locale.US.toLanguageTag(), languageHandler.getConfiguredLanguage());
-		}
-	}
-
 
 	@Test
 	void testGetConfigurationSupplier() {
 		// Arrange & Act
-		YamlConfigurationSupplier yamlConfigurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
+		YamlConfigurationSupplier yamlConfigurationSupplier = resourceManager.getConfigurationSupplier();
 
 		// Assert
 		assertNotNull(yamlConfigurationSupplier);
 		assertNotNull(yamlConfigurationSupplier.get());
 	}
 
-	@Test
-	void getConfiguredLanguageTest() {
-		// Act & Assert
-		assertEquals("en-US", languageHandler.getConfiguredLanguage());
-	}
 
 	@Nested
 	class ReloadTests {
+		//TODO: confirm this test will always receive an identical configuration object from the loader
 		@Test
-		void reloadTest() {
+		void testReload_new_config() {
+			// Arrange
 			// Act
-			boolean success = languageHandler.reload();
+			boolean success = resourceManager.reload();
 
 			// Assert
 			assertTrue(success);
 		}
 
-
+		//TODO: test the reload method when a new and different configuration is returned from the loader
+		@Disabled
 		@Test
-		void reloadTest_fail() {
+		void testReload_same_config() {
+			// Arrange
+
 			// Act
-			boolean success = languageHandler.reload();
+			boolean success = resourceManager.reload();
+
+			// Assert
+			assertTrue(success);
+		}
+
+		//TODO: test when the new configuration from the loader is null
+		@Disabled
+		@Test
+		void testReload_fail() {
+			// Act
+			boolean success = resourceManager.reload();
 
 			// Assert
 			assertTrue(success);
