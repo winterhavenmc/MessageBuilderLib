@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -27,7 +28,7 @@ import java.util.function.Supplier;
 /**
  * Class that implements the Java Supplier interface to provide the Bukkit {@link Configuration} object to consumers
  */
-public class YamlConfigurationSupplier implements Supplier<Configuration> {
+public final class YamlConfigurationSupplier implements Supplier<Configuration> {
 	private final Configuration configuration;
 
 
