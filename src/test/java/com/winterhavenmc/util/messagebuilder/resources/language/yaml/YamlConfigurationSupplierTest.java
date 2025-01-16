@@ -69,4 +69,14 @@ class YamlConfigurationSupplierTest {
 		assertTrue(configurationSection.contains("TEST_ITEM_1"));
 	}
 
+	@Test
+	void testGetSection_parameter_null() {
+		// Arrange & Act
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> configurationSupplier.getSection(null));
+
+		// Assert
+		assertEquals("The section parameter cannot be null.", exception.getMessage());
+	}
+
 }
