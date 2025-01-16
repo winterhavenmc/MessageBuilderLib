@@ -26,6 +26,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
 import javax.lang.model.type.NullType;
+import java.time.Duration;
 
 
 public enum ProcessorType {
@@ -52,6 +53,12 @@ public enum ProcessorType {
 		@Override
 		MacroProcessor create(final LanguageQueryHandler queryHandler) {
 			return new LocationProcessor(queryHandler);
+		}
+	},
+	DURATION(Duration.class) {
+		@Override
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new DurationProcessor(queryHandler);
 		}
 	},
 	NUMBER(Number.class) {
