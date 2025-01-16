@@ -42,27 +42,26 @@ public class NumberProcessor extends MacroProcessorTemplate implements MacroProc
 			return resultMap;
 		}
 
-		if (value instanceof Long longVar) {
+//		if (value instanceof Long longVar) {
+//
+//			// put string value of longVar in result map, to be overwritten if macroName ends a Duration string match
+//			resultMap.put(key, String.valueOf(longVar));
+//
+//			for (DurationSuffix durationSuffix : DurationSuffix.values()) {
+//				String[] keyComponents = key.split(":", 2);
+//				String category = keyComponents[0];
+//				if (category.endsWith(durationSuffix.name())) {
+//
+//					// get TimeSectionQueryHandler from SectionQueryFactory
+//					TimeSectionQueryHandler timeSectionQueryHandler = (TimeSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.TIME);
+//					if (timeSectionQueryHandler != null) {
+//						resultMap.put(key, timeSectionQueryHandler.getTimeString(longVar, durationSuffix.getTimeUnit()));
+//					}
+//				}
+//			}
+//		}
 
-			// put string value of longVar in result map, to be overwritten if macroName ends a Duration string match
-			resultMap.put(key, String.valueOf(longVar));
-
-			for (DurationSuffix durationSuffix : DurationSuffix.values()) {
-				String[] keyComponents = key.split(":", 2);
-				String category = keyComponents[0];
-				if (category.endsWith(durationSuffix.name())) {
-
-					// get TimeSectionQueryHandler from SectionQueryFactory
-					TimeSectionQueryHandler timeSectionQueryHandler = (TimeSectionQueryHandler) queryHandler.getQueryHandler(Section.TIME);
-					if (timeSectionQueryHandler != null) {
-						resultMap.put(key, timeSectionQueryHandler.getTimeString(longVar, durationSuffix.getTimeUnit()));
-					}
-				}
-			}
-		}
-		else {
-			resultMap.put(key, String.valueOf(value));
-		}
+		resultMap.put(key, String.valueOf(value));
 
 		return resultMap;
 	}
