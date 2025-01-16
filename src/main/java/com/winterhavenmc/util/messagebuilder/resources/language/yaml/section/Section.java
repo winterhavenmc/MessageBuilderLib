@@ -23,9 +23,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ite
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time.TimeSectionQueryHandler;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.Supplier;
+import java.util.EnumMap;
 
 
 /**
@@ -35,14 +33,15 @@ public enum Section {
 	CONSTANTS(ConstantSectionQueryHandler.class, "Constant", "Constants", "CONST"),
 	ITEMS(ItemSectionQueryHandler.class, "Item", "Items", "ITEM"),
 	MESSAGES(MessageSectionQueryHandler.class, "Message", "Messages", "MSG"),
-	TIME(TimeSectionQueryHandler.class, "Time", "Time", "TIME"),
+	TIME(TimeSectionQueryHandler.class, "Time", "Times", "TIME"),
 	;
+
+	private static final EnumMap<Section, SectionQueryHandler> HANDLER_MAP = new EnumMap<>(Section.class);
 
 	private final Class<? extends SectionQueryHandler> handlerClass;
 	private final String singularName;
 	private final String pluralName;
 	private final String mnemonic;
-	private Supplier<? extends SectionQueryHandler> handlerSupplier;
 
 
 	/**
@@ -72,51 +71,60 @@ public enum Section {
 		}
 	}
 
-
+	/**
+	 * Retrieve the handler class for this enum constant
+	 *
+	 * @return the handler class for this enum constant
+	 */
 	public Class<? extends SectionQueryHandler> getHandlerClass() {
 		return handlerClass;
 	}
 
+	/**
+	 * Retrieve the singular, pretty formatted name for this enum constant
+	 *
+	 * @return the formatted singular name for this enum constant
+	 */
 	public String getSingularName() {
 		return singularName;
 	}
 
+	/**
+	 * Retrieve the plural, pretty formatted name for this enum constant
+	 *
+	 * @return the formatted plural name for this enum constant
+	 */
 	public String getPluralName() {
 		return pluralName;
 	}
 
+	/**
+	 * Retrieve the mnemonic abbreviation for this enum constant
+	 *
+	 * @return the mnemonic for this enum constant
+	 */
 	public String getMnemonic() {
 		return mnemonic;
 	}
 
-
+	/**
+	 * Retrieve an instance of the section query handler that is bound to this enum constant from the enum map.
+	 * If the map has not been populated with an instance of its query handler, a new instance is created using
+	 * reflection to call the constructor and pass the {@code ConfigurationSupplier} parameter to the constructor,
+	 * which is then placed in the map for future retrievals, and returned to the caller for this use.
+	 *
+	 * @param configurationSupplier the Configuration supplier for the language resource
+	 * @return an instance of the section query handler that is bound to the enum constant
+	 * @param <T> the specific type of the section query handler being returned
+	 */
+	@SuppressWarnings("unchecked")
 	public <T extends SectionQueryHandler> T getQueryHandler(YamlConfigurationSupplier configurationSupplier) {
-		if (handlerSupplier == null) {
-			synchronized (this) {
-				if (handlerSupplier == null) {
-					handlerSupplier = () -> {
-						try {
-							// Verify constructor exists and is accessible
-							Constructor<? extends SectionQueryHandler> constructor =
-									handlerClass.getConstructor(YamlConfigurationSupplier.class);
-
-							// Create a new instance of the handler
-							return constructor.newInstance(configurationSupplier);
-						} catch (NoSuchMethodException e) {
-							throw new IllegalStateException(
-									"Handler class " + handlerClass.getName() +
-											" does not have a constructor accepting YamlConfigurationSupplier", e);
-						} catch (InstantiationException | IllegalAccessException |
-						         InvocationTargetException e) {
-							throw new IllegalStateException(
-									"Failed to instantiate handler for " + name(), e);
-						}
-					};
-				}
+		return (T) HANDLER_MAP.computeIfAbsent(this, section -> {
+			try {
+				return section.handlerClass.getConstructor(YamlConfigurationSupplier.class).newInstance(configurationSupplier);
+			} catch (ReflectiveOperationException e) {
+				throw new RuntimeException("Failed to instantiate SectionQueryHandler for " + section.name(), e);
 			}
-		}
-		// Return the cached handler instance
-		return (T) handlerClass.cast(handlerSupplier.get());
+		});
 	}
-
 }
