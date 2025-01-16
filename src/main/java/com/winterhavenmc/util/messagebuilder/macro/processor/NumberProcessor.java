@@ -26,11 +26,8 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 public class NumberProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	private final LanguageQueryHandler queryHandler;
-
 	public NumberProcessor(LanguageQueryHandler queryHandler) {
 		super(queryHandler);
-		this.queryHandler = queryHandler;
 	}
 
 	@Override
@@ -42,54 +39,9 @@ public class NumberProcessor extends MacroProcessorTemplate implements MacroProc
 			return resultMap;
 		}
 
-//		if (value instanceof Long longVar) {
-//
-//			// put string value of longVar in result map, to be overwritten if macroName ends a Duration string match
-//			resultMap.put(key, String.valueOf(longVar));
-//
-//			for (DurationSuffix durationSuffix : DurationSuffix.values()) {
-//				String[] keyComponents = key.split(":", 2);
-//				String category = keyComponents[0];
-//				if (category.endsWith(durationSuffix.name())) {
-//
-//					// get TimeSectionQueryHandler from SectionQueryFactory
-//					TimeSectionQueryHandler timeSectionQueryHandler = (TimeSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.TIME);
-//					if (timeSectionQueryHandler != null) {
-//						resultMap.put(key, timeSectionQueryHandler.getTimeString(longVar, durationSuffix.getTimeUnit()));
-//					}
-//				}
-//			}
-//		}
-
 		resultMap.put(key, String.valueOf(value));
 
 		return resultMap;
-	}
-
-
-	/**
-	 * An enum of macro name suffixes that will result in a TimeStringOld being returned for the corresponding TimeUnit.
-	 * This allows iterating over the suffixes for a matching macro name suffix, and passing the associated TimeUnit to
-	 * {@code queryHandler.getTimeString()}.
-	 */
-	enum DurationSuffix {
-		DURATION(TimeUnit.SECONDS),
-		DURATION_SECONDS(TimeUnit.SECONDS),
-		DURATION_MINUTES(TimeUnit.MINUTES),
-		DURATION_HOURS(TimeUnit.HOURS),
-		DURATION_DAYS(TimeUnit.DAYS),
-		;
-
-		private final TimeUnit timeUnit;
-
-		// constructor
-		DurationSuffix(TimeUnit timeUnit) {
-			this.timeUnit = timeUnit;
-		}
-
-		TimeUnit getTimeUnit() {
-			return this.timeUnit;
-		}
 	}
 
 }
