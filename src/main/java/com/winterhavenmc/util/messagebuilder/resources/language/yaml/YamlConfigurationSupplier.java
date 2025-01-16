@@ -41,12 +41,24 @@ public class YamlConfigurationSupplier implements Supplier<Configuration> {
 	}
 
 
+	/**
+	 * Retrieve the {@link Configuration} for the language resource delivered by this supplier
+	 *
+	 * @return {@code Configuration} object containing the language resource
+	 */
 	@Override
 	public Configuration get() {
 		return configuration;
 	}
 
 
+	/**
+	 * Retrieve the {@link ConfigurationSection} as specified by the enum constant parameter.
+	 *
+	 * @param section enum constant indicating the language resource section to retrieve
+	 * @return {@code ConfigurationSection} of the language resource pertaining to the enum constant parameter
+	 * @throws IllegalArgumentException if section parameter is null
+	 */
 	public ConfigurationSection getSection(final Section section) {
 		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION.getMessage()); }
 
