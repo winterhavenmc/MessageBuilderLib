@@ -79,7 +79,7 @@ public class NamespaceKey implements ContextKey {
 	/**
 	 * Class constructor
 	 * <p>
-	 *     creates a NamespaceKey with the supplied String representation of a full key.
+	 * creates a NamespaceKey with the supplied String representation of a full key.
 	 *</p>
 	 * @param fullKeyString a full String key to be used to derive a NamespaceKey's components
 	 */
