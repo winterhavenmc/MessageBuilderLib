@@ -35,7 +35,7 @@ import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Yaml
  * An implementation of the LanguageResourceLoader interface for loading the message configuration from yaml files
  */
 //TODO: This class needs more test coverage. It's mostly null checks and throws missing, and the reload command.
-public class YamlLanguageResourceLoader {
+public final class YamlLanguageResourceLoader {
 
 	// constants for plugin configuration keys
 	private final static String CONFIG_LOCALE_KEY = "locale";

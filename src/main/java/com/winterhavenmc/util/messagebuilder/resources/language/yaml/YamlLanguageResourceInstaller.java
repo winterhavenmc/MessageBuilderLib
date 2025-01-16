@@ -30,9 +30,9 @@ import java.util.*;
  * that are stored as a resource within a /language subdirectory in the plugin jar archive will be
  * copied to the /language subdirectory of the plugin data directory.
  */
-class YamlLanguageResourceInstaller {
+final class YamlLanguageResourceInstaller {
 
-	// THIS IS THE OFFICIAL DECLARATION OF THE LANGUAGE SUBDIRECTORY IN RESOURCES AND PLUGIN DATA DIRECTORY
+	// THIS IS THE OFFICIAL DECLARATION OF THE LANGUAGE SUBDIRECTORY IN RESOURCES AND THE PLUGIN DATA DIRECTORY
 	final static String SUBDIRECTORY = "language";
 	private final static String AUTO_INSTALL_TXT = SUBDIRECTORY + "/auto_install.txt";
 
