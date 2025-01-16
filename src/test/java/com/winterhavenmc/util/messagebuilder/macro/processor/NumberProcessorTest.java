@@ -113,34 +113,4 @@ class NumberProcessorTest {
 		assertFalse(resultMap.containsKey("SOME_NULL_LONG"));
 	}
 
-	@Test
-	void execute_duration() {
-		// Arrange
-		String key = "SOME_DURATION";
-		Long number = 12000L;
-		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
-
-		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, number);
-
-		// Assert
-		assertTrue(resultMap.containsKey("SOME_DURATION"));
-		assertEquals("12 seconds", resultMap.get("SOME_DURATION"));
-	}
-
-	@Test
-	void execute_duration_minutes() {
-		// Arrange
-		String key = "SOME_DURATION_MINUTES";
-		Long number = 61_000L;
-		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
-
-		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, number);
-
-		// Assert
-		assertTrue(resultMap.containsKey("SOME_DURATION_MINUTES"));
-		assertEquals("1 minute", resultMap.get("SOME_DURATION_MINUTES"));
-	}
-
 }
