@@ -52,6 +52,15 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	}
 
 
+	/**
+	 * @return the language configuration supplier
+	 */
+	@Override
+	public YamlConfigurationSupplier getConfigurationSupplier() {
+		return yamlConfigurationSupplier;
+	}
+
+
 	@Override
 	public Optional<ItemRecord> getItemRecord(final String keyPath) {
 		if (keyPath == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
