@@ -48,6 +48,8 @@ public class YamlConfigurationSupplier implements Supplier<Configuration> {
 
 
 	public ConfigurationSection getSection(final Section section) {
+		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION.getMessage()); }
+
 		return configuration.getConfigurationSection(section.name());
 	}
 
