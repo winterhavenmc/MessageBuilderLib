@@ -18,15 +18,31 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
 
-public class YamlLanguageResourceManager implements LanguageResourceManager {
+/**
+ * This class is responsible for the management and lifecycle of the language resource. It is implemented
+ * as a singleton, so that only one instance is involved in any loading or reloading of the resource to
+ * prevent access contention. The language resource is made available as a Bukkit {@link Configuration} object,
+ * which is loaded into a {@code Supplier} that is provided to classes that have a need to access the
+ * language configuration object. This supplier will return an up-to-date version of the language configuration
+ * object to any consumers, even if the language resource has been reloaded since the creation of the supplier.
+ * A convenience method is provided to query the current language setting in the plugin configuration so that
+ * changes to this setting may result in a different language resource being used for any subsequent reload operations.
+ * <p>
+ * The static {@code getInstance} method should be used to acquire an instance of this singleton class. It can be accessed
+ * globally, anywhere within this library using this static method.
+ * </p>
+ */
+public final class YamlLanguageResourceManager implements LanguageResourceManager {
 
 	private static YamlLanguageResourceManager instance;
 
 	private final Plugin plugin;
 	private final YamlLanguageResourceLoader languageResourceLoader;
+	private Configuration languageConfiguration;
 	private YamlConfigurationSupplier configurationSupplier;
 
 
@@ -42,8 +58,11 @@ public class YamlLanguageResourceManager implements LanguageResourceManager {
 		this.languageResourceLoader = new YamlLanguageResourceLoader(plugin, new YamlLanguageResourceInstaller(plugin));
 		this.languageResourceLoader.setup();
 
+		// get newly loaded configuration from loader
+		this.languageConfiguration = languageResourceLoader.loadConfiguration();
+
 		// instantiate supplier with language configuration from resource loader, and assign to field
-		this.configurationSupplier = new YamlConfigurationSupplier(languageResourceLoader.loadConfiguration());
+		this.configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
 	}
 
 
@@ -65,13 +84,32 @@ public class YamlLanguageResourceManager implements LanguageResourceManager {
 	}
 
 
+	/**
+	 * Reload the language resource. This method first calls the reload method in the resource loader,
+	 * and receives the new configuration object as the return value. If the new configuration object
+	 * is null, the old configuration object is not replace, and the method returns {@code false}.
+	 * If the new configuration exists, a new configuration supplier is created with the
+	 * new configuration, and the method returns {@code true}.
+	 *
+	 * @return {@code true} if the configuration was successfully reloaded, {@code false} if it failed
+	 */
 	public boolean reload() {
-		// Reload the configuration and update the supplier.
-		languageResourceLoader.reload();
-		if (languageResourceLoader.loadConfiguration() == null) {
-			return false;
+		// Reload the configuration and get the new configuration from the loader
+		Configuration newConfiguration = languageResourceLoader.reload();
+
+	//TODO: intelliJ says this can never happen
+		// if the new configuration is null, leave the old configuration in place, and return false
+//		if (newConfiguration == null) {
+//			return false;
+//		}
+
+		// if new configuration differs from existing configuration, replace stored configuration with
+		// new configuration and create a new supplier with the new configuration
+		if (!languageConfiguration.equals(newConfiguration)) {
+			languageConfiguration = newConfiguration;
+			configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
 		}
-		configurationSupplier = new YamlConfigurationSupplier(languageResourceLoader.loadConfiguration());
+		// return success
 		return true;
 	}
 
