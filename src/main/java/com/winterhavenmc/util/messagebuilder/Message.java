@@ -133,7 +133,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 */
 	public void send() {
 		// get message query handler
-		MessageSectionQueryHandler sectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getQueryHandler(Section.MESSAGES);
+		MessageSectionQueryHandler sectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.MESSAGES);
 		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
 
 			// get optional message record

@@ -71,15 +71,15 @@ class YamlLanguageQueryHandlerTest {
 
 	@ParameterizedTest
 	@EnumSource
-	void getQueryHandlerTest(Section section) {
-		assertEquals(section.getHandlerClass(), queryHandler.getQueryHandler(section).getClass());
+	void getSectionQueryHandlerTest(Section section) {
+		assertEquals(section.getHandlerClass(), queryHandler.getSectionQueryHandler(section).getClass());
 	}
 
 
 	@Test
 	void getItemRecordTest() {
 		// Arrange
-		ItemSectionQueryHandler itemSectionQueryHandler = (ItemSectionQueryHandler) queryHandler.getQueryHandler(Section.ITEMS);
+		ItemSectionQueryHandler itemSectionQueryHandler = (ItemSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.ITEMS);
 		assertNotNull(itemSectionQueryHandler);
 
 		// Act
@@ -93,7 +93,7 @@ class YamlLanguageQueryHandlerTest {
 	@Test
 	void getItemRecordTest_null() {
 		// Arrange
-		ItemSectionQueryHandler itemSectionQueryHandler = (ItemSectionQueryHandler) queryHandler.getQueryHandler(Section.ITEMS);
+		ItemSectionQueryHandler itemSectionQueryHandler = (ItemSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.ITEMS);
 		assertNotNull(itemSectionQueryHandler);
 
 		// Act
@@ -107,7 +107,7 @@ class YamlLanguageQueryHandlerTest {
 	@Test
 	void getMessageRecordTest() {
 		// Arrange
-		MessageSectionQueryHandler messageSectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getQueryHandler(Section.MESSAGES);
+		MessageSectionQueryHandler messageSectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.MESSAGES);
 		assertNotNull(messageSectionQueryHandler);
 
 		// Act
@@ -120,7 +120,7 @@ class YamlLanguageQueryHandlerTest {
 	@Test
 	void getMessageRecordTest_null() {
 		// Arrange
-		MessageSectionQueryHandler messageSectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getQueryHandler(Section.MESSAGES);
+		MessageSectionQueryHandler messageSectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.MESSAGES);
 		assertNotNull(messageSectionQueryHandler);
 
 		// Act

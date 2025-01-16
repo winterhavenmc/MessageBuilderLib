@@ -47,7 +47,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 
 
 	@Override
-	public SectionQueryHandler getQueryHandler(Section section) {
+	public SectionQueryHandler getSectionQueryHandler(Section section) {
 		return section.getQueryHandler(yamlConfigurationSupplier);
 	}
 

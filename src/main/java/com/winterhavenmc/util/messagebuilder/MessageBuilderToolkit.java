@@ -69,7 +69,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 * @return the section query handler
 	 */
 	public SectionQueryHandler getQueryHandler(Section section) {
-		return queryHandler.getQueryHandler(section);
+		return queryHandler.getSectionQueryHandler(section);
 	}
 
 
@@ -107,7 +107,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 */
 	@Override
 	public Optional<String> getSpawnDisplayName() {
-		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getQueryHandler(Section.CONSTANTS);
+		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.CONSTANTS);
 		if (constantSectionQueryHandler != null) {
 			return constantSectionQueryHandler.getString(SPAWN_DISPLAY_NAME);
 		}
@@ -123,7 +123,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 */
 	@Override
 	public Optional<String> getHomeDisplayName() {
-		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getQueryHandler(Section.CONSTANTS);
+		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.CONSTANTS);
 		if (constantSectionQueryHandler != null) {
 			return constantSectionQueryHandler.getString(HOME_DISPLAY_NAME);
 		}
@@ -139,7 +139,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 */
 	@Override
 	public Optional<String> getString(String keyPath) {
-		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getQueryHandler(Section.CONSTANTS);
+		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.CONSTANTS);
 		if (constantSectionQueryHandler != null) {
 			return constantSectionQueryHandler.getString(keyPath);
 		}
@@ -155,7 +155,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 */
 	@Override
 	public List<String> getStringList(String keyPath) {
-		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getQueryHandler(Section.CONSTANTS);
+		ConstantSectionQueryHandler constantSectionQueryHandler = (ConstantSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.CONSTANTS);
 		if (constantSectionQueryHandler != null) {
 			return constantSectionQueryHandler.getStringList("TEST_LIST");
 		}

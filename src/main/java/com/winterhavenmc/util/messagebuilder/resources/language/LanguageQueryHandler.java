@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
@@ -33,7 +34,10 @@ public interface LanguageQueryHandler {
 	 * @param section the namespace Section that dictates the query handler type to be returned
 	 * @return a query handler of the type dictated by the passed namespace Section
 	 */
-	SectionQueryHandler getQueryHandler(Section section);
+	SectionQueryHandler getSectionQueryHandler(Section section);
+
+
+	YamlConfigurationSupplier getConfigurationSupplier();
 
 
 	/**
