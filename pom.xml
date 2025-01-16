@@ -108,6 +108,22 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>net.time4j</groupId>
+			<artifactId>time4j-base</artifactId>
+			<version>5.9.1</version>
+		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>net.time4j</groupId>-->
+<!--			<artifactId>time4j-sqlxml</artifactId>-->
+<!--			<version>5.9.1</version>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>net.time4j</groupId>
+			<artifactId>time4j-tzdata</artifactId>
+			<version>5.0-2022a</version>
+		</dependency>
+
 		<!-- Unit Testing Dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
