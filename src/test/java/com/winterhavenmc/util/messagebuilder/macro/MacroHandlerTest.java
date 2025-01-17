@@ -92,10 +92,11 @@ class MacroHandlerTest {
 
 	@Test
 	void replaceMacrosTest() {
-		ResultMap resultMap = new ResultMap();
-		resultMap.put("TEST_ITEM", "§aTest Item");
+		ContextMap contextMap = new ContextMap(player);
+		String key = "MACRO:My_Item";
+		contextMap.put(key, ContextContainer.of("TEST_STRING", ProcessorType.STRING));
 
-		String resultString = macroHandler.replaceMacros(player, resultMap, "Replace this: %ITEM_NAME%");
+		String resultString = macroHandler.replaceMacros(player, contextMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
