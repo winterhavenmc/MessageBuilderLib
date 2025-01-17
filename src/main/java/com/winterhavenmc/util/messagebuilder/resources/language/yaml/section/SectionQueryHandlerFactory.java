@@ -18,14 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time.TimeSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
-
-import java.util.EnumMap;
-import java.util.Map;
 
 
 /**
@@ -34,7 +27,7 @@ import java.util.Map;
  */
 public class SectionQueryHandlerFactory {
 
-	private final Map<Section, SectionQueryHandler> sectionHandlerCache = new EnumMap<>(Section.class);
+//	private final Map<Section, SectionQueryHandler> sectionHandlerCache = new EnumMap<>(Section.class);
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
@@ -59,7 +52,8 @@ public class SectionQueryHandlerFactory {
 	 * @return The requested SectionQueryHandler
 	 */
 	public SectionQueryHandler getQueryHandler(Section section) {
-		return sectionHandlerCache.computeIfAbsent(section, this::createSectionHandler);
+//		return sectionHandlerCache.computeIfAbsent(section, this::createSectionHandler);
+		return createSectionHandler(section);
 	}
 
 
@@ -72,10 +66,10 @@ public class SectionQueryHandlerFactory {
 	 */
 	public SectionQueryHandler createSectionHandler(Section section) {
 		return switch (section) {
-			case CONSTANTS -> new ConstantSectionQueryHandler(configurationSupplier);
-			case ITEMS -> new ItemSectionQueryHandler(configurationSupplier);
-			case MESSAGES -> new MessageSectionQueryHandler(configurationSupplier);
-			case TIME -> new TimeSectionQueryHandler(configurationSupplier);
+			case CONSTANTS -> Section.CONSTANTS.getQueryHandler(configurationSupplier);
+			case ITEMS -> Section.ITEMS.getQueryHandler(configurationSupplier);
+			case MESSAGES -> Section.MESSAGES.getQueryHandler(configurationSupplier);
+			case TIME -> Section.TIME.getQueryHandler(configurationSupplier);
 			// leaving line below commented so any new section declared in the Section enum needs an explicit handler here
 			//default -> new DefaultSectionQueryHandler();
 		};
