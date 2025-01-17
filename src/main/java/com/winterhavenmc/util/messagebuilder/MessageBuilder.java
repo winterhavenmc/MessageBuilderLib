@@ -22,9 +22,12 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
+import com.winterhavenmc.util.time.TickUnit;
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+
+import java.time.temporal.TemporalUnit;
 
 
 /**
@@ -66,6 +69,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	private final YamlLanguageQueryHandler languageQueryHandler;
 	private final MacroHandler macroQueryHandler;
 
+	public static final TemporalUnit TICKS = new TickUnit();
+
 
 	/**
 	 * Class constructor
@@ -76,7 +81,9 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (plugin == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
 
 		this.plugin = plugin;
-		this.languageResourceManager = YamlLanguageResourceManager.getInstance(plugin);
+		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
+		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin, resourceInstaller);
+		this.languageResourceManager = YamlLanguageResourceManager.getInstance(plugin, resourceLoader);
 		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
 		this.macroQueryHandler = new MacroHandler(languageQueryHandler);
 	}

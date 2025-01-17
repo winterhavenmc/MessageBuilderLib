@@ -19,6 +19,9 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
@@ -26,6 +29,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHan
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -88,9 +92,10 @@ class MacroHandlerTest {
 
 	@Test
 	void replaceMacrosTest() {
-		ContextMap contextMap = new ContextMap(player);
+		ResultMap resultMap = new ResultMap();
+		resultMap.put("TEST_ITEM", "§aTest Item");
 
-		String resultString = macroHandler.replaceMacros(player, contextMap, "Replace this: %ITEM_NAME%");
+		String resultString = macroHandler.replaceMacros(player, resultMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 

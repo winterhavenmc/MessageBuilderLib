@@ -175,136 +175,141 @@ ARBITRARY_STRING_LIST:
 # Messages
 ##########
 MESSAGES:
+  ENABLED_RICH_TEXT_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT:
+      "This is an enabled rich text message."
+
   ENABLED_MESSAGE:
-    enabled: true
-    message: "This is an enabled message"
+    ENABLED: true
+    MESSAGE_TEXT: "This is an enabled message"
 
   DISABLED_MESSAGE:
-    enabled: false
-    message: "This is a disabled message"
+    ENABLED: false
+    MESSAGE_TEXT: "This is a disabled message"
 
   REPEAT_DELAYED_MESSAGE:
-    enabled: true
-    message: "this is a repeat delayed message"
-    repeat-delay: 10
+    ENABLED: true
+    MESSAGE_TEXT: "this is a repeat delayed message"
+    REPEAT_DELAY: 10
 
   CONSTANT_MESSAGE:
-    enabled: true
-    message: "This is a message with a constant replacement {CONSTANT:SPAWN.DISPLAY_NAME}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a constant replacement {CONSTANT:SPAWN.DISPLAY_NAME}."
 
   ITEM_MESSAGE:
-    enabled: true
-    message: "This is a message with a constant replacement {ITEM:TEST_ITEM_1}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a constant replacement {ITEM:TEST_ITEM_1}."
 
   TIME_MESSAGE:
-    enabled: true
-    message: "This is a message with a constant replacement {TIME:DURATION}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a constant replacement {TIME:DURATION}."
 
   MACRO_MESSAGE_ITEM:
-    enabled: true
-    message: "This is a message with a macro replacement {ITEM}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM}."
 
   MACRO_MESSAGE_ITEM_NAME:
-    enabled: true
-    message: "This is a message with a macro replacement {ITEM.NAME}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM.NAME}."
 
   MACRO_MESSAGE_ITEM_NAME_QUANTITY:
-    enabled: true
-    message: "This is a message with a macro replacement {ITEM.QUANTITY}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM.QUANTITY}."
 
   MACRO_MESSAGE_ITEM_ALT:
-    enabled: true
-    message: "This is a message with a macro replacement {ITEM:DEFAULT}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:DEFAULT}."
 
   MACRO_MESSAGE_ITEM_NAME_ALT:
-    enabled: true
-    message: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME}."
 
   MACRO_MESSAGE_ITEM_NAME_SINGULAR:
-    enabled: true
-    message: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.SINGULAR}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.SINGULAR}."
 
   MACRO_MESSAGE_ITEM_NAME_PLURAL:
-    enabled: true
-    message: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.PLURAL}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.PLURAL}."
 
   MACRO_MESSAGE_ITEM_NAME_QUANTITY_ALT:
-    enabled: true
-    message: "This is a message with a macro replacement {ITEM:ITEM.QUANTITY}."
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:ITEM.QUANTITY}."
 
   ENABLED_TITLE:
-    enabled: true
-    title: "This is an enabled title"
+    ENABLED: true
+    TITLE_TEXT: "This is an enabled title"
 
   DISABLED_TITLE:
-    enabled: false
-    title: "This is a disabled title"
+    ENABLED: false
+    TITLE_TEXT: "This is a disabled title"
 
   ENABLED_SUBTITLE:
-    enabled: true
-    subtitle: "This is an enabled subtitle"
+    ENABLED: true
+    subTITLE_TEXT: "This is an enabled subtitle"
 
   DISABLED_SUBTITLE:
-    enabled: false
-    subtitle: "This is a disabled subtitle"
+    ENABLED: false
+    subTITLE_TEXT: "This is a disabled subtitle"
 
   CUSTOM_FADE_TITLE:
-    enabled: true
-    title: "This is a title with custom fade values"
-    title-fade-in: 20
-    title-stay: 140
-    title-fade-out: 40
+    ENABLED: true
+    TITLE_TEXT: "This is a title with custom fade values"
+    TITLE_FADE_IN: 20
+    TITLE_STAY: 140
+    TITLE_FADE_OUT: 40
 
   NON_INT_TITLE_FADE_VALUES:
-    enabled: true
-    title: "This is a title with non-integer fade values"
-    title-fade-in: "STRING"
-    title-stay: "STRING"
-    title-fade-out: "STRING"
+    ENABLED: true
+    TITLE_TEXT: "This is a title with non-integer fade values"
+    TITLE_FADE_IN: "STRING"
+    TITLE_STAY: "STRING"
+    TITLE_FADE_OUT: "STRING"
 
   DURATION_MESSAGE:
-    enabled: true
-    message: "Duration is %DURATION%"
+    ENABLED: true
+    MESSAGE_TEXT: "Duration is %DURATION%"
 
 
   # all number fields are unique from each other and defaults(20, 70, 10)
   ALL_FIELDS_PRESENT:
-    message: "This entry has all fields present - message"
-    repeat-delay: 14
-    title: "This entry has all fields present - title"
+    MESSAGE_TEXT: "This entry has all fields present - message"
+    REPEAT_DELAY: 14
+    TITLE_TEXT: "This entry has all fields present - title"
     title_fade_in: 24
     title_stay: 34
     title_fade_out: 44
-    subtitle: "This entry has all fields present - subtitle"
+    subTITLE_TEXT: "This entry has all fields present - subtitle"
 
 
   UNDEFINED_FIELD_ENABLED:
-    message: "This entry has no enabled field"
+    MESSAGE_TEXT: "This entry has no enabled field"
 
   UNDEFINED_FIELD_MESSAGE:
-    enabled: true
-    title: "This entry has no message field"
+    ENABLED: true
+    TITLE_TEXT: "This entry has no message field"
 
   UNDEFINED_FIELD_REPEAT_DELAY:
-    enabled: true
-    message: "This entry has no repeat-delay field"
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no repeat-delay field"
 
   UNDEFINED_FIELD_TITLE:
-    enabled: true
-    message: "This entry has no title field"
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title field"
 
   UNDEFINED_FIELD_TITLE_FADE_IN:
-    enabled: true
-    message: "This entry has no title-fade-in field"
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title-fade-in field"
 
   UNDEFINED_FIELD_TITLE_STAY:
-    enabled: true
-    message: "This entry has no title-stay field"
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title-stay field"
 
   UNDEFINED_FIELD_TITLE_FADE_OUT:
-    enabled: true
-    message: "This entry has no title-fade-out field"
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title-fade-out field"
 
   UNDEFINED_FIELD_SUBTITLE:
-    enabled: true
-    message: "This entry has no subtitle field"
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no subtitle field"

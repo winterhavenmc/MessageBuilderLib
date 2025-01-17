@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time;
 
-import com.winterhavenmc.util.TimeUnit;
+import com.winterhavenmc.util.time.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
@@ -31,8 +31,10 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.List;
 
+import static jdk.jfr.Timespan.MILLISECONDS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
 
 class TimeSectionQueryHandlerTest {
@@ -148,7 +150,7 @@ class TimeSectionQueryHandlerTest {
 	}
 
 	@ParameterizedTest
-	@EnumSource
+	@EnumSource(mode = EXCLUDE, names = MILLISECONDS )
 	void tstGetPluralized_DAY_just_shy_of(TestTimeUnit testTimeUnit) {
 		// Arrange
 		TimeUnit match = match(testTimeUnit);
@@ -156,7 +158,7 @@ class TimeSectionQueryHandlerTest {
 		// Act & Assert
 		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(0), match));
 		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(1), match));
-		//TODO: Just shy of two (2) gives undetermined output depending on TimeUnit; 2 will always fail for millis
+		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(2), match));
 		assertEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.justShyOf(3), match));
 		assertNotEquals(testTimeUnit.getPlural(), queryHandler.getPluralized(match.one(), match));
 	}

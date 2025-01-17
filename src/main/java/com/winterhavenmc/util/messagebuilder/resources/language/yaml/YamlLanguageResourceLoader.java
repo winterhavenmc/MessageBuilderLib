@@ -53,7 +53,7 @@ public final class YamlLanguageResourceLoader {
 	 * @param plugin an instance of the plugin
 	 * @param resourceInstaller a language
 	 */
-	YamlLanguageResourceLoader(final Plugin plugin, final YamlLanguageResourceInstaller resourceInstaller)
+	public YamlLanguageResourceLoader(final Plugin plugin, final YamlLanguageResourceInstaller resourceInstaller)
 	{
 		this.plugin = plugin;
 		this.resourceInstaller = resourceInstaller;

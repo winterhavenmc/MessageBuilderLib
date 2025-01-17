@@ -51,11 +51,9 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 *
 	 * @param plugin an instance of the plugin
 	 */
-	private YamlLanguageResourceManager(Plugin plugin) {
+	private YamlLanguageResourceManager(final Plugin plugin, final YamlLanguageResourceLoader resourceLoader) {
 		this.plugin = plugin;
-
-		// instantiate resource loader and setup
-		this.languageResourceLoader = new YamlLanguageResourceLoader(plugin, new YamlLanguageResourceInstaller(plugin));
+		this.languageResourceLoader = resourceLoader;
 		this.languageResourceLoader.setup();
 
 		// get newly loaded configuration from loader
@@ -72,11 +70,11 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 * @param plugin an instance of the plugin
 	 * @return a new or cached instance of this singleton
 	 */
-	public static YamlLanguageResourceManager getInstance(Plugin plugin) {
+	public static YamlLanguageResourceManager getInstance(final Plugin plugin, final YamlLanguageResourceLoader resourceLoader) {
 		if (instance == null) {
 			synchronized (YamlLanguageResourceManager.class) {
 				if (instance == null) {
-					instance = new YamlLanguageResourceManager(plugin);
+					instance = new YamlLanguageResourceManager(plugin, resourceLoader);
 				}
 			}
 		}
@@ -99,9 +97,9 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 
 	//TODO: intelliJ says this can never happen
 		// if the new configuration is null, leave the old configuration in place, and return false
-//		if (newConfiguration == null) {
-//			return false;
-//		}
+		if (newConfiguration == null) {
+			return false;
+		}
 
 		// if new configuration differs from existing configuration, replace stored configuration with
 		// new configuration and create a new supplier with the new configuration

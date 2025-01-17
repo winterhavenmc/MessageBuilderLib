@@ -156,7 +156,7 @@ MESSAGES:
   WELCOME_MESSAGE:
     enabled: true
     message: "Welcome, %PLAYER_NAME%!"
-    repeat-delay: 0
+    REPEAT_DELAY: 0
     title: "Welcome!"
     title-fade-in: 10
     title-stay: 70

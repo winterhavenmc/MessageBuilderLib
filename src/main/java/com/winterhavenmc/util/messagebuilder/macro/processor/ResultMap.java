@@ -49,7 +49,7 @@ public class ResultMap {
 		return EmptyResultMapHolder.EMPTY_INSTANCE;
 	}
 
-	void put(final String contextKey, final String value) {
+	public void put(final String contextKey, final String value) {
 		internalResultMap.put(contextKey, value);
 	}
 

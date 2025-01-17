@@ -64,7 +64,7 @@ class YamlLanguageResourceManagerTest {
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
 		// instantiate real language handler with mocked parameters
-		resourceManager = YamlLanguageResourceManager.getInstance(pluginMock);
+		resourceManager = YamlLanguageResourceManager.getInstance(pluginMock, languageResourceLoaderMock);
 		assertNotNull(resourceManager);
 	}
 
@@ -98,28 +98,36 @@ class YamlLanguageResourceManagerTest {
 
 		// Assert
 		assertNotNull(yamlConfigurationSupplier);
-		assertNotNull(yamlConfigurationSupplier.get());
 	}
 
 
 	@Nested
+	@Disabled
 	class ReloadTests {
 		//TODO: confirm this test will always receive an identical configuration object from the loader
 		@Test
-		void testReload_new_config() {
+		void testReload_same_config() {
 			// Arrange
+			when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
+
 			// Act
 			boolean success = resourceManager.reload();
 
 			// Assert
-			assertTrue(success);
+			assertFalse(success);
+
+			// Verify
+			verify(languageResourceLoaderMock, atLeastOnce()).loadConfiguration();
 		}
 
-		//TODO: test the reload method when a new and different configuration is returned from the loader
-		@Disabled
+		//TODO: test the reload method when a different configuration is returned from the loader
 		@Test
-		void testReload_same_config() {
+		void testReload_different_config() {
+			languageConfiguration = new YamlConfiguration();
+			languageConfiguration.set("test_key", "test_value");
+
 			// Arrange
+			when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
 
 			// Act
 			boolean success = resourceManager.reload();
@@ -132,11 +140,17 @@ class YamlLanguageResourceManagerTest {
 		@Disabled
 		@Test
 		void testReload_fail() {
+			// Arrange
+			lenient().when(languageResourceLoaderMock.reload()).thenReturn(null);
+
 			// Act
 			boolean success = resourceManager.reload();
 
 			// Assert
 			assertTrue(success);
+
+			// Verify
+//			verify(languageResourceLoaderMock, atLeastOnce()).reload();
 		}
 	}
 

@@ -56,26 +56,26 @@ public record MessageRecord(
 	 * encapsulated in this enum in the future.
 	 */
 	enum Field {
-		ENABLED("enabled"),
-		MESSAGE("message"),
-		REPEAT_DELAY("repeat-delay"),
-		TITLE("title"),
-		TITLE_FADE_IN("title-fade-in"),
-		TITLE_STAY("title-stay"),
-		TITLE_FADE_OUT("title-fade-out"),
-		SUBTITLE("subtitle"),
+		ENABLED("ENABLED"),
+		REPEAT_DELAY("REPEAT_DELAY"),
+		MESSAGE_TEXT("MESSAGE_TEXT"),
+		TITLE_TEXT("TITLE_TEXT"),
+		TITLE_FADE_IN("TITLE_FADE_IN"),
+		TITLE_STAY("TITLE_STAY"),
+		TITLE_FADE_OUT("TITLE_FADE_OUT"),
+		SUBTITLE_TEXT("SUBTITLE_TEXT"),
 		;
 
-		private final String key;
+		private final String keyPath;
 
 		// class constructor
-		Field(final String key) {
-			this.key = key;
+		Field(final String keyPath) {
+			this.keyPath = keyPath;
 		}
 
 		// getter for key
 		public String toKey() {
-			return key;
+			return this.keyPath;
 		}
 	}
 
@@ -106,13 +106,13 @@ public record MessageRecord(
 
 		return Optional.of(new MessageRecord(messageId.toString(),
 				messageEntry.getBoolean(Field.ENABLED.toKey()),
-				messageEntry.getString(Field.MESSAGE.toKey()),
+				messageEntry.getString(Field.MESSAGE_TEXT.toKey()),
 				messageEntry.getLong(Field.REPEAT_DELAY.toKey()),
-				messageEntry.getString(Field.TITLE.toKey()),
+				messageEntry.getString(Field.TITLE_TEXT.toKey()),
 				messageEntry.getInt(Field.TITLE_FADE_IN.toKey()),
 				messageEntry.getInt(Field.TITLE_STAY.toKey()),
 				messageEntry.getInt(Field.TITLE_FADE_OUT.toKey()),
-				messageEntry.getString(Field.SUBTITLE.toKey())));
+				messageEntry.getString(Field.SUBTITLE_TEXT.toKey())));
 	}
 
 }
