@@ -36,6 +36,7 @@ public enum Section {
 	TIME(TimeSectionQueryHandler.class, "Time", "Times", "TIME"),
 	;
 
+	// Enum map serves as a cache for instances of query handlers
 	private static final EnumMap<Section, SectionQueryHandler> HANDLER_MAP = new EnumMap<>(Section.class);
 
 	private final Class<? extends SectionQueryHandler> handlerClass;
