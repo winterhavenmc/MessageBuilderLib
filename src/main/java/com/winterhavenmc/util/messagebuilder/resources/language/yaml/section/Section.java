@@ -53,22 +53,20 @@ public enum Section {
 	 * @param pluralName   the plural name for this section (ex: Items)
 	 * @param mnemonic     the short mnemonic for this section. To be used in key generation, or other programmatic purposes.
 	 */
-	Section(
-			final Class<? extends SectionQueryHandler> handlerClass,
+	Section(final Class<? extends SectionQueryHandler> handlerClass,
 			final String singularName,
 			final String pluralName,
-			final String mnemonic
-	) {
+			final String mnemonic)
+	{
 		this.handlerClass = handlerClass;
 		this.singularName = singularName;
 		this.pluralName = pluralName;
 		this.mnemonic = mnemonic;
 
 		// Validate the First Law of the Library
-		if (!SectionQueryHandler.class.isAssignableFrom(handlerClass)) {
-			throw new IllegalArgumentException(
-					handlerClass.getSimpleName() + " must implement SectionQueryHandler"
-			);
+		if (!SectionQueryHandler.class.isAssignableFrom(handlerClass))
+		{
+			throw new IllegalArgumentException(handlerClass.getSimpleName() + " must implement SectionQueryHandler");
 		}
 	}
 
@@ -77,7 +75,8 @@ public enum Section {
 	 *
 	 * @return the handler class for this enum constant
 	 */
-	public Class<? extends SectionQueryHandler> getHandlerClass() {
+	public Class<? extends SectionQueryHandler> getHandlerClass()
+	{
 		return handlerClass;
 	}
 
@@ -86,7 +85,8 @@ public enum Section {
 	 *
 	 * @return the formatted singular name for this enum constant
 	 */
-	public String getSingularName() {
+	public String getSingularName()
+	{
 		return singularName;
 	}
 
@@ -95,7 +95,8 @@ public enum Section {
 	 *
 	 * @return the formatted plural name for this enum constant
 	 */
-	public String getPluralName() {
+	public String getPluralName()
+	{
 		return pluralName;
 	}
 
@@ -104,7 +105,8 @@ public enum Section {
 	 *
 	 * @return the mnemonic for this enum constant
 	 */
-	public String getMnemonic() {
+	public String getMnemonic()
+	{
 		return mnemonic;
 	}
 
@@ -119,11 +121,13 @@ public enum Section {
 	 * @param <T> the specific type of the section query handler being returned
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends SectionQueryHandler> T getQueryHandler(YamlConfigurationSupplier configurationSupplier) {
+	public <T extends SectionQueryHandler> T getQueryHandler(YamlConfigurationSupplier configurationSupplier)
+	{
 		return (T) HANDLER_MAP.computeIfAbsent(this, section -> {
-			try {
+			try	{
 				return section.handlerClass.getConstructor(YamlConfigurationSupplier.class).newInstance(configurationSupplier);
-			} catch (ReflectiveOperationException e) {
+			}
+			catch (ReflectiveOperationException e) {
 				throw new RuntimeException("Failed to instantiate SectionQueryHandler for " + section.name(), e);
 			}
 		});
