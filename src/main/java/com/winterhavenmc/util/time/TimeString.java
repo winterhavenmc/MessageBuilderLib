@@ -26,7 +26,7 @@ import net.time4j.format.TextWidth;
 import java.util.Locale;
 
 
-public class TimeString {
+public final class TimeString {
 
 private TimeString() { /* private constructor to prevent instantiation */ }
 
