@@ -17,12 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
-
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
+import java.util.List;
+
 
 /**
  * A data object record for message information contained in the language file. This class also contains
@@ -41,6 +42,9 @@ import java.util.Optional;
 public record MessageRecord(
 		String messageKey,
 		boolean enabled,
+		boolean translatable,
+		String translatableKey,
+		List<String> translatableArgs,
 		String message,
 		long repeatDelay,
 		String title,
@@ -57,6 +61,9 @@ public record MessageRecord(
 	 */
 	enum Field {
 		ENABLED("ENABLED"),
+		TRANSLATABLE("TRANSLATABLE"),
+		TRANSLATABLE_KEY("TRANSLATABLE_KEY"),
+		TRANSLATABLE_ARGS("TRANSLATABLE_ARGS"),
 		REPEAT_DELAY("REPEAT_DELAY"),
 		MESSAGE_TEXT("MESSAGE_TEXT"),
 		TITLE_TEXT("TITLE_TEXT"),
@@ -106,6 +113,9 @@ public record MessageRecord(
 
 		return Optional.of(new MessageRecord(messageId.toString(),
 				messageEntry.getBoolean(Field.ENABLED.toKey()),
+				messageEntry.getBoolean(Field.TRANSLATABLE.toKey()),
+				messageEntry.getString(Field.TRANSLATABLE_KEY.toKey()),
+				messageEntry.getStringList(Field.TRANSLATABLE_ARGS.toKey()),
 				messageEntry.getString(Field.MESSAGE_TEXT.toKey()),
 				messageEntry.getLong(Field.REPEAT_DELAY.toKey()),
 				messageEntry.getString(Field.TITLE_TEXT.toKey()),
