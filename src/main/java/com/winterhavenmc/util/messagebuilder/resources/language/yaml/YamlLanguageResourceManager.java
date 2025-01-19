@@ -19,9 +19,6 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.plugin.Plugin;
-
-import java.util.Map;
 
 
 /**
@@ -42,21 +39,26 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 
 	private static YamlLanguageResourceManager instance;
 
-	private final Plugin plugin;
 	private final YamlLanguageResourceLoader languageResourceLoader;
+	private final YamlLanguageResourceInstaller languageResourceInstaller;
 	private Configuration languageConfiguration;
 	private YamlConfigurationSupplier configurationSupplier;
 
 
 	/**
 	 * Private constructor prevents instantiation except from within this class
-	 *
-	 * @param plugin an instance of the plugin
 	 */
-	private YamlLanguageResourceManager(final Plugin plugin, final YamlLanguageResourceLoader resourceLoader) {
-		this.plugin = plugin;
+	private YamlLanguageResourceManager(final YamlLanguageResourceInstaller resourceInstaller, final YamlLanguageResourceLoader resourceLoader) {
 		this.languageResourceLoader = resourceLoader;
+		this.languageResourceInstaller = resourceInstaller;
 		this.languageResourceLoader.setup();
+	}
+
+
+	@Override
+	public void setup() {
+		// install any auto install files if necessary
+		languageResourceInstaller.autoInstall();
 
 		// get newly loaded configuration from loader
 		this.languageConfiguration = languageResourceLoader.loadConfiguration();
@@ -69,14 +71,14 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	/**
 	 * Static method to retrieve an instance of this singleton
 	 *
-	 * @param plugin an instance of the plugin
 	 * @return a new or cached instance of this singleton
 	 */
-	public static YamlLanguageResourceManager getInstance(final Plugin plugin, final YamlLanguageResourceLoader resourceLoader) {
+	public static YamlLanguageResourceManager getInstance(final YamlLanguageResourceInstaller resourceInstaller,
+	                                                      final YamlLanguageResourceLoader resourceLoader) {
 		if (instance == null) {
 			synchronized (YamlLanguageResourceManager.class) {
 				if (instance == null) {
-					instance = new YamlLanguageResourceManager(plugin, resourceLoader);
+					instance = new YamlLanguageResourceManager(resourceInstaller, resourceLoader);
 				}
 			}
 		}
@@ -94,14 +96,9 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 * @return {@code true} if the configuration was successfully reloaded, {@code false} if it failed
 	 */
 	public boolean reload() {
+
 		// Reload the configuration and get the new configuration from the loader
 		Configuration newConfiguration = languageResourceLoader.reload();
-
-	//TODO: intelliJ says this can never happen
-		// if the new configuration is null, leave the old configuration in place, and return false
-		if (newConfiguration == null) {
-			return false;
-		}
 
 		// if new configuration differs from existing configuration, replace stored configuration with
 		// new configuration and create a new supplier with the new configuration
@@ -121,17 +118,6 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 */
 	public YamlConfigurationSupplier getConfigurationSupplier() {
 		return configurationSupplier;
-	}
-
-
-	/**
-	 * Get setting for language from plugin config file
-	 *
-	 * @return a string containing the IETF language tag set in the plugin config file
-	 */
-	@Override
-	public String getConfiguredLanguage() {
-		return plugin.getConfig().getString("language");
 	}
 
 }
