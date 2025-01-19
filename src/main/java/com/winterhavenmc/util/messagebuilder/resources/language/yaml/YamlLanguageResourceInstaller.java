@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -41,6 +42,7 @@ public final class YamlLanguageResourceInstaller {
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to plugin main class
 	 */
 	public YamlLanguageResourceInstaller(final Plugin plugin) {
@@ -49,67 +51,11 @@ public final class YamlLanguageResourceInstaller {
 
 	/**
 	 * package-private getter for auto install filename constant (for testing)
+	 *
 	 * @return the auto install filename
 	 */
-	String getAutoInstallFilename() {
+	String getAutoInstallResourceName() {
 		return AUTO_INSTALL_TXT;
-	}
-
-
-	/**
-	 * Install a resource with the given filename if not already installed
-	 *
-	 * @param filename the resource pathname to install in the plugin data directory
-	 */
-	void installIfMissing(final String filename) {
-		if (!verifyResourceInstalled(filename)) {
-			install(filename);
-		}
-	}
-
-
-	/**
-	 * Install resource files from plugin jar to plugin data directory
-	 *
-	 * @return {@code int} the number of files installed
-	 */
-	int autoInstall() {
-		int count = 0;
-		// iterate over list of language files and install from jar if not already present
-		for (String filename : getAutoInstallFilenames()) {
-			install(filename);
-			count++;
-		}
-		return count;
-	}
-
-
-	/**
-	 * Install resource from plugin jar to plugin data directory
-	 * @param resourceName {@code String} the path name of the resource to be installed
-	 */
-	void install(final String resourceName) {
-
-		if (plugin.getResource(resourceName) == null) {
-			plugin.getLogger().warning("The resource '" + resourceName
-					+ "' listed in the 'auto_install.txt' file could not be found by the installer.");
-			return;
-		}
-
-		// this check prevents a warning message when files are already installed
-		if (!verifyResourceInstalled(resourceName)) {
-
-			// save resource to plugin data directory
-			plugin.saveResource(resourceName, false);
-
-			// log successful install message if file exists
-			if (new File(plugin.getDataFolder(), resourceName).exists()) {
-				plugin.getLogger().info("Installation of '" + resourceName + "' confirmed.");
-			}
-			else {
-				plugin.getLogger().severe("installation of '" + resourceName + "' failed!");
-			}
-		}
 	}
 
 
@@ -118,10 +64,10 @@ public final class YamlLanguageResourceInstaller {
 	 *
 	 * @return Set of filename strings
 	 */
-	Set<String> getAutoInstallFilenames() {
+	Set<String> readResourceNames(String resource) {
 
 		// get input stream for resource
-		InputStream resourceInputStream = plugin.getResource(AUTO_INSTALL_TXT);
+		InputStream resourceInputStream = plugin.getResource(resource);
 
 		// if resource is null return empty set
 		if (resourceInputStream == null) {
@@ -146,7 +92,107 @@ public final class YamlLanguageResourceInstaller {
 
 
 	/**
-	 * Test if a resource exists
+	 * Install resources listed in auto_install.txt to the plugin data directory
+	 *
+	 * @return Map with filenames listed in auto_install.txt as key, and an InstallerStatus enum constant status for value
+	 */
+	Map<String, InstallerStatus> autoInstall() {
+		Map<String, InstallerStatus> resultMap = new LinkedHashMap<>();
+		for (String resourceName : readResourceNames(AUTO_INSTALL_TXT)) {
+			resultMap.put(resourceName, installByName(resourceName));
+		}
+		return resultMap;
+	}
+
+
+	/**
+	 * Install a resource for the given language tag if not already installed in the plugin data directory
+	 *
+	 * @param languageTag the language tag for the resource to be installed
+	 */
+	InstallerStatus installIfMissing(final String languageTag) {
+		Resource resource = new Resource(languageTag);
+
+		if (!isInstalledForTag(languageTag)) {
+			return installByName(resource.getName());
+		}
+		return InstallerStatus.FILE_EXISTS;
+	}
+
+
+	/**
+	 * Install resource from plugin jar to plugin data directory
+	 *
+	 * @param resourceName {@code String} the path name of the resource to be installed
+	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
+	 */
+	InstallerStatus installByName(final String resourceName) {
+		if (resourceName == null) { throw new IllegalArgumentException(Error.Parameter.NULL_RESOURCE_NAME.getMessage()); }
+		if (plugin.getResource(resourceName) == null) {
+			plugin.getLogger().warning("The resource '" + resourceName
+					+ "' listed in the 'auto_install.txt' file could not be found by the installer.");
+			return InstallerStatus.UNAVAILABLE;
+		}
+
+		// this check prevents a warning message when files are already installed TODO: there might be a way to do this silently
+		if (!isInstalled(resourceName)) {
+
+			// save resource to plugin data directory
+			plugin.saveResource(resourceName, false);
+
+			// log successful install message if file exists
+			if (new File(plugin.getDataFolder(), resourceName).exists()) {
+				plugin.getLogger().info("Installation of '" + resourceName + "' confirmed.");
+				return InstallerStatus.SUCCESS;
+			}
+			else {
+				plugin.getLogger().severe("installation of '" + resourceName + "' failed!");
+				return  InstallerStatus.FAIL;
+			}
+		}
+		return InstallerStatus.FILE_EXISTS;
+	}
+
+
+	/**
+	 * Install resource from plugin jar to plugin data directory
+	 *
+	 * @param languageTag {@code String} the path name of the resource to be installed
+	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
+	 */
+	InstallerStatus installForTag(final String languageTag) {
+		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
+
+		Resource resource = new Resource(languageTag);
+
+		if (plugin.getResource(resource.getName()) == null) {
+			plugin.getLogger().warning("The resource '" + resource
+					+ "' listed in the 'auto_install.txt' file could not be found by the installer.");
+			return InstallerStatus.UNAVAILABLE;
+		}
+
+		// this check prevents a warning message when files are already installed TODO: there might be a way to do this silently
+		if (!isInstalled(resource.getFileName())) {
+
+			// save resource to plugin data directory
+			plugin.saveResource(resource.getName(), false);
+
+			// log successful install message if file exists
+			if (new File(plugin.getDataFolder(), resource.getFileName()).exists()) {
+				plugin.getLogger().info("Installation of '" + resource + "' confirmed.");
+				return InstallerStatus.SUCCESS;
+			}
+			else {
+				plugin.getLogger().severe("installation of '" + resource + "' failed!");
+				return  InstallerStatus.FAIL;
+			}
+		}
+		return InstallerStatus.FILE_EXISTS;
+	}
+
+
+	/**
+	 * Check if a resource exists
 	 *
 	 * @param resourceName the name of the resource
 	 * @return {@code true} if the resource exists, {@code false} if it does not
@@ -157,13 +203,38 @@ public final class YamlLanguageResourceInstaller {
 
 
 	/**
+	 * Check if a resource exists
+	 *
+	 * @param languageTag the tag of the resource being checked for existence in the classpath
+	 * @return {@code true} if the resource exists, {@code false} if it does not
+	 */
+	boolean resourceExistsForTag(final String languageTag) {
+		Resource resource = new Resource(languageTag);
+
+		return plugin.getResource(resource.getName()) != null;
+	}
+
+
+	/**
 	 * Test if resource is installed in the plugin data directory
 	 *
- 	 * @param filename the name of the file being verified
+	 * @param filename the name of the file being verified
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
-	boolean verifyResourceInstalled(final String filename) {
+	boolean isInstalled(final String filename) {
 		return new File(plugin.getDataFolder(), filename).exists();
+	}
+
+	/**
+	 * Test if resource is installed in the plugin data directory
+	 *
+	 * @param languageTag the language tag of the file being verified as installed in the plugin data directory
+	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
+	 */
+	boolean isInstalledForTag(final String languageTag) {
+		Resource resource = new Resource(languageTag);
+
+		return new File(plugin.getDataFolder(), resource.getFileName()).exists();
 	}
 
 }
