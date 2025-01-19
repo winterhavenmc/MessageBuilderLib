@@ -27,6 +27,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.*;
@@ -60,6 +61,9 @@ class MessageRecordTest {
 		MessageRecord testRecord = new MessageRecord(
 				ENABLED_MESSAGE.toString(),
 				true,
+				true,
+				"this-is-a_string-key",
+				List.of("list", "of", "arguments"),
 				"this is a test message",
 				11,
 				"this is a test title",
