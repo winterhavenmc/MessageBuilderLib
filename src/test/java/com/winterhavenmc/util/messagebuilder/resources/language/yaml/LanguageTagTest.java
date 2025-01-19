@@ -23,27 +23,27 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ResourceTest {
+class LanguageTagTest {
 
 	@Test
 	void getLanguageTag() {
-		Resource resource = new Resource("en-US");
-		assertEquals("en-US", resource.getLanguageTag());
-		assertNotEquals("fr-FR", resource.getLanguageTag());
+		LanguageTag languageTag = new LanguageTag("en-US");
+		assertEquals("en-US", languageTag.getLanguageTag());
+		assertNotEquals("fr-FR", languageTag.getLanguageTag());
 	}
 
 	@Test
-	void getName() {
-		Resource resource = new Resource("en-US");
-		assertEquals("language/en-US.yml", resource.getName());
-		assertNotEquals("language/fr-FR.yml", resource.getName());
+	void getResourceName() {
+		LanguageTag languageTag = new LanguageTag("en-US");
+		assertEquals("language/en-US.yml", languageTag.getResourceName());
+		assertNotEquals("language/fr-FR.yml", languageTag.getResourceName());
 	}
 
 	@Test
 	void getFileName() {
-		Resource resource = new Resource("en-US");
-		assertEquals("language" + File.separator + "en-US.yml", resource.getFileName());
-		assertNotEquals("language" + File.separator + "fr-FR.yml", resource.getFileName());
+		LanguageTag languageTag = new LanguageTag("en-US");
+		assertEquals("language" + File.separator + "en-US.yml", languageTag.getFileName());
+		assertNotEquals("language" + File.separator + "fr-FR.yml", languageTag.getFileName());
 	}
 
 }
