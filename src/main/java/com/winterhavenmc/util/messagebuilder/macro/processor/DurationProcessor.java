@@ -17,13 +17,15 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.time.TimeUnit;
+import com.winterhavenmc.util.time.TimeString;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time.TimeSectionQueryHandler;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.time.Duration;
+import java.util.Locale;
 
 
 public class DurationProcessor extends MacroProcessorTemplate implements MacroProcessor {
@@ -38,8 +40,18 @@ public class DurationProcessor extends MacroProcessorTemplate implements MacroPr
 		ResultMap resultMap = new ResultMap();
 
 		if (value instanceof Duration duration) {
-			TimeSectionQueryHandler timeQueryHandler = Section.TIME.getQueryHandler(queryHandler.getConfigurationSupplier());
-			resultMap.put(keyPath, timeQueryHandler.getTimeString(duration.toMillis(), TimeUnit.MINUTES));
+
+			Locale locale = null;
+
+			if (contextMap.getRecipient() instanceof Player player) {
+				locale = Locale.forLanguageTag(player.getLocale());
+			}
+
+			if (locale == null) {
+				locale = Locale.US;
+			}
+
+			resultMap.put(keyPath, TimeString.getTimeString(locale, duration.toMillis()));
 		}
 		return resultMap;
 	}
