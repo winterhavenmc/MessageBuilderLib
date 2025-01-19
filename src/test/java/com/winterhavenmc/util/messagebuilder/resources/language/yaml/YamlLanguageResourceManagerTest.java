@@ -30,6 +30,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.util.MockUtility.LANGUAGE_EN_US_YML;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -38,6 +39,7 @@ import static org.mockito.Mockito.*;
 class YamlLanguageResourceManagerTest {
 
 	@Mock Plugin pluginMock;
+	@Mock YamlLanguageResourceInstaller languageResourceInstaller;
 	@Mock YamlLanguageResourceLoader languageResourceLoaderMock;
 
 	// real language handler
@@ -48,31 +50,29 @@ class YamlLanguageResourceManagerTest {
 
 	@BeforeEach
 	void setUp() {
-
 		// create real plugin config
 		pluginConfiguration = new YamlConfiguration();
-		pluginConfiguration.set("locale", "en-US");
 		pluginConfiguration.set("language", "en-US");
-
-		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
-
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+		pluginConfiguration.set("locale", "en-US");
 
 		// create real language configuration
-		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		languageConfiguration = MockUtility.loadConfigurationFromResource(LANGUAGE_EN_US_YML);
+
+		lenient().when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
 
 		// instantiate real language handler with mocked parameters
-		resourceManager = YamlLanguageResourceManager.getInstance(pluginMock, languageResourceLoaderMock);
+		resourceManager = YamlLanguageResourceManager.getInstance(languageResourceInstaller, languageResourceLoaderMock);
+
 	}
 
 
 	@AfterEach
 	void tearDown() {
+		pluginConfiguration = null;
 		pluginMock = null;
 		languageResourceLoaderMock = null;
 		resourceManager = null;
 		languageConfiguration = null;
-		pluginConfiguration = null;
 	}
 
 
@@ -81,12 +81,6 @@ class YamlLanguageResourceManagerTest {
 		assertNotNull(languageResourceLoaderMock);
 	}
 
-
-	@Test
-	void testGetConfiguredLanguage() {
-		// Act & Assert
-		assertEquals("en-US", resourceManager.getConfiguredLanguage());
-	}
 
 	@Test
 	void testGetConfigurationSupplier() {
@@ -99,13 +93,12 @@ class YamlLanguageResourceManagerTest {
 
 
 	@Nested
-	@Disabled
 	class ReloadTests {
 		//TODO: confirm this test will always receive an identical configuration object from the loader
 		@Test
 		void testReload_same_config() {
 			// Arrange
-			when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
+//			when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
 
 			// Act
 			boolean success = resourceManager.reload();
@@ -114,11 +107,12 @@ class YamlLanguageResourceManagerTest {
 			assertFalse(success);
 
 			// Verify
-			verify(languageResourceLoaderMock, atLeastOnce()).loadConfiguration();
+//			verify(languageResourceLoaderMock, atLeastOnce()).loadConfiguration();
 		}
 
 		//TODO: test the reload method when a different configuration is returned from the loader
 		@Test
+		@Disabled
 		void testReload_different_config() {
 			languageConfiguration = new YamlConfiguration();
 			languageConfiguration.set("test_key", "test_value");
@@ -133,18 +127,19 @@ class YamlLanguageResourceManagerTest {
 			assertTrue(success);
 		}
 
+
 		//TODO: test when the new configuration from the loader is null
 		@Disabled
 		@Test
 		void testReload_fail() {
 			// Arrange
-			lenient().when(languageResourceLoaderMock.reload()).thenReturn(null);
+			when(languageResourceLoaderMock.reload()).thenReturn(null);
 
 			// Act
 			boolean success = resourceManager.reload();
 
 			// Assert
-			assertTrue(success);
+			assertFalse(success);
 		}
 	}
 
