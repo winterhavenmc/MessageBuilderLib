@@ -112,7 +112,7 @@ public class YamlLanguageResourceInstallerTest {
 
 	@Test
 	void testGetAutoInstallByNameResourceName() {
-		assertEquals("language/auto_install.txt", resourceInstaller.getAutoInstallResourceName());
+		assertEquals("language/auto_install.txt", AUTO_INSTALL_TXT);
 	}
 
 
@@ -122,7 +122,7 @@ public class YamlLanguageResourceInstallerTest {
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getResourceStream(AUTO_INSTALL_TXT));
 
 		// Act
-		Collection<String> autoInstallFilenames = resourceInstaller.readResourceNames(AUTO_INSTALL_TXT);
+		Collection<String> autoInstallFilenames = resourceInstaller.getAutoInstallResourceNames(AUTO_INSTALL_TXT);
 
 		// Assert
 		assertFalse(autoInstallFilenames.isEmpty());
@@ -347,7 +347,7 @@ public class YamlLanguageResourceInstallerTest {
 	class AutoInstallResourceTests {
 		@Test
 		void testGetAutoInstallResourceName() {
-			assertEquals("language/auto_install.txt", resourceInstaller.getAutoInstallResourceName());
+			assertEquals("language/auto_install.txt",AUTO_INSTALL_TXT);
 		}
 
 		@Test
@@ -362,10 +362,11 @@ public class YamlLanguageResourceInstallerTest {
 		@Test
 		public void autoInstallResourceExistsTest_null_parameter() {
 			// Act
-			boolean result = resourceInstaller.resourceExistsForTag(null);
+			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+					() -> resourceInstaller.resourceExistsForTag(null));
 
 			// Assert
-			assertFalse(result);
+			assertEquals("The languageTag parameter cannot be null.", exception.getMessage());
 
 			// Verify
 			verify(pluginMock, atLeastOnce()).getResource(anyString());
@@ -431,7 +432,7 @@ public class YamlLanguageResourceInstallerTest {
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.readResourceNames(AUTO_INSTALL_TXT);
+		Collection<String> filenames = resourceInstaller.getAutoInstallResourceNames(AUTO_INSTALL_TXT);
 
 		// assert
 		assertNotNull(filenames);
@@ -446,7 +447,7 @@ public class YamlLanguageResourceInstallerTest {
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.readResourceNames(AUTO_INSTALL_TXT);
+		Collection<String> filenames = resourceInstaller.getAutoInstallResourceNames(AUTO_INSTALL_TXT);
 
 		// assert
 		assertFalse(filenames.isEmpty());
@@ -461,7 +462,7 @@ public class YamlLanguageResourceInstallerTest {
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.readResourceNames(AUTO_INSTALL_TXT);
+		Collection<String> filenames = resourceInstaller.getAutoInstallResourceNames(AUTO_INSTALL_TXT);
 
 		// Assert
 		assertTrue(filenames.contains(LANGUAGE_EN_US_YML));
@@ -477,7 +478,7 @@ public class YamlLanguageResourceInstallerTest {
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.readResourceNames(AUTO_INSTALL_TXT);
+		Collection<String> filenames = resourceInstaller.getAutoInstallResourceNames(AUTO_INSTALL_TXT);
 
 		// Assert
 		assertFalse(filenames.contains("nonexistent.yml"));
@@ -493,7 +494,7 @@ public class YamlLanguageResourceInstallerTest {
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(getClass().getClassLoader().getResourceAsStream(AUTO_INSTALL_TXT));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.readResourceNames(AUTO_INSTALL_TXT);
+		Collection<String> filenames = resourceInstaller.getAutoInstallResourceNames(AUTO_INSTALL_TXT);
 
 		// Assert
 		assertTrue(filenames.contains(LANGUAGE_EN_US_YML));
@@ -505,7 +506,7 @@ public class YamlLanguageResourceInstallerTest {
 	@Test
 	void getAutoInstallFilenamesTest_no_auto_install_ByName_txt() {
 		when(pluginMock.getResource(AUTO_INSTALL_TXT)).thenReturn(null);
-		assertTrue(resourceInstaller.readResourceNames(AUTO_INSTALL_TXT).isEmpty());
+		assertTrue(resourceInstaller.getAutoInstallResourceNames(AUTO_INSTALL_TXT).isEmpty());
 		verify(pluginMock, atLeastOnce()).getResource(AUTO_INSTALL_TXT);
 	}
 
