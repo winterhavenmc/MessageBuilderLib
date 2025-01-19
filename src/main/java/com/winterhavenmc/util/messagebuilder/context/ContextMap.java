@@ -45,6 +45,16 @@ public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
 
 
 	/**
+	 * Retrieve recipient
+	 *
+	 * @return the recipient that was used to create the context map
+	 */
+	public CommandSender getRecipient() {
+		return recipient;
+	}
+
+
+	/**
 	 * Puts a new value into the context map with its associated ProcessorType.
 	 *
 	 * @param key           the unique key for the value
