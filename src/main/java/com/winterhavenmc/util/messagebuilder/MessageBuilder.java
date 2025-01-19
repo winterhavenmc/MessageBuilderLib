@@ -82,10 +82,33 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 		this.plugin = plugin;
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
-		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin, resourceInstaller);
-		this.languageResourceManager = YamlLanguageResourceManager.getInstance(plugin, resourceLoader);
+		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
+		this.languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
+		this.languageResourceManager.setup(); // necessary to move i/o operations out of constructor
+
 		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
 		this.macroQueryHandler = new MacroHandler(languageQueryHandler);
+	}
+
+
+	/**
+	 * Class constructor <br> ** FOR TESTING PURPOSES ONLY ** <br>
+	 * This constructor is intended only for injecting mocks, for isolated testing of this class, and no other purpose.
+	 * It visibility is restricted to package-private, so it cannot be used to instantiate an instance of the class
+	 * from outside its package.
+	 *
+	 * @param pluginMock reference to plugin main class
+	 */
+	MessageBuilder(final Plugin pluginMock,
+	               final YamlLanguageResourceManager languageResourceManagerMock,
+	               final YamlLanguageQueryHandler languageQueryHandlerMock,
+	               final MacroHandler macroQueryHandlerMock) {
+		if (pluginMock == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
+
+		this.plugin = pluginMock;
+		this.languageResourceManager = languageResourceManagerMock;
+		this.languageQueryHandler = languageQueryHandlerMock;
+		this.macroQueryHandler = macroQueryHandlerMock;
 	}
 
 
