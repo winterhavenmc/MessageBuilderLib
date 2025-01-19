@@ -16,7 +16,7 @@ SETTINGS:
 CONSTANTS:
   TIME:
     UNLIMITED: "unlimited"
-    LESS_THAN: "less than"
+    LESS_THAN: "less than {VALUE}"
     LESS_THAN_ONE: "less than one"
   SPAWN:
     DISPLAY_NAME: '&aSpawn'
