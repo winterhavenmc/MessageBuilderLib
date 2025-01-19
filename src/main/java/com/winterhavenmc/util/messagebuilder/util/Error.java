@@ -53,7 +53,8 @@ public class Error {
 		NULL_PLUGIN_MANAGER("The pluginManager parameter was null."),
 		NULL_RECIPIENT("The recipient parameter was null."),
 		NULL_QUERY_HANDLER("The queryHandler parameter was null."),
-		NULL_RESOURCE_NAME("ResourceType name cannot be null."),
+		NULL_RESOURCE_NAME("The resourceName parameter cannot be null."),
+		NULL_RESOURCE_TYPE("ResourceType name cannot be null."),
 		NULL_SECTION("The section parameter cannot be null."),
 		NULL_SECTION_CONSTANTS("The constantSection parameter cannot be null."),
 		NULL_SECTION_ITEMS("The itemSection parameter cannot be null."),
@@ -64,6 +65,7 @@ public class Error {
 		NULL_TIME_UNIT("The timeUnit parameter cannot be null."),
 		NULL_VALUE("the value parameter was null."),
 		NULL_WORLD("The world parameter cannot be null."),
+		MISSING_RESOURCE("The default language resource cannot be found. This is an unrecoverable error."),
 		;
 
 		private final String messageString;
