@@ -21,6 +21,8 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResource
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Map;
+
 
 /**
  * This class is responsible for the management and lifecycle of the language resource. It is implemented
