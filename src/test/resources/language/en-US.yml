@@ -14,6 +14,10 @@ SETTINGS:
 # { in the future, placeholders }
 #################################
 CONSTANTS:
+  TIME:
+    UNLIMITED: "unlimited"
+    LESS_THAN: "less than"
+    LESS_THAN_ONE: "less than one"
   SPAWN:
     DISPLAY_NAME: '&aSpawn'
   HOME:
@@ -177,6 +181,9 @@ ARBITRARY_STRING_LIST:
 MESSAGES:
   ENABLED_RICH_TEXT_MESSAGE:
     ENABLED: true
+    TRANSLATABLE: false
+    TRANSLATION_KEY: A_STRING_OF_A_TRANSLATABLE_MESSAGE_KEY
+    TRANSLATION_ARGS: [ PLACEHOLDER1, PLACEHOLDER2 ]
     MESSAGE_TEXT:
       "This is an enabled rich text message."
 
