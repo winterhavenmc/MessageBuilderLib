@@ -23,8 +23,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.logging.Logger;
 
 
@@ -42,27 +40,22 @@ public final class YamlLanguageResourceLoader {
 	// reference to plugin main class
 	private final Plugin plugin;
 
-	YamlLanguageResourceInstaller resourceInstaller;
-
 
 	/**
 	 * Class constructor, Two parameter
 	 *
 	 * @param plugin an instance of the plugin
-	 * @param resourceInstaller a language
 	 */
-	public YamlLanguageResourceLoader(final Plugin plugin, final YamlLanguageResourceInstaller resourceInstaller)
+	public YamlLanguageResourceLoader(final Plugin plugin)
 	{
 		this.plugin = plugin;
-		this.resourceInstaller = resourceInstaller;
 	}
 
 
 	// avoid creating installer if the file we need is already installed
-	Map<String, InstallerStatus> setup()
+	void setup()
 	{
-		// install any language resource files listed in auto_install.txt to plugin data directory
-		return resourceInstaller.autoInstall();
+
 	}
 
 
@@ -106,22 +99,17 @@ public final class YamlLanguageResourceLoader {
 	Configuration loadConfiguration(final String languageTag) {
 
 		// NOTE: A RESOURCE NAME IS NOT THE SAME AS A FILE NAME. THEY MAY USE DIFFERENT DELIMITERS.
-		// A Resource object, when instantiated with a language tag String parameter, has methods to return
-		// either resource name, which always uses a '/' delimiter, or a file name, which uses the delimiter
+		// A LanguageTag object, when instantiated with a language tag String parameter, has methods to return
+		// either languageResource name, which always uses a '/' delimiter, or a file name, which uses the delimiter
 		// for the current filesystem, as returned by File.separator.
-		Resource resource = new Resource(languageTag);
-
-		// install resource if it exists and is not currently installed
-		if (resourceInstaller.resourceExistsForTag(languageTag)) {
-			resourceInstaller.installIfMissing(languageTag);
-		}
+		LanguageTag languageResource = new LanguageTag(languageTag);
 
 		// create new YamlConfiguration object
 		YamlConfiguration configuration = new YamlConfiguration();
 
 		try // to load specified language file into new YamlConfiguration object
 		{
-			configuration.load(resource.getFileName());
+			configuration.load(languageResource.getFileName());
 			plugin.getLogger().info("Language file " + languageTag + ".yml successfully loaded.");
 		} catch (FileNotFoundException e) {
 			plugin.getLogger().severe("Language file " + languageTag + ".yml does not exist.");
@@ -130,28 +118,6 @@ public final class YamlLanguageResourceLoader {
 		} catch (InvalidConfigurationException e) {
 			plugin.getLogger().severe("Language file " + languageTag + ".yml is not valid yaml.");
 		}
-
-		return configuration;
-	}
-
-
-	/**
-	 * Load a default configuration from a resource into an existing configuration
-	 *
-	 * @param resource the input stream for the resource
-	 * @param configuration the newly created language configuration
-	 * @return the configuration with a default configuration loaded from the resource, if available
-	 */
-	Configuration getConfigurationDefaults(InputStream resource, Configuration configuration)
-	{
-		// get input stream reader for embedded resource file
-		Reader inputStreamReader = new InputStreamReader(resource, StandardCharsets.UTF_8);
-
-		// load embedded resource stream into Configuration object
-		Configuration defaultConfiguration = YamlConfiguration.loadConfiguration(inputStreamReader);
-
-		// set Configuration object as defaults for configuration
-		configuration.setDefaults(defaultConfiguration);
 
 		return configuration;
 	}

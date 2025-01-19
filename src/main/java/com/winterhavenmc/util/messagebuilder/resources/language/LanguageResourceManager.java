@@ -30,13 +30,7 @@ public interface LanguageResourceManager {
 	YamlConfigurationSupplier getConfigurationSupplier();
 
 
-	/**
-	 * Get setting for language from plugin config file
-	 *
-	 * @return a string containing the IETF language tag set in the plugin config file
-	 */
-	String getConfiguredLanguage();
-
+	void setup();
 
 	/**
 	 * Reload messages into Configuration object

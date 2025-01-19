@@ -49,22 +49,13 @@ public final class YamlLanguageResourceInstaller {
 		this.plugin = plugin;
 	}
 
-	/**
-	 * package-private getter for auto install filename constant (for testing)
-	 *
-	 * @return the auto install filename
-	 */
-	String getAutoInstallResourceName() {
-		return AUTO_INSTALL_TXT;
-	}
-
 
 	/**
 	 * Get collection of resource filenames from text file in language directory of plugin jar
 	 *
 	 * @return Set of filename strings
 	 */
-	Set<String> readResourceNames(String resource) {
+	Set<String> getAutoInstallResourceNames(String resource) {
 
 		// get input stream for resource
 		InputStream resourceInputStream = plugin.getResource(resource);
@@ -98,7 +89,7 @@ public final class YamlLanguageResourceInstaller {
 	 */
 	Map<String, InstallerStatus> autoInstall() {
 		Map<String, InstallerStatus> resultMap = new LinkedHashMap<>();
-		for (String resourceName : readResourceNames(AUTO_INSTALL_TXT)) {
+		for (String resourceName : getAutoInstallResourceNames(AUTO_INSTALL_TXT)) {
 			resultMap.put(resourceName, installByName(resourceName));
 		}
 		return resultMap;
@@ -111,10 +102,11 @@ public final class YamlLanguageResourceInstaller {
 	 * @param languageTag the language tag for the resource to be installed
 	 */
 	InstallerStatus installIfMissing(final String languageTag) {
-		Resource resource = new Resource(languageTag);
+		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
+		LanguageTag languageResource = new LanguageTag(languageTag);
 
 		if (!isInstalledForTag(languageTag)) {
-			return installByName(resource.getName());
+			return installByName(languageResource.getResourceName());
 		}
 		return InstallerStatus.FILE_EXISTS;
 	}
@@ -163,27 +155,27 @@ public final class YamlLanguageResourceInstaller {
 	InstallerStatus installForTag(final String languageTag) {
 		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
 
-		Resource resource = new Resource(languageTag);
+		LanguageTag languageResource = new LanguageTag(languageTag);
 
-		if (plugin.getResource(resource.getName()) == null) {
-			plugin.getLogger().warning("The resource '" + resource
+		if (plugin.getResource(languageResource.getResourceName()) == null) {
+			plugin.getLogger().warning("The languageResource '" + languageResource
 					+ "' listed in the 'auto_install.txt' file could not be found by the installer.");
 			return InstallerStatus.UNAVAILABLE;
 		}
 
 		// this check prevents a warning message when files are already installed TODO: there might be a way to do this silently
-		if (!isInstalled(resource.getFileName())) {
+		if (!isInstalled(languageResource.getFileName())) {
 
-			// save resource to plugin data directory
-			plugin.saveResource(resource.getName(), false);
+			// save languageResource to plugin data directory
+			plugin.saveResource(languageResource.getResourceName(), false);
 
 			// log successful install message if file exists
-			if (new File(plugin.getDataFolder(), resource.getFileName()).exists()) {
-				plugin.getLogger().info("Installation of '" + resource + "' confirmed.");
+			if (new File(plugin.getDataFolder(), languageResource.getFileName()).exists()) {
+				plugin.getLogger().info("Installation of '" + languageResource + "' confirmed.");
 				return InstallerStatus.SUCCESS;
 			}
 			else {
-				plugin.getLogger().severe("installation of '" + resource + "' failed!");
+				plugin.getLogger().severe("installation of '" + languageResource + "' failed!");
 				return  InstallerStatus.FAIL;
 			}
 		}
@@ -209,9 +201,10 @@ public final class YamlLanguageResourceInstaller {
 	 * @return {@code true} if the resource exists, {@code false} if it does not
 	 */
 	boolean resourceExistsForTag(final String languageTag) {
-		Resource resource = new Resource(languageTag);
+		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
+		LanguageTag languageResource = new LanguageTag(languageTag);
 
-		return plugin.getResource(resource.getName()) != null;
+		return plugin.getResource(languageResource.getResourceName()) != null;
 	}
 
 
@@ -232,9 +225,10 @@ public final class YamlLanguageResourceInstaller {
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
 	boolean isInstalledForTag(final String languageTag) {
-		Resource resource = new Resource(languageTag);
+		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
+		LanguageTag languageResource = new LanguageTag(languageTag);
 
-		return new File(plugin.getDataFolder(), resource.getFileName()).exists();
+		return new File(plugin.getDataFolder(), languageResource.getFileName()).exists();
 	}
 
 }
