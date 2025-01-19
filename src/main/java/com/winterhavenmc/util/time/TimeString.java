@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.time;
 
+import com.winterhavenmc.util.messagebuilder.util.Error;
 import net.time4j.CalendarUnit;
 import net.time4j.ClockUnit;
 import net.time4j.Duration;
@@ -40,6 +41,7 @@ private TimeString() { /* private constructor to prevent instantiation */ }
 		return getTimeString(Locale.US, millis);
 	}
 
+
 	/**
 	 * Retrieve a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale
 	 * represented by the provided IETF language tag string. If no Locale can be found from the provided language tag,
@@ -50,11 +52,14 @@ private TimeString() { /* private constructor to prevent instantiation */ }
 	 * @return the {@code PrettyTime} formatted string
 	 */
 	public static String getTimeString(final String languageTag, final long millis) {
+		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
+
 		Locale locale = Locale.forLanguageTag(languageTag);
 		if (locale == null) { locale = Locale.US; }
 
 		return getTimeString(locale, millis);
 	}
+
 
 	/**
 	 * Retrieve a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale provided.
@@ -64,6 +69,8 @@ private TimeString() { /* private constructor to prevent instantiation */ }
 	 * @return the {@code PrettyTime} formatted string
 	 */
 	public static String getTimeString(final Locale locale, final long millis) {
+		if (locale == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LOCALE.getMessage()); }
+
 		PrettyTime prettyTime = PrettyTime.of(locale);
 
 		Duration<?> duration = Duration.of(millis, ClockUnit.MILLIS).toClockPeriod();
