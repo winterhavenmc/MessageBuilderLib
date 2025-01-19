@@ -280,4 +280,11 @@ class ContextMapTest {
 		assertFalse(contextMap.isEmpty());
 	}
 
+	@Test
+	void getRecipient() {
+		CommandSender sender = contextMap.getRecipient();
+
+		assertNotNull(sender);
+	}
+
 }
