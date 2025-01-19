@@ -55,17 +55,14 @@ class YamlLanguageResourceManagerTest {
 		pluginConfiguration.set("language", "en-US");
 
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
-		assertNotNull(pluginMock.getConfig());
 
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-		assertNotNull(pluginMock.getLogger());
 
 		// create real language configuration
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
 		// instantiate real language handler with mocked parameters
 		resourceManager = YamlLanguageResourceManager.getInstance(pluginMock, languageResourceLoaderMock);
-		assertNotNull(resourceManager);
 	}
 
 
@@ -148,9 +145,6 @@ class YamlLanguageResourceManagerTest {
 
 			// Assert
 			assertTrue(success);
-
-			// Verify
-//			verify(languageResourceLoaderMock, atLeastOnce()).reload();
 		}
 	}
 
