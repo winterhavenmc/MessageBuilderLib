@@ -71,6 +71,29 @@ public enum Section {
 	}
 
 	/**
+	 * Retrieve an instance of the section query handler that is bound to this enum constant from the enum map.
+	 * If the map has not been populated with an instance of its query handler, a new instance is created using
+	 * reflection to call the constructor and pass the {@code ConfigurationSupplier} parameter to the constructor,
+	 * which is then placed in the map for future retrievals, and returned to the caller for this use.
+	 *
+	 * @param configurationSupplier the Configuration supplier for the language resource
+	 * @return an instance of the section query handler that is bound to the enum constant
+	 * @param <T> the specific type of the section query handler being returned
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends SectionQueryHandler> T getQueryHandler(YamlConfigurationSupplier configurationSupplier)
+	{
+		return (T) HANDLER_MAP.computeIfAbsent(this, section -> {
+			try	{
+				return section.handlerClass.getConstructor(YamlConfigurationSupplier.class).newInstance(configurationSupplier);
+			}
+			catch (ReflectiveOperationException e) {
+				throw new RuntimeException("Failed to instantiate SectionQueryHandler for " + section.name(), e);
+			}
+		});
+	}
+
+	/**
 	 * Retrieve the handler class for this enum constant
 	 *
 	 * @return the handler class for this enum constant
@@ -110,26 +133,4 @@ public enum Section {
 		return mnemonic;
 	}
 
-	/**
-	 * Retrieve an instance of the section query handler that is bound to this enum constant from the enum map.
-	 * If the map has not been populated with an instance of its query handler, a new instance is created using
-	 * reflection to call the constructor and pass the {@code ConfigurationSupplier} parameter to the constructor,
-	 * which is then placed in the map for future retrievals, and returned to the caller for this use.
-	 *
-	 * @param configurationSupplier the Configuration supplier for the language resource
-	 * @return an instance of the section query handler that is bound to the enum constant
-	 * @param <T> the specific type of the section query handler being returned
-	 */
-	@SuppressWarnings("unchecked")
-	public <T extends SectionQueryHandler> T getQueryHandler(YamlConfigurationSupplier configurationSupplier)
-	{
-		return (T) HANDLER_MAP.computeIfAbsent(this, section -> {
-			try	{
-				return section.handlerClass.getConstructor(YamlConfigurationSupplier.class).newInstance(configurationSupplier);
-			}
-			catch (ReflectiveOperationException e) {
-				throw new RuntimeException("Failed to instantiate SectionQueryHandler for " + section.name(), e);
-			}
-		});
-	}
 }
