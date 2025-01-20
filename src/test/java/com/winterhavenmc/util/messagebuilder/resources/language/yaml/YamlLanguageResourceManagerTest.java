@@ -128,18 +128,17 @@ class YamlLanguageResourceManagerTest {
 		}
 
 
-		//TODO: test when the new configuration from the loader is null
-		@Disabled
 		@Test
 		void testReload_fail() {
 			// Arrange
 			when(languageResourceLoaderMock.reload()).thenReturn(null);
 
 			// Act
-			boolean success = resourceManager.reload();
+			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+					() -> resourceManager.reload());
 
 			// Assert
-			assertFalse(success);
+			assertEquals("", exception.getMessage());
 		}
 	}
 
