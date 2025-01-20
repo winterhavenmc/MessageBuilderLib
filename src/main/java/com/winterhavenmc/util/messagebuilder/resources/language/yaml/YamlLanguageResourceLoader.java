@@ -52,13 +52,6 @@ public final class YamlLanguageResourceLoader {
 	}
 
 
-	// avoid creating installer if the file we need is already installed
-	void setup()
-	{
-
-	}
-
-
 	/**
 	 * Gets language tag specified in config.yml.
 	 * <p>
