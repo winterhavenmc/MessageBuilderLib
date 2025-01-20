@@ -36,8 +36,7 @@ public final class YamlLanguageResourceLoader {
 
 	// constants for plugin configuration keys
 	private final static String CONFIG_LOCALE_KEY = "locale";
-	private final static String CONFIG_LANGUAGE_KEY = "language";
-	public static final String DEFAULT_LANGUAGE_TAG = "en-US";
+//	public static final String DEFAULT_LANGUAGE_TAG = "en-US";
 
 	// reference to plugin main class
 	private final Plugin plugin;
