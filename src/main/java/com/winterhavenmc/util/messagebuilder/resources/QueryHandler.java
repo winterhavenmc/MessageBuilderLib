@@ -17,6 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
+/**
+ * This interface declares the most general type of query handler.
+ * Classes implementing this interface must have a query method.
+ */
 public interface QueryHandler {
 	// no methods declared
 }
