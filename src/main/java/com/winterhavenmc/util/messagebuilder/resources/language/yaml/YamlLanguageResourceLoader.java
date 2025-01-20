@@ -24,28 +24,25 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.util.logging.Logger;
-
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.CONFIG_LANGUAGE_KEY;
+import java.util.regex.Pattern;
 
 
 /**
  * An implementation of the LanguageResourceLoader interface for loading the message configuration from yaml files
  */
-//TODO: This class needs more test coverage. It's mostly null checks and throws missing, and the reload command.
 public final class YamlLanguageResourceLoader {
 
-	// constants for plugin configuration keys
-	private final static String CONFIG_LOCALE_KEY = "locale";
-//	public static final String DEFAULT_LANGUAGE_TAG = "en-US";
+	// compiled regex pattern matching valid yaml keys for this application (upper snake case only)
+	private final static Pattern UPPER_SNAKE_CASE = Pattern.compile("[A-Z0-9_]+", Pattern.UNICODE_CHARACTER_CLASS);
 
-	// reference to plugin main class
+	// reference to plugin main class instance
 	private final Plugin plugin;
 
 
 	/**
-	 * Class constructor, Two parameter
+	 * Class constructor
 	 *
-	 * @param plugin an instance of the plugin
+	 * @param plugin an instance of the plugin main class
 	 */
 	public YamlLanguageResourceLoader(final Plugin plugin)
 	{
@@ -68,7 +65,7 @@ public final class YamlLanguageResourceLoader {
 	 */
 	String getConfiguredLanguageTag(final Plugin plugin)
 	{
-		return plugin.getConfig().getString(CONFIG_LANGUAGE_KEY);
+		return plugin.getConfig().getString(Option.CONFIG_LANGUAGE_KEY.toString());
 	}
 
 
@@ -80,7 +77,7 @@ public final class YamlLanguageResourceLoader {
 	 */
 	Configuration loadConfiguration()
 	{
-		return loadConfiguration(getConfiguredLanguageTag(plugin));
+		return loadConfiguration(new LanguageTag(getConfiguredLanguageTag(plugin)));
 	}
 
 
@@ -90,37 +87,38 @@ public final class YamlLanguageResourceLoader {
 	 *
 	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
-	Configuration loadConfiguration(final String languageTag) {
-
-		// NOTE: A RESOURCE NAME IS NOT THE SAME AS A FILE NAME. THEY MAY USE DIFFERENT DELIMITERS.
-		// A LanguageTag object, when instantiated with a language tag String parameter, has methods to return
-		// either languageResource name, which always uses a '/' delimiter, or a file name, which uses the delimiter
-		// for the current filesystem, as returned by File.separator.
-		LanguageTag languageResource = new LanguageTag(languageTag);
+	Configuration loadConfiguration(final LanguageTag languageTag) {
 
 		// create new YamlConfiguration object
 		YamlConfiguration configuration = new YamlConfiguration();
 
 		try // to load specified language file into new YamlConfiguration object
 		{
-			configuration.load(languageResource.getFileName());
-			plugin.getLogger().info("Language file " + languageTag + ".yml successfully loaded.");
+			configuration.load(languageTag.getFileName());
+			plugin.getLogger().info("Language file " + languageTag.getFileName() + " successfully loaded.");
 		} catch (FileNotFoundException e) {
-			plugin.getLogger().severe("Language file " + languageTag + ".yml does not exist.");
+			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " does not exist.");
 		} catch (IOException e) {
-			plugin.getLogger().severe("Language file " + languageTag + ".yml could not be read.");
+			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " could not be read.");
 		} catch (InvalidConfigurationException e) {
-			plugin.getLogger().severe("Language file " + languageTag + ".yml is not valid yaml.");
+			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " is not valid yaml.");
 		}
 
 		return configuration;
 	}
 
 
-	boolean validateKeys(Configuration configuration)
+	/**
+	 * Test all keys of the configuration object for compliance with this application's key standard.
+	 * Nonconforming keys will be noted in the log, but not modified in any way.
+	 *
+	 * @param configuration the configuration object loaded from the language resource
+	 * @return {@code true} if all keys conform ot the standard, {@code false} if not
+	 */
+	boolean validateKeys(final Configuration configuration)
 	{
 		for (String key : configuration.getKeys(true)) {
-			if (!key.matches("[A-Z0-9_]+")) {
+			if (!key.matches(UPPER_SNAKE_CASE.pattern())) {
 				Logger.getLogger(getClass().getName() + "Nonconforming key detected: " + key);
 				return false;
 			}
