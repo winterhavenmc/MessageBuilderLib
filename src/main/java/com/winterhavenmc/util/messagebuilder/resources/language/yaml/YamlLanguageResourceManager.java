@@ -51,7 +51,6 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	private YamlLanguageResourceManager(final YamlLanguageResourceInstaller resourceInstaller, final YamlLanguageResourceLoader resourceLoader) {
 		this.languageResourceLoader = resourceLoader;
 		this.languageResourceInstaller = resourceInstaller;
-		this.languageResourceLoader.setup();
 	}
 
 
