@@ -36,7 +36,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader.DEFAULT_LANGUAGE_TAG;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.DEFAULT_LANGUAGE_TAG;
 import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -68,7 +68,6 @@ public class YamlLanguageResourceLoaderTest {
 
 		// create new real file loader
 		yamlLanguageResourceLoader = new YamlLanguageResourceLoader(pluginMock);
-		yamlLanguageResourceLoader.setup();
 
 		// install resource to temp directory
 		MockUtility.installResource(LANGUAGE_EN_US_YML, tempDataDir.toPath());
@@ -106,7 +105,7 @@ public class YamlLanguageResourceLoaderTest {
 	@DisplayName("file loader get current filename not null.")
 	void GetLanguageFilenameTest() {
 		assertEquals("language" + File.separator + "en-US.yml",
-				new LanguageTag(DEFAULT_LANGUAGE_TAG).getFileName());
+				new LanguageTag(DEFAULT_LANGUAGE_TAG.value()).getFileName());
 	}
 
 	@Test
