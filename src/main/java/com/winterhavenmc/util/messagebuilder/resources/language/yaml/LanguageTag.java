@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 import java.io.File;
 import java.util.Locale;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller.SUBDIRECTORY;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_SUBDIRECTORY;
 
 public class LanguageTag
 {
@@ -81,7 +81,7 @@ public class LanguageTag
 	 */
 	public String getResourceName()
 	{
-		return String.join("/", SUBDIRECTORY, languageTag).concat(".yml");
+		return String.join("/", RESOURCE_SUBDIRECTORY.value(), languageTag).concat(".yml");
 	}
 
 
@@ -92,7 +92,18 @@ public class LanguageTag
 	 */
 	public String getFileName()
 	{
-		return String.join(File.separator, SUBDIRECTORY, languageTag).concat(".yml");
+		return String.join(File.separator, RESOURCE_SUBDIRECTORY.value(), languageTag).concat(".yml");
+	}
+
+
+	/**
+	 * Retrieve the name of the potential language resource file as installed in the plugin data directory, as a String.
+	 *
+	 * @return {@code String} representation of the potential language resource file installed in the plugin data directory
+	 */
+	public File getFile()
+	{
+		return new File(RESOURCE_SUBDIRECTORY.value(), languageTag.concat(".yml"));
 	}
 
 }
