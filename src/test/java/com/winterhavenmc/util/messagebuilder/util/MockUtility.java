@@ -34,7 +34,6 @@ import java.nio.file.*;
 public final class MockUtility {
 
 	public final static String LANGUAGE_EN_US_YML = "language/en-US.yml";
-	public final static String AUTO_INSTALL_TXT = "language/auto_install.txt";
 
 	/**
 	 * Private constructor to prevent instantiation
