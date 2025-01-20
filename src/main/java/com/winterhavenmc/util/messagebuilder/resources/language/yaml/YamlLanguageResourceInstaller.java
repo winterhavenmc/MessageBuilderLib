@@ -23,6 +23,10 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.InputStream;
 import java.util.*;
+import java.util.regex.Pattern;
+
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_AUTO_INSTALL;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_SUBDIRECTORY;
 
 
 /**
@@ -33,12 +37,9 @@ import java.util.*;
  */
 public final class YamlLanguageResourceInstaller {
 
-	// THIS IS THE OFFICIAL DECLARATION OF THE LANGUAGE SUBDIRECTORY IN RESOURCES AND THE PLUGIN DATA DIRECTORY
-	final static String SUBDIRECTORY = "language";
-	private final static String AUTO_INSTALL_TXT = SUBDIRECTORY + "/auto_install.txt";
+	private final static Pattern whitespace = Pattern.compile("\\s", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private final Plugin plugin;
-
 
 	/**
 	 * Class constructor
@@ -51,14 +52,17 @@ public final class YamlLanguageResourceInstaller {
 
 
 	/**
-	 * Get collection of resource filenames from text file in language directory of plugin jar
+	 * Retrieve {@link Set} of resource filenames from a plain text resource in the language directory of the plugin jar.
+	 * The plain text resource name elements are currently set in the Option enum. The valid pathname for the resource
+	 * can be retrieved using the getAutoInstallResourcePath method of this class
 	 *
+	 * @param autoInstallPathName a {@code String} containing the resource path of the auto install plain text resource
 	 * @return Set of filename strings
 	 */
-	Set<String> getAutoInstallResourceNames(String resource) {
+	Set<String> getAutoInstallResourceNames(String autoInstallPathName) {
 
 		// get input stream for resource
-		InputStream resourceInputStream = plugin.getResource(resource);
+		InputStream resourceInputStream = plugin.getResource(autoInstallPathName);
 
 		// if resource is null return empty set
 		if (resourceInputStream == null) {
@@ -66,33 +70,60 @@ public final class YamlLanguageResourceInstaller {
 		}
 
 		// use linked hash set to preserve order while eliminating duplicates
-		Set<String> filenames = new LinkedHashSet<>();
+		Set<String> resourcePathNames = new LinkedHashSet<>();
 
 		// read file names to be installed from text file
 		Scanner scan = new Scanner(resourceInputStream);
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine().strip();
-			// exclude comments and lines not ending with .yml
-			if (!line.startsWith("#") && line.endsWith(".yml")) {
-				filenames.add(line);
+			// include only lines that start with the resource subdirectory name and end with ".yml"
+			if (line.startsWith(RESOURCE_SUBDIRECTORY.value() + "/") && line.endsWith(".yml")) {
+				// further sanitize resource path names and add them to return list
+				resourcePathNames.add(sanitizeResourcePath(line));
 			}
 		}
 
-		return filenames;
+		return resourcePathNames;
 	}
 
+	/**
+	 * sanitize resource path file paths. these are ultimately set by server operators,
+	 * and may be running on servers not owned by them. It is essential that filenames
+	 * in this list of files to be copied not contain the names of system resources outside
+	 * the plugin's data directory.
+	 * <p>
+	 *     Logic:
+	 *     <ol>
+	 *     <li>any whitespace characters are to be removed</li>
+	 *     <li>any occurrences of two or more consecutive periods (.) are to be removed</li>
+	 *     <li>any number of leading slashes (/) are to be removed</li>
+	 *     <li>Any occurrence of two or more slashes (/) are to be replaced with a single slash</li>
+	 *     </ol>
+	 * </p>
+	 *
+	 * @param resourcePath the {@code String} path name to be sanitized.
+	 */
+	String sanitizeResourcePath(final String resourcePath) {
+		// strip leading/trailing spaces; strip 2 or more consecutive dots; strip one or more leading slashes
+		return resourcePath
+				.replaceAll(whitespace.pattern(), "")
+				.replaceAll("[.]{2,}", "")
+				.replaceFirst("[/]+}", "")
+				.replaceAll("[/]{2,}", "/");
+	}
 
 	/**
 	 * Install resources listed in auto_install.txt to the plugin data directory
-	 *
-	 * @return Map with filenames listed in auto_install.txt as key, and an InstallerStatus enum constant status for value
 	 */
-	Map<String, InstallerStatus> autoInstall() {
-		Map<String, InstallerStatus> resultMap = new LinkedHashMap<>();
-		for (String resourceName : getAutoInstallResourceNames(AUTO_INSTALL_TXT)) {
-			resultMap.put(resourceName, installByName(resourceName));
+	void autoInstall() {
+		for (String resourceName : getAutoInstallResourceNames(getAutoInstallResourcePath())) {
+			installByName(resourceName);
 		}
-		return resultMap;
+	}
+
+
+	String getAutoInstallResourcePath() {
+		return String.join("/", RESOURCE_SUBDIRECTORY.value(), RESOURCE_AUTO_INSTALL.value());
 	}
 
 
@@ -101,12 +132,11 @@ public final class YamlLanguageResourceInstaller {
 	 *
 	 * @param languageTag the language tag for the resource to be installed
 	 */
-	InstallerStatus installIfMissing(final String languageTag) {
+	InstallerStatus installIfMissing(final LanguageTag languageTag) {
 		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
-		LanguageTag languageResource = new LanguageTag(languageTag);
 
 		if (!isInstalledForTag(languageTag)) {
-			return installByName(languageResource.getResourceName());
+			return installByName(languageTag.getResourceName());
 		}
 		return InstallerStatus.FILE_EXISTS;
 	}
@@ -126,19 +156,26 @@ public final class YamlLanguageResourceInstaller {
 			return InstallerStatus.UNAVAILABLE;
 		}
 
-		// this check prevents a warning message when files are already installed TODO: there might be a way to do this silently
+		// this check prevents a warning message when files are already installed
+		// I believe the message is generated by the plugin.saveResource() method, and not the OS
+		// A non-destructive, silent file copy method would be preferred
 		if (!isInstalled(resourceName)) {
 
 			// save resource to plugin data directory
 			plugin.saveResource(resourceName, false);
 
+			// convert resource name to filename
+			String resourceFileName = resourceName.replace("/", File.separator);
+
 			// log successful install message if file exists
-			if (new File(plugin.getDataFolder(), resourceName).exists()) {
-				plugin.getLogger().info("Installation of '" + resourceName + "' confirmed.");
+			if (new File(plugin.getDataFolder(), resourceFileName).exists()) {
+				plugin.getLogger().info("Installation of '" + resourceFileName + "' confirmed.");
 				return InstallerStatus.SUCCESS;
 			}
 			else {
-				plugin.getLogger().severe("installation of '" + resourceName + "' failed!");
+				plugin.getLogger().severe("installation failed!" +
+						" The file " + resourceFileName + " does not exist in the plugin data directory " +
+						"after the install procedure has finished.");
 				return  InstallerStatus.FAIL;
 			}
 		}
@@ -152,30 +189,28 @@ public final class YamlLanguageResourceInstaller {
 	 * @param languageTag {@code String} the path name of the resource to be installed
 	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
 	 */
-	InstallerStatus installForTag(final String languageTag) {
+	InstallerStatus install(final LanguageTag languageTag) {
 		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
 
-		LanguageTag languageResource = new LanguageTag(languageTag);
-
-		if (plugin.getResource(languageResource.getResourceName()) == null) {
-			plugin.getLogger().warning("The languageResource '" + languageResource
-					+ "' listed in the 'auto_install.txt' file could not be found by the installer.");
+		if (plugin.getResource(languageTag.getResourceName()) == null) {
+			plugin.getLogger().warning("The language resource '" + languageTag.getResourceName()
+					+ "' listed in the '" + RESOURCE_AUTO_INSTALL.value() + "' file could not be found by the installer.");
 			return InstallerStatus.UNAVAILABLE;
 		}
 
 		// this check prevents a warning message when files are already installed TODO: there might be a way to do this silently
-		if (!isInstalled(languageResource.getFileName())) {
+		if (!isInstalled(languageTag.getFileName())) {
 
 			// save languageResource to plugin data directory
-			plugin.saveResource(languageResource.getResourceName(), false);
+			plugin.saveResource(languageTag.getResourceName(), false);
 
 			// log successful install message if file exists
-			if (new File(plugin.getDataFolder(), languageResource.getFileName()).exists()) {
-				plugin.getLogger().info("Installation of '" + languageResource + "' confirmed.");
+			if (new File(plugin.getDataFolder(), languageTag.getFileName()).exists()) {
+				plugin.getLogger().info("Installation of '" + languageTag + "' confirmed.");
 				return InstallerStatus.SUCCESS;
 			}
 			else {
-				plugin.getLogger().severe("installation of '" + languageResource + "' failed!");
+				plugin.getLogger().severe("installation of '" + languageTag + "' failed!");
 				return  InstallerStatus.FAIL;
 			}
 		}
@@ -200,11 +235,10 @@ public final class YamlLanguageResourceInstaller {
 	 * @param languageTag the tag of the resource being checked for existence in the classpath
 	 * @return {@code true} if the resource exists, {@code false} if it does not
 	 */
-	boolean resourceExistsForTag(final String languageTag) {
+	boolean resourceExists(final LanguageTag languageTag) {
 		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
-		LanguageTag languageResource = new LanguageTag(languageTag);
 
-		return plugin.getResource(languageResource.getResourceName()) != null;
+		return plugin.getResource(languageTag.getResourceName()) != null;
 	}
 
 
@@ -224,11 +258,10 @@ public final class YamlLanguageResourceInstaller {
 	 * @param languageTag the language tag of the file being verified as installed in the plugin data directory
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
-	boolean isInstalledForTag(final String languageTag) {
+	boolean isInstalledForTag(final LanguageTag languageTag) {
 		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
-		LanguageTag languageResource = new LanguageTag(languageTag);
 
-		return new File(plugin.getDataFolder(), languageResource.getFileName()).exists();
+		return new File(plugin.getDataFolder(), languageTag.getFileName()).exists();
 	}
 
 }
