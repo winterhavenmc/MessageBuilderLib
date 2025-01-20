@@ -17,39 +17,96 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LanguageTagTest {
 
+	@Nested
+	class ConstructorTests {
+		@Test
+		void testConstructor_locale() {
+			// Arrange
+			LanguageTag languageTag = new LanguageTag(Locale.US);
+
+			// Act
+			String result = languageTag.getLanguageTag();
+
+			// Assert
+			assertEquals("en-US", result);
+		}
+
+		@Test
+		void testConstructor_languageTag() {
+			// Arrange
+			LanguageTag languageTag = new LanguageTag("en-US");
+
+			// Act
+			Locale result = languageTag.getLocale();
+
+			// Assert
+			assertEquals(Locale.US, result);
+		}
+	}
+
 	@Test
 	void testGetLanguageTag() {
+		// Arrange
 		LanguageTag languageTag = new LanguageTag("en-US");
+
+		// Act & Assert
 		assertEquals("en-US", languageTag.getLanguageTag());
 		assertNotEquals("fr-FR", languageTag.getLanguageTag());
 	}
 
 	@Test
 	void testGetResourceName() {
+		// Arrange
 		LanguageTag languageTag = new LanguageTag("en-US");
+
+		// Act & Assert
 		assertEquals("language/en-US.yml", languageTag.getResourceName());
 		assertNotEquals("language/fr-FR.yml", languageTag.getResourceName());
 	}
 
 	@Test
 	void testGetFileName() {
+		// Arrange
 		LanguageTag languageTag = new LanguageTag("en-US");
+
+		// Act & Assert
 		assertEquals("language" + File.separator + "en-US.yml", languageTag.getFileName());
 		assertNotEquals("language" + File.separator + "fr-FR.yml", languageTag.getFileName());
 	}
 
 	@Test
 	void testGetFile() {
+		// Arrange
 		LanguageTag languageTag = new LanguageTag("en-US");
+
+		// Act
 		File file = languageTag.getFile();
-		assertEquals("", file.getName());
+
+		// Assert
+		assertEquals("en-US.yml", file.getName());
+		assertInstanceOf(File.class, file);
 	}
+
+	@Test
+	void testGetLocale() {
+		// Arrange
+		LanguageTag languageTag = new LanguageTag("en-US");
+
+		// Act
+		Locale locale = languageTag.getLocale();
+
+		// Assert
+		assertEquals(Locale.US, locale);
+	}
+
 }
