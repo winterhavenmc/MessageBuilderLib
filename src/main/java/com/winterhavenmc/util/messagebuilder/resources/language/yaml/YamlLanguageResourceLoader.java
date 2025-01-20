@@ -25,6 +25,8 @@ import org.bukkit.plugin.Plugin;
 import java.io.*;
 import java.util.logging.Logger;
 
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.CONFIG_LANGUAGE_KEY;
+
 
 /**
  * An implementation of the LanguageResourceLoader interface for loading the message configuration from yaml files
