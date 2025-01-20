@@ -23,16 +23,13 @@ enum Option {
 	DEFAULT_LANGUAGE_TAG("en-US"),
 	RESOURCE_AUTO_INSTALL("auto_install.txt"),
 	RESOURCE_SUBDIRECTORY("language"),
+	RESOURCE_LANGUAGE_EN_US_YML("language/en-US.yml"),
 	;
 
 	private final String value;
 
 	Option(final String value) {
 		this.value = value;
-	}
-
-	String value() {
-		return value;
 	}
 
 	@Override
