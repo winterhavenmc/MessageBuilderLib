@@ -72,7 +72,7 @@ class NamespaceKeyTest {
     void testStaticCreate_WithMacro_null() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> NamespaceKey.create(null));
-        assertEquals("macro cannot be null.", exception.getMessage());
+        assertEquals("The macro parameter cannot be null.", exception.getMessage());
     }
 
     @Test
@@ -159,14 +159,14 @@ class NamespaceKeyTest {
 		void testCreate_1_param_null_macro() {
 			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 					() -> NamespaceKey.create(null));
-			assertEquals("macro cannot be null.", exception.getMessage());
+			assertEquals("The macro parameter cannot be null.", exception.getMessage());
 		}
 
 		@Test
         void testStaticCreate_2_param_null_macro() {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                     () -> NamespaceKey.create(null, Namespace.Domain.MACRO));
-            assertEquals("macro cannot be null.", exception.getMessage());
+            assertEquals("The macro parameter cannot be null.", exception.getMessage());
         }
 
         @Test
