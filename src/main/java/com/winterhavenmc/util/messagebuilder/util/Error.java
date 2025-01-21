@@ -43,7 +43,7 @@ public class Error {
 		NULL_KEY_PATH("The keyPath parameter cannot be null."),
 		NULL_LANGUAGE_TAG("The languageTag parameter cannot be null."),
 		NULL_LOCALE("The locale parameter cannot be null."),
-		NULL_MACRO("macro cannot be null."),
+		NULL_MACRO("The macro parameter cannot be null."),
 		NULL_MESSAGE_BUILDER("The messageBuilder parameter cannot be null."),
 		NULL_MESSAGE_ID("The messageId parameter cannot be null."),
 		NULL_MESSAGE_KEY("The messageKey parameter cannot be null."),
@@ -63,7 +63,7 @@ public class Error {
 		NULL_SUBDOMAIN_ELEMENT("Subdomains cannot be null."),
 		NULL_SUBDOMAINS("Subdomains array cannot be null."),
 		NULL_TIME_UNIT("The timeUnit parameter cannot be null."),
-		NULL_VALUE("the value parameter was null."),
+		NULL_VALUE("The value parameter was null."),
 		NULL_WORLD("The world parameter cannot be null."),
 		MISSING_RESOURCE("The default language resource cannot be found. This is an unrecoverable error."),
 		NULL_RESOURCE_MANAGER("The resource manager parameter cannot be null.");
