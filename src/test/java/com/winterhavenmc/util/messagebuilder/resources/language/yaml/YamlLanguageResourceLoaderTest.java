@@ -136,6 +136,8 @@ public class YamlLanguageResourceLoaderTest {
 		@Test
 		void validateKeys_invalid() {
 			// Arrange
+			when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+
 			Configuration testConfiguration = new MemoryConfiguration();
 			testConfiguration.set("invalid-keys-only", false);
 			testConfiguration.set("A_VALID_KEY", "a string value");
