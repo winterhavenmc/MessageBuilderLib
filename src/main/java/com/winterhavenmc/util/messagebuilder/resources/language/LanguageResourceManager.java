@@ -30,8 +30,6 @@ public interface LanguageResourceManager {
 	YamlConfigurationSupplier getConfigurationSupplier();
 
 
-	void setup();
-
 	/**
 	 * Reload messages into Configuration object
 	 *
