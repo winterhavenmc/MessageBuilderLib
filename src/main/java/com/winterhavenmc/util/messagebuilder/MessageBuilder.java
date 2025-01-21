@@ -155,7 +155,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public void reload() {
 		if (!languageResourceManager.reload()) {
-			plugin.getLogger().warning(Error.LanguageConfiguration.RELOAD_FAILED.getMessage());
+			plugin.getLogger().warning(bundle.getString(Error.LanguageConfiguration.RELOAD_FAILED.name()));
 		}
 	}
 
