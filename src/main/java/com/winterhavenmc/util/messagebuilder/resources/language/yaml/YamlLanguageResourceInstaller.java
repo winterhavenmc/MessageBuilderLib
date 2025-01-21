@@ -77,7 +77,7 @@ public final class YamlLanguageResourceInstaller {
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine().strip();
 			// include only lines that start with the resource subdirectory name and end with ".yml"
-			if (line.startsWith(RESOURCE_SUBDIRECTORY.value() + "/") && line.endsWith(".yml")) {
+			if (line.startsWith(RESOURCE_SUBDIRECTORY + "/") && line.endsWith(".yml")) {
 				// further sanitize resource path names and add them to return list
 				resourcePathNames.add(sanitizeResourcePath(line));
 			}
@@ -108,8 +108,8 @@ public final class YamlLanguageResourceInstaller {
 		return resourcePath
 				.replaceAll(whitespace.pattern(), "")
 				.replaceAll("[.]{2,}", "")
-				.replaceFirst("[/]+}", "")
-				.replaceAll("[/]{2,}", "/");
+				.replaceFirst("/+}", "")
+				.replaceAll("/{2,}", "/");
 	}
 
 	/**
@@ -123,7 +123,7 @@ public final class YamlLanguageResourceInstaller {
 
 
 	String getAutoInstallResourcePath() {
-		return String.join("/", RESOURCE_SUBDIRECTORY.value(), RESOURCE_AUTO_INSTALL.value());
+		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), RESOURCE_AUTO_INSTALL.toString());
 	}
 
 
@@ -191,30 +191,7 @@ public final class YamlLanguageResourceInstaller {
 	 */
 	InstallerStatus install(final LanguageTag languageTag) {
 		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
-
-		if (plugin.getResource(languageTag.getResourceName()) == null) {
-			plugin.getLogger().warning("The language resource '" + languageTag.getResourceName()
-					+ "' listed in the '" + RESOURCE_AUTO_INSTALL.value() + "' file could not be found by the installer.");
-			return InstallerStatus.UNAVAILABLE;
-		}
-
-		// this check prevents a warning message when files are already installed TODO: there might be a way to do this silently
-		if (!isInstalled(languageTag.getFileName())) {
-
-			// save languageResource to plugin data directory
-			plugin.saveResource(languageTag.getResourceName(), false);
-
-			// log successful install message if file exists
-			if (new File(plugin.getDataFolder(), languageTag.getFileName()).exists()) {
-				plugin.getLogger().info("Installation of '" + languageTag + "' confirmed.");
-				return InstallerStatus.SUCCESS;
-			}
-			else {
-				plugin.getLogger().severe("installation of '" + languageTag + "' failed!");
-				return  InstallerStatus.FAIL;
-			}
-		}
-		return InstallerStatus.FILE_EXISTS;
+		return installByName(languageTag.getResourceName());
 	}
 
 
