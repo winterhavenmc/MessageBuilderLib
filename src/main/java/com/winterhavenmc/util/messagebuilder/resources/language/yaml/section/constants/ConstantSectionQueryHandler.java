@@ -26,6 +26,8 @@ import com.winterhavenmc.util.messagebuilder.util.Error;
 import java.util.List;
 import java.util.Optional;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 /**
  * Query handler for the 'CONSTANTS' section of the language file.
@@ -50,7 +52,7 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 
 		// ensure the 'CONSTANTS' section exists in the configuration provided by the supplier
 		if (yamlConfigurationSupplier.getSection(section) == null) {
-			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage());
+			throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage()));
 		}
 
 		// get configuration supplier
@@ -66,7 +68,7 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public Optional<String> getString(final String keyPath) {
-		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
+		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_KEY_PATH.name())); }
 		return Optional.ofNullable(configurationSupplier.getSection(section).getString(keyPath));
 	}
 
@@ -79,7 +81,7 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public List<String> getStringList(final String keyPath) {
-		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
+		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_KEY_PATH.name())); }
 		return configurationSupplier.getSection(section).getStringList(keyPath);
 	}
 
@@ -92,7 +94,7 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public int getInt(final String keyPath) {
-		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
+		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_KEY_PATH.name())); }
 		return configurationSupplier.getSection(section).getInt(keyPath);
 	}
 

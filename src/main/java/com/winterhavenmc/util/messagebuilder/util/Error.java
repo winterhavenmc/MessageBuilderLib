@@ -32,7 +32,6 @@ public class Error {
 		INVALID_SECTION_CONSTANTS("The constantSection returned by the configuration supplier was an invalid '" + Section.CONSTANTS + "' section."),
 		INVALID_SECTION_ITEMS("The itemSection returned by the configuration supplier was an invalid '" + Section.ITEMS + "' section."),
 		INVALID_SECTION_MESSAGES("The messageSection returned by the configuration supplier was an invalid '" + Section.MESSAGES + "' section."),
-		INVALID_SECTION_TIME("The timeSection returned by the configuration supplier was an invalid '" + Section.TIME + "' section."),
 		NULL_CONFIGURATION("The configuration parameter was null."),
 		NULL_CONFIGURATION_SECTION("The configurationSection parameter was null."),
 		NULL_CONFIGURATION_SUPPLIER("The configurationSupplier parameter was null."),

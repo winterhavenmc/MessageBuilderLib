@@ -24,6 +24,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.List;
 import java.util.Optional;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 /**
  * A data object record for item information contained in the language file. This class also contains
@@ -77,8 +79,8 @@ public record ItemRecord(
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
 	public static Optional<ItemRecord> getRecord(final String keyPath, final ConfigurationSection itemSection) {
-		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
-		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage()); }
+		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_ITEM_KEY.name())); }
+		if (itemSection == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_ITEMS.name())); }
 
 		// get configuration section for item key
 		ConfigurationSection itemEntry = itemSection.getConfigurationSection(keyPath);
@@ -86,8 +88,9 @@ public record ItemRecord(
 
 		// return new ItemRecord
 		return Optional.of(new ItemRecord(keyPath,
-				// looping over these would be nice, and checking types against those listed in the query handler would be too
-				// any fields that do not match a type listed in the query handler will be returned as an empty optional or empty list or throw an exception
+				// looping over these would be nice, and checking types against those listed in the query handler
+				// would be to any fields that do not match a type listed in the query handler will be returned as
+				// an empty optional or empty list or throw an exception
 				Optional.ofNullable(itemEntry.getString(Field.NAME_SINGULAR.getKeyPath())),
 				Optional.ofNullable(itemEntry.getString(Field.NAME_PLURAL.getKeyPath())),
 				Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath())),

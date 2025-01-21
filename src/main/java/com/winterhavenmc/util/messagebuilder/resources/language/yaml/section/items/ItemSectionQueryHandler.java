@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
-import com.winterhavenmc.util.messagebuilder.resources.AbstractQueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
@@ -28,6 +27,8 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
 
 
 /**
@@ -54,7 +55,7 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 
 		// check that 'ITEMS' section returned by the configuration supplier is not null
 		if (configurationSupplier.getSection(section) == null) {
-				throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
+				throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_ITEMS.name()));
 		}
 
 		this.configurationSupplier = configurationSupplier;
@@ -69,7 +70,7 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	public Optional<ItemRecord> getRecord(final String keyPath) {
-		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
+		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_ITEM_KEY.name())); }
 
 		// get configuration section for item key
 		ConfigurationSection itemEntry = configurationSupplier.getSection(Section.ITEMS).getConfigurationSection(keyPath);

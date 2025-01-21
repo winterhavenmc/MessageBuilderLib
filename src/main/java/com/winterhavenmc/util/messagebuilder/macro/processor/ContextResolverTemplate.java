@@ -38,7 +38,7 @@ public abstract class ContextResolverTemplate implements MacroProcessor {
 	 * @param queryHandler the LanguageQueryHandler used by the classes that extend this abstract class
 	 */
 	ContextResolverTemplate(final LanguageQueryHandler queryHandler) {
-		if (queryHandler == null) { throw new IllegalArgumentException(Error.Parameter.NULL_QUERY_HANDLER.getMessage()); }
+		if (queryHandler == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_QUERY_HANDLER.name())); }
 		this.queryHandler = queryHandler;
 	}
 

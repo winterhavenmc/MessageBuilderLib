@@ -52,7 +52,7 @@ private TimeString() { /* private constructor to prevent instantiation */ }
 	 * @return the {@code PrettyTime} formatted string
 	 */
 	public static String getTimeString(final String languageTag, final long millis) {
-		if (languageTag == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LANGUAGE_TAG.getMessage()); }
+		if (languageTag == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_LANGUAGE_TAG.name())); }
 
 		Locale locale = Locale.forLanguageTag(languageTag);
 		if (locale == null) { locale = Locale.US; }
@@ -69,7 +69,7 @@ private TimeString() { /* private constructor to prevent instantiation */ }
 	 * @return the {@code PrettyTime} formatted string
 	 */
 	public static String getTimeString(final Locale locale, final long millis) {
-		if (locale == null) { throw new IllegalArgumentException(Error.Parameter.NULL_LOCALE.getMessage()); }
+		if (locale == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_LOCALE.name())); }
 
 		PrettyTime prettyTime = PrettyTime.of(locale);
 

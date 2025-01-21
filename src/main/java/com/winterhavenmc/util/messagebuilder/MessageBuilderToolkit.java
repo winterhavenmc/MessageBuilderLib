@@ -29,6 +29,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 /**
  * Provides an instance of a MessageBuilderToolkit, that allows some access to internal library functions.
@@ -46,7 +48,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 * @param messageBuilder the MessageBuilder instance
 	 */
 	public MessageBuilderToolkit(final MessageBuilder<MessageId, Macro> messageBuilder) {
-		if (messageBuilder == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_BUILDER.getMessage()); }
+		if (messageBuilder == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_MESSAGE_BUILDER.name())); }
 
 		this.queryHandler = messageBuilder.getLanguageQueryHandler();
 	}

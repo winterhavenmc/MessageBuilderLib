@@ -31,10 +31,10 @@ public class OfflinePlayerProcessor extends MacroProcessorTemplate implements Ma
 
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
-		if (key == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
-		if (key.isBlank()) { throw new IllegalArgumentException(Error.Parameter.EMPTY_KEY_PATH.getMessage()); }
-		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
-		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
+		if (key == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_KEY_PATH.name())); }
+		if (key.isBlank()) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.EMPTY_KEY_PATH.name())); }
+		if (contextMap == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONTEXT_MAP.name())); }
+		if (value == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_VALUE.name())); }
 
 		ResultMap resultMap = new ResultMap();
 

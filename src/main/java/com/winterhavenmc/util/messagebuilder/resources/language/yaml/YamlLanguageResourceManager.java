@@ -71,6 +71,8 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	public static YamlLanguageResourceManager getInstance(final YamlLanguageResourceInstaller resourceInstaller,
 	                                                      final YamlLanguageResourceLoader resourceLoader) {
 
+		//TODO: add null parameter checks here
+
 		if (instance == null) {
 			synchronized (YamlLanguageResourceManager.class) {
 				if (instance == null) {

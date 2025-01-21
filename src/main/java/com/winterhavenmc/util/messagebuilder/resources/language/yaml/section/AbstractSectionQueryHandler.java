@@ -22,6 +22,8 @@ import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import java.util.List;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 public abstract class AbstractSectionQueryHandler implements SectionQueryHandler {
 
@@ -35,7 +37,7 @@ public abstract class AbstractSectionQueryHandler implements SectionQueryHandler
 	                                      final Section section,
 	                                      final Class<?> primaryType,
 	                                      final List<Class<?>> handledTypes) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SUPPLIER.getMessage()); }
+		if (configurationSupplier == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONFIGURATION_SUPPLIER.name())); }
 
 		this.configurationSupplier = configurationSupplier;
 		this.section = section;

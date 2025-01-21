@@ -24,6 +24,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.Optional;
 import java.util.List;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 /**
  * A data object record for message information contained in the language file. This class also contains
@@ -99,12 +101,12 @@ public record MessageRecord(
 	<MessageId extends Enum<MessageId>> // parameter type
 	Optional<MessageRecord> // return type
 	getRecord(final MessageId messageId, final ConfigurationSection messageSection) {
-		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage()); }
-		if (messageSection == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
+		if (messageId == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_MESSAGE_ID.name())); }
+		if (messageSection == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_SECTION_MESSAGES.name())); }
 
 		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
 		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
-			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
+			throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_MESSAGES.name()));
 		}
 
 		// get entry for messageId

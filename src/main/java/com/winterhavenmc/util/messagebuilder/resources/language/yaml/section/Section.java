@@ -21,7 +21,6 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time.TimeSectionQueryHandler;
 
 import java.util.EnumMap;
 
@@ -33,7 +32,6 @@ public enum Section {
 	CONSTANTS(ConstantSectionQueryHandler.class, "Constant", "Constants", "CONST"),
 	ITEMS(ItemSectionQueryHandler.class, "Item", "Items", "ITEM"),
 	MESSAGES(MessageSectionQueryHandler.class, "Message", "Messages", "MSG"),
-	TIME(TimeSectionQueryHandler.class, "Time", "Times", "TIME"),
 	;
 
 	// Enum map serves as a cache for instances of query handlers

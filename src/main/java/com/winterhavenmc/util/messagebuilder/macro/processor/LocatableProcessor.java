@@ -104,10 +104,10 @@ public class LocatableProcessor extends ContextResolverTemplate {
 	 */
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T object) {
-		if (key == null) { throw new IllegalArgumentException(Error.Parameter.NULL_NAMESPACED_KEY.getMessage()); }
+		if (key == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_NAMESPACED_KEY.name())); }
 		if (key.isBlank()) { throw new IllegalArgumentException((Error.Parameter.EMPTY_NAMESPACED_KEY.getMessage())); }
-		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
-		if (object == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
+		if (contextMap == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONTEXT_MAP.name())); }
+		if (object == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_VALUE.name())); }
 
 		// try to get object as locatable
 		Optional<Locatable> locatable = LocationAdapter.asLocatable(object);

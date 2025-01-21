@@ -20,6 +20,8 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 /**
  * A factory that produces section query handlers for each top level section of the language file,
@@ -39,7 +41,7 @@ public class SectionQueryHandlerFactory {
 	 * @param configurationSupplier the provider of the language configuration
 	 */
 	public SectionQueryHandlerFactory(YamlConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION.getMessage()); }
+		if (configurationSupplier == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONFIGURATION.name())); }
 		this.configurationSupplier = configurationSupplier;
 	}
 
@@ -52,8 +54,7 @@ public class SectionQueryHandlerFactory {
 	 * @return The requested SectionQueryHandler
 	 */
 	public SectionQueryHandler getQueryHandler(Section section) {
-//		return sectionHandlerCache.computeIfAbsent(section, this::createSectionHandler);
-		return createSectionHandler(section);
+		return section.getQueryHandler(configurationSupplier);
 	}
 
 
@@ -65,14 +66,7 @@ public class SectionQueryHandlerFactory {
 	 * @throws IllegalArgumentException if no handler can be created for the given section
 	 */
 	public SectionQueryHandler createSectionHandler(Section section) {
-		return switch (section) {
-			case CONSTANTS -> Section.CONSTANTS.getQueryHandler(configurationSupplier);
-			case ITEMS -> Section.ITEMS.getQueryHandler(configurationSupplier);
-			case MESSAGES -> Section.MESSAGES.getQueryHandler(configurationSupplier);
-			case TIME -> Section.TIME.getQueryHandler(configurationSupplier);
-			// leaving line below commented so any new section declared in the Section enum needs an explicit handler here
-			//default -> new DefaultSectionQueryHandler();
-		};
+		return section.getQueryHandler(configurationSupplier);
 	}
 
 

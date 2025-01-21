@@ -27,6 +27,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.List;
 import java.util.Optional;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 /**
  * Handles queries for message records from the current language file. The constructor takes the 'MESSAGES' configuration
@@ -52,7 +54,7 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 
 		// check that 'MESSAGES' section returned by the configuration supplier is not null
 		if (configurationSupplier.getSection(Section.MESSAGES) == null) {
-			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_MESSAGES.getMessage());
+			throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_MESSAGES.name()));
 		}
 
 		// set field from parameter
@@ -68,7 +70,7 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	 * @param <MessageId> an enum member that is used as a key to retrieve messages from the language file
 	 */
 	public <MessageId extends Enum<MessageId>> Optional<MessageRecord> getRecord(final MessageId messageId) {
-		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_KEY.getMessage()); }
+		if (messageId == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_MESSAGE_KEY.name())); }
 
 		return MessageRecord.getRecord(messageId, messageSection);
 	}

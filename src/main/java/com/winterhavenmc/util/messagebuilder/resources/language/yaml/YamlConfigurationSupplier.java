@@ -24,6 +24,8 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.function.Supplier;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 /**
  * Class that implements the Java Supplier interface to provide the Bukkit {@link Configuration} object to consumers
@@ -61,7 +63,7 @@ public final class YamlConfigurationSupplier implements Supplier<Configuration> 
 	 * @throws IllegalArgumentException if section parameter is null
 	 */
 	public ConfigurationSection getSection(final Section section) {
-		if (section == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION.getMessage()); }
+		if (section == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_SECTION.name())); }
 
 		return configuration.getConfigurationSection(section.name());
 	}

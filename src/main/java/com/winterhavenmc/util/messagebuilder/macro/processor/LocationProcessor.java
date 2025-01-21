@@ -100,10 +100,10 @@ public class LocationProcessor extends MacroProcessorTemplate {
 	 */
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
-		if (key == null) { throw new IllegalArgumentException(Error.Parameter.NULL_NAMESPACED_KEY.getMessage()); }
+		if (key == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_NAMESPACED_KEY.name())); }
 		if (key.isBlank()) { throw new IllegalArgumentException((Error.Parameter.EMPTY_NAMESPACED_KEY.getMessage())); }
-		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
-		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
+		if (contextMap == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONTEXT_MAP.name())); }
+		if (value == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_VALUE.name())); }
 
 		// create empty result map
 		ResultMap resultMap = new ResultMap();
