@@ -94,7 +94,7 @@ public class YamlLanguageResourceInstallerTest {
 		@Test
 		void testResourceStream() throws IOException {
 			// Arrange & Act
-			InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML);
+			InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 			// Assert
 			assertNotNull(resourceStream, "Resource stream should not be null.");
@@ -107,21 +107,21 @@ public class YamlLanguageResourceInstallerTest {
 		@Test
 		void testSaveResource_MocksCorrectly() throws Exception {
 			// Arrange
-			Path targetFilePath = tempDataDir.toPath().resolve(LANGUAGE_EN_US_YML);
+			Path targetFilePath = tempDataDir.toPath().resolve(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 			// Ensure parent directories exist
 			Files.createDirectories(targetFilePath.getParent());
 
 			// Simulate saving the resource by copying it from the test resources
-			InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML);
+			InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 			copyResource(resourceStream, targetFilePath);
 			// when(pluginMock.saveResource(LANGUAGE_EN_US_YML, false)).thenReturn(copyResource(LANGUAGE_EN_US_YML, targetFilePath));
 
 			// Act
-			pluginMock.saveResource(LANGUAGE_EN_US_YML, false);
+			pluginMock.saveResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString(), false);
 
 			// Assert
-			File savedFile = new File(tempDataDir, LANGUAGE_EN_US_YML);
+			File savedFile = new File(tempDataDir, Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 			assertTrue(savedFile.exists(), "The resource file should be saved to the data directory.");
 		}
 	}
@@ -160,7 +160,7 @@ public class YamlLanguageResourceInstallerTest {
 	@Test
 	void isInstalled_true() {
 		// Arrange
-		LanguageTag languageTag = new LanguageTag(DEFAULT_LANGUAGE_TAG.value());
+		LanguageTag languageTag = new LanguageTag(DEFAULT_LANGUAGE_TAG.toString());
 
 		// install resource when saveResource is called
 		doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
@@ -234,7 +234,7 @@ public class YamlLanguageResourceInstallerTest {
 				.when(pluginMock).saveResource(anyString(), eq(false));
 
 		// Act
-		InstallerStatus status = resourceInstaller.installByName(LANGUAGE_EN_US_YML);
+		InstallerStatus status = resourceInstaller.installByName(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// Assert
 		assertEquals(InstallerStatus.SUCCESS, status);
@@ -257,10 +257,10 @@ public class YamlLanguageResourceInstallerTest {
 		doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
 				.when(pluginMock).saveResource(anyString(), eq(false));
 
-		resourceInstaller.installByName(LANGUAGE_EN_US_YML);
+		resourceInstaller.installByName(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// Act
-		InstallerStatus status = resourceInstaller.installByName(LANGUAGE_EN_US_YML);
+		InstallerStatus status = resourceInstaller.installByName(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// Assert
 		assertEquals(InstallerStatus.FILE_EXISTS, status);
@@ -359,11 +359,11 @@ public class YamlLanguageResourceInstallerTest {
 		Path tempDir = Files.createTempDirectory("installer-test");
 
 		// Act: Install a resource into the temporary directory
-		boolean result = installResource(LANGUAGE_EN_US_YML, tempDir);
+		boolean result = installResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString(), tempDir);
 
 		// Assert: Verify the file exists and was successfully copied
 		assertTrue(result, "ResourceType should have been installed successfully.");
-		assertTrue(Files.exists(tempDir.resolve(LANGUAGE_EN_US_YML)));
+		assertTrue(Files.exists(tempDir.resolve(Option.RESOURCE_LANGUAGE_EN_US_YML.toString())));
 
 		// Cleanup: Delete the temporary directory and its contents
 		Files.walk(tempDir)
@@ -446,7 +446,7 @@ public class YamlLanguageResourceInstallerTest {
 		LanguageTag languageTag = new LanguageTag(DEFAULT_LANGUAGE_TAG.toString());
 
 		// return a null File object when language/en-US.yml resource is fetched, simulating a missing resource
-		when(pluginMock.getResource(LANGUAGE_EN_US_YML)).thenReturn(null);
+		when(pluginMock.getResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString())).thenReturn(null);
 
 		// Act
 		boolean result = resourceInstaller.resourceExists(languageTag);
@@ -455,7 +455,7 @@ public class YamlLanguageResourceInstallerTest {
 		assertFalse(result);
 
 		// Verify
-		verify(pluginMock, atLeastOnce()).getResource(LANGUAGE_EN_US_YML);
+		verify(pluginMock, atLeastOnce()).getResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 	}
 
 	@Test
@@ -509,7 +509,7 @@ public class YamlLanguageResourceInstallerTest {
 		Collection<String> filenames = resourceInstaller.getAutoInstallResourceNames( resourceInstaller.getAutoInstallResourcePath());
 
 		// Assert
-		assertTrue(filenames.contains(LANGUAGE_EN_US_YML));
+		assertTrue(filenames.contains("language/en-US.yml"));
 		assertTrue(filenames.contains("language/fr-FR.yml"));
 
 		// Verify
@@ -541,7 +541,7 @@ public class YamlLanguageResourceInstallerTest {
 		Collection<String> filenames = resourceInstaller.getAutoInstallResourceNames( resourceInstaller.getAutoInstallResourcePath());
 
 		// Assert
-		assertTrue(filenames.contains(LANGUAGE_EN_US_YML));
+		assertTrue(filenames.contains("language/en-US.yml"));
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourcePath());
@@ -583,7 +583,7 @@ public class YamlLanguageResourceInstallerTest {
 		void verifyResourceInstalledTest() {
 			// Arrange
 			when(pluginMock.getResource( resourceInstaller.getAutoInstallResourcePath())).thenReturn(getClass().getClassLoader().getResourceAsStream( resourceInstaller.getAutoInstallResourcePath()));
-			when(pluginMock.getResource(LANGUAGE_EN_US_YML)).thenReturn(getClass().getClassLoader().getResourceAsStream(LANGUAGE_EN_US_YML));
+			when(pluginMock.getResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString())).thenReturn(getClass().getClassLoader().getResourceAsStream(Option.RESOURCE_LANGUAGE_EN_US_YML.toString()));
 			// install resource when saveResource is called
 			doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
 					.when(pluginMock).saveResource(anyString(), eq(false));
@@ -592,12 +592,12 @@ public class YamlLanguageResourceInstallerTest {
 			resourceInstaller.autoInstall();
 
 			// Assert
-			assertTrue(resourceInstaller.isInstalled(LANGUAGE_EN_US_YML));
+			assertTrue(resourceInstaller.isInstalled("language/en-US.yml"));
 			assertFalse(resourceInstaller.isInstalled("nonexistent-resource"));
 
 			// verify
 			verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourcePath());
-			verify(pluginMock, atLeastOnce()).getResource(LANGUAGE_EN_US_YML);
+			verify(pluginMock, atLeastOnce()).getResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 		}
 
 		@Test
