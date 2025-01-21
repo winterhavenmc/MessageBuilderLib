@@ -17,8 +17,16 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.macro.*;
+import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
+import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -27,22 +35,26 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
-@SuppressWarnings("unused")
-public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
+
+/**
+ * The message object being built with builder pattern
+ *
+ * @param <MessageId> the unique identifier of a message in the language file
+ * @param <Macro> a macro placeholder value to be added to the context map
+ */
+public final class Message<MessageId extends Enum<MessageId>, Macro> {
 
 	// reference to plugin main class
 	private final Plugin plugin;
 
-	// macro object map
-	private final MacroObjectMap macroObjectMap = new MacroObjectMap();
-
-	private final static String UNKNOWN_VALUE = "???";
+	// context map
+	private final ContextMap contextMap;
 
 	// required parameters
 	private final CommandSender recipient;
 	private final MessageId messageId;
-	private final LanguageHandler languageHandler;
-	private final MacroProcessorHandler macroProcessorHandler;
+	private final LanguageQueryHandler queryHandler;
+	private final MacroHandler macroHandler;
 
 	// optional parameters
 	private String altMessage;
@@ -53,22 +65,24 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	/**
 	 * Class constructor
 	 *
-	 * @param plugin          reference to plugin main class
-	 * @param languageHandler reference to language handler class
-	 * @param macroProcessorHandler  reference to macro processor class
-	 * @param recipient       message recipient
-	 * @param messageId       message identifier
+	 * @param plugin       reference to plugin main class
+	 * @param queryHandler the ItemRecord handler for message records
+	 * @param macroHandler reference to macro processor class
+	 * @param recipient    message recipient
+	 * @param messageId    message identifier
 	 */
 	public Message(final Plugin plugin,
-	               final LanguageHandler languageHandler,
-	               final MacroProcessorHandler macroProcessorHandler,
-	               final CommandSender recipient,
-	               final MessageId messageId) {
+				final LanguageQueryHandler queryHandler,
+                final MacroHandler macroHandler,
+                final CommandSender recipient,
+                final MessageId messageId) {
+
 		this.plugin = plugin;
-		this.languageHandler = languageHandler;
-		this.macroProcessorHandler = macroProcessorHandler;
+		this.queryHandler = queryHandler;
+		this.macroHandler = macroHandler;
 		this.recipient = recipient;
 		this.messageId = messageId;
+		this.contextMap = new ContextMap(recipient);
 	}
 
 
@@ -79,86 +93,114 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
-	@SuppressWarnings("UnusedReturnValue")
-	public Message<MessageId, Macro> setMacro(final Macro macro, final Object value) {
+	public <T> Message<MessageId, Macro> setMacro(final MacroKey macro, final T value) {
 
-		if (value instanceof Optional<?> optionalValue) {
+		Object unwrappedValue = value;
 
-			optionalValue.ifPresentOrElse(
-					unwrappedValue -> macroObjectMap.put(macro.name(), unwrappedValue),
-					() -> macroObjectMap.put(macro.name(), UNKNOWN_VALUE)
-			);
+		// if value is an optional, get unwrapped value
+		if (value instanceof Optional<?> opt && opt.isPresent()) {
+			unwrappedValue = opt.get();
 		}
-		else {
-			macroObjectMap.put(macro.name(), value);
+
+		// create name spaced key
+		String key = NamespaceKey.create(macro.toString(), Namespace.Domain.MACRO);
+
+		// get macro expected type from macro enum method
+		Class<?> expectedType = macro.getAssociatedType();
+
+		// check the type against the expected type and throw exception if mismatched
+		if (!expectedType.isInstance(unwrappedValue)) {
+			throw new IllegalArgumentException(
+					"Value type does not match the expected type for macro: " + macro +
+							". Expected: " + expectedType.getName() +
+							", Provided: " + unwrappedValue.getClass().getName());
 		}
+
+		// get matching processor type for object
+		ProcessorType processorType = ProcessorType.matchType(unwrappedValue);
+
+		// put value and processor type into context map
+		this.contextMap.put(key, unwrappedValue, processorType);
+
+		// return this instance of Message class to the builder chain
 		return this;
 	}
 
+		//TODO: add back optional unwrapping
 
 	/**
 	 * Final step of message builder, performs replacements and sends message to recipient
 	 */
 	public void send() {
+		// get message query handler
+		MessageSectionQueryHandler sectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.MESSAGES);
+		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
 
-		// if message is not enabled in messages file, do nothing and return
-		if (!languageHandler.isEnabled(messageId)) {
-			return;
-		}
+			// get optional message record
+			Optional<MessageRecord> messageRecord = messageSectionQueryHandler.getRecord(messageId);
 
-		// get cooldown instance
-		MessageCooldown<MessageId> messageCooldown = MessageCooldown.getInstance(plugin);
+			// if message record is empty or not enabled, return
+			if (messageRecord.isEmpty() || !messageRecord.get().enabled()) {
+				return;
+			}
 
-		// if message is not cooled, do nothing and return
-		if (messageCooldown.isCooling(recipient, messageId, languageHandler.getRepeatDelay(messageId))) {
-			return;
-		}
+			// get cooldown instance
+			MessageCooldownMap<MessageId> messageCooldownMap = MessageCooldownMap.getInstance(plugin);
 
-		// send message to player
-		if (!this.toString().isEmpty()) {
-			recipient.sendMessage(this.toString());
-		}
+			// if message is not cooled, do nothing and return
+			if (messageCooldownMap.isCooling(recipient, messageId, messageRecord.get().repeatDelay())) {
+				return;
+			}
 
-		// if titles enabled in config, display titles
-		if (plugin.getConfig().getBoolean("titles-enabled")) {
-			displayTitle();
-		}
+			// send message to player
+			if (!this.toString().isEmpty()) {
+				recipient.sendMessage(this.toString());
+			}
 
-		// if message repeat delay value is greater than zero and recipient is entity, add entry to messageCooldownMap
-		if (languageHandler.getRepeatDelay(messageId) > 0 && recipient instanceof Entity) {
-			messageCooldown.put(messageId, (Entity) recipient);
+			// if titles enabled in config, display titles
+			if (plugin.getConfig().getBoolean("titles-enabled")) {
+				displayTitle();
+			}
+
+			// if message repeat delay value is greater than zero and recipient is entity, add entry to messageCooldownMap
+			if (messageRecord.get().repeatDelay() > 0 && recipient instanceof Entity) {
+				messageCooldownMap.put(messageId, (Entity) recipient);
+			}
 		}
 	}
 
 
 	private void displayTitle() {
-		if (recipient instanceof Player) {
+
+		if (recipient instanceof Entity) {
 
 			// get title string
 			String titleString;
 			if (altTitle != null && !altTitle.isEmpty()) {
-				titleString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, altTitle);
+				titleString = macroHandler.replaceMacros(recipient, contextMap, altTitle);
 			}
 			else {
-				titleString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, languageHandler.getTitle(messageId));
+				titleString = macroHandler.replaceMacros(recipient, contextMap,
+						queryHandler.getMessageRecord(messageId).map(MessageRecord::title).orElse(""));
 			}
 
 			// get subtitle string
 			String subtitleString;
 			if (altSubtitle != null && !altSubtitle.isEmpty()) {
-				subtitleString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, altSubtitle);
+				subtitleString = macroHandler.replaceMacros(recipient, contextMap, altSubtitle);
 			}
 			else {
-				subtitleString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, languageHandler.getSubtitle(messageId));
+				subtitleString = macroHandler.replaceMacros(recipient, contextMap,
+						queryHandler.getMessageRecord(messageId).map(MessageRecord::subtitle).orElse(""));
 			}
 
 			// only send title if either title string or subtitle string is not empty
 			if (!titleString.isEmpty() || !subtitleString.isEmpty()) {
 
 				// get title timing values
-				int titleFadeIn = languageHandler.getTitleFadeIn(messageId);
-				int titleStay = languageHandler.getTitleStay(messageId);
-				int titleFadeOut = languageHandler.getTitleFadeOut(messageId);
+				int titleFadeIn = queryHandler.getMessageRecord(messageId).map(MessageRecord::titleFadeIn).orElse(20);
+				int titleStay = queryHandler.getMessageRecord(messageId).map(MessageRecord::titleStay).orElse(70);
+				int titleFadeOut = queryHandler.getMessageRecord(messageId).map(MessageRecord::titleFadeOut).orElse(10);
 
 				// if title string is empty, add format code, else it won't display with subtitle only
 				if (titleString.isEmpty()) {
@@ -185,12 +227,14 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	@Override
 	public String toString() {
 
-		// if message is not enabled in messages file, return empty string
-		if (!languageHandler.isEnabled(messageId)) {
+		// get optional MessageRecord
+		Optional<MessageRecord> messageRecord = queryHandler.getMessageRecord(messageId);
+
+		// if message entry not found or message not enabled for messageId, return empty string
+		if (messageRecord.isEmpty() || !messageRecord.get().enabled()) {
 			return "";
 		}
 
-		// return message with macro replacements and color codes translated
 		return getMessageString();
 	}
 
@@ -201,12 +245,21 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @return message string to send
 	 */
 	private String getMessageString() {
+
 		String messageString;
+
 		if (altMessage != null && !altMessage.isEmpty()) {
-			messageString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, altMessage);
+			messageString = macroHandler.replaceMacros(recipient, contextMap, altMessage);
 		}
 		else {
-			messageString = macroProcessorHandler.replaceMacros(recipient, macroObjectMap, languageHandler.getMessage(messageId));
+			Optional<MessageRecord> messageRecord = queryHandler.getMessageRecord(messageId);
+
+			// if message entry could not be found, then return empty string
+			if (messageRecord.isEmpty()) {
+				return "";
+			}
+
+			messageString = macroHandler.replaceMacros(recipient, contextMap, messageRecord.get().message());
 		}
 		return ChatColor.translateAlternateColorCodes('&', messageString);
 	}

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -25,83 +25,98 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
+import javax.lang.model.type.NullType;
+import java.time.Duration;
+
 
 public enum ProcessorType {
 
-	STRING() {
+	ENTITY(Entity.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new StringProcessor(languageHandler);
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new EntityProcessor(queryHandler);
 		}
 	},
-	ENTITY() {
+	COMMAND_SENDER(CommandSender.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new EntityProcessor(languageHandler);
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new CommandSenderProcessor(queryHandler);
 		}
 	},
-	COMMAND_SENDER() {
+	ITEM_STACK(ItemStack.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new CommandSenderProcessor(languageHandler);
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new ItemStackProcessor(queryHandler);
 		}
 	},
-	ITEM_STACK() {
+	LOCATION(Location.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new ItemStackProcessor(languageHandler);
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new LocationProcessor(queryHandler);
 		}
 	},
-	LOCATION() {
+	DURATION(Duration.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new LocationProcessor(languageHandler);
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new DurationProcessor(queryHandler);
 		}
 	},
-	NUMBER() {
+	NUMBER(Number.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new NumberProcessor(languageHandler);
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new NumberProcessor(queryHandler);
 		}
 	},
-	OFFLINE_PLAYER() {
+	OFFLINE_PLAYER(OfflinePlayer.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new OfflinePlayerProcessor(languageHandler);
+		MacroProcessor create(LanguageQueryHandler queryHandler) {
+			return new OfflinePlayerProcessor(queryHandler);
 		}
 	},
-	WORLD() {
+	WORLD(World.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new WorldProcessor(languageHandler);
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new WorldProcessor(queryHandler);
 		}
 	},
-	OBJECT() {
+	STRING(String.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new ObjectProcessor(languageHandler);
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new StringProcessor(queryHandler);
 		}
 	},
-	NULL() {
+	OBJECT(Object.class) {
 		@Override
-		Processor create(final LanguageHandler languageHandler) {
-			return new NullProcessor(languageHandler);
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new ObjectProcessor(queryHandler);
+		}
+	},
+	NULL(NullType.class) {
+		@Override
+		MacroProcessor create(final LanguageQueryHandler queryHandler) {
+			return new NullProcessor(queryHandler);
 		}
 	};
 
-	abstract Processor create(final LanguageHandler languageHandler);
+	private final Class<?> expectedType;
 
 
-	public void register(final LanguageHandler languageHandler,
+	ProcessorType(Class<?> expectedType) {
+		this.expectedType = expectedType;
+	}
+
+	abstract MacroProcessor create(final LanguageQueryHandler queryHandler);
+
+
+	public void register(final LanguageQueryHandler queryHandler,
 	                     final ProcessorRegistry macroProcessorRegistry,
 	                     final ProcessorType type) {
-		macroProcessorRegistry.put(type, type.create(languageHandler));
+		macroProcessorRegistry.put(type, type.create(queryHandler));
 	}
 
 
 	public static ProcessorType matchType(final Object object) {
 		return switch (object) {
-			case String ignored -> STRING;
 			case Entity ignored -> ENTITY;
 			case CommandSender ignored -> COMMAND_SENDER;
 			case OfflinePlayer ignored -> OFFLINE_PLAYER;
@@ -109,9 +124,14 @@ public enum ProcessorType {
 			case Location ignored -> LOCATION;
 			case World ignored -> WORLD;
 			case Number ignored -> NUMBER;
+			case String ignored -> STRING;
 			case null -> NULL;
 			default -> OBJECT;
 		};
+	}
+
+	public Class<?> getExpectedType() {
+		return this.expectedType;
 	}
 
 }

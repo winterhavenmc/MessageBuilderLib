@@ -17,72 +17,129 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.bukkit.OfflinePlayer;
-import org.junit.jupiter.api.*;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
 
-import java.util.UUID;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+@ExtendWith(MockitoExtension.class)
 class OfflinePlayerProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
+	@Mock LanguageQueryHandler languageQueryHandlerMock;
+	@Mock Player playerMock;
+	@Mock OfflinePlayer offlinePlayerMock;
 
+	@BeforeEach
+	void setUp() {
 
-	@BeforeAll
-	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-	}
-
-	@Disabled
-	@Test
-	void execute() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(languageHandler);
-
-		String key = "SOME_NAME";
-		OfflinePlayer offlinePlayer = server.getOfflinePlayer(UUID.randomUUID());
-		assertNotNull(offlinePlayer);
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, offlinePlayer);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, offlinePlayer);
-
-		assertTrue(resultMap.containsKey(key), "No match: " + key);
+		languageQueryHandlerMock = null;
+		offlinePlayerMock = null;
 	}
 
 	@Test
-	void execute_with_null_offlinePlayer() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(languageHandler);
+	void resolveContextTest() {
+		// Arrange
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		ContextMap contextMap = new ContextMap(playerMock);
 
-		String key = "SOME_NAME";
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, contextMap, offlinePlayerMock);
 
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, null);
+		// Assert
+		assertFalse(resultMap.isEmpty());
+		assertTrue(resultMap.containsKey(namespacedKey));
+	}
 
-		ResultMap resultMap = processor.execute(macroObjectMap, key, null);
 
-		assertFalse(resultMap.containsKey("SOME_NAME"));
+	@Test
+	void resolveContext_with_null_key() {
+		// Arrange
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		ContextMap contextMap = new ContextMap(playerMock);
+
+		// Act
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> macroProcessor.resolveContext(null, contextMap, offlinePlayerMock));
+
+		// Assert
+		assertEquals("The keyPath parameter cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void resolveContext_with_empty_key() {
+		// Arrange
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		ContextMap contextMap = new ContextMap(playerMock);
+
+		// Act
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> macroProcessor.resolveContext("", contextMap, offlinePlayerMock));
+
+		// Assert
+		assertEquals("The keyPath parameter cannot be empty.", exception.getMessage());
+	}
+
+	@Test
+	void resolveContext_with_null_contextMap() {
+		// Arrange
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+
+		// Act
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> macroProcessor.resolveContext(namespacedKey, null, offlinePlayerMock));
+
+		// Assert
+		assertEquals("The contextMap parameter was null.", exception.getMessage());
+	}
+
+	@Test
+	void resolveContext_with_null_value() {
+		// Arrange
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		ContextMap contextMap = new ContextMap(playerMock);
+
+		// Act
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> macroProcessor.resolveContext(namespacedKey, contextMap, null));
+
+		// Assert
+		assertEquals("the value parameter was null.", exception.getMessage());
+	}
+
+	@Test
+	void resolveContext_with_value_wrong_type() {
+		// Arrange
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		ContextMap contextMap = new ContextMap(playerMock);
+
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, contextMap, new ItemStack(Material.STONE));
+
+		// Assert
+		assertTrue(resultMap.isEmpty());
 	}
 
 }

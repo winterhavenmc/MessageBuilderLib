@@ -17,49 +17,40 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.command.ConsoleCommandSenderMock;
-import be.seeseemelk.mockbukkit.entity.OfflinePlayerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import be.seeseemelk.mockbukkit.inventory.ItemStackMock;
-
-import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
-
-import java.util.UUID;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class ProcessorTypeTest {
 
-	ServerMock server;
-	PluginMain plugin;
+	@Mock Plugin pluginMock;
 
 	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
 
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		pluginMock = null;
 	}
 
 
@@ -72,14 +63,14 @@ class ProcessorTypeTest {
 	@Disabled
 	@Test
 	void matchTypeEntity() {
-		PlayerMock player = server.addPlayer("player");
+		Player player = mock(Player.class);
 		assertNotNull(player, "Mock player is null.");
 		assertEquals(ProcessorType.ENTITY, ProcessorType.matchType(player), "Mock player does not match processor type ENTITY");
 	}
 
 	@Test
 	void matchTypeCommandSender() {
-		CommandSender consoleSender = new ConsoleCommandSenderMock();
+		CommandSender consoleSender = mock(ConsoleCommandSender.class);
 		assertNotNull(consoleSender, "Console sender is null.");
 		assertEquals(ProcessorType.COMMAND_SENDER, ProcessorType.matchType(consoleSender));
 	}
@@ -88,19 +79,20 @@ class ProcessorTypeTest {
 	void matchTypeNumber() {
 		assertEquals(ProcessorType.NUMBER, ProcessorType.matchType(42));
 		assertEquals(ProcessorType.NUMBER, ProcessorType.matchType(420L));
+		assertEquals(ProcessorType.NUMBER, ProcessorType.matchType(3.14));
 	}
 
 	@Disabled
 	@Test
 	void matchTypeWorld() {
-		World world = server.getWorld("world");
+		World world = mock(World.class);
 		assertNotNull(world);
 		assertEquals(ProcessorType.WORLD, ProcessorType.matchType(world));
 	}
 
 	@Test
 	void matchTypeOfflinePlayer() {
-		OfflinePlayer offlinePlayer = new OfflinePlayerMock(UUID.randomUUID(), "offline guy");
+		OfflinePlayer offlinePlayer = mock(OfflinePlayer.class);
 		assertNotNull(offlinePlayer);
 		assertEquals(ProcessorType.OFFLINE_PLAYER, ProcessorType.matchType(offlinePlayer));
 	}
@@ -108,7 +100,7 @@ class ProcessorTypeTest {
 	@Disabled
 	@Test
 	void matchTypeItemStack() {
-		ItemStack itemStack = new ItemStackMock(Material.STONE);
+		ItemStack itemStack = mock(ItemStack.class);
 		assertNotNull(itemStack, "ItemStack is null.");
 		assertEquals(ProcessorType.ITEM_STACK, ProcessorType.matchType(itemStack));
 	}
@@ -116,7 +108,8 @@ class ProcessorTypeTest {
 	@Disabled
 	@Test
 	void matchTypeLocation() {
-		World world = server.getWorld("world");
+		World world = mock(World.class);
+		when(world.getName()).thenReturn("test_world");
 		assertNotNull(world);
 		Location location = new Location(world,10,20,30);
 		assertNotNull(location);
@@ -132,7 +125,7 @@ class ProcessorTypeTest {
 //	@ParameterizedTest
 //	@EnumSource(MacroProcessorType.class)
 //	void createProcessor(MacroProcessorType macroProcessorType) {
-//		Processor macroProcessor = macroProcessorType.create(plugin, languageHandler);
+//		MacroProcessor macroProcessor = macroProcessorType.create(plugin, languageHandler);
 //	}
 
 }

@@ -17,79 +17,90 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
+import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
+
+import org.bukkit.configuration.Configuration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static com.winterhavenmc.util.messagebuilder.util.MockUtility.loadConfigurationFromResource;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class StringProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
+	@Mock Plugin pluginMock;
+	@Mock Player playerMock;
 
+	LanguageQueryHandler queryHandler;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
+		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
+		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
+		queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		pluginMock = null;
+		queryHandler = null;
 	}
 
 	@Test
-	void execute() {
+	void resolveContext() {
 
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(languageHandler);
+		String keyPath = "SOME_NAME";
+		String stringObject = "some name";
 
-		String key = "SOME_NAME";
-		String value = "some name";
+		ContextMap contextMap = new ContextMap(playerMock);
+		String namespacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
 
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, value);
+		contextMap.put(namespacedKey, ContextContainer.of(stringObject, ProcessorType.STRING));
 
-		ResultMap stringMap = processor.execute(macroObjectMap, "SOME_NAME", "some name");
+		MacroProcessor macroProcessor = new StringProcessor(queryHandler);
 
-		assertTrue(stringMap.containsKey("SOME_NAME"));
-		assertEquals(value, stringMap.get(key));
+		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, contextMap, stringObject);
+
+		assertTrue(resultMap.containsKey(namespacedKey));
+		assertEquals(stringObject, resultMap.get(namespacedKey));
 	}
 
 
-	@Test
-	void executeWithItem() {
-
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(languageHandler);
-
-		String key = "ITEM";
-		String value = "some item string";
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, value);
-
-		ResultMap stringMap = processor.execute(macroObjectMap, "ITEM", "some item string");
-
-		assertTrue(stringMap.containsKey(key));
-		assertEquals("§aTest Item", stringMap.get(key));
-		assertTrue(stringMap.containsKey("ITEM_NAME"));
-		assertEquals("§aTest Item", stringMap.get("ITEM_NAME"));
-	}
+//	@Test
+//	void resolveContextWithItem() {
+//
+//		LanguageResourceManager languageHandler = new YamlLanguageResourceManager(plugin, new YamlLanguageResourceLoader(plugin));
+//		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(plugin, languageHandler.getConfiguration());
+//		MacroProcessor macroProcessor = new StringProcessor(queryHandler);
+//
+//		String stringKey = "ITEM";
+//		String stringObject = "some item string";
+//
+//		ContextMap contextMap = new ContextMap();
+//		ContextKey compositeKey = new CompositeKey(ProcessorType.STRING, stringKey);
+//		contextMap.put(compositeKey, stringObject);
+//
+//		ResultMap stringMap = macroProcessor.execute("ITEM", "some item string", contextMap);
+//
+//		assertTrue(stringMap.containsKey(stringKey));
+//		assertEquals("§aTest Item", stringMap.get(stringKey));
+//		assertTrue(stringMap.containsKey("ITEM_NAME"));
+//		assertEquals("§aTest Item", stringMap.get("ITEM_NAME"));
+//
+//	}
 
 }

@@ -17,63 +17,49 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class ProcessorRegistryTest {
 
-	ServerMock server;
-	PluginMain plugin;
+	@Mock
+	YamlLanguageQueryHandler queryHandler;
+	ProcessorRegistry processorRegistry;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
+		processorRegistry = new ProcessorRegistry();
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		processorRegistry = null;
 	}
 
 
 	@Test
-	void notNull() {
-		ProcessorRegistry macroProcessorRegistry = new ProcessorRegistry();
-		assertNotNull(macroProcessorRegistry);
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		assertNotNull(languageHandler);
+	void testPut() {
+		// Arrange & Act
+		processorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(queryHandler));
+
+		// Assert
+		assertNotNull(processorRegistry.get(ProcessorType.STRING));
 	}
 
 	@Test
-	void put() {
-		ProcessorRegistry macroProcessorRegistry = new ProcessorRegistry();
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		macroProcessorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(languageHandler));
-		assertNotNull(macroProcessorRegistry.get(ProcessorType.STRING));
-	}
+	void tstGet() {
+		// Arrange & Act
+		processorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(queryHandler));
 
-	@Test
-	void get() {
-		ProcessorRegistry macroProcessorRegistry = new ProcessorRegistry();
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		macroProcessorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(languageHandler));
-		assertNotNull(macroProcessorRegistry.get(ProcessorType.STRING));
+		// Assert
+		assertNotNull(processorRegistry.get(ProcessorType.STRING));
 	}
 
 }

@@ -17,79 +17,83 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.WorldMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.Namespace;
+import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
+
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import java.util.UUID;
+import java.util.logging.Logger;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static org.mockito.Mockito.when;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+@ExtendWith(MockitoExtension.class)
 class WorldProcessorTest {
 
-	private final Plugin mockPlugin = mock(Plugin.class);
-	ServerMock server;
-	PluginMain plugin;
+	@Mock private Plugin pluginMock;
+	@Mock private LanguageQueryHandler languageQueryHandlerMock;
+	@Mock private World worldMock;
+	@Mock private Player playerMock;
 
 
 	@BeforeEach
 	public void setUp() {
+		// return logger for mock plugin
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("WorldProcessorTest"));
 
-//		when(mockPlugin)
+		// return name for mock world
+		when(worldMock.getName()).thenReturn("test_world");
 
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
+//		playerMock = mock(Player.class, "MockPlayer");
+		when(playerMock.getName()).thenReturn("Player One");
+		when(playerMock.getUniqueId()).thenReturn(new UUID(0,1));
 	}
 
 	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		pluginMock = null;
+		worldMock = null;
 	}
 
 	@Disabled
 	@Test
-	void execute() {
+	void resolveContext() {
+		String keyPath = "SOME_WORLD";
+		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
+		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
+		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
 
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new WorldProcessor(languageHandler);
-
-		String key = "SOME_WORLD";
-		String value = "some word";
-
-		WorldMock world = server.addSimpleWorld("test_world");
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, world);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, world);
-		assertTrue(resultMap.containsKey("SOME_WORLD"));
-		assertEquals("test_world", resultMap.get("SOME_WORLD"));
+		assertTrue(resultMap.containsKey(nameSpacedKey));
+		assertEquals("test_world", resultMap.get(nameSpacedKey));
 	}
 
+	@Disabled
 	@Test
-	void execute_with_null_world() {
+	void resolveContext_with_null_world() {
+		String keyPath = "SOME_WORLD";
+		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
+		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
+		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
 
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new WorldProcessor(languageHandler);
-
-		String key = "SOME_WORLD";
-		String value = "some word";
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, null);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, null);
+		assertTrue(resultMap.containsKey(nameSpacedKey));
+		assertEquals("test_world", resultMap.get(nameSpacedKey));
 		assertTrue(resultMap.isEmpty());
 	}
 

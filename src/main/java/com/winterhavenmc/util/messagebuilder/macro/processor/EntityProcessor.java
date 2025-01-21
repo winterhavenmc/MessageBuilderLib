@@ -17,25 +17,28 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import org.bukkit.entity.Entity;
 
 
-public class EntityProcessor extends AbstractProcessor implements Processor {
+class EntityProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	public EntityProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public EntityProcessor(final LanguageQueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
-
-	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object instanceof Entity entity) {
-			resultMap.putAll(mapName(key, entity.getName()));
+		if (value instanceof Entity entity) {
+
+			// put entity macro replacements in result map
+			resultMap.put(key, entity.getName());
+
+//			resultMap.putAll(compositeKey, entity.getName());
+			// this seems to be the proper place to add more entity values to the result map, if so inclined
 		}
 
 		return resultMap;

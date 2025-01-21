@@ -1,40 +1,172 @@
 # Language configuration file for ${project.name} v${project.version}
 
-###########
-# Item Info
-###########
-ITEM_INFO:
-  # Item Display Name
-  ITEM_NAME: '&aTest Item'
-  ITEM_NAME_PLURAL: '&aTest Items'
-  INVENTORY_ITEM_NAME: '&aInventory Item'
+##########
+# Settings
+##########
+SETTINGS:
+  DELIMITERS:
+    LEFT: '{'
+    RIGHT: '}'
 
-  # Item Lore
-  ITEM_LORE:
-    - '&elore line 1'
-    - '&elore line 2'
 
-  # Spawn Display Name
-  SPAWN_DISPLAY_NAME: '&aSpawn'
-  HOME_DISPLAY_NAME: '&aHome'
+#################################
+# Constant Strings
+# { in the future, placeholders }
+#################################
+CONSTANTS:
+  TIME:
+    UNLIMITED: "unlimited"
+    LESS_THAN: "less than {VALUE}"
+    LESS_THAN_ONE: "less than one"
+  SPAWN:
+    DISPLAY_NAME: '&aSpawn'
+  HOME:
+    DISPLAY_NAME: '&aHome'
+  TEST_LIST:
+    - item 1
+    - item 2
+    - item 3
+  TEST_INT: 42
+
+
+################
+# Macro Defaults
+################
+DEFAULTS:
+  WORLD.NAME: "unknown world"
+  PLAYER.NAME: "a player"
 
 
 ##############
-# Time strings
+# Time Strings
 ##############
-TIME_STRINGS:
-  DAY: 'day'
-  DAY_PLURAL: 'days'
-  HOUR: 'hour'
-  HOUR_PLURAL: 'hours'
-  MINUTE: 'minute'
-  MINUTE_PLURAL: 'minutes'
-  SECOND: 'second'
-  SECOND_PLURAL: 'seconds'
-  UNLIMITED: 'unlimited time'
-  LESS_THAN_ONE: 'less than one'
+TIME:
+  UNITS:
+    MILLISECONDS:
+      SINGULAR: "millisecond"
+      PLURAL: "milliseconds"
+    TICKS:
+      SINGULAR: "tick"
+      PLURAL: "ticks"
+    SECONDS:
+      SINGULAR: "second"
+      PLURAL: "seconds"
+    MINUTES:
+      SINGULAR: "minute"
+      PLURAL: "minutes"
+    HOURS:
+      SINGULAR: "hour"
+      PLURAL: "hours"
+    DAYS:
+      SINGULAR: "day"
+      PLURAL: "days"
+    WEEKS:
+      SINGULAR: "week"
+      PLURAL: "weeks"
+    MONTHS:
+      SINGULAR: "month"
+      PLURAL: "months"
+    YEARS:
+      SINGULAR: "year"
+      PLURAL: "years"
+  OTHER:
+    UNLIMITED: "unlimited time"
+    LESS_THAN: "less than"
+    LESS_THAN_ONE: "less than one"
+  # All additional subsections under the TIME section are reserved for future use at this time
 
 
+##############
+# Item Strings
+##############
+ITEMS:
+  DEFAULT:
+    NAME:
+      SINGULAR: 'Default Item'
+      PLURAL: 'Default Items'
+    INVENTORY_NAME:
+      SINGULAR: 'Default Inventory Item'
+      PLURAL:  'Default Inventory ItemS'
+    ITEM_LORE:
+      - '&edefault lore line 1'
+      - '&edefault lore line 2'
+
+  TEST_ITEM_1:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory Item'
+    ITEM_LORE:
+      - '&etest1 lore line 1'
+      - '&etest1 lore line 2'
+    QUANTITY: 1
+
+  TEST_ITEM_2:
+    NAME:
+      SINGULAR: '&aTest Item 2'
+      PLURAL: '&aTest Items 2'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item 2'
+      PLURAL: '&aInventory Items 2'
+    LORE:
+      - '&etest2 lore line 1'
+      - '&etest2 lore line 2'
+
+  UNDEFINED_ITEM_NAME:
+    NAME:
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory Items'
+    LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_NAME_PLURAL:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory ItemS'
+    LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_INVENTORY_ITEM_NAME:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      PLURAL: '&aInventory ItemS'
+    ITEM_LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_INVENTORY_ITEM_NAME_PLURAL:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+    ITEM_LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_ITEM_LORE:
+    NAME:
+      SINGULAR: '&aTest Item'
+      PLURAL: '&aTest Items'
+    INVENTORY_NAME:
+      SINGULAR: '&aInventory Item'
+      PLURAL: '&aInventory Item'
+
+
+###################
+# Arbitrary Strings
+###################
 ARBITRARY_STRING: 'an arbitrary string'
 
 ARBITRARY_STRING_LIST:
@@ -43,49 +175,148 @@ ARBITRARY_STRING_LIST:
   - "item 3"
 
 
+##########
+# Messages
+##########
 MESSAGES:
+  ENABLED_RICH_TEXT_MESSAGE:
+    ENABLED: true
+    TRANSLATABLE: false
+    TRANSLATION_KEY: A_STRING_OF_A_TRANSLATABLE_MESSAGE_KEY
+    TRANSLATION_ARGS: [ PLACEHOLDER1, PLACEHOLDER2 ]
+    MESSAGE_TEXT:
+      "This is an enabled rich text message."
+
   ENABLED_MESSAGE:
-    enabled: true
-    message: "This is an enabled message"
+    ENABLED: true
+    MESSAGE_TEXT: "This is an enabled message"
 
   DISABLED_MESSAGE:
-    enabled: false
-    message: "This is a disabled message"
-
-  LEGACY_MESSAGE:
-    string: "This is a legacy message"
-
-  MACRO_MESSAGE:
-    enabled: true
-    message: This is a message with a macro replacement %ITEM_NAME%.
-
-  ENABLED_TITLE:
-    enabled: false
-    title: "This is an enabled title"
-
-  ENABLED_SUBTITLE:
-    enabled: false
-    subtitle: "This is an enabled subtitle"
+    ENABLED: false
+    MESSAGE_TEXT: "This is a disabled message"
 
   REPEAT_DELAYED_MESSAGE:
-    enabled: true
-    message: "this is a repeat delayed message"
-    repeat-delay: 10
+    ENABLED: true
+    MESSAGE_TEXT: "this is a repeat delayed message"
+    REPEAT_DELAY: 10
+
+  CONSTANT_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a constant replacement {CONSTANT:SPAWN.DISPLAY_NAME}."
+
+  ITEM_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a constant replacement {ITEM:TEST_ITEM_1}."
+
+  TIME_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a constant replacement {TIME:DURATION}."
+
+  MACRO_MESSAGE_ITEM:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM}."
+
+  MACRO_MESSAGE_ITEM_NAME:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM.NAME}."
+
+  MACRO_MESSAGE_ITEM_NAME_QUANTITY:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM.QUANTITY}."
+
+  MACRO_MESSAGE_ITEM_ALT:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:DEFAULT}."
+
+  MACRO_MESSAGE_ITEM_NAME_ALT:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME}."
+
+  MACRO_MESSAGE_ITEM_NAME_SINGULAR:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.SINGULAR}."
+
+  MACRO_MESSAGE_ITEM_NAME_PLURAL:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.PLURAL}."
+
+  MACRO_MESSAGE_ITEM_NAME_QUANTITY_ALT:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:ITEM.QUANTITY}."
+
+  ENABLED_TITLE:
+    ENABLED: true
+    TITLE_TEXT: "This is an enabled title"
+
+  DISABLED_TITLE:
+    ENABLED: false
+    TITLE_TEXT: "This is a disabled title"
+
+  ENABLED_SUBTITLE:
+    ENABLED: true
+    subTITLE_TEXT: "This is an enabled subtitle"
+
+  DISABLED_SUBTITLE:
+    ENABLED: false
+    subTITLE_TEXT: "This is a disabled subtitle"
 
   CUSTOM_FADE_TITLE:
-    enabled: false
-    title: "This is a title with custom fade values"
-    title-fade-in: 20
-    title-stay: 140
-    title-fade-out: 40
+    ENABLED: true
+    TITLE_TEXT: "This is a title with custom fade values"
+    TITLE_FADE_IN: 20
+    TITLE_STAY: 140
+    TITLE_FADE_OUT: 40
 
   NON_INT_TITLE_FADE_VALUES:
-    enabled: true
-    title: "This is a title with non-integer fade values"
-    title-fade-in: "STRING"
-    title-stay: "STRING"
-    title-fade-out: "STRING"
+    ENABLED: true
+    TITLE_TEXT: "This is a title with non-integer fade values"
+    TITLE_FADE_IN: "STRING"
+    TITLE_STAY: "STRING"
+    TITLE_FADE_OUT: "STRING"
 
   DURATION_MESSAGE:
-    enabled: true
-    message: "Duration is %DURATION%"
+    ENABLED: true
+    MESSAGE_TEXT: "Duration is %DURATION%"
+
+
+  # all number fields are unique from each other and defaults(20, 70, 10)
+  ALL_FIELDS_PRESENT:
+    MESSAGE_TEXT: "This entry has all fields present - message"
+    REPEAT_DELAY: 14
+    TITLE_TEXT: "This entry has all fields present - title"
+    title_fade_in: 24
+    title_stay: 34
+    title_fade_out: 44
+    subTITLE_TEXT: "This entry has all fields present - subtitle"
+
+
+  UNDEFINED_FIELD_ENABLED:
+    MESSAGE_TEXT: "This entry has no enabled field"
+
+  UNDEFINED_FIELD_MESSAGE:
+    ENABLED: true
+    TITLE_TEXT: "This entry has no message field"
+
+  UNDEFINED_FIELD_REPEAT_DELAY:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no repeat-delay field"
+
+  UNDEFINED_FIELD_TITLE:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title field"
+
+  UNDEFINED_FIELD_TITLE_FADE_IN:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title-fade-in field"
+
+  UNDEFINED_FIELD_TITLE_STAY:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title-stay field"
+
+  UNDEFINED_FIELD_TITLE_FADE_OUT:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title-fade-out field"
+
+  UNDEFINED_FIELD_SUBTITLE:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no subtitle field"

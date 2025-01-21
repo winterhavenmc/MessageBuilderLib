@@ -17,59 +17,55 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+
+import org.bukkit.entity.Player;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class ObjectProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
-	Processor processor;
+	@Mock private LanguageQueryHandler queryHandlerMock;
+	@Mock private Player playerMock;
+	private MacroProcessor macroProcessor;
 
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
 
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new ObjectProcessor(languageHandler);
+		macroProcessor = new ObjectProcessor(queryHandlerMock);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		queryHandlerMock = null;
+		macroProcessor = null;
 	}
 
 
 	@Test
-	void execute_integer() {
-		String key = "SOME_INTEGER";
+	void resolveContext_integer() {
+		String keyPath = "SOME_INTEGER";
 		Integer number = 42;
 
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, number);
+		ContextMap contextMap = new ContextMap(playerMock);
+		String nameSpacedKey = NamespaceKey.create(Macro.DURATION);
+		contextMap.put(nameSpacedKey, ContextContainer.of(number, ProcessorType.NUMBER));
 
-		ResultMap resultMap = processor.execute(macroObjectMap, key, number);
-		assertTrue(resultMap.containsKey("SOME_INTEGER"));
-		assertEquals("42", resultMap.get("SOME_INTEGER"));
+		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, number);
+		assertTrue(resultMap.containsKey(nameSpacedKey));
+		assertEquals("42", resultMap.get(nameSpacedKey));
 	}
 
 }

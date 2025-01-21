@@ -17,50 +17,26 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.TimeUnit;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 
-public class NumberProcessor extends AbstractProcessor implements Processor {
+public class NumberProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	public NumberProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public NumberProcessor(LanguageQueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object == null) {
+		if (value == null) {
 			return resultMap;
 		}
 
-		if (object instanceof Long longVar) {
-
-			if (key.endsWith("DURATION") || key.endsWith("DURATION_SECONDS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.SECONDS));
-			}
-			else if (key.endsWith("DURATION_TICKS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.TICKS));
-			}
-			else if (key.endsWith("DURATION_MINUTES")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.MINUTES));
-			}
-			else if (key.endsWith("DURATION_HOURS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.HOURS));
-			}
-			else if (key.endsWith("DURATION_DAYS")) {
-				resultMap.put(key, languageHandler.getTimeString(longVar, TimeUnit.DAYS));
-			}
-			else {
-				resultMap.put(key, String.valueOf(longVar));
-			}
-		}
-		else {
-			resultMap.put(key, String.valueOf(object));
-		}
+		resultMap.put(key, String.valueOf(value));
 
 		return resultMap;
 	}

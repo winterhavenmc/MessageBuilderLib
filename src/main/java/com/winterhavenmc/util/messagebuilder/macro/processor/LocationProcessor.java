@@ -17,109 +17,131 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.bukkit.Bukkit;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 import org.bukkit.Location;
-import org.bukkit.Server;
-
-import java.util.Optional;
 
 
-public class LocationProcessor extends AbstractProcessor implements Processor {
+/**
+ * A processor for resolving placeholders related to Bukkit {@link Location} objects.
+ * <p>
+ * This processor extracts information from {@link Location} objects, such as the world name
+ * and the X, Y, and Z coordinates, and populates a {@link ContextMap} with these values. It also
+ * provides a preformatted string combining the world and coordinates for convenience.
+ * </p>
+ * <p>
+ * The following placeholders are resolved:
+ * <ul>
+ *     <li><b>%<i>key</i>_LOCATION_WORLD%</b>: The name of the world (e.g., "world", "nether").</li>
+ *     <li><b>%<i>key</i>_LOCATION_X%</b>: The integer X-coordinate of the location (e.g., "123").</li>
+ *     <li><b>%<i>key</i>_LOCATION_Y%</b>: The integer Y-coordinate of the location (e.g., "64").</li>
+ *     <li><b>%<i>key</i>_LOCATION_Z%</b>: The integer Z-coordinate of the location (e.g., "-789").</li>
+ *     <li><b>%<i>key</i>_LOCATION%</b>: A preformatted string combining the world and coordinates
+ *         (e.g., "world [123, 64, -789]").</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * This processor ensures that placeholders are unique by suffixing "_LOCATION" to the key if it is not
+ * already present. Null values or missing components, such as the world name, are replaced with the
+ * default placeholder {@code UNKNOWN_VALUE}.
+ * </p>
+ *
+ * <p><b>Example Usage:</b></p>
+ * <pre>
+ * {@code
+ * LocationProcessor processor = new LocationProcessor(queryHandler);
+ * Location location = new Location(world, 123.45, 64.0, -789.12);
+ * ResultMap resultMap = processor.resolveContext("HOME", contextMap, location);
+ *
+ * // Resolved Placeholders:
+ * // %HOME_LOCATION_WORLD% -> "world"
+ * // %HOME_LOCATION_X% -> "123"
+ * // %HOME_LOCATION_Y% -> "64"
+ * // %HOME_LOCATION_Z% -> "-789"
+ * // %HOME_LOCATION% -> "world [123, 64, -789]"
+ * }
+ * </pre>
+ *
+ * @see Location
+ * @see ContextMap
+ * @see WorldNameUtility
+ */
+public class LocationProcessor extends MacroProcessorTemplate {
 
-	public LocationProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public LocationProcessor(LanguageQueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
+
+	/**
+	 * Resolves placeholders from a {@link Location} object and populates the context map.
+	 * <p>
+	 * This method extracts location data, formats it as placeholders, and adds the resolved
+	 * entries to the {@link ResultMap}. If the input value is not a {@link Location}, an empty
+	 * {@link ResultMap} is returned.
+	 * </p>
+	 *
+	 * <p>
+	 * If the provided key does not end with "_LOCATION", the method automatically appends
+	 * "_LOCATION" to ensure a consistent naming convention for location placeholders.
+	 * Furthermore, other object types that include a location, such as ENTITY or PLAYER,
+	 * may call this processor to add context entries to the map for their locations, if available.
+	 * </p>
+	 *
+	 * @param key         the unique key or namespace for this macro entry
+	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
+	 * @param value       the input value to resolve into context (must be {@link Location})
+	 * @param <T>         the type of the input value
+	 * @return a {@link ResultMap} containing the resolved placeholders and their replacements
+	 * @throws IllegalArgumentException if any parameter is null or invalid
+	 */
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+		if (key == null) { throw new IllegalArgumentException(Error.Parameter.NULL_NAMESPACED_KEY.getMessage()); }
+		if (key.isBlank()) { throw new IllegalArgumentException((Error.Parameter.EMPTY_NAMESPACED_KEY.getMessage())); }
+		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
+		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
 
 		// create empty result map
 		ResultMap resultMap = new ResultMap();
 
 		// if passed object is not a Location, return empty result map
-		if (!(object instanceof Location location)) {
-			return resultMap;
-		}
+		if (value instanceof Location location) {
 
-		// get location strings
-		String locationWorld = getWorldName(location).orElse(UNKNOWN_VALUE);
-		String locationX = String.valueOf(location.getBlockX());
-		String locationY = String.valueOf(location.getBlockY());
-		String locationZ = String.valueOf(location.getBlockZ());
-		String locationString = locationWorld + " [" + locationX + ", " + locationY + ", " + locationZ + "]";
+			// copy of original key before appending component field suffixes
+			String resultKey = key;
 
-		// if key does not end in _LOCATION or _LOC, add it for location string keys
-		String[] keySuffixes = {"_LOCATION", "_LOC"};
+			// Get components
+			String locationWorld;
+			if (location.getWorld() == null) {
+				locationWorld = UNKNOWN_VALUE;
+			}
+			else {
+				locationWorld = location.getWorld().getName();
+			}
+			String locationX = String.valueOf(location.getBlockX());
+			String locationY = String.valueOf(location.getBlockY());
+			String locationZ = String.valueOf(location.getBlockZ());
+			String locationString = locationWorld + " [" + locationX + ", " + locationY + ", " + locationZ + "]";
 
-		// put location strings in map
-		for (String keySuffix : keySuffixes) {
-			if (key.endsWith(keySuffix)) {
-				keySuffix = "";
+			// if macroName does not end in _LOCATION, suffix it to the end of the key
+			if (!resultKey.endsWith("_LOCATION")) {
+				resultKey = resultKey.concat("_LOCATION");
 			}
 
-			resultMap.put(key + keySuffix, locationString);
-			resultMap.put(key + keySuffix + "_WORLD", locationWorld);
-			resultMap.put(key + keySuffix + "_X", locationX);
-			resultMap.put(key + keySuffix + "_Y", locationY);
-			resultMap.put(key + keySuffix + "_Z", locationZ);
+			// Store placeholders
+			resultMap.put(resultKey, locationString);
+			resultMap.put(resultKey.concat("_WORLD"), locationWorld);
+			resultMap.put(resultKey.concat("_X"), locationX);
+			resultMap.put(resultKey.concat("_Y"), locationY);
+			resultMap.put(resultKey.concat("_Z"), locationZ);
 		}
 
-		// put original key with location string in resultMap
-		resultMap.put(key, locationString);
-
+		// return result map
 		return resultMap;
-	}
-
-
-	/**
-	 * Get world name for location, using Multiverse alias if available
-	 *
-	 * @param location the location used to retrieve world name
-	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
-	 */
-	private Optional<String> getWorldName(final Location location) {
-
-		// check for null parameter
-		if (location == null) {
-			return Optional.empty();
-		}
-
-		// get server instance from static reference to access the plugin manager and worlds
-		// note this is the only processor that needed external access, so we are resorting to static references
-		// in order to avoid otherwise unnecessary dependency injection
-		Server server = Bukkit.getServer();
-
-		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) server.getPluginManager().getPlugin("Multiverse-Core");
-
-		// declare resultString with world name for location
-		String resultString;
-		if (location.getWorld() != null) {
-			resultString = location.getWorld().getName();
-		}
-		else {
-			// get name of first world
-			resultString = server.getWorlds().getFirst().getName();
-		}
-
-		// if Multiverse is enabled, use Multiverse world alias if available
-		if (mvCore != null && mvCore.isEnabled()) {
-
-			// get Multiverse world object
-			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(location.getWorld());
-
-			// if Multiverse alias is not null or empty, set world name to alias if set
-			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
-				resultString = mvWorld.getAlias();
-			}
-		}
-
-		// return resultString
-		return Optional.of(resultString);
 	}
 
 }

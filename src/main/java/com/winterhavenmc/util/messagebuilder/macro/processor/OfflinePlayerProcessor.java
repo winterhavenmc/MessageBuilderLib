@@ -17,23 +17,28 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.OfflinePlayer;
 
 
-public class OfflinePlayerProcessor extends AbstractProcessor implements Processor {
+public class OfflinePlayerProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	public OfflinePlayerProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public OfflinePlayerProcessor(final LanguageQueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+		if (key == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
+		if (key.isBlank()) { throw new IllegalArgumentException(Error.Parameter.EMPTY_KEY_PATH.getMessage()); }
+		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
+		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object instanceof OfflinePlayer offlinePlayer) {
+		if (value instanceof OfflinePlayer offlinePlayer) {
 			resultMap.put(key, offlinePlayer.getName());
 		}
 

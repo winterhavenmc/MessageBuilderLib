@@ -1,4 +1,19 @@
 # test configuration file for MessageBuilder
 
-# Localization language
-language: en-US
+# Locale. If the specified locale can not be found, the en-US locale will be used
+locale: en-US
+
+# language file name. uncomment this if you would like to specify a different language file than your locale.
+#language: en-US
+
+# NOTE: an option may be added to allow for a different language file to be set distinct from
+# the specified locale, to allow server operators more flexibility. For instance, they may want to
+# specify a locale for number and date formatting (a planned feature), but use a derivative file
+# or an alternative naming convention for their messages files. This would allow specifying a file,
+# not necessarily adhering to the IETF language tags, while still specifying a valid language tag for locale.
+# The settings should be 'locale' for the IETF compliant locale (or including a suffix), and 'language' to specify the language file
+# to be read into the messages configuration object. If only the 'locale' setting is present, then the valid
+# IETF language tag shall be used for the filename. If only the 'language' tag is present, then an attempt
+# to match to a valid IETF tag should be made, and the locale set to this value, otherwise falling back on
+# a default locale of en-US. This will ensure backward compatibility with previous setting keys in the
+# plugin config.yml file for language.

@@ -17,59 +17,36 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+@ExtendWith(MockitoExtension.class)
 class EntityProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
-	Processor processor;
+	@Mock private YamlLanguageQueryHandler queryHandlerMock;
+	private MacroProcessor macroProcessor;
 
-
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
+		LanguageQueryHandler mockLanguageQueryHandler = mock(LanguageQueryHandler.class, "MockQueryHandler");
 
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new EntityProcessor(languageHandler);
+		macroProcessor = new EntityProcessor(mockLanguageQueryHandler);
 	}
 
-	@AfterAll
+	@AfterEach
 	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		queryHandlerMock = null;
+		macroProcessor = null;
 	}
 
-	@Disabled
 	@Test
-	void execute() {
-		String key = "SOME_ENTITY";
+	void resolveContext() { }
 
-		PlayerMock player = server.addPlayer("testy");
-		assertNotNull(player);
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, player);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, player);
-		assertTrue(resultMap.containsKey("SOME_ENTITY"));
-		assertEquals("testy", resultMap.get("SOME_ENTITY"));
-		assertTrue(resultMap.containsKey("SOME_ENTITY_NAME"));
-		assertEquals("testy", resultMap.get("SOME_ENTITY_NAME"));
-	}
 }

@@ -27,7 +27,7 @@ import java.util.EnumMap;
 public class ProcessorRegistry {
 
 	// the backing store EnumMap
-	private final EnumMap<ProcessorType, Processor> macroProcessorMap = new EnumMap<>(ProcessorType.class);
+	private final EnumMap<ProcessorType, MacroProcessor> macroProcessorMap = new EnumMap<>(ProcessorType.class);
 
 
 	/**
@@ -35,7 +35,7 @@ public class ProcessorRegistry {
 	 * @param type the macro processor type, an Enum member, used as the key
 	 * @param macroProcessor the macro processor instance, used as the value
 	 */
-	public void put(final ProcessorType type, final Processor macroProcessor) {
+	public void put(final ProcessorType type, final MacroProcessor macroProcessor) {
 		this.macroProcessorMap.put(type, macroProcessor);
 	}
 
@@ -44,7 +44,7 @@ public class ProcessorRegistry {
 	 * @param macroProcessorType the macro processor type key
 	 * @return The macro processor instance stored in the map that is referenced by the key
 	 */
-	public Processor get(final ProcessorType macroProcessorType) {
+	public MacroProcessor get(final ProcessorType macroProcessorType) {
 		return macroProcessorMap.get(macroProcessorType);
 	}
 

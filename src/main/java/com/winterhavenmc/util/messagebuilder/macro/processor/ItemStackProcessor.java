@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2024 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,47 +17,39 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+public class ItemStackProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-public class ItemStackProcessor extends AbstractProcessor implements Processor {
-
-	public ItemStackProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public ItemStackProcessor(final LanguageQueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object instanceof ItemStack itemStack) {
+		String displayName = UNKNOWN_VALUE;
 
-			if (key.equals("ITEM") || key.equals("ITEM_NAME")) {
-				// get item name from message file
-				resultMap.putAll(mapConfigItemName(macroObjectMap, "ITEM", "ITEM_NAME"));
+		if (value instanceof ItemStack itemStack) {
+
+			// get item stack displayName
+			ItemMeta itemMeta = itemStack.getItemMeta();
+			if (itemMeta != null) {
+				displayName = itemMeta.getDisplayName();
 			}
-
-			// else get item stack name from metadata or material
 			else {
-				String resultString = "";
-				if (itemStack.hasItemMeta()) {
-					ItemMeta itemMeta = itemStack.getItemMeta();
-					//noinspection ConstantConditions
-					if (itemMeta.hasDisplayName()) {
-						resultString = itemMeta.getDisplayName();
-					}
-				}
-				else {
-					resultString = itemStack.getType().toString();
-				}
-				resultMap.put(key, resultString);
+				// get display name from item material
+				displayName = itemStack.getType().toString();
 			}
 		}
 
+		// put displayName in result map
+		resultMap.put(key, displayName);
 		return resultMap;
 	}
 

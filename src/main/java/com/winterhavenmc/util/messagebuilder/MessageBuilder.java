@@ -17,15 +17,17 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.TimeUnit;
+import com.winterhavenmc.util.messagebuilder.resources.language.*;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.*;
+import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
+import com.winterhavenmc.util.messagebuilder.util.Error;
 
-import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
-import org.bukkit.World;
+import com.winterhavenmc.util.time.TickUnit;
+import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.temporal.TemporalUnit;
 
 
 /**
@@ -44,7 +46,7 @@ import java.util.Optional;
  * <p>
  * <i>example:</i>
  * <pre>
- * {@code messageBuilder.compose(recipient, MessageId.MESSAGE_TO_SEND)
+ * {@code messageBuilder.compose(recipient, MessageId.ENABLED_MESSAGE)
  *     .setMacro(Macro.PLACEHOLDER1, object)
  *     .setMacro(Macro.PLACEHOLDER2, replacementString)
  *     .send();
@@ -58,14 +60,17 @@ import java.util.Optional;
  * DURATION or DURATION_MINUTES
  *
  * @param <MessageId> An enum whose members correspond to a message key in a language file
- * @param <Macro> An enum whose members correspond to a string replacement placeholder in a message string
+ * @param <Macro>     An enum whose members correspond to a string replacement placeholder in a message string
  */
-@SuppressWarnings("unused")
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
-	private final LanguageHandler languageHandler;
 	private final Plugin plugin;
-	private final MacroProcessorHandler macroProcessorHandler;
+	private final LanguageResourceManager languageResourceManager;
+	private final YamlLanguageQueryHandler languageQueryHandler;
+	private final MacroHandler macroQueryHandler;
+
+	public static final TemporalUnit TICKS = new TickUnit();
+
 
 	/**
 	 * Class constructor
@@ -73,192 +78,82 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param plugin reference to plugin main class
 	 */
 	public MessageBuilder(final Plugin plugin) {
+		if (plugin == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
+
 		this.plugin = plugin;
-		this.languageHandler = new YamlLanguageHandler(plugin);
-		this.macroProcessorHandler = new MacroProcessorHandler(languageHandler);
+		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
+		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
+		this.languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
+		this.languageResourceManager.setup(); // necessary to move i/o operations out of constructor
+
+		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
+		this.macroQueryHandler = new MacroHandler(languageQueryHandler);
 	}
 
 
 	/**
-	 * Set both delimiters to the same specific character
-	 * @param character the character to use for both delimiters
+	 * Class constructor <br> ** FOR TESTING PURPOSES ONLY ** <br>
+	 * This constructor is intended only for injecting mocks, for isolated testing of this class, and no other purpose.
+	 * It visibility is restricted to package-private, so it cannot be used to instantiate an instance of the class
+	 * from outside its package.
+	 *
+	 * @param pluginMock reference to plugin main class
 	 */
-	public void setDelimiters(final Character character) {
-		MacroProcessorHandler.MacroDelimiter.LEFT.set(character);
-		MacroProcessorHandler.MacroDelimiter.RIGHT.set(character);
+	MessageBuilder(final Plugin pluginMock,
+	               final YamlLanguageResourceManager languageResourceManagerMock,
+	               final YamlLanguageQueryHandler languageQueryHandlerMock,
+	               final MacroHandler macroQueryHandlerMock) {
+		if (pluginMock == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
+
+		this.plugin = pluginMock;
+		this.languageResourceManager = languageResourceManagerMock;
+		this.languageQueryHandler = languageQueryHandlerMock;
+		this.macroQueryHandler = macroQueryHandlerMock;
 	}
 
 
 	/**
-	 * Set delimiters to unique characters by passing two parameters
-	 * @param leftCharacter the character to use for the left delimiter
-	 * @param rightCharacter the character to use for the right delimiter
-	 */
-	public void setDelimiters(final Character leftCharacter, final Character rightCharacter) {
-		MacroProcessorHandler.MacroDelimiter.LEFT.set(leftCharacter);
-		MacroProcessorHandler.MacroDelimiter.RIGHT.set(rightCharacter);
-	}
-
-
-	/**
-	 * Initiate a message
+	 * Initiate the message building sequence
+	 *
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
 	 * @return Message - an initialized message object
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
-		return new Message<>(plugin, languageHandler, macroProcessorHandler, recipient, messageId);
+		if (recipient == null) { throw new IllegalArgumentException(Error.Parameter.NULL_RECIPIENT.getMessage()); }
+		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_ID.getMessage()); }
+
+		return new Message<>(plugin, languageQueryHandler, macroQueryHandler, recipient, messageId);
 	}
 
 
 	/**
-	 * Check if a message is enabled in the configuration file
-	 * @param messageId the message identifier
-	 * @return true if message is enabled, false if not
+	 *  Return an instance of the MessageBuilderToolkit for an advanced interface to MessageBuilder internals
+	 * 
+	 * @return a new MessageBuilderToolkit instance
 	 */
-	public boolean isEnabled(final MessageId messageId) {
-		return languageHandler.isEnabled(messageId);
+	public Toolkit getToolkit() {
+		return new MessageBuilderToolkit<>(this);
 	}
 
 
 	/**
-	 * Get the configured repeat delay for a message
-	 * @param messageId the message identifier
-	 * @return long - the message repeat delay (in seconds)
-	 */
-	public long getRepeatDelay(final MessageId messageId) {
-		return languageHandler.getRepeatDelay(messageId);
-	}
-
-
-	/**
-	 * get message text from language file
+	 * Return an instance of the language file ItemRecord handler
 	 *
-	 * @param messageId the message identifier
-	 * @return String message text, or empty string if no message string found
+	 * @return the ItemRecord handler for the language file
 	 */
-	public String getMessage(final MessageId messageId) {
-		return languageHandler.getMessage(messageId);
+	LanguageQueryHandler getLanguageQueryHandler() {
+		return this.languageQueryHandler;
 	}
 
-
-	/**
-	 * Get item name from language specific messages file, with translated color codes
-	 *
-	 * @return the formatted item name from language file, or empty string if key not found
-	 */
-	public Optional<String> getItemName() {
-		return languageHandler.getItemName();
-	}
-
-
-	/**
-	 * Get configured plural item name from language file
-	 *
-	 * @return the formatted item plural name from language file, or empty string if key not found
-	 */
-	public Optional<String> getItemNamePlural() {
-		return languageHandler.getItemNamePlural();
-	}
-
-
-	/**
-	 * Get configured inventory item name from language file
-	 *
-	 * @return the formatted inventory display name of an item, as a String wrapped in an {@link Optional}
-	 */
-	public Optional<String> getInventoryItemName() {
-		return languageHandler.getInventoryItemName();
-	}
-
-
-	/**
-	 * Get item lore from language specific messages file, with translated color codes
-	 *
-	 * @return List of strings, one string for each line of lore, or empty list if key not found
-	 */
-	public List<String> getItemLore() {
-		return languageHandler.getItemLore();
-	}
-
-
-	/**
-	 * Get spawn display name from language file
-	 *
-	 * @return the formatted display name for the world spawn, as a String wrapped in an {@link Optional}
-	 */
-	public Optional<String> getSpawnDisplayName() {
-		return languageHandler.getSpawnDisplayName();
-	}
-
-
-	/**
-	 * Get home display name from language file
-	 *
-	 * @return the formatted display name for home, as a String wrapped in an {@link Optional}
-	 */
-	public Optional<String> getHomeDisplayName() {
-		return languageHandler.getHomeDisplayName();
-	}
-
-
-	/**
-	 * Format the time string with days, hours, minutes and seconds as necessary
-	 *
-	 * @param duration a time duration in milliseconds
-	 * @return formatted time string
-	 */
-	public String getTimeString(final long duration) {
-		return languageHandler.getTimeString(duration);
-	}
-
-
-	/**
-	 * Format the time string with days, hours, minutes and seconds as necessary, to the granularity passed
-	 *
-	 * @param duration a time duration in milliseconds
-	 * @param timeUnit the time granularity to display (days | hours | minutes | seconds)
-	 * @return formatted time string
-	 */
-	public String getTimeString(final long duration, final TimeUnit timeUnit) {
-		return languageHandler.getTimeString(duration, timeUnit);
-	}
-
-
-	/**
-	 * Get string by path in message file
-	 * @param path the message path for the string being retrieved
-	 * @return String - the string retrieved by path from message file, wrapped in an {@link Optional}
-	 */
-	public Optional<String> getString(final String path) {
-		return languageHandler.getString(path);
-	}
-
-
-	/**
-	 * Get List of String by path in message file
-	 * @param path the message path for the string list being retrieved
-	 * @return List of String - the string list retrieved by path from message file
-	 */
-	public List<String> getStringList(final String path) {
-		return languageHandler.getStringList(path);
-	}
-
-
-	/**
-	 * Get optional string of world name or multiverse alias if available
-	 * @param world the world to retrieve name
-	 * @return Optional String containing world name or multiverse alias
-	 */
-	public Optional<String> getWorldName(final World world) {
-		return languageHandler.getWorldName(world);
-	}
 
 	/**
 	 * Reload messages from configured language file
 	 */
 	public void reload() {
-		languageHandler.reload();
+		if (!languageResourceManager.reload()) {
+			plugin.getLogger().warning(Error.LanguageConfiguration.RELOAD_FAILED.getMessage());
+		}
 	}
 
 }

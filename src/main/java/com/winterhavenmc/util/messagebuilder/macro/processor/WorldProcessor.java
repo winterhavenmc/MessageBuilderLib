@@ -17,25 +17,28 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 
 import org.bukkit.World;
 
 
-public class WorldProcessor extends AbstractProcessor implements Processor {
+public class WorldProcessor extends MacroProcessorTemplate implements MacroProcessor {
 
-	public WorldProcessor(final LanguageHandler languageHandler) {
-		super(languageHandler);
+	public WorldProcessor(final LanguageQueryHandler queryHandler) {
+		super(queryHandler);
 	}
 
 	@Override
-	public ResultMap execute(final MacroObjectMap macroObjectMap, final String key, final Object object) {
+	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
-		if (object instanceof World world) {
-			resultMap.put(key, languageHandler.getWorldName(world).orElse(UNKNOWN_VALUE));
+		if (value instanceof World world) {
+			//TODO: reimplement world name lookups after Multiverse alias lookups are reimplemented
+			//String worldName = queryHandler.getWorldName(world).orElse(UNKNOWN_VALUE);
+			String worldName = world.getName();
+			resultMap.put(key, worldName);
 		}
 
 		return resultMap;
