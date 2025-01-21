@@ -81,7 +81,7 @@ public class LanguageTag
 	 */
 	public String getResourceName()
 	{
-		return String.join("/", RESOURCE_SUBDIRECTORY.value(), languageTag).concat(".yml");
+		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), languageTag).concat(".yml");
 	}
 
 
@@ -92,7 +92,7 @@ public class LanguageTag
 	 */
 	public String getFileName()
 	{
-		return String.join(File.separator, RESOURCE_SUBDIRECTORY.value(), languageTag).concat(".yml");
+		return String.join(File.separator, RESOURCE_SUBDIRECTORY.toString(), languageTag).concat(".yml");
 	}
 
 
@@ -103,7 +103,7 @@ public class LanguageTag
 	 */
 	public File getFile()
 	{
-		return new File(RESOURCE_SUBDIRECTORY.value(), languageTag.concat(".yml"));
+		return new File(RESOURCE_SUBDIRECTORY.toString(), languageTag.concat(".yml"));
 	}
 
 }
