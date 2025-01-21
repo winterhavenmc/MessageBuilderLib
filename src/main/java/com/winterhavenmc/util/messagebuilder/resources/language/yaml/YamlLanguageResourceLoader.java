@@ -28,7 +28,9 @@ import java.util.regex.Pattern;
 
 
 /**
- * An implementation of the LanguageResourceLoader interface for loading the message configuration from yaml files
+ * This class is responsible for the loading of the language file from the plugin data directory into
+ * a configuration object. The configuration object is loaded at instantiation of this class, and
+ * when the reload method is called.
  */
 public final class YamlLanguageResourceLoader {
 
