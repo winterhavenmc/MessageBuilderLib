@@ -30,10 +30,10 @@ import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Opti
 
 
 /**
- * Install localization files from language directory in jar archive to language subdirectory
- * of the plugin data directory. Any files listed in auto_install.txt file with a .yml suffix
- * that are stored as a resource within a /language subdirectory in the plugin jar archive will be
- * copied to the /language subdirectory of the plugin data directory.
+ * This class is responsible for installing localization resources from the language directory of the jar archive,
+ * to language subdirectory of the plugin data directory.
+ * Any files listed in auto_install.txt file with a .yml suffix that are stored as a resource within a /language
+ * subdirectory in the plugin jar archive will be copied to the /language subdirectory of the plugin data directory.
  */
 public final class YamlLanguageResourceInstaller {
 
