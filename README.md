@@ -81,6 +81,7 @@ in a 'auto_install.txt' file within the same folder. Server operators can custom
 and reload the plugin to re-install any auto-install specified files from their resources. The auto install process
 runs when the MessageBuilder is instantiated in the plugin onEnable method, and whenever the reload method is called.
 
+
 ### Querying Records
 #### Fetching Message Records
 Retrieve message data from the `MESSAGES` section of the YAML configuration:
@@ -135,6 +136,7 @@ SETTINGS:
 The settings section contains various settings related to the language file.
 Currently, the DELIMITERS section is the only available setting.
 
+
 ### Items
 ```yaml
 ITEMS:
@@ -163,6 +165,7 @@ MESSAGES:
     title-fade-out: 20
     subtitle: "Enjoy your stay at %LOCATION_WORLD%!"
 ```
+
 
 ## Requirements
 - Java 21 or higher
