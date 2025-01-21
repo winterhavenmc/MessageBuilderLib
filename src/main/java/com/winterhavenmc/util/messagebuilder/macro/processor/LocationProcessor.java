@@ -23,6 +23,8 @@ import com.winterhavenmc.util.messagebuilder.util.Error;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 import org.bukkit.Location;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 /**
  * A processor for resolving placeholders related to Bukkit {@link Location} objects.

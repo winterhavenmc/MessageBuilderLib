@@ -30,6 +30,8 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.*;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 public final class MockUtility {
 
@@ -106,8 +108,8 @@ public final class MockUtility {
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
 	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
-		if (resourceName == null) { throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_RESOURCE_NAME.name())); }
-		if (resourceName.isEmpty()) { throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.Parameter.EMPTY_RESOURCE_NAME.name())); }
+		if (resourceName == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_RESOURCE_NAME.name())); }
+		if (resourceName.isEmpty()) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.EMPTY_RESOURCE_NAME.name())); }
 		if (targetDirPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_DIRECTORY_PATH.name())); }
 
 		// Ensure the target directory exists

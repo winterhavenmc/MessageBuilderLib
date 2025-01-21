@@ -26,6 +26,8 @@ import net.time4j.format.TextWidth;
 
 import java.util.Locale;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 public final class TimeString {
 

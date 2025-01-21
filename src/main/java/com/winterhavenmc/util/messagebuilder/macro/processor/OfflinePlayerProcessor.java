@@ -22,6 +22,8 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHan
 import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.OfflinePlayer;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 public class OfflinePlayerProcessor extends MacroProcessorTemplate implements MacroProcessor {
 

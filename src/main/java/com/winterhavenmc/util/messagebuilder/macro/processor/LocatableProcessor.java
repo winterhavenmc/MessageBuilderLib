@@ -27,6 +27,8 @@ import org.bukkit.Location;
 
 import java.util.Optional;
 
+import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+
 
 /**
  * A processor for resolving placeholders from objects that have an associated Bukkit {@link Location}.
