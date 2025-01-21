@@ -35,6 +35,7 @@ public class Error {
 		INVALID_SECTION_TIME("The timeSection returned by the configuration supplier was an invalid '" + Section.TIME + "' section."),
 		NULL_CONFIGURATION("The configuration parameter was null."),
 		NULL_CONFIGURATION_SECTION("The configurationSection parameter was null."),
+		NULL_CONFIGURATION_SUPPLIER("The configurationSupplier parameter was null."),
 		NULL_CONTEXT_MAP("The contextMap parameter was null."),
 		NULL_DIRECTORY_PATH("Target directory path cannot be null."),
 		NULL_DOMAIN("The domain parameter cannot be null."),
