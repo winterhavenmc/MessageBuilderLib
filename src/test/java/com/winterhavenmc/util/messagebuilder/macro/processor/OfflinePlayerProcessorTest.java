@@ -125,7 +125,7 @@ class OfflinePlayerProcessorTest {
 				() -> macroProcessor.resolveContext(namespacedKey, contextMap, null));
 
 		// Assert
-		assertEquals("the value parameter was null.", exception.getMessage());
+		assertEquals("The value parameter was null.", exception.getMessage());
 	}
 
 	@Test
