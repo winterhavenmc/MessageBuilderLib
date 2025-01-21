@@ -38,13 +38,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
+import java.util.logging.Logger;
 
 import static com.winterhavenmc.util.messagebuilder.MessageBuilder.TICKS;
 import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
 class MessageBuilderTest {
 
@@ -95,6 +96,27 @@ class MessageBuilderTest {
 	}
 
 	@Test
+	void compose_parameter_null_player() {
+		// Arrange & Act
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
+
+		// Assert
+		assertEquals("The recipient parameter was null.", exception.getMessage());
+	}
+
+	@Test
+	void compose_parameter_null_message_id() {
+		// Arrange & Act
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> messageBuilder.compose(playerMock, null));
+
+		// Assert
+		assertEquals("The messageId parameter cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
 	void getToolkit() {
 		// Arrange & Act
 		Toolkit toolkit = messageBuilder.getToolkit();
@@ -111,6 +133,20 @@ class MessageBuilderTest {
 
 	@Test
 	void reload() {
+		when(languageResourceManagerMock.reload()).thenReturn(true);
+
+		messageBuilder.reload();
+
+		verify(languageResourceManagerMock, atLeastOnce()).reload();
+	}
+
+	@Test
+	void reload_failed() {
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+
+		messageBuilder.reload();
+
+		verify(languageResourceManagerMock, atLeastOnce()).reload();
 	}
 
 }
