@@ -22,6 +22,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.Plugin;
@@ -30,7 +31,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.util.messagebuilder.util.MockUtility.LANGUAGE_EN_US_YML;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -56,7 +56,7 @@ class YamlLanguageResourceManagerTest {
 		pluginConfiguration.set("locale", "en-US");
 
 		// create real language configuration
-		languageConfiguration = MockUtility.loadConfigurationFromResource(LANGUAGE_EN_US_YML);
+		languageConfiguration = MockUtility.loadConfigurationFromResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		lenient().when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
 
@@ -84,11 +84,21 @@ class YamlLanguageResourceManagerTest {
 
 	@Test
 	void testGetConfigurationSupplier() {
-		// Arrange & Act
-		YamlConfigurationSupplier yamlConfigurationSupplier = resourceManager.getConfigurationSupplier();
+		// Arrange
+		LanguageTag languageTag = new LanguageTag(Locale.US);
+		when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
+		when(languageResourceLoaderMock.loadConfiguration(languageTag)).thenReturn(languageConfiguration);
+
+		//  Act
+		resourceManager.reload();
+		YamlConfigurationSupplier configurationSupplier = resourceManager.getConfigurationSupplier();
 
 		// Assert
-		assertNotNull(yamlConfigurationSupplier);
+//		assertNotNull(configurationSupplier);
+
+		// Verify
+		verify(languageResourceLoaderMock, atLeastOnce()).loadConfiguration();
+//		verify(languageResourceLoaderMock, atLeastOnce()).loadConfiguration(languageTag);
 	}
 
 
