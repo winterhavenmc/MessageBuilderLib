@@ -60,7 +60,7 @@ class TimeSectionQueryHandlerTest {
 	void testConstructor_parameter_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new TimeSectionQueryHandler(null));
-		assertEquals("The configurationSection parameter was null.", exception.getMessage());
+		assertEquals("The configurationSupplier parameter was null.", exception.getMessage());
 	}
 
 	@Test
@@ -85,8 +85,8 @@ class TimeSectionQueryHandlerTest {
 	}
 
 	@Test
-	void getHandledType() {
-		assertEquals(String.class, queryHandler.getHandledType());
+	void getPrimaryType() {
+		assertEquals(String.class, queryHandler.getPrimaryType());
 	}
 
 	@Test

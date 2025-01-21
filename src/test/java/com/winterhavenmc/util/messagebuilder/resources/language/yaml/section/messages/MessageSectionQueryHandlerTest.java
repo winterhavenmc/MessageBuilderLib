@@ -60,7 +60,7 @@ class MessageSectionQueryHandlerTest {
 	void testConstructor_parameter_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new MessageSectionQueryHandler(null));
-		assertEquals("The messageSection parameter cannot be null.", exception.getMessage());
+		assertEquals("The configurationSupplier parameter was null.", exception.getMessage());
 	}
 
 	@Test
@@ -104,8 +104,8 @@ class MessageSectionQueryHandlerTest {
 	}
 
 	@Test
-	void getHandledType() {
-		assertEquals(MessageRecord.class, queryHandler.getHandledType());
+	void getPrimaryType() {
+		assertEquals(MessageRecord.class, queryHandler.getPrimaryType());
 	}
 
 	@Test
