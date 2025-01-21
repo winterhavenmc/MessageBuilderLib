@@ -51,11 +51,7 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	private YamlLanguageResourceManager(final YamlLanguageResourceInstaller resourceInstaller, final YamlLanguageResourceLoader resourceLoader) {
 		this.languageResourceLoader = resourceLoader;
 		this.languageResourceInstaller = resourceInstaller;
-	}
 
-
-	@Override
-	public void setup() {
 		// install any auto install files if necessary
 		languageResourceInstaller.autoInstall();
 
@@ -74,6 +70,7 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 */
 	public static YamlLanguageResourceManager getInstance(final YamlLanguageResourceInstaller resourceInstaller,
 	                                                      final YamlLanguageResourceLoader resourceLoader) {
+
 		if (instance == null) {
 			synchronized (YamlLanguageResourceManager.class) {
 				if (instance == null) {
@@ -96,16 +93,12 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 */
 	public boolean reload() {
 
-		// Reload the configuration and get the new configuration from the loader
-		Configuration newConfiguration = languageResourceLoader.reload();
+		// install any resources whose corresponding files are absent
+		languageResourceInstaller.autoInstall();
 
-		// if new configuration differs from existing configuration, replace stored configuration with
-		// new configuration and create a new supplier with the new configuration
-		if (!languageConfiguration.equals(newConfiguration)) {
-			languageConfiguration = newConfiguration;
-			configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
-		}
-		// return success
+		// Reload the configuration and get the new configuration from the loader
+		this.languageConfiguration = languageResourceLoader.loadConfiguration();
+		this.configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
 		return true;
 	}
 

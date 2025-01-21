@@ -29,13 +29,15 @@ import java.util.regex.Pattern;
 
 /**
  * This class is responsible for the loading of the language file from the plugin data directory into
- * a configuration object. The configuration object is loaded at instantiation of this class, and
- * when the reload method is called.
+ * a configuration object. The configuration object is loaded from file when ever the getConfiguration method
+ * is called. The class does not store the configuration; each invocation of the getConfiguration method will
+ * result in a new configuration object loaded from the currently configured language file, or the us-EN language
+ * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
 public final class YamlLanguageResourceLoader {
 
 	// compiled regex pattern matching valid yaml keys for this application (upper snake case only)
-	private final static Pattern UPPER_SNAKE_CASE = Pattern.compile("[A-Z0-9_]+", Pattern.UNICODE_CHARACTER_CLASS);
+	final static Pattern UPPER_SNAKE_CASE = Pattern.compile("[A-Z0-9_]+", Pattern.UNICODE_CHARACTER_CLASS);
 
 	// reference to plugin main class instance
 	private final Plugin plugin;
@@ -121,18 +123,11 @@ public final class YamlLanguageResourceLoader {
 	{
 		for (String key : configuration.getKeys(true)) {
 			if (!key.matches(UPPER_SNAKE_CASE.pattern())) {
-				Logger.getLogger(getClass().getName() + "Nonconforming key detected: " + key);
+				plugin.getLogger().warning("Nonconforming key detected: " + key);
 				return false;
 			}
 		}
 		return true;
-	}
-
-
-	public Configuration reload()
-	{
-		//TODO: Is this right? Needs test case at any rate.
-		return loadConfiguration();
 	}
 
 }

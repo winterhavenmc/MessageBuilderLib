@@ -28,6 +28,7 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +39,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.DEFAULT_LANGUAGE_TAG;
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_LANGUAGE_EN_US_YML;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader.UPPER_SNAKE_CASE;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -134,6 +136,8 @@ public class YamlLanguageResourceLoaderTest {
 		@Test
 		void validateKeys_invalid() {
 			// Arrange
+			when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+
 			Configuration testConfiguration = new MemoryConfiguration();
 			testConfiguration.set("invalid-keys-only", false);
 			testConfiguration.set("A_VALID_KEY", "a string value");
@@ -144,6 +148,30 @@ public class YamlLanguageResourceLoaderTest {
 			// Assert
 			assertFalse(result);
 		}
+	}
+
+	@Test
+	void testPattern_match() {
+		// Arrange
+		String initialString = "THE_QUICK_BROWN_FOX";
+
+		// Act
+		Matcher matcher = UPPER_SNAKE_CASE.matcher(initialString);
+
+		// Assert
+		assertTrue(matcher.matches());
+	}
+
+	@Test
+	void testPattern_no_match() {
+		// Arrange
+		String initialString = "the quick brown fox.";
+
+		// Act
+		Matcher matcher = UPPER_SNAKE_CASE.matcher(initialString);
+
+		// Assert
+		assertFalse(matcher.matches());
 	}
 
 }

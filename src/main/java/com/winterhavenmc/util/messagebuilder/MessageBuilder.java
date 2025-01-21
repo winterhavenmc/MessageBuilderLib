@@ -84,7 +84,6 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
 		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
 		this.languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
-		this.languageResourceManager.setup(); // necessary to move i/o operations out of constructor
 
 		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
 		this.macroQueryHandler = new MacroHandler(languageQueryHandler);
