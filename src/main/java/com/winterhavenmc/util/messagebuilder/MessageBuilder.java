@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
 
-import com.winterhavenmc.util.time.TickUnit;
+import com.winterhavenmc.util.time.Tick;
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -69,7 +69,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	private final YamlLanguageQueryHandler languageQueryHandler;
 	private final MacroHandler macroQueryHandler;
 
-	public static final TemporalUnit TICKS = new TickUnit();
+	public static final TemporalUnit TICKS = new Tick();
 
 
 	/**
@@ -101,7 +101,6 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	               final YamlLanguageResourceManager languageResourceManagerMock,
 	               final YamlLanguageQueryHandler languageQueryHandlerMock,
 	               final MacroHandler macroQueryHandlerMock) {
-		if (pluginMock == null) { throw new IllegalArgumentException(Error.Parameter.NULL_PLUGIN.getMessage()); }
 
 		this.plugin = pluginMock;
 		this.languageResourceManager = languageResourceManagerMock;
