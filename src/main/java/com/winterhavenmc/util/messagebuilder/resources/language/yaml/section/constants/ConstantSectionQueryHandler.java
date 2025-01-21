@@ -52,7 +52,7 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 
 		// ensure the 'CONSTANTS' section exists in the configuration provided by the supplier
 		if (yamlConfigurationSupplier.getSection(section) == null) {
-			throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage()));
+			throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_CONSTANTS.name()));
 		}
 
 		// get configuration supplier
