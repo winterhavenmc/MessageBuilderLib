@@ -78,6 +78,12 @@ class MessageBuilderTest {
 
 	@AfterEach
 	public void tearDown() {
+		languageResourceManagerMock = null;
+		languageQueryHandlerMock = null;
+		macroQueryHandlerMock = null;
+		playerMock = null;
+		pluginConfiguration = null;
+		languageConfiguration = null;
 	}
 
 
