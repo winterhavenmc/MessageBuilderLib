@@ -107,7 +107,7 @@ public class LocatableProcessor extends ContextResolverTemplate {
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T object) {
 		if (key == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_NAMESPACED_KEY.name())); }
-		if (key.isBlank()) { throw new IllegalArgumentException((Error.Parameter.EMPTY_NAMESPACED_KEY.getMessage())); }
+		if (key.isBlank()) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.EMPTY_NAMESPACED_KEY.name())); }
 		if (contextMap == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONTEXT_MAP.name())); }
 		if (object == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_VALUE.name())); }
 
