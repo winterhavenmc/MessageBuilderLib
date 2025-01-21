@@ -24,6 +24,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHan
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -41,7 +42,6 @@ import java.time.Duration;
 import java.util.logging.Logger;
 
 import static com.winterhavenmc.util.messagebuilder.MessageBuilder.TICKS;
-import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -69,7 +69,7 @@ class MessageBuilderTest {
 		pluginConfiguration.set("language", "en-US");
 		pluginConfiguration.set("locale", "en-US");
 
-		languageConfiguration = loadConfigurationFromResource("language/en-US.yml");
+		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		messageBuilder = new MessageBuilder<>(pluginMock,
 				languageResourceManagerMock,
 				languageQueryHandlerMock,
