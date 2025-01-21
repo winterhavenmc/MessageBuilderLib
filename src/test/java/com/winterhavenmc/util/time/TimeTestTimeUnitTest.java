@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
 
-class TimeTestTimeUnitTests {
+class TimeTestTimeUnitTest {
 
 	// these are the smallest/largest numbers that will not cause an overflow for any time unit
 	private final static long MIN = Long.MIN_VALUE / YEARS.getMillis();
