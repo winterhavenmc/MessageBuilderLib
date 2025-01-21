@@ -22,9 +22,6 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.Locale;
-import java.util.logging.Logger;
-
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +36,7 @@ import static org.mockito.Mockito.*;
 class YamlLanguageResourceManagerTest {
 
 	@Mock Plugin pluginMock;
-	@Mock YamlLanguageResourceInstaller languageResourceInstaller;
+	@Mock YamlLanguageResourceInstaller languageResourceInstallerMock;
 	@Mock YamlLanguageResourceLoader languageResourceLoaderMock;
 
 	// real language handler
@@ -58,10 +55,8 @@ class YamlLanguageResourceManagerTest {
 		// create real language configuration
 		languageConfiguration = MockUtility.loadConfigurationFromResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
-		lenient().when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
-
 		// instantiate real language handler with mocked parameters
-		resourceManager = YamlLanguageResourceManager.getInstance(languageResourceInstaller, languageResourceLoaderMock);
+		resourceManager = YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock);
 
 	}
 
@@ -77,78 +72,53 @@ class YamlLanguageResourceManagerTest {
 
 
 	@Test
-	void testLanguageHandler_not_null() {
-		assertNotNull(languageResourceLoaderMock);
+	void testLanguageConfiguration_not_null() {
+		assertNotNull(this.languageConfiguration);
 	}
 
 
 	@Test
 	void testGetConfigurationSupplier() {
 		// Arrange
-		LanguageTag languageTag = new LanguageTag(Locale.US);
 		when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
-		when(languageResourceLoaderMock.loadConfiguration(languageTag)).thenReturn(languageConfiguration);
 
 		//  Act
 		resourceManager.reload();
 		YamlConfigurationSupplier configurationSupplier = resourceManager.getConfigurationSupplier();
 
 		// Assert
-//		assertNotNull(configurationSupplier);
+		assertNotNull(configurationSupplier);
 
 		// Verify
 		verify(languageResourceLoaderMock, atLeastOnce()).loadConfiguration();
-//		verify(languageResourceLoaderMock, atLeastOnce()).loadConfiguration(languageTag);
 	}
 
 
 	@Nested
 	class ReloadTests {
-		//TODO: confirm this test will always receive an identical configuration object from the loader
 		@Test
-		void testReload_same_config() {
-			// Arrange
-//			when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
-
-			// Act
+		void testReload() {
+			// Arrange & Act
 			boolean success = resourceManager.reload();
 
 			// Assert
-			assertFalse(success);
-
-			// Verify
-//			verify(languageResourceLoaderMock, atLeastOnce()).loadConfiguration();
+			assertTrue(success);
+			assertNotNull(resourceManager.getConfigurationSupplier());
 		}
 
-		//TODO: test the reload method when a different configuration is returned from the loader
-		@Test
-		@Disabled
-		void testReload_different_config() {
-			languageConfiguration = new YamlConfiguration();
-			languageConfiguration.set("test_key", "test_value");
 
+		@Test
+		void testReload_new_config() {
 			// Arrange
-			when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
+			FileConfiguration newLanguageConfiguration = new YamlConfiguration();
+			newLanguageConfiguration.set("test_key", "test_value");
 
 			// Act
 			boolean success = resourceManager.reload();
 
 			// Assert
 			assertTrue(success);
-		}
-
-
-		@Test
-		void testReload_fail() {
-			// Arrange
-			when(languageResourceLoaderMock.reload()).thenReturn(null);
-
-			// Act
-			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-					() -> resourceManager.reload());
-
-			// Assert
-			assertEquals("", exception.getMessage());
+			assertNotNull(resourceManager.getConfigurationSupplier());
 		}
 	}
 
