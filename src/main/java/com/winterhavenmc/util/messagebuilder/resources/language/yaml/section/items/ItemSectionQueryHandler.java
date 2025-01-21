@@ -17,7 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
+import com.winterhavenmc.util.messagebuilder.resources.AbstractQueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
@@ -33,7 +35,11 @@ import java.util.Optional;
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * item section.
  */
-public class ItemSectionQueryHandler implements SectionQueryHandler {
+public class ItemSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler {
+
+	private final static Section section = Section.ITEMS;
+	private final static Class<?> primaryType = ItemRecord.class;
+	private final static List<Class<?>> handledTypes = List.of(ItemRecord.class);
 
 	private final YamlConfigurationSupplier configurationSupplier;
 
@@ -44,10 +50,10 @@ public class ItemSectionQueryHandler implements SectionQueryHandler {
 	 * @param configurationSupplier the supplier for the configuration object of the language file.
 	 */
 	public ItemSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_ITEMS.getMessage()); }
+		super(configurationSupplier, section, primaryType, handledTypes);
 
 		// check that 'ITEMS' section returned by the configuration supplier is not null
-		if (configurationSupplier.getSection(Section.ITEMS) == null) {
+		if (configurationSupplier.getSection(section) == null) {
 				throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage());
 		}
 
@@ -71,40 +77,6 @@ public class ItemSectionQueryHandler implements SectionQueryHandler {
 
 		// return new ItemRecord
 		return ItemRecord.getRecord(keyPath, configurationSupplier.getSection(Section.ITEMS));
-	}
-
-
-	/**
-	 * Return the Section enum constant for this query handler type
-	 *
-	 * @return the ITEMS Section constant, establishing this query handler type
-	 */
-	@Override
-	public Section getSectionType() {
-		return Section.ITEMS;
-	}
-
-
-	/**
-	 * The primary type returned by this query handler. A query handler may provide methods that return
-	 * values of other types.
-	 *
-	 * @return ItemRecord.class as the primary type returned by this query handler
-	 */
-	@Override
-	public Class<?> getHandledType() {
-		return ItemRecord.class;
-	}
-
-	/**
-	 * A list of the types returned by this query handler. A query handler should not provide methods that return
-	 * values of other types.
-	 *
-	 * @return {@code List} of class types that are handled by this query handler
-	 */
-	@Override
-	public List<Class<?>> listHandledTypes() {
-		return List.of(ItemRecord.class);
 	}
 
 }

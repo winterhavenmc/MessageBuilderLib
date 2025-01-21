@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
@@ -29,9 +30,12 @@ import java.util.Optional;
 /**
  * Query handler for the 'CONSTANTS' section of the language file.
  */
-public class ConstantSectionQueryHandler implements SectionQueryHandler {
+public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler {
 
 	private final static Section section = Section.CONSTANTS;
+	private final static Class<?> primaryType = String.class;
+	private final static List<Class<?>> handledTypes = List.of(String.class, List.class, Integer.class);
+
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
@@ -42,50 +46,15 @@ public class ConstantSectionQueryHandler implements SectionQueryHandler {
 	 * @throws IllegalArgumentException if the {@code yamlConfigurationSupplier} parameter is null or invalid
 	 */
 	public ConstantSectionQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
-		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_CONSTANTS.getMessage()); }
+		super(yamlConfigurationSupplier, section, primaryType, handledTypes);
 
 		// ensure the 'CONSTANTS' section exists in the configuration provided by the supplier
-		if (yamlConfigurationSupplier.getSection(Section.CONSTANTS) == null) {
+		if (yamlConfigurationSupplier.getSection(section) == null) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_CONSTANTS.getMessage());
 		}
 
 		// get configuration supplier
 		this.configurationSupplier = yamlConfigurationSupplier;
-	}
-
-
-	/**
-	 * Return the Section constant for this query handler type
-	 *
-	 * @return the CONSTANTS Section constant, establishing this query handler type
-	 */
-	@Override
-	public Section getSectionType() {
-		return section;
-	}
-
-
-	/**
-	 * The primary type returned by this query handler. A query handler may provide methods that return
-	 * values of other types.
-	 *
-	 * @return String.class as the primary type returned by this query handler
-	 */
-	@Override
-	public Class<?> getHandledType() {
-		return String.class;
-	}
-
-
-	/**
-	 * A list of the types returned by this query handler. A query handler should not provide methods that return
-	 * values of other types.
-	 *
-	 * @return {@code List} of class types that are handled by this query handler
-	 */
-	@Override
-	public List<Class<?>> listHandledTypes() {
-		return List.of(String.class, List.class, Integer.class);
 	}
 
 

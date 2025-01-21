@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.time.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
@@ -38,15 +39,19 @@ import static com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_TI
  * duration, listing the appropriate time units and their singular or plural names down to the granularity
  * specified by the provided TimeUnit constant.
  */
-public class TimeSectionQueryHandler implements SectionQueryHandler {
+public class TimeSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler {
+
+	private final static Section section = Section.TIME;
+	private final static Class<?> primaryType = String.class;
+	private final static List<Class<?>> handledTypes = List.of(String.class);
+
+	private final ConfigurationSection timeSection;
 
 	public static final String LESS_THAN_ONE_KEY = "OTHER.LESS_THAN_ONE";
 	public static final String LESS_THAN_KEY = "OTHER.LESS_THAN";
 	public static final String UNLIMITED_KEY = "OTHER.UNLIMITED";
 	public static final String UNIT_SECTION = "UNITS";
 	public static final String PATH_DELIMITER = ".";
-
-	private final ConfigurationSection timeSection;
 
 
 	/**
@@ -55,49 +60,14 @@ public class TimeSectionQueryHandler implements SectionQueryHandler {
 	 * @param configurationSupplier the supplier for the configuration object for the language file
 	 */
 	public TimeSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION_SECTION.getMessage()); }
+		super(configurationSupplier, section, primaryType, handledTypes);
 
 		// check that 'TIME' section returned by the configuration supplier is not null
-		if (configurationSupplier.getSection(Section.TIME) == null) {
+		if (configurationSupplier.getSection(section) == null) {
 			throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_TIME.getMessage());
 		}
 
-		this.timeSection = configurationSupplier.getSection(Section.TIME);
-	}
-
-
-	/**
-	 * Return the Section constant for this query handler type
-	 *
-	 * @return the TIME Section constant, establishing this query handler type
-	 */
-	@Override
-	public Section getSectionType() {
-		return Section.TIME;
-	}
-
-
-	/**
-	 * The primary type returned by this query handler. A query handler may provide methods that return
-	 * values of other types.
-	 *
-	 * @return String.class as the primary type returned by this query handler
-	 */
-	@Override
-	public Class<?> getHandledType() {
-		return String.class;
-	}
-
-
-	/**
-	 * A list of the types returned by this query handler. A query handler should not provide methods that return
-	 * values of other types.
-	 *
-	 * @return {@code List} of class types that are handled by this query handler
-	 */
-	@Override
-	public List<Class<?>> listHandledTypes() {
-		return List.of(String.class);
+		this.timeSection = configurationSupplier.getSection(section);
 	}
 
 

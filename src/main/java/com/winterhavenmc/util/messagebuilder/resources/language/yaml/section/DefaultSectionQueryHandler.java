@@ -38,7 +38,7 @@ public class DefaultSectionQueryHandler implements SectionQueryHandler {
 	 * @return null
 	 */
 	@Override
-	public Class<Void> getHandledType() {
+	public Class<Void> getPrimaryType() {
 		return null;
 	}
 

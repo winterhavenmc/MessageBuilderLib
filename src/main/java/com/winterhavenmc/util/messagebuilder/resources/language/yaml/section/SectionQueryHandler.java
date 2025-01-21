@@ -26,7 +26,7 @@ public interface SectionQueryHandler extends QueryHandler {
 
 	Section getSectionType();
 
-	Class<?> getHandledType();
+	Class<?> getPrimaryType();
 
 	List<Class<?>> listHandledTypes();
 }

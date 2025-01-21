@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.Error;
@@ -32,7 +33,11 @@ import java.util.Optional;
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * message section.
  */
-public class MessageSectionQueryHandler implements SectionQueryHandler {
+public class MessageSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler {
+
+	private final static Section section = Section.MESSAGES;
+	private final static Class<?> primaryType = MessageRecord.class;
+	private final static List<Class<?>> handledTypes = List.of(MessageRecord.class);
 
 	private final ConfigurationSection messageSection;
 
@@ -43,7 +48,7 @@ public class MessageSectionQueryHandler implements SectionQueryHandler {
 	 * @param configurationSupplier the configuration supplier that provides access to the configuration object for the language file.
 	 */
 	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_SECTION_MESSAGES.getMessage()); }
+		super(configurationSupplier, section, primaryType, handledTypes);
 
 		// check that 'MESSAGES' section returned by the configuration supplier is not null
 		if (configurationSupplier.getSection(Section.MESSAGES) == null) {
@@ -66,41 +71,6 @@ public class MessageSectionQueryHandler implements SectionQueryHandler {
 		if (messageId == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_KEY.getMessage()); }
 
 		return MessageRecord.getRecord(messageId, messageSection);
-	}
-
-
-	/**
-	 * Return the Section enum constant for this query handler type
-	 *
-	 * @return the MESSAGES Section constant, establishing this query handler type
-	 */
-	@Override
-	public Section getSectionType() {
-		return Section.MESSAGES;
-	}
-
-
-	/**
-	 * The primary type returned by this query handler. A query handler may provide methods that return
-	 * values of other types.
-	 *
-	 * @return MessageRecord.class as the primary type returned by this query handler
-	 */
-	@Override
-	public Class<?> getHandledType() {
-		return MessageRecord.class;
-	}
-
-
-	/**
-	 * A list of the types returned by this query handler. A query handler should not provide methods that return
-	 * values of other types.
-	 *
-	 * @return {@code List} of class types that are handled by this query handler
-	 */
-	@Override
-	public List<Class<?>> listHandledTypes() {
-		return List.of(MessageRecord.class);
 	}
 
 }
