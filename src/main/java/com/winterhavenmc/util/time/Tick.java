@@ -23,7 +23,7 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
 
 
-public final class TickUnit implements TemporalUnit {
+public final class Tick implements TemporalUnit {
 	private static final long TICK_DURATION_MS = 50;
 
 	@Override

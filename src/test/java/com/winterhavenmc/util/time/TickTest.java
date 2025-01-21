@@ -27,36 +27,36 @@ import java.time.temporal.TemporalAmount;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TickUnitTest {
+class TickTest {
 
 	private static final long TICK_DURATION_MS = 50;
-	private final TickUnit tickUnit = new TickUnit();
+	private final Tick tick = new Tick();
 
 	@Test
 	void testGetDuration() {
 		Duration expectedDuration = Duration.ofMillis(TICK_DURATION_MS);
-		assertEquals(expectedDuration, tickUnit.getDuration(), "Tick duration should be 50ms.");
+		assertEquals(expectedDuration, tick.getDuration(), "Tick duration should be 50ms.");
 	}
 
 	@Test
 	void testIsDurationEstimated() {
-		assertFalse(tickUnit.isDurationEstimated(), "Ticks should not have an estimated duration.");
+		assertFalse(tick.isDurationEstimated(), "Ticks should not have an estimated duration.");
 	}
 
 	@Test
 	void testIsDateBased() {
-		assertFalse(tickUnit.isDateBased(), "Ticks should not be date-based.");
+		assertFalse(tick.isDateBased(), "Ticks should not be date-based.");
 	}
 
 	@Test
 	void testIsTimeBased() {
-		assertTrue(tickUnit.isTimeBased(), "Ticks should be time-based.");
+		assertTrue(tick.isTimeBased(), "Ticks should be time-based.");
 	}
 
 	@Test
 	void testAddTo() {
 		Instant now = Instant.now();
-		Temporal result = tickUnit.addTo(now, 10); // Add 10 ticks (500ms)
+		Temporal result = tick.addTo(now, 10); // Add 10 ticks (500ms)
 		assertEquals(now.plus(10 * TICK_DURATION_MS, ChronoUnit.MILLIS), result,
 				"Adding 10 ticks should move the temporal by 500ms.");
 	}
@@ -65,7 +65,7 @@ class TickUnitTest {
 	void testBetween() {
 		Instant start = Instant.now();
 		Instant end = start.plus(500, ChronoUnit.MILLIS); // 10 ticks
-		long ticksBetween = tickUnit.between(start, end);
+		long ticksBetween = tick.between(start, end);
 		assertEquals(10, ticksBetween, "There should be 10 ticks between the two instants.");
 	}
 
@@ -73,26 +73,26 @@ class TickUnitTest {
 	void testBetweenWithPartialTicks() {
 		Instant start = Instant.now();
 		Instant end = start.plus(525, ChronoUnit.MILLIS); // 10.5 ticks
-		long ticksBetween = tickUnit.between(start, end);
+		long ticksBetween = tick.between(start, end);
 		assertEquals(10, ticksBetween, "Only full ticks should be counted.");
 	}
 
 	@Test
 	void testAddToNegativeTicks() {
 		Instant now = Instant.now();
-		Temporal result = tickUnit.addTo(now, -5); // Subtract 5 ticks (-250ms)
+		Temporal result = tick.addTo(now, -5); // Subtract 5 ticks (-250ms)
 		assertEquals(now.minus(5 * TICK_DURATION_MS, ChronoUnit.MILLIS), result,
 				"Adding -5 ticks should move the temporal back by 250ms.");
 	}
 
 	@Test
 	void testToString() {
-		assertEquals("Ticks (50ms)", tickUnit.toString(), "The string representation should match.");
+		assertEquals("Ticks (50ms)", tick.toString(), "The string representation should match.");
 	}
 
 	@Test
 	void testGetDurationEquality() {
-		TemporalAmount durationFromTicks = tickUnit.getDuration();
+		TemporalAmount durationFromTicks = tick.getDuration();
 		Duration expectedDuration = Duration.ofMillis(TICK_DURATION_MS);
 		assertEquals(expectedDuration, durationFromTicks, "Tick duration should equal 50ms.");
 	}
@@ -100,10 +100,10 @@ class TickUnitTest {
 	@Test
 	void testAddToEdgeCases() {
 		Instant now = Instant.now();
-		Temporal resultZero = tickUnit.addTo(now, 0); // Add 0 ticks
+		Temporal resultZero = tick.addTo(now, 0); // Add 0 ticks
 		assertEquals(now, resultZero, "Adding 0 ticks should not change the temporal.");
 
-		Temporal resultLarge = tickUnit.addTo(now, Long.MAX_VALUE / TICK_DURATION_MS);
+		Temporal resultLarge = tick.addTo(now, Long.MAX_VALUE / TICK_DURATION_MS);
 		assertNotNull(resultLarge, "Adding a large number of ticks should not throw an exception.");
 	}
 
@@ -111,7 +111,7 @@ class TickUnitTest {
 	void testBetweenLargeDifference() {
 		Instant start = Instant.EPOCH;
 		Instant end = start.plus(Long.MAX_VALUE / TICK_DURATION_MS, ChronoUnit.MILLIS);
-		long ticksBetween = tickUnit.between(start, end);
+		long ticksBetween = tick.between(start, end);
 		assertTrue(ticksBetween > 0, "Large differences in time should yield valid tick counts.");
 	}
 }
