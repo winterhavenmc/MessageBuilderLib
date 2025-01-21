@@ -85,7 +85,7 @@ class MessageRecordTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  MessageRecord.getRecord(null, messageSection));
 
-		assertEquals("The messageId parameter cannot null.", exception.getMessage());
+		assertEquals("The messageId parameter cannot be null.", exception.getMessage());
 	}
 
 	@Test

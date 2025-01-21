@@ -46,7 +46,7 @@ public class Error {
 		NULL_LOCALE("The locale parameter cannot be null."),
 		NULL_MACRO("macro cannot be null."),
 		NULL_MESSAGE_BUILDER("The messageBuilder parameter cannot be null."),
-		NULL_MESSAGE_ID("The messageId parameter cannot null."),
+		NULL_MESSAGE_ID("The messageId parameter cannot be null."),
 		NULL_MESSAGE_KEY("The messageKey parameter cannot be null."),
 		NULL_NAMESPACED_KEY("The key parameter cannot be null."),
 		NULL_OBJECT("The object parameter cannot be null."),
@@ -67,7 +67,7 @@ public class Error {
 		NULL_VALUE("the value parameter was null."),
 		NULL_WORLD("The world parameter cannot be null."),
 		MISSING_RESOURCE("The default language resource cannot be found. This is an unrecoverable error."),
-		;
+		NULL_RESOURCE_MANAGER("The resource manager parameter cannot be null.");
 
 		private final String messageString;
 
