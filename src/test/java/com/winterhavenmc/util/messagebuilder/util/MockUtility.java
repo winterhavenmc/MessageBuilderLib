@@ -33,8 +33,6 @@ import java.nio.file.*;
 
 public final class MockUtility {
 
-	public final static String LANGUAGE_EN_US_YML = "language/en-US.yml";
-
 	/**
 	 * Private constructor to prevent instantiation
 	 * @throws InstantiationException if instantiated from within this class
