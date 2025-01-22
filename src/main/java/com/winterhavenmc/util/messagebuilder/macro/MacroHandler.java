@@ -45,8 +45,8 @@ public class MacroHandler {
 	 * Enum that contains settable LEFT and RIGHT macro delimiter characters
 	 */
 	public enum MacroDelimiter {
-		LEFT('%'),
-		RIGHT('%');
+		LEFT('{'),
+		RIGHT('}');
 
 		// the delimiter character
 		private char character;
