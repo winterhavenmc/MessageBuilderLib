@@ -90,7 +90,7 @@ class MacroHandlerTest {
 	@Test
 	void replaceMacrosTest() {
 		ContextMap contextMap = new ContextMap(playerMock);
-		String key = "MACRO:My_Item";
+		String key = "ITEM_NAME";
 		contextMap.put(key, ContextContainer.of("TEST_STRING", ProcessorType.STRING));
 
 		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");

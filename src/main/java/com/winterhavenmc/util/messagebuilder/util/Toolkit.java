@@ -34,4 +34,5 @@ public interface Toolkit {
 
 	List<String> getStringList(String key);
 
+	int getInt(String key);
 }
