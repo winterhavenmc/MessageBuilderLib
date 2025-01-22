@@ -22,7 +22,6 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 
@@ -67,7 +66,7 @@ class StringProcessorTest {
 		String stringObject = "some name";
 
 		ContextMap contextMap = new ContextMap(playerMock);
-		String namespacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
+		String namespacedKey = NamespaceKey.create(keyPath, NamespaceKey.Domain.MACRO);
 
 		contextMap.put(namespacedKey, ContextContainer.of(stringObject, ProcessorType.STRING));
 

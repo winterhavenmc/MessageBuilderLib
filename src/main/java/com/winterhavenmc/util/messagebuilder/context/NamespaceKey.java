@@ -17,8 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.context;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -31,7 +33,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  * A class representing a fully qualified namespace key, used to uniquely identify entries in
  * various contexts, such as macros, configurations, or other domain-specific resources.
  * <p>
- * The namespace key is composed of a {@link Namespace.Domain} (e.g., MACRO, CONFIG), a
+ * The namespace key is composed of a {@link Domain} (e.g., MACRO, CONFIG), a
  * {@code keyPath}, and an optional sequence of subdomains. The {@code keyPath} is a
  * dot-separated string, while subdomains provide additional hierarchical context.
  * </p>
@@ -73,7 +75,7 @@ public class NamespaceKey implements ContextKey {
 	private final static Character KEY_BOUNDARY_DELIMITER = '|';
 	private final static Character KEY_PATH_DELIMITER = '.';
 
-	private final Namespace.Domain domain;
+	private final Domain domain;
 	private final List<String> subdomains;
 	private final List<String> pathComponents;
 
@@ -87,7 +89,7 @@ public class NamespaceKey implements ContextKey {
 	 * @param keyPath a String key to be used as a component the fully name-spaced key
 	 * @param domain  the domain that forms the root of the keyDomain
 	 */
-	public NamespaceKey(final String keyPath, final Namespace.Domain domain) {
+	public NamespaceKey(final String keyPath, final Domain domain) {
 		this.domain = domain;
 		this.subdomains = new ArrayList<>();
 		this.pathComponents = List.of(keyPath.split("\\" + KEY_PATH_DELIMITER));
@@ -105,7 +107,7 @@ public class NamespaceKey implements ContextKey {
 	 * @param keyPath the String key to be used as a component in the fully name-spaced key
 	 * @param domain  the domain that forms the root of the keyDomain
 	 */
-	public NamespaceKey(final String keyPath, final Namespace.Domain domain, final String... subdomains) {
+	public NamespaceKey(final String keyPath, final Domain domain, final String... subdomains) {
 		this.domain = domain;
 		this.subdomains = new ArrayList<>(Arrays.stream(subdomains).toList());
 		this.pathComponents = List.of(keyPath.split("\\" + KEY_PATH_DELIMITER));
@@ -138,7 +140,7 @@ public class NamespaceKey implements ContextKey {
 	 *
 	 * @return the Namespace.Domain enum constant of this key
 	 */
-	public Namespace.Domain getDomain() {
+	public Domain getDomain() {
 		return domain;
 	}
 
@@ -183,7 +185,7 @@ public class NamespaceKey implements ContextKey {
 	public static <Macro> String create(final Macro macro) {
 		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, "macro"); }
 
-		return Namespace.Domain.MACRO + KEY_BOUNDARY_DELIMITER.toString() + macro;
+		return Domain.MACRO + KEY_BOUNDARY_DELIMITER.toString() + macro;
 	}
 
 
@@ -195,7 +197,7 @@ public class NamespaceKey implements ContextKey {
 	 * @param domain a domain to use as the keyDomain (required).
 	 * @return A proper namespaced String key.
 	 */
-	public static <Macro> String create(final Macro macro, final Namespace.Domain domain) {
+	public static <Macro> String create(final Macro macro, final Domain domain) {
 		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, "macro"); }
 		if (domain == null) { throw new LocalizedException(PARAMETER_NULL, "domain"); }
 
@@ -212,7 +214,7 @@ public class NamespaceKey implements ContextKey {
 	 * @return A fully-formed namespaced String key.
 	 */
 	public static String create(final String keyPath,
-	                            final Namespace.Domain domain,
+	                            final Domain domain,
 	                            final String... subdomains) {
 		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
 		if (keyPath.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "keyPath"); }
@@ -239,7 +241,7 @@ public class NamespaceKey implements ContextKey {
 	 * <p>
 	 * Logic:<br>
 	 * A keyDomain must contain at least one string of alphanumeric characters, which is a string representation
-	 * of a constant of the enum {@link Namespace.Domain}, and optionally may contain one or more additional
+	 * of a constant of the enum {@link Domain}, and optionally may contain one or more additional
 	 * subdomains as alphanumeric strings, with the domain and any subdomains delimited by a colon (:)
 	 * <p>
 	 * Note: Because domain is derived from an enum constant name, it should be formatted in upper snake case,
@@ -321,4 +323,30 @@ public class NamespaceKey implements ContextKey {
 		return Objects.hash(domain, subdomains, pathComponents);
 	}
 
+	/**
+	 * This enum represents the top-level domains that must be used as the root of the keyDomain.
+	 * They are subject to change at this time, and will likely be reduced to an appropriate set as necessary.
+	 * I selected a wide array of domains here until I narrow down those I find useful.
+	 * <p>
+	 * NOTE: THIS ENUM REPRESENTS THE SOURCE OF TRUTH FOR DOMAIN VALUES, USED IN PRODUCTION. IT MAY BE MOVED TO
+	 * A MORE APPROPRIATE LOCATION IN THE FUTURE
+	 * </P>
+	 */
+	public enum Domain {
+		CONSTANTS(ConstantSectionQueryHandler.class), // values supplied by the yaml language file, from the root level section 'CONSTANTS'
+		ITEMS(ItemSectionQueryHandler.class), // values supplied by the yaml language file, from the root level section 'ITEMS'
+		MACRO(null), // values passed in by calls to the setMacro method
+		MESSAGES(MessageSectionQueryHandler.class), // values supplied by the yaml language file. from the root level section 'MESSAGES'
+		;
+
+		// placeholder prefix to prevent name collisions between domains
+		private final Class<?> queryHandler;
+
+		Domain(final Class<?> queryHandler) {
+			this.queryHandler = queryHandler;
+		}
+		public Class<?> getQueryHandler() {
+			return this.queryHandler;
+		}
+	}
 }

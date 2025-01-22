@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -31,35 +30,35 @@ class NamespaceKeyTest {
 
     @Test
     void testConstructor_WithDomainAndKeyPath() {
-        NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.MACRO);
+        NamespaceKey key = new NamespaceKey("test.key", NamespaceKey.Domain.MACRO);
         assertEquals("test.key", key.getPath());
-        assertEquals(Namespace.Domain.MACRO, key.getDomain());
+        assertEquals(NamespaceKey.Domain.MACRO, key.getDomain());
         assertTrue(key.getSubdomains().isEmpty());
     }
 
     @Test
     void testConstructor_WithDomainKeyPathAndSubdomains() {
-        NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.MACRO, "sub1", "sub2");
+        NamespaceKey key = new NamespaceKey("test.key", NamespaceKey.Domain.MACRO, "sub1", "sub2");
         assertEquals("test.key", key.getPath());
-        assertEquals(Namespace.Domain.MACRO, key.getDomain());
+        assertEquals(NamespaceKey.Domain.MACRO, key.getDomain());
         assertEquals(List.of("sub1", "sub2"), key.getSubdomains());
     }
 
     @Test
     void testGetFullDomain() {
-        NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.MACRO, "sub1", "sub2");
+        NamespaceKey key = new NamespaceKey("test.key", NamespaceKey.Domain.MACRO, "sub1", "sub2");
         assertEquals("MACRO:sub1:sub2", key.getFullDomain());
     }
 
     @Test
     void testGetKey() {
-        NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.MACRO, "sub1", "sub2");
+        NamespaceKey key = new NamespaceKey("test.key", NamespaceKey.Domain.MACRO, "sub1", "sub2");
         assertEquals("MACRO:sub1:sub2|test.key", key.getKey());
     }
 
     @Test
     void testGetPathComponents() {
-        NamespaceKey key = new NamespaceKey("test.key.path", Namespace.Domain.MACRO);
+        NamespaceKey key = new NamespaceKey("test.key.path", NamespaceKey.Domain.MACRO);
         assertEquals(List.of("test", "key", "path"), key.getPathComponents());
     }
 
@@ -78,13 +77,13 @@ class NamespaceKeyTest {
 
     @Test
     void testStaticCreate_WithMacroAndDomain() {
-        String key = NamespaceKey.create("MACRO_NAME", Namespace.Domain.MACRO);
+        String key = NamespaceKey.create("MACRO_NAME", NamespaceKey.Domain.MACRO);
         assertEquals("MACRO|MACRO_NAME", key);
     }
 
     @Test
     void testStaticCreate_WithKeyPathDomainAndSubcategories() {
-        String key = NamespaceKey.create("test.key", Namespace.Domain.MACRO, "sub1", "sub2");
+        String key = NamespaceKey.create("test.key", NamespaceKey.Domain.MACRO, "sub1", "sub2");
         assertEquals("MACRO:sub1:sub2:test.key", key);
     }
 
@@ -141,7 +140,7 @@ class NamespaceKeyTest {
 		@Test
 		void testCreate_2_param() {
 			// Arrange & Act
-			String key = NamespaceKey.create(Macro.TOOL, Namespace.Domain.ITEMS);
+			String key = NamespaceKey.create(Macro.TOOL, NamespaceKey.Domain.ITEMS);
 
 			// Assert
 			assertEquals("ITEMS|TOOL", key);
@@ -150,7 +149,7 @@ class NamespaceKeyTest {
 		@Test
 		void testCreate_3_param() {
 			// Arrange & Act
-			String key = NamespaceKey.create("TEST_TOOL_1", Namespace.Domain.ITEMS, "subdomain");
+			String key = NamespaceKey.create("TEST_TOOL_1", NamespaceKey.Domain.ITEMS, "subdomain");
 
 			// Assert
 			assertEquals("ITEMS:subdomain:TEST_TOOL_1", key);
@@ -166,7 +165,7 @@ class NamespaceKeyTest {
 		@Test
         void testStaticCreate_2_param_null_macro() {
             LocalizedException exception = assertThrows(LocalizedException.class,
-                    () -> NamespaceKey.create(null, Namespace.Domain.MACRO));
+                    () -> NamespaceKey.create(null, NamespaceKey.Domain.MACRO));
             assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
         }
 
@@ -180,14 +179,14 @@ class NamespaceKeyTest {
 		@Test
 		void testStaticCreate_3_param_null_keyPath() {
 			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> NamespaceKey.create(null, Namespace.Domain.MACRO, "sub1", "sub2"));
+					() -> NamespaceKey.create(null, NamespaceKey.Domain.MACRO, "sub1", "sub2"));
 			assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
 		}
 
 		@Test
 		void testStaticCreate_3_param_empty_keyPath() {
 			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> NamespaceKey.create("", Namespace.Domain.MACRO, "sub1", "sub2"));
+					() -> NamespaceKey.create("", NamespaceKey.Domain.MACRO, "sub1", "sub2"));
 			assertEquals("The parameter 'keyPath' cannot be empty.", exception.getMessage());
 		}
 
@@ -201,14 +200,14 @@ class NamespaceKeyTest {
         @Test
         void testStaticCreate_3_param_null_subdomain() {
             LocalizedException exception = assertThrows(LocalizedException.class,
-                    () -> NamespaceKey.create("some.key.path", Namespace.Domain.MACRO, (String) null));
+                    () -> NamespaceKey.create("some.key.path", NamespaceKey.Domain.MACRO, (String) null));
             assertEquals("The parameter 'subdomain' cannot be null.", exception.getMessage());
         }
 
         @Test
         void testStaticCreate_3_param_empty_subdomain() {
             LocalizedException exception = assertThrows(LocalizedException.class,
-                    () -> NamespaceKey.create("some.key.path", Namespace.Domain.MACRO, ""));
+                    () -> NamespaceKey.create("some.key.path", NamespaceKey.Domain.MACRO, ""));
             assertEquals("The parameter 'subdomain' cannot be empty.", exception.getMessage());
         }
     }
@@ -218,33 +217,33 @@ class NamespaceKeyTest {
 	class EqualsTests {
 		@Test
 		public void testEquals_sameObject() {
-			NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
 			assertEquals(key, key, "A NamespaceKey should equal itself.");
 		}
 
 		@Test
 		public void testEquals_different_Object() {
-			NamespaceKey key1 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
-			NamespaceKey key2 = new NamespaceKey("test.key2", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key1 = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key2 = new NamespaceKey("test.key2", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
 			assertNotEquals(key1, key2, "Different NamespaceKeys should not be equal.");
 		}
 
 		@Test
 		public void testEquals_nullObject() {
-			NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
 			assertNotEquals(null, key, "A NamespaceKey should not equal null.");
 		}
 
 		@Test
 		public void testEquals_differentClass() {
-			NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
 			assertNotEquals("Some String", key,  "A NamespaceKey should not equal an object of a different class.");
 		}
 
 		@Test
 		public void testEquals_equalObjects() {
-			NamespaceKey key1 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
-			NamespaceKey key2 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key1 = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key2 = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
 
 			assertEquals(key1, key2, "NamespaceKeys with the same fields should be equal.");
 			assertEquals(key1.hashCode(), key2.hashCode(), "Equal NamespaceKeys should have the same hashCode.");
@@ -252,31 +251,31 @@ class NamespaceKeyTest {
 
 		@Test
 		public void testEquals_differentDomains() {
-			NamespaceKey key1 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
-			NamespaceKey key2 = new NamespaceKey("test.key", Namespace.Domain.MACRO, "sub1", "sub2");
+			NamespaceKey key1 = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key2 = new NamespaceKey("test.key", NamespaceKey.Domain.MACRO, "sub1", "sub2");
 
 			assertNotEquals(key1, key2, "NamespaceKeys with different domains should not be equal.");
 		}
 
 		@Test
 		public void testEquals_differentSubdomains() {
-			NamespaceKey key1 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
-			NamespaceKey key2 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "bus1", "bus2");
+			NamespaceKey key1 = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key2 = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "bus1", "bus2");
 
 			assertNotEquals(key1, key2, "NamespaceKeys with different subdomains should not be equal.");
 		}
 
 		@Test
 		public void testEquals_differentPathElements() {
-			NamespaceKey key1 = new NamespaceKey("test.key1", Namespace.Domain.CONSTANTS, "sub1", "sub2");
-			NamespaceKey key2 = new NamespaceKey("test.key2", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key1 = new NamespaceKey("test.key1", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key2 = new NamespaceKey("test.key2", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
 
 			assertNotEquals(key1, key2, "NamespaceKeys with different path elements should not be equal.");
 		}
 
 		@Test
 		public void testEquals_parameter_null() {
-			NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key = new NamespaceKey("test.key", NamespaceKey.Domain.CONSTANTS, "sub1", "sub2");
 
 			assertFalse(key.equals(null));
 		}

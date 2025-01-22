@@ -25,7 +25,6 @@ import com.winterhavenmc.util.messagebuilder.macro.*;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -103,7 +102,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		}
 
 		// create name spaced key
-		String key = NamespaceKey.create(macro.toString(), Namespace.Domain.MACRO);
+		String key = NamespaceKey.create(macro.toString(), NamespaceKey.Domain.MACRO);
 
 		// get macro expected type from macro enum method
 		Class<?> expectedType = macro.getAssociatedType();

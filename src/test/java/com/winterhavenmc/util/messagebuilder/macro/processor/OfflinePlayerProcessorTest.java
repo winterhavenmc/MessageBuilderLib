@@ -22,7 +22,6 @@ import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
 
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -59,7 +58,7 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContextTest() {
 		// Arrange
-		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, NamespaceKey.Domain.MACRO);
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
 		ContextMap contextMap = new ContextMap(playerMock);
 
@@ -104,7 +103,7 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_null_contextMap() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
-		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, NamespaceKey.Domain.MACRO);
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
@@ -118,7 +117,7 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_null_value() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
-		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, NamespaceKey.Domain.MACRO);
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
@@ -133,7 +132,7 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_value_wrong_type() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
-		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		String namespacedKey = NamespaceKey.create(Macro.OWNER, NamespaceKey.Domain.MACRO);
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act

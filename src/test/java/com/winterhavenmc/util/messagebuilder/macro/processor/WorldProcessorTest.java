@@ -20,7 +20,6 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
 
 import org.bukkit.World;
@@ -72,7 +71,7 @@ class WorldProcessorTest {
 	@Test
 	void resolveContext() {
 		String keyPath = "SOME_WORLD";
-		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
+		String nameSpacedKey = NamespaceKey.create(keyPath, NamespaceKey.Domain.MACRO);
 		ContextMap contextMap = new ContextMap(playerMock);
 		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
 		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
@@ -86,7 +85,7 @@ class WorldProcessorTest {
 	@Test
 	void resolveContext_with_null_world() {
 		String keyPath = "SOME_WORLD";
-		String nameSpacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
+		String nameSpacedKey = NamespaceKey.create(keyPath, NamespaceKey.Domain.MACRO);
 		ContextMap contextMap = new ContextMap(playerMock);
 		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
 		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
