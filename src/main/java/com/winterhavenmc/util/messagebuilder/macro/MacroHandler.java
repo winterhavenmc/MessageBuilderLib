@@ -19,12 +19,15 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.context.Source;
+import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 import com.winterhavenmc.util.messagebuilder.macro.processor.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorRegistry;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 
 import java.util.Map;
 
@@ -105,24 +108,15 @@ public class MacroHandler {
 			// final result map of String NameSpacedKeys and processed String values
 			ResultMap replacementStringMap = new ResultMap();
 
-			//TODO: THESE WILL NEED TO BE ADDED ELSEWHERE, LIKE IN THE APPROPRIATE MACRO PROCESSOR
-			// perhaps we need a RECIPIENT type; at any rate, there will need to be a method
-			// to add items to the ContextMap manually, before macros are processed
-//			// put message recipient in macro object map
-//			// create key for recipient in contextMap
-//			ContextKey compositeKey = new CompositeKey(processorType, "RECIPIENT");
-//
-//			contextMap.put(compositeKey, recipient);
-//
-//			// if recipient is an entity, put recipient location in macro object map
-//			if (recipient instanceof Entity entity) {
-//				contextMap.put("RECIPIENT_LOCATION", entity.getLocation());
-//			}
-//
-//			// put string placeholder for item in object map if not already in map
-//			if (!contextMap.containsKey("ITEM_NAME")) {
-//				contextMap.put("ITEM_NAME", "item_name");
-//			}
+			// put recipient name in context map
+			String contextKey = SourceKey.create(Source.MACRO, "RECIPIENT");
+			contextMap.put(contextKey, ContextContainer.of(recipient.getName(), ProcessorType.COMMAND_SENDER));
+
+			// if recipient is an entity, put recipient location in macro object map
+			if (recipient instanceof Entity entity) {
+				String locationKey = contextKey.concat(".LOCATION");
+				contextMap.put(locationKey, ContextContainer.of(entity.getLocation(), ProcessorType.LOCATION));
+			}
 
 			// iterate over context map, getting macro value strings based on class type in map
 			for (Map.Entry<String, ContextContainer<?>> entry : contextMap.entrySet()) {

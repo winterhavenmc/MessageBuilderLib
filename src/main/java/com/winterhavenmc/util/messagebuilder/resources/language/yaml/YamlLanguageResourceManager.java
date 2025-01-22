@@ -18,7 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.configuration.Configuration;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -48,7 +51,9 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	/**
 	 * Private constructor prevents instantiation except from within this class
 	 */
-	private YamlLanguageResourceManager(final YamlLanguageResourceInstaller resourceInstaller, final YamlLanguageResourceLoader resourceLoader) {
+	private YamlLanguageResourceManager(final YamlLanguageResourceInstaller resourceInstaller,
+	                                    final YamlLanguageResourceLoader resourceLoader)
+	{
 		this.languageResourceLoader = resourceLoader;
 		this.languageResourceInstaller = resourceInstaller;
 
@@ -69,9 +74,10 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 * @return a new or cached instance of this singleton
 	 */
 	public static YamlLanguageResourceManager getInstance(final YamlLanguageResourceInstaller resourceInstaller,
-	                                                      final YamlLanguageResourceLoader resourceLoader) {
-
-		//TODO: add null parameter checks here
+	                                                      final YamlLanguageResourceLoader resourceLoader)
+	{
+		if (resourceInstaller == null) { throw new LocalizedException(PARAMETER_NULL, "resourceInstaller"); }
+		if (resourceLoader == null) { throw new LocalizedException(PARAMETER_NULL, "resourceLoader"); }
 
 		if (instance == null) {
 			synchronized (YamlLanguageResourceManager.class) {
@@ -93,13 +99,15 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 *
 	 * @return {@code true} if the configuration was successfully reloaded, {@code false} if it failed
 	 */
-	public boolean reload() {
-
+	public boolean reload()
+	{
 		// install any resources whose corresponding files are absent
 		languageResourceInstaller.autoInstall();
 
 		// Reload the configuration and get the new configuration from the loader
 		this.languageConfiguration = languageResourceLoader.loadConfiguration();
+
+		// create a new configuration supplier with the new configuration
 		this.configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
 		return true;
 	}

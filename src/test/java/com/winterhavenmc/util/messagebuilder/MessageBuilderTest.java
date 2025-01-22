@@ -124,15 +124,6 @@ class MessageBuilderTest {
 
 
 	@Test
-	void getToolkit() {
-		// Arrange & Act
-		Toolkit toolkit = messageBuilder.getToolkit();
-
-		// Assert
-		assertNotNull(toolkit);
-	}
-
-	@Test
 	void getLanguageQueryHandler() {
 		LanguageQueryHandler languageQueryHandler = messageBuilder.getLanguageQueryHandler();
 		assertNotNull(languageQueryHandler);

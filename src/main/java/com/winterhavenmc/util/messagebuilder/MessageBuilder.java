@@ -134,16 +134,6 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 
 	/**
-	 *  Return an instance of the MessageBuilderToolkit for an advanced interface to MessageBuilder internals
-	 * 
-	 * @return a new MessageBuilderToolkit instance
-	 */
-	public Toolkit getToolkit() {
-		return new MessageBuilderToolkit<>(this);
-	}
-
-
-	/**
 	 * Return an instance of the language file ItemRecord handler
 	 *
 	 * @return the ItemRecord handler for the language file

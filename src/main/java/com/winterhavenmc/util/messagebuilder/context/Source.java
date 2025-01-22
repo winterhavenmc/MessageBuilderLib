@@ -15,24 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.context;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface Toolkit {
-
-	void setDelimiters(Character character);
-
-	void setDelimiters(Character leftCharacter, Character rightCharacter);
-
-	Optional<String> getSpawnDisplayName();
-
-	Optional<String> getHomeDisplayName();
-
-	Optional<String> getString(String key);
-
-	List<String> getStringList(String key);
-
-	int getInt(String key);
+public enum Source {
+	CONST,
+	ITEM,
+	MACRO,
 }

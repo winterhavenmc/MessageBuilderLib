@@ -17,13 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.context.*;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
-import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 
 import org.bukkit.configuration.Configuration;
@@ -67,16 +64,16 @@ class StringProcessorTest {
 		String stringObject = "some name";
 
 		ContextMap contextMap = new ContextMap(playerMock);
-		String namespacedKey = NamespaceKey.create(keyPath, Namespace.Domain.MACRO);
+		String contextKey = SourceKey.create(Source.MACRO, keyPath);
 
-		contextMap.put(namespacedKey, ContextContainer.of(stringObject, ProcessorType.STRING));
+		contextMap.put(contextKey, ContextContainer.of(stringObject, ProcessorType.STRING));
 
 		MacroProcessor macroProcessor = new StringProcessor(queryHandler);
 
-		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, contextMap, stringObject);
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, stringObject);
 
-		assertTrue(resultMap.containsKey(namespacedKey));
-		assertEquals(stringObject, resultMap.get(namespacedKey));
+		assertTrue(resultMap.containsKey(contextKey));
+		assertEquals(stringObject, resultMap.get(contextKey));
 	}
 
 

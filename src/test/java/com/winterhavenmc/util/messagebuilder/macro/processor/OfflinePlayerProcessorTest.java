@@ -18,11 +18,11 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.context.Source;
+import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
 
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -59,16 +59,16 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContextTest() {
 		// Arrange
-		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, contextMap, offlinePlayerMock);
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, offlinePlayerMock);
 
 		// Assert
 		assertFalse(resultMap.isEmpty());
-		assertTrue(resultMap.containsKey(namespacedKey));
+		assertTrue(resultMap.containsKey(contextKey));
 	}
 
 
@@ -104,11 +104,11 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_null_contextMap() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
-		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroProcessor.resolveContext(namespacedKey, null, offlinePlayerMock));
+				() -> macroProcessor.resolveContext(contextKey, null, offlinePlayerMock));
 
 		// Assert
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
@@ -118,12 +118,12 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_null_value() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
-		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroProcessor.resolveContext(namespacedKey, contextMap, null));
+				() -> macroProcessor.resolveContext(contextKey, contextMap, null));
 
 		// Assert
 		assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
@@ -133,11 +133,11 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_value_wrong_type() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
-		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
+		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(namespacedKey, contextMap, new ItemStack(Material.STONE));
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, new ItemStack(Material.STONE));
 
 		// Assert
 		assertTrue(resultMap.isEmpty());
