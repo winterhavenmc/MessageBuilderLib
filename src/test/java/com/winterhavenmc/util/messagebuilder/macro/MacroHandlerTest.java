@@ -40,8 +40,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.internal.configuration.GlobalConfiguration.validate;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -116,14 +116,16 @@ class MacroHandlerTest {
 
 	@Test
 	void replaceMacrosTest_recipient_is_entity() {
-		Entity entity = mock(Entity.class);
-		when(entity.getUniqueId()).thenReturn(new UUID(123,123));
-		when(entity.getName()).thenReturn("player1");
+		Entity entityMock = mock(Entity.class);
+		when(entityMock.getUniqueId()).thenReturn(new UUID(123,123));
+		when(entityMock.getName()).thenReturn("entity one");
 
 		ContextMap contextMap = new ContextMap(playerMock);
+		contextMap.put("ENTITY", ContextContainer.of(entityMock, ProcessorType.ENTITY));
 
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
-		assertEquals("Replace this: §aTest Item", resultString);
+		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: {ENTITY}");
+
+		assertEquals("Replace this: player1", resultString);
 	}
 
 }
