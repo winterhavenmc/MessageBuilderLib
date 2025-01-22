@@ -51,7 +51,7 @@ class SectionQueryHandlerFactoryTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new SectionQueryHandlerFactory(null));
 
-		assertEquals("The configuration parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
 	}
 
 

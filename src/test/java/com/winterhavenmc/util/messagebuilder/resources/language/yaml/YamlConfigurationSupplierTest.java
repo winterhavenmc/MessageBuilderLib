@@ -76,7 +76,7 @@ class YamlConfigurationSupplierTest {
 				() -> configurationSupplier.getSection(null));
 
 		// Assert
-		assertEquals("The section parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'section' cannot be null.", exception.getMessage());
 	}
 
 }

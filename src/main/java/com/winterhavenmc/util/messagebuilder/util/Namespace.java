@@ -20,7 +20,6 @@ package com.winterhavenmc.util.messagebuilder.util;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time.TimeSectionQueryHandler;
 
 /**
  * This class contains enums that are used as a component to create a unique namespace,
@@ -44,7 +43,6 @@ public class Namespace {
 		ITEMS(ItemSectionQueryHandler.class), // values supplied by the yaml language file, from the root level section 'ITEMS'
 		MACRO(null), // values passed in by calls to the setMacro method
 		MESSAGES(MessageSectionQueryHandler.class), // values supplied by the yaml language file. from the root level section 'MESSAGES'
-		TIME(TimeSectionQueryHandler.class), // string values for time units supplied by the yaml language file, from the root level section 'TIME'
 		;
 
 		// placeholder prefix to prevent name collisions between domains

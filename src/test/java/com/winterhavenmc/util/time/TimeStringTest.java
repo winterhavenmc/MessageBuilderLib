@@ -66,7 +66,7 @@ class TimeStringTest {
 				() -> TimeString.getTimeString((Locale) null, millis));
 
 		// Assert
-		assertEquals("The locale parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'locale' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -79,7 +79,7 @@ class TimeStringTest {
 				() -> TimeString.getTimeString((String) null, millis));
 
 		// Assert
-		assertEquals("The languageTag parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
 	}
 
 	@Test

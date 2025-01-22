@@ -21,7 +21,6 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.time.TimeSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
 import org.junit.jupiter.api.Test;
@@ -38,15 +37,13 @@ class SectionTest {
 		assertEquals(ConstantSectionQueryHandler.class, Section.CONSTANTS.getHandlerClass());
 		assertEquals(ItemSectionQueryHandler.class, Section.ITEMS.getHandlerClass());
 		assertEquals(MessageSectionQueryHandler.class, Section.MESSAGES.getHandlerClass());
-		assertEquals(TimeSectionQueryHandler.class, Section.TIME.getHandlerClass());
 	}
 
 	@Test
 	void getSingularName() {
 		assertEquals("Constant", Section.CONSTANTS.getSingularName());
 		assertEquals("Item", Section.ITEMS.getSingularName());
-		assertEquals("Message", Section.MESSAGES.getSingularName());
-		assertEquals("Time", Section.TIME.getSingularName());
+		assertEquals("MessageKey", Section.MESSAGES.getSingularName());
 	}
 
 	@Test
@@ -54,7 +51,6 @@ class SectionTest {
 		assertEquals("Constants", Section.CONSTANTS.getPluralName());
 		assertEquals("Items", Section.ITEMS.getPluralName());
 		assertEquals("Messages", Section.MESSAGES.getPluralName());
-		assertEquals("Times", Section.TIME.getPluralName());
 	}
 
 	@Test
@@ -62,7 +58,6 @@ class SectionTest {
 		assertEquals("CONST", Section.CONSTANTS.getMnemonic());
 		assertEquals("ITEM", Section.ITEMS.getMnemonic());
 		assertEquals("MSG", Section.MESSAGES.getMnemonic());
-		assertEquals("TIME", Section.TIME.getMnemonic());
 	}
 
 	@ParameterizedTest
@@ -82,7 +77,6 @@ class SectionTest {
 		assertEquals(Section.CONSTANTS, values[0]);
 		assertEquals(Section.ITEMS, values[1]);
 		assertEquals(Section.MESSAGES, values[2]);
-		assertEquals(Section.TIME, values[3]);
 	}
 
 	@Test
@@ -90,6 +84,5 @@ class SectionTest {
 		assertEquals(Section.CONSTANTS, Section.valueOf("CONSTANTS"));
 		assertEquals(Section.ITEMS, Section.valueOf("ITEMS"));
 		assertEquals(Section.MESSAGES, Section.valueOf("MESSAGES"));
-		assertEquals(Section.TIME, Section.valueOf("TIME"));
 	}
 }

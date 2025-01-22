@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -70,9 +71,9 @@ class NamespaceKeyTest {
 
     @Test
     void testStaticCreate_WithMacro_null() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        LocalizedException exception = assertThrows(LocalizedException.class,
                 () -> NamespaceKey.create(null));
-        assertEquals("macro cannot be null.", exception.getMessage());
+        assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
     }
 
     @Test
@@ -114,55 +115,101 @@ class NamespaceKeyTest {
         assertFalse(NamespaceKey.isValidKeyPath("test.key..path"));
     }
 
-    @Test
-    void testLogInvalidKeyPath_InvalidDomainLogsWarning() {
-        // Use a mock logger or capture console output for assertion
-        NamespaceKey.logInvalidKeyPath("test.key..path");
-    }
+	@Test
+	void testLogInvalidKeyPath_InvalidDomainLogsWarning() {
+		// Use a mock logger or capture console output for assertion
+		NamespaceKey.logInvalidKeyPath("test.key..path");
+	}
 
+	@Test
+	void testLogInvalidKeyPath_valid() {
+		// Use a mock logger or capture console output for assertion
+		NamespaceKey.logInvalidKeyPath("VALID_KEY");
+	}
 
-    @Nested
-    class StaticCreateTests {
-        @Test
+	@Nested
+	class StaticCreateTests {
+		@Test
+		void testCreate_1_param() {
+			// Arrange & Act
+			String key = NamespaceKey.create(Macro.TOOL);
+
+			// Assert
+			assertEquals("MACRO|TOOL", key);
+		}
+
+		@Test
+		void testCreate_2_param() {
+			// Arrange & Act
+			String key = NamespaceKey.create(Macro.TOOL, Namespace.Domain.ITEMS);
+
+			// Assert
+			assertEquals("ITEMS|TOOL", key);
+		}
+
+		@Test
+		void testCreate_3_param() {
+			// Arrange & Act
+			String key = NamespaceKey.create("TEST_TOOL_1", Namespace.Domain.ITEMS, "subdomain");
+
+			// Assert
+			assertEquals("ITEMS:subdomain:TEST_TOOL_1", key);
+		}
+
+		@Test
+		void testCreate_1_param_null_macro() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> NamespaceKey.create(null));
+			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
+		}
+
+		@Test
         void testStaticCreate_2_param_null_macro() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create(null, Namespace.Domain.MACRO));
-            assertEquals("macro cannot be null.", exception.getMessage());
+            assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
         }
 
         @Test
         void testStaticCreate_2_param_null_domain() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create(Macro.TOOL, null));
-            assertEquals("The domain parameter cannot be null.", exception.getMessage());
+            assertEquals("The parameter 'domain' cannot be null.", exception.getMessage());
         }
 
-        @Test
-        void testStaticCreate_3_param_null_keyPath() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                    () -> NamespaceKey.create(null, Namespace.Domain.MACRO, "sub1", "sub2"));
-            assertEquals("The keyPath parameter cannot be null.", exception.getMessage());
-        }
+		@Test
+		void testStaticCreate_3_param_null_keyPath() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> NamespaceKey.create(null, Namespace.Domain.MACRO, "sub1", "sub2"));
+			assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
+		}
 
-        @Test
+		@Test
+		void testStaticCreate_3_param_empty_keyPath() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> NamespaceKey.create("", Namespace.Domain.MACRO, "sub1", "sub2"));
+			assertEquals("The parameter 'keyPath' cannot be empty.", exception.getMessage());
+		}
+
+		@Test
         void testStaticCreate_3_param_null_domain() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create("some.key.path", null, "sub1", "sub2"));
-            assertEquals("The domain parameter cannot be null.", exception.getMessage());
+            assertEquals("The parameter 'domain' cannot be null.", exception.getMessage());
         }
 
         @Test
         void testStaticCreate_3_param_null_subdomain() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create("some.key.path", Namespace.Domain.MACRO, (String) null));
-            assertEquals("Subdomains cannot be null.", exception.getMessage());
+            assertEquals("The parameter 'subdomain' cannot be null.", exception.getMessage());
         }
 
         @Test
         void testStaticCreate_3_param_empty_subdomain() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create("some.key.path", Namespace.Domain.MACRO, ""));
-            assertEquals("Subdomains cannot be empty.", exception.getMessage());
+            assertEquals("The parameter 'subdomain' cannot be empty.", exception.getMessage());
         }
     }
 
@@ -173,6 +220,13 @@ class NamespaceKeyTest {
 		public void testEquals_sameObject() {
 			NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
 			assertEquals(key, key, "A NamespaceKey should equal itself.");
+		}
+
+		@Test
+		public void testEquals_different_Object() {
+			NamespaceKey key1 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+			NamespaceKey key2 = new NamespaceKey("test.key2", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+			assertNotEquals(key1, key2, "Different NamespaceKeys should not be equal.");
 		}
 
 		@Test
@@ -219,55 +273,13 @@ class NamespaceKeyTest {
 
 			assertNotEquals(key1, key2, "NamespaceKeys with different path elements should not be equal.");
 		}
+
+		@Test
+		public void testEquals_parameter_null() {
+			NamespaceKey key = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1", "sub2");
+
+			assertFalse(key.equals(null));
+		}
 	}
-
-
-    //TODO: THESE SHOULD ALL THROW. disable test if it does, and try to work around for testing null. Null parameter checks should already be done above
-//    @Disabled
-//    @Nested
-//    class ThrowOnNullParameterTests {
-//        @Test
-//        public void testEquals_nullSubdomains() {
-//            NamespaceKey key1 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, (String[]) null);
-//            NamespaceKey key2 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, (String[]) null);
-//
-//            assertEquals(key1, key2, "NamespaceKeys with null subdomains but identical other fields should be equal.");
-//            assertEquals(key1.hashCode(), key2.hashCode(), "Equal NamespaceKeys with null subdomains should have the same hashCode.");
-//        }
-//
-//        @Test
-//        public void testEquals_nullPathElements() {
-//            NamespaceKey key1 = new NamespaceKey(null, Namespace.Domain.CONSTANTS, "sub1","sub2");
-//            NamespaceKey key2 = new NamespaceKey(null, Namespace.Domain.CONSTANTS, "sub1","sub2");
-//
-//            assertEquals(key1, key2, "NamespaceKeys with null path elements but identical other fields should be equal.");
-//            assertEquals(key1.hashCode(), key2.hashCode(), "Equal NamespaceKeys with null path elements should have the same hashCode.");
-//        }
-//
-//        @Test
-//        public void testEquals_bothNullSubdomainsAndPathElements() {
-//            NamespaceKey key1 = new NamespaceKey(null, Namespace.Domain.CONSTANTS, (String[]) null);
-//            NamespaceKey key2 = new NamespaceKey(null, Namespace.Domain.CONSTANTS, (String[]) null);
-//
-//            assertEquals(key1, key2, "NamespaceKeys with null subdomains and null path elements should be equal.");
-//            assertEquals(key1.hashCode(), key2.hashCode(), "Equal NamespaceKeys with null fields should have the same hashCode.");
-//        }
-//
-//        @Test
-//        public void testEquals_oneNullSubdomains() {
-//            NamespaceKey key1 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, (String[]) null);
-//            NamespaceKey key2 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1","sub2");
-//
-//            assertNotEquals(key1, key2, "NamespaceKeys with one null and one non-null subdomain should not be equal.");
-//        }
-//
-//        @Test
-//        public void testEquals_oneNullPathElements() {
-//            NamespaceKey key1 = new NamespaceKey(null, Namespace.Domain.CONSTANTS, "sub1","sub2");
-//            NamespaceKey key2 = new NamespaceKey("test.key", Namespace.Domain.CONSTANTS, "sub1","sub2");
-//
-//            assertNotEquals(key1, key2, "NamespaceKeys with one null and one non-null path element should not be equal.");
-//        }
-//    }
 
 }

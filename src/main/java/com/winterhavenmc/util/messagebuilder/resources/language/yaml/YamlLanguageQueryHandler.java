@@ -24,10 +24,11 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ite
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.Error.*;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 public class YamlLanguageQueryHandler implements LanguageQueryHandler {
@@ -40,7 +41,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	 * @param yamlConfigurationSupplier the language configuration supplier
 	 */
 	public YamlLanguageQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
-		if (yamlConfigurationSupplier == null) { throw new IllegalArgumentException(Parameter.NULL_CONFIGURATION.getMessage()); }
+		if (yamlConfigurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, "configurationSupplier"); }
 
 		this.yamlConfigurationSupplier = yamlConfigurationSupplier;
 	}
@@ -63,7 +64,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 
 	@Override
 	public Optional<ItemRecord> getItemRecord(final String keyPath) {
-		if (keyPath == null) { throw new IllegalArgumentException(Parameter.NULL_ITEM_KEY.getMessage()); }
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
 
 		ItemSectionQueryHandler itemSectionQueryHandler = Section.ITEMS.getQueryHandler(yamlConfigurationSupplier);
 		return itemSectionQueryHandler.getRecord(keyPath);
@@ -72,7 +73,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 
 	@Override
 	public <MessageId extends Enum<MessageId>> Optional<MessageRecord> getMessageRecord(final MessageId messageId) {
-		if (messageId == null) { throw new IllegalArgumentException(Parameter.NULL_MESSAGE_ID.getMessage()); }
+		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, "messageId"); }
 
 		MessageSectionQueryHandler messageSectionQueryHandler = Section.MESSAGES.getQueryHandler(yamlConfigurationSupplier);
 		return messageSectionQueryHandler.getRecord(messageId);

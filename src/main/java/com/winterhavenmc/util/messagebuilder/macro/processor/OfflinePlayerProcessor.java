@@ -19,8 +19,11 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.OfflinePlayer;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 public class OfflinePlayerProcessor extends MacroProcessorTemplate implements MacroProcessor {
@@ -30,16 +33,16 @@ public class OfflinePlayerProcessor extends MacroProcessorTemplate implements Ma
 	}
 
 	@Override
-	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
-		if (key == null) { throw new IllegalArgumentException(Error.Parameter.NULL_KEY_PATH.getMessage()); }
-		if (key.isBlank()) { throw new IllegalArgumentException(Error.Parameter.EMPTY_KEY_PATH.getMessage()); }
-		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
-		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
+	public <T> ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
+		if (keyPath.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "keyPath"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+		if (value == null) { throw new LocalizedException(PARAMETER_NULL, "value"); }
 
 		ResultMap resultMap = new ResultMap();
 
 		if (value instanceof OfflinePlayer offlinePlayer) {
-			resultMap.put(key, offlinePlayer.getName());
+			resultMap.put(keyPath, offlinePlayer.getName());
 		}
 
 		return resultMap;

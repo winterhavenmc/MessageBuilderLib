@@ -19,9 +19,12 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 import org.bukkit.Location;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -100,10 +103,10 @@ public class LocationProcessor extends MacroProcessorTemplate {
 	 */
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
-		if (key == null) { throw new IllegalArgumentException(Error.Parameter.NULL_NAMESPACED_KEY.getMessage()); }
-		if (key.isBlank()) { throw new IllegalArgumentException((Error.Parameter.EMPTY_NAMESPACED_KEY.getMessage())); }
-		if (contextMap == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONTEXT_MAP.getMessage()); }
-		if (value == null) { throw new IllegalArgumentException(Error.Parameter.NULL_VALUE.getMessage()); }
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+		if (value == null) { throw new LocalizedException(PARAMETER_NULL, "value"); }
 
 		// create empty result map
 		ResultMap resultMap = new ResultMap();

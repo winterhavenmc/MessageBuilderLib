@@ -17,12 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.context;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Namespace;
 
 import java.util.*;
 import java.util.logging.Logger;
 
-import static com.winterhavenmc.util.messagebuilder.util.Error.*;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -74,37 +76,6 @@ public class NamespaceKey implements ContextKey {
 	private final Namespace.Domain domain;
 	private final List<String> subdomains;
 	private final List<String> pathComponents;
-
-
-	/**
-	 * Class constructor
-	 * <p>
-	 * creates a NamespaceKey with the supplied String representation of a full key.
-	 *</p>
-	 * @param fullKeyString a full String key to be used to derive a NamespaceKey's components
-	 */
-	NamespaceKey(final String fullKeyString) {
-		if (!containsExactlyOne(fullKeyString, KEY_BOUNDARY_DELIMITER)) {
-			throw new IllegalArgumentException("parameter fullKeyString is an invalid namespace key string.");
-		}
-
-		String[] keyHalves = fullKeyString.split(KEY_BOUNDARY_DELIMITER.toString(), 2);
-		String[] domainComponents = keyHalves[0].split(KEY_DOMAIN_DELIMITER.toString(), 2);
-
-		// get matching Domain constant from string
-		this.domain = Namespace.Domain.valueOf(domainComponents[0]);
-
-		// split subdomains into list if any
-		if (domainComponents.length > 1) {
-			this.subdomains = List.of(domainComponents[1].split(KEY_DOMAIN_DELIMITER.toString()));
-		}
-		else {
-			this.subdomains = Collections.emptyList();
-		}
-
-		// split path components into list
-		this.pathComponents = List.of(keyHalves[1].split("\\" + KEY_PATH_DELIMITER));
-	}
 
 
 	/**
@@ -210,7 +181,7 @@ public class NamespaceKey implements ContextKey {
 	 * @return A proper namespaced String key.
 	 */
 	public static <Macro> String create(final Macro macro) {
-		if (macro == null) { throw new IllegalArgumentException(Parameter.NULL_MACRO.getMessage()); }
+		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, "macro"); }
 
 		return Namespace.Domain.MACRO + KEY_BOUNDARY_DELIMITER.toString() + macro;
 	}
@@ -225,8 +196,8 @@ public class NamespaceKey implements ContextKey {
 	 * @return A proper namespaced String key.
 	 */
 	public static <Macro> String create(final Macro macro, final Namespace.Domain domain) {
-		if (macro == null) { throw new IllegalArgumentException(Parameter.NULL_MACRO.getMessage()); }
-		if (domain == null) { throw new IllegalArgumentException(Parameter.NULL_DOMAIN.getMessage()); }
+		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, "macro"); }
+		if (domain == null) { throw new LocalizedException(PARAMETER_NULL, "domain"); }
 
 		return domain.name() + KEY_BOUNDARY_DELIMITER + macro;
 	}
@@ -243,20 +214,20 @@ public class NamespaceKey implements ContextKey {
 	public static String create(final String keyPath,
 	                            final Namespace.Domain domain,
 	                            final String... subdomains) {
-		if (keyPath == null) { throw new IllegalArgumentException(Parameter.NULL_KEY_PATH.getMessage()); }
-		if (keyPath.isBlank()) { throw new IllegalArgumentException(Parameter.EMPTY_KEY_PATH.getMessage()); }
-		if (domain == null) { throw new IllegalArgumentException(Parameter.NULL_DOMAIN.getMessage()); }
-		if (subdomains == null) { throw new IllegalArgumentException(Parameter.NULL_SUBDOMAINS.getMessage()); }
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
+		if (keyPath.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "keyPath"); }
+		if (domain == null) { throw new LocalizedException(PARAMETER_NULL, "domain"); }
+		if (subdomains == null) { throw new LocalizedException(PARAMETER_NULL, "subdomains"); }
 
 		StringBuilder fullKey = new StringBuilder(domain.name());
-		for (String subcategory : subdomains) {
-			if (subcategory == null) {
-				throw new IllegalArgumentException(Parameter.NULL_SUBDOMAIN_ELEMENT.getMessage());
+		for (String subdomain : subdomains) {
+			if (subdomain == null) {
+				throw new LocalizedException(PARAMETER_NULL, "subdomain");
 			}
-			if (subcategory.isBlank()) {
-				throw new IllegalArgumentException(Parameter.EMPTY_SUBDOMAIN_ELEMENT.getMessage());
+			if (subdomain.isBlank()) {
+				throw new LocalizedException(PARAMETER_EMPTY, "subdomain");
 			}
-			fullKey.append(KEY_DOMAIN_DELIMITER).append(subcategory);
+			fullKey.append(KEY_DOMAIN_DELIMITER).append(subdomain);
 		}
 		fullKey.append(KEY_DOMAIN_DELIMITER).append(keyPath);
 		return fullKey.toString();
@@ -326,13 +297,6 @@ public class NamespaceKey implements ContextKey {
 			// Log a warning without modifying the keyPath
 			Logger.getLogger("NamespaceKey").warning("Key path '" + keyPath + "' does not conform to the allowed naming convention.");
 		}
-	}
-
-
-	public static boolean containsExactlyOne(final String input, final char target) {
-		return input.chars()
-				.filter(c -> c == target)
-				.count() == 1;
 	}
 
 

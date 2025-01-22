@@ -23,7 +23,9 @@ import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -41,7 +43,6 @@ import java.time.Duration;
 import java.util.logging.Logger;
 
 import static com.winterhavenmc.util.messagebuilder.MessageBuilder.TICKS;
-import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -69,7 +70,7 @@ class MessageBuilderTest {
 		pluginConfiguration.set("language", "en-US");
 		pluginConfiguration.set("locale", "en-US");
 
-		languageConfiguration = loadConfigurationFromResource("language/en-US.yml");
+		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		messageBuilder = new MessageBuilder<>(pluginMock,
 				languageResourceManagerMock,
 				languageQueryHandlerMock,
@@ -78,6 +79,12 @@ class MessageBuilderTest {
 
 	@AfterEach
 	public void tearDown() {
+		languageResourceManagerMock = null;
+		languageQueryHandlerMock = null;
+		macroQueryHandlerMock = null;
+		playerMock = null;
+		pluginConfiguration = null;
+		languageConfiguration = null;
 	}
 
 
@@ -102,17 +109,17 @@ class MessageBuilderTest {
 				() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
 
 		// Assert
-		assertEquals("The recipient parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void compose_parameter_null_message_id() {
 		// Arrange & Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> messageBuilder.compose(playerMock, null));
 
 		// Assert
-		assertEquals("The messageId parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'messageId' cannot be null.", exception.getMessage());
 	}
 
 

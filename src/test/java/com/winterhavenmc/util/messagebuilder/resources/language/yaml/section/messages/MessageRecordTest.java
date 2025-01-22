@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -81,11 +82,11 @@ class MessageRecordTest {
 	}
 
 	@Test
-	void testGetRecord_parameter_keyPath_null() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+	void testGetRecord_parameter_messageId_null() {
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() ->  MessageRecord.getRecord(null, messageSection));
 
-		assertEquals("The messageId parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'messageId' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -96,10 +97,10 @@ class MessageRecordTest {
 
 	@Test
 	void testGetRecord_parameter_itemSection_null() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() ->  MessageRecord.getRecord(ENABLED_MESSAGE, null));
 
-		assertEquals("The messageSection parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'messageSection' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -108,11 +109,11 @@ class MessageRecordTest {
 		messageSection = configuration.getConfigurationSection("ITEMS");
 
 		// Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() ->  MessageRecord.getRecord(ENABLED_MESSAGE, messageSection));
 
 		// Assert
-		assertEquals("The messageSection returned by the configuration supplier was an invalid 'MESSAGES' section.", exception.getMessage());
+		assertEquals("The configuration section returned by the configuration supplier was an invalid 'MESSAGES' section.", exception.getMessage());
 	}
 
 }

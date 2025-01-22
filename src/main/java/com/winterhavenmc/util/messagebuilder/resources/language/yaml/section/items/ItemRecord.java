@@ -17,12 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
-import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -77,8 +79,8 @@ public record ItemRecord(
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
 	public static Optional<ItemRecord> getRecord(final String keyPath, final ConfigurationSection itemSection) {
-		if (keyPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_ITEM_KEY.getMessage()); }
-		if (itemSection == null) { throw new IllegalArgumentException(Error.Parameter.INVALID_SECTION_ITEMS.getMessage()); }
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
+		if (itemSection == null) { throw new LocalizedException(PARAMETER_NULL, "itemSection"); }
 
 		// get configuration section for item key
 		ConfigurationSection itemEntry = itemSection.getConfigurationSection(keyPath);
@@ -86,8 +88,9 @@ public record ItemRecord(
 
 		// return new ItemRecord
 		return Optional.of(new ItemRecord(keyPath,
-				// looping over these would be nice, and checking types against those listed in the query handler would be too
-				// any fields that do not match a type listed in the query handler will be returned as an empty optional or empty list or throw an exception
+				// looping over these would be nice, and checking types against those listed in the query handler
+				// would be to any fields that do not match a type listed in the query handler will be returned as
+				// an empty optional or empty list or throw an exception
 				Optional.ofNullable(itemEntry.getString(Field.NAME_SINGULAR.getKeyPath())),
 				Optional.ofNullable(itemEntry.getString(Field.NAME_PLURAL.getKeyPath())),
 				Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath())),
@@ -97,7 +100,7 @@ public record ItemRecord(
 
 
 	@Override
-	public Optional<String> getPluralized(int quantity) {
+	public Optional<String> nameFor(int quantity) {
 		if (quantity != 1) {
 			return namePlural;
 		}

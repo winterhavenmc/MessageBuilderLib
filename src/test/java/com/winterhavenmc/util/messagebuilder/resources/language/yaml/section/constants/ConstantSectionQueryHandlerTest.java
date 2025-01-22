@@ -62,7 +62,7 @@ class ConstantSectionQueryHandlerTest {
 	void testConstructor_parameter_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new ConstantSectionQueryHandler(null));
-		assertEquals("The configurationSupplier parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -73,7 +73,7 @@ class ConstantSectionQueryHandlerTest {
 
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  new ConstantSectionQueryHandler(supplier));
-		assertEquals("The constantSection returned by the configuration supplier was an invalid 'CONSTANTS' section.", exception.getMessage());
+		assertEquals("The configuration section returned by the configuration supplier was an invalid 'CONSTANTS' section.", exception.getMessage());
 	}
 
 	@Test
@@ -105,7 +105,7 @@ class ConstantSectionQueryHandlerTest {
 	void getString_keyPath_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> queryHandler.getString(null));
-		assertEquals("The keyPath parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -122,7 +122,7 @@ class ConstantSectionQueryHandlerTest {
 	void getStringList_keyPath_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> queryHandler.getStringList(null));
-		assertEquals("The keyPath parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -139,7 +139,7 @@ class ConstantSectionQueryHandlerTest {
 	void getInt_keyPath_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> queryHandler.getInt(null));
-		assertEquals("The keyPath parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
 	}
 
 }

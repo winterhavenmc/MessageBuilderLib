@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstallerTest;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,6 +28,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.*;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 public final class MockUtility {
@@ -106,9 +108,9 @@ public final class MockUtility {
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
 	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
-		if (resourceName == null) { throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.Parameter.NULL_RESOURCE_NAME.getMessage()); }
-		if (resourceName.isEmpty()) { throw new IllegalArgumentException(com.winterhavenmc.util.messagebuilder.util.Error.Parameter.EMPTY_RESOURCE_NAME.getMessage()); }
-		if (targetDirPath == null) { throw new IllegalArgumentException(Error.Parameter.NULL_DIRECTORY_PATH.getMessage()); }
+		if (resourceName == null) { throw new LocalizedException(PARAMETER_NULL, "resourceName"); }
+		if (resourceName.isEmpty()) { throw new LocalizedException(PARAMETER_EMPTY, "resourceName"); }
+		if (targetDirPath == null) { throw new LocalizedException(PARAMETER_NULL, "targetDirPath"); }
 
 		// Ensure the target directory exists
 		Files.createDirectories(targetDirPath);

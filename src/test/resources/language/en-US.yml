@@ -16,7 +16,7 @@ SETTINGS:
 CONSTANTS:
   TIME:
     UNLIMITED: "unlimited"
-    LESS_THAN: "less than {VALUE}"
+    LESS_THAN: "less than {NUMBER}"
     LESS_THAN_ONE: "less than one"
   SPAWN:
     DISPLAY_NAME: '&aSpawn'
@@ -35,45 +35,6 @@ CONSTANTS:
 DEFAULTS:
   WORLD.NAME: "unknown world"
   PLAYER.NAME: "a player"
-
-
-##############
-# Time Strings
-##############
-TIME:
-  UNITS:
-    MILLISECONDS:
-      SINGULAR: "millisecond"
-      PLURAL: "milliseconds"
-    TICKS:
-      SINGULAR: "tick"
-      PLURAL: "ticks"
-    SECONDS:
-      SINGULAR: "second"
-      PLURAL: "seconds"
-    MINUTES:
-      SINGULAR: "minute"
-      PLURAL: "minutes"
-    HOURS:
-      SINGULAR: "hour"
-      PLURAL: "hours"
-    DAYS:
-      SINGULAR: "day"
-      PLURAL: "days"
-    WEEKS:
-      SINGULAR: "week"
-      PLURAL: "weeks"
-    MONTHS:
-      SINGULAR: "month"
-      PLURAL: "months"
-    YEARS:
-      SINGULAR: "year"
-      PLURAL: "years"
-  OTHER:
-    UNLIMITED: "unlimited time"
-    LESS_THAN: "less than"
-    LESS_THAN_ONE: "less than one"
-  # All additional subsections under the TIME section are reserved for future use at this time
 
 
 ##############

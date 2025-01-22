@@ -18,7 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -39,7 +41,7 @@ public class SectionQueryHandlerFactory {
 	 * @param configurationSupplier the provider of the language configuration
 	 */
 	public SectionQueryHandlerFactory(YamlConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(Error.Parameter.NULL_CONFIGURATION.getMessage()); }
+		if (configurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, "configurationSupplier"); }
 		this.configurationSupplier = configurationSupplier;
 	}
 
@@ -52,8 +54,7 @@ public class SectionQueryHandlerFactory {
 	 * @return The requested SectionQueryHandler
 	 */
 	public SectionQueryHandler getQueryHandler(Section section) {
-//		return sectionHandlerCache.computeIfAbsent(section, this::createSectionHandler);
-		return createSectionHandler(section);
+		return section.getQueryHandler(configurationSupplier);
 	}
 
 
@@ -62,17 +63,11 @@ public class SectionQueryHandlerFactory {
 	 *
 	 * @param section the section for which the query handler is to be created
 	 * @return the corresponding SectionQueryHandler
-	 * @throws IllegalArgumentException if no handler can be created for the given section
+	 * @throws LocalizedException if section parameter is null
 	 */
 	public SectionQueryHandler createSectionHandler(Section section) {
-		return switch (section) {
-			case CONSTANTS -> Section.CONSTANTS.getQueryHandler(configurationSupplier);
-			case ITEMS -> Section.ITEMS.getQueryHandler(configurationSupplier);
-			case MESSAGES -> Section.MESSAGES.getQueryHandler(configurationSupplier);
-			case TIME -> Section.TIME.getQueryHandler(configurationSupplier);
-			// leaving line below commented so any new section declared in the Section enum needs an explicit handler here
-			//default -> new DefaultSectionQueryHandler();
-		};
+		if (section == null) { throw new LocalizedException(PARAMETER_NULL, "section"); }
+		return section.getQueryHandler(configurationSupplier);
 	}
 
 
@@ -89,4 +84,5 @@ public class SectionQueryHandlerFactory {
 			throw new IllegalStateException("Failed to create handler for section: " + section, e);
 		}
 	}
+
 }

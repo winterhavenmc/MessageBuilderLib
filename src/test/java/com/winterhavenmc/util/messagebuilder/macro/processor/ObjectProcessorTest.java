@@ -68,4 +68,16 @@ class ObjectProcessorTest {
 		assertEquals("42", resultMap.get(nameSpacedKey));
 	}
 
+	@Test
+	void resolveContext_null() {
+		String keyPath = "SOME_INTEGER";
+		Integer nullValue = null;
+
+		ContextMap contextMap = new ContextMap(playerMock);
+		contextMap.put(keyPath, ContextContainer.of(nullValue, ProcessorType.NUMBER));
+
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, nullValue);
+
+		assertFalse(resultMap.containsKey(keyPath));
+	}
 }

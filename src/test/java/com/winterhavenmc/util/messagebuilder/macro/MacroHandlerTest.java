@@ -19,9 +19,6 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
-import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
-import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
@@ -29,7 +26,6 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHan
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
-import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -37,6 +33,9 @@ import org.bukkit.entity.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -45,21 +44,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
+@ExtendWith(MockitoExtension.class)
 class MacroHandlerTest {
 
-	private Player player;
-	private LanguageResourceManager languageResourceManager;
+	@Mock Player playerMock;
+	@Mock LanguageResourceManager languageResourceManagerMock;
 
-	private MacroHandler macroHandler;
+	MacroHandler macroHandler;
 
 	@BeforeEach
 	public void setUp() {
 
-		player = mock(Player.class, "MockPlayer");
-		when(player.getUniqueId()).thenReturn(new UUID(1, 1));
-		when(player.getName()).thenReturn("Player One");
-
-		languageResourceManager = mock(LanguageResourceManager.class, "MockLanguageHandler");
+//		when(playerMock.getUniqueId()).thenReturn(new UUID(1, 1));
+//		when(playerMock.getName()).thenReturn("Player One");
 
 		// real objects
 		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
@@ -70,8 +67,8 @@ class MacroHandlerTest {
 
 	@AfterEach
 	public void tearDown() {
-		player = null;
-		languageResourceManager = null;
+		playerMock = null;
+		languageResourceManagerMock = null;
 		macroHandler = null;
 	}
 
@@ -92,28 +89,28 @@ class MacroHandlerTest {
 
 	@Test
 	void replaceMacrosTest() {
-		ContextMap contextMap = new ContextMap(player);
+		ContextMap contextMap = new ContextMap(playerMock);
 		String key = "MACRO:My_Item";
 		contextMap.put(key, ContextContainer.of("TEST_STRING", ProcessorType.STRING));
 
-		String resultString = macroHandler.replaceMacros(player, contextMap, "Replace this: %ITEM_NAME%");
+		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
 	@Test
 	void replaceMacrosTest_item_already_in_map() {
-		ContextMap contextMap = new ContextMap(player);
+		ContextMap contextMap = new ContextMap(playerMock);
 		String key = "MACRO:My_Item";
 		contextMap.put(key, ContextContainer.of("TEST_STRING", ProcessorType.STRING));
 
-		String resultString = macroHandler.replaceMacros(player, contextMap, "Replace this: %ITEM_NAME%");
+		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
 	@Test
 	void replaceMacrosTest_item_no_delimiter() {
-		ContextMap contextMap = new ContextMap(player);
-		String resultString = macroHandler.replaceMacros(player, contextMap, "Replace this: ITEM_NAME");
+		ContextMap contextMap = new ContextMap(playerMock);
+		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: ITEM_NAME");
 		assertEquals("Replace this: ITEM_NAME", resultString);
 	}
 
@@ -123,8 +120,9 @@ class MacroHandlerTest {
 		when(entity.getUniqueId()).thenReturn(new UUID(123,123));
 		when(entity.getName()).thenReturn("player1");
 
-		ContextMap contextMap = new ContextMap(player);
-		String resultString = macroHandler.replaceMacros(player, contextMap, "Replace this: %ITEM_NAME%");
+		ContextMap contextMap = new ContextMap(playerMock);
+
+		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 

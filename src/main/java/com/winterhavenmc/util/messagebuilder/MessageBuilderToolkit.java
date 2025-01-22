@@ -22,12 +22,14 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Sec
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -46,7 +48,7 @@ public class MessageBuilderToolkit<MessageId extends Enum<MessageId>, Macro exte
 	 * @param messageBuilder the MessageBuilder instance
 	 */
 	public MessageBuilderToolkit(final MessageBuilder<MessageId, Macro> messageBuilder) {
-		if (messageBuilder == null) { throw new IllegalArgumentException(Error.Parameter.NULL_MESSAGE_BUILDER.getMessage()); }
+		if (messageBuilder == null) { throw new LocalizedException(PARAMETER_NULL, "messageBuilder"); }
 
 		this.queryHandler = messageBuilder.getLanguageQueryHandler();
 	}
