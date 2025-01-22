@@ -122,7 +122,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		// put value and processor type into context map
 		this.contextMap.put(key, unwrappedValue, processorType);
 
-		// return this instance of Message class to the builder chain
+		// return this instance of MessageKey class to the builder chain
 		return this;
 	}
 

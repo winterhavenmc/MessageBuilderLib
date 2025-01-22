@@ -19,10 +19,11 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.OfflinePlayer;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 public class OfflinePlayerProcessor extends MacroProcessorTemplate implements MacroProcessor {
@@ -32,16 +33,16 @@ public class OfflinePlayerProcessor extends MacroProcessorTemplate implements Ma
 	}
 
 	@Override
-	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
-		if (key == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_KEY_PATH.name())); }
-		if (key.isBlank()) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.EMPTY_KEY_PATH.name())); }
-		if (contextMap == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONTEXT_MAP.name())); }
-		if (value == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_VALUE.name())); }
+	public <T> ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
+		if (keyPath.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "keyPath"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+		if (value == null) { throw new LocalizedException(PARAMETER_NULL, "value"); }
 
 		ResultMap resultMap = new ResultMap();
 
 		if (value instanceof OfflinePlayer offlinePlayer) {
-			resultMap.put(key, offlinePlayer.getName());
+			resultMap.put(keyPath, offlinePlayer.getName());
 		}
 
 		return resultMap;

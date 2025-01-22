@@ -60,7 +60,7 @@ class NullProcessorTest {
 				() -> new NullProcessor(null));
 
 		// Assert
-		assertEquals("The queryHandler parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'queryHandler' cannot be null.", exception.getMessage());
 	}
 
 	@Test

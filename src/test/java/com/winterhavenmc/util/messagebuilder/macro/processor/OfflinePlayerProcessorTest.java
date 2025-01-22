@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Namespace;
 
 import org.bukkit.Material;
@@ -78,11 +79,11 @@ class OfflinePlayerProcessorTest {
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap, offlinePlayerMock));
 
 		// Assert
-		assertEquals("The keyPath parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -92,11 +93,11 @@ class OfflinePlayerProcessorTest {
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap, offlinePlayerMock));
 
 		// Assert
-		assertEquals("The keyPath parameter cannot be empty.", exception.getMessage());
+		assertEquals("The parameter 'keyPath' cannot be empty.", exception.getMessage());
 	}
 
 	@Test
@@ -106,11 +107,11 @@ class OfflinePlayerProcessorTest {
 		String namespacedKey = NamespaceKey.create(Macro.OWNER, Namespace.Domain.MACRO);
 
 		// Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(namespacedKey, null, offlinePlayerMock));
 
 		// Assert
-		assertEquals("The contextMap parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -121,11 +122,11 @@ class OfflinePlayerProcessorTest {
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(namespacedKey, contextMap, null));
 
 		// Assert
-		assertEquals("The value parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
 	}
 
 	@Test

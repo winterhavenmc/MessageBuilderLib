@@ -18,13 +18,13 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.function.Supplier;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -63,7 +63,7 @@ public final class YamlConfigurationSupplier implements Supplier<Configuration> 
 	 * @throws IllegalArgumentException if section parameter is null
 	 */
 	public ConfigurationSection getSection(final Section section) {
-		if (section == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_SECTION.name())); }
+		if (section == null) { throw new LocalizedException(PARAMETER_NULL, "section"); }
 
 		return configuration.getConfigurationSection(section.name());
 	}

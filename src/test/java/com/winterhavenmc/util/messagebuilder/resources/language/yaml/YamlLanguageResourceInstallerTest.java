@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
@@ -73,18 +74,18 @@ public class YamlLanguageResourceInstallerTest {
 
 	@Test
 	void isInstalledForTag_parameter_null() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> resourceInstaller.isInstalledForTag(null));
 
-		assertEquals("The languageTag parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void testInstallIfMissing_parameter_null() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> resourceInstaller.installIfMissing(null));
 
-		assertEquals("The languageTag parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
 	}
 
 
@@ -274,7 +275,7 @@ public class YamlLanguageResourceInstallerTest {
 				() -> resourceInstaller.installByName(null));
 
 		// Assert
-		assertEquals("The resourceName parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'resourceName' cannot be null.", exception.getMessage());
 	}
 
 
@@ -335,7 +336,7 @@ public class YamlLanguageResourceInstallerTest {
 				() -> resourceInstaller.install(null));
 
 		// Assert
-		assertEquals("The languageTag parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
 	}
 
 
@@ -397,11 +398,11 @@ public class YamlLanguageResourceInstallerTest {
 		@Test
 		public void autoInstallResourceExistsTest_null_parameter() {
 			// Act
-			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			LocalizedException exception = assertThrowsExactly(LocalizedException.class,
 					() -> resourceInstaller.resourceExists((LanguageTag) null));
 
 			// Assert
-			assertEquals("The languageTag parameter cannot be null.", exception.getMessage());
+			assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
 
 			// Verify
 			verify(pluginMock, atLeastOnce()).getResource(anyString());

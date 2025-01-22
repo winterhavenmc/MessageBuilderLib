@@ -18,13 +18,14 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
 import java.util.List;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -101,12 +102,12 @@ public record MessageRecord(
 	<MessageId extends Enum<MessageId>> // parameter type
 	Optional<MessageRecord> // return type
 	getRecord(final MessageId messageId, final ConfigurationSection messageSection) {
-		if (messageId == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_MESSAGE_ID.name())); }
-		if (messageSection == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_SECTION_MESSAGES.name())); }
+		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, "messageId"); }
+		if (messageSection == null) { throw new LocalizedException(PARAMETER_NULL, "messageSection"); }
 
 		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
 		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
-			throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_MESSAGES.name()));
+			throw new LocalizedException(INVALID_SECTION, Section.MESSAGES.name());
 		}
 
 		// get entry for messageId

@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Namespace;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -70,9 +71,9 @@ class NamespaceKeyTest {
 
     @Test
     void testStaticCreate_WithMacro_null() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        LocalizedException exception = assertThrows(LocalizedException.class,
                 () -> NamespaceKey.create(null));
-        assertEquals("The macro parameter cannot be null.", exception.getMessage());
+        assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
     }
 
     @Test
@@ -157,58 +158,58 @@ class NamespaceKeyTest {
 
 		@Test
 		void testCreate_1_param_null_macro() {
-			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			LocalizedException exception = assertThrows(LocalizedException.class,
 					() -> NamespaceKey.create(null));
-			assertEquals("The macro parameter cannot be null.", exception.getMessage());
+			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
 		}
 
 		@Test
         void testStaticCreate_2_param_null_macro() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create(null, Namespace.Domain.MACRO));
-            assertEquals("The macro parameter cannot be null.", exception.getMessage());
+            assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
         }
 
         @Test
         void testStaticCreate_2_param_null_domain() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create(Macro.TOOL, null));
-            assertEquals("The domain parameter cannot be null.", exception.getMessage());
+            assertEquals("The parameter 'domain' cannot be null.", exception.getMessage());
         }
 
 		@Test
 		void testStaticCreate_3_param_null_keyPath() {
-			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			LocalizedException exception = assertThrows(LocalizedException.class,
 					() -> NamespaceKey.create(null, Namespace.Domain.MACRO, "sub1", "sub2"));
-			assertEquals("The keyPath parameter cannot be null.", exception.getMessage());
+			assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
 		}
 
 		@Test
 		void testStaticCreate_3_param_empty_keyPath() {
-			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			LocalizedException exception = assertThrows(LocalizedException.class,
 					() -> NamespaceKey.create("", Namespace.Domain.MACRO, "sub1", "sub2"));
-			assertEquals("The keyPath parameter cannot be empty.", exception.getMessage());
+			assertEquals("The parameter 'keyPath' cannot be empty.", exception.getMessage());
 		}
 
 		@Test
         void testStaticCreate_3_param_null_domain() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create("some.key.path", null, "sub1", "sub2"));
-            assertEquals("The domain parameter cannot be null.", exception.getMessage());
+            assertEquals("The parameter 'domain' cannot be null.", exception.getMessage());
         }
 
         @Test
         void testStaticCreate_3_param_null_subdomain() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create("some.key.path", Namespace.Domain.MACRO, (String) null));
-            assertEquals("Subdomains cannot be null.", exception.getMessage());
+            assertEquals("The parameter 'subdomain' cannot be null.", exception.getMessage());
         }
 
         @Test
         void testStaticCreate_3_param_empty_subdomain() {
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            LocalizedException exception = assertThrows(LocalizedException.class,
                     () -> NamespaceKey.create("some.key.path", Namespace.Domain.MACRO, ""));
-            assertEquals("Subdomains cannot be empty.", exception.getMessage());
+            assertEquals("The parameter 'subdomain' cannot be empty.", exception.getMessage());
         }
     }
 

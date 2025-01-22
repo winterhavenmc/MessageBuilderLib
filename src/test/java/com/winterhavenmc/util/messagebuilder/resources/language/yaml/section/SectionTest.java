@@ -43,7 +43,7 @@ class SectionTest {
 	void getSingularName() {
 		assertEquals("Constant", Section.CONSTANTS.getSingularName());
 		assertEquals("Item", Section.ITEMS.getSingularName());
-		assertEquals("Message", Section.MESSAGES.getSingularName());
+		assertEquals("MessageKey", Section.MESSAGES.getSingularName());
 	}
 
 	@Test

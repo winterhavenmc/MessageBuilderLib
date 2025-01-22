@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -61,7 +62,7 @@ class ItemSectionQueryHandlerTest {
 	void testConstructor_parameter_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new ItemSectionQueryHandler(null));
-		assertEquals("The configurationSupplier parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -72,7 +73,7 @@ class ItemSectionQueryHandlerTest {
 
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  new ItemSectionQueryHandler(supplier));
-		assertEquals("The itemSection returned by the configuration supplier was an invalid 'ITEMS' section.", exception.getMessage());
+		assertEquals("The configuration section returned by the configuration supplier was an invalid 'ITEMS' section.", exception.getMessage());
 	}
 
 	@Test
@@ -102,9 +103,9 @@ class ItemSectionQueryHandlerTest {
 
 	@Test
 	void testGetRecord_parameter_null() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> queryHandler.getRecord(null));
-		assertEquals("The keyPath parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
 	}
 
 	@Test

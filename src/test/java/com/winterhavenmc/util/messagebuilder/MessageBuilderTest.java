@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
@@ -108,17 +109,17 @@ class MessageBuilderTest {
 				() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
 
 		// Assert
-		assertEquals("The recipient parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void compose_parameter_null_message_id() {
 		// Arrange & Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> messageBuilder.compose(playerMock, null));
 
 		// Assert
-		assertEquals("The messageId parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'messageId' cannot be null.", exception.getMessage());
 	}
 
 

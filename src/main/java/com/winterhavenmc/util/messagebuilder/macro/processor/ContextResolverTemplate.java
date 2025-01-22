@@ -18,9 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -40,7 +40,7 @@ public abstract class ContextResolverTemplate implements MacroProcessor {
 	 * @param queryHandler the LanguageQueryHandler used by the classes that extend this abstract class
 	 */
 	ContextResolverTemplate(final LanguageQueryHandler queryHandler) {
-		if (queryHandler == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_QUERY_HANDLER.name())); }
+		if (queryHandler == null) { throw new LocalizedException(PARAMETER_NULL, "queryHandler"); }
 		this.queryHandler = queryHandler;
 	}
 

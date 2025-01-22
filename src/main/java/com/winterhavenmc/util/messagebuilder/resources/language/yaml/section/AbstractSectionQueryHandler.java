@@ -18,11 +18,11 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import java.util.List;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 public abstract class AbstractSectionQueryHandler implements SectionQueryHandler {
@@ -37,7 +37,7 @@ public abstract class AbstractSectionQueryHandler implements SectionQueryHandler
 	                                      final Section section,
 	                                      final Class<?> primaryType,
 	                                      final List<Class<?>> handledTypes) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONFIGURATION_SUPPLIER.name())); }
+		if (configurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, "configurationSupplier"); }
 
 		this.configurationSupplier = configurationSupplier;
 		this.section = section;

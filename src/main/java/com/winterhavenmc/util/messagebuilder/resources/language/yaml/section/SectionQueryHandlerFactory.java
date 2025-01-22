@@ -18,9 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -41,7 +41,7 @@ public class SectionQueryHandlerFactory {
 	 * @param configurationSupplier the provider of the language configuration
 	 */
 	public SectionQueryHandlerFactory(YamlConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONFIGURATION.name())); }
+		if (configurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, "configurationSupplier"); }
 		this.configurationSupplier = configurationSupplier;
 	}
 
@@ -63,9 +63,10 @@ public class SectionQueryHandlerFactory {
 	 *
 	 * @param section the section for which the query handler is to be created
 	 * @return the corresponding SectionQueryHandler
-	 * @throws IllegalArgumentException if no handler can be created for the given section
+	 * @throws LocalizedException if section parameter is null
 	 */
 	public SectionQueryHandler createSectionHandler(Section section) {
+		if (section == null) { throw new LocalizedException(PARAMETER_NULL, "section"); }
 		return section.getQueryHandler(configurationSupplier);
 	}
 
@@ -83,4 +84,5 @@ public class SectionQueryHandlerFactory {
 			throw new IllegalStateException("Failed to create handler for section: " + section, e);
 		}
 	}
+
 }

@@ -65,7 +65,7 @@ class YamlLanguageQueryHandlerTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new YamlLanguageQueryHandler(null));
 
-		assertEquals("The configuration parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
 	}
 
 
@@ -101,7 +101,7 @@ class YamlLanguageQueryHandlerTest {
 				() -> itemSectionQueryHandler.getRecord(null));
 
 		// Assert
-		assertEquals("The keyPath parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -128,7 +128,7 @@ class YamlLanguageQueryHandlerTest {
 				() -> messageSectionQueryHandler.getRecord(null));
 
 		// Assert
-		assertEquals("The messageKey parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'messageId' cannot be null.", exception.getMessage());
 	}
 
 	@Test

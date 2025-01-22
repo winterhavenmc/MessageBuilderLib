@@ -17,13 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.context;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Namespace;
-import com.winterhavenmc.util.messagebuilder.util.Error;
 
 import java.util.*;
 import java.util.logging.Logger;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -180,7 +181,7 @@ public class NamespaceKey implements ContextKey {
 	 * @return A proper namespaced String key.
 	 */
 	public static <Macro> String create(final Macro macro) {
-		if (macro == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_MACRO.name())); }
+		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, "macro"); }
 
 		return Namespace.Domain.MACRO + KEY_BOUNDARY_DELIMITER.toString() + macro;
 	}
@@ -195,8 +196,8 @@ public class NamespaceKey implements ContextKey {
 	 * @return A proper namespaced String key.
 	 */
 	public static <Macro> String create(final Macro macro, final Namespace.Domain domain) {
-		if (macro == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_MACRO.name())); }
-		if (domain == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_DOMAIN.name())); }
+		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, "macro"); }
+		if (domain == null) { throw new LocalizedException(PARAMETER_NULL, "domain"); }
 
 		return domain.name() + KEY_BOUNDARY_DELIMITER + macro;
 	}
@@ -213,20 +214,20 @@ public class NamespaceKey implements ContextKey {
 	public static String create(final String keyPath,
 	                            final Namespace.Domain domain,
 	                            final String... subdomains) {
-		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_KEY_PATH.name())); }
-		if (keyPath.isBlank()) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.EMPTY_KEY_PATH.name())); }
-		if (domain == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_DOMAIN.name())); }
-		if (subdomains == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_SUBDOMAINS.name())); }
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
+		if (keyPath.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "keyPath"); }
+		if (domain == null) { throw new LocalizedException(PARAMETER_NULL, "domain"); }
+		if (subdomains == null) { throw new LocalizedException(PARAMETER_NULL, "subdomains"); }
 
 		StringBuilder fullKey = new StringBuilder(domain.name());
-		for (String subcategory : subdomains) {
-			if (subcategory == null) {
-				throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_SUBDOMAIN_ELEMENT.name()));
+		for (String subdomain : subdomains) {
+			if (subdomain == null) {
+				throw new LocalizedException(PARAMETER_NULL, "subdomain");
 			}
-			if (subcategory.isBlank()) {
-				throw new IllegalArgumentException(bundle.getString(Error.Parameter.EMPTY_SUBDOMAIN_ELEMENT.name()));
+			if (subdomain.isBlank()) {
+				throw new LocalizedException(PARAMETER_EMPTY, "subdomain");
 			}
-			fullKey.append(KEY_DOMAIN_DELIMITER).append(subcategory);
+			fullKey.append(KEY_DOMAIN_DELIMITER).append(subdomain);
 		}
 		fullKey.append(KEY_DOMAIN_DELIMITER).append(keyPath);
 		return fullKey.toString();

@@ -17,14 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
-import com.winterhavenmc.util.messagebuilder.util.Error;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -79,8 +79,8 @@ public record ItemRecord(
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
 	public static Optional<ItemRecord> getRecord(final String keyPath, final ConfigurationSection itemSection) {
-		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_ITEM_KEY.name())); }
-		if (itemSection == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_ITEMS.name())); }
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
+		if (itemSection == null) { throw new LocalizedException(PARAMETER_NULL, "itemSection"); }
 
 		// get configuration section for item key
 		ConfigurationSection itemEntry = itemSection.getConfigurationSection(keyPath);
@@ -100,7 +100,7 @@ public record ItemRecord(
 
 
 	@Override
-	public Optional<String> getPluralized(int quantity) {
+	public Optional<String> nameFor(int quantity) {
 		if (quantity != 1) {
 			return namePlural;
 		}

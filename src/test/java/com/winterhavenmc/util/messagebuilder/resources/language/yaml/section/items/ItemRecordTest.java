@@ -80,7 +80,7 @@ class ItemRecordTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  ItemRecord.getRecord(null, itemSection));
 
-		assertEquals("The keyPath parameter was null.", exception.getMessage());
+		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -94,7 +94,7 @@ class ItemRecordTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  ItemRecord.getRecord("TEST_ITEM_1", null));
 
-		assertEquals("The itemSection returned by the configuration supplier was an invalid 'ITEMS' section.", exception.getMessage());
+		assertEquals("The parameter 'itemSection' cannot be null.", exception.getMessage());
 	}
 
 	@ParameterizedTest
@@ -114,9 +114,9 @@ class ItemRecordTest {
 				Optional.of("Inventory Test Items"),
 				List.of("Lore line 1", "Lore line 2"));
 
-		assertEquals(Optional.of("Test Items"), testRecord.getPluralized(0));
-		assertEquals(Optional.of("Test Item"), testRecord.getPluralized(1));
-		assertEquals(Optional.of("Test Items"), testRecord.getPluralized(2));
+		assertEquals(Optional.of("Test Items"), testRecord.nameFor(0));
+		assertEquals(Optional.of("Test Item"), testRecord.nameFor(1));
+		assertEquals(Optional.of("Test Items"), testRecord.nameFor(2));
 	}
 
 }

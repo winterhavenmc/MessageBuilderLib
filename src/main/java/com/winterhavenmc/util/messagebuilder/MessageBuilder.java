@@ -20,8 +20,8 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.resources.language.*;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.*;
 import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
-import com.winterhavenmc.util.messagebuilder.util.Error;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.time.Tick;
 import com.winterhavenmc.util.messagebuilder.util.Toolkit;
 import org.bukkit.command.CommandSender;
@@ -30,6 +30,9 @@ import org.bukkit.plugin.Plugin;
 import java.time.temporal.TemporalUnit;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.RELOAD_FAILED;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -74,8 +77,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	private final MacroHandler macroQueryHandler;
 
 	// this will be moved to a configuration, but are globally accessible for now
-	private static final String ERROR_BUNDLE = "language.errors";
-	public final static ResourceBundle bundle = ResourceBundle.getBundle(ERROR_BUNDLE, Locale.getDefault());
+	private static final String ERROR_BUNDLE_NAME = "language.errors";
+	public final static ResourceBundle BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, Locale.getDefault());
 
 
 	/**
@@ -84,7 +87,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param plugin reference to plugin main class
 	 */
 	public MessageBuilder(final Plugin plugin) {
-		if (plugin == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_PLUGIN.name())); }
+		if (plugin == null) { throw new LocalizedException(PARAMETER_NULL, "plugin"); }
 
 		this.plugin = plugin;
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
@@ -98,7 +101,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	/**
 	 * Class constructor <br> ** FOR TESTING PURPOSES ONLY ** <br>
 	 * This constructor is intended only for injecting mocks, for isolated testing of this class, and no other purpose.
-	 * It visibility is restricted to package-private, so it cannot be used to instantiate an instance of the class
+	 * Its visibility is restricted to package-private, so it cannot be used to instantiate an instance of the class
 	 * from outside its package.
 	 *
 	 * @param pluginMock reference to plugin main class
@@ -120,11 +123,11 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
-	 * @return Message - an initialized message object
+	 * @return MessageKey - an initialized message object
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
-		if (recipient == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_RECIPIENT.name())); }
-		if (messageId == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_MESSAGE_ID.name())); }
+		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, "recipient"); }
+		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, "messageId"); }
 
 		return new Message<>(plugin, languageQueryHandler, macroQueryHandler, recipient, messageId);
 	}
@@ -155,7 +158,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 */
 	public void reload() {
 		if (!languageResourceManager.reload()) {
-			plugin.getLogger().warning(bundle.getString(Error.LanguageConfiguration.RELOAD_FAILED.name()));
+			plugin.getLogger().warning(BUNDLE.getString(RELOAD_FAILED.name()));
 		}
 	}
 

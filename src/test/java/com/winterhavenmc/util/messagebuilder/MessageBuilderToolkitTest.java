@@ -61,7 +61,7 @@ class MessageBuilderToolkitTest {
 	void constructorTest_null_parameter() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
 				new MessageBuilderToolkit<MessageId, Macro>(null));
-		assertEquals("The messageBuilder parameter cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'messageBuilder' cannot be null.", exception.getMessage());
 	}
 
 

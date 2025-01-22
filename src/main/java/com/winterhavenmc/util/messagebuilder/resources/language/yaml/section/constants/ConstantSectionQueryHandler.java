@@ -21,12 +21,13 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -45,14 +46,14 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * Class constructor
 	 *
 	 * @param yamlConfigurationSupplier the provider of the current language configuration object
-	 * @throws IllegalArgumentException if the {@code yamlConfigurationSupplier} parameter is null or invalid
+	 * @throws LocalizedException if the {@code yamlConfigurationSupplier} parameter is null or invalid
 	 */
 	public ConstantSectionQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
 		super(yamlConfigurationSupplier, section, primaryType, handledTypes);
 
 		// ensure the 'CONSTANTS' section exists in the configuration provided by the supplier
 		if (yamlConfigurationSupplier.getSection(section) == null) {
-			throw new IllegalArgumentException(bundle.getString(Error.Parameter.INVALID_SECTION_CONSTANTS.name()));
+			throw new LocalizedException(INVALID_SECTION, section.name());
 		}
 
 		// get configuration supplier
@@ -68,7 +69,7 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public Optional<String> getString(final String keyPath) {
-		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_KEY_PATH.name())); }
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
 		return Optional.ofNullable(configurationSupplier.getSection(section).getString(keyPath));
 	}
 
@@ -81,7 +82,7 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public List<String> getStringList(final String keyPath) {
-		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_KEY_PATH.name())); }
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
 		return configurationSupplier.getSection(section).getStringList(keyPath);
 	}
 
@@ -94,7 +95,7 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public int getInt(final String keyPath) {
-		if (keyPath == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_KEY_PATH.name())); }
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
 		return configurationSupplier.getSection(section).getInt(keyPath);
 	}
 

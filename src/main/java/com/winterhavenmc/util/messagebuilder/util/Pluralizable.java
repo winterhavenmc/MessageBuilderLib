@@ -22,5 +22,5 @@ import java.util.Optional;
 public interface Pluralizable {
 	Optional<String> nameSingular();
 	Optional<String> namePlural();
-	Optional<String> getPluralized(int quantity);
+	Optional<String> nameFor(int quantity);
 }

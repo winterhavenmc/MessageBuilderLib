@@ -21,13 +21,14 @@ import com.winterhavenmc.util.messagebuilder.adapters.location.Locatable;
 import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.Error;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 import org.bukkit.Location;
 
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.MessageBuilder.bundle;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
@@ -102,14 +103,14 @@ public class LocatableProcessor extends ContextResolverTemplate {
 	 * @param object      the object to resolve into context (must be {@link Locatable})
 	 * @param <T>         the type of the input value
 	 * @return a {@link ResultMap} containing the resolved placeholders and their replacements
-	 * @throws IllegalArgumentException if any parameter is null or invalid
+	 * @throws LocalizedException if any parameter is null or invalid
 	 */
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T object) {
-		if (key == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_NAMESPACED_KEY.name())); }
-		if (key.isBlank()) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.EMPTY_NAMESPACED_KEY.name())); }
-		if (contextMap == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_CONTEXT_MAP.name())); }
-		if (object == null) { throw new IllegalArgumentException(bundle.getString(Error.Parameter.NULL_VALUE.name())); }
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+		if (object == null) { throw new LocalizedException(PARAMETER_NULL, "object"); }
 
 		// try to get object as locatable
 		Optional<Locatable> locatable = LocationAdapter.asLocatable(object);
