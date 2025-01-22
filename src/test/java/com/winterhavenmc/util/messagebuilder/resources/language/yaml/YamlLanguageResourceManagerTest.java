@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -119,6 +120,31 @@ class YamlLanguageResourceManagerTest {
 			// Assert
 			assertTrue(success);
 			assertNotNull(resourceManager.getConfigurationSupplier());
+		}
+	}
+
+
+	@Nested
+	class GetInstanceTests {
+		@Test
+		void testGetInstance_parameters_valid () {
+			assertNotNull(YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock));
+		}
+
+		@Test
+		void testGetInstance_parameter_null_resourceInstaller () {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> YamlLanguageResourceManager.getInstance(null, languageResourceLoaderMock));
+
+			assertEquals("The parameter 'resourceInstaller' cannot be null.", exception.getMessage());
+		}
+
+		@Test
+		void testGetInstance_parameter_null_resourceLoader () {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, null));
+
+			assertEquals("The parameter 'resourceLoader' cannot be null.", exception.getMessage());
 		}
 	}
 
