@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -149,7 +148,7 @@ public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
 	 * @return A set of entries in the map.
 	 */
 	@Override
-	public @NotNull Set<Map.Entry<String, ContextContainer<?>>> entrySet() {
+	public Set<Map.Entry<String, ContextContainer<?>>> entrySet() {
 		return internalMap.entrySet();
 	}
 

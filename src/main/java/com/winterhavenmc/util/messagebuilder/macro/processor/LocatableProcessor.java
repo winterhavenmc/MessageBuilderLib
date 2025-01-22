@@ -37,7 +37,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  * This processor extracts information from {@link Location} objects, such as the world name
  * and the X, Y, and Z coordinates, and populates a {@link ContextMap} with these values. It also
  * provides a preformatted string combining the world and coordinates for convenience.
- * </p>
+ * 
  * <p>
  * The following placeholders are resolved:
  * <ul>
@@ -48,15 +48,15 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  *     <li><b>%<i>key</i>_LOCATION%</b>: A preformatted string combining the world and coordinates
  *         (e.g., "world [123, 64, -789]").</li>
  * </ul>
- * </p>
+ * 
  *
  * <p>
  * This processor ensures that placeholders are unique by suffixing "_LOCATION" to the key if it is not
  * already present. Null values or missing components, such as the world name, are replaced with the
  * default placeholder {@code UNKNOWN_VALUE}.
- * </p>
+ * 
  *
- * <p><b>Example Usage:</b></p>
+ * <b>Example Usage:</b>
  * <pre>
  * {@code
  * LocationProcessor processor = new LocationProcessor(queryHandler);
@@ -89,14 +89,14 @@ public class LocatableProcessor extends ContextResolverTemplate {
 	 * This method extracts gatLocation data, formats it as placeholders, and adds the resolved
 	 * entries to the {@link ResultMap}. If the input value is not a {@link Location}, an empty
 	 * {@link ResultMap} is returned.
-	 * </p>
+	 * 
 	 *
 	 * <p>
 	 * If the provided key does not end with "_LOCATION", the method automatically appends
 	 * "_LOCATION" to ensure a consistent naming convention for gatLocation placeholders.
 	 * Furthermore, other object types that include a gatLocation, such as ENTITY or PLAYER,
 	 * may call this processor to add context entries to the map for their locations, if available.
-	 * </p>
+	 * 
 	 *
 	 * @param key         the unique key or namespace for this macro entry
 	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders

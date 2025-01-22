@@ -100,7 +100,7 @@ public final class YamlLanguageResourceInstaller {
 	 *     <li>any number of leading slashes (/) are to be removed</li>
 	 *     <li>Any occurrence of two or more slashes (/) are to be replaced with a single slash</li>
 	 *     </ol>
-	 * </p>
+	 * 
 	 *
 	 * @param resourcePath the {@code String} path name to be sanitized.
 	 */
