@@ -36,7 +36,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  * <p>
  * The static {@code getInstance} method should be used to acquire an instance of this singleton class. It can be accessed
  * globally, anywhere within this library using this static method.
- * </p>
+ * 
  */
 public final class YamlLanguageResourceManager implements LanguageResourceManager {
 

@@ -28,13 +28,12 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
  * replacements. Each processor focuses on a specific type of input,
  * such as locations, entities, or custom types, and provides the necessary
  * mappings to integrate dynamic data into messages.
- * </p>
  * <p>
  * Implementations of this interface must define how placeholders are
  * generated and resolved based on the input value and its context.
- * </p>
  *
- * <p><b>Examples:</b></p>
+ * <br>
+ * <b>Examples:</b>
  * <pre>
  * {@code
  * // A LocationProcessor might resolve placeholders for a player's position:
@@ -46,7 +45,7 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
  * }
  * </pre>
  *
- * <p><b>Example 2:</b> Resolving a single placeholder for a number</p>
+ * <b>Example 2:</b> Resolving a single placeholder for a number
  * <pre>
  * {@code
  * // A NumberProcessor might resolve a single placeholder for any Java Number:
@@ -81,7 +80,7 @@ public interface MacroProcessor {
 	 * a {@link ResultMap} containing the value or values resulting from the processing,
 	 * and any new fields generated for them with a namespaced key which is a child key of
 	 * the original object's namespaced key.
-	 * </p>
+	 * 
 	 *
 	 * @param key         the unique key or namespace for this macro entry
 	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
