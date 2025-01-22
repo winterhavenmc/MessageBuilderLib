@@ -17,9 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.context.*;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 
@@ -56,28 +54,35 @@ class ObjectProcessorTest {
 
 	@Test
 	void resolveContext_integer() {
+		// Arrange
 		String keyPath = "SOME_INTEGER";
 		Integer number = 42;
-
 		ContextMap contextMap = new ContextMap(playerMock);
-		String nameSpacedKey = NamespaceKey.create(Macro.DURATION);
-		contextMap.put(nameSpacedKey, ContextContainer.of(number, ProcessorType.NUMBER));
+		String contextKey = SourceKey.create(Source.MACRO, keyPath);
+		contextMap.put(contextKey, ContextContainer.of(number, ProcessorType.NUMBER));
 
-		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, number);
-		assertTrue(resultMap.containsKey(nameSpacedKey));
-		assertEquals("42", resultMap.get(nameSpacedKey));
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, number);
+
+		// Assert
+		assertTrue(resultMap.containsKey(contextKey));
+		assertEquals("42", resultMap.get(contextKey));
 	}
 
 	@Test
 	void resolveContext_null() {
+		// Arrange
 		String keyPath = "SOME_INTEGER";
 		Integer nullValue = null;
-
 		ContextMap contextMap = new ContextMap(playerMock);
-		contextMap.put(keyPath, ContextContainer.of(nullValue, ProcessorType.NUMBER));
+		String contextKey = SourceKey.create(Source.MACRO, keyPath);
+		contextMap.put(contextKey, ContextContainer.of(nullValue, ProcessorType.NUMBER));
 
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, nullValue);
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, nullValue);
 
-		assertFalse(resultMap.containsKey(keyPath));
+		// Assert
+		assertFalse(resultMap.containsKey(contextKey));
 	}
+
 }

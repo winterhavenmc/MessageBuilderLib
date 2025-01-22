@@ -19,8 +19,9 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.context.Source;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.context.NamespaceKey;
+import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -71,28 +72,28 @@ class WorldProcessorTest {
 	@Test
 	void resolveContext() {
 		String keyPath = "SOME_WORLD";
-		String nameSpacedKey = NamespaceKey.create(keyPath, NamespaceKey.Domain.MACRO);
+		String contextKey = SourceKey.create(Source.MACRO, keyPath);
 		ContextMap contextMap = new ContextMap(playerMock);
 		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
-		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
-		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
+		contextMap.put(contextKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, keyPath);
 
-		assertTrue(resultMap.containsKey(nameSpacedKey));
-		assertEquals("test_world", resultMap.get(nameSpacedKey));
+		assertTrue(resultMap.containsKey(contextKey));
+		assertEquals("test_world", resultMap.get(contextKey));
 	}
 
 	@Disabled
 	@Test
 	void resolveContext_with_null_world() {
 		String keyPath = "SOME_WORLD";
-		String nameSpacedKey = NamespaceKey.create(keyPath, NamespaceKey.Domain.MACRO);
+		String contextKey = SourceKey.create(Source.MACRO, keyPath);
 		ContextMap contextMap = new ContextMap(playerMock);
 		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
-		contextMap.put(nameSpacedKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
-		ResultMap resultMap = macroProcessor.resolveContext(nameSpacedKey, contextMap, keyPath);
+		contextMap.put(contextKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, keyPath);
 
-		assertTrue(resultMap.containsKey(nameSpacedKey));
-		assertEquals("test_world", resultMap.get(nameSpacedKey));
+		assertTrue(resultMap.containsKey(contextKey));
+		assertEquals("test_world", resultMap.get(contextKey));
 		assertTrue(resultMap.isEmpty());
 	}
 

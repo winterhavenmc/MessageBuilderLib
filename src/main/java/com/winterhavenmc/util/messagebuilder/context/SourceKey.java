@@ -73,4 +73,16 @@ public class SourceKey implements ContextKey {
 		return String.join(DELIMITER, source.name(), keyPath);
 	}
 
+
+	/**
+	 * Static method to create a SourceKey String
+	 *
+	 * @param source the Source enum constant associated with the key
+	 * @param keyPath the keyPath String associated with the key
+	 * @return a {@code String} representation of the key
+	 */
+	public static String create(final Source source, final String keyPath) {
+		return String.join(DELIMITER, source.name(), keyPath);
+	}
+
 }
