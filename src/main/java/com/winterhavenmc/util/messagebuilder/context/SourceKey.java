@@ -18,6 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.context;
 
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A source key shall have a Source constant and a keyPath combined to form a composite key.
  */
@@ -27,7 +29,8 @@ public class SourceKey implements ContextKey {
 	private final Source source;
 	private final String keyPath;
 
-	public SourceKey(final Source source, final String keyPath) {
+
+	public SourceKey(@NotNull final Source source, @NotNull final String keyPath) {
 		this.source = source;
 		this.keyPath = keyPath;
 	}
@@ -39,6 +42,22 @@ public class SourceKey implements ContextKey {
 
 	public Source getSource() {
 		return source;
+	}
+
+	@Override
+	public final boolean equals(Object object) {
+		if (!(object instanceof SourceKey sourceKey)) {
+			return false;
+		}
+
+		return source == sourceKey.source && keyPath.equals(sourceKey.keyPath);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = source.hashCode();
+		result = 31 * result + keyPath.hashCode();
+		return result;
 	}
 
 	public String getKeyPath() {
