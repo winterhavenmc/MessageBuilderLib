@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SourceKey implements ContextKey {
 
-	private final static String DELIMITER = "|";
+	private final static String DELIMITER = ":";
 	private final Source source;
 	private final String keyPath;
 
