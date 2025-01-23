@@ -23,77 +23,75 @@ import com.winterhavenmc.util.messagebuilder.context.Source;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import org.bukkit.World;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.UUID;
-import java.util.logging.Logger;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import static com.winterhavenmc.util.messagebuilder.util.MockUtility.loadConfigurationFromResource;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class WorldProcessorTest {
 
-	@Mock private Plugin pluginMock;
-	@Mock private LanguageQueryHandler languageQueryHandlerMock;
-	@Mock private World worldMock;
-	@Mock private Player playerMock;
+	@Mock Player playerMock;
+	@Mock World worldMock;
+	@Mock YamlLanguageQueryHandler languageQueryHandlerMock;
+
+	LanguageQueryHandler languageQueryHandler;
 
 
 	@BeforeEach
 	public void setUp() {
-		// return logger for mock plugin
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("WorldProcessorTest"));
-
-		// return name for mock world
-		when(worldMock.getName()).thenReturn("test_world");
-
-//		playerMock = mock(Player.class, "MockPlayer");
-		when(playerMock.getName()).thenReturn("Player One");
-		when(playerMock.getUniqueId()).thenReturn(new UUID(0,1));
+		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
+		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
+		languageQueryHandler = new YamlLanguageQueryHandler(configurationSupplier);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		pluginMock = null;
+		playerMock = null;
 		worldMock = null;
+		languageQueryHandlerMock = null;
+		languageQueryHandler = null;
 	}
 
-	@Disabled
+
 	@Test
 	void resolveContext() {
+		// Arrange
+		when(worldMock.getName()).thenReturn("test_world");
+
 		String keyPath = "SOME_WORLD";
-		String contextKey = SourceKey.create(Source.MACRO, keyPath);
 		ContextMap contextMap = new ContextMap(playerMock);
 		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
-		contextMap.put(contextKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, keyPath);
+		contextMap.put(keyPath, ContextContainer.of(worldMock, ProcessorType.WORLD));
 
-		assertTrue(resultMap.containsKey(contextKey));
-		assertEquals("test_world", resultMap.get(contextKey));
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, worldMock);
+
+		// Assert
+		assertTrue(resultMap.containsKey(keyPath));
+		assertEquals("test_world", resultMap.get(keyPath));
 	}
 
-	@Disabled
+
 	@Test
 	void resolveContext_with_null_world() {
 		String keyPath = "SOME_WORLD";
-		String contextKey = SourceKey.create(Source.MACRO, keyPath);
 		ContextMap contextMap = new ContextMap(playerMock);
 		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
-		contextMap.put(contextKey, ContextContainer.of(worldMock, ProcessorType.WORLD));
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, keyPath);
+		contextMap.put(keyPath, ContextContainer.of(worldMock, ProcessorType.WORLD));
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, null);
 
-		assertTrue(resultMap.containsKey(contextKey));
-		assertEquals("test_world", resultMap.get(contextKey));
+		assertFalse(resultMap.containsKey(keyPath));
 		assertTrue(resultMap.isEmpty());
 	}
 
