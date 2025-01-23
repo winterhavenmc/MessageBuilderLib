@@ -17,36 +17,82 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
+
+import org.bukkit.configuration.Configuration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
+import static com.winterhavenmc.util.messagebuilder.util.MockUtility.loadConfigurationFromResource;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class EntityProcessorTest {
 
-	@Mock private YamlLanguageQueryHandler queryHandlerMock;
-	private MacroProcessor macroProcessor;
+	@Mock Player playerMock;
+	@Mock Entity entityMock;
+
+	LanguageQueryHandler queryHandler;
+
 
 	@BeforeEach
-	public void setUp() {
-		LanguageQueryHandler mockLanguageQueryHandler = mock(LanguageQueryHandler.class, "MockQueryHandler");
-
-		macroProcessor = new EntityProcessor(mockLanguageQueryHandler);
+	void setUp() {
+		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
+		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
+		queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
 	}
 
 	@AfterEach
-	public void tearDown() {
-		queryHandlerMock = null;
-		macroProcessor = null;
+	void tearDown() {
+		playerMock = null;
+		entityMock = null;
+		queryHandler = null;
 	}
 
 	@Test
-	void resolveContext() { }
+	void resolveContext() {
+		// Arrange
+		when(entityMock.getName()).thenReturn("Entity Name");
+		String keyPath = "ENTITY";
+		ContextMap contextMap = new ContextMap(playerMock);
+		contextMap.put(keyPath, ContextContainer.of(entityMock, ProcessorType.ENTITY));
+
+		MacroProcessor macroProcessor = new EntityProcessor(queryHandler);
+
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, entityMock);
+
+		// Assert
+		assertTrue(resultMap.containsKey(keyPath));
+		assertEquals("Entity Name", resultMap.get(keyPath));
+	}
+
+	@Test
+	void resolveContext_not_entity() {
+		// Arrange
+		String keyPath = "ENTITY";
+		ContextMap contextMap = new ContextMap(playerMock);
+		contextMap.put(keyPath, ContextContainer.of("string", ProcessorType.ENTITY));
+
+		MacroProcessor macroProcessor = new EntityProcessor(queryHandler);
+
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, "string");
+
+		// Assert
+		assertFalse(resultMap.containsKey(keyPath));
+	}
 
 }
