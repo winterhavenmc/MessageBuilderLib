@@ -42,40 +42,6 @@ public class MacroHandler {
 
 
 	/**
-	 * Enum that contains settable LEFT and RIGHT macro delimiter characters
-	 */
-	public enum MacroDelimiter {
-		LEFT('{'),
-		RIGHT('}');
-
-		// the delimiter character
-		private char character;
-
-		/**
-		 * Constructor for enum
-		 *
-		 * @param defaultChar the default character for a delimiter
-		 */
-		MacroDelimiter(final char defaultChar) {
-			this.character = defaultChar;
-		}
-
-		@Override
-		public String toString() {
-			return String.valueOf(this.character);
-		}
-
-		public char toChar() {
-			return this.character;
-		}
-
-		public void set(final char character) {
-			this.character = character;
-		}
-	}
-
-
-	/**
 	 * Class constructor
 	 */
 	public MacroHandler(final LanguageQueryHandler queryHandler) {
@@ -103,7 +69,7 @@ public class MacroHandler {
 		String modifiedMessageString = messageString;
 
 		// only process macro tokens if message string contains a token marker character
-		if (modifiedMessageString.contains(MacroDelimiter.LEFT.toString())) {
+		if (modifiedMessageString.contains(MacroDelimiter.OPEN.toString())) {
 
 			// final result map of String NameSpacedKeys and processed String values
 			ResultMap replacementStringMap = new ResultMap();
@@ -139,7 +105,7 @@ public class MacroHandler {
 
 			// replace macro tokens in message string with macro strings
 			for (Map.Entry<String, String> entry : replacementStringMap.entrySet()) {
-				String macroToken = MacroDelimiter.LEFT + entry.getKey() + MacroDelimiter.RIGHT;
+				String macroToken = MacroDelimiter.OPEN + entry.getKey() + MacroDelimiter.CLOSE;
 				modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue());
 			}
 		}
