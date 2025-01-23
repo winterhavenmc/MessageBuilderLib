@@ -35,3 +35,4 @@ resources/
             │
             └── time/
                 └── TimeQueryHandler.java        // Concrete class: Handles queries for time section.
+
