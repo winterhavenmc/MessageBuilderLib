@@ -62,7 +62,7 @@ public record MessageRecord(
 	 * message record field constants and their corresponding keyPaths. Other field metadata may be
 	 * encapsulated in this enum in the future.
 	 */
-	enum Field {
+	public enum Field {
 		ENABLED("ENABLED"),
 		TRANSLATABLE("TRANSLATABLE"),
 		TRANSLATABLE_KEY("TRANSLATABLE_KEY"),
