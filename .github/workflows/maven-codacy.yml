@@ -34,4 +34,4 @@ jobs:
         curl -Ls https://coverage.codacy.com/get.sh -o codacy-coverage-reporter.sh
         chmod +x codacy-coverage-reporter.sh
         ./codacy-coverage-reporter.sh report \
-          -r target/kover/report.xml
+          -r target/site/kover/report.xml
