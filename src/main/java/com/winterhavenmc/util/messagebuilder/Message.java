@@ -53,32 +53,27 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	// required parameters
 	private final CommandSender recipient;
 	private final MessageId messageId;
-	private final LanguageQueryHandler queryHandler;
+	private final LanguageQueryHandler languageQueryHandler;
 	private final MacroHandler macroHandler;
-
-	// optional parameters
-	private String altMessage;
-	private String altTitle;
-	private String altSubtitle;
 
 
 	/**
 	 * Class constructor
 	 *
 	 * @param plugin       reference to plugin main class
-	 * @param queryHandler the ItemRecord handler for message records
+	 * @param languageQueryHandler the ItemRecord handler for message records
 	 * @param macroHandler reference to macro processor class
 	 * @param recipient    message recipient
 	 * @param messageId    message identifier
 	 */
 	public Message(final Plugin plugin,
-				final LanguageQueryHandler queryHandler,
+				final LanguageQueryHandler languageQueryHandler,
                 final MacroHandler macroHandler,
                 final CommandSender recipient,
                 final MessageId messageId) {
 
 		this.plugin = plugin;
-		this.queryHandler = queryHandler;
+		this.languageQueryHandler = languageQueryHandler;
 		this.macroHandler = macroHandler;
 		this.recipient = recipient;
 		this.messageId = messageId;
@@ -122,18 +117,17 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		// put value and processor type into context map
 		this.contextMap.put(key, unwrappedValue, processorType);
 
-		// return this instance of MessageKey class to the builder chain
+		// return this instance of Message class to the builder chain
 		return this;
 	}
 
-		//TODO: add back optional unwrapping
 
 	/**
 	 * Final step of message builder, performs replacements and sends message to recipient
 	 */
 	public void send() {
 		// get message query handler
-		MessageSectionQueryHandler sectionQueryHandler = (MessageSectionQueryHandler) queryHandler.getSectionQueryHandler(Section.MESSAGES);
+		MessageSectionQueryHandler sectionQueryHandler = (MessageSectionQueryHandler) languageQueryHandler.getSectionQueryHandler(Section.MESSAGES);
 		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
 
 			// get optional message record
@@ -176,31 +170,22 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 
 			// get title string
 			String titleString;
-			if (altTitle != null && !altTitle.isEmpty()) {
-				titleString = macroHandler.replaceMacros(recipient, contextMap, altTitle);
-			}
-			else {
-				titleString = macroHandler.replaceMacros(recipient, contextMap,
-						queryHandler.getMessageRecord(messageId).map(MessageRecord::title).orElse(""));
-			}
+
+			titleString = macroHandler.replaceMacros(recipient, contextMap,
+					languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::title).orElse(""));
 
 			// get subtitle string
 			String subtitleString;
-			if (altSubtitle != null && !altSubtitle.isEmpty()) {
-				subtitleString = macroHandler.replaceMacros(recipient, contextMap, altSubtitle);
-			}
-			else {
 				subtitleString = macroHandler.replaceMacros(recipient, contextMap,
-						queryHandler.getMessageRecord(messageId).map(MessageRecord::subtitle).orElse(""));
-			}
+						languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::subtitle).orElse(""));
 
 			// only send title if either title string or subtitle string is not empty
 			if (!titleString.isEmpty() || !subtitleString.isEmpty()) {
 
 				// get title timing values
-				int titleFadeIn = queryHandler.getMessageRecord(messageId).map(MessageRecord::titleFadeIn).orElse(20);
-				int titleStay = queryHandler.getMessageRecord(messageId).map(MessageRecord::titleStay).orElse(70);
-				int titleFadeOut = queryHandler.getMessageRecord(messageId).map(MessageRecord::titleFadeOut).orElse(10);
+				int titleFadeIn = languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::titleFadeIn).orElse(20);
+				int titleStay = languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::titleStay).orElse(70);
+				int titleFadeOut = languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::titleFadeOut).orElse(10);
 
 				// if title string is empty, add format code, else it won't display with subtitle only
 				if (titleString.isEmpty()) {
@@ -228,7 +213,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	public String toString() {
 
 		// get optional MessageRecord
-		Optional<MessageRecord> messageRecord = queryHandler.getMessageRecord(messageId);
+		Optional<MessageRecord> messageRecord = languageQueryHandler.getMessageRecord(messageId);
 
 		// if message entry not found or message not enabled for messageId, return empty string
 		if (messageRecord.isEmpty() || !messageRecord.get().enabled()) {
@@ -248,62 +233,16 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 
 		String messageString;
 
-		if (altMessage != null && !altMessage.isEmpty()) {
-			messageString = macroHandler.replaceMacros(recipient, contextMap, altMessage);
-		}
-		else {
-			Optional<MessageRecord> messageRecord = queryHandler.getMessageRecord(messageId);
+		Optional<MessageRecord> messageRecord = languageQueryHandler.getMessageRecord(messageId);
 
-			// if message entry could not be found, then return empty string
-			if (messageRecord.isEmpty()) {
-				return "";
-			}
-
-			messageString = macroHandler.replaceMacros(recipient, contextMap, messageRecord.get().message());
+		// if message entry could not be found, then return empty string
+		if (messageRecord.isEmpty()) {
+			return "";
 		}
+
+		messageString = macroHandler.replaceMacros(recipient, contextMap, messageRecord.get().message());
+
 		return ChatColor.translateAlternateColorCodes('&', messageString);
-	}
-
-
-	/**
-	 * Set alternate message string
-	 *
-	 * @param altMessage the alternative message string
-	 * @return this message object with alternative message string set
-	 */
-	public Message<MessageId, Macro> setAltMessage(final String altMessage) {
-		if (altMessage != null) {
-			this.altMessage = altMessage;
-		}
-		return this;
-	}
-
-
-	/**
-	 * Set alternate title string
-	 *
-	 * @param altTitle the alternate title string
-	 * @return this message object with alternate title string set
-	 */
-	public Message<MessageId, Macro> setAltTitle(final String altTitle) {
-		if (altTitle != null) {
-			this.altTitle = altTitle;
-		}
-		return this;
-	}
-
-
-	/**
-	 * Set alternate subtitle string
-	 *
-	 * @param altSubtitle the alternate subtitle string
-	 * @return this message object with alternate title string set
-	 */
-	public Message<MessageId, Macro> setAltSubtitle(final String altSubtitle) {
-		if (altSubtitle != null) {
-			this.altSubtitle = altSubtitle;
-		}
-		return this;
 	}
 
 }
