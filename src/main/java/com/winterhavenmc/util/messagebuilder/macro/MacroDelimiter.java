@@ -22,7 +22,7 @@ import java.util.EnumMap;
 /**
  * Enum that contains settable LEFT and RIGHT macro delimiter characters
  */
-public enum MacroDelimiter {
+enum MacroDelimiter {
 	OPEN('{'),
 	CLOSE('}');
 
@@ -45,7 +45,7 @@ public enum MacroDelimiter {
 	 *
 	 * @return Character the default character for this enum constant
 	 */
-	public Character getDefaultChar() {
+	Character getDefaultChar() {
 		return this.defaultChar;
 	}
 
@@ -55,7 +55,7 @@ public enum MacroDelimiter {
 	 *
 	 * @param character the character to set as the delimiter for this enum constant
 	 */
-	public void set(final char character) {
+	void set(final char character) {
 		backingMap.put(this, character);
 	}
 
