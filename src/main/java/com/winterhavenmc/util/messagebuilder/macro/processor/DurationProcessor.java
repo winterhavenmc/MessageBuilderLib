@@ -48,7 +48,7 @@ public class DurationProcessor extends MacroProcessorTemplate implements MacroPr
 			}
 
 			if (locale == null) {
-				locale = Locale.US;
+				locale = Locale.getDefault();
 			}
 
 			resultMap.put(keyPath, TimeString.getTimeString(locale, duration.toMillis()));
