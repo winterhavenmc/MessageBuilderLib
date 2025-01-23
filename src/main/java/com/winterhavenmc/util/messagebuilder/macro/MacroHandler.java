@@ -46,11 +46,11 @@ public class MacroHandler {
 	 */
 	public MacroHandler(final LanguageQueryHandler queryHandler) {
 		// instantiate macro processor registry
-		this.processorRegistry = new ProcessorRegistry();
+		this.processorRegistry = new ProcessorRegistry(queryHandler);
 		// populate macro processor registry
-		for (ProcessorType type : ProcessorType.values()) {
-			type.register(queryHandler, processorRegistry, type);
-		}
+//		for (ProcessorType type : ProcessorType.values()) {
+//			type.register(queryHandler, processorRegistry, type);
+//		}
 	}
 
 

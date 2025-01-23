@@ -17,6 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import java.util.EnumMap;
 
 
@@ -26,26 +29,31 @@ import java.util.EnumMap;
  */
 public class ProcessorRegistry {
 
-	// the backing store EnumMap
-	private final EnumMap<ProcessorType, MacroProcessor> macroProcessorMap = new EnumMap<>(ProcessorType.class);
+	private final EnumMap<ProcessorType, MacroProcessor> macroProcessorMap;
+	private final LanguageQueryHandler languageQueryHandler;
 
 
 	/**
-	 * This method inserts an entry into the map
-	 * @param type the macro processor type, an Enum member, used as the key
-	 * @param macroProcessor the macro processor instance, used as the value
+	 * Class constructor
+	 *
+	 * @param languageQueryHandler the language handler to be passed to macro processor constructors
 	 */
-	public void put(final ProcessorType type, final MacroProcessor macroProcessor) {
-		this.macroProcessorMap.put(type, macroProcessor);
+	public ProcessorRegistry(final LanguageQueryHandler languageQueryHandler) {
+		if (languageQueryHandler == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "languageQueryHandler"); }
+
+		macroProcessorMap = new EnumMap<>(ProcessorType.class);
+		this.languageQueryHandler = languageQueryHandler;
 	}
+
 
 	/**
 	 * This method retrieves a macro processor instance from the map by the MacroProcessorType key
-	 * @param macroProcessorType the macro processor type key
+	 * @param processorType the macro processor type key
 	 * @return The macro processor instance stored in the map that is referenced by the key
 	 */
-	public MacroProcessor get(final ProcessorType macroProcessorType) {
-		return macroProcessorMap.get(macroProcessorType);
+	public MacroProcessor get(final ProcessorType processorType) {
+		macroProcessorMap.computeIfAbsent(processorType, type -> ProcessorType.of(type, languageQueryHandler));
+		return macroProcessorMap.get(processorType);
 	}
 
 }
