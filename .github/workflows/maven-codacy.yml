@@ -1,4 +1,4 @@
-name: Maven Build and Codacy Coverage
+name: Codacy Coverage Report Upload
 
 on:
   push:
