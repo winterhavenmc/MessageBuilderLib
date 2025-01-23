@@ -25,7 +25,6 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class StringProcessorTest {
 
-	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
 
 	LanguageQueryHandler queryHandler;
@@ -53,7 +51,6 @@ class StringProcessorTest {
 
 	@AfterEach
 	public void tearDown() {
-		pluginMock = null;
 		queryHandler = null;
 	}
 
@@ -75,29 +72,5 @@ class StringProcessorTest {
 		assertTrue(resultMap.containsKey(contextKey));
 		assertEquals(stringObject, resultMap.get(contextKey));
 	}
-
-
-//	@Test
-//	void resolveContextWithItem() {
-//
-//		LanguageResourceManager languageHandler = new YamlLanguageResourceManager(plugin, new YamlLanguageResourceLoader(plugin));
-//		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(plugin, languageHandler.getConfiguration());
-//		MacroProcessor macroProcessor = new StringProcessor(queryHandler);
-//
-//		String stringKey = "ITEM";
-//		String stringObject = "some item string";
-//
-//		ContextMap contextMap = new ContextMap();
-//		ContextKey compositeKey = new CompositeKey(ProcessorType.STRING, stringKey);
-//		contextMap.put(compositeKey, stringObject);
-//
-//		ResultMap stringMap = macroProcessor.execute("ITEM", "some item string", contextMap);
-//
-//		assertTrue(stringMap.containsKey(stringKey));
-//		assertEquals("§aTest Item", stringMap.get(stringKey));
-//		assertTrue(stringMap.containsKey("ITEM_NAME"));
-//		assertEquals("§aTest Item", stringMap.get("ITEM_NAME"));
-//
-//	}
 
 }
