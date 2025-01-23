@@ -1,14 +1,14 @@
-name: Codacy Coverage Report Upload
+name: Codacy Coverage
 
 on:
   push:
     branches:
       - main
       - develop
-#      - 'feature/*'  # Optional, triggers on feature branches
 
 jobs:
   build-and-report:
+    name: upload-report
     runs-on: ubuntu-latest
 
     steps:
