@@ -31,87 +31,31 @@ import java.time.Duration;
 
 public enum ProcessorType {
 
-	ENTITY(Entity.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new EntityProcessor(queryHandler);
-		}
-	},
-	COMMAND_SENDER(CommandSender.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new CommandSenderProcessor(queryHandler);
-		}
-	},
-	ITEM_STACK(ItemStack.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new ItemStackProcessor(queryHandler);
-		}
-	},
-	LOCATION(Location.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new LocationProcessor(queryHandler);
-		}
-	},
-	DURATION(Duration.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new DurationProcessor(queryHandler);
-		}
-	},
-	NUMBER(Number.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new NumberProcessor(queryHandler);
-		}
-	},
-	OFFLINE_PLAYER(OfflinePlayer.class) {
-		@Override
-		MacroProcessor create(LanguageQueryHandler queryHandler) {
-			return new OfflinePlayerProcessor(queryHandler);
-		}
-	},
-	WORLD(World.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new WorldProcessor(queryHandler);
-		}
-	},
-	STRING(String.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new StringProcessor(queryHandler);
-		}
-	},
-	OBJECT(Object.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new ObjectProcessor(queryHandler);
-		}
-	},
-	NULL(NullType.class) {
-		@Override
-		MacroProcessor create(final LanguageQueryHandler queryHandler) {
-			return new NullProcessor(queryHandler);
-		}
-	};
+	ENTITY(EntityProcessor.class, Entity.class),
+	COMMAND_SENDER(CommandSenderProcessor.class, CommandSender.class),
+	ITEM_STACK(ItemStackProcessor.class, ItemStack.class),
+	LOCATION(LocationProcessor.class, Location.class),
+	DURATION(DurationProcessor.class, Duration.class),
+	NUMBER(NumberProcessor.class, Number.class),
+	OFFLINE_PLAYER(OfflinePlayerProcessor.class, OfflinePlayer.class),
+	WORLD(WorldProcessor.class, World.class),
+	STRING(StringProcessor.class, String.class),
+	OBJECT(ObjectProcessor.class, Object.class),
+	NULL(NullProcessor.class, NullType.class),
+	;
 
+	private final Class<? extends MacroProcessor> processorClass;
 	private final Class<?> expectedType;
 
 
-	ProcessorType(Class<?> expectedType) {
+	ProcessorType(Class<? extends MacroProcessor> processorClass, Class<?> expectedType) {
+		this.processorClass = processorClass;
 		this.expectedType = expectedType;
 	}
 
-	abstract MacroProcessor create(final LanguageQueryHandler queryHandler);
 
-
-	public void register(final LanguageQueryHandler queryHandler,
-	                     final ProcessorRegistry macroProcessorRegistry,
-	                     final ProcessorType type) {
-		macroProcessorRegistry.put(type, type.create(queryHandler));
+	public Class<?> getExpectedType() {
+		return this.expectedType;
 	}
 
 
@@ -123,6 +67,7 @@ public enum ProcessorType {
 			case ItemStack ignored -> ITEM_STACK;
 			case Location ignored -> LOCATION;
 			case World ignored -> WORLD;
+			case Duration ignored -> DURATION;
 			case Number ignored -> NUMBER;
 			case String ignored -> STRING;
 			case null -> NULL;
@@ -130,8 +75,21 @@ public enum ProcessorType {
 		};
 	}
 
-	public Class<?> getExpectedType() {
-		return this.expectedType;
+
+	public static MacroProcessor of(final ProcessorType processorType, final LanguageQueryHandler languageQueryHandler) {
+		return switch (processorType) {
+			case COMMAND_SENDER -> new CommandSenderProcessor(languageQueryHandler);
+			case DURATION -> new DurationProcessor(languageQueryHandler);
+			case ENTITY -> new EntityProcessor(languageQueryHandler);
+			case ITEM_STACK -> new ItemStackProcessor(languageQueryHandler);
+			case LOCATION -> new LocationProcessor(languageQueryHandler);
+			case NULL -> new NullProcessor(languageQueryHandler);
+			case NUMBER -> new NumberProcessor(languageQueryHandler);
+			case OBJECT -> new ObjectProcessor(languageQueryHandler);
+			case OFFLINE_PLAYER -> new OfflinePlayerProcessor(languageQueryHandler);
+			case STRING -> new StringProcessor(languageQueryHandler);
+			case WORLD -> new WorldProcessor(languageQueryHandler);
+		};
 	}
 
 }

@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -35,7 +36,7 @@ class ProcessorRegistryTest {
 
 	@BeforeEach
 	public void setUp() {
-		processorRegistry = new ProcessorRegistry();
+		processorRegistry = new ProcessorRegistry(queryHandler);
 	}
 
 	@AfterEach
@@ -44,20 +45,27 @@ class ProcessorRegistryTest {
 	}
 
 
-	@Test
-	void testPut() {
-		// Arrange & Act
-		processorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(queryHandler));
+	@Nested
+	class ConstructorTests {
+		@Test
+		void testConstructor_parameter_valid() {
+			ProcessorRegistry registry = new ProcessorRegistry(queryHandler);
 
-		// Assert
-		assertNotNull(processorRegistry.get(ProcessorType.STRING));
+			assertNotNull(registry);
+		}
+
+		@Test
+		void testConstructor_parameter_null() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> new ProcessorRegistry(null));
+
+			assertEquals("The parameter 'languageQueryHandler' cannot be null.", exception.getMessage());
+		}
 	}
+
 
 	@Test
 	void tstGet() {
-		// Arrange & Act
-		processorRegistry.put(ProcessorType.STRING, ProcessorType.STRING.create(queryHandler));
-
 		// Assert
 		assertNotNull(processorRegistry.get(ProcessorType.STRING));
 	}

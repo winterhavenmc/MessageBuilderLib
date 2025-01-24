@@ -37,8 +37,7 @@ class EntityProcessor extends MacroProcessorTemplate implements MacroProcessor {
 			// put entity macro replacements in result map
 			resultMap.put(key, entity.getName());
 
-//			resultMap.putAll(compositeKey, entity.getName());
-			// this seems to be the proper place to add more entity values to the result map, if so inclined
+			//TODO: put additional field processing here, including entity location
 		}
 
 		return resultMap;
