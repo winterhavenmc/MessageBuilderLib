@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-report:
-    name: upload-report
+    name: Generate Coverage Report
     runs-on: ubuntu-latest
 
     steps:
