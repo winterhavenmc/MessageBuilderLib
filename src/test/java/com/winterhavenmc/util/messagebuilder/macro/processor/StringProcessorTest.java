@@ -51,6 +51,7 @@ class StringProcessorTest {
 
 	@AfterEach
 	public void tearDown() {
+		playerMock = null;
 		queryHandler = null;
 	}
 
