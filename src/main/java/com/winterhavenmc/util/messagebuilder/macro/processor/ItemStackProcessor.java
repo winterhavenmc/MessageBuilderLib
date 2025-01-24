@@ -37,15 +37,18 @@ public class ItemStackProcessor extends MacroProcessorTemplate implements MacroP
 
 		if (value instanceof ItemStack itemStack) {
 
-			// get item stack displayName
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			if (itemMeta != null) {
-				displayName = itemMeta.getDisplayName();
-			}
-			else {
+//			if (itemStack.hasItemMeta()) {
+//
+//				// get item stack displayName
+//				ItemMeta itemMeta = itemStack.getItemMeta();
+//				if (itemMeta != null) {
+//					displayName = itemMeta.getDisplayName();
+//				}
+//			}
+//			else {
 				// get display name from item material
 				displayName = itemStack.getType().toString();
-			}
+//			}
 		}
 
 		// put displayName in result map
