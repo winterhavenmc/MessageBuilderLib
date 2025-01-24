@@ -54,6 +54,11 @@ public enum ProcessorType {
 	}
 
 
+	public Class<?> getExpectedType() {
+		return this.expectedType;
+	}
+
+
 	public static ProcessorType matchType(final Object object) {
 		return switch (object) {
 			case Entity ignored -> ENTITY;
@@ -68,10 +73,6 @@ public enum ProcessorType {
 			case null -> NULL;
 			default -> OBJECT;
 		};
-	}
-
-	public Class<?> getExpectedType() {
-		return this.expectedType;
 	}
 
 
