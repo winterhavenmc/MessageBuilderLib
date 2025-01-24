@@ -18,15 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import org.bukkit.command.CommandSender;
 
 
 public class CommandSenderProcessor extends MacroProcessorTemplate {
-
-	public CommandSenderProcessor(LanguageQueryHandler queryHandler) {
-		super(queryHandler);
-	}
 
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {

@@ -18,8 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.bukkit.OfflinePlayer;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
@@ -27,10 +27,6 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
 
 
 public class OfflinePlayerProcessor extends MacroProcessorTemplate implements MacroProcessor {
-
-	public OfflinePlayerProcessor(final LanguageQueryHandler queryHandler) {
-		super(queryHandler);
-	}
 
 	@Override
 	public <T> ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {

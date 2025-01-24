@@ -17,37 +17,36 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.*;
-import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.context.Source;
+import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 
 import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)
 class ObjectProcessorTest {
 
-	@Mock private LanguageQueryHandler queryHandlerMock;
 	@Mock private Player playerMock;
 	private MacroProcessor macroProcessor;
 
 
 	@BeforeEach
 	public void setUp() {
-
-		macroProcessor = new ObjectProcessor(queryHandlerMock);
+		macroProcessor = new ObjectProcessor();
 	}
 
 	@AfterEach
 	public void tearDown() {
-		queryHandlerMock = null;
 		macroProcessor = null;
 	}
 

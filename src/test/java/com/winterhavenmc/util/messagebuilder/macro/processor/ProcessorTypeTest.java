@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -52,7 +51,6 @@ class ProcessorTypeTest {
 	@Mock OfflinePlayer offlinePlayer;
 	@Mock World worldMock;
 	@Mock Location locationMock;
-	@Mock YamlLanguageQueryHandler languageQueryHandler;
 
 	static Map<String, ProcessorType> nameMap = new HashMap<>();
 
@@ -160,8 +158,8 @@ class ProcessorTypeTest {
 	 */
 	@ParameterizedTest
 	@EnumSource
-	void testOf(ProcessorType processorType) {
-		assertInstanceOf(MacroProcessor.class, ProcessorType.of(processorType, languageQueryHandler));
+	void testCreate(ProcessorType processorType) {
+		assertInstanceOf(MacroProcessor.class, ProcessorType.create(processorType));
 	}
 
 
@@ -173,7 +171,7 @@ class ProcessorTypeTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = { "COMMAND_SENDER", "DURATION", "ENTITY", "ITEM_STACK", "LOCATION", "NULL", "NUMBER", "OBJECT", "OFFLINE_PLAYER", "STRING", "WORLD" } )
-	void testValueOf(String name) {
+	void testValueCreate(String name) {
 		assertEquals(nameMap.get(name), ProcessorType.valueOf(name));
 	}
 

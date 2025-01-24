@@ -19,11 +19,6 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.*;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
-
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
@@ -31,7 +26,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.util.messagebuilder.util.MockUtility.loadConfigurationFromResource;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -40,19 +34,10 @@ class StringProcessorTest {
 
 	@Mock Player playerMock;
 
-	LanguageQueryHandler queryHandler;
-
-	@BeforeEach
-	public void setUp() {
-		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
-		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
-	}
 
 	@AfterEach
 	public void tearDown() {
 		playerMock = null;
-		queryHandler = null;
 	}
 
 	@Test
@@ -66,7 +51,7 @@ class StringProcessorTest {
 
 		contextMap.put(contextKey, ContextContainer.of(stringObject, ProcessorType.STRING));
 
-		MacroProcessor macroProcessor = new StringProcessor(queryHandler);
+		MacroProcessor macroProcessor = new StringProcessor();
 
 		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, stringObject);
 

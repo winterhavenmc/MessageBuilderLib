@@ -19,54 +19,35 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+
 import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @ExtendWith(MockitoExtension.class)
 class NullProcessorTest {
 
-	@Mock LanguageQueryHandler queryHandler;
 	@Mock Player playerMock;
-
-	@BeforeEach
-	void setUp() {
-	}
 
 	@AfterEach
 	void tearDown() {
+		playerMock = null;
 	}
 
-	@Test
-	void testConstructor_parameter_valid() {
-		// Arrange & Act
-		NullProcessor processor = new NullProcessor(queryHandler);
-
-		// Assert
-		assertNotNull(processor);
-	}
-
-	@Test
-	void testConstructor_parameter_null() {
-		// Arrange & Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new NullProcessor(null));
-
-		// Assert
-		assertEquals("The parameter 'queryHandler' cannot be null.", exception.getMessage());
-	}
 
 	@Test
 	void resolveContext() {
 		// Arrange
-		NullProcessor nullProcessor = new NullProcessor(queryHandler);
+		NullProcessor nullProcessor = new NullProcessor();
 		ContextMap contextMap = new ContextMap(playerMock);
 		contextMap.put("KEY", new ContextContainer<>(null, ProcessorType.NULL));
 
@@ -80,7 +61,7 @@ class NullProcessorTest {
 	@Test
 	void resolveContext_not_null() {
 		// Arrange
-		NullProcessor nullProcessor = new NullProcessor(queryHandler);
+		NullProcessor nullProcessor = new NullProcessor();
 		ContextMap contextMap = new ContextMap(playerMock);
 		contextMap.put("KEY", new ContextContainer<>("not_null", ProcessorType.NULL));
 

@@ -19,12 +19,8 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 
 import org.bukkit.World;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
@@ -33,7 +29,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.util.messagebuilder.util.MockUtility.loadConfigurationFromResource;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -43,24 +38,12 @@ class WorldProcessorTest {
 
 	@Mock Player playerMock;
 	@Mock World worldMock;
-	@Mock YamlLanguageQueryHandler languageQueryHandlerMock;
 
-	LanguageQueryHandler languageQueryHandler;
-
-
-	@BeforeEach
-	public void setUp() {
-		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
-		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		languageQueryHandler = new YamlLanguageQueryHandler(configurationSupplier);
-	}
 
 	@AfterEach
 	public void tearDown() {
 		playerMock = null;
 		worldMock = null;
-		languageQueryHandlerMock = null;
-		languageQueryHandler = null;
 	}
 
 
@@ -71,7 +54,7 @@ class WorldProcessorTest {
 
 		String keyPath = "SOME_WORLD";
 		ContextMap contextMap = new ContextMap(playerMock);
-		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
+		MacroProcessor macroProcessor = new WorldProcessor();
 		contextMap.put(keyPath, ContextContainer.of(worldMock, ProcessorType.WORLD));
 
 		// Act
@@ -87,7 +70,7 @@ class WorldProcessorTest {
 	void resolveContext_with_null_world() {
 		String keyPath = "SOME_WORLD";
 		ContextMap contextMap = new ContextMap(playerMock);
-		MacroProcessor macroProcessor = new WorldProcessor(languageQueryHandlerMock);
+		MacroProcessor macroProcessor = new WorldProcessor();
 		contextMap.put(keyPath, ContextContainer.of(worldMock, ProcessorType.WORLD));
 		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, null);
 

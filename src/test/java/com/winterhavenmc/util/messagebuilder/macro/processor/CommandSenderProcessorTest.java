@@ -22,14 +22,13 @@ import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.context.Source;
 import com.winterhavenmc.util.messagebuilder.context.SourceKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -41,49 +40,19 @@ import static org.mockito.Mockito.when;
 class CommandSenderProcessorTest {
 
 	@Mock Plugin pluginMock;
-	@Mock LanguageQueryHandler queryHandlerMock;
 	@Mock Player playerMock;
 
 	MacroProcessor macroProcessor;
 
 	@BeforeEach
 	public void setUp() {
-		macroProcessor = new CommandSenderProcessor(queryHandlerMock);
+		macroProcessor = new CommandSenderProcessor();
 	}
 
 	@AfterEach
 	public void tearDown() {
 		pluginMock = null;
-		queryHandlerMock = null;
 		macroProcessor = null;
-	}
-
-
-	@Test
-	void testConstructor_parameter_valid() {
-		// Arrange & Act
-		CommandSenderProcessor processor = new CommandSenderProcessor(queryHandlerMock);
-
-		// Assert
-		assertNotNull(processor);
-	}
-
-	@Test
-	void testConstructor_parameter_null() {
-		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> new CommandSenderProcessor(null));
-
-		// Assert
-		assertEquals("The parameter 'queryHandler' cannot be null.", exception.getMessage());
-	}
-
-
-
-	@Test
-	void testResolveContext() {
-
-
 	}
 
 

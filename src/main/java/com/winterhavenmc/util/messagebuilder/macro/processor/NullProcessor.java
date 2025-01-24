@@ -18,14 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 
 
 public class NullProcessor extends MacroProcessorTemplate {
-
-	public NullProcessor(final LanguageQueryHandler queryHandler) {
-		super(queryHandler);
-	}
 
 	@Override
 	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {

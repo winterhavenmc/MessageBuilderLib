@@ -30,7 +30,6 @@ import java.util.EnumMap;
 public class ProcessorRegistry {
 
 	private final EnumMap<ProcessorType, MacroProcessor> macroProcessorMap;
-	private final LanguageQueryHandler languageQueryHandler;
 
 
 	/**
@@ -42,17 +41,17 @@ public class ProcessorRegistry {
 		if (languageQueryHandler == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "languageQueryHandler"); }
 
 		macroProcessorMap = new EnumMap<>(ProcessorType.class);
-		this.languageQueryHandler = languageQueryHandler;
 	}
 
 
 	/**
 	 * This method retrieves a macro processor instance from the map by the MacroProcessorType key
+	 *
 	 * @param processorType the macro processor type key
 	 * @return The macro processor instance stored in the map that is referenced by the key
 	 */
 	public MacroProcessor get(final ProcessorType processorType) {
-		macroProcessorMap.computeIfAbsent(processorType, type -> ProcessorType.of(type, languageQueryHandler));
+		macroProcessorMap.computeIfAbsent(processorType, ProcessorType::create);
 		return macroProcessorMap.get(processorType);
 	}
 

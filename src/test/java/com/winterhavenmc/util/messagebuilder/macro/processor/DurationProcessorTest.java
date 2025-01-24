@@ -19,27 +19,24 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.context.Source;
-import com.winterhavenmc.util.messagebuilder.context.SourceKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
+
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
-import java.util.Locale;
 
-import static com.winterhavenmc.util.messagebuilder.util.MockUtility.loadConfigurationFromResource;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 class DurationProcessorTest {
@@ -47,21 +44,13 @@ class DurationProcessorTest {
 	@Mock Player playerMock;
 	@Mock ConsoleCommandSender consoleMock;
 
-	LanguageQueryHandler queryHandler;
-
-
-	@BeforeEach
-	void setUp() {
-		Configuration configuration = loadConfigurationFromResource("language/en-US.yml");
-		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
-	}
 
 	@AfterEach
 	void tearDown() {
 		playerMock = null;
-		queryHandler = null;
+		consoleMock = null;
 	}
+
 
 	@Test
 	void resolveContext() {
@@ -72,7 +61,7 @@ class DurationProcessorTest {
 		ContextMap contextMap = new ContextMap(playerMock);
 		Duration durationObject = Duration.ofMillis(12300);
 		contextMap.put(keyPath, ContextContainer.of(durationObject, ProcessorType.DURATION));
-		MacroProcessor macroProcessor = new DurationProcessor(queryHandler);
+		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, durationObject);
@@ -90,7 +79,7 @@ class DurationProcessorTest {
 		ContextMap contextMap = new ContextMap(consoleMock);
 		Duration durationObject = Duration.ofMillis(12300);
 		contextMap.put(keyPath, ContextContainer.of(durationObject, ProcessorType.DURATION));
-		MacroProcessor macroProcessor = new DurationProcessor(queryHandler);
+		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, durationObject);
@@ -108,7 +97,7 @@ class DurationProcessorTest {
 		ContextMap contextMap = new ContextMap(consoleMock);
 		Object object = "a string";
 		contextMap.put(keyPath, ContextContainer.of(object, ProcessorType.DURATION));
-		MacroProcessor macroProcessor = new DurationProcessor(queryHandler);
+		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, object);

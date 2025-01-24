@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -40,7 +39,6 @@ import static org.hamcrest.Matchers.*;
 @ExtendWith(MockitoExtension.class)
 class LocationProcessorTest {
 
-	@Mock private LanguageQueryHandler queryHandlerMock;
 	@Mock private World worldMock;
 	@Mock private Location locationMock;
 	@Mock private Player playerMock;
@@ -52,18 +50,11 @@ class LocationProcessorTest {
 
 	@BeforeEach
 	void setUp() {
-
 		// real context map
 		contextMap = new ContextMap(playerMock);
 
 		// Initialize the processor
-		locationProcessor = new LocationProcessor(queryHandlerMock);
-
-//		// Mock Bukkit's PluginManager and WorldNameUtility
-//		try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
-//			PluginManager mockPluginManager = mock(PluginManager.class);
-//			mockedBukkit.when(Bukkit::getPluginManager).thenReturn(mockPluginManager);
-//		}
+		locationProcessor = new LocationProcessor();
 	}
 
 	@Test

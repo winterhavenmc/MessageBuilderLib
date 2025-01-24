@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 
 import org.bukkit.entity.Player;
 
@@ -34,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class NumberProcessorTest {
 
-	@Mock private LanguageQueryHandler queryHandlerMock;
 	@Mock private Player playerMock;
 
 	private MacroProcessor macroProcessor;
@@ -43,14 +41,15 @@ class NumberProcessorTest {
 
 	@BeforeEach
 	public void setUp() {
-		macroProcessor = new NumberProcessor(queryHandlerMock);
+		macroProcessor = new NumberProcessor();
 		contextMap = new ContextMap(playerMock);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		queryHandlerMock = null;
+		playerMock = null;
 		macroProcessor = null;
+		contextMap = null;
 	}
 
 
