@@ -37,7 +37,6 @@ import java.util.Map;
  */
 public class MacroHandler {
 
-	// the processor registry
 	private final ProcessorRegistry processorRegistry;
 
 
@@ -45,12 +44,7 @@ public class MacroHandler {
 	 * Class constructor
 	 */
 	public MacroHandler(final LanguageQueryHandler queryHandler) {
-		// instantiate macro processor registry
 		this.processorRegistry = new ProcessorRegistry(queryHandler);
-		// populate macro processor registry
-//		for (ProcessorType type : ProcessorType.values()) {
-//			type.register(queryHandler, processorRegistry, type);
-//		}
 	}
 
 
@@ -68,7 +62,7 @@ public class MacroHandler {
 
 		String modifiedMessageString = messageString;
 
-		// only process macro tokens if message string contains a token marker character
+		// only process macro tokens if message string contains a macro delimiter
 		if (modifiedMessageString.contains(MacroDelimiter.OPEN.toString())) {
 
 			// final result map of String NameSpacedKeys and processed String values
