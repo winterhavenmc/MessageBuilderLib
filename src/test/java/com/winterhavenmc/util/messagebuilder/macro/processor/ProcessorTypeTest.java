@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -34,14 +35,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.lang.model.type.NullType;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +52,7 @@ class ProcessorTypeTest {
 	@Mock OfflinePlayer offlinePlayer;
 	@Mock World worldMock;
 	@Mock Location locationMock;
+	@Mock YamlLanguageQueryHandler languageQueryHandler;
 
 	static Map<String, ProcessorType> nameMap = new HashMap<>();
 
@@ -71,9 +72,6 @@ class ProcessorTypeTest {
 		nameMap.put("WORLD",ProcessorType.WORLD);
 	}
 
-	public static Stream<String> nameProvider() {
-		return nameMap.keySet().stream();
-	}
 
 	@AfterEach
 	void tearDown() {
@@ -142,7 +140,30 @@ class ProcessorTypeTest {
 
 	@Test
 	void getExpectedType() {
+		assertEquals(CommandSender.class, ProcessorType.COMMAND_SENDER.getExpectedType());
+		assertEquals(Duration.class, ProcessorType.DURATION.getExpectedType());
+		assertEquals(Entity.class, ProcessorType.ENTITY.getExpectedType());
+		assertEquals(ItemStack.class, ProcessorType.ITEM_STACK.getExpectedType());
+		assertEquals(Location.class, ProcessorType.LOCATION.getExpectedType());
+		assertEquals(NullType.class, ProcessorType.NULL.getExpectedType());
+		assertEquals(Number.class, ProcessorType.NUMBER.getExpectedType());
+		assertEquals(Object.class, ProcessorType.OBJECT.getExpectedType());
+		assertEquals(OfflinePlayer.class, ProcessorType.OFFLINE_PLAYER.getExpectedType());
+		assertEquals(String.class, ProcessorType.STRING.getExpectedType());
+		assertEquals(World.class, ProcessorType.WORLD.getExpectedType());
 	}
+
+
+	/**
+	 * Test that ProcessorType.of() method returns an object that conforms to the
+	 * MacroProcessor interface fore each constant.
+	 */
+	@ParameterizedTest
+	@EnumSource
+	void testOf(ProcessorType processorType) {
+		assertInstanceOf(MacroProcessor.class, ProcessorType.of(processorType, languageQueryHandler));
+	}
+
 
 	@ParameterizedTest
 	@EnumSource
