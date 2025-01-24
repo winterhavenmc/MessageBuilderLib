@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -31,34 +30,50 @@ import java.time.Duration;
 
 public enum ProcessorType {
 
-	ENTITY(EntityProcessor.class, Entity.class),
-	COMMAND_SENDER(CommandSenderProcessor.class, CommandSender.class),
-	ITEM_STACK(ItemStackProcessor.class, ItemStack.class),
-	LOCATION(LocationProcessor.class, Location.class),
-	DURATION(DurationProcessor.class, Duration.class),
-	NUMBER(NumberProcessor.class, Number.class),
-	OFFLINE_PLAYER(OfflinePlayerProcessor.class, OfflinePlayer.class),
-	WORLD(WorldProcessor.class, World.class),
-	STRING(StringProcessor.class, String.class),
-	OBJECT(ObjectProcessor.class, Object.class),
-	NULL(NullProcessor.class, NullType.class),
+	ENTITY(Entity.class),
+	COMMAND_SENDER(CommandSender.class),
+	ITEM_STACK(ItemStack.class),
+	LOCATION(Location.class),
+	DURATION(Duration.class),
+	NUMBER(Number.class),
+	OFFLINE_PLAYER(OfflinePlayer.class),
+	WORLD(World.class),
+	STRING(String.class),
+	OBJECT(Object.class),
+	NULL(NullType.class),
 	;
 
-	private final Class<? extends MacroProcessor> processorClass;
 	private final Class<?> expectedType;
 
 
-	ProcessorType(Class<? extends MacroProcessor> processorClass, Class<?> expectedType) {
-		this.processorClass = processorClass;
+	/**
+	 * Enum constructor
+	 *
+	 * @param expectedType the expected type of value for each processor type
+	 */
+	ProcessorType(Class<?> expectedType) {
 		this.expectedType = expectedType;
 	}
 
 
+	/**
+	 * Retrieve the expected type of value for a processor type
+	 *
+	 * @return {@code Class} the class of the expected type for a processor type
+	 */
 	public Class<?> getExpectedType() {
 		return this.expectedType;
 	}
 
 
+	/**
+	 * Static method that returns an appropriate {@code ProcessorType} for a given object. Null objects
+	 * return a NULL processor type, and unmatched objects fall through to the default case and return
+	 * an OBJECT processor type.
+	 *
+	 * @param object the object to match to a ProcessorType
+	 * @return {@code ProcessorType} the matching processor type for the object
+	 */
 	public static ProcessorType matchType(final Object object) {
 		return switch (object) {
 			case Entity ignored -> ENTITY;
@@ -76,19 +91,25 @@ public enum ProcessorType {
 	}
 
 
-	public static MacroProcessor of(final ProcessorType processorType, final LanguageQueryHandler languageQueryHandler) {
+	/**
+	 * Static method that returns an instance of a macro processor for the given {@code ProcessorType}
+	 *
+	 * @param processorType the ype of processor to instantiate
+	 * @return a new instantiation of a macro processor for the given {@code ProcessorType}
+	 */
+	public static MacroProcessor create(final ProcessorType processorType) {
 		return switch (processorType) {
-			case COMMAND_SENDER -> new CommandSenderProcessor(languageQueryHandler);
-			case DURATION -> new DurationProcessor(languageQueryHandler);
-			case ENTITY -> new EntityProcessor(languageQueryHandler);
-			case ITEM_STACK -> new ItemStackProcessor(languageQueryHandler);
-			case LOCATION -> new LocationProcessor(languageQueryHandler);
-			case NULL -> new NullProcessor(languageQueryHandler);
-			case NUMBER -> new NumberProcessor(languageQueryHandler);
-			case OBJECT -> new ObjectProcessor(languageQueryHandler);
-			case OFFLINE_PLAYER -> new OfflinePlayerProcessor(languageQueryHandler);
-			case STRING -> new StringProcessor(languageQueryHandler);
-			case WORLD -> new WorldProcessor(languageQueryHandler);
+			case COMMAND_SENDER -> new CommandSenderProcessor();
+			case DURATION -> new DurationProcessor();
+			case ENTITY -> new EntityProcessor();
+			case ITEM_STACK -> new ItemStackProcessor();
+			case LOCATION -> new LocationProcessor();
+			case NULL -> new NullProcessor();
+			case NUMBER -> new NumberProcessor();
+			case OBJECT -> new ObjectProcessor();
+			case OFFLINE_PLAYER -> new OfflinePlayerProcessor();
+			case STRING -> new StringProcessor();
+			case WORLD -> new WorldProcessor();
 		};
 	}
 

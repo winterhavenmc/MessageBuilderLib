@@ -17,11 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-
 
 /**
  * This skeleton class makes the queryHandler available to any extending classes,
@@ -31,17 +26,5 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
 public abstract class MacroProcessorTemplate implements MacroProcessor {
 
 	final static String UNKNOWN_VALUE = "???";
-
-	public final LanguageQueryHandler queryHandler;
-
-
-	/**
-	 * Abstract class constructor
-	 * @param queryHandler the LanguageQueryHandler used by the classes that extend this abstract class
-	 */
-	MacroProcessorTemplate(final LanguageQueryHandler queryHandler) {
-		if (queryHandler == null) { throw new LocalizedException(PARAMETER_NULL, "queryHandler"); }
-		this.queryHandler = queryHandler;
-	}
 
 }

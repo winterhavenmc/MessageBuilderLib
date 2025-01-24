@@ -19,9 +19,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.time.TimeString;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
@@ -29,10 +27,6 @@ import java.util.Locale;
 
 
 public class DurationProcessor extends MacroProcessorTemplate implements MacroProcessor {
-
-	public DurationProcessor(LanguageQueryHandler queryHandler) {
-		super(queryHandler);
-	}
 
 	@Override
 	public <T> ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {

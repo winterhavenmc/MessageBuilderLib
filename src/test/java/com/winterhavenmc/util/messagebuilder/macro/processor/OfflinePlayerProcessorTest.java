@@ -21,7 +21,6 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.context.Source;
 import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.Material;
@@ -35,24 +34,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @ExtendWith(MockitoExtension.class)
 class OfflinePlayerProcessorTest {
 
-	@Mock LanguageQueryHandler languageQueryHandlerMock;
 	@Mock Player playerMock;
 	@Mock OfflinePlayer offlinePlayerMock;
 
-	@BeforeEach
-	void setUp() {
-
-	}
-
 	@AfterEach
 	public void tearDown() {
-		languageQueryHandlerMock = null;
 		offlinePlayerMock = null;
 	}
 
@@ -60,7 +55,7 @@ class OfflinePlayerProcessorTest {
 	void resolveContextTest() {
 		// Arrange
 		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
@@ -75,7 +70,7 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContext_with_null_key() {
 		// Arrange
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
@@ -89,7 +84,7 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContext_with_empty_key() {
 		// Arrange
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		ContextMap contextMap = new ContextMap(playerMock);
 
 		// Act
@@ -103,7 +98,7 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContext_with_null_contextMap() {
 		// Arrange
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
 
 		// Act
@@ -117,7 +112,7 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContext_with_null_value() {
 		// Arrange
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
 		ContextMap contextMap = new ContextMap(playerMock);
 
@@ -132,7 +127,7 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContext_with_value_wrong_type() {
 		// Arrange
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor(languageQueryHandlerMock);
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
 		ContextMap contextMap = new ContextMap(playerMock);
 

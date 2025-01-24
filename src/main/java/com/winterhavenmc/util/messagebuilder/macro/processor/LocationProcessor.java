@@ -18,9 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
+
 import org.bukkit.Location;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
@@ -50,8 +50,6 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  * This processor ensures that placeholders are unique by suffixing "_LOCATION" to the key if it is not
  * already present. Null values or missing components, such as the world name, are replaced with the
  * default placeholder {@code UNKNOWN_VALUE}.
- * 
- *
  * <b>Example Usage:</b>
  * <pre>
  * {@code
@@ -73,10 +71,6 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  * @see WorldNameUtility
  */
 public class LocationProcessor extends MacroProcessorTemplate {
-
-	public LocationProcessor(LanguageQueryHandler queryHandler) {
-		super(queryHandler);
-	}
 
 
 	/**
