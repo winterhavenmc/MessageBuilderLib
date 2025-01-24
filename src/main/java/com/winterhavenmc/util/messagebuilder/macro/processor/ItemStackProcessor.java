@@ -33,23 +33,10 @@ public class ItemStackProcessor extends MacroProcessorTemplate implements MacroP
 
 		ResultMap resultMap = new ResultMap();
 
-		String displayName = UNKNOWN_VALUE;
-
 		if (value instanceof ItemStack itemStack) {
-
-			// get item stack displayName
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			if (itemMeta != null) {
-				displayName = itemMeta.getDisplayName();
-			}
-			else {
-				// get display name from item material
-				displayName = itemStack.getType().toString();
-			}
+			resultMap.put(key, itemStack.getType().toString());
 		}
 
-		// put displayName in result map
-		resultMap.put(key, displayName);
 		return resultMap;
 	}
 

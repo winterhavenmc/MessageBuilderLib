@@ -24,6 +24,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -46,15 +47,12 @@ class MacroHandlerTest {
 
 	@Mock Player playerMock;
 	@Mock LanguageResourceManager languageResourceManagerMock;
+	@Mock YamlLanguageQueryHandler languageQueryHandlerMock;
 
 	MacroHandler macroHandler;
 
 	@BeforeEach
 	public void setUp() {
-
-//		when(playerMock.getUniqueId()).thenReturn(new UUID(1, 1));
-//		when(playerMock.getName()).thenReturn("Player One");
-
 		// real objects
 		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
@@ -70,6 +68,29 @@ class MacroHandlerTest {
 	}
 
 
+	@Test
+	void testConstructor_parameter_valid() {
+		// Arrange & Act
+		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
+		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
+		macroHandler = new MacroHandler(queryHandler);
+
+		assertNotNull(macroHandler);
+	}
+
+
+	@Test
+	void testConstructor_parameter_null() {
+		// Arrange & Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> new MacroHandler(null));
+
+		// Assert
+		assertEquals("The parameter 'languageQueryHandler' cannot be null.", exception.getMessage());
+	}
+
+
 	@Disabled
 	@Test
 	void replaceMacrosTest() {
@@ -77,7 +98,7 @@ class MacroHandlerTest {
 		String key = "ITEM_NAME";
 		contextMap.put(key, ContextContainer.of("TEST_STRING", ProcessorType.STRING));
 
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
+		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: {ITEM_NAME}");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
