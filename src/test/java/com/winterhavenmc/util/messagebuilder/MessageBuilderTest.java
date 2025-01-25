@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
+import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
@@ -52,7 +52,7 @@ class MessageBuilderTest {
 	@Mock Plugin pluginMock;
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock YamlLanguageQueryHandler languageQueryHandlerMock;
-	@Mock MacroHandler macroQueryHandlerMock;
+	@Mock MacroReplacer macroQueryHandlerMock;
 	@Mock Player playerMock;
 
 	FileConfiguration pluginConfiguration;

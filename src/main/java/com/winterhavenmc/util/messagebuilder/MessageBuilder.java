@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.*;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.*;
-import com.winterhavenmc.util.messagebuilder.macro.MacroHandler;
+import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.time.Tick;
@@ -74,7 +74,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	private final Plugin plugin;
 	private final LanguageResourceManager languageResourceManager;
 	private final YamlLanguageQueryHandler languageQueryHandler;
-	private final MacroHandler macroQueryHandler;
+	private final MacroReplacer macroQueryHandler;
 
 	// this will be moved to a configuration, but are globally accessible for now
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
@@ -94,7 +94,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
 		this.languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
 		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
-		this.macroQueryHandler = new MacroHandler();
+		this.macroQueryHandler = new MacroReplacer();
 	}
 
 
@@ -109,7 +109,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	MessageBuilder(final Plugin pluginMock,
 	               final YamlLanguageResourceManager languageResourceManagerMock,
 	               final YamlLanguageQueryHandler languageQueryHandlerMock,
-	               final MacroHandler macroQueryHandlerMock) {
+	               final MacroReplacer macroQueryHandlerMock) {
 
 		this.plugin = pluginMock;
 		this.languageResourceManager = languageResourceManagerMock;
