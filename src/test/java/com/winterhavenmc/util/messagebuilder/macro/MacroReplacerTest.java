@@ -34,32 +34,32 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MacroHandlerTest {
+class MacroReplacerTest {
 
 	@Mock Player playerMock;
-	MacroHandler macroHandler;
+	MacroReplacer macroReplacer;
 
 
 	@BeforeEach
 	public void setUp() {
 		// real objects
-		macroHandler = new MacroHandler();
+		macroReplacer = new MacroReplacer();
 	}
 
 	@AfterEach
 	public void tearDown() {
 		playerMock = null;
-		macroHandler = null;
+		macroReplacer = null;
 	}
 
 
 	@Test
 	void testConstructor_parameter_valid() {
 		// Arrange & Act
-		macroHandler = new MacroHandler();
+		macroReplacer = new MacroReplacer();
 
 		// Assert
-		assertNotNull(macroHandler);
+		assertNotNull(macroReplacer);
 	}
 
 
@@ -70,7 +70,7 @@ class MacroHandlerTest {
 		String key = "ITEM_NAME";
 		contextMap.put(key, "TEST_STRING");
 
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: {ITEM_NAME}");
+		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: {ITEM_NAME}");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
@@ -81,14 +81,14 @@ class MacroHandlerTest {
 		String key = "MACRO:My_Item";
 		contextMap.put(key, "TEST_STRING");
 
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
+		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
 	@Test
 	void replaceMacrosTest_item_no_delimiter() {
 		ContextMap contextMap = new ContextMap(playerMock);
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: ITEM_NAME");
+		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: ITEM_NAME");
 		assertEquals("Replace this: ITEM_NAME", resultString);
 	}
 
@@ -102,7 +102,7 @@ class MacroHandlerTest {
 		ContextMap contextMap = new ContextMap(playerMock);
 		contextMap.put("ENTITY", entityMock);
 
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: {ENTITY}");
+		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: {ENTITY}");
 
 		assertEquals("Replace this: player1", resultString);
 	}
