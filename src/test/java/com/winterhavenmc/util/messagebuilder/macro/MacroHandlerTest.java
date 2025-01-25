@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -38,9 +37,8 @@ import static org.mockito.Mockito.*;
 class MacroHandlerTest {
 
 	@Mock Player playerMock;
-	@Mock LanguageResourceManager languageResourceManagerMock;
-
 	MacroHandler macroHandler;
+
 
 	@BeforeEach
 	public void setUp() {
@@ -51,7 +49,6 @@ class MacroHandlerTest {
 	@AfterEach
 	public void tearDown() {
 		playerMock = null;
-		languageResourceManagerMock = null;
 		macroHandler = null;
 	}
 
