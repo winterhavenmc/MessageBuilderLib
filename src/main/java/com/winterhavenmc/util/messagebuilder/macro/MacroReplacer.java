@@ -63,7 +63,8 @@ public class MacroReplacer {
 			addRecipientContext(recipient, contextMap);
 
 			// final result map of String NameSpacedKeys and processed String values
-			ResultMap replacementStringMap = new ResultMap(convertValuesToStrings(contextMap));
+			ResultMap replacementStringMap = new ResultMap();
+			replacementStringMap.putAll(convertValuesToStrings(contextMap));
 
 			// do macro replacements on message string
 			modifiedMessageString = performReplacements(replacementStringMap, modifiedMessageString);

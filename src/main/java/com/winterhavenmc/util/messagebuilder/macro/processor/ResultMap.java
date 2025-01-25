@@ -17,29 +17,25 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class ResultMap {
 
-	private final ResultMap internalResultMap;
+	private final Map<String, String> internalResultMap;
 
 
 	// Public constructor for regular instantiation
 	public ResultMap() {
-		this.internalResultMap = new ResultMap();
+		this.internalResultMap = new HashMap<>();
 	}
 
 
-	// Public constructor for regular instantiation
-	public ResultMap(final ResultMap map) {
-		this.internalResultMap = new ResultMap(map);
-	}
-
-
-	public void put(final String contextKey, final String value) {
-		internalResultMap.put(contextKey, value);
+	public void put(final String key, final String value) {
+		internalResultMap.put(key, value);
 	}
 
 
@@ -47,9 +43,12 @@ public class ResultMap {
 		return internalResultMap.get(key);
 	}
 
-	public void putAll(final ResultMap resultMap) {
-		for (Map.Entry<String, String> entry : resultMap.entrySet()) {
-			internalResultMap.put(entry.getKey(), entry.getValue());
+
+	public void putAll(final @NotNull ResultMap insertionMap) {
+		for (Map.Entry<String, String> entry : insertionMap.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			internalResultMap.put(key, value);
 		}
 	}
 
