@@ -23,11 +23,11 @@ import com.winterhavenmc.util.messagebuilder.context.Source;
 import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 import com.winterhavenmc.util.messagebuilder.macro.processor.*;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 
 /**
