@@ -35,8 +35,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class ObjectProcessorTest {
 
-	@Mock private Player playerMock;
-	private MacroProcessor macroProcessor;
+	@Mock Player playerMock;
+	MacroProcessor macroProcessor;
 
 
 	@BeforeEach

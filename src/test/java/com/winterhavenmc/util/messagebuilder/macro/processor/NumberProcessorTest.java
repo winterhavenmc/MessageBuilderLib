@@ -33,10 +33,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class NumberProcessorTest {
 
-	@Mock private Player playerMock;
+	@Mock Player playerMock;
 
-	private MacroProcessor macroProcessor;
-	private ContextMap contextMap;
+	MacroProcessor macroProcessor;
+	ContextMap contextMap;
 
 
 	@BeforeEach

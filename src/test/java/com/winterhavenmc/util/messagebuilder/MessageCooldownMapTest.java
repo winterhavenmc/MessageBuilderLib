@@ -42,10 +42,10 @@ class MessageCooldownMapTest {
 
 	private final static UUID player1Uid = new UUID(1,1);
 
-	@Mock private Plugin pluginMock;
-	@Mock private Server serverMock;
-	@Mock private PluginManager pluginManagerMock;
-	@Mock private Player playerMock;
+	@Mock Plugin pluginMock;
+	@Mock Server serverMock;
+	@Mock PluginManager pluginManagerMock;
+	@Mock Player playerMock;
 
 	// get real instance of MessageCooldownMap
 	private MessageCooldownMap<MessageId> messageCooldownMap;
@@ -73,7 +73,7 @@ class MessageCooldownMapTest {
 
 
 	@Test
-	void getInstance() {
+	public void getInstance() {
 		assertNotNull(MessageCooldownMap.getInstance(pluginMock));
 	}
 
