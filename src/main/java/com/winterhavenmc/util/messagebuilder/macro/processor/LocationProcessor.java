@@ -17,11 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 
 import org.bukkit.Location;
+
+import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
@@ -70,7 +73,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  * @see ContextMap
  * @see WorldNameUtility
  */
-public class LocationProcessor<T> extends MacroProcessorTemplate<T> {
+public class LocationProcessor extends MacroProcessorTemplate {
 
 
 	/**
@@ -90,19 +93,23 @@ public class LocationProcessor<T> extends MacroProcessorTemplate<T> {
 	 *
 	 * @param key         the unique key or namespace for this macro entry
 	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
-	 * @param value       the input value to resolve into context (must be {@link Location})
 	 * @return a {@link ResultMap} containing the resolved placeholders and their replacements
 	 * @throws IllegalArgumentException if any parameter is null or invalid
 	 */
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
 		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
-		if (value == null) { throw new LocalizedException(PARAMETER_NULL, "value"); }
 
 		// create empty result map
-		ResultMap resultMap = new ResultMap();
+		ResultMap resultMap = ResultMap.empty();
+
+		// get context container from map
+		Optional<ContextContainer<?>> container = contextMap.getContainer(key);
+
+		// TODO: maybe a little harsh, but the value should be there
+		Object value = container.orElseThrow().value();
 
 		// if passed object is not a Location, return empty result map
 		if (value instanceof Location location) {
@@ -124,16 +131,16 @@ public class LocationProcessor<T> extends MacroProcessorTemplate<T> {
 			String locationString = locationWorld + " [" + locationX + ", " + locationY + ", " + locationZ + "]";
 
 			// if macroName does not end in _LOCATION, suffix it to the end of the key
-			if (!resultKey.endsWith("_LOCATION")) {
-				resultKey = resultKey.concat("_LOCATION");
+			if (!resultKey.endsWith(".LOCATION")) {
+				resultKey = resultKey.concat(".LOCATION");
 			}
 
 			// Store placeholders
 			resultMap.put(resultKey, locationString);
-			resultMap.put(resultKey.concat("_WORLD"), locationWorld);
-			resultMap.put(resultKey.concat("_X"), locationX);
-			resultMap.put(resultKey.concat("_Y"), locationY);
-			resultMap.put(resultKey.concat("_Z"), locationZ);
+			resultMap.put(resultKey.concat(".WORLD"), locationWorld);
+			resultMap.put(resultKey.concat(".X"), locationX);
+			resultMap.put(resultKey.concat(".Y"), locationY);
+			resultMap.put(resultKey.concat(".Z"), locationZ);
 		}
 
 		// return result map

@@ -20,15 +20,15 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 
-public class ObjectProcessor<T> extends MacroProcessorTemplate<T> {
+public class ObjectProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
 
-		ResultMap resultMap = new ResultMap();
+		ResultMap resultMap = ResultMap.empty();
 
-		if (value != null) {
-			resultMap.put(key, value.toString());
+		if (contextMap.get(key).value() != null) {
+			resultMap.put(key, contextMap.get(key).value().toString());
 		}
 
 		return resultMap;

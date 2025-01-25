@@ -56,7 +56,7 @@ class ItemStackProcessorTest {
 		MacroProcessor macroProcessor = new ItemStackProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, itemStack);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey(keyPath));
@@ -74,7 +74,7 @@ class ItemStackProcessorTest {
 		MacroProcessor macroProcessor = new ItemStackProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, value);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
 		assertFalse(resultMap.containsKey(keyPath));

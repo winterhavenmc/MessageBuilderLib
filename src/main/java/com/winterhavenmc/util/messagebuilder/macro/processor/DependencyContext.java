@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,17 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro;
+package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
-
-
-public interface MacroKey {
-
-	ProcessorType getProcessorType();
-
-//	default Class<?> getAssociatedType() {
-//		return getProcessorType().getExpectedType();
-//	}
-
+public class DependencyContext {
+	/* this class is intended to be a dependency container for injection */
 }

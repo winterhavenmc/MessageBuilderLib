@@ -26,19 +26,18 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
-public class OfflinePlayerProcessor<T> extends MacroProcessorTemplate<T> {
+public class OfflinePlayerProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {
-		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
-		if (keyPath.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "keyPath"); }
+	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "keyPath"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
-		if (value == null) { throw new LocalizedException(PARAMETER_NULL, "value"); }
 
-		ResultMap resultMap = new ResultMap();
+		ResultMap resultMap = ResultMap.empty();
 
-		if (value instanceof OfflinePlayer offlinePlayer) {
-			resultMap.put(keyPath, offlinePlayer.getName());
+		if (contextMap.get(key).value() instanceof OfflinePlayer offlinePlayer) {
+			resultMap.put(key, offlinePlayer.getName());
 		}
 
 		return resultMap;

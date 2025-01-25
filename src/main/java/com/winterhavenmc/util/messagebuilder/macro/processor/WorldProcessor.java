@@ -19,21 +19,25 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.World;
 
 
-public class WorldProcessor<T> extends MacroProcessorTemplate<T> {
+public class WorldProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
+		if (key == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "key"); }
+		if (key.isBlank()) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_EMPTY, "key"); }
+		if (contextMap == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "contextMap"); }
 
 		ResultMap resultMap = new ResultMap();
 
+		Object value = contextMap.getContainer(key).orElseThrow().value();
+
 		if (value instanceof World world) {
 			//TODO: reimplement world name lookups after Multiverse alias lookups are reimplemented
-			//String worldName = queryHandler.getWorldName(world).orElse(UNKNOWN_VALUE);
-			String worldName = world.getName();
-			resultMap.put(key, worldName);
+			resultMap.put(key, world.getName());
 		}
 
 		return resultMap;

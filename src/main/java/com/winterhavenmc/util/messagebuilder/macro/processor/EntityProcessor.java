@@ -17,16 +17,32 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.entity.Entity;
 
+import java.util.Optional;
 
-class EntityProcessor<T> extends MacroProcessorTemplate<T> {
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+
+
+class EntityProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
-		ResultMap resultMap = new ResultMap();
+		// get context container from map
+		Optional<ContextContainer<?>> container = contextMap.getContainer(key);
+
+		// get value from container
+		Object value = container.orElseThrow().value();
+
+		ResultMap resultMap = ResultMap.empty();
 
 		if (value instanceof Entity entity) {
 

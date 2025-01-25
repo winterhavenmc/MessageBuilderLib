@@ -64,7 +64,7 @@ class DurationProcessorTest {
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, durationObject);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey(keyPath));
@@ -82,7 +82,7 @@ class DurationProcessorTest {
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, durationObject);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey(keyPath));
@@ -100,7 +100,7 @@ class DurationProcessorTest {
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, object);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
 		assertFalse(resultMap.containsKey(keyPath));

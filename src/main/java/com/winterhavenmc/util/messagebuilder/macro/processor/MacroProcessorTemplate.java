@@ -23,7 +23,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
  * as well as the UNKNOWN_VALUE string constant.
  * Methods used by all classes may be placed here in the future.
  */
-public abstract class MacroProcessorTemplate<T> implements MacroProcessor<T> {
+public abstract class MacroProcessorTemplate implements MacroProcessor {
 
 	final static String UNKNOWN_VALUE = "???";
 

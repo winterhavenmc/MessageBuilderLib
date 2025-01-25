@@ -53,7 +53,7 @@ class StringProcessorTest {
 
 		MacroProcessor macroProcessor = new StringProcessor();
 
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, stringObject);
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap);
 
 		assertTrue(resultMap.containsKey(contextKey));
 		assertEquals(stringObject, resultMap.get(contextKey));

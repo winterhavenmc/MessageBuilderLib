@@ -101,13 +101,13 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 		String key = SourceKey.create(Source.MACRO, macro.toString());
 
 		// get macro expected type from macro enum method
-		Class<?> expectedType = macro.getAssociatedType();
+		var handledType = ProcessorType.matchType(value).getHandledType();
 
 		// check the type against the expected type and throw exception if mismatched
-		if (!expectedType.isInstance(unwrappedValue)) {
+		if (!handledType.isInstance(unwrappedValue)) {
 			throw new IllegalArgumentException(
 					"Value type does not match the expected type for macro: " + macro +
-							". Expected: " + expectedType.getName() +
+							". Expected: " + handledType.getName() +
 							", Provided: " + unwrappedValue.getClass().getName());
 		}
 

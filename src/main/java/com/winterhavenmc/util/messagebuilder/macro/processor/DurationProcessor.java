@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.time.TimeString;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
@@ -24,14 +26,27 @@ import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.Locale;
+import java.util.Optional;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
-public class DurationProcessor<T> extends MacroProcessorTemplate<T> {
+public class DurationProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
-		ResultMap resultMap = new ResultMap();
+		// get context container from map
+		Optional<ContextContainer<?>> container = contextMap.getContainer(key);
+
+		// get value from container
+		Object value = container.orElseThrow().value();
+
+		ResultMap resultMap = ResultMap.empty();
 
 		if (value instanceof Duration duration) {
 
@@ -45,7 +60,7 @@ public class DurationProcessor<T> extends MacroProcessorTemplate<T> {
 				locale = Locale.getDefault();
 			}
 
-			resultMap.put(keyPath, TimeString.getTimeString(locale, duration.toMillis()));
+			resultMap.put(key, TimeString.getTimeString(locale, duration.toMillis()));
 		}
 		return resultMap;
 	}

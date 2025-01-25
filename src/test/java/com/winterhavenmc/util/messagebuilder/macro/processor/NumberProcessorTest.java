@@ -61,7 +61,7 @@ class NumberProcessorTest {
 		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, number);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey("SOME_INTEGER"));
@@ -77,7 +77,7 @@ class NumberProcessorTest {
 		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, number);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
 		assertFalse(resultMap.containsKey("SOME_NULL_INTEGER"));
@@ -91,7 +91,7 @@ class NumberProcessorTest {
 		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, number);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey("SOME_LONG"));
@@ -106,7 +106,7 @@ class NumberProcessorTest {
 		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, number);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
 		assertFalse(resultMap.containsKey("SOME_NULL_LONG"));

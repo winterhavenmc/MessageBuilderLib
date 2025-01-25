@@ -18,17 +18,24 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.inventory.ItemStack;
 
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
-public class ItemStackProcessor<T> extends MacroProcessorTemplate<T> {
+
+public class ItemStackProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
-		ResultMap resultMap = new ResultMap();
+		ResultMap resultMap = ResultMap.empty();
 
-		if (value instanceof ItemStack itemStack) {
+		if (contextMap.get(key).value() instanceof ItemStack itemStack) {
 			resultMap.put(key, itemStack.getType().toString());
 		}
 
