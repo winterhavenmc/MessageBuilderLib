@@ -29,6 +29,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -103,6 +105,24 @@ class OfflinePlayerProcessorTest {
 
 		// Assert
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void resolveContext_mismatched_type() {
+
+		String keyPath = "SOME_NAME";
+		Duration duration  = Duration.ofMillis(2000);
+
+		ContextMap contextMap = new ContextMap(playerMock);
+
+		contextMap.put(keyPath, duration);
+
+		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
+
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+
+		assertFalse(resultMap.containsKey(keyPath));
 	}
 
 }
