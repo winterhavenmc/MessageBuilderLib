@@ -23,12 +23,18 @@ import java.util.Map;
 
 public class ResultMap {
 
-	private final Map<String, String> internalResultMap;
+	private final ResultMap internalResultMap;
 
 
 	// Public constructor for regular instantiation
 	public ResultMap() {
-		this.internalResultMap = new HashMap<>();
+		this.internalResultMap = new ResultMap();
+	}
+
+
+	// Public constructor for regular instantiation
+	public ResultMap(final ResultMap map) {
+		this.internalResultMap = new ResultMap(map);
 	}
 
 
