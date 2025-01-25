@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.logging.Logger;
 
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller.WHITESPACE;
 import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.DEFAULT_LANGUAGE_TAG;
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,12 +47,12 @@ import static org.mockito.Mockito.*;
 public class YamlLanguageResourceInstallerTest {
 
 	@TempDir File tempDataDir;
-	@Mock private Plugin pluginMock;
+	@Mock Plugin pluginMock;
 
-	private YamlLanguageResourceInstaller resourceInstaller;
+	YamlLanguageResourceInstaller resourceInstaller;
 
 	@BeforeEach
-	public void setUp() throws IOException {
+	void setUp() {
 
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger("YamlLanguageResourceInstallerTest"));
 		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
@@ -65,10 +66,19 @@ public class YamlLanguageResourceInstallerTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		pluginMock = null;
 		resourceInstaller = null;
 		deleteTempFiles();
+	}
+
+
+	@Test
+	void testRegExWhitespacePattern() {
+		String whitespace = "this string contains \t whitespace";
+		String nonWhitespace = "nonwhitespace";
+		assertTrue(WHITESPACE.matcher(whitespace).find());
+		assertFalse(WHITESPACE.matcher(nonWhitespace).find());
 	}
 
 
@@ -136,10 +146,7 @@ public class YamlLanguageResourceInstallerTest {
 
 	@Test
 	void testGetAutoInstallResourceNames() {
-		// Arrange
-//		when(pluginMock.getResource( resourceInstaller.getAutoInstallResourcePath())).thenReturn(getResourceStream( resourceInstaller.getAutoInstallResourcePath()));
-
-		// Act
+		// Arrange & Act
 		Collection<String> autoInstallFilenames = resourceInstaller.getAutoInstallResourceNames(resourceInstaller.getAutoInstallResourcePath());
 
 		// Assert
@@ -200,10 +207,10 @@ public class YamlLanguageResourceInstallerTest {
 		LanguageTag languageTag = new LanguageTag(DEFAULT_LANGUAGE_TAG.toString());
 
 		// Act
-		InstallerStatus status = resourceInstaller.installIfMissing(languageTag);
+		YamlLanguageResourceInstaller.InstallerStatus status = resourceInstaller.installIfMissing(languageTag);
 
 		// Assert
-		assertEquals(InstallerStatus.SUCCESS, status);
+		assertEquals(YamlLanguageResourceInstaller.InstallerStatus.SUCCESS, status);
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).saveResource(anyString(), eq(false));
@@ -221,10 +228,10 @@ public class YamlLanguageResourceInstallerTest {
 		resourceInstaller.install(languageTag);
 
 		// Act
-		InstallerStatus status = resourceInstaller.installIfMissing(languageTag);
+		YamlLanguageResourceInstaller.InstallerStatus status = resourceInstaller.installIfMissing(languageTag);
 
 		// Assert
-		assertEquals(InstallerStatus.FILE_EXISTS, status);
+		assertEquals(YamlLanguageResourceInstaller.InstallerStatus.FILE_EXISTS, status);
 	}
 
 
@@ -235,20 +242,20 @@ public class YamlLanguageResourceInstallerTest {
 				.when(pluginMock).saveResource(anyString(), eq(false));
 
 		// Act
-		InstallerStatus status = resourceInstaller.installByName(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
+		YamlLanguageResourceInstaller.InstallerStatus status = resourceInstaller.installByName(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// Assert
-		assertEquals(InstallerStatus.SUCCESS, status);
+		assertEquals(YamlLanguageResourceInstaller.InstallerStatus.SUCCESS, status);
 	}
 
 
 	@Test
 	void testInstall_ByName_resource_unavailable() {
 		// Act
-		InstallerStatus status = resourceInstaller.installByName("nonexistent-resource");
+		YamlLanguageResourceInstaller.InstallerStatus status = resourceInstaller.installByName("nonexistent-resource");
 
 		// Assert
-		assertEquals(InstallerStatus.UNAVAILABLE, status);
+		assertEquals(YamlLanguageResourceInstaller.InstallerStatus.UNAVAILABLE, status);
 	}
 
 
@@ -261,10 +268,10 @@ public class YamlLanguageResourceInstallerTest {
 		resourceInstaller.installByName(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// Act
-		InstallerStatus status = resourceInstaller.installByName(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
+		YamlLanguageResourceInstaller.InstallerStatus status = resourceInstaller.installByName(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// Assert
-		assertEquals(InstallerStatus.FILE_EXISTS, status);
+		assertEquals(YamlLanguageResourceInstaller.InstallerStatus.FILE_EXISTS, status);
 	}
 
 
@@ -289,10 +296,10 @@ public class YamlLanguageResourceInstallerTest {
 		LanguageTag languageTag = new LanguageTag(DEFAULT_LANGUAGE_TAG.toString());
 
 		// Act
-		InstallerStatus status = resourceInstaller.install(languageTag);
+		YamlLanguageResourceInstaller.InstallerStatus status = resourceInstaller.install(languageTag);
 
 		// Assert
-		assertEquals(InstallerStatus.SUCCESS, status);
+		assertEquals(YamlLanguageResourceInstaller.InstallerStatus.SUCCESS, status);
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).saveResource(anyString(), eq(false));
@@ -309,10 +316,10 @@ public class YamlLanguageResourceInstallerTest {
 		resourceInstaller.install(languageTag);
 
 		// Act
-		InstallerStatus status = resourceInstaller.install(languageTag);
+		YamlLanguageResourceInstaller.InstallerStatus status = resourceInstaller.install(languageTag);
 
 		// Assert
-		assertEquals(InstallerStatus.FILE_EXISTS, status);
+		assertEquals(YamlLanguageResourceInstaller.InstallerStatus.FILE_EXISTS, status);
 	}
 
 
@@ -322,10 +329,10 @@ public class YamlLanguageResourceInstallerTest {
 		LanguageTag languageTag = new LanguageTag("nonexistent-language-tag");
 
 		// Act
-		InstallerStatus status = resourceInstaller.install(languageTag);
+		YamlLanguageResourceInstaller.InstallerStatus status = resourceInstaller.install(languageTag);
 
 		// Assert
-		assertEquals(InstallerStatus.UNAVAILABLE, status);
+		assertEquals(YamlLanguageResourceInstaller.InstallerStatus.UNAVAILABLE, status);
 	}
 
 
@@ -340,7 +347,6 @@ public class YamlLanguageResourceInstallerTest {
 	}
 
 
-	@Disabled //TODO: run this check after we know the language directory has been created. it's obviously working
 	@Test
 	void verifyLanguageDirectoryTest_exists() throws IOException {
 		// Arrange
