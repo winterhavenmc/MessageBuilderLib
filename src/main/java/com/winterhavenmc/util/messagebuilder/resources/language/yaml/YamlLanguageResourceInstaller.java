@@ -38,7 +38,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  */
 public final class YamlLanguageResourceInstaller {
 
-	private final static Pattern whitespace = Pattern.compile("\\s", Pattern.UNICODE_CHARACTER_CLASS);
+	final static Pattern WHITESPACE = Pattern.compile("\\s", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private final Plugin plugin;
 
@@ -107,7 +107,7 @@ public final class YamlLanguageResourceInstaller {
 	String sanitizeResourcePath(final String resourcePath) {
 		// strip leading/trailing spaces; strip 2 or more consecutive dots; strip one or more leading slashes
 		return resourcePath
-				.replaceAll(whitespace.pattern(), "")
+				.replaceAll(WHITESPACE.pattern(), "")
 				.replaceAll("[.]{2,}", "")
 				.replaceFirst("/+}", "")
 				.replaceAll("/{2,}", "/");
@@ -242,4 +242,10 @@ public final class YamlLanguageResourceInstaller {
 		return new File(plugin.getDataFolder(), languageTag.getFileName()).exists();
 	}
 
+	enum InstallerStatus {
+		UNAVAILABLE,
+		FILE_EXISTS,
+		SUCCESS,
+		FAIL;
+	}
 }
