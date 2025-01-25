@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import org.bukkit.World;
@@ -55,7 +54,7 @@ class WorldProcessorTest {
 		String keyPath = "SOME_WORLD";
 		ContextMap contextMap = new ContextMap(playerMock);
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(keyPath, ContextContainer.of(worldMock, ProcessorType.WORLD));
+		contextMap.put(keyPath, worldMock);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
@@ -72,7 +71,7 @@ class WorldProcessorTest {
 		String key = "SOME_WORLD";
 		ContextMap contextMap = new ContextMap(playerMock);
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(key, ContextContainer.of(null, ProcessorType.WORLD));
+		contextMap.put(key, null);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);

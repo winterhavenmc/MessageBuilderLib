@@ -17,14 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 
 import org.bukkit.Location;
-
-import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
@@ -103,15 +100,12 @@ public class LocationProcessor extends MacroProcessorTemplate {
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
 		// create empty result map
-		ResultMap resultMap = ResultMap.empty();
+		ResultMap resultMap = new ResultMap();
 
-		// get context container from map
-		Optional<ContextContainer<?>> container = contextMap.getContainer(key);
+		// get value from container
+		Object value = contextMap.get(key);
 
-		// TODO: maybe a little harsh, but the value should be there
-		Object value = container.orElseThrow().value();
-
-		// if passed object is not a Location, return empty result map
+		// if passed object is a Location, process fields
 		if (value instanceof Location location) {
 
 			// copy of original key before appending component field suffixes

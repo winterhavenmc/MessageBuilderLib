@@ -31,9 +31,10 @@ public class WorldProcessor extends MacroProcessorTemplate {
 		if (key.isBlank()) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_EMPTY, "key"); }
 		if (contextMap == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "contextMap"); }
 
-		ResultMap resultMap = new ResultMap();
+		// get value from context map
+		Object value = contextMap.get(key);
 
-		Object value = contextMap.getContainer(key).orElseThrow().value();
+		ResultMap resultMap = new ResultMap();
 
 		if (value instanceof World world) {
 			//TODO: reimplement world name lookups after Multiverse alias lookups are reimplemented

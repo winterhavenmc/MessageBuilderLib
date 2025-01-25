@@ -18,13 +18,10 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.context.Source;
-import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.macro.*;
-import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 
 import org.bukkit.ChatColor;
@@ -88,34 +85,27 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
-	public <T> Message<MessageId, Macro> setMacro(final MacroKey macro, final T value) {
+	public <T> Message<MessageId, Macro> setMacro(final Macro macro, final T value) {
 
-		Object unwrappedValue = value;
+		// use macro toString value as key
+		String key = macro.toString();
 
-		// if value is an optional, get unwrapped value
-		if (value instanceof Optional<?> opt && opt.isPresent()) {
-			unwrappedValue = opt.get();
-		}
-
-		// create name spaced key
-		String key = SourceKey.create(Source.MACRO, macro.toString());
-
-		// get macro expected type from macro enum method
-		var handledType = ProcessorType.matchType(value).getHandledType();
-
-		// check the type against the expected type and throw exception if mismatched
-		if (!handledType.isInstance(unwrappedValue)) {
-			throw new IllegalArgumentException(
-					"Value type does not match the expected type for macro: " + macro +
-							". Expected: " + handledType.getName() +
-							", Provided: " + unwrappedValue.getClass().getName());
-		}
-
-		// get matching processor type for object
-		ProcessorType processorType = ProcessorType.matchType(unwrappedValue);
+//		// get macro expected type from macro enum method
+//		var handledType = ProcessorType.matchType(value).getHandledType();
+//
+//		// check the type against the expected type and throw exception if mismatched
+//		if (!handledType.isInstance(unwrappedValue)) {
+//			throw new IllegalArgumentException(
+//					"Value type does not match the expected type for macro: " + macro +
+//							". Expected: " + handledType.getName() +
+//							", Provided: " + unwrappedValue.getClass().getName());
+//		}
+//
+//		// get matching processor type for object
+//		ProcessorType processorType = ProcessorType.matchType(unwrappedValue);
 
 		// put value and processor type into context map
-		this.contextMap.put(key, unwrappedValue, processorType);
+		this.contextMap.put(key, value);
 
 		// return this instance of Message class to the builder chain
 		return this;

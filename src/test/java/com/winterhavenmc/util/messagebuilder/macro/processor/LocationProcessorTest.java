@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -31,6 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -59,6 +60,39 @@ class LocationProcessorTest {
 		locationProcessor = new LocationProcessor();
 	}
 
+
+	@Test
+	void testResolveContext_parameter_null_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new LocationProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext(null, contextMap));
+
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_empty_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new LocationProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("", contextMap));
+
+		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_null_context_map() {
+		MacroProcessor macroProcessor = new LocationProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("KEY", null));
+
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
+
+
 	@Test
 	void testResolveContext_ValidLocation() {
 		// Arrange
@@ -68,7 +102,7 @@ class LocationProcessorTest {
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put("HOME", ContextContainer.of(locationMock, ProcessorType.LOCATION));
+		contextMap.put("HOME",locationMock);
 
 		// Act
 		ResultMap result = locationProcessor.resolveContext("HOME", contextMap);
@@ -90,7 +124,7 @@ class LocationProcessorTest {
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put("HOME", ContextContainer.of(locationMock, ProcessorType.LOCATION));
+		contextMap.put("HOME", locationMock);
 
 		// Act
 		ResultMap result = locationProcessor.resolveContext("HOME", contextMap);
@@ -118,7 +152,7 @@ class LocationProcessorTest {
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put("HOME", ContextContainer.of(locationMock, ProcessorType.LOCATION));
+		contextMap.put("HOME", locationMock);
 
 		// Act
 		ResultMap result = locationProcessor.resolveContext("HOME", contextMap);

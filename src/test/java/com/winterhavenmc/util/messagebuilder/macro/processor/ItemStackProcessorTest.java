@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -46,13 +46,45 @@ class ItemStackProcessorTest {
 
 
 	@Test
+	void testResolveContext_parameter_null_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new ItemStackProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext(null, contextMap));
+
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_empty_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new ItemStackProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("", contextMap));
+
+		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_null_context_map() {
+		MacroProcessor macroProcessor = new ItemStackProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("KEY", null));
+
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
 	void resolveContext_no_metadata() {
 		// Arrange
 		String keyPath = "ITEM_STACK";
 		ItemStack itemStack = new ItemStack(Material.GOLDEN_AXE);
 
 		ContextMap contextMap = new ContextMap(playerMock);
-		contextMap.put(keyPath, ContextContainer.of(itemStack, ProcessorType.ITEM_STACK));
+		contextMap.put(keyPath, itemStack);
 		MacroProcessor macroProcessor = new ItemStackProcessor();
 
 		// Act
@@ -70,7 +102,7 @@ class ItemStackProcessorTest {
 		String keyPath = "ITEM_STACK";
 		int value = 42;
 		ContextMap contextMap = new ContextMap(playerMock);
-		contextMap.put(keyPath, ContextContainer.of(value, ProcessorType.ITEM_STACK));
+		contextMap.put(keyPath, value);
 		MacroProcessor macroProcessor = new ItemStackProcessor();
 
 		// Act

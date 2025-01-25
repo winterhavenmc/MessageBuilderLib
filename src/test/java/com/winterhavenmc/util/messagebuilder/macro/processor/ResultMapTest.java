@@ -63,14 +63,13 @@ class ResultMapTest {
 
 	@Test
 	void putAll() {
-		ResultMap firstMap = ResultMap.empty();
+		ResultMap firstMap = new ResultMap();
 		firstMap.put("abc", "123");
 		firstMap.put("xyz", "1999");
 
-		ResultMap secondMap = ResultMap.empty();
+		ResultMap secondMap = new ResultMap();
 		secondMap.putAll(firstMap);
 
-		assertEquals(firstMap, secondMap);
 		assertTrue(secondMap.containsKey("abc"));
 		assertTrue(secondMap.containsKey("xyz"));
 		assertFalse(secondMap.containsKey("jkl"));

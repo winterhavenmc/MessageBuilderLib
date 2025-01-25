@@ -17,23 +17,20 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.context.Source;
-import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 import com.winterhavenmc.util.messagebuilder.macro.processor.*;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
-public class MacroHandler <T> {
+public class MacroHandler {
 
 	private final ProcessorRegistry processorRegistry;
 
@@ -67,23 +64,20 @@ public class MacroHandler <T> {
 			ResultMap replacementStringMap = new ResultMap();
 
 			// put recipient name in context map
-			String contextKey = SourceKey.create(Source.MACRO, "RECIPIENT");
-			contextMap.put(contextKey, ContextContainer.of(recipient.getName(), ProcessorType.COMMAND_SENDER));
+			String key = "RECIPIENT";
+			contextMap.put(key, recipient.getName());
 
 			// if recipient is an entity, put recipient location in macro object map
 			if (recipient instanceof Entity entity) {
-				String locationKey = contextKey.concat(".LOCATION");
-				contextMap.put(locationKey, ContextContainer.of(entity.getLocation(), ProcessorType.LOCATION));
+				String locationKey = key.concat(".LOCATION");
+				contextMap.put(locationKey, entity.getLocation());
 			}
 
 			// iterate over context map, getting macro value strings based on class type in map
-			for (Map.Entry<String, ContextContainer<?>> entry : contextMap.entrySet()) {
+			for (Map.Entry<String, Object> entry : contextMap.entrySet()) {
 
-				// get key from entry
-				String key = entry.getKey();
-
-				// get macroProcessor type from context container
-				ProcessorType processorType = entry.getValue().processorType();
+				// get processor type
+				ProcessorType processorType = ProcessorType.matchType(entry.getValue());
 
 				// get macroProcessor from registry by ProcessorType
 				MacroProcessor macroProcessor = processorRegistry.get(processorType);

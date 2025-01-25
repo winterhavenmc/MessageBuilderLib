@@ -17,13 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.context;
 
-import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.AbstractMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,13 +30,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * to be processed for replacement strings. The map key is an enum member, and the corresponding value
  * is the object to be processed. It is backed by a HashMap.
  */
-public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
+public class ContextMap {
 
 	private final CommandSender recipient;
 
 	// Backing store map (use linked hash map to maintain insertion order) TODO: investigate best map type here
-	private final Map<String, ContextContainer<?>> internalMap = new ConcurrentHashMap<>();
+	private final Map<String, Object> internalMap = new ConcurrentHashMap<>();
 
+
+	/**
+	 * Class constructor
+	 *
+	 * @param recipient the message recipient
+	 */
 	public ContextMap(CommandSender recipient) {
 		this.recipient = recipient;
 	}
@@ -55,71 +59,19 @@ public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
 
 
 	/**
-	 * Puts a new value into the context map with its associated ProcessorType.
-	 *
-	 * @param key           the unique key for the value
-	 * @param container     the context container wrapping the value and its ProcessorType
-	 */
-	@Override
-	public ContextContainer<?> put(String key, ContextContainer<?> container) {
-		ContextContainer<?> previousValue = internalMap.get(key);
-		internalMap.put(key, container);
-		return previousValue;
-	}
-
-
-	/**
 	 * Creates and puts a new value with its associated ProcessorType into the context map.
 	 *
 	 * @param key           the unique key for the value
 	 * @param value         the value to store
-	 * @param processorType the processor type associated with the value
 	 * @param <T>           the type of the value
 	 */
-	public <T> void put(String key, T value, ProcessorType processorType) {
-		internalMap.put(key, ContextContainer.of(value, processorType));
+	public <T> void put(String key, T value) {
+		internalMap.put(key, Objects.requireNonNullElse(value, "NULL"));
 	}
 
-
-	/**
-	 * Retrieves a context container by its key.
-	 *
-	 * @param key the unique key for the value
-	 * @return an Optional containing the ContextContainer, or empty if not found
-	 */
-	public Optional<ContextContainer<?>> getContainer(String key) {
-		return Optional.ofNullable(internalMap.get(key));
+	public Object get(String key) {
+		return internalMap.get(key);
 	}
-
-
-	/**
-	 * Retrieves the value by its key, cast to the specified type.
-	 *
-	 * @param key   the unique key for the value
-	 * @param clazz the expected class type of the value
-	 * @param <T>   the type of the value
-	 * @return an Optional containing the value, or empty if not found or type mismatch
-	 */
-	public <T> Optional<T> getValue(String key, Class<T> clazz) {
-		ContextContainer<?> container = internalMap.get(key);
-		if (container != null && clazz.isInstance(container.value())) {
-			return Optional.of(clazz.cast(container.value()));
-		}
-		return Optional.empty();
-	}
-
-
-	/**
-	 * Retrieves the processor type associated with a given key.
-	 *
-	 * @param key the unique key for the value
-	 * @return an Optional containing the ProcessorType, or empty if not found
-	 */
-	public Optional<ProcessorType> getProcessorType(String key) {
-		ContextContainer<?> container = internalMap.get(key);
-		return container != null ? Optional.of(container.processorType()) : Optional.empty();
-	}
-
 
 	/**
 	 * Checks if the map contains a value for the specified key.
@@ -138,7 +90,7 @@ public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
 	 * @param key The enum member used as the key.
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
-	public ContextContainer<?> remove(final String key) {
+	public Object remove(final String key) {
 		return internalMap.remove(key);
 	}
 
@@ -148,8 +100,7 @@ public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
 	 *
 	 * @return A set of entries in the map.
 	 */
-	@Override
-	public @NotNull Set<Map.Entry<String, ContextContainer<?>>> entrySet() {
+	public @NotNull Set<Map.Entry<String, Object>> entrySet() {
 		return internalMap.entrySet();
 	}
 
@@ -157,7 +108,6 @@ public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
 	/**
 	 * Clears all entries in the map.
 	 */
-	@Override
 	public void clear() {
 		internalMap.clear();
 	}
@@ -167,7 +117,6 @@ public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
 	 *
 	 * @return The size of the map.
 	 */
-	@Override
 	public int size() {
 		return this.internalMap.size();
 	}
@@ -177,7 +126,6 @@ public class ContextMap extends AbstractMap<String, ContextContainer<?>> {
 	 *
 	 * @return {@code true} if the map contains no entries, {@code false} otherwise.
 	 */
-	@Override
 	public boolean isEmpty() {
 		return this.internalMap.isEmpty();
 	}

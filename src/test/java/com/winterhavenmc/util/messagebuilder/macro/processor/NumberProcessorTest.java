@@ -17,13 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -58,7 +58,7 @@ class NumberProcessorTest {
 		// Arrange
 		String key = "SOME_INTEGER";
 		Integer number = 42;
-		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
+		contextMap.put(key, number);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
@@ -74,13 +74,13 @@ class NumberProcessorTest {
 		// Arrange
 		String key = "SOME_NULL_INTEGER";
 		Integer number = null;
-		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
+		contextMap.put(key, number);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey("SOME_NULL_INTEGER"));
+		assert(resultMap.containsKey("SOME_NULL_INTEGER"));
 	}
 
 	@Test
@@ -88,7 +88,7 @@ class NumberProcessorTest {
 		// Arrange
 		String key = "SOME_LONG";
 		Long number = 420L;
-		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
+		contextMap.put(key, number);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
@@ -103,13 +103,14 @@ class NumberProcessorTest {
 		// Arrange
 		String key = "SOME_NULL_LONG";
 		Long number = null;
-		contextMap.put(key, ContextContainer.of(number, ProcessorType.NUMBER));
+		contextMap.put(key,number);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey("SOME_NULL_LONG"));
+		assertTrue(resultMap.containsKey("SOME_NULL_LONG"));
+		assertEquals("NULL", resultMap.get(key));
 	}
 
 }

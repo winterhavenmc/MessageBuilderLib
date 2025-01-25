@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.context;
 
-import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -28,11 +26,11 @@ import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,8 +40,9 @@ import static org.mockito.Mockito.mock;
 @ExtendWith(MockitoExtension.class)
 class ContextMapTest {
 
-	@Mock private CommandSender commandSenderMock;
-	private ContextMap contextMap;
+	@Mock CommandSender commandSenderMock;
+	@Mock World worldMock;
+	ContextMap contextMap;
 
 	@BeforeEach
 	void setUp() {
@@ -51,86 +50,59 @@ class ContextMapTest {
 	}
 
 	@Test
-	void testPutAndGetContainer() {
+	void testPutAndGet() {
 		// Arrange
-		String key = "MACRO|NUMBER";
-		Integer number =42;
-		ProcessorType processorType = ProcessorType.NUMBER;
-		ContextContainer<Number> container = ContextContainer.of(number, processorType);
+		String key = "NUMBER";
+		Integer number = 42;
 
 		// Act
-		contextMap.put(key, container);
-		Optional<ContextContainer<?>> retrievedContainer = contextMap.getContainer(key);
+		contextMap.put(key, number);
 
 		// Assert
-		assertTrue(retrievedContainer.isPresent(), "Container should be present");
-		assertEquals(container, retrievedContainer.get(), "Retrieved container should match the original");
+		assertEquals(42, contextMap.get(key));
 	}
 
 	@Test
-	void testPutDirectlyAndRetrieveContainer() {
+	void testPutDirectlyAndGet() {
 		// Arrange
-		String key = "Item::Sword";
+		String key = "SWORD";
 		ItemStack itemStack = new ItemStack(Material.STONE);
-		ProcessorType processorType = ProcessorType.ITEM_STACK;
 
 		// Act
-		contextMap.put(key, itemStack, processorType);
-		Optional<ContextContainer<?>> retrievedContainer = contextMap.getContainer(key);
+		contextMap.put(key, itemStack);
 
 		// Assert
-		assertTrue(retrievedContainer.isPresent(), "Container should be present");
-		assertEquals(itemStack, retrievedContainer.get().value(), "Retrieved value should match the original");
-		assertEquals(processorType, retrievedContainer.get().processorType(), "ProcessorType should match the original");
+		assertTrue(contextMap.containsKey(key));
+		assertEquals(itemStack, contextMap.get(key), "Retrieved value should match the original");
 	}
 
 	@Test
 	void testGetValueWithCorrectType() {
 		// Arrange
 		String key = "Location::Player";
-		World world = mock(World.class, "MockWorld");
-		Location location = new Location(world, 10, 20, 30);
-		ProcessorType processorType = ProcessorType.LOCATION;
-		contextMap.put(key, location, processorType);
+		Location location = new Location(worldMock, 10, 20, 30);
+		contextMap.put(key, location);
 
 		// Act
-		Optional<Location> retrievedValue = contextMap.getValue(key, Location.class);
+		Location retrievedValue = (Location) contextMap.get(key);
 
 		// Assert
-		assertTrue(retrievedValue.isPresent(), "Value should be present");
-		assertEquals(location, retrievedValue.get(), "Retrieved value should match the original");
+		assertNotNull(retrievedValue, "Value should be non-null");
+		assertEquals(location, retrievedValue, "Retrieved value should match the original");
 	}
 
 	@Test
 	void testGetValueWithIncorrectType() {
 		// Arrange
-		String key = "Item::Sword";
-		ItemStack itemStack = new ItemStack(Material.STONE);
-		ProcessorType processorType = ProcessorType.ITEM_STACK;
-		contextMap.put(key, itemStack, processorType);
+		String key = "SWORD";
+		ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
+		contextMap.put(key, itemStack);
 
 		// Act
-		Optional<Location> retrievedValue = contextMap.getValue(key, Location.class);
+		Object retrievedValue = contextMap.get(key);
 
 		// Assert
-		assertFalse(retrievedValue.isPresent(), "Value should not be present for mismatched type");
-	}
-
-	@Test
-	void testGetProcessorType() {
-		// Arrange
-		String key = "Location::Player";
-		World world = mock(World.class, "MockWorld");
-		Location location = new Location(world, 10, 20, 30);
-		ProcessorType processorType = ProcessorType.LOCATION;
-		contextMap.put(key, location, processorType);
-
-		// Act
-		Optional<ProcessorType> retrievedProcessorType = contextMap.getProcessorType(key);
-
-		// Assert
-		assertTrue(retrievedProcessorType.isPresent(), "ProcessorType should be present");
-		assertEquals(processorType, retrievedProcessorType.get(), "Retrieved ProcessorType should match the original");
+		assertInstanceOf(ItemStack.class, retrievedValue, "Value should not be present for mismatched type");
 	}
 
 	@Test
@@ -139,8 +111,7 @@ class ContextMapTest {
 		String key = "MACRO|LOCATION";
 		World world = mock(World.class, "MockWorld");
 		Location location = new Location(world, 10, 20, 30);
-		ProcessorType processorType = ProcessorType.LOCATION;
-		contextMap.put(key, location, processorType);
+		contextMap.put(key, location);
 
 		// Act & Assert
 		assertTrue(contextMap.containsKey(key), "Key should be present in the map");
@@ -151,9 +122,6 @@ class ContextMapTest {
 	void testEmptyMap() {
 		// Act & Assert
 		assertFalse(contextMap.containsKey("SomeKey"), "Empty map should not contain any keys");
-		assertFalse(contextMap.getContainer("SomeKey").isPresent(), "Empty map should return empty Optional for containers");
-		assertFalse(contextMap.getProcessorType("SomeKey").isPresent(), "Empty map should return empty Optional for processor type");
-		assertFalse(contextMap.getValue("SomeKey", Object.class).isPresent(), "Empty map should return empty Optional for values");
 	}
 
 
@@ -161,19 +129,16 @@ class ContextMapTest {
 	@Test
 	void testEntrySet() {
 		// Arrange
-		String key1 = "MACRO|NUMBER1";
-		Integer number1 = 41;
-		ProcessorType processorType = ProcessorType.NUMBER;
-		ContextContainer<Number> container1 = ContextContainer.of(number1, processorType);
-		contextMap.put(key1, container1);
+		String key1 = "NUMBER1";
+		Integer value1 = 41;
+		contextMap.put(key1, value1);
 
-		String key2 = "MACRO|NUMBER2";
-		Integer number2 = 42;
-		ContextContainer<Number> container2 = ContextContainer.of(number2, processorType);
-		contextMap.put(key2, container2);
+		String key2 = "NUMBER2";
+		Integer value2 = 42;
+		contextMap.put(key2, value2);
 
 		// Act
-		Set<Map.Entry<String, ContextContainer<?>>> entrySet = contextMap.entrySet();
+		Set<Map.Entry<String, Object>> entrySet = contextMap.entrySet();
 
 		// Assert
 		assertEquals(2, entrySet.size());
@@ -183,15 +148,12 @@ class ContextMapTest {
 	void testRemove() {
 		// Arrange
 		String key1 = "MACRO|NUMBER1";
-		Integer number1 = 41;
-		ProcessorType processorType = ProcessorType.NUMBER;
-		ContextContainer<Number> container1 = ContextContainer.of(number1, processorType);
-		contextMap.put(key1, container1);
+		Integer value1 = 41;
+		contextMap.put(key1, value1);
 
 		String key2 = "MACRO|NUMBER2";
-		Integer number2 = 42;
-		ContextContainer<Number> container2 = ContextContainer.of(number2, processorType);
-		contextMap.put(key2, container2);
+		Integer value2 = 42;
+		contextMap.put(key2, value2);
 
 		assertFalse(contextMap.isEmpty());
 		assertEquals(2, contextMap.size());
@@ -208,31 +170,26 @@ class ContextMapTest {
 	@Test
 	void testRemove_nonexistent() {
 		// Arrange
-		String key1 = "MACRO|NUMBER1";
-		Integer number1 = 41;
-		ProcessorType processorType = ProcessorType.NUMBER;
-		ContextContainer<Number> container1 = ContextContainer.of(number1, processorType);
-		contextMap.put(key1, container1);
+		String key = "NUMBER1";
+		Integer value = 41;
+		contextMap.put(key, value);
 
 		// Act
-		ContextContainer<?> removedContainer = contextMap.remove("NONEXISTENT_KEY");
+		Object removedObject = contextMap.remove("NONEXISTENT_KEY");
 
 		// Assert
-		assertNull(removedContainer);
+		assertNull(removedObject);
 	}
 
 	@Test
 	void testClear() {
 		String key1 = "MACRO|NUMBER1";
-		Integer number1 = 41;
-		ProcessorType processorType = ProcessorType.NUMBER;
-		ContextContainer<Number> container1 = ContextContainer.of(number1, processorType);
-		contextMap.put(key1, container1);
+		Integer value1 = 41;
+		contextMap.put(key1, value1);
 
 		String key2 = "MACRO|NUMBER2";
-		Integer number2 = 42;
-		ContextContainer<Number> container2 = ContextContainer.of(number2, processorType);
-		contextMap.put(key2, container2);
+		Integer value2 = 42;
+		contextMap.put(key2, value2);
 
 		assertFalse(contextMap.isEmpty());
 		assertEquals(2, contextMap.size());
@@ -249,12 +206,10 @@ class ContextMapTest {
 	@Test
 	void testSize_not_empty() {
 		String key = "MACRO|NUMBER";
-		Integer number =42;
-		ProcessorType processorType = ProcessorType.NUMBER;
-		ContextContainer<Number> container = ContextContainer.of(number, processorType);
+		Integer value =42;
 
 		// Act
-		contextMap.put(key, container);
+		contextMap.put(key, value);
 
 		// Assert
 		assertEquals(1, contextMap.size());
@@ -268,13 +223,11 @@ class ContextMapTest {
 	@Test
 	void testIsEmpty_not_empty() {
 		// Arrange
-		String key = "MACRO|NUMBER";
-		Integer number =42;
-		ProcessorType processorType = ProcessorType.NUMBER;
-		ContextContainer<Number> container = ContextContainer.of(number, processorType);
+		String key = "NUMBER";
+		Integer value =42;
 
 		// Act
-		contextMap.put(key, container);
+		contextMap.put(key, value);
 
 		// Assert
 		assertFalse(contextMap.isEmpty());

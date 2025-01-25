@@ -17,11 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
@@ -47,7 +45,6 @@ class MacroHandlerTest {
 
 	@Mock Player playerMock;
 	@Mock LanguageResourceManager languageResourceManagerMock;
-	@Mock YamlLanguageQueryHandler languageQueryHandlerMock;
 
 	MacroHandler macroHandler;
 
@@ -96,7 +93,7 @@ class MacroHandlerTest {
 	void replaceMacrosTest() {
 		ContextMap contextMap = new ContextMap(playerMock);
 		String key = "ITEM_NAME";
-		contextMap.put(key, ContextContainer.of("TEST_STRING", ProcessorType.STRING));
+		contextMap.put(key, "TEST_STRING");
 
 		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: {ITEM_NAME}");
 		assertEquals("Replace this: §aTest Item", resultString);
@@ -107,7 +104,7 @@ class MacroHandlerTest {
 	void replaceMacrosTest_item_already_in_map() {
 		ContextMap contextMap = new ContextMap(playerMock);
 		String key = "MACRO:My_Item";
-		contextMap.put(key, ContextContainer.of("TEST_STRING", ProcessorType.STRING));
+		contextMap.put(key, "TEST_STRING");
 
 		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
@@ -128,7 +125,7 @@ class MacroHandlerTest {
 		when(entityMock.getName()).thenReturn("entity one");
 
 		ContextMap contextMap = new ContextMap(playerMock);
-		contextMap.put("ENTITY", ContextContainer.of(entityMock, ProcessorType.ENTITY));
+		contextMap.put("ENTITY", entityMock);
 
 		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: {ENTITY}");
 
