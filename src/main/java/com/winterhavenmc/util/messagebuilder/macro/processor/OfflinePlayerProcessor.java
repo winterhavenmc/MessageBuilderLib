@@ -26,10 +26,10 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
-public class OfflinePlayerProcessor extends MacroProcessorTemplate implements MacroProcessor {
+public class OfflinePlayerProcessor<T> extends MacroProcessorTemplate<T> {
 
 	@Override
-	public <T> ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {
 		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
 		if (keyPath.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "keyPath"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }

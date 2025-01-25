@@ -70,7 +70,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  * @see ContextMap
  * @see WorldNameUtility
  */
-public class LocationProcessor extends MacroProcessorTemplate {
+public class LocationProcessor<T> extends MacroProcessorTemplate<T> {
 
 
 	/**
@@ -91,12 +91,11 @@ public class LocationProcessor extends MacroProcessorTemplate {
 	 * @param key         the unique key or namespace for this macro entry
 	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
 	 * @param value       the input value to resolve into context (must be {@link Location})
-	 * @param <T>         the type of the input value
 	 * @return a {@link ResultMap} containing the resolved placeholders and their replacements
 	 * @throws IllegalArgumentException if any parameter is null or invalid
 	 */
 	@Override
-	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }

@@ -97,19 +97,19 @@ public enum ProcessorType {
 	 * @param processorType the ype of processor to instantiate
 	 * @return a new instantiation of a macro processor for the given {@code ProcessorType}
 	 */
-	public static MacroProcessor create(final ProcessorType processorType) {
+	public static MacroProcessor<?> create(final ProcessorType processorType) {
 		return switch (processorType) {
-			case COMMAND_SENDER -> new CommandSenderProcessor();
-			case DURATION -> new DurationProcessor();
-			case ENTITY -> new EntityProcessor();
-			case ITEM_STACK -> new ItemStackProcessor();
-			case LOCATION -> new LocationProcessor();
-			case NULL -> new NullProcessor();
-			case NUMBER -> new NumberProcessor();
-			case OBJECT -> new ObjectProcessor();
-			case OFFLINE_PLAYER -> new OfflinePlayerProcessor();
-			case STRING -> new StringProcessor();
-			case WORLD -> new WorldProcessor();
+			case COMMAND_SENDER -> new CommandSenderProcessor<>();
+			case DURATION -> new DurationProcessor<>();
+			case ENTITY -> new EntityProcessor<>();
+			case ITEM_STACK -> new ItemStackProcessor<>();
+			case LOCATION -> new LocationProcessor<>();
+			case NULL -> new NullProcessor<>();
+			case NUMBER -> new NumberProcessor<>();
+			case OBJECT -> new ObjectProcessor<>();
+			case OFFLINE_PLAYER -> new OfflinePlayerProcessor<>();
+			case STRING -> new StringProcessor<>();
+			case WORLD -> new WorldProcessor<>();
 		};
 	}
 
