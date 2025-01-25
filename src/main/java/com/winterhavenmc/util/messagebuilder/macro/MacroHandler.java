@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
-public class MacroHandler <T> {
+public class MacroHandler {
 
 	private final ProcessorRegistry processorRegistry;
 
