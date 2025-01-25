@@ -48,14 +48,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class YamlLanguageResourceLoaderTest {
 
-	@TempDir
-	File tempDataDir;
+	@TempDir File tempDataDir;
 	@Mock Plugin pluginMock;
 
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;
 
-	private YamlLanguageResourceLoader yamlLanguageResourceLoader;
+	YamlLanguageResourceLoader yamlLanguageResourceLoader;
 
 
 	@BeforeEach
@@ -85,13 +84,13 @@ public class YamlLanguageResourceLoaderTest {
 
 
 	@Test
-	void FileLoaderNotNull() {
+	public void FileLoaderNotNull() {
 		assertNotNull(yamlLanguageResourceLoader);
 	}
 
 
 	@Test
-	void testLoadConfiguration() {
+	public void testLoadConfiguration() {
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
@@ -104,23 +103,22 @@ public class YamlLanguageResourceLoaderTest {
 
 
 	@Test
-	@DisplayName("file loader get current filename not null.")
-	void GetLanguageFilenameTest() {
+	public void GetLanguageFilenameTest() {
 		assertEquals("language" + File.separator + "en-US.yml",
 				new LanguageTag(DEFAULT_LANGUAGE_TAG.toString()).getFileName());
 	}
 
 	@Test
-	void GetLanguageFilenameTest_nonexistent() {
+	public void GetLanguageFilenameTest_nonexistent() {
 		assertEquals("language" + File.separator + "not-a-valid-tag.yml",
 				new LanguageTag("not-a-valid-tag").getFileName());
 	}
 
 
 	@Nested
-	class ValidateKeysTests {
+	public class ValidateKeysTests {
 		@Test
-		void validateKeys_valid() {
+		public void validateKeys_valid() {
 			// Arrange
 			Configuration testConfiguration = new MemoryConfiguration();
 			testConfiguration.set("VALID_KEYS_ONLY", true);
@@ -134,7 +132,7 @@ public class YamlLanguageResourceLoaderTest {
 		}
 
 		@Test
-		void validateKeys_invalid() {
+		public void validateKeys_invalid() {
 			// Arrange
 			when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
@@ -151,7 +149,7 @@ public class YamlLanguageResourceLoaderTest {
 	}
 
 	@Test
-	void testPattern_match() {
+	public void testPattern_match() {
 		// Arrange
 		String initialString = "THE_QUICK_BROWN_FOX";
 
@@ -163,7 +161,7 @@ public class YamlLanguageResourceLoaderTest {
 	}
 
 	@Test
-	void testPattern_no_match() {
+	public void testPattern_no_match() {
 		// Arrange
 		String initialString = "the quick brown fox.";
 

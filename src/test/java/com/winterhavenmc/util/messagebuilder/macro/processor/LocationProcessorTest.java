@@ -43,17 +43,17 @@ import static org.hamcrest.Matchers.*;
 @ExtendWith(MockitoExtension.class)
 class LocationProcessorTest {
 
-	@Mock private World worldMock;
-	@Mock private Location locationMock;
-	@Mock private Player playerMock;
+	@Mock World worldMock;
+	@Mock Location locationMock;
+	@Mock Player playerMock;
 
 	// real location processor
-	private LocationProcessor locationProcessor;
-	private ContextMap contextMap;
+	LocationProcessor locationProcessor;
+	ContextMap contextMap;
 
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		// real context map
 		contextMap = new ContextMap(playerMock);
 

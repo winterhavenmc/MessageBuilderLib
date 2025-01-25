@@ -37,11 +37,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MessageRecordTest {
 
-	private Configuration configuration;
-	private ConfigurationSection messageSection;
+	Configuration configuration;
+	ConfigurationSection messageSection;
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		// create real configuration from resource
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
@@ -50,7 +50,7 @@ class MessageRecordTest {
 	}
 
 	@AfterEach
-	void tearDown() {
+	public void tearDown() {
 		messageSection = null;
 	}
 
