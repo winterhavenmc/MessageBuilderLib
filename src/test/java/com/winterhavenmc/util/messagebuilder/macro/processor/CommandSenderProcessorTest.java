@@ -18,11 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.context.Source;
-import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -57,21 +55,65 @@ class CommandSenderProcessorTest {
 
 
 	@Test
-	void resolveContext_integer() {
+	void testResolveContext_parameter_null_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new CommandSenderProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext(null, contextMap));
+
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_empty_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new CommandSenderProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("", contextMap));
+
+		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_null_context_map() {
+		MacroProcessor macroProcessor = new CommandSenderProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("KEY", null));
+
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void resolveContext() {
 		// Arrange
 		when(playerMock.getName()).thenReturn("player one");
 		String keyPath = "SOME_KEY";
 		ContextMap contextMap = new ContextMap(playerMock);
-		String contextKey = SourceKey.create(Source.MACRO, keyPath);
-		contextMap.put(contextKey, ContextContainer.of(playerMock, ProcessorType.COMMAND_SENDER));
+		contextMap.put(keyPath, playerMock);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(contextKey));
-		assertNotNull(resultMap.get(contextKey));
+		assertTrue(resultMap.containsKey(keyPath));
+		assertNotNull(resultMap.get(keyPath));
+	}
 
+	@Test
+	void resolveContext_not_command_sender() {
+		// Arrange
+		String keyPath = "SOME_KEY";
+		ContextMap contextMap = new ContextMap(playerMock);
+		contextMap.put(keyPath, 42);
+
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+
+		// Assert
+		assertTrue(resultMap.isEmpty());
 	}
 
 }

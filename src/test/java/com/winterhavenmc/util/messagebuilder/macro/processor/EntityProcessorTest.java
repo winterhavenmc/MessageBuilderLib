@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -47,12 +47,44 @@ class EntityProcessorTest {
 	}
 
 	@Test
+	void testResolveContext_parameter_null_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new EntityProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext(null, contextMap));
+
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_empty_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new EntityProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("", contextMap));
+
+		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_null_context_map() {
+		MacroProcessor macroProcessor = new EntityProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("KEY", null));
+
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
 	void resolveContext() {
 		// Arrange
 		when(entityMock.getName()).thenReturn("Entity Name");
 		String keyPath = "ENTITY";
 		ContextMap contextMap = new ContextMap(playerMock);
-		contextMap.put(keyPath, ContextContainer.of(entityMock, ProcessorType.ENTITY));
+		contextMap.put(keyPath, entityMock);
 
 		MacroProcessor macroProcessor = new EntityProcessor();
 
@@ -69,7 +101,7 @@ class EntityProcessorTest {
 		// Arrange
 		String keyPath = "ENTITY";
 		ContextMap contextMap = new ContextMap(playerMock);
-		contextMap.put(keyPath, ContextContainer.of("string", ProcessorType.ENTITY));
+		contextMap.put(keyPath, "string");
 
 		MacroProcessor macroProcessor = new EntityProcessor();
 

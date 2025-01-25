@@ -18,18 +18,32 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 public class NullProcessor extends MacroProcessorTemplate {
 
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
-		ResultMap resultMap = ResultMap.empty();
+		// get value from context map
+		Object value = contextMap.get(key);
 
-		if (contextMap.get(key).value() == null) {
+		ResultMap resultMap = new ResultMap();
+
+		if (value == null) {
 			resultMap.put(key, "NULL");
 		}
+		else {
+			resultMap.put(key, value.toString());
+		}
+
 		return resultMap;
 	}
 

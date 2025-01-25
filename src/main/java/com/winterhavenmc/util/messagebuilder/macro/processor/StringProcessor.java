@@ -25,9 +25,12 @@ public class StringProcessor extends MacroProcessorTemplate {
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
 
-		ResultMap resultMap = ResultMap.empty();
+		// get value from context map
+		Object value = contextMap.get(key);
 
-		if (contextMap.get(key).value() instanceof String resultString) {
+		ResultMap resultMap = new ResultMap();
+
+		if (value instanceof String resultString) {
 			resultMap.put(key, resultString);
 		}
 		return resultMap;

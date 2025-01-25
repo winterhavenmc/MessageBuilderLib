@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,28 +25,12 @@ public class ResultMap {
 
 	private final Map<String, String> internalResultMap;
 
-	// Static nested class to hold the singleton empty ResultMap
-	private static class EmptyResultMapHolder {
-		private static final ResultMap EMPTY_INSTANCE =
-				new ResultMap(new HashMap<>(Collections.emptyMap()));
-	}
-
 
 	// Public constructor for regular instantiation
 	public ResultMap() {
 		this.internalResultMap = new HashMap<>();
 	}
 
-	// Private constructor for the empty singleton instance
-	private ResultMap(HashMap<String, String> map) {
-		this.internalResultMap = map;
-	}
-
-
-	// Static method to return a shared, empty ResultMap
-	public static ResultMap empty() {
-		return EmptyResultMapHolder.EMPTY_INSTANCE;
-	}
 
 	public void put(final String contextKey, final String value) {
 		internalResultMap.put(contextKey, value);
@@ -64,8 +47,8 @@ public class ResultMap {
 		}
 	}
 
-	public boolean containsKey(final String compositeKey) {
-		return internalResultMap.containsKey(compositeKey);
+	public boolean containsKey(final String key) {
+		return internalResultMap.containsKey(key);
 	}
 
 	public Iterable<? extends Map.Entry<String, String>> entrySet() {

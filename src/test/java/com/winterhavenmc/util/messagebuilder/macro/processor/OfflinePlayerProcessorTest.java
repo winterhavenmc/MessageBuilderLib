@@ -17,11 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.context.Source;
-import com.winterhavenmc.util.messagebuilder.context.SourceKey;
-import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.OfflinePlayer;
@@ -53,18 +49,18 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContextTest() {
 		// Arrange
-		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
+		String key = "KEY";
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		ContextMap contextMap = new ContextMap(playerMock);
 
-		contextMap.put(contextKey, ContextContainer.of(offlinePlayerMock, ProcessorType.OFFLINE_PLAYER));
+		contextMap.put(key, offlinePlayerMock);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
 		assertFalse(resultMap.isEmpty());
-		assertTrue(resultMap.containsKey(contextKey));
+		assertTrue(resultMap.containsKey(key));
 	}
 
 
@@ -100,11 +96,10 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_null_contextMap() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroProcessor.resolveContext(contextKey, null));
+				() -> macroProcessor.resolveContext("KEY", null));
 
 		// Assert
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());

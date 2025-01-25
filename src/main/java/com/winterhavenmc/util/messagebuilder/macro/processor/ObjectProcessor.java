@@ -25,10 +25,13 @@ public class ObjectProcessor extends MacroProcessorTemplate {
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
 
-		ResultMap resultMap = ResultMap.empty();
+		// get value from context map
+		Object value = contextMap.get(key);
 
-		if (contextMap.get(key).value() != null) {
-			resultMap.put(key, contextMap.get(key).value().toString());
+		ResultMap resultMap = new ResultMap();
+
+		if (value != null) {
+			resultMap.put(key, value.toString());
 		}
 
 		return resultMap;

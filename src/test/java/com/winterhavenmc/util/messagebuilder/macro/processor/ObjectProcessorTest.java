@@ -17,10 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.context.Source;
-import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 
 import org.bukkit.entity.Player;
 
@@ -54,18 +51,17 @@ class ObjectProcessorTest {
 	@Test
 	void resolveContext_integer() {
 		// Arrange
-		String keyPath = "SOME_INTEGER";
-		Integer number = 42;
+		String key = "SOME_INTEGER";
+		Integer value = 42;
 		ContextMap contextMap = new ContextMap(playerMock);
-		String contextKey = SourceKey.create(Source.MACRO, keyPath);
-		contextMap.put(contextKey, ContextContainer.of(number, ProcessorType.NUMBER));
+		contextMap.put(key, value);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(contextKey));
-		assertEquals("42", resultMap.get(contextKey));
+		assertTrue(resultMap.containsKey(key));
+		assertEquals("42", resultMap.get(key));
 	}
 
 }

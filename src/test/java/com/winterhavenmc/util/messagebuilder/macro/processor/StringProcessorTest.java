@@ -47,16 +47,15 @@ class StringProcessorTest {
 		String stringObject = "some name";
 
 		ContextMap contextMap = new ContextMap(playerMock);
-		String contextKey = SourceKey.create(Source.MACRO, keyPath);
 
-		contextMap.put(contextKey, ContextContainer.of(stringObject, ProcessorType.STRING));
+		contextMap.put(keyPath, stringObject);
 
 		MacroProcessor macroProcessor = new StringProcessor();
 
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
-		assertTrue(resultMap.containsKey(contextKey));
-		assertEquals(stringObject, resultMap.get(contextKey));
+		assertTrue(resultMap.containsKey(keyPath));
+		assertEquals(stringObject, resultMap.get(keyPath));
 	}
 
 }

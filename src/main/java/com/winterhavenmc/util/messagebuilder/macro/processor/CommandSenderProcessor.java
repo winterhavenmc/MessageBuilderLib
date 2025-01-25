@@ -17,12 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import org.bukkit.command.CommandSender;
 
-import java.util.Optional;
+import org.bukkit.command.CommandSender;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
@@ -36,13 +34,10 @@ public class CommandSenderProcessor extends MacroProcessorTemplate {
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
-		// get context container from map
-		Optional<ContextContainer<?>> container = contextMap.getContainer(key);
+		// get value from context map
+		Object value = contextMap.get(key);
 
-		// get value from container
-		Object value = container.orElseThrow().value();
-
-		ResultMap resultMap = ResultMap.empty();
+		ResultMap resultMap = new ResultMap();
 
 		if (value instanceof CommandSender commandSender) {
 			resultMap.put(key, commandSender.getName());

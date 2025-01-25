@@ -34,9 +34,12 @@ public class OfflinePlayerProcessor extends MacroProcessorTemplate {
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "keyPath"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
-		ResultMap resultMap = ResultMap.empty();
+		// get value from context map
+		Object value = contextMap.get(key);
 
-		if (contextMap.get(key).value() instanceof OfflinePlayer offlinePlayer) {
+		ResultMap resultMap = new ResultMap();
+
+		if (value instanceof OfflinePlayer offlinePlayer) {
 			resultMap.put(key, offlinePlayer.getName());
 		}
 

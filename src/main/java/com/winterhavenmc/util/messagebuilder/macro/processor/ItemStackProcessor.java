@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.bukkit.inventory.ItemStack;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
@@ -33,9 +34,12 @@ public class ItemStackProcessor extends MacroProcessorTemplate {
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
-		ResultMap resultMap = ResultMap.empty();
+		// get value from container
+		Object value = contextMap.get(key);
 
-		if (contextMap.get(key).value() instanceof ItemStack itemStack) {
+		ResultMap resultMap = new ResultMap();
+
+		if (value instanceof ItemStack itemStack) {
 			resultMap.put(key, itemStack.getType().toString());
 		}
 

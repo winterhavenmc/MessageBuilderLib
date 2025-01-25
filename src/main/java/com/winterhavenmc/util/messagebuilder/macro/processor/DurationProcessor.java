@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.time.TimeString;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
@@ -26,7 +25,6 @@ import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.Locale;
-import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
@@ -40,13 +38,10 @@ public class DurationProcessor extends MacroProcessorTemplate {
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
-		// get context container from map
-		Optional<ContextContainer<?>> container = contextMap.getContainer(key);
+		// get value from context map
+		Object value = contextMap.get(key);
 
-		// get value from container
-		Object value = container.orElseThrow().value();
-
-		ResultMap resultMap = ResultMap.empty();
+		ResultMap resultMap = new ResultMap();
 
 		if (value instanceof Duration duration) {
 

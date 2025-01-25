@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -31,10 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 
@@ -53,6 +50,38 @@ class DurationProcessorTest {
 
 
 	@Test
+	void testResolveContext_parameter_null_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new DurationProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext(null, contextMap));
+
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_empty_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new DurationProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("", contextMap));
+
+		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_null_context_map() {
+		MacroProcessor macroProcessor = new DurationProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("KEY", null));
+
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
 	void resolveContext() {
 		// Arrange
 		when(playerMock.getLocale()).thenReturn("en-US");
@@ -60,7 +89,7 @@ class DurationProcessorTest {
 		String keyPath = "DURATION";
 		ContextMap contextMap = new ContextMap(playerMock);
 		Duration durationObject = Duration.ofMillis(12300);
-		contextMap.put(keyPath, ContextContainer.of(durationObject, ProcessorType.DURATION));
+		contextMap.put(keyPath,durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
@@ -78,7 +107,7 @@ class DurationProcessorTest {
 		String keyPath = "DURATION";
 		ContextMap contextMap = new ContextMap(consoleMock);
 		Duration durationObject = Duration.ofMillis(12300);
-		contextMap.put(keyPath, ContextContainer.of(durationObject, ProcessorType.DURATION));
+		contextMap.put(keyPath,durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
@@ -96,7 +125,7 @@ class DurationProcessorTest {
 		String keyPath = "DURATION";
 		ContextMap contextMap = new ContextMap(consoleMock);
 		Object object = "a string";
-		contextMap.put(keyPath, ContextContainer.of(object, ProcessorType.DURATION));
+		contextMap.put(keyPath, object);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
