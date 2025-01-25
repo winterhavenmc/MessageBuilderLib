@@ -35,12 +35,9 @@ public class ProcessorRegistry {
 
 	/**
 	 * Class constructor
-	 *
-	 * @param languageQueryHandler the language handler to be passed to macro processor constructors
 	 */
-	public ProcessorRegistry(final DependencyContext context, final LanguageQueryHandler languageQueryHandler) {
+	public ProcessorRegistry(final DependencyContext context) {
 		if (context == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "context"); }
-		if (languageQueryHandler == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "languageQueryHandler"); }
 
 		this.context = context;
 		macroProcessorMap = new EnumMap<>(ProcessorType.class);

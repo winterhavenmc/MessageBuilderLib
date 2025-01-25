@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -43,6 +44,38 @@ class WorldProcessorTest {
 	public void tearDown() {
 		playerMock = null;
 		worldMock = null;
+	}
+
+
+	@Test
+	void testResolveContext_parameter_null_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new WorldProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext(null, contextMap));
+
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_empty_key() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroProcessor macroProcessor = new WorldProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("", contextMap));
+
+		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
+	}
+
+
+	@Test
+	void testResolveContext_parameter_null_context_map() {
+		MacroProcessor macroProcessor = new WorldProcessor();
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroProcessor.resolveContext("KEY", null));
+
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
 
 

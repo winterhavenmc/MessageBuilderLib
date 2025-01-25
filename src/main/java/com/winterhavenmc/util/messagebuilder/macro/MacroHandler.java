@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.processor.*;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -38,8 +37,8 @@ public class MacroHandler {
 	/**
 	 * Class constructor
 	 */
-	public MacroHandler(final LanguageQueryHandler queryHandler) {
-		this.processorRegistry = new ProcessorRegistry(new DependencyContext(), queryHandler);
+	public MacroHandler() {
+		this.processorRegistry = new ProcessorRegistry(new DependencyContext());
 	}
 
 

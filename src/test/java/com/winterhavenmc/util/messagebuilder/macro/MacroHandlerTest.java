@@ -19,13 +19,7 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -51,10 +45,7 @@ class MacroHandlerTest {
 	@BeforeEach
 	public void setUp() {
 		// real objects
-		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
-		macroHandler = new MacroHandler(queryHandler);
+		macroHandler = new MacroHandler();
 	}
 
 	@AfterEach
@@ -68,23 +59,10 @@ class MacroHandlerTest {
 	@Test
 	void testConstructor_parameter_valid() {
 		// Arrange & Act
-		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
-		macroHandler = new MacroHandler(queryHandler);
-
-		assertNotNull(macroHandler);
-	}
-
-
-	@Test
-	void testConstructor_parameter_null() {
-		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> new MacroHandler(null));
+		macroHandler = new MacroHandler();
 
 		// Assert
-		assertEquals("The parameter 'languageQueryHandler' cannot be null.", exception.getMessage());
+		assertNotNull(macroHandler);
 	}
 
 
