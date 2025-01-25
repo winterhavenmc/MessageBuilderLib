@@ -32,14 +32,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ItemRecordTest {
+public class ItemRecordTest {
 
 	private final static String TEST_ITEM = "TEST_ITEM_1";
 
 	private ConfigurationSection itemSection;
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		// create real configuration from resource
 		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
@@ -48,7 +48,7 @@ class ItemRecordTest {
 	}
 
 	@AfterEach
-	void tearDown() {
+	public void tearDown() {
 		itemSection = null;
 	}
 
@@ -56,7 +56,7 @@ class ItemRecordTest {
 	// that are only used for that test, so changes to entries will not effect other tests
 
 	@Test
-	void constructorTest() {
+	public void constructorTest() {
 
 		ItemRecord testRecord = new ItemRecord(
 				TEST_ITEM,
@@ -70,13 +70,13 @@ class ItemRecordTest {
 	}
 
 	@Test
-	void testGetRecord_parameter_valid() {
+	public void testGetRecord_parameter_valid() {
 		Optional<ItemRecord> itemRecord = ItemRecord.getRecord("TEST_ITEM_1", itemSection);
 		assertTrue(itemRecord.isPresent());
 	}
 
 	@Test
-	void testGetRecord_parameter_keyPath_null() {
+	public void testGetRecord_parameter_keyPath_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  ItemRecord.getRecord(null, itemSection));
 
@@ -84,13 +84,13 @@ class ItemRecordTest {
 	}
 
 	@Test
-	void testGetRecord_parameter_keyPath_invalid() {
+	public void testGetRecord_parameter_keyPath_invalid() {
 		Optional<ItemRecord> itemRecord = ItemRecord.getRecord("INVALID_ITEM", itemSection);
 		assertTrue(itemRecord.isEmpty());
 	}
 
 	@Test
-	void testGetRecord_parameter_itemSection_null() {
+	public void testGetRecord_parameter_itemSection_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  ItemRecord.getRecord("TEST_ITEM_1", null));
 
@@ -105,7 +105,7 @@ class ItemRecordTest {
 	}
 
 	@Test
-	void testPluralized() {
+	public void testPluralized() {
 		ItemRecord testRecord = new ItemRecord(
 				TEST_ITEM,
 				Optional.of("Test Item"),
