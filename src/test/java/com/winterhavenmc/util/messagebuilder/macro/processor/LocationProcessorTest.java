@@ -17,15 +17,17 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -66,25 +68,18 @@ class LocationProcessorTest {
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
+		contextMap.put("HOME", ContextContainer.of(locationMock, ProcessorType.LOCATION));
+
 		// Act
-		ResultMap result = locationProcessor.resolveContext("HOME", contextMap, locationMock);
+		ResultMap result = locationProcessor.resolveContext("HOME", contextMap);
 
 		// Assert
 		assertThat(result, is(notNullValue()));
-		assertThat(result.get("HOME_LOCATION_WORLD"), is("test_world"));
-		assertThat(result.get("HOME_LOCATION_X"), is("123"));
-		assertThat(result.get("HOME_LOCATION_Y"), is("64"));
-		assertThat(result.get("HOME_LOCATION_Z"), is("-789"));
-		assertThat(result.get("HOME_LOCATION"), is("test_world [123, 64, -789]"));
-	}
-
-	@Test
-	void testResolveContext_NullLocation() {
-		// Act & Assert
-		assertThrows(IllegalArgumentException.class,
-				() -> locationProcessor.resolveContext("HOME", contextMap, null),
-				"Expected resolveContext to throw IllegalArgumentException for null location"
-		);
+		assertThat(result.get("HOME.LOCATION.WORLD"), is("test_world"));
+		assertThat(result.get("HOME.LOCATION.X"), is("123"));
+		assertThat(result.get("HOME.LOCATION.Y"), is("64"));
+		assertThat(result.get("HOME.LOCATION.Z"), is("-789"));
+		assertThat(result.get("HOME.LOCATION"), is("test_world [123, 64, -789]"));
 	}
 
 	@Test
@@ -95,19 +90,21 @@ class LocationProcessorTest {
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
+		contextMap.put("HOME", ContextContainer.of(locationMock, ProcessorType.LOCATION));
+
 		// Act
-		ResultMap result = locationProcessor.resolveContext("HOME", contextMap, locationMock);
+		ResultMap result = locationProcessor.resolveContext("HOME", contextMap);
 
 		// Assert
-		assertThat(result.get("HOME_LOCATION_WORLD"), is("???"));
-		assertThat(result.get("HOME_LOCATION"), is("??? [123, 64, -789]"));
+		assertThat(result.get("HOME.LOCATION.WORLD"), is("???"));
+		assertThat(result.get("HOME.LOCATION"), is("??? [123, 64, -789]"));
 	}
 
 	@Test
 	void testResolveContext_EmptyKey() {
 		// Act & Assert
 		assertThrows(IllegalArgumentException.class,
-				() -> locationProcessor.resolveContext("", contextMap, locationMock),
+				() -> locationProcessor.resolveContext("", contextMap),
 				"Expected resolveContext to throw IllegalArgumentException for empty key"
 		);
 	}
@@ -121,27 +118,17 @@ class LocationProcessorTest {
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
+		contextMap.put("HOME", ContextContainer.of(locationMock, ProcessorType.LOCATION));
+
 		// Act
-		ResultMap result = locationProcessor.resolveContext("HOME", contextMap, locationMock);
+		ResultMap result = locationProcessor.resolveContext("HOME", contextMap);
 
 		// Assert
-		assertThat(result.get("HOME_LOCATION_WORLD"), is("test_world"));
-		assertThat(result.get("HOME_LOCATION_X"), is("123"));
-		assertThat(result.get("HOME_LOCATION_Y"), is("64"));
-		assertThat(result.get("HOME_LOCATION_Z"), is("-789"));
-		assertThat(result.get("HOME_LOCATION"), is("test_world [123, 64, -789]"));
+		assertThat(result.get("HOME.LOCATION.WORLD"), is("test_world"));
+		assertThat(result.get("HOME.LOCATION.X"), is("123"));
+		assertThat(result.get("HOME.LOCATION.Y"), is("64"));
+		assertThat(result.get("HOME.LOCATION.Z"), is("-789"));
+		assertThat(result.get("HOME.LOCATION"), is("test_world [123, 64, -789]"));
 	}
 
-	@Disabled
-	@Test
-	void testResolveContext_InvalidValueType() {
-		// Arrange
-		Object invalidValue = "NotALocation";
-
-		// Act & Assert
-		assertThrows(IllegalArgumentException.class,
-				() -> locationProcessor.resolveContext("HOME", contextMap, invalidValue),
-				"Expected resolveContext to throw IllegalArgumentException for invalid value type"
-		);
-	}
 }

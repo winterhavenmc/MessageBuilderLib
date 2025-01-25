@@ -65,12 +65,10 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
  * }
  * }
  * </pre>
-
-
  * @see ContextMap
  */
 @FunctionalInterface
-public interface MacroProcessor<T> {
+public interface MacroProcessor {
 
 	/**
 	 * Resolves contextual information from the given value and populates the context map.
@@ -85,9 +83,8 @@ public interface MacroProcessor<T> {
 	 *
 	 * @param key         the unique key or namespace for this macro entry
 	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
-	 * @param value       the input value to resolve into context
 	 * @return a {@link ResultMap} containing resolved macros and their replacements
 	 */
-	ResultMap resolveContext(String key, ContextMap contextMap, T value);
+	ResultMap resolveContext(String key, ContextMap contextMap);
 
 }

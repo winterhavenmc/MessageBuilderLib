@@ -26,33 +26,47 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.lang.model.type.NullType;
 import java.time.Duration;
+import java.util.function.Function;
 
 
 public enum ProcessorType {
 
-	ENTITY(Entity.class),
-	COMMAND_SENDER(CommandSender.class),
-	ITEM_STACK(ItemStack.class),
-	LOCATION(Location.class),
-	DURATION(Duration.class),
-	NUMBER(Number.class),
-	OFFLINE_PLAYER(OfflinePlayer.class),
-	WORLD(World.class),
-	STRING(String.class),
-	OBJECT(Object.class),
-	NULL(NullType.class),
+	ENTITY(Entity.class, ctx -> new EntityProcessor()),
+	COMMAND_SENDER(CommandSender.class, ctx -> new CommandSenderProcessor()),
+	ITEM_STACK(ItemStack.class, ctx -> new ItemStackProcessor()),
+	LOCATION(Location.class, ctx -> new LocationProcessor()),
+	DURATION(Duration.class, ctx -> new DurationProcessor()),
+	NUMBER(Number.class, ctx -> new NumberProcessor()),
+	OFFLINE_PLAYER(OfflinePlayer.class, ctx -> new OfflinePlayerProcessor()),
+	WORLD(World.class, ctx -> new WorldProcessor()),
+	STRING(String.class, ctx -> new StringProcessor()),
+	OBJECT(Object.class, ctx -> new ObjectProcessor()),
+	NULL(NullType.class, ctx -> new NullProcessor()),
 	;
 
-	private final Class<?> expectedType;
+	private final Class<?> handledType;
+	private final Function<DependencyContext, MacroProcessor> creator;
 
 
 	/**
 	 * Enum constructor
 	 *
-	 * @param expectedType the expected type of value for each processor type
+	 * @param handledType the expected type of value for each processor type
 	 */
-	ProcessorType(Class<?> expectedType) {
-		this.expectedType = expectedType;
+	ProcessorType(Class<?> handledType, Function<DependencyContext, MacroProcessor> creator) {
+		this.handledType = handledType;
+		this.creator = creator;
+	}
+
+
+	/**
+	 * Instantiate a macro processor for the type represented by this enum constant
+	 *
+	 * @param context a dependency injection container
+	 * @return a newly created instance of a macro processor
+	 */
+	public MacroProcessor create(DependencyContext context) {
+		return creator.apply(context);
 	}
 
 
@@ -61,8 +75,8 @@ public enum ProcessorType {
 	 *
 	 * @return {@code Class} the class of the expected type for a processor type
 	 */
-	public Class<?> getExpectedType() {
-		return this.expectedType;
+	public Class<?> getHandledType() {
+		return this.handledType;
 	}
 
 
@@ -87,29 +101,6 @@ public enum ProcessorType {
 			case String ignored -> STRING;
 			case null -> NULL;
 			default -> OBJECT;
-		};
-	}
-
-
-	/**
-	 * Static method that returns an instance of a macro processor for the given {@code ProcessorType}
-	 *
-	 * @param processorType the ype of processor to instantiate
-	 * @return a new instantiation of a macro processor for the given {@code ProcessorType}
-	 */
-	public static MacroProcessor<?> create(final ProcessorType processorType) {
-		return switch (processorType) {
-			case COMMAND_SENDER -> new CommandSenderProcessor<>();
-			case DURATION -> new DurationProcessor<>();
-			case ENTITY -> new EntityProcessor<>();
-			case ITEM_STACK -> new ItemStackProcessor<>();
-			case LOCATION -> new LocationProcessor<>();
-			case NULL -> new NullProcessor<>();
-			case NUMBER -> new NumberProcessor<>();
-			case OBJECT -> new ObjectProcessor<>();
-			case OFFLINE_PLAYER -> new OfflinePlayerProcessor<>();
-			case STRING -> new StringProcessor<>();
-			case WORLD -> new WorldProcessor<>();
 		};
 	}
 

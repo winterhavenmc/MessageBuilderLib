@@ -57,7 +57,7 @@ class EntityProcessorTest {
 		MacroProcessor macroProcessor = new EntityProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, entityMock);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey(keyPath));
@@ -74,7 +74,7 @@ class EntityProcessorTest {
 		MacroProcessor macroProcessor = new EntityProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, "string");
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
 		assertFalse(resultMap.containsKey(keyPath));

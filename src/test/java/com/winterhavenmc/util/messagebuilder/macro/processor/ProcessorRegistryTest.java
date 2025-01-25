@@ -36,7 +36,7 @@ class ProcessorRegistryTest {
 
 	@BeforeEach
 	public void setUp() {
-		processorRegistry = new ProcessorRegistry(queryHandler);
+		processorRegistry = new ProcessorRegistry(new DependencyContext(), queryHandler);
 	}
 
 	@AfterEach
@@ -49,7 +49,7 @@ class ProcessorRegistryTest {
 	class ConstructorTests {
 		@Test
 		void testConstructor_parameter_valid() {
-			ProcessorRegistry registry = new ProcessorRegistry(queryHandler);
+			ProcessorRegistry registry = new ProcessorRegistry(new DependencyContext(), queryHandler);
 
 			assertNotNull(registry);
 		}
@@ -57,7 +57,7 @@ class ProcessorRegistryTest {
 		@Test
 		void testConstructor_parameter_null() {
 			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> new ProcessorRegistry(null));
+					() -> new ProcessorRegistry(new DependencyContext(), null));
 
 			assertEquals("The parameter 'languageQueryHandler' cannot be null.", exception.getMessage());
 		}

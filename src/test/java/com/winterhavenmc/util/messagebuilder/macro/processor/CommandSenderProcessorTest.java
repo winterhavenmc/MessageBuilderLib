@@ -66,28 +66,12 @@ class CommandSenderProcessorTest {
 		contextMap.put(contextKey, ContextContainer.of(playerMock, ProcessorType.COMMAND_SENDER));
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, playerMock);
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey(contextKey));
 		assertNotNull(resultMap.get(contextKey));
 
-	}
-
-	@Test
-	void resolveContext_null() {
-		// Arrange
-		String keyPath = "SOME_INTEGER";
-		Integer nullValue = null;
-		ContextMap contextMap = new ContextMap(playerMock);
-		String contextKey = SourceKey.create(Source.MACRO, keyPath);
-		contextMap.put(contextKey, ContextContainer.of(nullValue, ProcessorType.NUMBER));
-
-		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, nullValue);
-
-		// Assert
-		assertFalse(resultMap.containsKey(contextKey));
 	}
 
 }

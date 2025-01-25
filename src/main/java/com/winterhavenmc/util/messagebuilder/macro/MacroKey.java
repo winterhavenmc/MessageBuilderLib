@@ -19,11 +19,13 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
 
+
 public interface MacroKey {
+
 	ProcessorType getProcessorType();
 
-	default Class<?> getAssociatedType() {
-		return getProcessorType().getExpectedType();
-	}
+//	default Class<?> getAssociatedType() {
+//		return getProcessorType().getExpectedType();
+//	}
 
 }

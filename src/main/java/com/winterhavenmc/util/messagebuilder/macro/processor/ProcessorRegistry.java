@@ -29,7 +29,8 @@ import java.util.EnumMap;
  */
 public class ProcessorRegistry {
 
-	private final EnumMap<ProcessorType, MacroProcessor<?>> macroProcessorMap;
+	private final EnumMap<ProcessorType, MacroProcessor> macroProcessorMap;
+	private final DependencyContext context;
 
 
 	/**
@@ -37,22 +38,18 @@ public class ProcessorRegistry {
 	 *
 	 * @param languageQueryHandler the language handler to be passed to macro processor constructors
 	 */
-	public ProcessorRegistry(final LanguageQueryHandler languageQueryHandler) {
+	public ProcessorRegistry(final DependencyContext context, final LanguageQueryHandler languageQueryHandler) {
+		if (context == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "context"); }
 		if (languageQueryHandler == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "languageQueryHandler"); }
 
+		this.context = context;
 		macroProcessorMap = new EnumMap<>(ProcessorType.class);
 	}
 
 
-	/**
-	 * This method retrieves a macro processor instance from the map by the MacroProcessorType key
-	 *
-	 * @param processorType the macro processor type key
-	 * @return The macro processor instance stored in the map that is referenced by the key
-	 */
-	public MacroProcessor<?> get(final ProcessorType processorType) {
-		macroProcessorMap.computeIfAbsent(processorType, ProcessorType::create);
-		return macroProcessorMap.get(processorType);
+	// Get a processor, creating it lazily if necessary
+	public MacroProcessor get(ProcessorType type) {
+		return macroProcessorMap.computeIfAbsent(type, t -> t.create(context));
 	}
 
 }

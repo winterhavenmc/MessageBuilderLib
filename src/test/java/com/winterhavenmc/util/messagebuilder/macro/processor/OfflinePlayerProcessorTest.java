@@ -17,16 +17,15 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.context.Source;
 import com.winterhavenmc.util.messagebuilder.context.SourceKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,8 +57,10 @@ class OfflinePlayerProcessorTest {
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		ContextMap contextMap = new ContextMap(playerMock);
 
+		contextMap.put(contextKey, ContextContainer.of(offlinePlayerMock, ProcessorType.OFFLINE_PLAYER));
+
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, offlinePlayerMock);
+		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap);
 
 		// Assert
 		assertFalse(resultMap.isEmpty());
@@ -75,7 +76,7 @@ class OfflinePlayerProcessorTest {
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroProcessor.resolveContext(null, contextMap, offlinePlayerMock));
+				() -> macroProcessor.resolveContext(null, contextMap));
 
 		// Assert
 		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
@@ -89,7 +90,7 @@ class OfflinePlayerProcessorTest {
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroProcessor.resolveContext("", contextMap, offlinePlayerMock));
+				() -> macroProcessor.resolveContext("", contextMap));
 
 		// Assert
 		assertEquals("The parameter 'keyPath' cannot be empty.", exception.getMessage());
@@ -103,39 +104,10 @@ class OfflinePlayerProcessorTest {
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroProcessor.resolveContext(contextKey, null, offlinePlayerMock));
+				() -> macroProcessor.resolveContext(contextKey, null));
 
 		// Assert
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void resolveContext_with_null_value() {
-		// Arrange
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
-		ContextMap contextMap = new ContextMap(playerMock);
-
-		// Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroProcessor.resolveContext(contextKey, contextMap, null));
-
-		// Assert
-		assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void resolveContext_with_value_wrong_type() {
-		// Arrange
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		String contextKey = SourceKey.create(Source.MACRO, Macro.OWNER.name());
-		ContextMap contextMap = new ContextMap(playerMock);
-
-		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(contextKey, contextMap, new ItemStack(Material.STONE));
-
-		// Assert
-		assertTrue(resultMap.isEmpty());
 	}
 
 }

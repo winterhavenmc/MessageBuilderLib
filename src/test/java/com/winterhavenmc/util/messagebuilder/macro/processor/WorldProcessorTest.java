@@ -58,7 +58,7 @@ class WorldProcessorTest {
 		contextMap.put(keyPath, ContextContainer.of(worldMock, ProcessorType.WORLD));
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, worldMock);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey(keyPath));
@@ -68,14 +68,17 @@ class WorldProcessorTest {
 
 	@Test
 	void resolveContext_with_null_world() {
-		String keyPath = "SOME_WORLD";
+		// Arrange
+		String key = "SOME_WORLD";
 		ContextMap contextMap = new ContextMap(playerMock);
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(keyPath, ContextContainer.of(worldMock, ProcessorType.WORLD));
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap, null);
+		contextMap.put(key, ContextContainer.of(null, ProcessorType.WORLD));
 
-		assertFalse(resultMap.containsKey(keyPath));
-		assertTrue(resultMap.isEmpty());
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
+
+		// Assert
+		assertNull(resultMap.get(key));
 	}
 
 }

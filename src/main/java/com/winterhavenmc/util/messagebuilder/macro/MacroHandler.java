@@ -21,21 +21,19 @@ import com.winterhavenmc.util.messagebuilder.context.ContextContainer;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.context.Source;
 import com.winterhavenmc.util.messagebuilder.context.SourceKey;
-import com.winterhavenmc.util.messagebuilder.macro.processor.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorRegistry;
-import com.winterhavenmc.util.messagebuilder.macro.processor.ProcessorType;
-import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
+import com.winterhavenmc.util.messagebuilder.macro.processor.*;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
-public class MacroHandler {
+public class MacroHandler <T> {
 
 	private final ProcessorRegistry processorRegistry;
 
@@ -44,7 +42,7 @@ public class MacroHandler {
 	 * Class constructor
 	 */
 	public MacroHandler(final LanguageQueryHandler queryHandler) {
-		this.processorRegistry = new ProcessorRegistry(queryHandler);
+		this.processorRegistry = new ProcessorRegistry(new DependencyContext(), queryHandler);
 	}
 
 
@@ -81,7 +79,7 @@ public class MacroHandler {
 			// iterate over context map, getting macro value strings based on class type in map
 			for (Map.Entry<String, ContextContainer<?>> entry : contextMap.entrySet()) {
 
-				// get name-spaced String key from entry
+				// get key from entry
 				String key = entry.getKey();
 
 				// get macroProcessor type from context container
@@ -91,7 +89,7 @@ public class MacroHandler {
 				MacroProcessor macroProcessor = processorRegistry.get(processorType);
 
 				// get resultMap from macroProcessor execution
-				ResultMap resultMap = macroProcessor.resolveContext(key, contextMap, entry.getValue());
+				ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 				// add all entries of resultMap to macroStringMap
 				replacementStringMap.putAll(resultMap);

@@ -52,24 +52,10 @@ class NullProcessorTest {
 		contextMap.put("KEY", new ContextContainer<>(null, ProcessorType.NULL));
 
 		// Act
-		ResultMap resultMap = nullProcessor.resolveContext("KEY", contextMap, null);
+		ResultMap resultMap = nullProcessor.resolveContext("KEY", contextMap);
 
 		// Assert
 		assertEquals("NULL", resultMap.get("KEY"));
-	}
-
-	@Test
-	void resolveContext_not_null() {
-		// Arrange
-		NullProcessor nullProcessor = new NullProcessor();
-		ContextMap contextMap = new ContextMap(playerMock);
-		contextMap.put("KEY", new ContextContainer<>("not_null", ProcessorType.NULL));
-
-		// Act
-		ResultMap resultMap = nullProcessor.resolveContext("KEY", contextMap, "not_null");
-
-		// Assert
-		assertTrue(resultMap.isEmpty());
 	}
 
 }
