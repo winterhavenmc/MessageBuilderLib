@@ -24,16 +24,9 @@ public class NumberProcessor extends MacroProcessorTemplate {
 
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
-
-		// get value from container
 		Object value = contextMap.get(key);
-
 		ResultMap resultMap = new ResultMap();
-
-		if (value != null) {
-			resultMap.put(key, String.valueOf(value));
-		}
-
+		resultMap.put(key, String.valueOf(value));
 		return resultMap;
 	}
 
