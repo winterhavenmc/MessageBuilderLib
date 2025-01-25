@@ -21,10 +21,10 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import org.bukkit.inventory.ItemStack;
 
 
-public class ItemStackProcessor extends MacroProcessorTemplate implements MacroProcessor {
+public class ItemStackProcessor<T> extends MacroProcessorTemplate<T> {
 
 	@Override
-	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 

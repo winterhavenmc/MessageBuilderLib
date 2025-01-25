@@ -20,10 +20,10 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 
-public class NumberProcessor extends MacroProcessorTemplate implements MacroProcessor {
+public class NumberProcessor<T> extends MacroProcessorTemplate<T> {
 
 	@Override
-	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 

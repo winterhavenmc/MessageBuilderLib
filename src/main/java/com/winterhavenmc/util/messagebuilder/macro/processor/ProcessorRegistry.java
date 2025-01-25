@@ -29,7 +29,7 @@ import java.util.EnumMap;
  */
 public class ProcessorRegistry {
 
-	private final EnumMap<ProcessorType, MacroProcessor> macroProcessorMap;
+	private final EnumMap<ProcessorType, MacroProcessor<?>> macroProcessorMap;
 
 
 	/**
@@ -50,7 +50,7 @@ public class ProcessorRegistry {
 	 * @param processorType the macro processor type key
 	 * @return The macro processor instance stored in the map that is referenced by the key
 	 */
-	public MacroProcessor get(final ProcessorType processorType) {
+	public MacroProcessor<?> get(final ProcessorType processorType) {
 		macroProcessorMap.computeIfAbsent(processorType, ProcessorType::create);
 		return macroProcessorMap.get(processorType);
 	}

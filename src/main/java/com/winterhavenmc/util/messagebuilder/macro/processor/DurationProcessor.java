@@ -26,10 +26,10 @@ import java.time.Duration;
 import java.util.Locale;
 
 
-public class DurationProcessor extends MacroProcessorTemplate implements MacroProcessor {
+public class DurationProcessor<T> extends MacroProcessorTemplate<T> {
 
 	@Override
-	public <T> ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String keyPath, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 

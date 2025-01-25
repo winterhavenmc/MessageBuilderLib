@@ -22,10 +22,10 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import org.bukkit.World;
 
 
-public class WorldProcessor extends MacroProcessorTemplate implements MacroProcessor {
+public class WorldProcessor<T> extends MacroProcessorTemplate<T> {
 
 	@Override
-	public <T> ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap, final T value) {
 
 		ResultMap resultMap = new ResultMap();
 
