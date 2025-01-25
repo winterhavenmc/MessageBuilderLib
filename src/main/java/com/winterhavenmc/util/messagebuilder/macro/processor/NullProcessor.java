@@ -32,17 +32,8 @@ public class NullProcessor extends MacroProcessorTemplate {
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
-		// get value from context map
-		Object value = contextMap.get(key);
-
 		ResultMap resultMap = new ResultMap();
-
-		if (value == null) {
-			resultMap.put(key, "NULL");
-		}
-		else {
-			resultMap.put(key, value.toString());
-		}
+		resultMap.put(key, "NULL");
 
 		return resultMap;
 	}
