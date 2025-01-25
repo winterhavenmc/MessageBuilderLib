@@ -22,7 +22,10 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_AUTO_INSTALL;
@@ -246,6 +249,6 @@ public final class YamlLanguageResourceInstaller {
 		UNAVAILABLE,
 		FILE_EXISTS,
 		SUCCESS,
-		FAIL;
+		FAIL,
 	}
 }
