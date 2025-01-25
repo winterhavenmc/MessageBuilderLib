@@ -112,49 +112,4 @@ class ItemStackProcessorTest {
 		assertFalse(resultMap.containsKey(keyPath));
 	}
 
-
-
-
-//	@Disabled
-//	@Test
-//	void execute_with_item_meta() {
-//
-//		ItemStack itemStack = new ItemStack(Material.STONE);
-//		ProcessorType processorType = ProcessorType.matchType(itemStack);
-//		String stringKey = "SOME_ITEM";
-//
-//		ItemMeta itemMeta = itemStack.getItemMeta();
-//		itemMeta.setDisplayName("Some Item Display Name");
-//		itemStack.setItemMeta(itemMeta);
-//
-//		ContextMap contextMap = new ContextMap();
-//		ContextKey compositeKey = new CompositeKey(processorType, stringKey);
-//		contextMap.put(compositeKey, itemStack);
-//
-//		ResultMap resultMap = macroProcessor.execute(stringKey, itemStack, contextMap);
-//
-//		assertFalse(resultMap.isEmpty());
-//		assertTrue(resultMap.containsKey("SOME_ITEM"));
-//		assertEquals("Some Item Display Name", resultMap.get("SOME_ITEM"));
-//	}
-
-//	@Disabled
-//	@Test
-//	void execute_with_item_material() {
-//		String key = "SOME_ITEM";
-//
-//		ItemStack itemStack = new ItemStack(Material.STONE);
-//
-//		ContextMap contextMap = new ContextMap();
-//
-//		MacroObjectMap macroObjectMap = new MacroObjectMap();
-//		macroObjectMap.put(key, itemStack);
-//
-//		ResultMap resultMap = macroProcessor.execute(key, itemStack, contextMap);
-//
-//		assertFalse(resultMap.isEmpty());
-//		assertTrue(resultMap.containsKey("SOME_ITEM"));
-//		assertEquals("STONE", resultMap.get("SOME_ITEM"));
-//	}
-
 }

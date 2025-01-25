@@ -27,6 +27,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -63,5 +65,6 @@ class ObjectProcessorTest {
 		assertTrue(resultMap.containsKey(key));
 		assertEquals("42", resultMap.get(key));
 	}
+
 
 }

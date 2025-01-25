@@ -51,7 +51,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	private final CommandSender recipient;
 	private final MessageId messageId;
 	private final LanguageQueryHandler languageQueryHandler;
-	private final MacroHandler macroHandler;
+	private final MacroReplacer macroReplacer;
 
 
 	/**
@@ -59,19 +59,19 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 *
 	 * @param plugin       reference to plugin main class
 	 * @param languageQueryHandler the ItemRecord handler for message records
-	 * @param macroHandler reference to macro processor class
+	 * @param macroReplacer reference to macro processor class
 	 * @param recipient    message recipient
 	 * @param messageId    message identifier
 	 */
 	public Message(final Plugin plugin,
 				final LanguageQueryHandler languageQueryHandler,
-                final MacroHandler macroHandler,
+                final MacroReplacer macroReplacer,
                 final CommandSender recipient,
                 final MessageId messageId) {
 
 		this.plugin = plugin;
 		this.languageQueryHandler = languageQueryHandler;
-		this.macroHandler = macroHandler;
+		this.macroReplacer = macroReplacer;
 		this.recipient = recipient;
 		this.messageId = messageId;
 		this.contextMap = new ContextMap(recipient);
@@ -86,26 +86,25 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 * @return this message object with macro value set in map
 	 */
 	public <T> Message<MessageId, Macro> setMacro(final Macro macro, final T value) {
+		return setMacro(1, macro, value);
+	}
+
+
+	/**
+	 * set macro for message replacements
+	 *
+	 * @param macro token for placeholder
+	 * @param value object that contains value that will be substituted in message
+	 * @return this message object with macro value set in map
+	 */
+	public <T> Message<MessageId, Macro> setMacro(int quantity, final Macro macro, final T value) {
 
 		// use macro toString value as key
 		String key = macro.toString();
 
-//		// get macro expected type from macro enum method
-//		var handledType = ProcessorType.matchType(value).getHandledType();
-//
-//		// check the type against the expected type and throw exception if mismatched
-//		if (!handledType.isInstance(unwrappedValue)) {
-//			throw new IllegalArgumentException(
-//					"Value type does not match the expected type for macro: " + macro +
-//							". Expected: " + handledType.getName() +
-//							", Provided: " + unwrappedValue.getClass().getName());
-//		}
-//
-//		// get matching processor type for object
-//		ProcessorType processorType = ProcessorType.matchType(unwrappedValue);
-
-		// put value and processor type into context map
+		// put value into context map
 		this.contextMap.put(key, value);
+		this.contextMap.put(key + ".QUANTITY", quantity);
 
 		// return this instance of Message class to the builder chain
 		return this;
@@ -161,12 +160,12 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 			// get title string
 			String titleString;
 
-			titleString = macroHandler.replaceMacros(recipient, contextMap,
+			titleString = macroReplacer.replaceMacros(recipient, contextMap,
 					languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::title).orElse(""));
 
 			// get subtitle string
 			String subtitleString;
-				subtitleString = macroHandler.replaceMacros(recipient, contextMap,
+				subtitleString = macroReplacer.replaceMacros(recipient, contextMap,
 						languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::subtitle).orElse(""));
 
 			// only send title if either title string or subtitle string is not empty
@@ -230,7 +229,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 			return "";
 		}
 
-		messageString = macroHandler.replaceMacros(recipient, contextMap, messageRecord.get().message());
+		messageString = macroReplacer.replaceMacros(recipient, contextMap, messageRecord.get().message());
 
 		return ChatColor.translateAlternateColorCodes('&', messageString);
 	}

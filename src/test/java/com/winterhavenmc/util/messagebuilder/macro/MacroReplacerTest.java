@@ -18,14 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -41,50 +34,32 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MacroHandlerTest {
+class MacroReplacerTest {
 
 	@Mock Player playerMock;
-	@Mock LanguageResourceManager languageResourceManagerMock;
+	MacroReplacer macroReplacer;
 
-	MacroHandler macroHandler;
 
 	@BeforeEach
 	public void setUp() {
 		// real objects
-		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
-		macroHandler = new MacroHandler(queryHandler);
+		macroReplacer = new MacroReplacer();
 	}
 
 	@AfterEach
 	public void tearDown() {
 		playerMock = null;
-		languageResourceManagerMock = null;
-		macroHandler = null;
+		macroReplacer = null;
 	}
 
 
 	@Test
 	void testConstructor_parameter_valid() {
 		// Arrange & Act
-		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		LanguageQueryHandler queryHandler = new YamlLanguageQueryHandler(configurationSupplier);
-		macroHandler = new MacroHandler(queryHandler);
-
-		assertNotNull(macroHandler);
-	}
-
-
-	@Test
-	void testConstructor_parameter_null() {
-		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> new MacroHandler(null));
+		macroReplacer = new MacroReplacer();
 
 		// Assert
-		assertEquals("The parameter 'languageQueryHandler' cannot be null.", exception.getMessage());
+		assertNotNull(macroReplacer);
 	}
 
 
@@ -95,7 +70,7 @@ class MacroHandlerTest {
 		String key = "ITEM_NAME";
 		contextMap.put(key, "TEST_STRING");
 
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: {ITEM_NAME}");
+		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: {ITEM_NAME}");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
@@ -106,14 +81,14 @@ class MacroHandlerTest {
 		String key = "MACRO:My_Item";
 		contextMap.put(key, "TEST_STRING");
 
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
+		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
 	@Test
 	void replaceMacrosTest_item_no_delimiter() {
 		ContextMap contextMap = new ContextMap(playerMock);
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: ITEM_NAME");
+		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: ITEM_NAME");
 		assertEquals("Replace this: ITEM_NAME", resultString);
 	}
 
@@ -127,7 +102,7 @@ class MacroHandlerTest {
 		ContextMap contextMap = new ContextMap(playerMock);
 		contextMap.put("ENTITY", entityMock);
 
-		String resultString = macroHandler.replaceMacros(playerMock, contextMap, "Replace this: {ENTITY}");
+		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: {ENTITY}");
 
 		assertEquals("Replace this: player1", resultString);
 	}
