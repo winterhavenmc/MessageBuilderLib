@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
-public class MacroHandler {
+public class MacroReplacer {
 
 	private final ProcessorRegistry processorRegistry;
 
@@ -37,7 +37,7 @@ public class MacroHandler {
 	/**
 	 * Class constructor
 	 */
-	public MacroHandler() {
+	public MacroReplacer() {
 		this.processorRegistry = new ProcessorRegistry(new DependencyContext());
 	}
 
@@ -56,45 +56,52 @@ public class MacroHandler {
 
 		String modifiedMessageString = messageString;
 
-		// only process macro tokens if message string contains a macro delimiter
-		if (modifiedMessageString.contains(MacroDelimiter.OPEN.toString())) {
+		// only process macro tokens if message string contains a pair of macro delimiters
+		if (modifiedMessageString.matches(MacroDelimiter.OPEN + ".*" + MacroDelimiter.CLOSE)) {
+
+			// add recipient fields to context map
+			addRecipientContext(recipient, contextMap);
 
 			// final result map of String NameSpacedKeys and processed String values
-			ResultMap replacementStringMap = new ResultMap();
+			ResultMap replacementStringMap = new ResultMap(convertValuesToStrings(contextMap));
 
-			// put recipient name in context map
-			String key = "RECIPIENT";
-			contextMap.put(key, recipient.getName());
-
-			// if recipient is an entity, put recipient location in macro object map
-			if (recipient instanceof Entity entity) {
-				String locationKey = key.concat(".LOCATION");
-				contextMap.put(locationKey, entity.getLocation());
-			}
-
-			// iterate over context map, getting macro value strings based on class type in map
-			for (Map.Entry<String, Object> entry : contextMap.entrySet()) {
-
-				// get processor type
-				ProcessorType processorType = ProcessorType.matchType(entry.getValue());
-
-				// get macroProcessor from registry by ProcessorType
-				MacroProcessor macroProcessor = processorRegistry.get(processorType);
-
-				// get resultMap from macroProcessor execution
-				ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
-
-				// add all entries of resultMap to macroStringMap
-				replacementStringMap.putAll(resultMap);
-			}
-
-			// replace macro tokens in message string with macro strings
-			for (Map.Entry<String, String> entry : replacementStringMap.entrySet()) {
-				String macroToken = MacroDelimiter.OPEN + entry.getKey() + MacroDelimiter.CLOSE;
-				modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue());
-			}
+			// do macro replacements on message string
+			modifiedMessageString = performReplacements(replacementStringMap, modifiedMessageString);
 		}
 
+		return modifiedMessageString;
+	}
+
+
+	private void addRecipientContext(CommandSender recipient, ContextMap contextMap) {
+		// put recipient name in context map
+		String key = "RECIPIENT";
+		contextMap.put(key, recipient.getName());
+
+		// if recipient is an entity, put recipient location in macro object map
+		if (recipient instanceof Entity entity) {
+			String locationKey = key.concat(".LOCATION");
+			contextMap.put(locationKey, entity.getLocation());
+		}
+	}
+
+
+	private ResultMap convertValuesToStrings(ContextMap contextMap) {
+		ResultMap resultMap = new ResultMap();
+		for (Map.Entry<String, Object> entry : contextMap.entrySet()) {
+			ProcessorType processorType = ProcessorType.matchType(entry.getValue());
+			MacroProcessor macroProcessor = processorRegistry.get(processorType);
+			resultMap.putAll(macroProcessor.resolveContext(entry.getKey(), contextMap));
+		}
+		return resultMap;
+	}
+
+
+	private String performReplacements(ResultMap replacementStringMap, String modifiedMessageString) {
+		for (Map.Entry<String, String> entry : replacementStringMap.entrySet()) {
+			String macroToken = MacroDelimiter.OPEN + entry.getKey() + MacroDelimiter.CLOSE;
+			modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue());
+		}
 		return modifiedMessageString;
 	}
 
