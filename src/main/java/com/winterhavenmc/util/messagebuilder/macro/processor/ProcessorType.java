@@ -24,37 +24,33 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
-import javax.lang.model.type.NullType;
 import java.time.Duration;
 import java.util.function.Function;
 
 
 public enum ProcessorType {
 
-	ENTITY(Entity.class, ctx -> new EntityProcessor()),
-	COMMAND_SENDER(CommandSender.class, ctx -> new CommandSenderProcessor()),
-	ITEM_STACK(ItemStack.class, ctx -> new ItemStackProcessor()),
-	LOCATION(Location.class, ctx -> new LocationProcessor()),
-	DURATION(Duration.class, ctx -> new DurationProcessor()),
-	NUMBER(Number.class, ctx -> new NumberProcessor()),
-	OFFLINE_PLAYER(OfflinePlayer.class, ctx -> new OfflinePlayerProcessor()),
-	WORLD(World.class, ctx -> new WorldProcessor()),
-	STRING(String.class, ctx -> new StringProcessor()),
-	OBJECT(Object.class, ctx -> new ObjectProcessor()),
-	NULL(NullType.class, ctx -> new NullProcessor()),
+	ENTITY(ctx -> new EntityProcessor()),
+	COMMAND_SENDER(ctx -> new CommandSenderProcessor()),
+	ITEM_STACK(ctx -> new ItemStackProcessor()),
+	LOCATION(ctx -> new LocationProcessor()),
+	DURATION(ctx -> new DurationProcessor()),
+	NUMBER(ctx -> new NumberProcessor()),
+	OFFLINE_PLAYER(ctx -> new OfflinePlayerProcessor()),
+	WORLD(ctx -> new WorldProcessor()),
+	STRING(ctx -> new StringProcessor()),
+	OBJECT(ctx -> new ObjectProcessor()),
+	NULL(ctx -> new NullProcessor()),
 	;
 
-	private final Class<?> handledType;
 	private final Function<DependencyContext, MacroProcessor> creator;
 
 
 	/**
 	 * Enum constructor
 	 *
-	 * @param handledType the expected type of value for each processor type
 	 */
-	ProcessorType(Class<?> handledType, Function<DependencyContext, MacroProcessor> creator) {
-		this.handledType = handledType;
+	ProcessorType(Function<DependencyContext, MacroProcessor> creator) {
 		this.creator = creator;
 	}
 
@@ -67,16 +63,6 @@ public enum ProcessorType {
 	 */
 	public MacroProcessor create(DependencyContext context) {
 		return creator.apply(context);
-	}
-
-
-	/**
-	 * Retrieve the expected type of value for a processor type
-	 *
-	 * @return {@code Class} the class of the expected type for a processor type
-	 */
-	public Class<?> getHandledType() {
-		return this.handledType;
 	}
 
 

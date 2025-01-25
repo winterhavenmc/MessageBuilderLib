@@ -34,7 +34,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.lang.model.type.NullType;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -135,33 +134,6 @@ class ProcessorTypeTest {
 	void matchType_world() {
 		assertEquals(ProcessorType.WORLD, ProcessorType.matchType(worldMock));
 	}
-
-	@Test
-	void getExpectedType() {
-		assertEquals(CommandSender.class, ProcessorType.COMMAND_SENDER.getHandledType());
-		assertEquals(Duration.class, ProcessorType.DURATION.getHandledType());
-		assertEquals(Entity.class, ProcessorType.ENTITY.getHandledType());
-		assertEquals(ItemStack.class, ProcessorType.ITEM_STACK.getHandledType());
-		assertEquals(Location.class, ProcessorType.LOCATION.getHandledType());
-		assertEquals(NullType.class, ProcessorType.NULL.getHandledType());
-		assertEquals(Number.class, ProcessorType.NUMBER.getHandledType());
-		assertEquals(Object.class, ProcessorType.OBJECT.getHandledType());
-		assertEquals(OfflinePlayer.class, ProcessorType.OFFLINE_PLAYER.getHandledType());
-		assertEquals(String.class, ProcessorType.STRING.getHandledType());
-		assertEquals(World.class, ProcessorType.WORLD.getHandledType());
-	}
-
-
-//	/**
-//	 * Test that ProcessorType.of() method returns an object that conforms to the
-//	 * MacroProcessor interface fore each constant.
-//	 */
-//	@ParameterizedTest
-//	@EnumSource
-//	void testCreate(ProcessorType processorType) {
-//		assertInstanceOf(MacroProcessor.class, ProcessorType.create(processorType));
-//	}
-
 
 	@ParameterizedTest
 	@EnumSource

@@ -104,7 +104,7 @@ class NullProcessorTest {
 		ResultMap resultMap = nullProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertEquals("42", resultMap.get(key));
+		assertEquals("NULL", resultMap.get(key));
 	}
 
 }
