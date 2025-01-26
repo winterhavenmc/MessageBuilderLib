@@ -22,7 +22,9 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -145,6 +148,89 @@ class ProcessorTypeTest {
 	@ValueSource(strings = { "COMMAND_SENDER", "DURATION", "ENTITY", "ITEM_STACK", "LOCATION", "NULL", "NUMBER", "OBJECT", "OFFLINE_PLAYER", "STRING", "WORLD" } )
 	void testValueCreate(String name) {
 		assertEquals(nameMap.get(name), ProcessorType.valueOf(name));
+	}
+
+
+/* test below were added from another test class */
+
+	@Test
+	void matchTypeCommandSender() {
+		CommandSender consoleSender = mock(ConsoleCommandSender.class);
+		assertNotNull(consoleSender, "Console sender is null.");
+		assertEquals(ProcessorType.COMMAND_SENDER, ProcessorType.matchType(consoleSender));
+	}
+
+	@Test
+	void matchTypeDuration() {
+		Duration duration = Duration.ofMillis(2000);
+		assertEquals(ProcessorType.DURATION, ProcessorType.matchType(duration));
+	}
+
+	@Test
+	void matchTypeEntity() {
+		Player player = mock(Player.class);
+		assertNotNull(player, "Mock player is null.");
+		assertEquals(ProcessorType.ENTITY, ProcessorType.matchType(player), "Mock player does not match processor type ENTITY");
+	}
+
+	@Test
+	void matchTypeItemStack() {
+		ItemStack itemStack = mock(ItemStack.class);
+		assertNotNull(itemStack, "ItemStack is null.");
+		assertEquals(ProcessorType.ITEM_STACK, ProcessorType.matchType(itemStack));
+	}
+
+	@Test
+	void matchTypeLocation() {
+		World world = mock(World.class);
+		assertNotNull(world);
+		Location location = new Location(world,10,20,30);
+		assertNotNull(location);
+		assertEquals(ProcessorType.LOCATION, ProcessorType.matchType(location));
+	}
+
+	@Test
+	void matchTypeNull() {
+		assertEquals(ProcessorType.NULL, ProcessorType.matchType(null));
+	}
+
+	@Test
+	void matchTypeNumber() {
+		assertEquals(ProcessorType.NUMBER, ProcessorType.matchType(42));
+		assertEquals(ProcessorType.NUMBER, ProcessorType.matchType(420L));
+		assertEquals(ProcessorType.NUMBER, ProcessorType.matchType(3.14));
+	}
+
+	@Test
+	void matchTypeObject() {
+		assertEquals(ProcessorType.OBJECT, ProcessorType.matchType(new Object()));
+	}
+
+	@Test
+	void matchTypeOfflinePlayer() {
+		OfflinePlayer offlinePlayer = mock(OfflinePlayer.class);
+		assertNotNull(offlinePlayer);
+		assertEquals(ProcessorType.OFFLINE_PLAYER, ProcessorType.matchType(offlinePlayer));
+	}
+
+	@Test
+	void matchTypeString() {
+		String string = "string";
+		assertEquals(ProcessorType.STRING, ProcessorType.matchType(string), "String does not match processor type STRING");
+	}
+
+	@Test
+	void matchTypeWorld() {
+		World world = mock(World.class);
+		assertNotNull(world);
+		assertEquals(ProcessorType.WORLD, ProcessorType.matchType(world));
+	}
+
+	@Test
+	void testCreate() {
+		DependencyContext ctx = new DependencyContext();
+		assertInstanceOf(MacroProcessor.class, ProcessorType.WORLD.create(ctx));
+
 	}
 
 }

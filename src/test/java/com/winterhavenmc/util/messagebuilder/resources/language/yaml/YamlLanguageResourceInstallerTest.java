@@ -348,9 +348,14 @@ public class YamlLanguageResourceInstallerTest {
 
 
 	@Test
-	public void verifyLanguageDirectoryTest_exists() throws IOException {
+	public void verifyLanguageDirectoryTest_exists() {
 		// Arrange
-		MockUtility.installResource("language/en-US.yml", new File(tempDataDir, "language").toPath());
+		try {
+			MockUtility.installResource("language/en-US.yml", new File(tempDataDir, "language").toPath());
+		}
+		catch (IOException e) {
+			throw new RuntimeException();
+		}
 
 		// Act
 		File languageDir = new File(tempDataDir, "language");
@@ -361,21 +366,26 @@ public class YamlLanguageResourceInstallerTest {
 
 
 	@Test
-	public void testInstallByNameResource_CreatesFileSuccessfully() throws IOException {
-		// Arrange: Create a temporary directory for the test
-		Path tempDir = Files.createTempDirectory("installer-test");
+	public void testInstallByNameResource_CreatesFileSuccessfully() {
+		try {
+			// Arrange: Create a temporary directory for the test
+			Path tempDir = Files.createTempDirectory("installer-test");
 
-		// Act: Install a resource into the temporary directory
-		boolean result = installResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString(), tempDir);
+			// Act: Install a resource into the temporary directory
+			boolean result = installResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString(), tempDir);
 
-		// Assert: Verify the file exists and was successfully copied
-		assertTrue(result, "ResourceType should have been installed successfully.");
-		assertTrue(Files.exists(tempDir.resolve(Option.RESOURCE_LANGUAGE_EN_US_YML.toString())));
+			// Assert: Verify the file exists and was successfully copied
+			assertTrue(result, "ResourceType should have been installed successfully.");
+			assertTrue(Files.exists(tempDir.resolve(Option.RESOURCE_LANGUAGE_EN_US_YML.toString())));
 
-		// Cleanup: Delete the temporary directory and its contents
-		Files.walk(tempDir)
-				.sorted(Comparator.reverseOrder())
-				.forEach(path -> path.toFile().delete());
+			// Cleanup: Delete the temporary directory and its contents
+			Files.walk(tempDir)
+					.sorted(Comparator.reverseOrder())
+					.forEach(path -> path.toFile().delete());
+		}
+		catch (IOException e) {
+			throw new RuntimeException();
+		}
 	}
 
 

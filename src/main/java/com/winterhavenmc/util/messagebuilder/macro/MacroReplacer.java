@@ -20,16 +20,22 @@ package com.winterhavenmc.util.messagebuilder.macro;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.processor.*;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
 import java.util.Map;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
 public class MacroReplacer {
+
+	private final static String DELIMITER_OPEN = "{";
+	private final static String DELIMITER_CLOSE = "}";
 
 	private final ProcessorRegistry processorRegistry;
 
@@ -57,7 +63,7 @@ public class MacroReplacer {
 		String modifiedMessageString = messageString;
 
 		// only process macro tokens if message string contains a pair of macro delimiters
-		if (modifiedMessageString.matches(MacroDelimiter.OPEN + ".*" + MacroDelimiter.CLOSE)) {
+		if (modifiedMessageString.contains(DELIMITER_OPEN)) {
 
 			// add recipient fields to context map
 			addRecipientContext(recipient, contextMap);
@@ -74,7 +80,10 @@ public class MacroReplacer {
 	}
 
 
-	private void addRecipientContext(CommandSender recipient, ContextMap contextMap) {
+	void addRecipientContext(CommandSender recipient, ContextMap contextMap) {
+		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, "recipient"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+
 		// put recipient name in context map
 		String key = "RECIPIENT";
 		contextMap.put(key, recipient.getName());
@@ -87,7 +96,9 @@ public class MacroReplacer {
 	}
 
 
-	private ResultMap convertValuesToStrings(ContextMap contextMap) {
+	ResultMap convertValuesToStrings(ContextMap contextMap) {
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+
 		ResultMap resultMap = new ResultMap();
 		for (Map.Entry<String, Object> entry : contextMap.entrySet()) {
 			ProcessorType processorType = ProcessorType.matchType(entry.getValue());
@@ -98,9 +109,14 @@ public class MacroReplacer {
 	}
 
 
-	private String performReplacements(ResultMap replacementStringMap, String modifiedMessageString) {
-		for (Map.Entry<String, String> entry : replacementStringMap.entrySet()) {
-			String macroToken = MacroDelimiter.OPEN + entry.getKey() + MacroDelimiter.CLOSE;
+	String performReplacements(final ResultMap replacementMap, final String messageString) {
+		if (replacementMap == null) { throw new LocalizedException(PARAMETER_NULL, "replacementMap"); }
+		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, "messageString"); }
+
+		String modifiedMessageString = messageString;
+
+		for (Map.Entry<String, String> entry : replacementMap.entrySet()) {
+			String macroToken = DELIMITER_OPEN + entry.getKey() + DELIMITER_CLOSE;
 			modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue());
 		}
 		return modifiedMessageString;
