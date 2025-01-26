@@ -160,12 +160,12 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 			// get title string
 			String titleString;
 
-			titleString = macroReplacer.replaceMacros(recipient, contextMap,
+			titleString = macroReplacer.replaceMacros(contextMap,
 					languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::title).orElse(""));
 
 			// get subtitle string
 			String subtitleString;
-				subtitleString = macroReplacer.replaceMacros(recipient, contextMap,
+				subtitleString = macroReplacer.replaceMacros(contextMap,
 						languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::subtitle).orElse(""));
 
 			// only send title if either title string or subtitle string is not empty
@@ -229,7 +229,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 			return "";
 		}
 
-		messageString = macroReplacer.replaceMacros(recipient, contextMap, messageRecord.get().message());
+		messageString = macroReplacer.replaceMacros(contextMap, messageRecord.get().message());
 
 		return ChatColor.translateAlternateColorCodes('&', messageString);
 	}
