@@ -20,16 +20,22 @@ package com.winterhavenmc.util.messagebuilder.macro;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.processor.*;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
 import java.util.Map;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 
 
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
 public class MacroReplacer {
+
+	private final static String DELIMITER_OPEN = "{";
+	private final static String DELIMITER_CLOSE = "}";
 
 	private final ProcessorRegistry processorRegistry;
 
@@ -57,7 +63,7 @@ public class MacroReplacer {
 		String modifiedMessageString = messageString;
 
 		// only process macro tokens if message string contains a pair of macro delimiters
-		if (modifiedMessageString.matches(MacroDelimiter.OPEN + ".*" + MacroDelimiter.CLOSE)) {
+		if (modifiedMessageString.contains(DELIMITER_OPEN)) {
 
 			// add recipient fields to context map
 			addRecipientContext(recipient, contextMap);
