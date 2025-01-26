@@ -54,4 +54,31 @@ public class LocalizedException extends IllegalArgumentException {
 		RELOAD_FAILED,
 	}
 
+
+	public enum Parameter {
+		CONTEXT_MAP("contextMap"),
+		MESSAGE_ID("messageId"),
+		MESSAGE_STRING("messageString"),
+		KEY("key"),
+		RECIPIENT("recipient"),
+		REPLACEMENT_MAP("replacementMap"),
+		VALUE("value"),
+		;
+
+		private final String displayName;
+
+		Parameter(final String displayName) {
+			this.displayName = displayName;
+		}
+
+		public String getDisplayName() {
+			return displayName;
+		}
+
+		@Override
+		public String toString() {
+			return getDisplayName();
+		}
+	}
+
 }
