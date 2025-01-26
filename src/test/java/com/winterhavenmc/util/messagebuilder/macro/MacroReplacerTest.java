@@ -54,169 +54,136 @@ class MacroReplacerTest {
 	}
 
 
-	@Nested
-	class ReplaceMacrosTests {
+	@Test
+	void testReplaceMacros() {
+		ContextMap contextMap = new ContextMap(playerMock);
+		MacroReplacer macroReplacer = new MacroReplacer();
+		String key = "ITEM_NAME";
+		contextMap.put(key, "TEST_STRING");
 
-		@Test
-		void testReplaceMacros() {
-			ContextMap contextMap = new ContextMap(playerMock);
-			MacroReplacer macroReplacer = new MacroReplacer();
-			String key = "ITEM_NAME";
-			contextMap.put(key, "TEST_STRING");
+		String resultString = macroReplacer.replaceMacros(contextMap, "Replace this: {ITEM_NAME}");
+		assertEquals("Replace this: TEST_STRING", resultString);
+	}
 
-			String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: {ITEM_NAME}");
-			assertEquals("Replace this: TEST_STRING", resultString);
-		}
+	@Test
+	void testReplaceMacros_parameter_null_context_map() {
+		// Arrange & Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.replaceMacros(null, "Some message string."));
 
-		@Test
-		void testReplaceMacros_parameter_null_recipient() {
-			// Arrange
-			ContextMap contextMap = new ContextMap(playerMock);
-
-			// Act
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> macroReplacer.replaceMacros(null, contextMap, "Some message string."));
-
-			// Assert
-			assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
-		}
-
-
-		@Test
-		void testReplaceMacros_parameter_null_context_map() {
-			// Arrange & Act
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> macroReplacer.replaceMacros(playerMock, null, "Some message string."));
-
-			// Assert
-			assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-		}
-
-
-		@Test
-		void testReplaceMacros_parameter_null_messageString() {
-			// Arrange
-			ContextMap contextMap = new ContextMap(playerMock);
-
-			// Act
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> macroReplacer.replaceMacros(playerMock, contextMap, null));
-
-			// Assert
-			assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
-		}
+		// Assert
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
 
 
-	@Nested
-	class AddRecipientContextTests {
+	@Test
+	void testReplaceMacros_parameter_null_messageString() {
+		// Arrange
+		ContextMap contextMap = new ContextMap(playerMock);
 
-		@Test
-		void testAddRecipientContext() {
-			// Arrange
-			ContextMap contextMap = new ContextMap(playerMock);
+		// Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.replaceMacros(contextMap, null));
 
-			// Act
-			macroReplacer.addRecipientContext(playerMock, contextMap);
-
-			// Assert
-			assertTrue(contextMap.containsKey("RECIPIENT.LOCATION"));
-		}
-
-		@Test
-		void testAddRecipientContext_parameter_null_recipient() {
-			// Arrange
-			ContextMap contextMap = new ContextMap(playerMock);
-
-			// Act
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> macroReplacer.addRecipientContext(null, contextMap));
-
-			// Assert
-			assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
-		}
-
-		@Test
-		void testAddRecipientContext_parameter_null_context_map() {
-			// Arrange & Act
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> macroReplacer.addRecipientContext(playerMock, null));
-
-			// Assert
-			assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-		}
-	}
-
-	@Nested
-	class ConvertValuesToStringsTests {
-
-		@Test
-		void testConvertValuesToStrings() {
-			// Arrange
-			ItemStack itemStack = new ItemStack(Material.STONE);
-			ContextMap contextMap = new ContextMap(playerMock);
-			contextMap.put("NUMBER", 42);
-			contextMap.put("ITEM_STACK", itemStack);
-
-			// Act
-			ResultMap resultMap = macroReplacer.convertValuesToStrings(contextMap);
-
-			// Assert
-			assertTrue(resultMap.containsKey("NUMBER"));
-			assertEquals("42", resultMap.get("NUMBER"));
-			assertTrue(resultMap.containsKey("ITEM_STACK"));
-			assertEquals("STONE", resultMap.get("ITEM_STACK"));
-		}
-
-		@Test
-		void testConvertValuesToStrings_parameter_null_context_map() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> macroReplacer.convertValuesToStrings(null));
-
-			assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-		}
+		// Assert
+		assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
 	}
 
 
-	@Nested
-	class PerformReplacementsTests {
-		@Test
-		void testPerformReplacements() {
-			// Arrange
-			MacroReplacer localMacroReplacer = new MacroReplacer();
+	@Test
+	void testAddRecipientContext() {
+		// Arrange
+		ContextMap contextMap = new ContextMap(playerMock);
 
-			ResultMap resultMap = new ResultMap();
-			resultMap.put("KEY", "value");
-			String messageString = "this is a macro replacement string {KEY}.";
+		// Act
+		macroReplacer.addRecipientContext(contextMap);
 
-			// Act
-			String resultString = localMacroReplacer.performReplacements(resultMap, messageString);
+		// Assert
+		assertTrue(contextMap.containsKey("RECIPIENT.LOCATION"));
+	}
 
-			// Assert
-			assertEquals("this is a macro replacement string value.", resultString);
-			System.out.println("Output: " + resultString);
-		}
+	@Test
+	void testAddRecipientContext_parameter_null_context_map() {
+		// Arrange & Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.addRecipientContext(null));
 
-		@Test
-		void testPerformReplacements_parameter_nul_replacement_map() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> macroReplacer.performReplacements(null, "some string"));
+		// Assert
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
 
-			assertEquals("The parameter 'replacementMap' cannot be null.", exception.getMessage());
-		}
 
-		@Test
-		void testPerformReplacements_parameter_nul_message_string() {
-			ResultMap resultMap = new ResultMap();
-			resultMap.put("KEY1", "value1");
-			resultMap.put("KEY2", "value2");
-			resultMap.put("KEY3", "value3");
 
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> macroReplacer.performReplacements(resultMap, null));
 
-			assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
-		}
+	@Test
+	void testConvertValuesToStrings() {
+		// Arrange
+		ItemStack itemStack = new ItemStack(Material.STONE);
+		ContextMap contextMap = new ContextMap(playerMock);
+		contextMap.put("NUMBER", 42);
+		contextMap.put("ITEM_STACK", itemStack);
+
+		// Act
+		ResultMap resultMap = macroReplacer.convertValuesToStrings(contextMap);
+
+		// Assert
+		assertTrue(resultMap.containsKey("NUMBER"));
+		assertEquals("42", resultMap.get("NUMBER"));
+		assertTrue(resultMap.containsKey("ITEM_STACK"));
+		assertEquals("STONE", resultMap.get("ITEM_STACK"));
+	}
+
+	@Test
+	void testConvertValuesToStrings_parameter_null_context_map() {
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.convertValuesToStrings(null));
+
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
+
+
+
+	@Test
+	void testPerformReplacements() {
+		// Arrange
+		MacroReplacer localMacroReplacer = new MacroReplacer();
+
+		ResultMap resultMap = new ResultMap();
+		resultMap.put("KEY", "value");
+		String messageString = "this is a macro replacement string {KEY}.";
+
+		// Act
+		String resultString = localMacroReplacer.performReplacements(resultMap, messageString);
+
+		// Assert
+		assertEquals("this is a macro replacement string value.", resultString);
+	}
+
+	@Test
+	void testPerformReplacements_parameter_nul_replacement_map() {
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.performReplacements(null, "some string"));
+
+		assertEquals("The parameter 'replacementMap' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testPerformReplacements_parameter_nul_message_string() {
+		ResultMap resultMap = new ResultMap();
+		resultMap.put("KEY1", "value1");
+		resultMap.put("KEY2", "value2");
+		resultMap.put("KEY3", "value3");
+
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.performReplacements(resultMap, null));
+
+		assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testContainsMacros() {
+		assertTrue(macroReplacer.containsMacros("This is a string that {CONTAINS} a macro."));
+		assertFalse(macroReplacer.containsMacros("This is a string that does not contain a macro."));
 	}
 
 }
