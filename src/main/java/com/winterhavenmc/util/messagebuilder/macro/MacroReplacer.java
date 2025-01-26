@@ -43,7 +43,8 @@ public class MacroReplacer {
 	/**
 	 * Class constructor
 	 */
-	public MacroReplacer() {
+	public MacroReplacer()
+	{
 		this.processorRegistry = new ProcessorRegistry(new DependencyContext());
 	}
 
@@ -58,8 +59,13 @@ public class MacroReplacer {
 	 */
 	public String replaceMacros(final CommandSender recipient,
 	                            final ContextMap contextMap,
-	                            final String messageString) {
+	                            final String messageString)
+	{
+		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, "recipient"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, "messageString"); }
 
+		// copy message string to local var
 		String modifiedMessageString = messageString;
 
 		// only process macro tokens if message string contains a pair of macro delimiters
@@ -80,7 +86,8 @@ public class MacroReplacer {
 	}
 
 
-	void addRecipientContext(CommandSender recipient, ContextMap contextMap) {
+	void addRecipientContext(CommandSender recipient, ContextMap contextMap)
+	{
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, "recipient"); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
@@ -96,7 +103,8 @@ public class MacroReplacer {
 	}
 
 
-	ResultMap convertValuesToStrings(ContextMap contextMap) {
+	ResultMap convertValuesToStrings(ContextMap contextMap)
+	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
 
 		ResultMap resultMap = new ResultMap();
@@ -109,7 +117,8 @@ public class MacroReplacer {
 	}
 
 
-	String performReplacements(final ResultMap replacementMap, final String messageString) {
+	String performReplacements(final ResultMap replacementMap, final String messageString)
+	{
 		if (replacementMap == null) { throw new LocalizedException(PARAMETER_NULL, "replacementMap"); }
 		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, "messageString"); }
 
