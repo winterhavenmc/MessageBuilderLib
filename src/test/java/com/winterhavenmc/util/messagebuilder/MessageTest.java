@@ -66,30 +66,9 @@ class MessageTest {
 	@Disabled
 	@Test
 	void setMacroTest() {
-//		PlayerMock testPlayer = server.addPlayer("test_player");
 		Message<MessageId, Macro> message = messageBuilder.compose(playerMock, MessageId.DURATION_MESSAGE);
 		message.setMacro(Macro.DURATION, 1200L);
 		assertEquals("Duration is 1 second", message.toString());
 	}
-
-//	@Test
-//	void send() {
-//	}
-//
-//	@Test
-//	void testToString() {
-//	}
-//
-//	@Test
-//	void setAltMessage() {
-//	}
-//
-//	@Test
-//	void setAltTitle() {
-//	}
-//
-//	@Test
-//	void setAltSubtitle() {
-//	}
 
 }
