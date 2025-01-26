@@ -74,7 +74,10 @@ public class MacroReplacer {
 	}
 
 
-	private void addRecipientContext(CommandSender recipient, ContextMap contextMap) {
+	void addRecipientContext(CommandSender recipient, ContextMap contextMap) {
+		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, "recipient"); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+
 		// put recipient name in context map
 		String key = "RECIPIENT";
 		contextMap.put(key, recipient.getName());
@@ -87,7 +90,9 @@ public class MacroReplacer {
 	}
 
 
-	private ResultMap convertValuesToStrings(ContextMap contextMap) {
+	ResultMap convertValuesToStrings(ContextMap contextMap) {
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+
 		ResultMap resultMap = new ResultMap();
 		for (Map.Entry<String, Object> entry : contextMap.entrySet()) {
 			ProcessorType processorType = ProcessorType.matchType(entry.getValue());
@@ -98,9 +103,14 @@ public class MacroReplacer {
 	}
 
 
-	private String performReplacements(ResultMap replacementStringMap, String modifiedMessageString) {
-		for (Map.Entry<String, String> entry : replacementStringMap.entrySet()) {
-			String macroToken = MacroDelimiter.OPEN + entry.getKey() + MacroDelimiter.CLOSE;
+	String performReplacements(final ResultMap replacementMap, final String messageString) {
+		if (replacementMap == null) { throw new LocalizedException(PARAMETER_NULL, "replacementMap"); }
+		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, "messageString"); }
+
+		String modifiedMessageString = messageString;
+
+		for (Map.Entry<String, String> entry : replacementMap.entrySet()) {
+			String macroToken = DELIMITER_OPEN + entry.getKey() + DELIMITER_CLOSE;
 			modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue());
 		}
 		return modifiedMessageString;
