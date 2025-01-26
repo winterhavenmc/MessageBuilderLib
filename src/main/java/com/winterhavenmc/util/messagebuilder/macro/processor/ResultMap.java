@@ -39,7 +39,7 @@ public class ResultMap {
 	}
 
 
-	String get(final String key) {
+	public String get(final String key) {
 		return internalResultMap.get(key);
 	}
 
