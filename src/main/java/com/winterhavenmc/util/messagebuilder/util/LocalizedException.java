@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.util;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -28,12 +29,27 @@ public class LocalizedException extends IllegalArgumentException {
 
 
 	private final MessageKey messageKey;
+	private final String parameterDisplayName;
 	private final Object[] placeholders;
 
 	public LocalizedException(MessageKey messageKey, Object... placeholders) {
 		this.messageKey = messageKey;
+		this.parameterDisplayName = Arrays.stream(placeholders).findFirst().orElse("unknown").toString();
 		this.placeholders = placeholders;
 	}
+
+
+	public LocalizedException(MessageKey messageKey, Parameter parameter, Object... placeholders) {
+		this.messageKey = messageKey;
+		this.parameterDisplayName = parameter.getDisplayName();
+
+		// create new array for placeholders with Parameter display name string as first element
+		Object[] tempArray = new Object[placeholders.length+1];
+		tempArray[0] = this.parameterDisplayName;
+		System.arraycopy(placeholders, 0, tempArray, 1, placeholders.length);
+		this.placeholders = tempArray;
+	}
+
 
 	@Override
 	public String getMessage() {
