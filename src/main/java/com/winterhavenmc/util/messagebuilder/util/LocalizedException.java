@@ -40,6 +40,7 @@ public class LocalizedException extends IllegalArgumentException {
 		return getLocalizedMessage(Locale.getDefault());
 	}
 
+
 	public String getLocalizedMessage(Locale locale) {
 		ResourceBundle bundle = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, locale);
 		String pattern = bundle.getString(messageKey.name());
@@ -49,8 +50,11 @@ public class LocalizedException extends IllegalArgumentException {
 
 	public enum MessageKey {
 		INVALID_SECTION,
+		MISSING_RESOURCE,
 		PARAMETER_EMPTY,
+		PARAMETER_INVALID,
 		PARAMETER_NULL,
+		PARAMETER_TYPE_MISMATCH,
 		RELOAD_FAILED,
 	}
 
