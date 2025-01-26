@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 public class LocalizedException extends IllegalArgumentException {
 
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
-
+	private static final Locale DEFAULT_LOCALE = Locale.US;
 
 	private final MessageKey messageKey;
 	private final String parameterDisplayName;
