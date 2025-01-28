@@ -87,7 +87,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param plugin reference to plugin main class
 	 */
 	public MessageBuilder(final Plugin plugin) {
-		if (plugin == null) { throw new LocalizedException(PARAMETER_NULL, "plugin"); }
+		if (plugin == null) { throw new LocalizedException(PARAMETER_NULL, PLUGIN); }
 
 		this.plugin = plugin;
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
@@ -126,8 +126,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @return MessageKey - an initialized message object
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
-		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, "recipient"); }
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, "messageId"); }
+		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
+		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
 		return new Message<>(plugin, languageQueryHandler, macroQueryHandler, recipient, messageId);
 	}
