@@ -32,6 +32,7 @@ public class LocalizedException extends IllegalArgumentException {
 	private final String parameterDisplayName;
 	private final Object[] placeholders;
 
+
 	public LocalizedException(MessageKey messageKey, Object... placeholders) {
 		this.messageKey = messageKey;
 		this.parameterDisplayName = Arrays.stream(placeholders).findFirst().orElse("unknown").toString();
@@ -77,7 +78,12 @@ public class LocalizedException extends IllegalArgumentException {
 
 	public enum Parameter {
 		CONTEXT_MAP("contextMap"),
+		COMMAND_SENDER("commandSender"),
+		DURATION("duration"),
+		ENTITY("entity"),
 		MESSAGE_ID("messageId"),
+		MESSAGE_SECTION("messageSection"),
+		MESSAGE_RECORD("messageRecord"),
 		MESSAGE_STRING("messageString"),
 		KEY("key"),
 		RECIPIENT("recipient"),
