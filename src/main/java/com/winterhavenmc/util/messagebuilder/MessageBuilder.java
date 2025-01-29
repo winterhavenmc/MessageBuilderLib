@@ -17,8 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.*;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.*;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
+
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
@@ -33,6 +36,7 @@ import java.util.ResourceBundle;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
 
 
 /**
@@ -69,32 +73,36 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  */
 public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
-	public static final TemporalUnit TICKS = new Tick();
-
-	private final Plugin plugin;
-	private final LanguageResourceManager languageResourceManager;
-	private final YamlLanguageQueryHandler languageQueryHandler;
-	private final MacroReplacer macroQueryHandler;
-
-	// this will be moved to a configuration, but are globally accessible for now
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
 	public final static ResourceBundle BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, Locale.getDefault());
+	public static final TemporalUnit TICKS = new Tick();
+
+	private static Plugin plugin;
+	private static YamlLanguageResourceManager languageResourceManager;
+	private static YamlLanguageQueryHandler languageQueryHandler;
 
 
 	/**
-	 * Class constructor
+	 * A static factory method for instantiating this class. Due to the necessity of performing file I/O operations
+	 * to instantiate this class, this static method has been provided to perform the potentially blocking operations
+	 * before instantiation, and then inject them into the package-private constructor of the class, and returning
+	 * the newly constructed object. If file operations fail, the class will not be left in a partially
+	 * instantiated state.
 	 *
-	 * @param plugin reference to plugin main class
+	 * @return an instance of this class
+	 * @param <MessageId> the type for MessageId, a unique identifier for messages stored in a resource
+	 * @param <Macro> the type for Macro, a unique identifier for macros passed into the builder from the plugin
 	 */
-	public MessageBuilder(final Plugin plugin) {
-		if (plugin == null) { throw new LocalizedException(PARAMETER_NULL, PLUGIN); }
-
-		this.plugin = plugin;
+	public static // scope
+	<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> // type parameters
+	MessageBuilder<MessageId, Macro> // return type
+	create() {
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
 		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
-		this.languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
-		this.languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
-		this.macroQueryHandler = new MacroReplacer();
+		languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
+		languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
+
+		return new MessageBuilder<>(plugin, languageResourceManager, languageQueryHandler);
 	}
 
 
@@ -104,17 +112,38 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * Its visibility is restricted to package-private, so it cannot be used to instantiate an instance of the class
 	 * from outside its package.
 	 *
-	 * @param pluginMock reference to plugin main class
+	 * @param pluginMock a mock plugin instance
+	 * @param languageResourceManagerMock a mock language resource manager instance
+	 * @param languageQueryHandlerMock a mock language query handler instance
+	 * @return an instance of this class, instantiated with the mock objects
+	 * @param <MessageId> the type for MessageId, a unique identifier for messages stored in a resource
+	 * @param <Macro> the type for Macro, a unique identifier for macros passed into the builder from the plugin
 	 */
-	MessageBuilder(final Plugin pluginMock,
-	               final YamlLanguageResourceManager languageResourceManagerMock,
-	               final YamlLanguageQueryHandler languageQueryHandlerMock,
-	               final MacroReplacer macroQueryHandlerMock) {
+	static // scope
+	<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> // type parameters
+	MessageBuilder<MessageId, Macro> // return type
+	test(final Plugin pluginMock,
+         final YamlLanguageResourceManager languageResourceManagerMock,
+         final YamlLanguageQueryHandler languageQueryHandlerMock)
+	{
+		return new MessageBuilder<>(pluginMock, languageResourceManagerMock, languageQueryHandlerMock);
+	}
 
-		this.plugin = pluginMock;
-		this.languageResourceManager = languageResourceManagerMock;
-		this.languageQueryHandler = languageQueryHandlerMock;
-		this.macroQueryHandler = macroQueryHandlerMock;
+
+	/**
+	 * A private constructor for the class that can only called from within this class, by the static factory method.
+	 *
+	 * @param plugin an instance of the plugin
+	 * @param languageResourceManager an instance of the language resource manager
+	 * @param languageQueryHandler an instance of the language query handler
+	 */
+	private MessageBuilder(final Plugin plugin,
+	               final YamlLanguageResourceManager languageResourceManager,
+	               final YamlLanguageQueryHandler languageQueryHandler) {
+
+		MessageBuilder.plugin = plugin;
+		MessageBuilder.languageResourceManager = languageResourceManager;
+		MessageBuilder.languageQueryHandler = languageQueryHandler;
 	}
 
 
@@ -123,23 +152,15 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
-	 * @return MessageKey - an initialized message object
+	 * @return {@code Message} an initialized message object
 	 */
 	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
-		return new Message<>(plugin, languageQueryHandler, macroQueryHandler, recipient, messageId);
-	}
+		MacroReplacer<MessageId> macroReplacer = new MacroReplacer<>();
 
-
-	/**
-	 * Return an instance of the language file ItemRecord handler
-	 *
-	 * @return the ItemRecord handler for the language file
-	 */
-	LanguageQueryHandler getLanguageQueryHandler() {
-		return this.languageQueryHandler;
+		return new Message<>(languageQueryHandler, macroReplacer, recipient, messageId);
 	}
 
 
