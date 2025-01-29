@@ -20,7 +20,6 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
@@ -52,7 +51,7 @@ class MessageBuilderTest {
 	@Mock Plugin pluginMock;
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock YamlLanguageQueryHandler languageQueryHandlerMock;
-	@Mock MacroReplacer macroQueryHandlerMock;
+	@Mock MacroReplacer<MessageId> macroQueryHandlerMock;
 	@Mock Player playerMock;
 
 	FileConfiguration pluginConfiguration;
@@ -70,10 +69,7 @@ class MessageBuilderTest {
 		pluginConfiguration.set("locale", "en-US");
 
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		messageBuilder = new MessageBuilder<>(pluginMock,
-				languageResourceManagerMock,
-				languageQueryHandlerMock,
-				macroQueryHandlerMock);
+		messageBuilder = MessageBuilder.test(pluginMock, languageResourceManagerMock, languageQueryHandlerMock);
 	}
 
 	@AfterEach
@@ -123,12 +119,6 @@ class MessageBuilderTest {
 
 
 	@Test
-	void getLanguageQueryHandler() {
-		LanguageQueryHandler languageQueryHandler = messageBuilder.getLanguageQueryHandler();
-		assertNotNull(languageQueryHandler);
-	}
-
-	@Test
 	void reload() {
 		when(languageResourceManagerMock.reload()).thenReturn(true);
 
@@ -144,6 +134,19 @@ class MessageBuilderTest {
 		messageBuilder.reload();
 
 		verify(languageResourceManagerMock, atLeastOnce()).reload();
+	}
+
+	@Test
+	void testCreate() {
+		// Arrange
+		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+
+		// Act
+		MessageBuilder<MessageId, Macro> messageBuilder1 = MessageBuilder.create();
+
+		// Assert
+		assertNotNull(messageBuilder1);
 	}
 
 }
