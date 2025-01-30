@@ -31,10 +31,16 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.LOCALE;
 
 
+/**
+ * Format a time string using the Time4J PrettyTime formatter. When given a locale and a duration, a formatted string
+ * with pluralized time units appropriate for the duration is returned as a string.
+ */
 public final class PrettyTimeFormatter implements TimeFormatter {
 
 	/**
-	 * Retrieve a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale provided.
+	 * Return a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale provided.<br>
+	 * <b><i>Note:</i></b> Duration type used in this method are of the net.time4j.Duration type, with the exception
+	 * of the java.time.Duration type that is accepted as a parameter
 	 *
 	 * @param locale the Locale to use for {@code PrettyTime} translation and pluralization
 	 * @param duration a time duration
