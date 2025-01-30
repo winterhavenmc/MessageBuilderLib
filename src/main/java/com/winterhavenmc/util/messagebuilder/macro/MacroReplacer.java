@@ -42,8 +42,8 @@ public class MacroReplacer implements Replacer {
 	private final static String DELIMITER_OPEN = "{";
 	private final static String DELIMITER_CLOSE = "}";
 
-	// Matches {MACRO}
-	private final static Pattern MACRO_PATTERN = Pattern.compile("\\" + DELIMITER_OPEN + "[\\p{Lu}0-9_]+" + DELIMITER_CLOSE);
+	// Regex pattern to match placeholders with delimiters
+	private final Pattern MACRO_PATTERN;
 
 	private final ProcessorRegistry processorRegistry;
 
@@ -54,6 +54,7 @@ public class MacroReplacer implements Replacer {
 	public MacroReplacer()
 	{
 		this.processorRegistry = new ProcessorRegistry(new DependencyContext());
+		this.MACRO_PATTERN = getRegex();
 	}
 
 
@@ -125,8 +126,6 @@ public class MacroReplacer implements Replacer {
 	}
 
 
-
-
 	void addRecipientContext(ContextMap contextMap)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
@@ -172,6 +171,11 @@ public class MacroReplacer implements Replacer {
 			modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue());
 		}
 		return modifiedMessageString;
+	}
+
+
+	public static Pattern getRegex() {
+		return Pattern.compile("\\" + DELIMITER_OPEN + "[\\p{Lu}0-9_]+" + DELIMITER_CLOSE);
 	}
 
 }
