@@ -85,7 +85,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 
 	/**
-	 * A private constructor for the class that can only called from within this class.
+	 * A private constructor for the class that can only be called from within this class.
 	 * Use the static factory method {@code create} to instantiate an instance of this class.
 	 *
 	 * @param plugin an instance of the plugin
