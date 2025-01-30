@@ -115,7 +115,7 @@ public class LocalizedException extends IllegalArgumentException {
 
 		@Override
 		public String toString() {
-			return getDisplayName();
+			return displayName;
 		}
 	}
 
