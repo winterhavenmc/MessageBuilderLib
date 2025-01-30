@@ -29,6 +29,7 @@ import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
 
 
 public class YamlLanguageQueryHandler implements LanguageQueryHandler {
@@ -41,7 +42,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	 * @param yamlConfigurationSupplier the language configuration supplier
 	 */
 	public YamlLanguageQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
-		if (yamlConfigurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, "configurationSupplier"); }
+		if (yamlConfigurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER); }
 
 		this.yamlConfigurationSupplier = yamlConfigurationSupplier;
 	}
@@ -63,17 +64,16 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 
 
 	@Override
-	public Optional<ItemRecord> getItemRecord(final String keyPath) {
-		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
+	public Optional<ItemRecord> getItemRecord(final String key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
 
 		ItemSectionQueryHandler itemSectionQueryHandler = Section.ITEMS.getQueryHandler(yamlConfigurationSupplier);
-		return itemSectionQueryHandler.getRecord(keyPath);
+		return itemSectionQueryHandler.getRecord(key);
 	}
 
-
 	@Override
-	public <MessageId extends Enum<MessageId>> Optional<MessageRecord> getMessageRecord(final MessageId messageId) {
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, "messageId"); }
+	public <MessageId extends Enum<MessageId>> Optional<MessageRecord<MessageId>> getMessageRecord(final MessageId messageId) {
+		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
 		MessageSectionQueryHandler messageSectionQueryHandler = Section.MESSAGES.getQueryHandler(yamlConfigurationSupplier);
 		return messageSectionQueryHandler.getRecord(messageId);
