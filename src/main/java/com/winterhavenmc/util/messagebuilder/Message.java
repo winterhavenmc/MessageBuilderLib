@@ -18,19 +18,20 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
+import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
+import com.winterhavenmc.util.messagebuilder.pipeline.*;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.macro.*;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 
-import org.bukkit.ChatColor;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
 
 
 /**
@@ -39,42 +40,41 @@ import java.util.Optional;
  * @param <MessageId> the unique identifier of a message in the language file
  * @param <Macro> a macro placeholder value to be added to the context map
  */
-public final class Message<MessageId extends Enum<MessageId>, Macro> {
-
-	// reference to plugin main class
-	private final Plugin plugin;
+public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	// context map
-	private final ContextMap contextMap;
+	private final ContextMap<MessageId> contextMap;
 
 	// required parameters
 	private final CommandSender recipient;
 	private final MessageId messageId;
 	private final LanguageQueryHandler languageQueryHandler;
-	private final MacroReplacer macroReplacer;
+	private final MacroReplacer<MessageId> macroReplacer;
+	private final CooldownMap cooldownMap;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param plugin       reference to plugin main class
 	 * @param languageQueryHandler the ItemRecord handler for message records
-	 * @param macroReplacer reference to macro processor class
-	 * @param recipient    message recipient
-	 * @param messageId    message identifier
+	 * @param macroReplacer        reference to macro processor class
+	 * @param recipient            message recipient
+	 * @param messageId            message identifier
 	 */
-	public Message(final Plugin plugin,
-				final LanguageQueryHandler languageQueryHandler,
-                final MacroReplacer macroReplacer,
-                final CommandSender recipient,
-                final MessageId messageId) {
-
-		this.plugin = plugin;
+	public Message(
+			final LanguageQueryHandler languageQueryHandler,
+			final MacroReplacer<MessageId> macroReplacer,
+			final CommandSender recipient,
+			final MessageId messageId,
+			final CooldownMap cooldownMap
+	)
+	{
 		this.languageQueryHandler = languageQueryHandler;
 		this.macroReplacer = macroReplacer;
 		this.recipient = recipient;
 		this.messageId = messageId;
-		this.contextMap = new ContextMap(recipient);
+		this.cooldownMap = cooldownMap;
+		this.contextMap = new ContextMap<>(recipient, messageId);
 	}
 
 
@@ -85,7 +85,11 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
-	public <T> Message<MessageId, Macro> setMacro(final Macro macro, final T value) {
+	public <T> Message<MessageId, Macro> setMacro(final Macro macro, final T value)
+	{
+		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
+		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
+
 		return setMacro(1, macro, value);
 	}
 
@@ -97,10 +101,13 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
-	public <T> Message<MessageId, Macro> setMacro(int quantity, final Macro macro, final T value) {
+	public <T> Message<MessageId, Macro> setMacro(int quantity, final Macro macro, final T value)
+	{
+		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
+		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
 
-		// use macro toString value as key
-		String key = macro.toString();
+		// use macro enum constant name as key
+		String key = macro.name();
 
 		// put value into context map
 		this.contextMap.put(key, value);
@@ -114,124 +121,52 @@ public final class Message<MessageId extends Enum<MessageId>, Macro> {
 	/**
 	 * Final step of message builder, performs replacements and sends message to recipient
 	 */
-	public void send() {
-		// get message query handler
-		MessageSectionQueryHandler sectionQueryHandler = (MessageSectionQueryHandler) languageQueryHandler.getSectionQueryHandler(Section.MESSAGES);
-		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
+	public void send()
+	{
+		// get functional message retriever
+		Retriever retriever = new MessageRetriever();
 
-			// get optional message record
-			Optional<MessageRecord> messageRecord = messageSectionQueryHandler.getRecord(messageId);
+		// get optional message record
+		Optional<MessageRecord<MessageId>> messageRecord = retriever.getMessageRecord(messageId, languageQueryHandler);
 
-			// if message record is empty or not enabled, return
-			if (messageRecord.isEmpty() || !messageRecord.get().enabled()) {
-				return;
-			}
-
-			// get cooldown instance
-			MessageCooldownMap<MessageId> messageCooldownMap = MessageCooldownMap.getInstance(plugin);
-
-			// if message is not cooled, do nothing and return
-			if (messageCooldownMap.isCooling(recipient, messageId, messageRecord.get().repeatDelay())) {
-				return;
-			}
-
-			// send message to player
-			if (!this.toString().isEmpty()) {
-				recipient.sendMessage(this.toString());
-			}
-
-			// if titles enabled in config, display titles
-			if (plugin.getConfig().getBoolean("titles-enabled")) {
-				displayTitle();
-			}
-
-			// if message repeat delay value is greater than zero and recipient is entity, add entry to messageCooldownMap
-			if (messageRecord.get().repeatDelay() > 0 && recipient instanceof Entity) {
-				messageCooldownMap.put(messageId, (Entity) recipient);
-			}
-		}
-	}
-
-
-	private void displayTitle() {
-
-		if (recipient instanceof Entity) {
-
-			// get title string
-			String titleString;
-
-			titleString = macroReplacer.replaceMacros(contextMap,
-					languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::title).orElse(""));
-
-			// get subtitle string
-			String subtitleString;
-				subtitleString = macroReplacer.replaceMacros(contextMap,
-						languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::subtitle).orElse(""));
-
-			// only send title if either title string or subtitle string is not empty
-			if (!titleString.isEmpty() || !subtitleString.isEmpty()) {
-
-				// get title timing values
-				int titleFadeIn = languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::titleFadeIn).orElse(20);
-				int titleStay = languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::titleStay).orElse(70);
-				int titleFadeOut = languageQueryHandler.getMessageRecord(messageId).map(MessageRecord::titleFadeOut).orElse(10);
-
-				// if title string is empty, add format code, else it won't display with subtitle only
-				if (titleString.isEmpty()) {
-					titleString = "&r";
-				}
-
-				// convert formatting codes
-				titleString = ChatColor.translateAlternateColorCodes('&', titleString);
-				subtitleString = ChatColor.translateAlternateColorCodes('&', subtitleString);
-
-				// cast recipient to player
-				Player player = (Player) recipient;
-
-				// send title to player
-				player.sendTitle(titleString, subtitleString, titleFadeIn, titleStay, titleFadeOut);
-			}
-		}
-	}
-
-
-	/**
-	 * performs replacements and returns formatted message string
-	 */
-	@Override
-	public String toString() {
-
-		// get optional MessageRecord
-		Optional<MessageRecord> messageRecord = languageQueryHandler.getMessageRecord(messageId);
-
-		// if message entry not found or message not enabled for messageId, return empty string
-		if (messageRecord.isEmpty() || !messageRecord.get().enabled()) {
-			return "";
-		}
-
-		return getMessageString();
-	}
-
-
-	/**
-	 * Get formatted message string with macros replaced, using alternate message if set
-	 *
-	 * @return message string to send
-	 */
-	private String getMessageString() {
-
-		String messageString;
-
-		Optional<MessageRecord> messageRecord = languageQueryHandler.getMessageRecord(messageId);
-
-		// if message entry could not be found, then return empty string
+		// if optional message record is empty, do nothing and return
 		if (messageRecord.isEmpty()) {
-			return "";
+			return;
 		}
 
-		messageString = macroReplacer.replaceMacros(contextMap, messageRecord.get().message());
+		// check if message and recipient are available for sending
+		if (!isSendable(recipient, messageRecord.get())) {
+			return;
+		}
 
-		return ChatColor.translateAlternateColorCodes('&', messageString);
+		// perform macro replacements
+		Optional<MessageRecord<MessageId>> finalMesssageRecord = macroReplacer.replaceMacros(messageRecord.get(), contextMap);
+
+		// send message
+		finalMesssageRecord.ifPresent(record -> new MessageSender().send(recipient, record));
+		finalMesssageRecord.ifPresent(record -> new TitleSender().send(recipient, record));
+		finalMesssageRecord.ifPresent(record -> cooldownMap.putExpirationTime(recipient, record));
+	}
+
+
+	/**
+	 * Check if prerequisites have been met for a message to be able to be sent
+	 *
+	 * @param recipient the intended recipient of the message
+	 * @param messageRecord the message record
+	 * @return {@code true} if the recipient/message is sendable, {@code false} if not
+	 */
+	private boolean isSendable(final CommandSender recipient, MessageRecord<MessageId> messageRecord) {
+
+		// if recipient is a player but is not online, return false
+		if (recipient instanceof Player player && player.isOnline()) {
+			return false;
+		}
+
+		MessageId messageId = messageRecord.messageId();
+
+		// return true if message is enabled and not in cooldown map, else false
+		return messageRecord.enabled() && !cooldownMap.isCooling(recipient, messageId);
 	}
 
 }
