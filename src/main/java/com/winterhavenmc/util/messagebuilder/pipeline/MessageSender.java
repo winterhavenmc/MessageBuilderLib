@@ -15,16 +15,17 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class MessageSender implements Sender {
 
 	@Override
-	public void send(CommandSender recipient, MessageRecord messageRecord) {
-		recipient.sendMessage(messageRecord.message());
+	public <MessageId extends Enum<MessageId>> void send(CommandSender recipient, MessageRecord<MessageId> messageRecord) {
+		recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageRecord.finalMessageString()));
 	}
 
 }
