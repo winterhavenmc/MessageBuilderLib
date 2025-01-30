@@ -94,8 +94,7 @@ public class LocationProcessor extends MacroProcessorTemplate {
 	 * @throws IllegalArgumentException if any parameter is null or invalid
 	 */
 	@Override
-	public <MessageId extends Enum<MessageId>>
-	ResultMap resolveContext(final String key, final ContextMap contextMap)
+	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
 		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }

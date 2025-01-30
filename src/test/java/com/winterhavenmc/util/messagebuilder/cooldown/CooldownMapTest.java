@@ -46,13 +46,13 @@ class CooldownMapTest {
 	@Mock Player playerMock;
 
 	CooldownMap cooldownMap;
-	MessageRecord<MessageId> messageRecord;
+	MessageRecord messageRecord;
 
 	@BeforeEach
 	void setUp() {
 		cooldownMap = new CooldownMap();
 
-		messageRecord = new MessageRecord<>(
+		messageRecord = new MessageRecord(
 				MessageId.ENABLED_MESSAGE.name(),
 				true,
 				false,
@@ -213,7 +213,7 @@ class CooldownMapTest {
 		void testRemoveExpired_expired() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			messageRecord = new MessageRecord<>(
+			messageRecord = new MessageRecord(
 					MessageId.ENABLED_MESSAGE.name(),
 					true,
 					false,

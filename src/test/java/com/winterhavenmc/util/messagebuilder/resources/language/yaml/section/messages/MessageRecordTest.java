@@ -61,7 +61,7 @@ class MessageRecordTest {
 
 	@Test
 	void constructorTest() {
-		MessageRecord<MessageId> testRecord = new MessageRecord<>(
+		MessageRecord testRecord = new MessageRecord(
 				ENABLED_MESSAGE.name(),
 				true,
 				true,
@@ -79,7 +79,7 @@ class MessageRecordTest {
 
 	@Test
 	void testGetRecord_parameter_valid() {
-		Optional<MessageRecord<MessageId>> messageRecord = MessageRecord.getRecord(ENABLED_MESSAGE.name(), messageSection);
+		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(ENABLED_MESSAGE.name(), messageSection);
 		assertTrue(messageRecord.isPresent());
 	}
 
@@ -93,7 +93,7 @@ class MessageRecordTest {
 
 	@Test
 	void testGetRecord_parameter_keyPath_invalid() {
-		Optional<MessageRecord<MessageId>> messageRecord = MessageRecord.getRecord(NONEXISTENT_ENTRY.name(), messageSection);
+		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(NONEXISTENT_ENTRY.name(), messageSection);
 		assertTrue(messageRecord.isEmpty());
 	}
 

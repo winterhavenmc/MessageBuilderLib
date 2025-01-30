@@ -42,9 +42,7 @@ public final class CooldownMap {
 	 * @param messageRecord the message to be placed in the cooldown map for recipient
 	 * @throws LocalizedException if any parameter is null
 	 */
-	public
-	<MessageId extends Enum<MessageId>>
-	void putExpirationTime(final CommandSender recipient, final MessageRecord<MessageId> messageRecord) {
+	public void putExpirationTime(final CommandSender recipient, final MessageRecord messageRecord) {
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
 

@@ -29,7 +29,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 
 /**
  * An implementation of a key for use in the cooldown map. It is composed of the recipient uuid and
- * the unique MessageId. If a recipient does not have a uuid, such as the console, the declared constant
+ * the unique MessageId. If a recipient does not have an uuid, such as the console, the declared constant
  * default uuid is used. This means that the console is subject to message repeat delays, which are
  * shared by all non-uuid message recipients. (Are there more than console? Players and Entities both have uuids.)
  * <p>

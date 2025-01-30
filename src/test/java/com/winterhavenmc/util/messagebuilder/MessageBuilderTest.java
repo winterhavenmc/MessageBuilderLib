@@ -52,7 +52,7 @@ class MessageBuilderTest {
 	@Mock Plugin pluginMock;
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock YamlLanguageQueryHandler languageQueryHandlerMock;
-	@Mock MacroReplacer<MessageId> macroQueryHandlerMock;
+	@Mock MacroReplacer macroQueryHandlerMock;
 	@Mock CooldownMap cooldownMap;
 	@Mock Player playerMock;
 

@@ -31,7 +31,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 
 public class MessageRetriever implements Retriever {
 	@Override
-	public <MessageId extends Enum<MessageId>> Optional<MessageRecord<MessageId>> getMessageRecord(String messageId, LanguageQueryHandler languageQueryHandler) {
+	public Optional<MessageRecord> getMessageRecord(String messageId, LanguageQueryHandler languageQueryHandler) {
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 		SectionQueryHandler sectionQueryHandler = languageQueryHandler.getSectionQueryHandler(Section.MESSAGES);
 		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {

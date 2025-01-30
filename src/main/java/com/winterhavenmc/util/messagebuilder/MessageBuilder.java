@@ -164,7 +164,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
-		MacroReplacer<MessageId> macroReplacer = new MacroReplacer<>();
+		MacroReplacer macroReplacer = new MacroReplacer();
 
 		return new Message<>(languageQueryHandler, macroReplacer, recipient, messageId.name(), cooldownMap);
 	}

@@ -45,12 +45,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class MacroReplacerTest {
 
 	@Mock Player playerMock;
-	MacroReplacer<MessageId> macroReplacer;
+	MacroReplacer macroReplacer;
 
 
 	@BeforeEach
 	public void setUp() {
-		macroReplacer = new MacroReplacer<>();
+		macroReplacer = new MacroReplacer();
 	}
 
 	@AfterEach
@@ -64,7 +64,7 @@ class MacroReplacerTest {
 	void testReplaceMacros1_valid_parameters() {
 		// Arrange
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MessageRecord<MessageId> messageRecord = new MessageRecord<>(
+		MessageRecord messageRecord = new MessageRecord(
 				MessageId.ENABLED_MESSAGE.name(),
 				true,
 				false,
@@ -83,7 +83,7 @@ class MacroReplacerTest {
 		);
 
 		// Act
-		Optional<MessageRecord<MessageId>> result = macroReplacer.replaceMacros(messageRecord, contextMap);
+		Optional<MessageRecord> result = macroReplacer.replaceMacros(messageRecord, contextMap);
 
 		// Assert
 		assertNotNull(result);
@@ -102,7 +102,7 @@ class MacroReplacerTest {
 	@Test
 	void testReplaceMacros1_parameter_null_contextMap() {
 		// Arrange
-		MessageRecord<MessageId> messageRecord = new MessageRecord<>(
+		MessageRecord messageRecord = new MessageRecord(
 				MessageId.ENABLED_MESSAGE.name(),
 				true,
 				false,
@@ -132,7 +132,7 @@ class MacroReplacerTest {
 	@Test
 	void testReplaceMacros2() {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroReplacer<MessageId> macroReplacer = new MacroReplacer<>();
+		MacroReplacer macroReplacer = new MacroReplacer();
 		String key = "ITEM_NAME";
 		contextMap.put(key, "TEST_STRING");
 
@@ -221,7 +221,7 @@ class MacroReplacerTest {
 	@Test
 	void testPerformReplacements() {
 		// Arrange
-		MacroReplacer<MessageId> localMacroReplacer = new MacroReplacer<>();
+		MacroReplacer localMacroReplacer = new MacroReplacer();
 
 		ResultMap resultMap = new ResultMap();
 		resultMap.put("KEY", "value");

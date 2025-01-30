@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 public class MessageSender implements Sender {
 
 	@Override
-	public <MessageId extends Enum<MessageId>> void send(CommandSender recipient, MessageRecord<MessageId> messageRecord) {
+	public void send(CommandSender recipient, MessageRecord messageRecord) {
 		recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageRecord.finalMessageString()));
 	}
 

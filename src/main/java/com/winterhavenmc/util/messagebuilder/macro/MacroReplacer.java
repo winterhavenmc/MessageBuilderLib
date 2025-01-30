@@ -37,7 +37,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
-public class MacroReplacer<MessageId extends Enum<MessageId>> implements Replacer<MessageId> {
+public class MacroReplacer implements Replacer {
 
 	private final static String DELIMITER_OPEN = "{";
 	private final static String DELIMITER_CLOSE = "}";
@@ -65,7 +65,7 @@ public class MacroReplacer<MessageId extends Enum<MessageId>> implements Replace
 	 * @return a new {@code MessageRecord} with all macro replacements performed and placed into the final string fields
 	 */
 	@Override
-	public Optional<MessageRecord<MessageId>> replaceMacros(MessageRecord<MessageId> messageRecord, ContextMap contextMap)
+	public Optional<MessageRecord> replaceMacros(MessageRecord messageRecord, ContextMap contextMap)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
@@ -99,8 +99,7 @@ public class MacroReplacer<MessageId extends Enum<MessageId>> implements Replace
 	 * @param messageString the message with placeholders to be replaced by macro values
 	 * @return the string with all macro replacements performed
 	 */
-	public String replaceMacros(final ContextMap contextMap,
-	                                        final String messageString)
+	public String replaceMacros(final ContextMap contextMap, final String messageString)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_STRING); }

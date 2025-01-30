@@ -29,8 +29,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 public class NullProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public <MessageId extends Enum<MessageId>>
-	ResultMap resolveContext(final String key, final ContextMap contextMap) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
 		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }

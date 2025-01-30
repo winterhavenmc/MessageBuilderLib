@@ -45,7 +45,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  * @param titleFadeOut the title fade out setting for the message
  * @param subtitle the subtitle for the message
  */
-public record MessageRecord<MessageId extends Enum<MessageId>> (
+public record MessageRecord (
 		String messageId,
 		boolean enabled,
 		boolean translatable,
@@ -103,12 +103,8 @@ public record MessageRecord<MessageId extends Enum<MessageId>> (
 	 * @param messageId the {@code MessageId} for the message to be retrieved from the language file
 	 * @param messageSection the message section containing the messages
 	 * @return a MessageRecord if an entry could be found for the {@code MessageId}, otherwise an empty Optional.
-	 * @param <MessageId> an enum constant that serves as a key to a message entry in the language file
 	 */
-	public static // scope
-	<MessageId extends Enum<MessageId>> // parameter type
-	Optional<MessageRecord<MessageId>> // return type
-	getRecord(final String messageId, final ConfigurationSection messageSection)
+	public static Optional<MessageRecord> getRecord(final String messageId, final ConfigurationSection messageSection)
 	{
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 		if (messageSection == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_SECTION); }
@@ -122,7 +118,7 @@ public record MessageRecord<MessageId extends Enum<MessageId>> (
 		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId);
 		if (messageEntry == null) { return Optional.empty(); }
 
-		return Optional.of(new MessageRecord<>(messageId,
+		return Optional.of(new MessageRecord(messageId,
 				messageEntry.getBoolean(Field.ENABLED.toKey()),
 				messageEntry.getBoolean(Field.TRANSLATABLE.toKey()),
 				messageEntry.getString(Field.TRANSLATABLE_KEY.toKey()),
@@ -149,11 +145,11 @@ public record MessageRecord<MessageId extends Enum<MessageId>> (
 	 * @param newFinalSubTitleString final subtitle string
 	 * @return a new {@code MessageRecord} with the final message string fields populated
 	 */
-	public Optional<MessageRecord<MessageId>> withFinalStrings(final String newFinalMessageString,
-	                                                           final String newFinalTitleString,
-	                                                           final String newFinalSubTitleString)
+	public Optional<MessageRecord> withFinalStrings(final String newFinalMessageString,
+	                                                final String newFinalTitleString,
+	                                                final String newFinalSubTitleString)
 	{
-		return Optional.of(new MessageRecord<>(
+		return Optional.of(new MessageRecord(
 				this.messageId,
 				this.enabled,
 				this.translatable,

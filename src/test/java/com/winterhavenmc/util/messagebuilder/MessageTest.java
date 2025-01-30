@@ -18,8 +18,6 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,8 +30,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -53,7 +49,7 @@ class MessageTest {
 	@Mock Player playerMock;
 	@Mock World worldMock;
 	@Mock LanguageQueryHandler languageQueryHandlerMock;
-	@Mock MacroReplacer<MessageId> macroReplacerMock;
+	@Mock MacroReplacer macroReplacerMock;
 
 
 	FileConfiguration pluginConfiguration;

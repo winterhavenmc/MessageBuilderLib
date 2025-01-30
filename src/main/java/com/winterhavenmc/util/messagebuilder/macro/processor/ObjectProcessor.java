@@ -23,8 +23,7 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 public class ObjectProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public <MessageId extends Enum<MessageId>>
-	ResultMap resolveContext(final String key, final ContextMap contextMap)
+	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
 		Object value = contextMap.get(key);
 		ResultMap resultMap = new ResultMap();
