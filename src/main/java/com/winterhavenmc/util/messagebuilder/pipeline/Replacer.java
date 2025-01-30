@@ -15,12 +15,16 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
-
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import org.bukkit.command.CommandSender;
 
-public interface Sender {
-	void send(final CommandSender recipient, final MessageRecord messageRecord);
+import java.util.Optional;
+
+@FunctionalInterface
+public interface Replacer<MessageId extends Enum<MessageId>> {
+
+	Optional<MessageRecord<MessageId>> replaceMacros(MessageRecord<MessageId> messageRecord, ContextMap<MessageId> contextMap);
+
 }
