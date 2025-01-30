@@ -25,6 +25,6 @@ import java.util.Optional;
 @FunctionalInterface
 public interface Retriever {
 
-	Optional<MessageRecord>	getMessageRecord(String messageId, LanguageQueryHandler languageQueryHandler);
+	Optional<MessageRecord> getRecord(String messageId, LanguageQueryHandler languageQueryHandler);
 
 }
