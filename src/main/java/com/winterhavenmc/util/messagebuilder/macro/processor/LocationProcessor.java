@@ -19,12 +19,13 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.messagebuilder.util.WorldNameUtility;
 
 import org.bukkit.Location;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
 
 
 /**
@@ -68,7 +69,6 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  *
  * @see Location
  * @see ContextMap
- * @see WorldNameUtility
  */
 public class LocationProcessor extends MacroProcessorTemplate {
 
@@ -94,10 +94,12 @@ public class LocationProcessor extends MacroProcessorTemplate {
 	 * @throws IllegalArgumentException if any parameter is null or invalid
 	 */
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
-		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+	public <MessageId extends Enum<MessageId>>
+	ResultMap resolveContext(final String key, final ContextMap<MessageId> contextMap)
+	{
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 
 		// create empty result map
 		ResultMap resultMap = new ResultMap();

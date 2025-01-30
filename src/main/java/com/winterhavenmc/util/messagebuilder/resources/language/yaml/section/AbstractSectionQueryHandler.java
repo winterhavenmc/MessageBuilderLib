@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import java.util.List;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONFIGURATION_SUPPLIER;
 
 
 public abstract class AbstractSectionQueryHandler implements SectionQueryHandler {
@@ -37,7 +38,7 @@ public abstract class AbstractSectionQueryHandler implements SectionQueryHandler
 	                                      final Section section,
 	                                      final Class<?> primaryType,
 	                                      final List<Class<?>> handledTypes) {
-		if (configurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, "configurationSupplier"); }
+		if (configurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER); }
 
 		this.configurationSupplier = configurationSupplier;
 		this.section = section;

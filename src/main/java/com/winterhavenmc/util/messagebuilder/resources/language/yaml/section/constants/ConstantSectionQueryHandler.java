@@ -28,6 +28,7 @@ import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
 
 
 /**
@@ -64,39 +65,39 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	/**
 	 * Query the constants section of the language file for a String with keyPath
 	 *
-	 * @param keyPath the keyPath of the String to be retrieved
+	 * @param key the keyPath of the String to be retrieved
 	 * @return an {@code Optional} String containing the String retrieved with keyPath, or an empty Optional if no
 	 * value was found for the keyPath
 	 */
-	public Optional<String> getString(final String keyPath) {
-		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
-		return Optional.ofNullable(configurationSupplier.getSection(section).getString(keyPath));
+	public Optional<String> getString(final String key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		return Optional.ofNullable(configurationSupplier.getSection(section).getString(key));
 	}
 
 
 	/**
 	 * Query the constants section of the language file for a List of String with the keyPath
 	 *
-	 * @param keyPath the keyPath of the List to be retrieved
+	 * @param key the keyPath of the List to be retrieved
 	 * @return a {@code List} of String containing the values retrieved using keyPath, or an empty List if no
 	 * value was found for the keyPath
 	 */
-	public List<String> getStringList(final String keyPath) {
-		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
-		return configurationSupplier.getSection(section).getStringList(keyPath);
+	public List<String> getStringList(final String key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		return configurationSupplier.getSection(section).getStringList(key);
 	}
 
 
 	/**
 	 * Query the constants section of the language file for an {@code int} with the keyPath
 	 *
-	 * @param keyPath the keyPath of the {@code int} to be retrieved
+	 * @param key the keyPath of the {@code int} to be retrieved
 	 * @return {@code int} containing the values retrieved using keyPath, or zero (0) if no
 	 * value was found for the keyPath
 	 */
-	public int getInt(final String keyPath) {
-		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
-		return configurationSupplier.getSection(section).getInt(keyPath);
+	public int getInt(final String key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		return configurationSupplier.getSection(section).getInt(key);
 	}
 
 }

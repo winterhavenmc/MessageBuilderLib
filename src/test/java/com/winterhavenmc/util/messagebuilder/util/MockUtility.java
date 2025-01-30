@@ -31,6 +31,8 @@ import java.nio.file.*;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.RESOURCE_NAME;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.TARGET_DIR_PATH;
 
 
 public final class MockUtility {
@@ -108,9 +110,9 @@ public final class MockUtility {
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
 	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
-		if (resourceName == null) { throw new LocalizedException(PARAMETER_NULL, "resourceName"); }
-		if (resourceName.isEmpty()) { throw new LocalizedException(PARAMETER_EMPTY, "resourceName"); }
-		if (targetDirPath == null) { throw new LocalizedException(PARAMETER_NULL, "targetDirPath"); }
+		if (resourceName == null) { throw new LocalizedException(PARAMETER_NULL, RESOURCE_NAME); }
+		if (resourceName.isEmpty()) { throw new LocalizedException(PARAMETER_EMPTY, RESOURCE_NAME); }
+		if (targetDirPath == null) { throw new LocalizedException(PARAMETER_NULL, TARGET_DIR_PATH); }
 
 		// Ensure the target directory exists
 		Files.createDirectories(targetDirPath);

@@ -105,7 +105,7 @@ class ItemSectionQueryHandlerTest {
 	void testGetRecord_parameter_null() {
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> queryHandler.getRecord(null));
-		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test

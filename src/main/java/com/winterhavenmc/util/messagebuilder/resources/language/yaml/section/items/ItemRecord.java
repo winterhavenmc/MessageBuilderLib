@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.ITEM_SECTION;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
 
 
 /**
@@ -79,8 +81,8 @@ public record ItemRecord(
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
 	public static Optional<ItemRecord> getRecord(final String keyPath, final ConfigurationSection itemSection) {
-		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
-		if (itemSection == null) { throw new LocalizedException(PARAMETER_NULL, "itemSection"); }
+		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		if (itemSection == null) { throw new LocalizedException(PARAMETER_NULL, ITEM_SECTION); }
 
 		// get configuration section for item key
 		ConfigurationSection itemEntry = itemSection.getConfigurationSection(keyPath);

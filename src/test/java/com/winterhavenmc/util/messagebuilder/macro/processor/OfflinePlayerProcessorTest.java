@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.OfflinePlayer;
@@ -53,7 +54,7 @@ class OfflinePlayerProcessorTest {
 		// Arrange
 		String key = "KEY";
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 
 		contextMap.put(key, offlinePlayerMock);
 
@@ -70,28 +71,28 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_null_key() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
 
 		// Assert
-		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void resolveContext_with_empty_key() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
 
 		// Assert
-		assertEquals("The parameter 'keyPath' cannot be empty.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
 	}
 
 	@Test
@@ -114,7 +115,7 @@ class OfflinePlayerProcessorTest {
 		String keyPath = "SOME_NAME";
 		Duration duration  = Duration.ofMillis(2000);
 
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 
 		contextMap.put(keyPath, duration);
 

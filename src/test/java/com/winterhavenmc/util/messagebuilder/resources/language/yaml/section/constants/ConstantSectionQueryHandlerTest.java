@@ -105,7 +105,7 @@ class ConstantSectionQueryHandlerTest {
 	void getString_keyPath_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> queryHandler.getString(null));
-		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -122,7 +122,7 @@ class ConstantSectionQueryHandlerTest {
 	void getStringList_keyPath_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> queryHandler.getStringList(null));
-		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -139,7 +139,7 @@ class ConstantSectionQueryHandlerTest {
 	void getInt_keyPath_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> queryHandler.getInt(null));
-		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 }

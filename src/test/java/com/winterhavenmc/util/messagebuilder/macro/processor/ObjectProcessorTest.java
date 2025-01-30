@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
@@ -55,7 +56,7 @@ class ObjectProcessorTest {
 		// Arrange
 		String key = "SOME_INTEGER";
 		Integer value = 42;
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		contextMap.put(key, value);
 
 		// Act
