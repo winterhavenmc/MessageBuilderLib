@@ -108,10 +108,8 @@ class DurationProcessorTest {
 	@Test
 	void resolveContext_console() {
 		// Arrange
-		when(playerMock.getLocale()).thenReturn("en-US");
-
 		String keyPath = "DURATION";
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap<MessageId> contextMap = new ContextMap<>(consoleMock, MessageId.ENABLED_MESSAGE);
 		Duration durationObject = Duration.ofMillis(12300);
 		contextMap.put(keyPath,durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
