@@ -142,7 +142,7 @@ public record MessageRecord<MessageId extends Enum<MessageId>> (
 
 
 	/**
-	 * Retrieve a duplicate record with the final message string fields populated
+	 * Create a duplicate record with the final message string fields populated
 	 *
 	 * @param newFinalMessageString final message string
 	 * @param newFinalTitleString final title string
