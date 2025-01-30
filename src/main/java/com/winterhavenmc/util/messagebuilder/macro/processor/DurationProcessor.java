@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.time.TimeString;
+import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import org.bukkit.entity.Player;
@@ -54,7 +54,7 @@ public class DurationProcessor extends MacroProcessorTemplate {
 				locale = Locale.forLanguageTag(player.getLocale());
 			}
 
-			resultMap.put(key, TimeString.getTimeString(locale, duration.toMillis()));
+			resultMap.put(key, new PrettyTimeFormatter().getFormatted(locale, duration));
 		}
 		return resultMap;
 	}
