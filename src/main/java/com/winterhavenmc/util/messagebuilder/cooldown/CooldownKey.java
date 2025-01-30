@@ -41,7 +41,7 @@ class CooldownKey {
 	final static UUID DEFAULT_UUID = new UUID(0, 0);
 
 	private final UUID uuid;
-	private final String messageIdString;
+	private final String messageId;
 
 
 	/**
@@ -49,13 +49,12 @@ class CooldownKey {
 	 *
 	 * @param recipient the message recipient
 	 * @param messageId the unique message id
-	 * @param <MessageId> the type for message id
 	 */
-	<MessageId extends Enum<MessageId>> CooldownKey(final CommandSender recipient, MessageId messageId) {
+	CooldownKey(final CommandSender recipient, String messageId) {
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
-		this.messageIdString = messageId.name();
+		this.messageId = messageId;
 
 		if (recipient instanceof Entity entity) {
 			this.uuid = entity.getUniqueId();
@@ -67,7 +66,7 @@ class CooldownKey {
 
 	@Override
 	public String toString() {
-		return messageIdString + "|" + this.uuid;
+		return messageId + "|" + this.uuid;
 	}
 
 	@Override
@@ -75,13 +74,13 @@ class CooldownKey {
 		if (!(object instanceof CooldownKey that)) {
 			return false;
 		}
-		return uuid.equals(that.uuid) && messageIdString.equals(that.messageIdString);
+		return uuid.equals(that.uuid) && messageId.equals(that.messageId);
 	}
 
 	@Override
 	public int hashCode() {
 		int result = uuid.hashCode();
-		result = 31 * result + messageIdString.hashCode();
+		result = 31 * result + messageId.hashCode();
 		return result;
 	}
 

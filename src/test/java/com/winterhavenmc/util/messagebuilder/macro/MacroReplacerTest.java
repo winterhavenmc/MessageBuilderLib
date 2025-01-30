@@ -63,9 +63,9 @@ class MacroReplacerTest {
 	@Test
 	void testReplaceMacros1_valid_parameters() {
 		// Arrange
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MessageRecord<MessageId> messageRecord = new MessageRecord<>(
-				MessageId.ENABLED_MESSAGE,
+				MessageId.ENABLED_MESSAGE.name(),
 				true,
 				false,
 				"key",
@@ -91,7 +91,7 @@ class MacroReplacerTest {
 
 	@Test
 	void testReplaceMacros1_parameter_null_messageRecord() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroReplacer.replaceMacros(null, contextMap));
@@ -103,7 +103,7 @@ class MacroReplacerTest {
 	void testReplaceMacros1_parameter_null_contextMap() {
 		// Arrange
 		MessageRecord<MessageId> messageRecord = new MessageRecord<>(
-				MessageId.ENABLED_MESSAGE,
+				MessageId.ENABLED_MESSAGE.name(),
 				true,
 				false,
 				"key",
@@ -131,7 +131,7 @@ class MacroReplacerTest {
 
 	@Test
 	void testReplaceMacros2() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroReplacer<MessageId> macroReplacer = new MacroReplacer<>();
 		String key = "ITEM_NAME";
 		contextMap.put(key, "TEST_STRING");
@@ -154,11 +154,11 @@ class MacroReplacerTest {
 	@Test
 	void testReplaceMacros2_parameter_null_messageString() {
 		// Arrange
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroReplacer.replaceMacros(contextMap, (String) null));
+				() -> macroReplacer.replaceMacros(contextMap, null));
 
 		// Assert
 		assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
@@ -168,7 +168,7 @@ class MacroReplacerTest {
 	@Test
 	void testAddRecipientContext() {
 		// Arrange
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		// Act
 		macroReplacer.addRecipientContext(contextMap);
@@ -194,7 +194,7 @@ class MacroReplacerTest {
 	void testConvertValuesToStrings() {
 		// Arrange
 		ItemStack itemStack = new ItemStack(Material.STONE);
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		contextMap.put("NUMBER", 42);
 		contextMap.put("ITEM_STACK", itemStack);
 

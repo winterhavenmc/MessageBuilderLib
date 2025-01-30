@@ -46,7 +46,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  * @param subtitle the subtitle for the message
  */
 public record MessageRecord<MessageId extends Enum<MessageId>> (
-		MessageId messageId,
+		String messageId,
 		boolean enabled,
 		boolean translatable,
 		String translatableKey,
@@ -108,7 +108,7 @@ public record MessageRecord<MessageId extends Enum<MessageId>> (
 	public static // scope
 	<MessageId extends Enum<MessageId>> // parameter type
 	Optional<MessageRecord<MessageId>> // return type
-	getRecord(final MessageId messageId, final ConfigurationSection messageSection)
+	getRecord(final String messageId, final ConfigurationSection messageSection)
 	{
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 		if (messageSection == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_SECTION); }
@@ -119,7 +119,7 @@ public record MessageRecord<MessageId extends Enum<MessageId>> (
 		}
 
 		// get entry for messageId
-		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId.name());
+		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId);
 		if (messageEntry == null) { return Optional.empty(); }
 
 		return Optional.of(new MessageRecord<>(messageId,

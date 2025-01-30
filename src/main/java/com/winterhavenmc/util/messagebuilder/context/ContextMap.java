@@ -30,10 +30,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * to be processed for replacement strings. The map key is an enum member, and the corresponding value
  * is the object to be processed. It is backed by a HashMap.
  */
-public class ContextMap<MessageId> {
+public class ContextMap {
 
 	private final CommandSender recipient;
-	private final MessageId messageId;
+	private final String messageId;
 
 	// Backing store map (use linked hash map to maintain insertion order)
 	private final Map<String, Object> internalMap = new ConcurrentHashMap<>();
@@ -43,8 +43,9 @@ public class ContextMap<MessageId> {
 	 * Class constructor
 	 *
 	 * @param recipient the message recipient
+	 * @param messageId the message unique identifier as a string
 	 */
-	public ContextMap(final CommandSender recipient, final MessageId messageId) {
+	public ContextMap(final CommandSender recipient, final String messageId) {
 		this.recipient = recipient;
 		this.messageId = messageId;
 	}
@@ -66,7 +67,7 @@ public class ContextMap<MessageId> {
 	 * @return {@code MessageId} the MessageId associated with this context map
 	 */
 
-	public MessageId getMessageId() {
+	public String getMessageId() {
 		return messageId;
 	}
 

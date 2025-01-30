@@ -55,7 +55,7 @@ class DurationProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new DurationProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
@@ -66,7 +66,7 @@ class DurationProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_empty_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new DurationProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
@@ -91,7 +91,7 @@ class DurationProcessorTest {
 		when(playerMock.getLocale()).thenReturn("en-US");
 
 		String keyPath = "DURATION";
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		Duration durationObject = Duration.ofMillis(12300);
 		contextMap.put(keyPath,durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
@@ -109,7 +109,7 @@ class DurationProcessorTest {
 	void resolveContext_console() {
 		// Arrange
 		String keyPath = "DURATION";
-		ContextMap<MessageId> contextMap = new ContextMap<>(consoleMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(consoleMock, MessageId.ENABLED_MESSAGE.name());
 		Duration durationObject = Duration.ofMillis(12300);
 		contextMap.put(keyPath,durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
@@ -162,7 +162,7 @@ class DurationProcessorTest {
 	void resolveContext_value_not_duration() {
 		// Arrange
 		String keyPath = "DURATION";
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		Object object = "a string";
 		contextMap.put(keyPath, object);
 		MacroProcessor macroProcessor = new DurationProcessor();

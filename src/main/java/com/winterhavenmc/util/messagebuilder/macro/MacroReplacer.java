@@ -65,7 +65,7 @@ public class MacroReplacer<MessageId extends Enum<MessageId>> implements Replace
 	 * @return a new {@code MessageRecord} with all macro replacements performed and placed into the final string fields
 	 */
 	@Override
-	public Optional<MessageRecord<MessageId>> replaceMacros(MessageRecord<MessageId> messageRecord, ContextMap<MessageId> contextMap)
+	public Optional<MessageRecord<MessageId>> replaceMacros(MessageRecord<MessageId> messageRecord, ContextMap contextMap)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
@@ -99,7 +99,7 @@ public class MacroReplacer<MessageId extends Enum<MessageId>> implements Replace
 	 * @param messageString the message with placeholders to be replaced by macro values
 	 * @return the string with all macro replacements performed
 	 */
-	public String replaceMacros(final ContextMap<MessageId> contextMap,
+	public String replaceMacros(final ContextMap contextMap,
 	                                        final String messageString)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
@@ -128,7 +128,7 @@ public class MacroReplacer<MessageId extends Enum<MessageId>> implements Replace
 
 
 
-	void addRecipientContext(ContextMap<MessageId> contextMap)
+	void addRecipientContext(ContextMap contextMap)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 
@@ -147,7 +147,7 @@ public class MacroReplacer<MessageId extends Enum<MessageId>> implements Replace
 	}
 
 
-	ResultMap convertValuesToStrings(ContextMap<MessageId> contextMap)
+	ResultMap convertValuesToStrings(ContextMap contextMap)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 

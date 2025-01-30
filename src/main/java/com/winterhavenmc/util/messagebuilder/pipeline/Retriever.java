@@ -27,6 +27,6 @@ public interface Retriever {
 
 	<MessageId extends Enum<MessageId>>
 	Optional<MessageRecord<MessageId>>
-	getMessageRecord(MessageId messageId, LanguageQueryHandler languageQueryHandler);
+	getMessageRecord(String messageId, LanguageQueryHandler languageQueryHandler);
 
 }

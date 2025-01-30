@@ -64,9 +64,7 @@ public final class CooldownMap {
 	 * @return true if player message is in cooldown map and has not reached its expiration time, false if it is not
 	 * @throws LocalizedException if any parameter is null
 	 */
-	public
-	<MessageId extends Enum<MessageId>>
-	boolean isCooling(final CommandSender recipient, final MessageId messageId) {
+	public boolean isCooling(final CommandSender recipient, final String messageId) {
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 

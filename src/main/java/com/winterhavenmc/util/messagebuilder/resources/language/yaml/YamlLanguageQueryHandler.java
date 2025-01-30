@@ -72,7 +72,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	}
 
 	@Override
-	public <MessageId extends Enum<MessageId>> Optional<MessageRecord<MessageId>> getMessageRecord(final MessageId messageId) {
+	public <MessageId extends Enum<MessageId>> Optional<MessageRecord<MessageId>> getMessageRecord(final String messageId) {
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
 		MessageSectionQueryHandler messageSectionQueryHandler = Section.MESSAGES.getQueryHandler(yamlConfigurationSupplier);

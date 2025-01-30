@@ -43,11 +43,11 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	// context map
-	private final ContextMap<MessageId> contextMap;
+	private final ContextMap contextMap;
 
 	// required parameters
 	private final CommandSender recipient;
-	private final MessageId messageId;
+	private final String messageId;
 	private final LanguageQueryHandler languageQueryHandler;
 	private final MacroReplacer<MessageId> macroReplacer;
 	private final CooldownMap cooldownMap;
@@ -65,7 +65,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			final LanguageQueryHandler languageQueryHandler,
 			final MacroReplacer<MessageId> macroReplacer,
 			final CommandSender recipient,
-			final MessageId messageId,
+			final String messageId,
 			final CooldownMap cooldownMap
 	)
 	{
@@ -74,7 +74,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		this.recipient = recipient;
 		this.messageId = messageId;
 		this.cooldownMap = cooldownMap;
-		this.contextMap = new ContextMap<>(recipient, messageId);
+		this.contextMap = new ContextMap(recipient, messageId);
 	}
 
 
@@ -163,10 +163,8 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 			return false;
 		}
 
-		MessageId messageId = messageRecord.messageId();
-
 		// return true if message is enabled and not in cooldown map, else false
-		return messageRecord.enabled() && !cooldownMap.isCooling(recipient, messageId);
+		return messageRecord.enabled() && !cooldownMap.isCooling(recipient, messageRecord.messageId());
 	}
 
 }

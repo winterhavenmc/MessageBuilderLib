@@ -85,6 +85,6 @@ public interface MacroProcessor {
 	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
 	 * @return a {@link ResultMap} containing resolved macros and their replacements
 	 */
-	<MessageId extends Enum<MessageId>> ResultMap resolveContext(String key, ContextMap<MessageId> contextMap);
+	<MessageId extends Enum<MessageId>> ResultMap resolveContext(String key, ContextMap contextMap);
 
 }

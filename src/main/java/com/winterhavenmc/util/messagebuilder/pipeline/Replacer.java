@@ -25,6 +25,6 @@ import java.util.Optional;
 @FunctionalInterface
 public interface Replacer<MessageId extends Enum<MessageId>> {
 
-	Optional<MessageRecord<MessageId>> replaceMacros(MessageRecord<MessageId> messageRecord, ContextMap<MessageId> contextMap);
+	Optional<MessageRecord<MessageId>> replaceMacros(MessageRecord<MessageId> messageRecord, ContextMap contextMap);
 
 }

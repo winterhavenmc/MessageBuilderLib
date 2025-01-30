@@ -43,11 +43,11 @@ class ContextMapTest {
 
 	@Mock CommandSender commandSenderMock;
 	@Mock World worldMock;
-	ContextMap<MessageId> contextMap;
+	ContextMap contextMap;
 
 	@BeforeEach
 	void setUp() {
-		contextMap = new ContextMap<>(commandSenderMock, MessageId.ENABLED_MESSAGE);
+		contextMap = new ContextMap(commandSenderMock, MessageId.ENABLED_MESSAGE.name());
 	}
 
 	@Test
@@ -243,8 +243,9 @@ class ContextMapTest {
 
 	@Test
 	void getMessageId() {
-		MessageId result = contextMap.getMessageId();
+		String result = contextMap.getMessageId();
 
-		assertEquals(MessageId.ENABLED_MESSAGE, result);
+		assertEquals(MessageId.ENABLED_MESSAGE.name(), result);
 	}
+
 }

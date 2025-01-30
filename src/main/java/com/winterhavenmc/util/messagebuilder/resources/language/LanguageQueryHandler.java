@@ -56,5 +56,5 @@ public interface LanguageQueryHandler {
 	 * @return  an {@link Optional} containing the message record, or an empty {@code Optional} if no record could be found.
 	 * @param <MessageId> An enum constant representing the message identifier in the language file
 	 */
-	<MessageId extends Enum<MessageId>> Optional<MessageRecord<MessageId>> getMessageRecord(MessageId messageId);
+	<MessageId extends Enum<MessageId>> Optional<MessageRecord<MessageId>> getMessageRecord(String messageId);
 }

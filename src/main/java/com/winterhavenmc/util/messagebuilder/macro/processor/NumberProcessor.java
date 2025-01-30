@@ -24,7 +24,7 @@ public class NumberProcessor extends MacroProcessorTemplate {
 
 	@Override
 	public <MessageId extends Enum<MessageId>>
-	ResultMap resolveContext(final String key, final ContextMap<MessageId> contextMap)
+	ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
 		Object value = contextMap.get(key);
 		ResultMap resultMap = new ResultMap();

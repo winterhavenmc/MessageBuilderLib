@@ -30,7 +30,7 @@ public class StringProcessor extends MacroProcessorTemplate {
 
 	@Override
 	public <MessageId extends Enum<MessageId>>
-	ResultMap resolveContext(final String key, final ContextMap<MessageId> contextMap)
+	ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
 		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }

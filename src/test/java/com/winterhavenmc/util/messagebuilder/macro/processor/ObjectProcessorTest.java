@@ -56,7 +56,7 @@ class ObjectProcessorTest {
 		// Arrange
 		String key = "SOME_INTEGER";
 		Integer value = 42;
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		contextMap.put(key, value);
 
 		// Act
