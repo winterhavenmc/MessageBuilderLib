@@ -20,22 +20,30 @@ package com.winterhavenmc.util.messagebuilder.macro;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.processor.*;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.Replacer;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
 
 
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
-public class MacroReplacer {
+public class MacroReplacer<MessageId extends Enum<MessageId>> implements Replacer<MessageId> {
 
 	private final static String DELIMITER_OPEN = "{";
 	private final static String DELIMITER_CLOSE = "}";
+
+	// Matches {MACRO}
+	private final static Pattern MACRO_PATTERN = Pattern.compile("\\" + DELIMITER_OPEN + "[\\p{Lu}0-9_]+" + DELIMITER_CLOSE);
 
 	private final ProcessorRegistry processorRegistry;
 
@@ -43,7 +51,8 @@ public class MacroReplacer {
 	/**
 	 * Class constructor
 	 */
-	public MacroReplacer() {
+	public MacroReplacer()
+	{
 		this.processorRegistry = new ProcessorRegistry(new DependencyContext());
 	}
 
@@ -51,24 +60,61 @@ public class MacroReplacer {
 	/**
 	 * Replace macros in a message to be sent
 	 *
-	 * @param recipient     the message recipient
+	 * @param messageRecord the message record to have macro placeholders replaced in message and title strings
+	 * @param contextMap the context map containing other objects whose values may be retrieved
+	 * @return a new {@code MessageRecord} with all macro replacements performed and placed into the final string fields
+	 */
+	@Override
+	public Optional<MessageRecord<MessageId>> replaceMacros(MessageRecord<MessageId> messageRecord, ContextMap<MessageId> contextMap)
+	{
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
+		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
+
+		// return new message record with final string fields added with macro replacements performed
+		return messageRecord.withFinalStrings(
+				replaceMacros(contextMap, messageRecord.message()),
+				replaceMacros(contextMap, messageRecord.title()),
+				replaceMacros(contextMap, messageRecord.subtitle())
+		);
+	}
+
+
+	/**
+	 * Check if a message string contains any macro placeholders by matching delimiters
+	 * containing a valid placeholder string
+	 *
+	 * @param message the message to check for macro placeholders
+	 * @return {@code true} if the message string contains any macro placeholders
+	 */
+	public boolean containsMacros(String message)
+	{
+		return MACRO_PATTERN.matcher(message).find();
+	}
+
+
+	/**
+	 * Replace macros in a message to be sent
+	 *
 	 * @param contextMap    the context map containing other objects whose values may be retrieved
 	 * @param messageString the message with placeholders to be replaced by macro values
 	 * @return the string with all macro replacements performed
 	 */
-	public String replaceMacros(final CommandSender recipient,
-	                            final ContextMap contextMap,
-	                            final String messageString) {
+	public String replaceMacros(final ContextMap<MessageId> contextMap,
+	                                        final String messageString)
+	{
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
+		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_STRING); }
 
+		// copy message string to local variable
 		String modifiedMessageString = messageString;
 
 		// only process macro tokens if message string contains a pair of macro delimiters
-		if (modifiedMessageString.contains(DELIMITER_OPEN)) {
+		if (containsMacros(modifiedMessageString)) {
 
 			// add recipient fields to context map
-			addRecipientContext(recipient, contextMap);
+			addRecipientContext(contextMap);
 
-			// final result map of String NameSpacedKeys and processed String values
+			// final result map of keys and processed string values
 			ResultMap replacementStringMap = new ResultMap();
 			replacementStringMap.putAll(convertValuesToStrings(contextMap));
 
@@ -80,9 +126,14 @@ public class MacroReplacer {
 	}
 
 
-	void addRecipientContext(CommandSender recipient, ContextMap contextMap) {
-		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, "recipient"); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+
+
+	void addRecipientContext(ContextMap<MessageId> contextMap)
+	{
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
+
+		// get recipient from context map
+		CommandSender recipient = contextMap.getRecipient();
 
 		// put recipient name in context map
 		String key = "RECIPIENT";
@@ -96,8 +147,9 @@ public class MacroReplacer {
 	}
 
 
-	ResultMap convertValuesToStrings(ContextMap contextMap) {
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+	ResultMap convertValuesToStrings(ContextMap<MessageId> contextMap)
+	{
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 
 		ResultMap resultMap = new ResultMap();
 		for (Map.Entry<String, Object> entry : contextMap.entrySet()) {
@@ -109,9 +161,10 @@ public class MacroReplacer {
 	}
 
 
-	String performReplacements(final ResultMap replacementMap, final String messageString) {
-		if (replacementMap == null) { throw new LocalizedException(PARAMETER_NULL, "replacementMap"); }
-		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, "messageString"); }
+	String performReplacements(final ResultMap replacementMap, final String messageString)
+	{
+		if (replacementMap == null) { throw new LocalizedException(PARAMETER_NULL, REPLACEMENT_MAP); }
+		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_STRING); }
 
 		String modifiedMessageString = messageString;
 

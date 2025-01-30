@@ -22,6 +22,8 @@ import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.configuration.Configuration;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.RESOURCE_INSTALLER;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.RESOURCE_LOADER;
 
 
 /**
@@ -76,8 +78,8 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	public static YamlLanguageResourceManager getInstance(final YamlLanguageResourceInstaller resourceInstaller,
 	                                                      final YamlLanguageResourceLoader resourceLoader)
 	{
-		if (resourceInstaller == null) { throw new LocalizedException(PARAMETER_NULL, "resourceInstaller"); }
-		if (resourceLoader == null) { throw new LocalizedException(PARAMETER_NULL, "resourceLoader"); }
+		if (resourceInstaller == null) { throw new LocalizedException(PARAMETER_NULL, RESOURCE_INSTALLER); }
+		if (resourceLoader == null) { throw new LocalizedException(PARAMETER_NULL, RESOURCE_LOADER); }
 
 		if (instance == null) {
 			synchronized (YamlLanguageResourceManager.class) {

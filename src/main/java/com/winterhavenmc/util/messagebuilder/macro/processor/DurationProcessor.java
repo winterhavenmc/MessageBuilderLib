@@ -28,15 +28,19 @@ import java.util.Locale;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
 
 
 public class DurationProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
-		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+	public <MessageId extends Enum<MessageId>>
+	ResultMap resolveContext(final String key, final ContextMap<MessageId> contextMap)
+	{
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 
 		// get value from context map
 		Object value = contextMap.get(key);
@@ -45,14 +49,10 @@ public class DurationProcessor extends MacroProcessorTemplate {
 
 		if (value instanceof Duration duration) {
 
-			Locale locale = null;
+			Locale locale = Locale.getDefault();
 
 			if (contextMap.getRecipient() instanceof Player player) {
 				locale = Locale.forLanguageTag(player.getLocale());
-			}
-
-			if (locale == null) {
-				locale = Locale.getDefault();
 			}
 
 			resultMap.put(key, TimeString.getTimeString(locale, duration.toMillis()));

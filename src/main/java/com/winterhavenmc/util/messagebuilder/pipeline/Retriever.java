@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,21 +15,18 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 
+import java.util.Optional;
 
-public class NumberProcessor extends MacroProcessorTemplate {
+@FunctionalInterface
+public interface Retriever {
 
-	@Override
-	public <MessageId extends Enum<MessageId>>
-	ResultMap resolveContext(final String key, final ContextMap<MessageId> contextMap)
-	{
-		Object value = contextMap.get(key);
-		ResultMap resultMap = new ResultMap();
-		resultMap.put(key, String.valueOf(value));
-		return resultMap;
-	}
+	<MessageId extends Enum<MessageId>>
+	Optional<MessageRecord<MessageId>>
+	getMessageRecord(MessageId messageId, LanguageQueryHandler languageQueryHandler);
 
 }

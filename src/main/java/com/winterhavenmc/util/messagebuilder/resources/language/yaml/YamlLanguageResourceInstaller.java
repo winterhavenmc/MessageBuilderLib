@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_AUTO_INSTALL;
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_SUBDIRECTORY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
 
 
 /**
@@ -137,7 +138,7 @@ public final class YamlLanguageResourceInstaller {
 	 * @param languageTag the language tag for the resource to be installed
 	 */
 	InstallerStatus installIfMissing(final LanguageTag languageTag) {
-		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, "languageTag"); }
+		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG); }
 
 		if (!isInstalledForTag(languageTag)) {
 			return installByName(languageTag.getResourceName());
@@ -153,7 +154,7 @@ public final class YamlLanguageResourceInstaller {
 	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
 	 */
 	InstallerStatus installByName(final String resourceName) {
-		if (resourceName == null) { throw new LocalizedException(PARAMETER_NULL, "resourceName"); }
+		if (resourceName == null) { throw new LocalizedException(PARAMETER_NULL, RESOURCE_NAME); }
 		if (plugin.getResource(resourceName) == null) {
 			plugin.getLogger().warning("The resource '" + resourceName
 					+ "' listed in the 'auto_install.txt' file could not be found by the installer.");
@@ -194,7 +195,7 @@ public final class YamlLanguageResourceInstaller {
 	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
 	 */
 	InstallerStatus install(final LanguageTag languageTag) {
-		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, "languageTag"); }
+		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG); }
 		return installByName(languageTag.getResourceName());
 	}
 
@@ -217,7 +218,7 @@ public final class YamlLanguageResourceInstaller {
 	 * @return {@code true} if the resource exists, {@code false} if it does not
 	 */
 	boolean resourceExists(final LanguageTag languageTag) {
-		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, "languageTag"); }
+		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG); }
 
 		return plugin.getResource(languageTag.getResourceName()) != null;
 	}
@@ -240,7 +241,7 @@ public final class YamlLanguageResourceInstaller {
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
 	boolean isInstalledForTag(final LanguageTag languageTag) {
-		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, "languageTag"); }
+		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG); }
 
 		return new File(plugin.getDataFolder(), languageTag.getFileName()).exists();
 	}

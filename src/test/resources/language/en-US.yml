@@ -148,6 +148,19 @@ MESSAGES:
     MESSAGE_TEXT:
       "This is an enabled rich text message."
 
+  ALT_SCHEMA_MESSAGE:
+    MESSAGE:
+      ENABLED: true
+      REPEAT_DELAY: 10
+      TEXT: "This is an enabled chat message."
+    TITLE:
+      ENABLED: true
+      TEXT: "This is an enabled title message."
+      SUBTITLE_TEXT: "this is a subtitle."
+      FADE_IN: 20
+      STAY: 40
+      FADE_OUT: 30
+
   ENABLED_MESSAGE:
     ENABLED: true
     MESSAGE_TEXT: "This is an enabled message"

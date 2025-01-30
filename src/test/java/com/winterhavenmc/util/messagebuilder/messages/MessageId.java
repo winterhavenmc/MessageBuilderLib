@@ -1,11 +1,13 @@
 package com.winterhavenmc.util.messagebuilder.messages;
 
 
+import com.winterhavenmc.util.messagebuilder.util.MessageIdInterface;
+
 /**
  * An enum whose values represent the text messages displayed to users, corresponding to user
  * configured text in the language yaml files.
  */
-public enum MessageId {
+public enum MessageId implements MessageIdInterface {
 
 	ENABLED_MESSAGE,
 	DISABLED_MESSAGE,

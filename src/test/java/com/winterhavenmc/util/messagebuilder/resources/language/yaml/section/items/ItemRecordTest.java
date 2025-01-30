@@ -80,7 +80,7 @@ public class ItemRecordTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  ItemRecord.getRecord(null, itemSection));
 
-		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test

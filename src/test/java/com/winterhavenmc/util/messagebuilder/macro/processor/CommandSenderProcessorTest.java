@@ -20,6 +20,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -56,7 +57,7 @@ class CommandSenderProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_key() {
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		MacroProcessor macroProcessor = new CommandSenderProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
@@ -67,7 +68,7 @@ class CommandSenderProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_empty_key() {
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		MacroProcessor macroProcessor = new CommandSenderProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
@@ -91,7 +92,7 @@ class CommandSenderProcessorTest {
 		// Arrange
 		when(playerMock.getName()).thenReturn("player one");
 		String keyPath = "SOME_KEY";
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		contextMap.put(keyPath, playerMock);
 
 		// Act
@@ -106,7 +107,7 @@ class CommandSenderProcessorTest {
 	void resolveContext_not_command_sender() {
 		// Arrange
 		String keyPath = "SOME_KEY";
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		contextMap.put(keyPath, 42);
 
 		// Act

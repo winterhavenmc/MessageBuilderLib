@@ -59,7 +59,7 @@ class ProcessorRegistryTest {
 			LocalizedException exception = assertThrows(LocalizedException.class,
 					() -> new ProcessorRegistry(null));
 
-			assertEquals("The parameter 'context' cannot be null.", exception.getMessage());
+			assertEquals("The parameter 'dependencyContext' cannot be null.", exception.getMessage());
 		}
 	}
 

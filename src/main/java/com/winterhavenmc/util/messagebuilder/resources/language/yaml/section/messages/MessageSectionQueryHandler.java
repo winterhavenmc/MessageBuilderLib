@@ -30,6 +30,7 @@ import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_ID;
 
 
 /**
@@ -71,8 +72,8 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	 * @return the message record for the MessageId
 	 * @param <MessageId> an enum member that is used as a key to retrieve messages from the language file
 	 */
-	public <MessageId extends Enum<MessageId>> Optional<MessageRecord> getRecord(final MessageId messageId) {
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, "messageId"); }
+	public <MessageId extends Enum<MessageId>> Optional<MessageRecord<MessageId>> getRecord(final MessageId messageId) {
+		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
 		return MessageRecord.getRecord(messageId, messageSection);
 	}

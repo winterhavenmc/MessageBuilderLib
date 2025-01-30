@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.Location;
@@ -49,13 +50,13 @@ class LocationProcessorTest {
 
 	// real location processor
 	LocationProcessor locationProcessor;
-	ContextMap contextMap;
+	ContextMap<MessageId> contextMap;
 
 
 	@BeforeEach
 	public void setUp() {
 		// real context map
-		contextMap = new ContextMap(playerMock);
+		contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 
 		// Initialize the processor
 		locationProcessor = new LocationProcessor();
@@ -64,7 +65,7 @@ class LocationProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_key() {
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		MacroProcessor macroProcessor = new LocationProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
@@ -75,7 +76,7 @@ class LocationProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_empty_key() {
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		MacroProcessor macroProcessor = new LocationProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
@@ -195,7 +196,7 @@ class LocationProcessorTest {
 		// Arrange
 		String keyPath = "SOME_NAME";
 		Duration duration  = Duration.ofMillis(2000);
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		contextMap.put(keyPath, duration);
 		MacroProcessor macroProcessor = new LocationProcessor();
 

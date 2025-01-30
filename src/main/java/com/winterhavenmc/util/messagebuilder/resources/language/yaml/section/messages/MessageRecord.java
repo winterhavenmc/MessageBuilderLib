@@ -21,18 +21,21 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Sec
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.List;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_ID;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_SECTION;
 
 
 /**
  * A data object record for message information contained in the language file. This class also contains
  * an enum of fields with their corresponding path key, and a static method for retrieving a record.
  *
- * @param messageKey the key for the message
+ * @param messageId the key for the message
  * @param enabled the enabled setting for the message
  * @param message the raw message string, with placeholders
  * @param repeatDelay the repeat delay setting for the message
@@ -42,27 +45,31 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
  * @param titleFadeOut the title fade out setting for the message
  * @param subtitle the subtitle for the message
  */
-public record MessageRecord(
-		String messageKey,
+public record MessageRecord<MessageId extends Enum<MessageId>> (
+		MessageId messageId,
 		boolean enabled,
 		boolean translatable,
 		String translatableKey,
 		List<String> translatableArgs,
 		String message,
-		long repeatDelay,
+		Duration repeatDelay,
 		String title,
 		int titleFadeIn,
 		int titleStay,
 		int titleFadeOut,
-		String subtitle) {
-
+		String subtitle,
+		String finalMessageString,
+		String finalTitleString,
+		String finalSubTitleString)
+{
 
 	/**
 	 * Enum of MessageRecord fields and their corresponding keyPath. This enum is the source of truth for
 	 * message record field constants and their corresponding keyPaths. Other field metadata may be
 	 * encapsulated in this enum in the future.
 	 */
-	public enum Field {
+	public enum Field
+	{
 		ENABLED("ENABLED"),
 		TRANSLATABLE("TRANSLATABLE"),
 		TRANSLATABLE_KEY("TRANSLATABLE_KEY"),
@@ -76,16 +83,16 @@ public record MessageRecord(
 		SUBTITLE_TEXT("SUBTITLE_TEXT"),
 		;
 
-		private final String keyPath;
+		private final String key;
 
 		// class constructor
-		Field(final String keyPath) {
-			this.keyPath = keyPath;
+		Field(final String key) {
+			this.key = key;
 		}
 
 		// getter for key
 		public String toKey() {
-			return this.keyPath;
+			return this.key;
 		}
 	}
 
@@ -93,17 +100,18 @@ public record MessageRecord(
 	/**
 	 * A static method to retrieve a message record.
 	 *
-	 * @param messageId the {@link MessageId} for the message to be retrieved from the language file
+	 * @param messageId the {@code MessageId} for the message to be retrieved from the language file
 	 * @param messageSection the message section containing the messages
 	 * @return a MessageRecord if an entry could be found for the {@code MessageId}, otherwise an empty Optional.
 	 * @param <MessageId> an enum constant that serves as a key to a message entry in the language file
 	 */
 	public static // scope
 	<MessageId extends Enum<MessageId>> // parameter type
-	Optional<MessageRecord> // return type
-	getRecord(final MessageId messageId, final ConfigurationSection messageSection) {
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, "messageId"); }
-		if (messageSection == null) { throw new LocalizedException(PARAMETER_NULL, "messageSection"); }
+	Optional<MessageRecord<MessageId>> // return type
+	getRecord(final MessageId messageId, final ConfigurationSection messageSection)
+	{
+		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
+		if (messageSection == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_SECTION); }
 
 		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
 		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
@@ -114,18 +122,54 @@ public record MessageRecord(
 		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId.name());
 		if (messageEntry == null) { return Optional.empty(); }
 
-		return Optional.of(new MessageRecord(messageId.toString(),
+		return Optional.of(new MessageRecord<>(messageId,
 				messageEntry.getBoolean(Field.ENABLED.toKey()),
 				messageEntry.getBoolean(Field.TRANSLATABLE.toKey()),
 				messageEntry.getString(Field.TRANSLATABLE_KEY.toKey()),
 				messageEntry.getStringList(Field.TRANSLATABLE_ARGS.toKey()),
 				messageEntry.getString(Field.MESSAGE_TEXT.toKey()),
-				messageEntry.getLong(Field.REPEAT_DELAY.toKey()),
+				Duration.ofSeconds(messageEntry.getLong(Field.REPEAT_DELAY.toKey())),
 				messageEntry.getString(Field.TITLE_TEXT.toKey()),
 				messageEntry.getInt(Field.TITLE_FADE_IN.toKey()),
 				messageEntry.getInt(Field.TITLE_STAY.toKey()),
 				messageEntry.getInt(Field.TITLE_FADE_OUT.toKey()),
-				messageEntry.getString(Field.SUBTITLE_TEXT.toKey())));
+				messageEntry.getString(Field.SUBTITLE_TEXT.toKey()),
+				"",
+				"",
+				"")
+		);
+	}
+
+
+	/**
+	 * Retrieve a duplicate record with the final message string fields populated
+	 *
+	 * @param newFinalMessageString final message string
+	 * @param newFinalTitleString final title string
+	 * @param newFinalSubTitleString final subtitle string
+	 * @return a new {@code MessageRecord} with the final message string fields populated
+	 */
+	public Optional<MessageRecord<MessageId>> withFinalStrings(final String newFinalMessageString,
+	                                                           final String newFinalTitleString,
+	                                                           final String newFinalSubTitleString)
+	{
+		return Optional.of(new MessageRecord<>(
+				this.messageId,
+				this.enabled,
+				this.translatable,
+				this.translatableKey,
+				this.translatableArgs,
+				this.message,
+				this.repeatDelay,
+				this.title,
+				this.titleFadeIn,
+				this.titleStay,
+				this.titleFadeOut,
+				this.subtitle,
+				newFinalMessageString,
+				newFinalTitleString,
+				newFinalSubTitleString)
+		);
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,21 +15,17 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
-
-public class NumberProcessor extends MacroProcessorTemplate {
+public class MessageSender implements Sender {
 
 	@Override
-	public <MessageId extends Enum<MessageId>>
-	ResultMap resolveContext(final String key, final ContextMap<MessageId> contextMap)
-	{
-		Object value = contextMap.get(key);
-		ResultMap resultMap = new ResultMap();
-		resultMap.put(key, String.valueOf(value));
-		return resultMap;
+	public <MessageId extends Enum<MessageId>> void send(CommandSender recipient, MessageRecord<MessageId> messageRecord) {
+		recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageRecord.finalMessageString()));
 	}
 
 }

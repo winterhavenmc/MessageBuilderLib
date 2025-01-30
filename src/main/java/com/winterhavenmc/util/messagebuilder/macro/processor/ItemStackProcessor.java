@@ -24,15 +24,19 @@ import org.bukkit.inventory.ItemStack;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
 
 
 public class ItemStackProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, "key"); }
-		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, "key"); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, "contextMap"); }
+	public <MessageId extends Enum<MessageId>>
+	ResultMap resolveContext(final String key, final ContextMap<MessageId> contextMap)
+	{
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
+		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 
 		// get value from container
 		Object value = contextMap.get(key);

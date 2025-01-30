@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.context;
 
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -42,11 +43,11 @@ class ContextMapTest {
 
 	@Mock CommandSender commandSenderMock;
 	@Mock World worldMock;
-	ContextMap contextMap;
+	ContextMap<MessageId> contextMap;
 
 	@BeforeEach
 	void setUp() {
-		contextMap = new ContextMap(commandSenderMock);
+		contextMap = new ContextMap<>(commandSenderMock, MessageId.ENABLED_MESSAGE);
 	}
 
 	@Test
@@ -240,4 +241,10 @@ class ContextMapTest {
 		assertNotNull(sender);
 	}
 
+	@Test
+	void getMessageId() {
+		MessageId result = contextMap.getMessageId();
+
+		assertEquals(MessageId.ENABLED_MESSAGE, result);
+	}
 }

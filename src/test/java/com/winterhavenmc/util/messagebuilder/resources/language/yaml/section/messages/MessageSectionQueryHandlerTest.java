@@ -78,7 +78,7 @@ class MessageSectionQueryHandlerTest {
 	@Test
 	void testGetRecord_parameter_valid() {
 		// Arrange & Act
-		Optional<MessageRecord> messageRecord = queryHandler.getRecord(MessageId.ENABLED_MESSAGE);
+		Optional<MessageRecord<MessageId>> messageRecord = queryHandler.getRecord(MessageId.ENABLED_MESSAGE);
 
 		// Assert
 		assertTrue(messageRecord.isPresent());
@@ -94,7 +94,7 @@ class MessageSectionQueryHandlerTest {
 
 	@Test
 	void testGetRecord_parameter_invalid() {
-		Optional<MessageRecord> messageRecord = queryHandler.getRecord(MessageId.NONEXISTENT_ENTRY);
+		Optional<MessageRecord<MessageId>> messageRecord = queryHandler.getRecord(MessageId.NONEXISTENT_ENTRY);
 		assertFalse(messageRecord.isPresent());
 	}
 

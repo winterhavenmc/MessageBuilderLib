@@ -21,6 +21,8 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.SECTION;
 
 
 /**
@@ -41,7 +43,7 @@ public class SectionQueryHandlerFactory {
 	 * @param configurationSupplier the provider of the language configuration
 	 */
 	public SectionQueryHandlerFactory(YamlConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, "configurationSupplier"); }
+		if (configurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER); }
 		this.configurationSupplier = configurationSupplier;
 	}
 
@@ -66,7 +68,7 @@ public class SectionQueryHandlerFactory {
 	 * @throws LocalizedException if section parameter is null
 	 */
 	public SectionQueryHandler createSectionHandler(Section section) {
-		if (section == null) { throw new LocalizedException(PARAMETER_NULL, "section"); }
+		if (section == null) { throw new LocalizedException(PARAMETER_NULL, SECTION); }
 		return section.getQueryHandler(configurationSupplier);
 	}
 

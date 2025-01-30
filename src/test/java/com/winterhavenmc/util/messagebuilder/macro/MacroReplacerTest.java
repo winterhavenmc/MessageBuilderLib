@@ -20,6 +20,8 @@ package com.winterhavenmc.util.messagebuilder.macro;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.Material;
@@ -32,6 +34,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -39,12 +45,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class MacroReplacerTest {
 
 	@Mock Player playerMock;
-	MacroReplacer macroReplacer;
+	MacroReplacer<MessageId> macroReplacer;
 
 
 	@BeforeEach
 	public void setUp() {
-		macroReplacer = new MacroReplacer();
+		macroReplacer = new MacroReplacer<>();
 	}
 
 	@AfterEach
@@ -55,81 +61,68 @@ class MacroReplacerTest {
 
 
 	@Test
-	void replaceMacrosTest() {
-		ContextMap contextMap = new ContextMap(playerMock);
-		MacroReplacer macroReplacer = new MacroReplacer();
-		String key = "ITEM_NAME";
-		contextMap.put(key, "TEST_STRING");
-
-		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: {ITEM_NAME}");
-		assertEquals("Replace this: TEST_STRING", resultString);
-	}
-
-//	@Disabled
-//	@Test
-//	void replaceMacrosTest_item_already_in_map() {
-//		ContextMap contextMap = new ContextMap(playerMock);
-//		String key = "MACRO:My_Item";
-//		contextMap.put(key, "TEST_STRING");
-//
-//		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: %ITEM_NAME%");
-//		assertEquals("Replace this: §aTest Item", resultString);
-//	}
-
-//	@Test
-//	void replaceMacrosTest_item_no_delimiter() {
-//		ContextMap contextMap = new ContextMap(playerMock);
-//		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: ITEM_NAME");
-//		assertEquals("Replace this: ITEM_NAME", resultString);
-//	}
-
-//	@Disabled
-//	@Test
-//	void replaceMacrosTest_recipient_is_entity() {
-//		Entity entityMock = mock(Entity.class);
-//		when(entityMock.getUniqueId()).thenReturn(new UUID(123,123));
-//		when(entityMock.getName()).thenReturn("entity one");
-//
-//		ContextMap contextMap = new ContextMap(playerMock);
-//		contextMap.put("ENTITY", entityMock);
-//
-//		String resultString = macroReplacer.replaceMacros(playerMock, contextMap, "Replace this: {ENTITY}");
-//
-//		assertEquals("Replace this: player1", resultString);
-//	}
-
-
-	@Test
-	void testAddRecipientContext() {
+	void testReplaceMacros1_valid_parameters() {
 		// Arrange
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		MessageRecord<MessageId> messageRecord = new MessageRecord<>(
+				MessageId.ENABLED_MESSAGE,
+				true,
+				false,
+				"key",
+				List.of("arg1", "arg2"),
+				"this is a message.",
+				Duration.ofSeconds(3),
+				"this is a title.",
+				20,
+				40,
+				30,
+				"this is a subtitle.",
+				"this is a final message string",
+				"this is a final title string",
+				"this is a final subtitle string"
+		);
 
 		// Act
-		macroReplacer.addRecipientContext(playerMock, contextMap);
+		Optional<MessageRecord<MessageId>> result = macroReplacer.replaceMacros(messageRecord, contextMap);
 
 		// Assert
-		assertTrue(contextMap.containsKey("RECIPIENT.LOCATION"));
+		assertNotNull(result);
 	}
 
 	@Test
-	void testAddRecipientContext_parameter_null_recipient() {
+	void testReplaceMacros1_parameter_null_messageRecord() {
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.replaceMacros(null, contextMap));
+
+		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testReplaceMacros1_parameter_null_contextMap() {
 		// Arrange
-		ContextMap contextMap = new ContextMap(playerMock);
+		MessageRecord<MessageId> messageRecord = new MessageRecord<>(
+				MessageId.ENABLED_MESSAGE,
+				true,
+				false,
+				"key",
+				List.of("arg1", "arg2"),
+				"this is a message.",
+				Duration.ofSeconds(3),
+				"this is a title.",
+				20,
+				40,
+				30,
+				"this is a subtitle.",
+				"this is a final message string",
+				"this is a final title string",
+				"this is a final subtitle string"
+		);
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroReplacer.addRecipientContext(null, contextMap));
-
-		// Assert
-		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	void testAddRecipientContext_parameter_null_context_map() {
-		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroReplacer.addRecipientContext(playerMock, null));
+				() -> macroReplacer.replaceMacros(messageRecord, null));
 
 		// Assert
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
@@ -137,10 +130,71 @@ class MacroReplacerTest {
 
 
 	@Test
+	void testReplaceMacros2() {
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		MacroReplacer<MessageId> macroReplacer = new MacroReplacer<>();
+		String key = "ITEM_NAME";
+		contextMap.put(key, "TEST_STRING");
+
+		String resultString = macroReplacer.replaceMacros(contextMap, "Replace this: {ITEM_NAME}");
+		assertEquals("Replace this: TEST_STRING", resultString);
+	}
+
+	@Test
+	void testReplaceMacros2_parameter_null_contextMap() {
+		// Arrange & Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.replaceMacros(null, "Some message string."));
+
+		// Assert
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testReplaceMacros2_parameter_null_messageString() {
+		// Arrange
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+
+		// Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.replaceMacros(contextMap, (String) null));
+
+		// Assert
+		assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testAddRecipientContext() {
+		// Arrange
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+
+		// Act
+		macroReplacer.addRecipientContext(contextMap);
+
+		// Assert
+		assertTrue(contextMap.containsKey("RECIPIENT.LOCATION"));
+	}
+
+	@Test
+	void testAddRecipientContext_parameter_null_context_map() {
+		// Arrange & Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> macroReplacer.addRecipientContext(null));
+
+		// Assert
+		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	}
+
+
+
+
+	@Test
 	void testConvertValuesToStrings() {
 		// Arrange
 		ItemStack itemStack = new ItemStack(Material.STONE);
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		contextMap.put("NUMBER", 42);
 		contextMap.put("ITEM_STACK", itemStack);
 
@@ -154,15 +208,31 @@ class MacroReplacerTest {
 		assertEquals("STONE", resultMap.get("ITEM_STACK"));
 	}
 
-
 	@Test
-	void testConvertValuesToStrings_parameter_null() {
+	void testConvertValuesToStrings_parameter_null_context_map() {
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroReplacer.convertValuesToStrings(null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
 
+
+
+	@Test
+	void testPerformReplacements() {
+		// Arrange
+		MacroReplacer<MessageId> localMacroReplacer = new MacroReplacer<>();
+
+		ResultMap resultMap = new ResultMap();
+		resultMap.put("KEY", "value");
+		String messageString = "this is a macro replacement string {KEY}.";
+
+		// Act
+		String resultString = localMacroReplacer.performReplacements(resultMap, messageString);
+
+		// Assert
+		assertEquals("this is a macro replacement string value.", resultString);
+	}
 
 	@Test
 	void testPerformReplacements_parameter_nul_replacement_map() {
@@ -185,22 +255,10 @@ class MacroReplacerTest {
 		assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
 	}
 
-
 	@Test
-	void testPerformReplacements() {
-		// Arrange
-		MacroReplacer localMacroReplacer = new MacroReplacer();
-
-		ResultMap resultMap = new ResultMap();
-		resultMap.put("KEY", "value");
-		String messageString = "this is a macro replacement string {KEY}.";
-
-		// Act
-		String resultString = localMacroReplacer.performReplacements(resultMap, messageString);
-
-		// Assert
-		assertEquals("this is a macro replacement string value.", resultString);
-		System.out.println("Output: " + resultString);
+	void testContainsMacros() {
+		assertTrue(macroReplacer.containsMacros("This is a string that {CONTAINS} a macro."));
+		assertFalse(macroReplacer.containsMacros("This is a string that does not contain a macro."));
 	}
 
 }

@@ -30,6 +30,7 @@ import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
 
 
 /**
@@ -67,18 +68,18 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 	 * Retrieve an item record from the language file for the currently configured language. If a record cannot be
 	 * found for the keyPath, an empty Optional will be returned.
 	 *
-	 * @param keyPath the keyPath for the item record in the language file
+	 * @param key the keyPath for the item record in the language file
 	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
 	 */
-	public Optional<ItemRecord> getRecord(final String keyPath) {
-		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, "keyPath"); }
+	public Optional<ItemRecord> getRecord(final String key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
 
 		// get configuration section for item key
-		ConfigurationSection itemEntry = configurationSupplier.getSection(Section.ITEMS).getConfigurationSection(keyPath);
+		ConfigurationSection itemEntry = configurationSupplier.getSection(Section.ITEMS).getConfigurationSection(key);
 		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
-		return ItemRecord.getRecord(keyPath, configurationSupplier.getSection(Section.ITEMS));
+		return ItemRecord.getRecord(key, configurationSupplier.getSection(Section.ITEMS));
 	}
 
 }

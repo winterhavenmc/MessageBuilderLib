@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.*;
 
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.entity.Player;
 
@@ -46,7 +47,7 @@ class StringProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_key() {
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		MacroProcessor macroProcessor = new StringProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
@@ -57,7 +58,7 @@ class StringProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_empty_key() {
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		MacroProcessor macroProcessor = new StringProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
@@ -82,7 +83,7 @@ class StringProcessorTest {
 		String keyPath = "SOME_NAME";
 		String stringObject = "some name";
 
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 
 		contextMap.put(keyPath, stringObject);
 
@@ -100,7 +101,7 @@ class StringProcessorTest {
 		String keyPath = "SOME_NAME";
 		Duration duration  = Duration.ofMillis(2000);
 
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 
 		contextMap.put(keyPath, duration);
 
