@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
@@ -52,6 +53,7 @@ class MessageBuilderTest {
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock YamlLanguageQueryHandler languageQueryHandlerMock;
 	@Mock MacroReplacer<MessageId> macroQueryHandlerMock;
+	@Mock CooldownMap cooldownMap;
 	@Mock Player playerMock;
 
 	FileConfiguration pluginConfiguration;
@@ -62,14 +64,13 @@ class MessageBuilderTest {
 
 	@BeforeEach
 	void setUp() {
-
 		// load configuration from resource
 		pluginConfiguration = new YamlConfiguration();
 		pluginConfiguration.set("language", "en-US");
 		pluginConfiguration.set("locale", "en-US");
 
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		messageBuilder = MessageBuilder.test(pluginMock, languageResourceManagerMock, languageQueryHandlerMock);
+		messageBuilder = MessageBuilder.test(pluginMock, languageResourceManagerMock, languageQueryHandlerMock, cooldownMap);
 	}
 
 	@AfterEach
