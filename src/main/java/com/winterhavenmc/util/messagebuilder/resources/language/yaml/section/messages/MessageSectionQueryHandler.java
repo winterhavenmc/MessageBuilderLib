@@ -71,10 +71,10 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	 * @param messageId the MessageId of the message record to be retrieved
 	 * @return the message record for the MessageId
 	 */
-	public Optional<MessageRecord> getRecord(final String messageId) {
+	public <T> Optional<T> getRecord(final String messageId) {
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
-		return MessageRecord.getRecord(messageId, messageSection);
+		return (Optional<T>) MessageRecord.getRecord(messageId, messageSection);
 	}
 
 }

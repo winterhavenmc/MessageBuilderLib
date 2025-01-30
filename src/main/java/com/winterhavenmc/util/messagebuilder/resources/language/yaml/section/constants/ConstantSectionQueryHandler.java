@@ -100,4 +100,17 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 		return configurationSupplier.getSection(section).getInt(key);
 	}
 
+
+	/**
+	 * Stub method until implemented
+	 *
+	 * @param key the record key
+	 * @return an option of a ConstantRecord
+	 * @param <T> the return record type
+	 */
+	@Override
+	public <T> Optional<T> getRecord(String key) {
+		return Optional.empty();
+	}
+
 }

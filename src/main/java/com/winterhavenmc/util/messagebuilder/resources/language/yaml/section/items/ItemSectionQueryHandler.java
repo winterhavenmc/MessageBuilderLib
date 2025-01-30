@@ -71,7 +71,7 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 	 * @param key the keyPath for the item record in the language file
 	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
 	 */
-	public Optional<ItemRecord> getRecord(final String key) {
+	public <T> Optional<T> getRecord(final String key) {
 		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
 
 		// get configuration section for item key
@@ -79,7 +79,7 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
-		return ItemRecord.getRecord(key, configurationSupplier.getSection(Section.ITEMS));
+		return (Optional<T>) ItemRecord.getRecord(key, configurationSupplier.getSection(Section.ITEMS));
 	}
 
 }
