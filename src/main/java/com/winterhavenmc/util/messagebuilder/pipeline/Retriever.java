@@ -25,8 +25,6 @@ import java.util.Optional;
 @FunctionalInterface
 public interface Retriever {
 
-	<MessageId extends Enum<MessageId>>
-	Optional<MessageRecord<MessageId>>
-	getMessageRecord(MessageId messageId, LanguageQueryHandler languageQueryHandler);
+	Optional<MessageRecord>	getMessageRecord(String messageId, LanguageQueryHandler languageQueryHandler);
 
 }

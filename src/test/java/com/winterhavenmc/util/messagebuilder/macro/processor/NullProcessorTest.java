@@ -46,7 +46,7 @@ class NullProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new NullProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
@@ -57,7 +57,7 @@ class NullProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_empty_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new NullProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
@@ -82,7 +82,7 @@ class NullProcessorTest {
 		// Arrange
 		String key = "KEY";
 		NullProcessor nullProcessor = new NullProcessor();
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		contextMap.put(key, null);
 
 		// Act
@@ -98,7 +98,7 @@ class NullProcessorTest {
 		// Arrange
 		String key = "KEY";
 		NullProcessor nullProcessor = new NullProcessor();
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		contextMap.put(key, 42);
 
 		// Act

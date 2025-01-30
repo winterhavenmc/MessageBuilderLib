@@ -66,13 +66,12 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 
 
 	/**
-	 * Retrieve a message record from the language file for the provided {@link MessageId}
+	 * Retrieve a message record from the language file for the provided messageId
 	 *
 	 * @param messageId the MessageId of the message record to be retrieved
 	 * @return the message record for the MessageId
-	 * @param <MessageId> an enum member that is used as a key to retrieve messages from the language file
 	 */
-	public <MessageId extends Enum<MessageId>> Optional<MessageRecord<MessageId>> getRecord(final MessageId messageId) {
+	public Optional<MessageRecord> getRecord(final String messageId) {
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
 		return MessageRecord.getRecord(messageId, messageSection);

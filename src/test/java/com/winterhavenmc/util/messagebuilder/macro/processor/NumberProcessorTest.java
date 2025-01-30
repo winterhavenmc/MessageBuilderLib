@@ -37,13 +37,13 @@ class NumberProcessorTest {
 	@Mock Player playerMock;
 
 	MacroProcessor macroProcessor;
-	ContextMap<MessageId> contextMap;
+	ContextMap contextMap;
 
 
 	@BeforeEach
 	public void setUp() {
 		macroProcessor = new NumberProcessor();
-		contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 	}
 
 	@AfterEach

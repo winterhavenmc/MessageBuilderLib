@@ -54,7 +54,7 @@ class OfflinePlayerProcessorTest {
 		// Arrange
 		String key = "KEY";
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		contextMap.put(key, offlinePlayerMock);
 
@@ -71,7 +71,7 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_null_key() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
@@ -85,7 +85,7 @@ class OfflinePlayerProcessorTest {
 	void resolveContext_with_empty_key() {
 		// Arrange
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
@@ -115,7 +115,7 @@ class OfflinePlayerProcessorTest {
 		String keyPath = "SOME_NAME";
 		Duration duration  = Duration.ofMillis(2000);
 
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		contextMap.put(keyPath, duration);
 

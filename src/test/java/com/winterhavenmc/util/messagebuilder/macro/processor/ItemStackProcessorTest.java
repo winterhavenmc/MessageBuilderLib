@@ -48,7 +48,7 @@ class ItemStackProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new ItemStackProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
@@ -59,7 +59,7 @@ class ItemStackProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_empty_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new ItemStackProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
@@ -84,7 +84,7 @@ class ItemStackProcessorTest {
 		String keyPath = "ITEM_STACK";
 		ItemStack itemStack = new ItemStack(Material.GOLDEN_AXE);
 
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		contextMap.put(keyPath, itemStack);
 		MacroProcessor macroProcessor = new ItemStackProcessor();
 
@@ -102,7 +102,7 @@ class ItemStackProcessorTest {
 		// Arrange
 		String keyPath = "ITEM_STACK";
 		int value = 42;
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		contextMap.put(keyPath, value);
 		MacroProcessor macroProcessor = new ItemStackProcessor();
 

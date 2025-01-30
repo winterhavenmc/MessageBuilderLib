@@ -50,13 +50,13 @@ class LocationProcessorTest {
 
 	// real location processor
 	LocationProcessor locationProcessor;
-	ContextMap<MessageId> contextMap;
+	ContextMap contextMap;
 
 
 	@BeforeEach
 	public void setUp() {
 		// real context map
-		contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		// Initialize the processor
 		locationProcessor = new LocationProcessor();
@@ -65,7 +65,7 @@ class LocationProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new LocationProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
@@ -76,7 +76,7 @@ class LocationProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_empty_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new LocationProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
@@ -196,7 +196,7 @@ class LocationProcessorTest {
 		// Arrange
 		String keyPath = "SOME_NAME";
 		Duration duration  = Duration.ofMillis(2000);
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		contextMap.put(keyPath, duration);
 		MacroProcessor macroProcessor = new LocationProcessor();
 

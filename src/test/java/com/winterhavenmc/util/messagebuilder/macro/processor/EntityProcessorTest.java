@@ -49,7 +49,7 @@ class EntityProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new EntityProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
@@ -60,7 +60,7 @@ class EntityProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_empty_key() {
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new EntityProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
@@ -84,7 +84,7 @@ class EntityProcessorTest {
 		// Arrange
 		when(entityMock.getName()).thenReturn("Entity Name");
 		String keyPath = "ENTITY";
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		contextMap.put(keyPath, entityMock);
 
 		MacroProcessor macroProcessor = new EntityProcessor();
@@ -101,7 +101,7 @@ class EntityProcessorTest {
 	void resolveContext_not_entity() {
 		// Arrange
 		String keyPath = "ENTITY";
-		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		contextMap.put(keyPath, "string");
 
 		MacroProcessor macroProcessor = new EntityProcessor();

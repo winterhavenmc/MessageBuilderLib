@@ -61,8 +61,8 @@ class MessageRecordTest {
 
 	@Test
 	void constructorTest() {
-		MessageRecord<MessageId> testRecord = new MessageRecord<MessageId>(
-				ENABLED_MESSAGE,
+		MessageRecord testRecord = new MessageRecord(
+				ENABLED_MESSAGE.name(),
 				true,
 				true,
 				"this-is-a_string-key",
@@ -79,7 +79,7 @@ class MessageRecordTest {
 
 	@Test
 	void testGetRecord_parameter_valid() {
-		Optional<MessageRecord<MessageId>> messageRecord = MessageRecord.getRecord(ENABLED_MESSAGE, messageSection);
+		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(ENABLED_MESSAGE.name(), messageSection);
 		assertTrue(messageRecord.isPresent());
 	}
 
@@ -93,14 +93,14 @@ class MessageRecordTest {
 
 	@Test
 	void testGetRecord_parameter_keyPath_invalid() {
-		Optional<MessageRecord<MessageId>> messageRecord = MessageRecord.getRecord(NONEXISTENT_ENTRY, messageSection);
+		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(NONEXISTENT_ENTRY.name(), messageSection);
 		assertTrue(messageRecord.isEmpty());
 	}
 
 	@Test
 	void testGetRecord_parameter_itemSection_null() {
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() ->  MessageRecord.getRecord(ENABLED_MESSAGE, null));
+				() ->  MessageRecord.getRecord(ENABLED_MESSAGE.name(), null));
 
 		assertEquals("The parameter 'messageSection' cannot be null.", exception.getMessage());
 	}
@@ -112,7 +112,7 @@ class MessageRecordTest {
 
 		// Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() ->  MessageRecord.getRecord(ENABLED_MESSAGE, messageSection));
+				() ->  MessageRecord.getRecord(ENABLED_MESSAGE.name(), messageSection));
 
 		// Assert
 		assertEquals("The configuration section returned by the configuration supplier was an invalid 'MESSAGES' section.", exception.getMessage());

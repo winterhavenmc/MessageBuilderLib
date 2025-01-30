@@ -111,7 +111,7 @@ class YamlLanguageQueryHandlerTest {
 		assertNotNull(messageSectionQueryHandler);
 
 		// Act
-		Optional<MessageRecord<MessageId>> messageRecord = messageSectionQueryHandler.getRecord(MessageId.ENABLED_MESSAGE);
+		Optional<MessageRecord> messageRecord = messageSectionQueryHandler.getRecord(MessageId.ENABLED_MESSAGE.name());
 
 		// Assert
 		assertTrue(messageRecord.isPresent());

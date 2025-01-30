@@ -43,13 +43,13 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
 
 	// context map
-	private final ContextMap<MessageId> contextMap;
+	private final ContextMap contextMap;
 
 	// required parameters
 	private final CommandSender recipient;
-	private final MessageId messageId;
+	private final String messageId;
 	private final LanguageQueryHandler languageQueryHandler;
-	private final MacroReplacer<MessageId> macroReplacer;
+	private final MacroReplacer macroReplacer;
 	private final CooldownMap cooldownMap;
 
 
@@ -63,9 +63,9 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 */
 	public Message(
 			final LanguageQueryHandler languageQueryHandler,
-			final MacroReplacer<MessageId> macroReplacer,
+			final MacroReplacer macroReplacer,
 			final CommandSender recipient,
-			final MessageId messageId,
+			final String messageId,
 			final CooldownMap cooldownMap
 	)
 	{
@@ -74,7 +74,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		this.recipient = recipient;
 		this.messageId = messageId;
 		this.cooldownMap = cooldownMap;
-		this.contextMap = new ContextMap<>(recipient, messageId);
+		this.contextMap = new ContextMap(recipient, messageId);
 	}
 
 
@@ -127,7 +127,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		Retriever retriever = new MessageRetriever();
 
 		// get optional message record
-		Optional<MessageRecord<MessageId>> messageRecord = retriever.getMessageRecord(messageId, languageQueryHandler);
+		Optional<MessageRecord> messageRecord = retriever.getMessageRecord(messageId, languageQueryHandler);
 
 		// if optional message record is empty, do nothing and return
 		if (messageRecord.isEmpty()) {
@@ -140,7 +140,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		}
 
 		// perform macro replacements
-		Optional<MessageRecord<MessageId>> finalMesssageRecord = macroReplacer.replaceMacros(messageRecord.get(), contextMap);
+		Optional<MessageRecord> finalMesssageRecord = macroReplacer.replaceMacros(messageRecord.get(), contextMap);
 
 		// send message
 		finalMesssageRecord.ifPresent(record -> new MessageSender().send(recipient, record));
@@ -156,17 +156,15 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @param messageRecord the message record
 	 * @return {@code true} if the recipient/message is sendable, {@code false} if not
 	 */
-	private boolean isSendable(final CommandSender recipient, MessageRecord<MessageId> messageRecord) {
+	private boolean isSendable(final CommandSender recipient, MessageRecord messageRecord) {
 
 		// if recipient is a player but is not online, return false
 		if (recipient instanceof Player player && player.isOnline()) {
 			return false;
 		}
 
-		MessageId messageId = messageRecord.messageId();
-
 		// return true if message is enabled and not in cooldown map, else false
-		return messageRecord.enabled() && !cooldownMap.isCooling(recipient, messageId);
+		return messageRecord.enabled() && !cooldownMap.isCooling(recipient, messageRecord.messageId());
 	}
 
 }

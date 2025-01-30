@@ -23,8 +23,8 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.mes
 import java.util.Optional;
 
 @FunctionalInterface
-public interface Replacer<MessageId extends Enum<MessageId>> {
+public interface Replacer {
 
-	Optional<MessageRecord<MessageId>> replaceMacros(MessageRecord<MessageId> messageRecord, ContextMap<MessageId> contextMap);
+	Optional<MessageRecord> replaceMacros(MessageRecord messageRecord, ContextMap contextMap);
 
 }

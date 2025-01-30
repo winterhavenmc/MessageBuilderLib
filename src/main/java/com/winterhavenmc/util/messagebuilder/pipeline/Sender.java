@@ -23,7 +23,7 @@ import org.bukkit.command.CommandSender;
 
 @FunctionalInterface
 public interface Sender {
-	<MessageId extends Enum<MessageId>> void send(CommandSender recipient, MessageRecord<MessageId> messageRecord);
+	void send(CommandSender recipient, MessageRecord messageRecord);
 
 	enum Type {
 		MESSAGE,

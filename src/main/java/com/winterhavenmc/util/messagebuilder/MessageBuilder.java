@@ -56,7 +56,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  * <p>
  * <i>example:</i>
  * <pre>
- * {@code messageBuilder.compose(recipient, MessageId.ENABLED_MESSAGE)
+ * {@code messageBuilder.compose(recipient, MessageId.ENABLED_MESSAGE.name())
  *     .setMacro(Macro.PLACEHOLDER1, object)
  *     .setMacro(Macro.PLACEHOLDER2, replacementString)
  *     .send();
@@ -85,7 +85,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 
 	/**
-	 * A private constructor for the class that can only called from within this class.
+	 * A private constructor for the class that can only be called from within this class.
 	 * Use the static factory method {@code create} to instantiate an instance of this class.
 	 *
 	 * @param plugin an instance of the plugin
@@ -164,9 +164,9 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
-		MacroReplacer<MessageId> macroReplacer = new MacroReplacer<>();
+		MacroReplacer macroReplacer = new MacroReplacer();
 
-		return new Message<>(languageQueryHandler, macroReplacer, recipient, messageId, cooldownMap);
+		return new Message<>(languageQueryHandler, macroReplacer, recipient, messageId.name(), cooldownMap);
 	}
 
 

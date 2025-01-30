@@ -29,7 +29,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 public class TitleSender implements Sender {
 
 	@Override
-	public <MessageId extends Enum<MessageId>> void send(final CommandSender recipient, final MessageRecord<MessageId> messageRecord) {
+	public void send(final CommandSender recipient, final MessageRecord messageRecord) {
 		if (recipient == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, RECIPIENT); }
 		if (messageRecord == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, MESSAGE_RECORD); }
 

@@ -46,14 +46,14 @@ class CooldownMapTest {
 	@Mock Player playerMock;
 
 	CooldownMap cooldownMap;
-	MessageRecord<MessageId> messageRecord;
+	MessageRecord messageRecord;
 
 	@BeforeEach
 	void setUp() {
 		cooldownMap = new CooldownMap();
 
-		messageRecord = new MessageRecord<>(
-				MessageId.ENABLED_MESSAGE,
+		messageRecord = new MessageRecord(
+				MessageId.ENABLED_MESSAGE.name(),
 				true,
 				false,
 				"key",
@@ -94,7 +94,7 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// Assert
-			assertTrue(cooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE));
+			assertTrue(cooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE.name()));
 
 			// Verify
 			verify(playerMock, atLeastOnce()).getUniqueId();
@@ -134,7 +134,7 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// Assert TODO: test that second put did not overwrite first entry
-			assertTrue(cooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE));
+			assertTrue(cooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE.name()));
 
 			// Verify
 			verify(playerMock, atLeast(2)).getUniqueId();
@@ -155,7 +155,7 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// assert
-			assertTrue(cooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE));
+			assertTrue(cooldownMap.isCooling(playerMock, MessageId.ENABLED_MESSAGE.name()));
 
 			// Verify
 			verify(playerMock, atLeastOnce()).getUniqueId();
@@ -165,7 +165,7 @@ class CooldownMapTest {
 		@DisplayName("Test isCooling with null recipient")
 		void testIsCooling_parameter_null_recipient() {
 			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> cooldownMap.isCooling(null, MessageId.ENABLED_MESSAGE));
+					() -> cooldownMap.isCooling(null, MessageId.ENABLED_MESSAGE.name()));
 
 			assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 		}
@@ -213,8 +213,8 @@ class CooldownMapTest {
 		void testRemoveExpired_expired() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			messageRecord = new MessageRecord<>(
-					MessageId.ENABLED_MESSAGE,
+			messageRecord = new MessageRecord(
+					MessageId.ENABLED_MESSAGE.name(),
 					true,
 					false,
 					"key",
