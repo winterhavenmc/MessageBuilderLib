@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.time;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -36,6 +37,30 @@ class PrettyTimeFormatterTest {
 		assertEquals("1 hour, 59 minutes, and 59 seconds", new PrettyTimeFormatter().getFormatted(Locale.US, duration));
 		assertEquals("1 hour, 59 minutes and 59 seconds", new PrettyTimeFormatter().getFormatted(Locale.UK, duration));
 		assertEquals("1 ora, 59 minuti e 59 secondi", new PrettyTimeFormatter().getFormatted(Locale.ITALIAN, duration));
+	}
+
+	@Test
+	void testGetFormatted_parameter_null_locale() {
+		// Arrange
+		long millis = 1000 * 2 * 60 * 60 - 1001; // 2 hours - (1 second + 1 millisecond)
+		Duration duration = Duration.ofMillis(millis);
+
+		// Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> new PrettyTimeFormatter().getFormatted(null, duration));
+
+		// Assert
+		assertEquals("The parameter 'locale' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testGetFormatted_parameter_null_duration() {
+		// Arrange & Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> new PrettyTimeFormatter().getFormatted(Locale.US, null));
+
+		// Assert
+		assertEquals("The parameter 'duration' cannot be null.", exception.getMessage());
 	}
 
 }
