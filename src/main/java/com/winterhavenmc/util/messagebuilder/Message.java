@@ -127,7 +127,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		Retriever retriever = new MessageRetriever();
 
 		// get optional message record
-		Optional<MessageRecord> messageRecord = retriever.getMessageRecord(messageId, languageQueryHandler);
+		Optional<MessageRecord> messageRecord = retriever.getRecord(messageId, languageQueryHandler);
 
 		// if optional message record is empty, do nothing and return
 		if (messageRecord.isEmpty()) {
