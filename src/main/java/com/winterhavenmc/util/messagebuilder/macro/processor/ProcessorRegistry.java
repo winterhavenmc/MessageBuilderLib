@@ -21,6 +21,9 @@ import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import java.util.EnumMap;
 
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.DEPENDENCY_CONTEXT;
+
 
 /**
  * This class implements a map of unique macro processor instances using ProcessorType Enum members as keys.
@@ -35,10 +38,10 @@ public class ProcessorRegistry {
 	/**
 	 * Class constructor
 	 */
-	public ProcessorRegistry(final DependencyContext context) {
-		if (context == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "context"); }
+	public ProcessorRegistry(final DependencyContext dependencyContext) {
+		if (dependencyContext == null) { throw new LocalizedException(PARAMETER_NULL, DEPENDENCY_CONTEXT); }
 
-		this.context = context;
+		this.context = dependencyContext;
 		macroProcessorMap = new EnumMap<>(ProcessorType.class);
 	}
 
