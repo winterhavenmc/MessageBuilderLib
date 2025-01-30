@@ -27,60 +27,30 @@ import net.time4j.format.TextWidth;
 import java.util.Locale;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.LANGUAGE_TAG;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.DURATION;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.LOCALE;
 
 
-public final class TimeString {
-
-private TimeString() { /* private constructor to prevent instantiation */ }
-
-	/**
-	 * Retrieve a {@link PrettyTime} string for the given amount of milliseconds, with the US Locale
-	 *
-	 * @param millis a time duration represented in milliseconds
-	 * @return the {@code PrettyTime} formated string
-	 */
-	public static String getTimeString(final long millis) {
-		return getTimeString(Locale.US, millis);
-	}
-
-
-	/**
-	 * Retrieve a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale
-	 * represented by the provided IETF language tag string. If no Locale can be found from the provided language tag,
-	 * the US locale will be used.
-	 *
-	 * @param languageTag the IETF language tag that represents the locale for which the string should be translated
-	 * @param millis a time duration in milliseconds
-	 * @return the {@code PrettyTime} formatted string
-	 */
-	public static String getTimeString(final String languageTag, final long millis) {
-		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG); }
-
-		Locale locale = Locale.forLanguageTag(languageTag);
-		if (locale == null) { locale = Locale.US; }
-
-		return getTimeString(locale, millis);
-	}
-
+public final class PrettyTimeFormatter implements TimeFormatter {
 
 	/**
 	 * Retrieve a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale provided.
 	 *
 	 * @param locale the Locale to use for {@code PrettyTime} translation and pluralization
-	 * @param millis a time duration in milliseconds
+	 * @param duration a time duration
 	 * @return the {@code PrettyTime} formatted string
 	 */
-	public static String getTimeString(final Locale locale, final long millis) {
+	public String getFormatted(final Locale locale, final java.time.Duration duration) {
 		if (locale == null) { throw new LocalizedException(PARAMETER_NULL, LOCALE); }
+		if (duration == null) { throw new LocalizedException(PARAMETER_NULL, DURATION); }
 
 		PrettyTime prettyTime = PrettyTime.of(locale);
 
-		Duration<?> duration = Duration.of(millis, ClockUnit.MILLIS).toClockPeriod();
+		// convert java.time.Duration to net.time4j.Duration
+		Duration<?> t4jDuration = Duration.from(duration).toClockPeriod();
 
-		Duration<CalendarUnit> calendarPart = duration.toCalendarPeriod();
-		Duration<ClockUnit> clockPart = duration.toClockPeriod();
+		Duration<CalendarUnit> calendarPart = t4jDuration.toCalendarPeriod();
+		Duration<ClockUnit> clockPart = t4jDuration.toClockPeriod();
 
 		clockPart = clockPart.with(ClockUnit.SECONDS.rounded());
 
