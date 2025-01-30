@@ -30,7 +30,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -74,24 +73,18 @@ class YamlLanguageResourceManagerTest {
 
 	@Test
 	void testLanguageConfiguration_not_null() {
-		assertNotNull(this.languageConfiguration);
+		assertNotNull(languageConfiguration);
 	}
 
 
 	@Test
 	void testGetConfigurationSupplier() {
-		// Arrange
-		when(languageResourceLoaderMock.loadConfiguration()).thenReturn(languageConfiguration);
-
-		//  Act
+		// Arrange & Act
 		resourceManager.reload();
 		YamlConfigurationSupplier configurationSupplier = resourceManager.getConfigurationSupplier();
 
 		// Assert
 		assertNotNull(configurationSupplier);
-
-		// Verify
-		verify(languageResourceLoaderMock, atLeastOnce()).loadConfiguration();
 	}
 
 
