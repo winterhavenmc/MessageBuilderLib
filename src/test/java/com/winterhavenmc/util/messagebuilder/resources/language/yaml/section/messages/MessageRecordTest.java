@@ -28,10 +28,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.messages.MessageId.*;
+import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
+import static com.winterhavenmc.util.messagebuilder.messages.MessageId.NONEXISTENT_ENTRY;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -59,25 +61,25 @@ class MessageRecordTest {
 
 	@Test
 	void constructorTest() {
-		MessageRecord testRecord = new MessageRecord(
-				ENABLED_MESSAGE.toString(),
+		MessageRecord<MessageId> testRecord = new MessageRecord<MessageId>(
+				ENABLED_MESSAGE,
 				true,
 				true,
 				"this-is-a_string-key",
 				List.of("list", "of", "arguments"),
 				"this is a test message",
-				11,
+				Duration.ofSeconds(11),
 				"this is a test title",
 				22,
 				33,
 				44,
-				"this is a test subtitle");
+				"this is a test subtitle", "", "", "");
 		assertNotNull(testRecord, "the newly created record is null.");
 	}
 
 	@Test
 	void testGetRecord_parameter_valid() {
-		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(MessageId.ENABLED_MESSAGE, messageSection);
+		Optional<MessageRecord<MessageId>> messageRecord = MessageRecord.getRecord(ENABLED_MESSAGE, messageSection);
 		assertTrue(messageRecord.isPresent());
 	}
 
@@ -91,7 +93,7 @@ class MessageRecordTest {
 
 	@Test
 	void testGetRecord_parameter_keyPath_invalid() {
-		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(NONEXISTENT_ENTRY, messageSection);
+		Optional<MessageRecord<MessageId>> messageRecord = MessageRecord.getRecord(NONEXISTENT_ENTRY, messageSection);
 		assertTrue(messageRecord.isEmpty());
 	}
 
