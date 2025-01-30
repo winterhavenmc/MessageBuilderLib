@@ -101,7 +101,7 @@ class YamlLanguageQueryHandlerTest {
 				() -> itemSectionQueryHandler.getRecord(null));
 
 		// Assert
-		assertEquals("The parameter 'keyPath' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test
@@ -111,7 +111,7 @@ class YamlLanguageQueryHandlerTest {
 		assertNotNull(messageSectionQueryHandler);
 
 		// Act
-		Optional<MessageRecord> messageRecord = messageSectionQueryHandler.getRecord(MessageId.ENABLED_MESSAGE);
+		Optional<MessageRecord<MessageId>> messageRecord = messageSectionQueryHandler.getRecord(MessageId.ENABLED_MESSAGE);
 
 		// Assert
 		assertTrue(messageRecord.isPresent());
