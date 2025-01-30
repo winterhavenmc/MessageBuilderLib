@@ -49,14 +49,10 @@ public class DurationProcessor extends MacroProcessorTemplate {
 
 		if (value instanceof Duration duration) {
 
-			Locale locale = null;
+			Locale locale = Locale.getDefault();
 
 			if (contextMap.getRecipient() instanceof Player player) {
 				locale = Locale.forLanguageTag(player.getLocale());
-			}
-
-			if (locale == null) {
-				locale = Locale.getDefault();
 			}
 
 			resultMap.put(key, TimeString.getTimeString(locale, duration.toMillis()));
