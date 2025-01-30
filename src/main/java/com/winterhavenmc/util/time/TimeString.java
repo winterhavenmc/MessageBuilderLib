@@ -27,6 +27,8 @@ import net.time4j.format.TextWidth;
 import java.util.Locale;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.LANGUAGE_TAG;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.LOCALE;
 
 
 public final class TimeString {
@@ -54,7 +56,7 @@ private TimeString() { /* private constructor to prevent instantiation */ }
 	 * @return the {@code PrettyTime} formatted string
 	 */
 	public static String getTimeString(final String languageTag, final long millis) {
-		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, "languageTag"); }
+		if (languageTag == null) { throw new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG); }
 
 		Locale locale = Locale.forLanguageTag(languageTag);
 		if (locale == null) { locale = Locale.US; }
@@ -71,7 +73,7 @@ private TimeString() { /* private constructor to prevent instantiation */ }
 	 * @return the {@code PrettyTime} formatted string
 	 */
 	public static String getTimeString(final Locale locale, final long millis) {
-		if (locale == null) { throw new LocalizedException(PARAMETER_NULL, "locale"); }
+		if (locale == null) { throw new LocalizedException(PARAMETER_NULL, LOCALE); }
 
 		PrettyTime prettyTime = PrettyTime.of(locale);
 
