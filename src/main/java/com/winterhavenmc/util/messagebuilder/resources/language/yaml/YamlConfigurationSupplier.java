@@ -25,6 +25,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.function.Supplier;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.SECTION;
 
 
 /**
@@ -63,7 +64,7 @@ public final class YamlConfigurationSupplier implements Supplier<Configuration> 
 	 * @throws IllegalArgumentException if section parameter is null
 	 */
 	public ConfigurationSection getSection(final Section section) {
-		if (section == null) { throw new LocalizedException(PARAMETER_NULL, "section"); }
+		if (section == null) { throw new LocalizedException(PARAMETER_NULL, SECTION); }
 
 		return configuration.getConfigurationSection(section.name());
 	}
