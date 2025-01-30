@@ -15,27 +15,31 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_RECORD;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.RECIPIENT;
 
 public class TitleSender implements Sender {
 
 	@Override
-	public void send(final CommandSender recipient, final MessageRecord messageRecord) {
-		if (recipient == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "recipient"); }
-		if (messageRecord == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, "message"); }
+	public <MessageId extends Enum<MessageId>> void send(final CommandSender recipient, final MessageRecord<MessageId> messageRecord) {
+		if (recipient == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, RECIPIENT); }
+		if (messageRecord == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, MESSAGE_RECORD); }
 
 		if (recipient instanceof Player player) {
-			player.sendTitle(messageRecord.title(),
-					messageRecord.subtitle(),
+			player.sendTitle(ChatColor.translateAlternateColorCodes('&', messageRecord.title()),
+					ChatColor.translateAlternateColorCodes('&', messageRecord.subtitle()),
 					messageRecord.titleFadeIn(),
 					messageRecord.titleStay(),
 					messageRecord.titleFadeOut());
 		}
 	}
-}
 
+}
