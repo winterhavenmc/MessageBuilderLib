@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.command.ConsoleCommandSender;
@@ -27,11 +28,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 
@@ -51,7 +55,7 @@ class DurationProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_key() {
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		MacroProcessor macroProcessor = new DurationProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
@@ -62,7 +66,7 @@ class DurationProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_empty_key() {
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		MacroProcessor macroProcessor = new DurationProcessor();
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
@@ -87,7 +91,7 @@ class DurationProcessorTest {
 		when(playerMock.getLocale()).thenReturn("en-US");
 
 		String keyPath = "DURATION";
-		ContextMap contextMap = new ContextMap(playerMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		Duration durationObject = Duration.ofMillis(12300);
 		contextMap.put(keyPath,durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
@@ -104,11 +108,48 @@ class DurationProcessorTest {
 	@Test
 	void resolveContext_console() {
 		// Arrange
+		when(playerMock.getLocale()).thenReturn("en-US");
+
 		String keyPath = "DURATION";
-		ContextMap contextMap = new ContextMap(consoleMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		Duration durationObject = Duration.ofMillis(12300);
 		contextMap.put(keyPath,durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
+
+		// Mock the static method Locale.forLanguageTag
+		try (MockedStatic<Locale> mockedLocale = mockStatic(Locale.class)) {
+			// Define the mock behavior
+			mockedLocale.when(() -> Locale.forLanguageTag("en-US")).thenReturn(Locale.US);
+
+			mockedLocale.when(() -> Locale.forLanguageTag("fr-FR"))
+					.thenReturn(Locale.FRANCE);
+
+			// Test the mocked behavior
+			Locale enLocale = Locale.forLanguageTag("en-US");
+			Locale frLocale = Locale.forLanguageTag("fr-FR");
+
+			assertEquals("en", enLocale.getLanguage());
+			assertEquals("US", enLocale.getCountry());
+
+			assertEquals("fr", frLocale.getLanguage());
+			assertEquals("FR", frLocale.getCountry());
+
+			// Verify the method was called with the expected arguments
+			mockedLocale.verify(() -> Locale.forLanguageTag("en-US"));
+			mockedLocale.verify(() -> Locale.forLanguageTag("fr-FR"));
+
+			// Define the mock behavior
+			mockedLocale.when(Locale::getDefault).thenReturn(Locale.US);
+
+			// Test the mocked behavior
+			Locale defaultLocale = Locale.getDefault();
+
+			assertEquals("en", defaultLocale.getLanguage());
+			assertEquals("US", defaultLocale.getCountry());
+
+			// Verify the method was called with the expected arguments
+			mockedLocale.verify(() -> Locale.forLanguageTag("en-US"));
+		}
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
@@ -123,7 +164,7 @@ class DurationProcessorTest {
 	void resolveContext_value_not_duration() {
 		// Arrange
 		String keyPath = "DURATION";
-		ContextMap contextMap = new ContextMap(consoleMock);
+		ContextMap<MessageId> contextMap = new ContextMap<>(playerMock, MessageId.ENABLED_MESSAGE);
 		Object object = "a string";
 		contextMap.put(keyPath, object);
 		MacroProcessor macroProcessor = new DurationProcessor();

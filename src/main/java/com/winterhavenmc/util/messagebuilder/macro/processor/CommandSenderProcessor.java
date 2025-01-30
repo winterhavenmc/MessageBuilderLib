@@ -31,7 +31,9 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 public class CommandSenderProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
+	public <MessageId extends Enum<MessageId>>
+	ResultMap resolveContext(final String key, final ContextMap<MessageId> contextMap)
+	{
 		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
 		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
