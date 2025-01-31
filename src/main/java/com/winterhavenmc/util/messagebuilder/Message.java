@@ -123,7 +123,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 */
 	public void send()
 	{
-		// get functional message retriever
+		// get message retriever
 		Retriever retriever = new MessageRetriever();
 
 		// get optional message record
@@ -157,6 +157,8 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @return {@code true} if the recipient/message is sendable, {@code false} if not
 	 */
 	boolean isSendable(final CommandSender recipient, MessageRecord messageRecord) {
+		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
+		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
 
 		// if recipient is a player but is not online, return false
 		if (recipient instanceof Player player && !player.isOnline()) {
