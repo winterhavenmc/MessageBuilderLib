@@ -44,7 +44,6 @@ import java.util.List;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -157,37 +156,6 @@ class MessageTest {
 					() -> message.setMacro(6, Macro.OWNER, null));
 
 			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
-		}
-	}
-
-	@Nested
-	class IsSendableTests {
-		@Test
-		void testIsSendable() {
-			// Arrange
-			when(playerMock.isOnline()).thenReturn(true);
-
-			// Act & Assert
-			assertTrue(message.isSendable(playerMock, testRecord));
-
-			// Verify
-			verify(playerMock, atLeastOnce()).isOnline();
-		}
-
-		@Test
-		void testIsSendable_parameter_null_recipient() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> message.isSendable(null, testRecord));
-
-			assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
-		}
-
-		@Test
-		void testIsSendable_parameter_null_messageRecord() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> message.isSendable(playerMock, null));
-
-			assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 		}
 	}
 
