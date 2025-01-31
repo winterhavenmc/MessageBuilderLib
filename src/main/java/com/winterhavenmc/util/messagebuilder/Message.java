@@ -25,11 +25,15 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHan
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
+import static com.google.common.base.Predicates.instanceOf;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
 
@@ -123,19 +127,23 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 */
 	public void send()
 	{
-		// get message retriever
 		Retriever retriever = new MessageRetriever();
+		Predicate<MessageRecord> isEnabled = MessageRecord::enabled;
+		Predicate<CommandSender> isPlayer = instanceOf(Player.class);
+		Predicate<Player> isOnline = Player::isOnline;
+		BiPredicate<CommandSender, String> isCooling = cooldownMap::isCooling; // cooldownMap.isCooling(recipient, messageId);
+		// Replacer replacer = new MacroReplacer();     // BiFunction (injected into class)
+		Sender messageSender = new MessageSender();     // Consumer
+		Sender titleSender = new TitleSender();         // Consumer
 
 		// get optional message record
 		Optional<MessageRecord> messageRecord = retriever.getRecord(messageId, languageQueryHandler);
 
-		// if optional message record is empty, do nothing and return
-		if (messageRecord.isEmpty()) {
-			return;
-		}
-
-		// check if message and recipient are available for sending
-		if (!isSendable(recipient, messageRecord.get())) {
+		// if optional message record is empty, disabled or unsendable, do nothing and return
+		if (messageRecord.isEmpty()
+				|| !isEnabled.test(messageRecord.get())
+				|| (isPlayer.test(recipient) && !isOnline.test((Player) recipient))
+				|| !isCooling.test(recipient, messageId)) {
 			return;
 		}
 
@@ -143,30 +151,11 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 		Optional<MessageRecord> finalMesssageRecord = macroReplacer.replaceMacros(messageRecord.get(), contextMap);
 
 		// send message
-		finalMesssageRecord.ifPresent(record -> new MessageSender().send(recipient, record));
-		finalMesssageRecord.ifPresent(record -> new TitleSender().send(recipient, record));
+		finalMesssageRecord.ifPresent(record -> messageSender.send(recipient, record));
+		finalMesssageRecord.ifPresent(record -> titleSender.send(recipient, record));
+
+		// set cooldown
 		finalMesssageRecord.ifPresent(record -> cooldownMap.putExpirationTime(recipient, record));
-	}
-
-
-	/**
-	 * Check if prerequisites have been met for a message to be able to be sent
-	 *
-	 * @param recipient the intended recipient of the message
-	 * @param messageRecord the message record
-	 * @return {@code true} if the recipient/message is sendable, {@code false} if not
-	 */
-	boolean isSendable(final CommandSender recipient, MessageRecord messageRecord) {
-		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
-		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
-
-		// if recipient is a player but is not online, return false
-		if (recipient instanceof Player player && !player.isOnline()) {
-			return false;
-		}
-
-		// return true if message is enabled and not in cooldown map, else false
-		return messageRecord.enabled() && !cooldownMap.isCooling(recipient, messageRecord.messageId());
 	}
 
 
