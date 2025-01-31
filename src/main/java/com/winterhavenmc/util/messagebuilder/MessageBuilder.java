@@ -76,12 +76,12 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 {
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
 	public final static ResourceBundle BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, Locale.getDefault());
-	public static final TemporalUnit TICKS = new Tick();
+	public final static TemporalUnit TICKS = new Tick();
 
-	private static Plugin plugin;
-	private static YamlLanguageResourceManager languageResourceManager;
-	private static YamlLanguageQueryHandler languageQueryHandler;
-	private static CooldownMap cooldownMap;
+	private final Plugin plugin;
+	private final YamlLanguageResourceManager languageResourceManager;
+	private final YamlLanguageQueryHandler languageQueryHandler;
+	private final CooldownMap cooldownMap;
 
 
 	/**
@@ -97,10 +97,10 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	                       final YamlLanguageQueryHandler languageQueryHandler,
 	                       final CooldownMap cooldownMap)
 	{
-		MessageBuilder.plugin = plugin;
-		MessageBuilder.languageResourceManager = languageResourceManager;
-		MessageBuilder.languageQueryHandler = languageQueryHandler;
-		MessageBuilder.cooldownMap = cooldownMap;
+		this.plugin = plugin;
+		this.languageResourceManager = languageResourceManager;
+		this.languageQueryHandler = languageQueryHandler;
+		this.cooldownMap = cooldownMap;
 	}
 
 
@@ -117,13 +117,13 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param <Macro> the type for Macro, a unique identifier for macros passed into the builder from the plugin
 	 */
 	public static <MessageId extends Enum<MessageId>, Macro extends Enum<Macro>>
-	MessageBuilder<MessageId, Macro> create()
+	MessageBuilder<MessageId, Macro> create(final Plugin plugin)
 	{
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
 		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
-		languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
-		languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
-		cooldownMap = new CooldownMap();
+		YamlLanguageResourceManager languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
+		YamlLanguageQueryHandler languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
+		CooldownMap cooldownMap = new CooldownMap();
 
 		return new MessageBuilder<>(plugin, languageResourceManager, languageQueryHandler, cooldownMap);
 	}
