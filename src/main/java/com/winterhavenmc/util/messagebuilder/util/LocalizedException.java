@@ -85,6 +85,7 @@ public class LocalizedException extends IllegalArgumentException {
 		ENTITY("entity"),
 		ITEM_SECTION("itemSection"),
 		KEY("key"),
+		LANGUAGE_QUERY_HANDLER("languageQueryHandler"),
 		LANGUAGE_TAG("languageTag"),
 		LOCALE("locale"),
 		MACRO("macro"),

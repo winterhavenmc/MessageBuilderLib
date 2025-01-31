@@ -27,12 +27,15 @@ import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.LANGUAGE_QUERY_HANDLER;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_ID;
 
 public class MessageRetriever implements Retriever {
 	@Override
-	public Optional<MessageRecord> getMessageRecord(String messageId, LanguageQueryHandler languageQueryHandler) {
+	public Optional<MessageRecord> getRecord(String messageId, LanguageQueryHandler languageQueryHandler) {
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
+		if (languageQueryHandler == null) { throw new LocalizedException(PARAMETER_NULL, LANGUAGE_QUERY_HANDLER); }
+
 		SectionQueryHandler sectionQueryHandler = languageQueryHandler.getSectionQueryHandler(Section.MESSAGES);
 		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
 			return messageSectionQueryHandler.getRecord(messageId);

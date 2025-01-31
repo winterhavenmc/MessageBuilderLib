@@ -15,16 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline;
+package com.winterhavenmc.util.time;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-
-import java.util.Optional;
+import java.time.Duration;
+import java.util.Locale;
 
 @FunctionalInterface
-public interface Retriever {
-
-	Optional<MessageRecord> getRecord(String messageId, LanguageQueryHandler languageQueryHandler);
-
+public interface TimeFormatter {
+	String getFormatted(Locale locale, Duration duration);
 }

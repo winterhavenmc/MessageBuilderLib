@@ -51,39 +51,4 @@ public abstract class AbstractSectionQueryHandler implements SectionQueryHandler
 		return configurationSupplier.getSection(section).getMapList(keyPath);
 	}
 
-
-	/**
-	 * Return the Section constant for this query handler type
-	 *
-	 * @return the CONSTANTS Section constant, establishing this query handler type
-	 */
-	@Override
-	public Section getSectionType() {
-		return section;
-	}
-
-
-	/**
-	 * The primary type returned by this query handler. A query handler may provide methods that return
-	 * values of other types.
-	 *
-	 * @return String.class as the primary type returned by this query handler
-	 */
-	@Override
-	public Class<?> getPrimaryType() {
-		return primaryType;
-	}
-
-	/**
-	 * A list of the types returned by this query handler. A query handler should not provide methods that return
-	 * values of other types.
-	 *
-	 * @return {@code List} of class types that are handled by this query handler
-	 */
-	@Override
-	public List<Class<?>> listHandledTypes()  {
-		return handledTypes;
-	}
-
-
 }

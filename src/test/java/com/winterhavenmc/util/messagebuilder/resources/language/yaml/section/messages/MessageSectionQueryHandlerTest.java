@@ -29,7 +29,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,21 +95,6 @@ class MessageSectionQueryHandlerTest {
 	void testGetRecord_parameter_invalid() {
 		Optional<MessageRecord> messageRecord = queryHandler.getRecord(MessageId.NONEXISTENT_ENTRY.name());
 		assertFalse(messageRecord.isPresent());
-	}
-
-	@Test
-	void getSectionType() {
-		assertEquals(Section.MESSAGES, queryHandler.getSectionType());
-	}
-
-	@Test
-	void getPrimaryType() {
-		assertEquals(MessageRecord.class, queryHandler.getPrimaryType());
-	}
-
-	@Test
-	void listHandledTypes() {
-		assertEquals(List.of(MessageRecord.class), queryHandler.listHandledTypes());
 	}
 
 }

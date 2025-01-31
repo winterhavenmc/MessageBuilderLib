@@ -20,10 +20,6 @@ package com.winterhavenmc.util.messagebuilder.resources.language;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-
-import java.util.Optional;
 
 
 public interface LanguageQueryHandler {
@@ -36,24 +32,5 @@ public interface LanguageQueryHandler {
 	 */
 	SectionQueryHandler getSectionQueryHandler(Section section);
 
-
 	YamlConfigurationSupplier getConfigurationSupplier();
-
-
-	/**
-	 * Convenience method to retrieve an item record
-	 *
-	 * @param keyPath the keyPath of the item record to retrieve
-	 * @return an {@link Optional} containing the item record, or an empty {@code Optional} if no record could be found.
-	 */
-	Optional<ItemRecord> getItemRecord(final String keyPath);
-
-
-	/**
-	 * Convenience method to retrieve a message record
-	 *
-	 * @param messageId the MessageId of the message to be retrieved
-	 * @return  an {@link Optional} containing the message record, or an empty {@code Optional} if no record could be found.
-	 */
-	Optional<MessageRecord> getMessageRecord(String messageId);
 }

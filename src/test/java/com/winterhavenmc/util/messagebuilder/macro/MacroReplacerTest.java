@@ -25,6 +25,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.mes
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.Material;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.ItemStack;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -259,6 +261,23 @@ class MacroReplacerTest {
 	void testContainsMacros() {
 		assertTrue(macroReplacer.containsMacros("This is a string that {CONTAINS} a macro."));
 		assertFalse(macroReplacer.containsMacros("This is a string that does not contain a macro."));
+	}
+
+	@Test
+	void addRecipientContext() {
+		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
+		ContextMap contextMap = new ContextMap(console, MessageId.ENABLED_MESSAGE.name());
+
+		macroReplacer.addRecipientContext(contextMap);
+		assertTrue(contextMap.containsKey("RECIPIENT"));
+		//TODO: fix ths:
+		// assertEquals("console", contextMap.get("RECIPIENT"));
+	}
+
+	@Test
+	void testGetRegex() {
+		assertNotNull(MacroReplacer.getRegex());
+		//TODO: test regex pattern
 	}
 
 }

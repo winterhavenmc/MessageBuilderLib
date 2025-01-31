@@ -20,13 +20,7 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-
-import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
@@ -60,23 +54,6 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	@Override
 	public YamlConfigurationSupplier getConfigurationSupplier() {
 		return yamlConfigurationSupplier;
-	}
-
-
-	@Override
-	public Optional<ItemRecord> getItemRecord(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
-
-		ItemSectionQueryHandler itemSectionQueryHandler = Section.ITEMS.getQueryHandler(yamlConfigurationSupplier);
-		return itemSectionQueryHandler.getRecord(key);
-	}
-
-	@Override
-	public Optional<MessageRecord> getMessageRecord(final String messageId) {
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
-
-		MessageSectionQueryHandler messageSectionQueryHandler = Section.MESSAGES.getQueryHandler(yamlConfigurationSupplier);
-		return messageSectionQueryHandler.getRecord(messageId);
 	}
 
 }

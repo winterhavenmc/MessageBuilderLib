@@ -77,21 +77,6 @@ class ConstantSectionQueryHandlerTest {
 	}
 
 	@Test
-	void testGetSectionType() {
-		assertEquals("CONSTANTS", queryHandler.getSectionType().name());
-	}
-
-	@Test
-	void getPrimaryType() {
-		assertEquals(String.class, queryHandler.getPrimaryType());
-	}
-
-	@Test
-	void listHandledTypes() {
-		assertEquals(List.of(String.class, List.class, Integer.class), queryHandler.listHandledTypes());
-	}
-
-	@Test
 	void getString_keyPath_valid() {
 		assertEquals(Optional.of("&aSpawn"), queryHandler.getString("SPAWN.DISPLAY_NAME"));
 	}

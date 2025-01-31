@@ -27,7 +27,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,21 +73,6 @@ class ItemSectionQueryHandlerTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  new ItemSectionQueryHandler(supplier));
 		assertEquals("The configuration section returned by the configuration supplier was an invalid 'ITEMS' section.", exception.getMessage());
-	}
-
-	@Test
-	void TestGetSectionType() {
-		assertEquals("ITEMS", queryHandler.getSectionType().name());
-	}
-
-	@Test
-	void testGetPrimaryType() {
-		assertEquals(ItemRecord.class, queryHandler.getPrimaryType());
-	}
-
-	@Test
-	void testListHandledTypes() {
-		assertEquals(List.of(ItemRecord.class), queryHandler.listHandledTypes());
 	}
 
 	@Test

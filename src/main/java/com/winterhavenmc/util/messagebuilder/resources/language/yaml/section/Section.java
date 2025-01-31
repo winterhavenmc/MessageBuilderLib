@@ -85,8 +85,8 @@ public enum Section {
 			try	{
 				return section.handlerClass.getConstructor(YamlConfigurationSupplier.class).newInstance(configurationSupplier);
 			}
-			catch (ReflectiveOperationException e) {
-				throw new RuntimeException("Failed to instantiate SectionQueryHandler for " + section.name(), e);
+			catch (ReflectiveOperationException exception) {
+				throw new RuntimeException("Failed to instantiate SectionQueryHandler for " + section.name(), exception);
 			}
 		});
 	}

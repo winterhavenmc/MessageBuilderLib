@@ -17,14 +17,23 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.*;
 
-@FunctionalInterface
-public interface Retriever {
+class SenderTest {
 
-	Optional<MessageRecord> getRecord(String messageId, LanguageQueryHandler languageQueryHandler);
+	@Test
+	void testTypeValues() {
+		Sender.Type[] values = Sender.Type.values();
+		assertEquals(Sender.Type.MESSAGE, values[0]);
+		assertEquals(Sender.Type.TITLE, values[1]);
+	}
+
+	@Test
+	void testTypeValueOf() {
+		assertEquals(Sender.Type.MESSAGE, Sender.Type.valueOf("MESSAGE"));
+		assertEquals(Sender.Type.TITLE, Sender.Type.valueOf("TITLE"));
+	}
 
 }
