@@ -108,65 +108,93 @@ class MessageTest {
 		pluginConfiguration = null;
 	}
 
-	@Test
-	void testSetMacro() {
-		message.setMacro(Macro.TOOL, itemStack);
-		assertEquals(itemStack, message.peek(Macro.TOOL));
+
+	@Nested
+	class SetMacroTests {
+		@Test
+		void testSetMacro() {
+			message.setMacro(Macro.TOOL, itemStack);
+			assertEquals(itemStack, message.peek(Macro.TOOL));
+		}
+
+		@Test
+		void testSetMacro_parameter_null_macro() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> message.setMacro(null, new ItemStack(Material.DIAMOND_SWORD)));
+
+			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
+		}
+
+		@Test
+		void testSetMacro_parameter_null_object() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> message.setMacro(Macro.OWNER, null));
+
+			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
+		}
 	}
 
-	@Test
-	void testSetMacro_parameter_null_macro() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> message.setMacro(null, new ItemStack(Material.DIAMOND_SWORD)));
 
-		assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
+	@Nested
+	class SetMacro2Tests {
+		@Test
+		void testSetMacro2() {
+			message.setMacro(10, Macro.TOOL, itemStack);
+			assertEquals(itemStack, message.peek(Macro.TOOL));
+		}
+
+		@Test
+		void testSetMacro2_parameter_null_macro() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> message.setMacro(5, null, new ItemStack(Material.DIAMOND_SWORD)));
+
+			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
+		}
+
+		@Test
+		void testSetMacro2_parameter_null_object() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> message.setMacro(6, Macro.OWNER, null));
+
+			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
+		}
 	}
 
-	@Test
-	void testSetMacro_parameter_null_object() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> message.setMacro(Macro.OWNER, null));
+	@Nested
+	class IsSendableTests {
+		@Test
+		void testIsSendable() {
+			// Arrange
+			when(playerMock.isOnline()).thenReturn(true);
 
-		assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
+			// Act & Assert
+			assertTrue(message.isSendable(playerMock, testRecord));
+
+			// Verify
+			verify(playerMock, atLeastOnce()).isOnline();
+		}
+
+		@Test
+		void testIsSendable_parameter_null_recipient() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> message.isSendable(null, testRecord));
+
+			assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
+		}
+
+		@Test
+		void testIsSendable_parameter_null_messageRecord() {
+			LocalizedException exception = assertThrows(LocalizedException.class,
+					() -> message.isSendable(playerMock, null));
+
+			assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
+		}
 	}
 
-	@Test
-	void testSetMacro2() {
-		message.setMacro(10, Macro.TOOL, itemStack);
-		assertEquals(itemStack, message.peek(Macro.TOOL));
-	}
-
-	@Test
-	void testSetMacro2_parameter_null_macro() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> message.setMacro(5,null, new ItemStack(Material.DIAMOND_SWORD)));
-
-		assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void testSetMacro2_parameter_null_object() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> message.setMacro(6, Macro.OWNER, null));
-
-		assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
-	}
 
 	@Test
 	void testSend() {
-
-	}
-
-	@Test
-	void testIsSendable() {
-		// Arrange
-		when(playerMock.isOnline()).thenReturn(true);
-
-		// Act & Assert
-		assertTrue(message.isSendable(playerMock, testRecord));
-
-		// Verify
-		verify(playerMock, atLeastOnce()).isOnline();
+		message.send();
 	}
 
 }
