@@ -19,8 +19,13 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+
+import org.bukkit.configuration.file.FileConfiguration;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +37,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -48,9 +54,29 @@ class MessageRetrieverTest {
 	@Test
 	void getRecord() {
 		Retriever retriever = new MessageRetriever();
+		// Arrange
+		FileConfiguration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
+		when(languageQueryHandlerMock.getSectionQueryHandler(Section.MESSAGES)).thenReturn(Section.MESSAGES.getQueryHandler(configurationSupplier));
+
+		// Act
+		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name(), languageQueryHandlerMock);
+
+		// Assert
+		assertNotNull(messageRecord);
+		assertTrue(messageRecord.isPresent());
+
+		// Verify
+		verify(languageQueryHandlerMock, atLeastOnce()).getSectionQueryHandler(Section.MESSAGES);
+	}
+
+	@Test
+	void getRecord_section_query_handler_null() {
+		Retriever retriever = new MessageRetriever();
 
 		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name(), languageQueryHandlerMock);
 		assertNotNull(messageRecord);
+		assertFalse(messageRecord.isPresent());
 	}
 
 	@Test

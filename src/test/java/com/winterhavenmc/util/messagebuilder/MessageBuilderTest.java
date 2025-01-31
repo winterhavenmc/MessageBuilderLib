@@ -59,7 +59,7 @@ class MessageBuilderTest {
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;
 
-	MessageBuilder<MessageId, Macro> messageBuilder;
+	MessageBuilder messageBuilder;
 
 
 	@BeforeEach
@@ -144,7 +144,7 @@ class MessageBuilderTest {
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
 		// Act
-		MessageBuilder<MessageId, Macro> messageBuilder1 = MessageBuilder.create();
+		MessageBuilder messageBuilder1 = MessageBuilder.create(pluginMock);
 
 		// Assert
 		assertNotNull(messageBuilder1);
