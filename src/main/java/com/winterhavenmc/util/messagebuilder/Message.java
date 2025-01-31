@@ -156,15 +156,26 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @param messageRecord the message record
 	 * @return {@code true} if the recipient/message is sendable, {@code false} if not
 	 */
-	private boolean isSendable(final CommandSender recipient, MessageRecord messageRecord) {
+	boolean isSendable(final CommandSender recipient, MessageRecord messageRecord) {
 
 		// if recipient is a player but is not online, return false
-		if (recipient instanceof Player player && player.isOnline()) {
+		if (recipient instanceof Player player && !player.isOnline()) {
 			return false;
 		}
 
 		// return true if message is enabled and not in cooldown map, else false
 		return messageRecord.enabled() && !cooldownMap.isCooling(recipient, messageRecord.messageId());
+	}
+
+
+	/**
+	 * Examine the contents of the context map for testing purposes
+	 *
+	 * @param macro the key to retrieve from the context map
+	 * @return {@code Object} the value stored in the map, or {@code null} if no value is present for key
+	 */
+	Object peek(Macro macro) {
+		return contextMap.get(macro.name());
 	}
 
 }
