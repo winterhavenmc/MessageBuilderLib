@@ -68,11 +68,8 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  * specially by the doMacroReplacements method. Special keys are:
  * ITEM or ITEM_NAME, ITEM_QUANTITY, WORLD or WORLD_NAME, PLAYER or PLAYER_NAME, LOCATION or PLAYER_LOCATION,
  * DURATION or DURATION_MINUTES
- *
- * @param <MessageId> An enum whose members correspond to a message key in a language file
- * @param <Macro>     An enum whose members correspond to a string replacement placeholder in a message string
  */
-public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>>
+public final class MessageBuilder
 {
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
 	public final static ResourceBundle BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, Locale.getDefault());
@@ -113,11 +110,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * the object will not be left in a partially instantiated state.
 	 *
 	 * @return an instance of this class
-	 * @param <MessageId> the type for MessageId, a unique identifier for messages stored in a resource
-	 * @param <Macro> the type for Macro, a unique identifier for macros passed into the builder from the plugin
 	 */
-	public static <MessageId extends Enum<MessageId>, Macro extends Enum<Macro>>
-	MessageBuilder<MessageId, Macro> create(final Plugin plugin)
+	public static MessageBuilder create(final Plugin plugin)
 	{
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
 		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
@@ -125,7 +119,7 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 		YamlLanguageQueryHandler languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
 		CooldownMap cooldownMap = new CooldownMap();
 
-		return new MessageBuilder<>(plugin, languageResourceManager, languageQueryHandler, cooldownMap);
+		return new MessageBuilder(plugin, languageResourceManager, languageQueryHandler, cooldownMap);
 	}
 
 
@@ -139,16 +133,13 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param languageResourceManagerMock a mock language resource manager instance
 	 * @param languageQueryHandlerMock a mock language query handler instance
 	 * @return an instance of this class, instantiated with the mock objects
-	 * @param <MessageId> the type for MessageId, a unique identifier for messages stored in a resource
-	 * @param <Macro> the type for Macro, a unique identifier for macros passed into the builder from the plugin
 	 */
-	static <MessageId extends Enum<MessageId>, Macro extends Enum<Macro>>
-	MessageBuilder<MessageId, Macro> test(final Plugin pluginMock,
+	static MessageBuilder test(final Plugin pluginMock,
          final YamlLanguageResourceManager languageResourceManagerMock,
          final YamlLanguageQueryHandler languageQueryHandlerMock,
 	     final CooldownMap cooldownMap)
 	{
-		return new MessageBuilder<>(pluginMock, languageResourceManagerMock, languageQueryHandlerMock, cooldownMap);
+		return new MessageBuilder(pluginMock, languageResourceManagerMock, languageQueryHandlerMock, cooldownMap);
 	}
 
 
@@ -159,7 +150,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param messageId the message identifier
 	 * @return {@code Message} an initialized message object
 	 */
-	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId)
+	public <MessageId extends Enum<MessageId>, Macro extends Enum<Macro>>
+	Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId)
 	{
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
