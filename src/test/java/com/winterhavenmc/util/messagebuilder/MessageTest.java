@@ -113,8 +113,8 @@ class MessageTest {
 	class SetMacroTests {
 		@Test
 		void testSetMacro() {
-			message.setMacro(Macro.TOOL, itemStack);
-			assertEquals(itemStack, message.peek(Macro.TOOL));
+			Message<MessageId, Macro> newMessage = message.setMacro(Macro.TOOL, itemStack);
+			assertEquals(itemStack, newMessage.peek(Macro.TOOL));
 		}
 
 		@Test
@@ -139,8 +139,8 @@ class MessageTest {
 	class SetMacro2Tests {
 		@Test
 		void testSetMacro2() {
-			message.setMacro(10, Macro.TOOL, itemStack);
-			assertEquals(itemStack, message.peek(Macro.TOOL));
+			Message<MessageId, Macro> newMessage = message.setMacro(10, Macro.TOOL, itemStack);
+			assertEquals(itemStack, newMessage.peek(Macro.TOOL));
 		}
 
 		@Test
