@@ -36,7 +36,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  * This behavior could be adapted by generating random uuids, or specific uuids for various non-uuid
  * message recipient types.
  */
-class CooldownKey {
+public class CooldownKey {
 
 	final static UUID DEFAULT_UUID = new UUID(0, 0);
 
@@ -50,7 +50,7 @@ class CooldownKey {
 	 * @param recipient the message recipient
 	 * @param messageId the unique message id
 	 */
-	CooldownKey(final CommandSender recipient, String messageId) {
+	public CooldownKey(final CommandSender recipient, String messageId) {
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
