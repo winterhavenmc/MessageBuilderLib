@@ -145,7 +145,7 @@ class CooldownKeyTest {
 	void testEquals_DifferentClass() {
 		CooldownKey key = new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name());
 
-		assertNotEquals(key, "some string"); // An object should not be equal to an instance of another class
+		assertNotEquals("some string", key); // An object should not be equal to an instance of another class
 	}
 
 	@Test
