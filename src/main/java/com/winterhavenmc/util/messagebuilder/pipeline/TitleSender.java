@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_RECORD;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.RECIPIENT;
 
+
 public class TitleSender implements Sender {
 
 	@Override
