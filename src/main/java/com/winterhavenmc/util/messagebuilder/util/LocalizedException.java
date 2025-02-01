@@ -89,6 +89,7 @@ public class LocalizedException extends IllegalArgumentException {
 		LANGUAGE_TAG("languageTag"),
 		LOCALE("locale"),
 		MACRO("macro"),
+		MESSAGE("message"),
 		MESSAGE_ID("messageId"),
 		MESSAGE_SECTION("messageSection"),
 		MESSAGE_RECORD("messageRecord"),
