@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
+
 public class NameAdapterTest {
 
 	@Nested
@@ -43,13 +44,13 @@ public class NameAdapterTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> resolver = NameAdapter.asNameable(commandSenderMock);
-			if (resolver.isPresent()) {
-				name = resolver.get().getName();
+			Optional<Nameable> adapter = NameAdapter.asNameable(commandSenderMock);
+			if (adapter.isPresent()) {
+				name = adapter.get().getName();
 			}
 
 			// Assert
-			assertEquals("Command Sender Name", name, "The resolver should return the name from the CommandSender.");
+			assertEquals("Command Sender Name", name, "The adapter should return the name from the CommandSender.");
 
 			verify(commandSenderMock, atLeastOnce()).getName();
 		}
@@ -61,13 +62,13 @@ public class NameAdapterTest {
 			String name = null;
 
 			// Act
-			Optional<Nameable> resolver = NameAdapter.asNameable(nullPlayer);
-			if (resolver.isPresent()) {
-				name = resolver.get().getName();
+			Optional<Nameable> adapter = NameAdapter.asNameable(nullPlayer);
+			if (adapter.isPresent()) {
+				name = adapter.get().getName();
 			}
 
 			// Assert
-			assertNull(name, "The resolver should return an empty string for a null Player.");
+			assertNull(name, "The adapter should return an empty string for a null Player.");
 		}
 	}
 
@@ -83,13 +84,13 @@ public class NameAdapterTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> resolver = NameAdapter.asNameable(worldMock);
-			if (resolver.isPresent()) {
-				name = resolver.get().getName();
+			Optional<Nameable> adapter = NameAdapter.asNameable(worldMock);
+			if (adapter.isPresent()) {
+				name = adapter.get().getName();
 			}
 
 			// Assert
-			assertEquals("world_name", name, "The resolver should return the name from the World.");
+			assertEquals("world_name", name, "The adapter should return the name from the World.");
 		}
 	}
 
@@ -104,13 +105,13 @@ public class NameAdapterTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> resolver = NameAdapter.asNameable(serverMock);
-			if (resolver.isPresent()) {
-				name = resolver.get().getName();
+			Optional<Nameable> adapter = NameAdapter.asNameable(serverMock);
+			if (adapter.isPresent()) {
+				name = adapter.get().getName();
 			}
 
 			// Assert
-			assertEquals("Server Name", name, "The resolver should return the name from the Server.");
+			assertEquals("Server Name", name, "The adapter should return the name from the Server.");
 		}
 	}
 
@@ -125,13 +126,13 @@ public class NameAdapterTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> resolver = NameAdapter.asNameable(pluginMock);
-			if (resolver.isPresent()) {
-				name = resolver.get().getName();
+			Optional<Nameable> adapter = NameAdapter.asNameable(pluginMock);
+			if (adapter.isPresent()) {
+				name = adapter.get().getName();
 			}
 
 			// Assert
-			assertEquals("Plugin Name", name, "The resolver should return the name from the Plugin.");
+			assertEquals("Plugin Name", name, "The adapter should return the name from the Plugin.");
 		}
 	}
 
