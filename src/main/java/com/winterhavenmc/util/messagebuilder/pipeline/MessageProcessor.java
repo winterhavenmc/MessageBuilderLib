@@ -50,14 +50,11 @@ public class MessageProcessor implements Processor {
 		this.notCooling = cooldownMap::notCooling;
 	}
 
-	public <Macro extends Enum<Macro>> void process(final Message<Macro> message) {
-		if (message == null) {
-			throw new LocalizedException(PARAMETER_NULL, MESSAGE);
-		}
+	public <Macro extends Enum<Macro>> void process(final Message<Macro> message)
+	{
+		if (message == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE); }
 
-		CooldownKey cooldownKey = new CooldownKey(message.getRecipient(), message.getMessageId());
-
-		Optional.of(cooldownKey)
+		Optional.of(new CooldownKey(message.getRecipient(), message.getMessageId()))
 				.filter(notCooling) // Only proceed if not on cooldown
 				.flatMap(key -> messageRetriever.getRecord(message.getMessageId()))
 				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message.getContextMap()))
