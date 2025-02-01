@@ -15,9 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.cooldown;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.Cooldown;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
@@ -48,7 +47,7 @@ public final class CooldownMap implements Cooldown {
 		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
 
 		CooldownKey key = new CooldownKey(recipient, messageRecord.messageId());
-		if (!isCooling(key)) {
+		if (notCooling(key)) {
 			Instant expirationTime = Instant.now().plus(messageRecord.repeatDelay());
 			COOLDOWN_MAP.put(key, expirationTime);
 		}
@@ -62,10 +61,10 @@ public final class CooldownMap implements Cooldown {
 	 * @return true if player message is in cooldown map and has not reached its expiration time, false if it is not
 	 * @throws LocalizedException if any parameter is null
 	 */
-	public boolean isCooling(final CooldownKey key) {
+	public boolean notCooling(final CooldownKey key) {
 		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
 
-		return COOLDOWN_MAP.containsKey(key) && Instant.now().isBefore(COOLDOWN_MAP.get(key));
+		return !(COOLDOWN_MAP.containsKey(key) && Instant.now().isBefore(COOLDOWN_MAP.get(key)));
 	}
 
 

@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,6 +30,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.*;
+import java.time.Duration;
+import java.util.List;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
@@ -133,6 +137,26 @@ public final class MockUtility {
 			Files.copy(inputStream, targetFilePath); // DO NOT REPLACE EXISTING FILES
 			return true;
 		}
+	}
+
+
+	public static MessageRecord getTestMessageRecord(final MessageId messageId) {
+		return new MessageRecord(
+				messageId.name(),
+				true,
+				false,
+				"key",
+				List.of("arg1", "arg2"),
+				"this is a message.",
+				Duration.ofSeconds(3),
+				"this is a title.",
+				20,
+				40,
+				30,
+				"this is a subtitle.",
+				"this is a final message string",
+				"this is a final title string",
+				"this is a final subtitle string");
 	}
 
 }

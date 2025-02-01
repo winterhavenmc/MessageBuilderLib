@@ -53,14 +53,14 @@ class MessageRetrieverTest {
 
 	@Test
 	void getRecord() {
-		Retriever retriever = new MessageRetriever();
+		Retriever retriever = new MessageRetriever(languageQueryHandlerMock);
 		// Arrange
 		FileConfiguration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
 		when(languageQueryHandlerMock.getSectionQueryHandler(Section.MESSAGES)).thenReturn(Section.MESSAGES.getQueryHandler(configurationSupplier));
 
 		// Act
-		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name(), languageQueryHandlerMock);
+		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name());
 
 		// Assert
 		assertNotNull(messageRecord);
@@ -72,31 +72,21 @@ class MessageRetrieverTest {
 
 	@Test
 	void getRecord_section_query_handler_null() {
-		Retriever retriever = new MessageRetriever();
+		Retriever retriever = new MessageRetriever(languageQueryHandlerMock);
 
-		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name(), languageQueryHandlerMock);
+		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name());
 		assertNotNull(messageRecord);
 		assertFalse(messageRecord.isPresent());
 	}
 
 	@Test
 	void getMessageRecord_parameter_null_Id() {
-		Retriever retriever = new MessageRetriever();
+		Retriever retriever = new MessageRetriever(languageQueryHandlerMock);
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> retriever.getRecord(null, languageQueryHandlerMock));
+				() -> retriever.getRecord(null));
 
 		// Assert
 		assertEquals("The parameter 'messageId' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void getRecord_parameter_null_languageQueryHandler() {
-		Retriever retriever = new MessageRetriever();
-		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> retriever.getRecord(MessageId.ENABLED_MESSAGE.name(), null));
-
-		// Assert
-		assertEquals("The parameter 'languageQueryHandler' cannot be null.", exception.getMessage());
 	}
 
 }

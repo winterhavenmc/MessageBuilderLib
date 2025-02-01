@@ -19,10 +19,10 @@ package com.winterhavenmc.util.messagebuilder.macro;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.processor.*;
-
 import com.winterhavenmc.util.messagebuilder.pipeline.Replacer;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
@@ -109,8 +109,8 @@ public class MacroReplacer implements Replacer {
 		String modifiedMessageString = messageString;
 
 		// only process macro tokens if message string contains a pair of macro delimiters
-		if (containsMacros(modifiedMessageString)) {
-
+		if (containsMacros(modifiedMessageString))
+		{
 			// add recipient fields to context map
 			addRecipientContext(contextMap);
 
@@ -138,7 +138,8 @@ public class MacroReplacer implements Replacer {
 		contextMap.put(key, recipient.getName());
 
 		// if recipient is an entity, put recipient location in macro object map
-		if (recipient instanceof Entity entity) {
+		if (recipient instanceof Entity entity)
+		{
 			String locationKey = key.concat(".LOCATION");
 			contextMap.put(locationKey, entity.getLocation());
 		}
@@ -150,11 +151,13 @@ public class MacroReplacer implements Replacer {
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 
 		ResultMap resultMap = new ResultMap();
-		for (Map.Entry<String, Object> entry : contextMap.entrySet()) {
+		for (Map.Entry<String, Object> entry : contextMap.entrySet())
+		{
 			ProcessorType processorType = ProcessorType.matchType(entry.getValue());
 			MacroProcessor macroProcessor = processorRegistry.get(processorType);
 			resultMap.putAll(macroProcessor.resolveContext(entry.getKey(), contextMap));
 		}
+
 		return resultMap;
 	}
 
@@ -166,15 +169,18 @@ public class MacroReplacer implements Replacer {
 
 		String modifiedMessageString = messageString;
 
-		for (Map.Entry<String, String> entry : replacementMap.entrySet()) {
+		for (Map.Entry<String, String> entry : replacementMap.entrySet())
+		{
 			String macroToken = DELIMITER_OPEN + entry.getKey() + DELIMITER_CLOSE;
 			modifiedMessageString = modifiedMessageString.replace(macroToken, entry.getValue());
 		}
+
 		return modifiedMessageString;
 	}
 
 
-	public static Pattern getRegex() {
+	public static Pattern getRegex()
+	{
 		return Pattern.compile("\\" + DELIMITER_OPEN + "[\\p{Lu}0-9_]+" + DELIMITER_CLOSE);
 	}
 

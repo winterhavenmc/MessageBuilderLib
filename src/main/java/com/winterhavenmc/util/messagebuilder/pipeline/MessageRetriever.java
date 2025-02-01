@@ -31,8 +31,16 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_ID;
 
 public class MessageRetriever implements Retriever {
+
+	private final LanguageQueryHandler languageQueryHandler;
+
+
+	public MessageRetriever(final LanguageQueryHandler languageQueryHandler) {
+		this.languageQueryHandler = languageQueryHandler;
+	}
+
 	@Override
-	public Optional<MessageRecord> getRecord(String messageId, LanguageQueryHandler languageQueryHandler) {
+	public Optional<MessageRecord> getRecord(String messageId) {
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 		if (languageQueryHandler == null) { throw new LocalizedException(PARAMETER_NULL, LANGUAGE_QUERY_HANDLER); }
 

@@ -17,8 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessageRetriever;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessageSender;
+import com.winterhavenmc.util.messagebuilder.pipeline.TitleSender;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
@@ -77,7 +82,7 @@ public final class MessageBuilder
 	public final static TemporalUnit TICKS = new Tick();
 
 	private final Plugin plugin;
-	private final YamlLanguageResourceManager languageResourceManager;
+	private final LanguageResourceManager languageResourceManager;
 	private final MessageProcessor messageProcessor;
 
 
@@ -89,7 +94,7 @@ public final class MessageBuilder
 	 * @param languageResourceManager an instance of the language resource manager
 	 */
 	private MessageBuilder(final Plugin plugin,
-	                       final YamlLanguageResourceManager languageResourceManager,
+	                       final LanguageResourceManager languageResourceManager,
 	                       final MessageProcessor messageProcessor)
 	{
 		this.plugin = plugin;
@@ -112,11 +117,14 @@ public final class MessageBuilder
 	{
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
 		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
-		YamlLanguageResourceManager languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
-		YamlLanguageQueryHandler languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
+		LanguageResourceManager languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
+		LanguageQueryHandler languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
 		CooldownMap cooldownMap = new CooldownMap();
 		MacroReplacer macroReplacer = new MacroReplacer();
-		MessageProcessor messageProcessor = new MessageProcessor(languageQueryHandler, macroReplacer, cooldownMap);
+		MessageSender messageSender = new MessageSender(cooldownMap);
+		TitleSender titleSender = new TitleSender();
+		MessageRetriever messageRetriever = new MessageRetriever(languageQueryHandler);
+		MessageProcessor messageProcessor = new MessageProcessor(messageRetriever, macroReplacer, cooldownMap, messageSender, titleSender);
 
 		return new MessageBuilder(plugin, languageResourceManager, messageProcessor);
 	}

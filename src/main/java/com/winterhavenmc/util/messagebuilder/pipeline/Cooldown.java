@@ -17,9 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownKey;
-
 @FunctionalInterface
 public interface Cooldown {
-	boolean isCooling(CooldownKey cooldownKey);
+	boolean notCooling(CooldownKey cooldownKey);
 }

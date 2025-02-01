@@ -15,12 +15,13 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.cooldown;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
@@ -50,7 +51,7 @@ public class CooldownKey {
 	 * @param recipient the message recipient
 	 * @param messageId the unique message id
 	 */
-	public CooldownKey(final CommandSender recipient, String messageId) {
+	public CooldownKey(final CommandSender recipient, final String messageId) {
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
@@ -62,6 +63,10 @@ public class CooldownKey {
 		else {
 			this.uuid = DEFAULT_UUID;
 		}
+	}
+
+	public static Optional<CooldownKey> optional(final CommandSender recipient, final String messageId) {
+		return Optional.of(new CooldownKey(recipient, messageId));
 	}
 
 	@Override

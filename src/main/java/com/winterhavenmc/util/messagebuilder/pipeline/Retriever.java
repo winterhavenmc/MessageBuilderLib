@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 
 import java.util.Optional;
@@ -25,6 +24,6 @@ import java.util.Optional;
 @FunctionalInterface
 public interface Retriever {
 
-	Optional<MessageRecord> getRecord(String messageId, LanguageQueryHandler languageQueryHandler);
+	Optional<MessageRecord> getRecord(String messageId);
 
 }

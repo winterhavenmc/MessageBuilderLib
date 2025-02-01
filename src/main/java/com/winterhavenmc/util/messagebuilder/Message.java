@@ -32,8 +32,8 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  *
  * @param <Macro> a macro placeholder value to be added to the context map
  */
-public final class Message<Macro extends Enum<Macro>> {
-
+public final class Message<Macro extends Enum<Macro>>
+{
 	private final CommandSender recipient;
 	private final String messageId;
 	private final MessageProcessor messageProcessor;
@@ -68,7 +68,14 @@ public final class Message<Macro extends Enum<Macro>> {
 		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
 		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
 
-		return setMacro(1, macro, value);
+		// use macro enum constant name as key
+		String key = macro.name();
+
+		// put value into context map
+		this.contextMap.put(key, value);
+
+		// return this instance of Message class to the builder chain
+		return this;
 	}
 
 
@@ -99,7 +106,8 @@ public final class Message<Macro extends Enum<Macro>> {
 	/**
 	 * Final step of message builder, performs replacements and sends message to recipient
 	 */
-	public void send() {
+	public void send()
+	{
 		messageProcessor.process(this);
 	}
 
@@ -110,20 +118,41 @@ public final class Message<Macro extends Enum<Macro>> {
 	 * @param macro the key to retrieve from the context map
 	 * @return {@code Object} the value stored in the map, or {@code null} if no value is present for key
 	 */
-	Object peek(Macro macro) {
+	Object peek(Macro macro)
+	{
 		return contextMap.get(macro.name());
 	}
 
 
-	public CommandSender getRecipient() {
+	/**
+	 * Getter for recipient
+	 *
+	 * @return {@code CommandSender} the message recipient
+	 */
+	public CommandSender getRecipient()
+	{
 		return recipient;
 	}
 
-	public String getMessageId() {
+
+	/**
+	 * Getter for messageId
+	 *
+	 * @return {@code String} the unique message identifier
+	 */
+	public String getMessageId()
+	{
 		return messageId;
 	}
 
-	public ContextMap getContextMap() {
+
+	/**
+	 * Getter for contextMap that contains macro key/value pairs for the message
+	 *
+	 * @return the context map for the message
+	 */
+	public ContextMap getContextMap()
+	{
 		return contextMap;
 	}
 

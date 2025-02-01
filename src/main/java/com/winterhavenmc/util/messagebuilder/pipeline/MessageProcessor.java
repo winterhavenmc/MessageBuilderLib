@@ -18,66 +18,52 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownKey;
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.function.Predicate;
 
-import static com.winterhavenmc.util.messagebuilder.pipeline.MessagePredicates.IS_ENABLED;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE;
 
 public class MessageProcessor implements Processor {
 
-	private final LanguageQueryHandler languageQueryHandler;
+	private final MessageRetriever messageRetriever;
 	private final MacroReplacer macroReplacer;
-	private final CooldownMap cooldownMap;
+	private final MessageSender messageSender;
+	private final TitleSender titleSender;
+	private final Predicate<CooldownKey> notCooling;
 
 
-	public MessageProcessor(final LanguageQueryHandler languageQueryHandler,
+	public MessageProcessor(final MessageRetriever messageRetriever,
 	                        final MacroReplacer macroReplacer,
-	                        final CooldownMap cooldownMap)
+	                        final CooldownMap cooldownMap,
+	                        final MessageSender messageSender,
+	                        final TitleSender titleSender)
 	{
-		this.languageQueryHandler = languageQueryHandler;
+		this.messageRetriever = messageRetriever;
 		this.macroReplacer = macroReplacer;
-		this.cooldownMap = cooldownMap;
+		this.messageSender = messageSender;
+		this.titleSender = titleSender;
+		this.notCooling = cooldownMap::notCooling;
 	}
 
-	public <Macro extends Enum<Macro>>
-	void process(final Message<Macro> message)
+	public <Macro extends Enum<Macro>> void process(final Message<Macro> message)
 	{
 		if (message == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE); }
 
-		// define predicates
-		Predicate<CooldownKey> isCooling = cooldownMap::isCooling;
+		List<Sender> senders = List.of(messageSender, titleSender);
 
-		// Replacer replacer = new MacroReplacer();     // BiFunction (injected into class)
-		Sender messageSender = new MessageSender();     // Consumer
-		Sender titleSender = new TitleSender();         // Consumer
-
-		// get optional message record
-		Optional<MessageRecord> messageRecord = new MessageRetriever().getRecord(message.getMessageId(), languageQueryHandler);
-
-		// if optional message record is present and enabled, recipient is online if player, and message is not cooling
-		if (messageRecord.isPresent()
-				&& IS_ENABLED.test(messageRecord.get())
-				&& !isCooling.test(new CooldownKey(message.getRecipient(), message.getMessageId())))
-		{
-			// perform macro replacements
-			Optional<MessageRecord> finalMesssageRecord = macroReplacer.replaceMacros(messageRecord.get(), message.getContextMap());
-
-			// send message
-			finalMesssageRecord.ifPresent(record -> messageSender.send(message.getRecipient(), record));
-			finalMesssageRecord.ifPresent(record -> titleSender.send(message.getRecipient(), record));
-
-			// set cooldown
-			finalMesssageRecord.ifPresent(record -> cooldownMap.putExpirationTime(message.getRecipient(), record));
-		}
+		CooldownKey.optional(message.getRecipient(), message.getMessageId())
+				.filter(notCooling) // Only proceed if not on cooldown
+				.flatMap(key -> messageRetriever
+						.getRecord(message.getMessageId()))
+				.flatMap(messageRecord -> macroReplacer
+						.replaceMacros(messageRecord, message.getContextMap()))
+				.ifPresent(processedMessage -> senders
+						.forEach(sender -> sender
+								.send(message.getRecipient(), processedMessage)));
 	}
 
 }
