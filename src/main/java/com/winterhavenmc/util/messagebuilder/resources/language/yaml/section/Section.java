@@ -31,7 +31,7 @@ import java.util.EnumMap;
 public enum Section {
 	CONSTANTS(ConstantSectionQueryHandler.class, "Constant", "Constants", "CONST"),
 	ITEMS(ItemSectionQueryHandler.class, "Item", "Items", "ITEM"),
-	MESSAGES(MessageSectionQueryHandler.class, "CooldownKey", "Messages", "MSG"),
+	MESSAGES(MessageSectionQueryHandler.class, "Message", "Messages", "MSG"),
 	;
 
 	// Enum map serves as a cache for instances of query handlers
