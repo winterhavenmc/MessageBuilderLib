@@ -69,6 +69,10 @@ public class CooldownKey {
 		return Optional.of(new CooldownKey(recipient, messageId));
 	}
 
+	public String getMessageId() {
+		return this.messageId;
+	}
+
 	@Override
 	public String toString() {
 		return messageId + "|" + this.uuid;
