@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageSender;
@@ -121,7 +121,7 @@ public final class MessageBuilder
 		LanguageQueryHandler languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
 		CooldownMap cooldownMap = new CooldownMap();
 		MacroReplacer macroReplacer = new MacroReplacer();
-		MessageSender messageSender = new MessageSender();
+		MessageSender messageSender = new MessageSender(cooldownMap);
 		TitleSender titleSender = new TitleSender();
 		MessageRetriever messageRetriever = new MessageRetriever(languageQueryHandler);
 		MessageProcessor messageProcessor = new MessageProcessor(messageRetriever, macroReplacer, cooldownMap, messageSender, titleSender);

@@ -18,16 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownKey;
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.function.Predicate;
 
-import static com.winterhavenmc.util.messagebuilder.pipeline.MessagePredicates.IS_ENABLED;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE;
 
@@ -35,10 +31,9 @@ public class MessageProcessor implements Processor {
 
 	private final MessageRetriever messageRetriever;
 	private final MacroReplacer macroReplacer;
-	private final CooldownMap cooldownMap;
 	private final MessageSender messageSender;
 	private final TitleSender titleSender;
-	private final Predicate<CooldownKey> isCooling;
+	private final Predicate<CooldownKey> notCooling;
 
 
 	public MessageProcessor(final MessageRetriever messageRetriever,
@@ -49,34 +44,25 @@ public class MessageProcessor implements Processor {
 	{
 		this.messageRetriever = messageRetriever;
 		this.macroReplacer = macroReplacer;
-		this.cooldownMap = cooldownMap;
 		this.messageSender = messageSender;
 		this.titleSender = titleSender;
-		this.isCooling = cooldownMap::isCooling;
+		this.notCooling = cooldownMap::notCooling;
 	}
 
-	public <Macro extends Enum<Macro>>
-	void process(final Message<Macro> message)
+	public <Macro extends Enum<Macro>> void process(final Message<Macro> message)
 	{
 		if (message == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE); }
 
-		// get optional message record
-		Optional<MessageRecord> messageRecord = messageRetriever.getRecord(message.getMessageId());
+		if (notCooling.test(new CooldownKey(message.getRecipient(), message.getMessageId()))) {
+			messageRetriever.getRecord(message.getMessageId())
+				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message.getContextMap())
+					.map(processedMessage -> {
+						List<Sender> senders = List.of(messageSender, titleSender);
+						senders.forEach(sender -> sender.send(message.getRecipient(), processedMessage));
+						return processedMessage; // Needed to satisfy `map()` return type
+					})
+				);
 
-		// if optional message record is present and enabled, recipient is online if player, and message is not cooling
-		if (messageRecord.isPresent()
-				&& IS_ENABLED.test(messageRecord.get())
-				&& !isCooling.test(new CooldownKey(message.getRecipient(), message.getMessageId())))
-		{
-			// perform macro replacements
-			Optional<MessageRecord> finalMesssageRecord = macroReplacer.replaceMacros(messageRecord.get(), message.getContextMap());
-
-			// send message
-			finalMesssageRecord.ifPresent(record -> messageSender.send(message.getRecipient(), record));
-			finalMesssageRecord.ifPresent(record -> titleSender.send(message.getRecipient(), record));
-
-			// set cooldown
-			finalMesssageRecord.ifPresent(record -> cooldownMap.putExpirationTime(message.getRecipient(), record));
 		}
 	}
 

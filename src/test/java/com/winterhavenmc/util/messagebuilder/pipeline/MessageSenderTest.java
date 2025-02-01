@@ -29,6 +29,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -53,8 +55,11 @@ class MessageSenderTest {
 
 	@Test
 	void send() {
+		// Arrange
+		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
+
 		// Act
-		new MessageSender().send(playerMock, messageRecord);
+		new MessageSender(new CooldownMap()).send(playerMock, messageRecord);
 
 		// Verify
 		verify(playerMock, atLeastOnce()).sendMessage(anyString());
@@ -63,14 +68,14 @@ class MessageSenderTest {
 	@Test
 	void send_parameter_null_recipient() {
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> new MessageSender().send(null, messageRecord));
+				() -> new MessageSender(new CooldownMap()).send(null, messageRecord));
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void send_parameter_null_messageRecord() {
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> new MessageSender().send(playerMock, null));
+				() -> new MessageSender(new CooldownMap()).send(playerMock, null));
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 	}
 

@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.cooldown;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
@@ -94,7 +94,7 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// Assert
-			assertTrue(cooldownMap.isCooling(new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name())));
+			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name())));
 
 			// Verify
 			verify(playerMock, atLeastOnce()).getUniqueId();
@@ -134,7 +134,7 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// Assert TODO: test that second put did not overwrite first entry
-			assertTrue(cooldownMap.isCooling(new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name())));
+			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name())));
 
 			// Verify
 			verify(playerMock, atLeast(2)).getUniqueId();
@@ -155,7 +155,7 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// assert
-			assertTrue(cooldownMap.isCooling(new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name())));
+			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name())));
 
 			// Verify
 			verify(playerMock, atLeastOnce()).getUniqueId();
@@ -165,7 +165,7 @@ class CooldownMapTest {
 		@DisplayName("Test isCooling with null key")
 		void testIsCooling_parameter_null_key() {
 			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> cooldownMap.isCooling(null));
+					() -> cooldownMap.notCooling(null));
 
 			assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 		}

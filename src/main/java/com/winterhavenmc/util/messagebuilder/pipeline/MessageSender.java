@@ -23,15 +23,24 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
 
 public class MessageSender implements Sender {
+
+	private final CooldownMap cooldownMap;
+
+
+	public MessageSender(final CooldownMap cooldownMap) {
+		this.cooldownMap = cooldownMap;
+	}
+
 	@Override
 	public void send(final CommandSender recipient, final MessageRecord messageRecord) {
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
 
 		recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageRecord.finalMessageString()));
+
+		cooldownMap.putExpirationTime(recipient, messageRecord);
 	}
 }
