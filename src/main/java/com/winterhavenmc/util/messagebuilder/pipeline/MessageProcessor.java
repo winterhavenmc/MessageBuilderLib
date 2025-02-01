@@ -21,7 +21,6 @@ import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.cooldown.CooldownKey;
 import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
@@ -34,18 +33,26 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 
 public class MessageProcessor implements Processor {
 
-	private final LanguageQueryHandler languageQueryHandler;
+	private final MessageRetriever messageRetriever;
 	private final MacroReplacer macroReplacer;
 	private final CooldownMap cooldownMap;
+	private final MessageSender messageSender;
+	private final TitleSender titleSender;
+	private final Predicate<CooldownKey> isCooling;
 
 
-	public MessageProcessor(final LanguageQueryHandler languageQueryHandler,
+	public MessageProcessor(final MessageRetriever messageRetriever,
 	                        final MacroReplacer macroReplacer,
-	                        final CooldownMap cooldownMap)
+	                        final CooldownMap cooldownMap,
+	                        final MessageSender messageSender,
+	                        final TitleSender titleSender)
 	{
-		this.languageQueryHandler = languageQueryHandler;
+		this.messageRetriever = messageRetriever;
 		this.macroReplacer = macroReplacer;
 		this.cooldownMap = cooldownMap;
+		this.messageSender = messageSender;
+		this.titleSender = titleSender;
+		this.isCooling = cooldownMap::isCooling;
 	}
 
 	public <Macro extends Enum<Macro>>
@@ -53,15 +60,8 @@ public class MessageProcessor implements Processor {
 	{
 		if (message == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE); }
 
-		// define predicates
-		Predicate<CooldownKey> isCooling = cooldownMap::isCooling;
-
-		// Replacer replacer = new MacroReplacer();     // BiFunction (injected into class)
-		Sender messageSender = new MessageSender();     // Consumer
-		Sender titleSender = new TitleSender();         // Consumer
-
 		// get optional message record
-		Optional<MessageRecord> messageRecord = new MessageRetriever().getRecord(message.getMessageId(), languageQueryHandler);
+		Optional<MessageRecord> messageRecord = messageRetriever.getRecord(message.getMessageId());
 
 		// if optional message record is present and enabled, recipient is online if player, and message is not cooling
 		if (messageRecord.isPresent()
