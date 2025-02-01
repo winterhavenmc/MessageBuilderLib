@@ -32,8 +32,8 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  *
  * @param <Macro> a macro placeholder value to be added to the context map
  */
-public final class Message<Macro extends Enum<Macro>> {
-
+public final class Message<Macro extends Enum<Macro>>
+{
 	private final CommandSender recipient;
 	private final String messageId;
 	private final MessageProcessor messageProcessor;
@@ -106,7 +106,8 @@ public final class Message<Macro extends Enum<Macro>> {
 	/**
 	 * Final step of message builder, performs replacements and sends message to recipient
 	 */
-	public void send() {
+	public void send()
+	{
 		messageProcessor.process(this);
 	}
 
@@ -117,7 +118,8 @@ public final class Message<Macro extends Enum<Macro>> {
 	 * @param macro the key to retrieve from the context map
 	 * @return {@code Object} the value stored in the map, or {@code null} if no value is present for key
 	 */
-	Object peek(Macro macro) {
+	Object peek(Macro macro)
+	{
 		return contextMap.get(macro.name());
 	}
 
