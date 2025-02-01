@@ -115,15 +115,35 @@ public final class Message<Macro extends Enum<Macro>> {
 	}
 
 
-	public CommandSender getRecipient() {
+	/**
+	 * Getter for recipient
+	 *
+	 * @return {@code CommandSender} the message recipient
+	 */
+	public CommandSender getRecipient()
+	{
 		return recipient;
 	}
 
-	public String getMessageId() {
+
+	/**
+	 * Getter for messageId
+	 *
+	 * @return {@code String} the unique message identifier
+	 */
+	public String getMessageId()
+	{
 		return messageId;
 	}
 
-	public ContextMap getContextMap() {
+
+	/**
+	 * Getter for contextMap that contains macro key/value pairs for the message
+	 *
+	 * @return the context map for the message
+	 */
+	public ContextMap getContextMap()
+	{
 		return contextMap;
 	}
 
