@@ -18,17 +18,10 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.*;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
@@ -37,43 +30,28 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 /**
  * The message object being built with builder pattern
  *
- * @param <MessageId> the unique identifier of a message in the language file
  * @param <Macro> a macro placeholder value to be added to the context map
  */
-public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
+public final class Message<Macro extends Enum<Macro>> {
 
-	// context map
-	private final ContextMap contextMap;
-
-	// required parameters
 	private final CommandSender recipient;
 	private final String messageId;
-	private final LanguageQueryHandler languageQueryHandler;
-	private final MacroReplacer macroReplacer;
-	private final CooldownMap cooldownMap;
+	private final MessageProcessor messageProcessor;
+	private final ContextMap contextMap;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param languageQueryHandler the ItemRecord handler for message records
-	 * @param macroReplacer        reference to macro processor class
-	 * @param recipient            message recipient
-	 * @param messageId            message identifier
+	 * @param recipient message recipient
+	 * @param messageId message identifier
+	 * @param messageProcessor the message processor that will receive the message when the send method is called
 	 */
-	public Message(
-			final LanguageQueryHandler languageQueryHandler,
-			final MacroReplacer macroReplacer,
-			final CommandSender recipient,
-			final String messageId,
-			final CooldownMap cooldownMap
-	)
+	public Message(final CommandSender recipient, final String messageId, final MessageProcessor messageProcessor)
 	{
-		this.languageQueryHandler = languageQueryHandler;
-		this.macroReplacer = macroReplacer;
 		this.recipient = recipient;
 		this.messageId = messageId;
-		this.cooldownMap = cooldownMap;
+		this.messageProcessor = messageProcessor;
 		this.contextMap = new ContextMap(recipient, messageId);
 	}
 
@@ -85,7 +63,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
-	public <T> Message<MessageId, Macro> setMacro(final Macro macro, final T value)
+	public <T> Message<Macro> setMacro(final Macro macro, final T value)
 	{
 		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
 		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
@@ -101,7 +79,7 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
-	public <T> Message<MessageId, Macro> setMacro(int quantity, final Macro macro, final T value)
+	public <T> Message<Macro> setMacro(int quantity, final Macro macro, final T value)
 	{
 		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
 		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
@@ -121,52 +99,8 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	/**
 	 * Final step of message builder, performs replacements and sends message to recipient
 	 */
-	public void send()
-	{
-		// get message retriever
-		Retriever retriever = new MessageRetriever();
-
-		// get optional message record
-		Optional<MessageRecord> messageRecord = retriever.getRecord(messageId, languageQueryHandler);
-
-		// if optional message record is empty, do nothing and return
-		if (messageRecord.isEmpty()) {
-			return;
-		}
-
-		// check if message and recipient are available for sending
-		if (!isSendable(recipient, messageRecord.get())) {
-			return;
-		}
-
-		// perform macro replacements
-		Optional<MessageRecord> finalMesssageRecord = macroReplacer.replaceMacros(messageRecord.get(), contextMap);
-
-		// send message
-		finalMesssageRecord.ifPresent(record -> new MessageSender().send(recipient, record));
-		finalMesssageRecord.ifPresent(record -> new TitleSender().send(recipient, record));
-		finalMesssageRecord.ifPresent(record -> cooldownMap.putExpirationTime(recipient, record));
-	}
-
-
-	/**
-	 * Check if prerequisites have been met for a message to be able to be sent
-	 *
-	 * @param recipient the intended recipient of the message
-	 * @param messageRecord the message record
-	 * @return {@code true} if the recipient/message is sendable, {@code false} if not
-	 */
-	boolean isSendable(final CommandSender recipient, MessageRecord messageRecord) {
-		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
-		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
-
-		// if recipient is a player but is not online, return false
-		if (recipient instanceof Player player && !player.isOnline()) {
-			return false;
-		}
-
-		// return true if message is enabled and not in cooldown map, else false
-		return messageRecord.enabled() && !cooldownMap.isCooling(recipient, messageRecord.messageId());
+	public void send() {
+		messageProcessor.process(this);
 	}
 
 
@@ -178,6 +112,19 @@ public final class Message<MessageId extends Enum<MessageId>, Macro extends Enum
 	 */
 	Object peek(Macro macro) {
 		return contextMap.get(macro.name());
+	}
+
+
+	public CommandSender getRecipient() {
+		return recipient;
+	}
+
+	public String getMessageId() {
+		return messageId;
+	}
+
+	public ContextMap getContextMap() {
+		return contextMap;
 	}
 
 }

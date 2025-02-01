@@ -17,21 +17,17 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,26 +40,20 @@ import java.util.List;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class MessageTest {
 
-
 	// declare mocks
-	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
-	@Mock World worldMock;
-	@Mock LanguageQueryHandler languageQueryHandlerMock;
-	@Mock MacroReplacer macroReplacerMock;
-	@Mock CooldownMap cooldownMapMock;
+	@Mock MessageProcessor messageProcessorMock;
 
 	// declare real objects
 	FileConfiguration pluginConfiguration;
-	Message<MessageId, Macro> message;
+	Message<Macro> message;
 	ItemStack itemStack;
-	MessageRecord testRecord;
+	MessageRecord messageRecord;
 
 
 	@BeforeEach
@@ -76,13 +66,9 @@ class MessageTest {
 		itemStack = new ItemStack(Material.DIAMOND_SWORD);
 
 		message = new Message<>(
-				languageQueryHandlerMock,
-				macroReplacerMock,
-				playerMock,
-				MessageId.ENABLED_MESSAGE.name(),
-				cooldownMapMock);
+				playerMock, MessageId.ENABLED_MESSAGE.name(), messageProcessorMock);
 
-		testRecord = new MessageRecord(
+		messageRecord = new MessageRecord(
 				ENABLED_MESSAGE.name(),
 				true,
 				true,
@@ -99,13 +85,23 @@ class MessageTest {
 
 	@AfterEach
 	public void tearDown() {
-		pluginMock = null;
 		playerMock = null;
-		worldMock = null;
-		languageQueryHandlerMock = null;
-		macroReplacerMock = null;
-		cooldownMapMock = null;
 		pluginConfiguration = null;
+	}
+
+	@Test
+	void getRecipient() {
+		assertEquals(playerMock, message.getRecipient());
+	}
+
+	@Test
+	void getMessageId() {
+		assertEquals(ENABLED_MESSAGE.name(), message.getMessageId());
+	}
+
+	@Test
+	void getContextMap() {
+		assertNotNull(message.getContextMap());
 	}
 
 
@@ -113,7 +109,7 @@ class MessageTest {
 	class SetMacroTests {
 		@Test
 		void testSetMacro() {
-			Message<MessageId, Macro> newMessage = message.setMacro(Macro.TOOL, itemStack);
+			Message<Macro> newMessage = message.setMacro(Macro.TOOL, itemStack);
 			assertEquals(itemStack, newMessage.peek(Macro.TOOL));
 		}
 
@@ -139,7 +135,10 @@ class MessageTest {
 	class SetMacro2Tests {
 		@Test
 		void testSetMacro2() {
-			Message<MessageId, Macro> newMessage = message.setMacro(10, Macro.TOOL, itemStack);
+			// Arrange
+			Message<Macro> newMessage = message.setMacro(10, Macro.TOOL, itemStack);
+
+			// Act & Assert
 			assertEquals(itemStack, newMessage.peek(Macro.TOOL));
 		}
 
@@ -157,37 +156,6 @@ class MessageTest {
 					() -> message.setMacro(6, Macro.OWNER, null));
 
 			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
-		}
-	}
-
-	@Nested
-	class IsSendableTests {
-		@Test
-		void testIsSendable() {
-			// Arrange
-			when(playerMock.isOnline()).thenReturn(true);
-
-			// Act & Assert
-			assertTrue(message.isSendable(playerMock, testRecord));
-
-			// Verify
-			verify(playerMock, atLeastOnce()).isOnline();
-		}
-
-		@Test
-		void testIsSendable_parameter_null_recipient() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> message.isSendable(null, testRecord));
-
-			assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
-		}
-
-		@Test
-		void testIsSendable_parameter_null_messageRecord() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
-					() -> message.isSendable(playerMock, null));
-
-			assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 		}
 	}
 
