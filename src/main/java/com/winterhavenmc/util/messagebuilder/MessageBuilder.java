@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
@@ -77,8 +78,7 @@ public final class MessageBuilder
 
 	private final Plugin plugin;
 	private final YamlLanguageResourceManager languageResourceManager;
-	private final YamlLanguageQueryHandler languageQueryHandler;
-	private final CooldownMap cooldownMap;
+	private final MessageProcessor messageProcessor;
 
 
 	/**
@@ -87,17 +87,14 @@ public final class MessageBuilder
 	 *
 	 * @param plugin an instance of the plugin
 	 * @param languageResourceManager an instance of the language resource manager
-	 * @param languageQueryHandler an instance of the language query handler
 	 */
 	private MessageBuilder(final Plugin plugin,
 	                       final YamlLanguageResourceManager languageResourceManager,
-	                       final YamlLanguageQueryHandler languageQueryHandler,
-	                       final CooldownMap cooldownMap)
+	                       final MessageProcessor messageProcessor)
 	{
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
-		this.languageQueryHandler = languageQueryHandler;
-		this.cooldownMap = cooldownMap;
+		this.messageProcessor = messageProcessor;
 	}
 
 
@@ -118,8 +115,10 @@ public final class MessageBuilder
 		YamlLanguageResourceManager languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
 		YamlLanguageQueryHandler languageQueryHandler = new YamlLanguageQueryHandler(languageResourceManager.getConfigurationSupplier());
 		CooldownMap cooldownMap = new CooldownMap();
+		MacroReplacer macroReplacer = new MacroReplacer();
+		MessageProcessor messageProcessor = new MessageProcessor(languageQueryHandler, macroReplacer, cooldownMap);
 
-		return new MessageBuilder(plugin, languageResourceManager, languageQueryHandler, cooldownMap);
+		return new MessageBuilder(plugin, languageResourceManager, messageProcessor);
 	}
 
 
@@ -131,15 +130,13 @@ public final class MessageBuilder
 	 *
 	 * @param pluginMock a mock plugin instance
 	 * @param languageResourceManagerMock a mock language resource manager instance
-	 * @param languageQueryHandlerMock a mock language query handler instance
 	 * @return an instance of this class, instantiated with the mock objects
 	 */
 	static MessageBuilder test(final Plugin pluginMock,
          final YamlLanguageResourceManager languageResourceManagerMock,
-         final YamlLanguageQueryHandler languageQueryHandlerMock,
-	     final CooldownMap cooldownMap)
+         final MessageProcessor messageProcessor)
 	{
-		return new MessageBuilder(pluginMock, languageResourceManagerMock, languageQueryHandlerMock, cooldownMap);
+		return new MessageBuilder(pluginMock, languageResourceManagerMock, messageProcessor);
 	}
 
 
@@ -151,14 +148,12 @@ public final class MessageBuilder
 	 * @return {@code Message} an initialized message object
 	 */
 	public <MessageId extends Enum<MessageId>, Macro extends Enum<Macro>>
-	Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId)
+	Message<Macro> compose(final CommandSender recipient, final MessageId messageId)
 	{
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
-		MacroReplacer macroReplacer = new MacroReplacer();
-
-		return new Message<>(languageQueryHandler, macroReplacer, recipient, messageId.name(), cooldownMap);
+		return new Message<>(recipient, messageId.name(), messageProcessor);
 	}
 
 

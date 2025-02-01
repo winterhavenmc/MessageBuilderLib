@@ -17,11 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
@@ -50,11 +49,11 @@ import static org.mockito.Mockito.*;
 class MessageBuilderTest {
 
 	@Mock Plugin pluginMock;
-	@Mock YamlLanguageResourceManager languageResourceManagerMock;
-	@Mock YamlLanguageQueryHandler languageQueryHandlerMock;
-	@Mock MacroReplacer macroQueryHandlerMock;
-	@Mock CooldownMap cooldownMap;
 	@Mock Player playerMock;
+
+	@Mock YamlLanguageResourceManager languageResourceManagerMock;
+	@Mock MacroReplacer macroReplacerMock;
+	@Mock MessageProcessor messageProcessorMock;
 
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;
@@ -70,17 +69,20 @@ class MessageBuilderTest {
 		pluginConfiguration.set("locale", "en-US");
 
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		messageBuilder = MessageBuilder.test(pluginMock, languageResourceManagerMock, languageQueryHandlerMock, cooldownMap);
+		messageBuilder = MessageBuilder.test(pluginMock,
+				languageResourceManagerMock,
+				messageProcessorMock);
 	}
 
 	@AfterEach
 	public void tearDown() {
-		languageResourceManagerMock = null;
-		languageQueryHandlerMock = null;
-		macroQueryHandlerMock = null;
 		playerMock = null;
+		pluginMock = null;
 		pluginConfiguration = null;
 		languageConfiguration = null;
+		languageResourceManagerMock = null;
+		macroReplacerMock = null;
+		messageProcessorMock = null;
 	}
 
 
@@ -92,7 +94,7 @@ class MessageBuilderTest {
 	@Test
 	void compose() {
 		// Arrange & Act
-		Message<MessageId, Macro> message = messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE);
+		Message<Macro> message = messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE);
 
 		// Assert
 		assertNotNull(message);
