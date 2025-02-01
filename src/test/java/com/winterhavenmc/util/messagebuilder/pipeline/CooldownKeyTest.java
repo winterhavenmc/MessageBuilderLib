@@ -29,11 +29,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 class CooldownKeyTest {
@@ -136,7 +138,7 @@ class CooldownKeyTest {
 	void testEquals_Null() {
 		CooldownKey key = new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name());
 
-		assertNotEquals(key, null); // An object should not be equal to null
+		assertNotEquals(null, key); // An object should not be equal to null
 	}
 
 	@Test
@@ -175,4 +177,25 @@ class CooldownKeyTest {
 		assertNotEquals(key1.hashCode(), key2.hashCode()); // Different messageIdStrings should result in different hash codes
 	}
 
+	@Test
+	void testGetMessageId() {
+		// Arrange
+		CooldownKey cooldownKey = new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name());
+
+		// Act
+		String messageId = cooldownKey.getMessageId();
+
+		// Assert
+		assertEquals("ENABLED_MESSAGE", messageId);
+	}
+
+	@Test
+	void testOptional() {
+		// Arrange & Act
+		Optional<CooldownKey> cooldownKey = CooldownKey.optional(playerMock, MessageId.ENABLED_MESSAGE.name());
+
+		// Assert
+		assertTrue(cooldownKey.isPresent());
+		assertEquals("ENABLED_MESSAGE", cooldownKey.get().getMessageId());
+	}
 }
