@@ -22,7 +22,6 @@ import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
@@ -54,14 +53,17 @@ public class MessageProcessor implements Processor {
 	{
 		if (message == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE); }
 
-		Optional.of(new CooldownKey(message.getRecipient(), message.getMessageId()))
+		List<Sender> senders = List.of(messageSender, titleSender);
+
+		CooldownKey.optional(message.getRecipient(), message.getMessageId())
 				.filter(notCooling) // Only proceed if not on cooldown
-				.flatMap(key -> messageRetriever.getRecord(message.getMessageId()))
-				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message.getContextMap()))
-				.ifPresent(processedMessage -> {
-					List<Sender> senders = List.of(messageSender, titleSender);
-					senders.forEach(sender -> sender.send(message.getRecipient(), processedMessage));
-				});
+				.flatMap(key -> messageRetriever
+						.getRecord(message.getMessageId()))
+				.flatMap(messageRecord -> macroReplacer
+						.replaceMacros(messageRecord, message.getContextMap()))
+				.ifPresent(processedMessage -> senders
+						.forEach(sender -> sender
+								.send(message.getRecipient(), processedMessage)));
 	}
 
 }
