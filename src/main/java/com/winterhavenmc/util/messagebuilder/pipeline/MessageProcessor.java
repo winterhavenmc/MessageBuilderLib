@@ -55,14 +55,11 @@ public class MessageProcessor implements Processor {
 
 		if (notCooling.test(new CooldownKey(message.getRecipient(), message.getMessageId()))) {
 			messageRetriever.getRecord(message.getMessageId())
-				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message.getContextMap())
-					.map(processedMessage -> {
-						List<Sender> senders = List.of(messageSender, titleSender);
-						senders.forEach(sender -> sender.send(message.getRecipient(), processedMessage));
-						return processedMessage; // Needed to satisfy `map()` return type
-					})
-				);
-
+				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message.getContextMap()))
+				.ifPresent(processedMessage -> {
+					List<Sender> senders = List.of(messageSender, titleSender);
+					senders.forEach(sender -> sender.send(message.getRecipient(), processedMessage));
+				});
 		}
 	}
 
