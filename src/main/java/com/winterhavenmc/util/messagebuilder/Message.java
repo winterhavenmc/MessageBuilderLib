@@ -68,7 +68,14 @@ public final class Message<Macro extends Enum<Macro>> {
 		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
 		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
 
-		return setMacro(1, macro, value);
+		// use macro enum constant name as key
+		String key = macro.name();
+
+		// put value into context map
+		this.contextMap.put(key, value);
+
+		// return this instance of Message class to the builder chain
+		return this;
 	}
 
 
