@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.cooldown;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.Cooldown;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
@@ -29,7 +30,7 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Mess
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
 
 
-public final class CooldownMap {
+public final class CooldownMap implements Cooldown {
 
 	// cooldown backing map
 	private final Map<CooldownKey, Instant> COOLDOWN_MAP = new ConcurrentHashMap<>();
@@ -46,8 +47,8 @@ public final class CooldownMap {
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
 
-		if (!isCooling(recipient, messageRecord.messageId())) {
-			CooldownKey key = new CooldownKey(recipient, messageRecord.messageId());
+		CooldownKey key = new CooldownKey(recipient, messageRecord.messageId());
+		if (!isCooling(key)) {
 			Instant expirationTime = Instant.now().plus(messageRecord.repeatDelay());
 			COOLDOWN_MAP.put(key, expirationTime);
 		}
@@ -57,16 +58,13 @@ public final class CooldownMap {
 	/**
 	 * check if player message is in cooldown map
 	 *
-	 * @param recipient player being sent message
-	 * @param messageId message id of message being sent
+	 * @param key the cooldown map key for the recipient/message
 	 * @return true if player message is in cooldown map and has not reached its expiration time, false if it is not
 	 * @throws LocalizedException if any parameter is null
 	 */
-	public boolean isCooling(final CommandSender recipient, final String messageId) {
-		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
+	public boolean isCooling(final CooldownKey key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
 
-		CooldownKey key = new CooldownKey(recipient, messageId);
 		return COOLDOWN_MAP.containsKey(key) && Instant.now().isBefore(COOLDOWN_MAP.get(key));
 	}
 
