@@ -58,13 +58,13 @@ public class MessageProcessor implements Processor {
 		CooldownKey cooldownKey = new CooldownKey(message.getRecipient(), message.getMessageId());
 
 		Optional.of(cooldownKey)
-			.filter(notCooling) // Only proceed if not on cooldown
-			.flatMap(key -> messageRetriever.getRecord(message.getMessageId()))
-			.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message.getContextMap()))
-			.ifPresent(processedMessage -> {
-				List<Sender> senders = List.of(messageSender, titleSender);
-				senders.forEach(sender -> sender.send(message.getRecipient(), processedMessage));
-			});
+				.filter(notCooling) // Only proceed if not on cooldown
+				.flatMap(key -> messageRetriever.getRecord(message.getMessageId()))
+				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message.getContextMap()))
+				.ifPresent(processedMessage -> {
+					List<Sender> senders = List.of(messageSender, titleSender);
+					senders.forEach(sender -> sender.send(message.getRecipient(), processedMessage));
+				});
 	}
 
 }
