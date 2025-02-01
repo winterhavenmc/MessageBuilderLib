@@ -20,17 +20,18 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import org.bukkit.entity.Entity;
+
+import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.Duration;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -44,59 +45,53 @@ class TitleSenderTest {
 
 	MessageRecord messageRecord;
 
+
 	@BeforeEach
 	void setUp() {
-		messageRecord = new MessageRecord(
-				MessageId.ENABLED_MESSAGE.name(),
-				true,
-				false,
-				"key",
-				List.of("arg1", "arg2"),
-				"this is a message.",
-				Duration.ofSeconds(3),
-				"this is a title.",
-				20,
-				40,
-				30,
-				"this is a subtitle.",
-				"this is a final message string",
-				"this is a final title string",
-				"this is a final subtitle string");
+		messageRecord = MockUtility.getTestMessageRecord(MessageId.ENABLED_MESSAGE);
 	}
 
 	@AfterEach
 	void tearDown() {
 		playerMock = null;
+		messageRecord = null;
 	}
 
 	@Test
-	void send() {
-		// Act
-		new TitleSender().send(playerMock, messageRecord);
+	void testSend() {
+		// Act & Assert
+		assertDoesNotThrow(() -> new TitleSender().send(playerMock, messageRecord));
 
 		// Verify
 		verify(playerMock, atLeastOnce()).sendTitle(anyString(), anyString(), anyInt(), anyInt(), anyInt());
 	}
 
 	@Test
-	void send_not_player() {
-		// Act
-		Entity entityMock = mock(Entity.class, "Mock Entity");
-		new TitleSender().send(entityMock, messageRecord);
-		// assert? verify?
+	void testSend_not_player() {
+		// Arrange
+		ConsoleCommandSender consoleMock = mock(ConsoleCommandSender.class, "Mock Console");
+
+		// Act & Assert
+		assertDoesNotThrow(() -> new TitleSender().send(consoleMock, messageRecord));
 	}
 
 	@Test
-	void send_parameter_null_recipient() {
+	void testSend_parameter_null_recipient() {
+		// Arrange & Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> new TitleSender().send(null, messageRecord));
+
+		// Assert
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}
 
 	@Test
-	void send_parameter_null_messageRecord() {
+	void testSend_parameter_null_messageRecord() {
+		// Arrange & Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> new TitleSender().send(playerMock, null));
+
+		// Assert
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 	}
 
