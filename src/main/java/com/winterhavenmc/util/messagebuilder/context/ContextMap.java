@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.context;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
 
 /**
  * This class implements a map of macro objects that have been passed in by the message builder
@@ -73,38 +77,54 @@ public class ContextMap {
 
 
 	/**
-	 * Creates and puts a new value with its associated ProcessorType into the context map.
+	 * Create and puts a new value with its associated ProcessorType into the context map.
 	 *
 	 * @param key           the unique key for the value
 	 * @param value         the value to store
 	 * @param <T>           the type of the value
 	 */
-	public <T> void put(String key, T value) {
+	public <T> void put(final String key, final T value) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+
 		internalMap.put(key, Objects.requireNonNullElse(value, "NULL"));
 	}
 
-	public Object get(String key) {
+
+	/**
+	 * Retrieve a value from the context map for the specified key.
+	 *
+	 * @param key the context map key
+	 * @return the value for the key
+	 */
+	public Object get(final String key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+
 		return internalMap.get(key);
 	}
 
+
 	/**
-	 * Checks if the map contains a value for the specified key.
+	 * Check if the map contains a value for the specified key.
 	 *
 	 * @param key the unique key to check
 	 * @return true if the key exists, false otherwise
 	 */
-	public boolean containsKey(String key) {
+	public boolean contains(final String key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+
 		return internalMap.containsKey(key);
 	}
 
 
 	/**
-	 * Removes an entry from the map by key.
+	 * Remove an entry from the map by key.
 	 *
 	 * @param key The enum member used as the key.
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
 	public Object remove(final String key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+
 		return internalMap.remove(key);
 	}
 

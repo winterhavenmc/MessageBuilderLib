@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -60,27 +61,48 @@ class ContextMapTest {
 		contextMap.put(key, number);
 
 		// Assert
-		assertEquals(42, contextMap.get(key));
+		assertEquals(42, contextMap.get(key), "Retrieved value should match the original");
 	}
 
 	@Test
-	void testPutDirectlyAndGet() {
+	void testPut_parameter_null_key() {
 		// Arrange
-		String key = "SWORD";
-		ItemStack itemStack = new ItemStack(Material.STONE);
+		Integer number = 42;
 
 		// Act
-		contextMap.put(key, itemStack);
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> contextMap.put(null, number));
 
 		// Assert
-		assertTrue(contextMap.containsKey(key));
-		assertEquals(itemStack, contextMap.get(key), "Retrieved value should match the original");
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testPut_parameter_null_value() {
+		// Arrange
+		String key = "NUMBER";
+
+		// Act
+		contextMap.put(key, null);
+
+		// Assert
+		assertEquals("NULL", contextMap.get(key));
+	}
+
+	@Test
+	void testGet_parameter_null_key() {
+		// Arrange & Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> contextMap.get(null));
+
+		// Assert
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void testGetValueWithCorrectType() {
 		// Arrange
-		String key = "Location::Player";
+		String key = "PLAYER.LOCATION";
 		Location location = new Location(worldMock, 10, 20, 30);
 		contextMap.put(key, location);
 
@@ -107,7 +129,7 @@ class ContextMapTest {
 	}
 
 	@Test
-	void testContainsKey() {
+	void testContains() {
 		// Arrange
 		String key = "MACRO|LOCATION";
 		World world = mock(World.class, "MockWorld");
@@ -115,14 +137,24 @@ class ContextMapTest {
 		contextMap.put(key, location);
 
 		// Act & Assert
-		assertTrue(contextMap.containsKey(key), "Key should be present in the map");
-		assertFalse(contextMap.containsKey("NonExistentKey"), "Key should not be present in the map");
+		assertTrue(contextMap.contains(key), "Key should be present in the map");
+		assertFalse(contextMap.contains("NonExistentKey"), "Key should not be present in the map");
+	}
+
+	@Test
+	void testContains_parameter_null_key() {
+		// Arrange & Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> contextMap.contains(null));
+
+		// Assert
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void testEmptyMap() {
 		// Act & Assert
-		assertFalse(contextMap.containsKey("SomeKey"), "Empty map should not contain any keys");
+		assertFalse(contextMap.contains("SomeKey"), "Empty map should not contain any keys");
 	}
 
 
@@ -164,8 +196,18 @@ class ContextMapTest {
 
 		// Assert
 		assertEquals(1, contextMap.size());
-		assertFalse(contextMap.containsKey(key1));
-		assertTrue(contextMap.containsKey(key2));
+		assertFalse(contextMap.contains(key1));
+		assertTrue(contextMap.contains(key2));
+	}
+
+	@Test
+	void testRemove_parameter_null_key() {
+		// Arrange & Act
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> contextMap.remove(null));
+
+		// Assert
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test

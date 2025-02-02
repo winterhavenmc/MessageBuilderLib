@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.processor.*;
 import com.winterhavenmc.util.messagebuilder.pipeline.Replacer;
+import com.winterhavenmc.util.messagebuilder.pipeline.Resolver;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
