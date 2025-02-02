@@ -30,6 +30,13 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 
 public class TitleSender implements Sender {
 
+	private final CooldownMap cooldownMap;
+
+
+	public TitleSender(final CooldownMap cooldownMap) {
+		this.cooldownMap = cooldownMap;
+	}
+
 	@Override
 	public void send(final CommandSender recipient, final MessageRecord messageRecord) {
 		if (recipient == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, RECIPIENT); }
@@ -42,6 +49,8 @@ public class TitleSender implements Sender {
 					messageRecord.titleStay(),
 					messageRecord.titleFadeOut());
 		}
+
+		cooldownMap.putExpirationTime(recipient, messageRecord);
 	}
 
 }
