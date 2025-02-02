@@ -84,7 +84,7 @@ class MessageProcessorTest {
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(ENABLED_MESSAGE.name())).thenReturn(Optional.of(messageRecord));
-		Message<Macro> message = new Message<>(playerMock, ENABLED_MESSAGE.name(), messageProcessor);
+		Message message = new Message(playerMock, ENABLED_MESSAGE.name(), messageProcessor);
 
 		// Act
 		messageProcessor.process(message);

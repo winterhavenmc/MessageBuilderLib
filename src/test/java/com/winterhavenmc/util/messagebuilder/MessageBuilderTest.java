@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
@@ -94,7 +93,7 @@ class MessageBuilderTest {
 	@Test
 	void compose() {
 		// Arrange & Act
-		Message<Macro> message = messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE);
+		Message message = messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE);
 
 		// Assert
 		assertNotNull(message);
