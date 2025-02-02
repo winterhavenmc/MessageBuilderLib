@@ -15,13 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline;
+package com.winterhavenmc.util.messagebuilder.macro;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-
-import java.util.Optional;
+import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
 
 @FunctionalInterface
-public interface Retriever {
-	Optional<MessageRecord> getRecord(String messageId);
+public interface Resolver {
+	ResultMap resolveContext(ContextMap contextMap);
 }

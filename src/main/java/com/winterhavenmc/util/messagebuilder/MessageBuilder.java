@@ -28,9 +28,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
-
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
-
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.time.Tick;
 
@@ -122,7 +120,7 @@ public final class MessageBuilder
 		CooldownMap cooldownMap = new CooldownMap();
 		MacroReplacer macroReplacer = new MacroReplacer();
 		MessageSender messageSender = new MessageSender(cooldownMap);
-		TitleSender titleSender = new TitleSender();
+		TitleSender titleSender = new TitleSender(cooldownMap);
 		MessageRetriever messageRetriever = new MessageRetriever(languageQueryHandler);
 		MessageProcessor messageProcessor = new MessageProcessor(messageRetriever, macroReplacer, cooldownMap, messageSender, titleSender);
 
@@ -155,13 +153,13 @@ public final class MessageBuilder
 	 * @param messageId the message identifier
 	 * @return {@code Message} an initialized message object
 	 */
-	public <MessageId extends Enum<MessageId>, Macro extends Enum<Macro>>
-	Message<Macro> compose(final CommandSender recipient, final MessageId messageId)
+	public <MessageId extends Enum<MessageId>>
+	Message compose(final CommandSender recipient, final MessageId messageId)
 	{
 		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
 		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
 
-		return new Message<>(recipient, messageId.name(), messageProcessor);
+		return new Message(recipient, messageId.name(), messageProcessor);
 	}
 
 

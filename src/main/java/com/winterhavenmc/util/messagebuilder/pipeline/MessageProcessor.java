@@ -50,18 +50,18 @@ public class MessageProcessor implements Processor
 	}
 
 
-	public <Macro extends Enum<Macro>> void process(final Message<Macro> message)
+	public void process(final Message message)
 	{
 		if (message == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE); }
 
 		List<Sender> senders = List.of(messageSender, titleSender);
 
 		CooldownKey.optional(message.getRecipient(), message.getMessageId())
-				.filter(notCooling) // Only proceed if not on cooldown
+				.filter(notCooling)
 				.flatMap(key ->
 						messageRetriever.getRecord(key.getMessageId()))
 				.flatMap(messageRecord ->
-						macroReplacer.replaceMacros(messageRecord, message.getContextMap()))
+						macroReplacer.replaceMacros(messageRecord, message))
 				.ifPresent(processedMessage ->
 						senders.forEach(sender ->
 								sender.send(message.getRecipient(), processedMessage)));

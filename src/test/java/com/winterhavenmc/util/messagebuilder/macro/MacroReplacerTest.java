@@ -17,10 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
+import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
@@ -38,6 +40,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -47,11 +53,14 @@ import static org.mockito.Mockito.mock;
 class MacroReplacerTest {
 
 	@Mock Player playerMock;
+	@Mock MessageProcessor messageProcessorMock;
 	MacroReplacer macroReplacer;
 
+	Message message;
 
 	@BeforeEach
 	public void setUp() {
+		message = new Message(playerMock, MessageId.ENABLED_MESSAGE.name(), messageProcessorMock);
 		macroReplacer = new MacroReplacer();
 	}
 
@@ -65,7 +74,6 @@ class MacroReplacerTest {
 	@Test
 	void testReplaceMacros1_valid_parameters() {
 		// Arrange
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MessageRecord messageRecord = new MessageRecord(
 				MessageId.ENABLED_MESSAGE.name(),
 				true,
@@ -85,7 +93,7 @@ class MacroReplacerTest {
 		);
 
 		// Act
-		Optional<MessageRecord> result = macroReplacer.replaceMacros(messageRecord, contextMap);
+		Optional<MessageRecord> result = macroReplacer.replaceMacros(messageRecord, message);
 
 		// Assert
 		assertNotNull(result);
@@ -93,10 +101,8 @@ class MacroReplacerTest {
 
 	@Test
 	void testReplaceMacros1_parameter_null_messageRecord() {
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroReplacer.replaceMacros(null, contextMap));
+				() -> macroReplacer.replaceMacros(null, message));
 
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 	}
@@ -193,7 +199,7 @@ class MacroReplacerTest {
 
 
 	@Test
-	void testConvertValuesToStrings() {
+	void testResolveContext() {
 		// Arrange
 		ItemStack itemStack = new ItemStack(Material.STONE);
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
@@ -201,7 +207,7 @@ class MacroReplacerTest {
 		contextMap.put("ITEM_STACK", itemStack);
 
 		// Act
-		ResultMap resultMap = macroReplacer.convertValuesToStrings(contextMap);
+		ResultMap resultMap = macroReplacer.resolveContext(contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey("NUMBER"));
@@ -211,9 +217,9 @@ class MacroReplacerTest {
 	}
 
 	@Test
-	void testConvertValuesToStrings_parameter_null_context_map() {
+	void testResolveContext_parameter_null_context_map() {
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> macroReplacer.convertValuesToStrings(null));
+				() -> macroReplacer.resolveContext(null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
@@ -275,9 +281,28 @@ class MacroReplacerTest {
 	}
 
 	@Test
-	void testGetRegex() {
-		assertNotNull(MacroReplacer.getRegex());
-		//TODO: test regex pattern
+	void testGetPlaceholderStream() {
+		// Arrange
+		String messageString = "This is a {MESSAGE} with {SEVERAL} {PLACE_HOLDERS}.";
+		Stream<String> placeholderStream = macroReplacer.getPlaceholderStream(messageString);
+		Set<String> placeholderSet = placeholderStream.collect(Collectors.toSet());
+
+		assertFalse(placeholderSet.isEmpty());
+		assertTrue(placeholderSet.contains("SEVERAL"));
+		assertTrue(placeholderSet.contains("MESSAGE"));
+		assertTrue(placeholderSet.contains("PLACE_HOLDERS"));
+		assertFalse(placeholderSet.contains("This"));
 	}
 
+	@Test
+	void getMatcher() {
+		// Arrange
+		String messageString = "This is a {MESSAGE} with {SEVERAL} {PLACE_HOLDERS}.";
+
+		// Act
+		Matcher matcher = MacroReplacer.getMatcher(messageString);
+
+		// Assert
+		assertTrue(matcher.find());
+	}
 }

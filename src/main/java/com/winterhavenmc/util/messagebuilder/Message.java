@@ -29,10 +29,8 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 
 /**
  * The message object being built with builder pattern
- *
- * @param <Macro> a macro placeholder value to be added to the context map
  */
-public final class Message<Macro extends Enum<Macro>>
+public final class Message
 {
 	private final CommandSender recipient;
 	private final String messageId;
@@ -63,7 +61,7 @@ public final class Message<Macro extends Enum<Macro>>
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
-	public <T> Message<Macro> setMacro(final Macro macro, final T value)
+	public <Macro extends Enum<Macro>, T> Message setMacro(final Macro macro, final T value)
 	{
 		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
 		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
@@ -80,13 +78,13 @@ public final class Message<Macro extends Enum<Macro>>
 
 
 	/**
-	 * set macro for message replacements
+	 * set macro for message replacements, with a corresponding quantity
 	 *
 	 * @param macro token for placeholder
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map
 	 */
-	public <T> Message<Macro> setMacro(int quantity, final Macro macro, final T value)
+	public <Macro extends Enum<Macro>, T> Message setMacro(int quantity, final Macro macro, final T value)
 	{
 		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
 		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
@@ -109,18 +107,6 @@ public final class Message<Macro extends Enum<Macro>>
 	public void send()
 	{
 		messageProcessor.process(this);
-	}
-
-
-	/**
-	 * Examine the contents of the context map for testing purposes
-	 *
-	 * @param macro the key to retrieve from the context map
-	 * @return {@code Object} the value stored in the map, or {@code null} if no value is present for key
-	 */
-	Object peek(Macro macro)
-	{
-		return contextMap.get(macro.name());
 	}
 
 
@@ -154,6 +140,18 @@ public final class Message<Macro extends Enum<Macro>>
 	public ContextMap getContextMap()
 	{
 		return contextMap;
+	}
+
+
+	/**
+	 * Examine the contents of the context map for testing purposes
+	 *
+	 * @param macro the key to retrieve from the context map
+	 * @return {@code Object} the value stored in the map, or {@code null} if no value is present for key
+	 */
+	<Macro extends Enum<Macro>> Object peek(Macro macro)
+	{
+		return contextMap.get(macro.name());
 	}
 
 }

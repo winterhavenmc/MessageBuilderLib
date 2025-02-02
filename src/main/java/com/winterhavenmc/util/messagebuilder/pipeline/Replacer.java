@@ -17,14 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 
 import java.util.Optional;
 
 @FunctionalInterface
 public interface Replacer {
-
-	Optional<MessageRecord> replaceMacros(MessageRecord messageRecord, ContextMap contextMap);
-
+	Optional<MessageRecord> replaceMacros(MessageRecord messageRecord, Message message);
 }

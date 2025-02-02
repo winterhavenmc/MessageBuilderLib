@@ -33,6 +33,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -41,8 +43,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TitleSenderTest {
 
+	// mock player
 	@Mock Player playerMock;
 
+	// real message record
 	MessageRecord messageRecord;
 
 
@@ -59,11 +63,15 @@ class TitleSenderTest {
 
 	@Test
 	void testSend() {
+		// Arrange
+		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
+
 		// Act & Assert
-		assertDoesNotThrow(() -> new TitleSender().send(playerMock, messageRecord));
+		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(playerMock, messageRecord));
 
 		// Verify
 		verify(playerMock, atLeastOnce()).sendTitle(anyString(), anyString(), anyInt(), anyInt(), anyInt());
+		verify(playerMock, atLeastOnce()).getUniqueId();
 	}
 
 	@Test
@@ -72,14 +80,14 @@ class TitleSenderTest {
 		ConsoleCommandSender consoleMock = mock(ConsoleCommandSender.class, "Mock Console");
 
 		// Act & Assert
-		assertDoesNotThrow(() -> new TitleSender().send(consoleMock, messageRecord));
+		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(consoleMock, messageRecord));
 	}
 
 	@Test
 	void testSend_parameter_null_recipient() {
 		// Arrange & Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> new TitleSender().send(null, messageRecord));
+				() -> new TitleSender(new CooldownMap()).send(null, messageRecord));
 
 		// Assert
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
@@ -89,7 +97,7 @@ class TitleSenderTest {
 	void testSend_parameter_null_messageRecord() {
 		// Arrange & Act
 		LocalizedException exception = assertThrows(LocalizedException.class,
-				() -> new TitleSender().send(playerMock, null));
+				() -> new TitleSender(new CooldownMap()).send(playerMock, null));
 
 		// Assert
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());

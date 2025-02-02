@@ -51,7 +51,7 @@ class MessageTest {
 
 	// declare real objects
 	FileConfiguration pluginConfiguration;
-	Message<Macro> message;
+	Message message;
 	ItemStack itemStack;
 	MessageRecord messageRecord;
 
@@ -65,7 +65,7 @@ class MessageTest {
 
 		itemStack = new ItemStack(Material.DIAMOND_SWORD);
 
-		message = new Message<>(
+		message = new Message(
 				playerMock, MessageId.ENABLED_MESSAGE.name(), messageProcessorMock);
 
 		messageRecord = new MessageRecord(
@@ -109,7 +109,7 @@ class MessageTest {
 	class SetMacroTests {
 		@Test
 		void testSetMacro() {
-			Message<Macro> newMessage = message.setMacro(Macro.TOOL, itemStack);
+			Message newMessage = message.setMacro(Macro.TOOL, itemStack);
 			assertEquals(itemStack, newMessage.peek(Macro.TOOL));
 		}
 
@@ -136,7 +136,7 @@ class MessageTest {
 		@Test
 		void testSetMacro2() {
 			// Arrange
-			Message<Macro> newMessage = message.setMacro(10, Macro.TOOL, itemStack);
+			Message newMessage = message.setMacro(10, Macro.TOOL, itemStack);
 
 			// Act & Assert
 			assertEquals(itemStack, newMessage.peek(Macro.TOOL));

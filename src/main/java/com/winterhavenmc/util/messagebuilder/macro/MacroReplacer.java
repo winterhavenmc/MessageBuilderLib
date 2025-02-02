@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
+import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.macro.processor.*;
 import com.winterhavenmc.util.messagebuilder.pipeline.Replacer;
@@ -28,7 +29,9 @@ import org.bukkit.entity.Entity;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
@@ -37,13 +40,10 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
-public class MacroReplacer implements Replacer {
+public class MacroReplacer implements Replacer, Resolver {
 
 	private final static String DELIMITER_OPEN = "{";
 	private final static String DELIMITER_CLOSE = "}";
-
-	// Regex pattern to match placeholders with delimiters
-	private final Pattern MACRO_PATTERN;
 
 	private final ProcessorRegistry processorRegistry;
 
@@ -54,7 +54,6 @@ public class MacroReplacer implements Replacer {
 	public MacroReplacer()
 	{
 		this.processorRegistry = new ProcessorRegistry(new DependencyContext());
-		this.MACRO_PATTERN = getRegex();
 	}
 
 
@@ -62,20 +61,19 @@ public class MacroReplacer implements Replacer {
 	 * Replace macros in a message to be sent
 	 *
 	 * @param messageRecord the message record to have macro placeholders replaced in message and title strings
-	 * @param contextMap the context map containing other objects whose values may be retrieved
 	 * @return a new {@code MessageRecord} with all macro replacements performed and placed into the final string fields
 	 */
 	@Override
-	public Optional<MessageRecord> replaceMacros(MessageRecord messageRecord, ContextMap contextMap)
+	public Optional<MessageRecord> replaceMacros(final MessageRecord messageRecord, final Message message)
 	{
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
+		if (message == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 
 		// return new message record with final string fields added with macro replacements performed
 		return messageRecord.withFinalStrings(
-				replaceMacros(contextMap, messageRecord.message()),
-				replaceMacros(contextMap, messageRecord.title()),
-				replaceMacros(contextMap, messageRecord.subtitle())
+				replaceMacros(message.getContextMap(), messageRecord.message()),
+				replaceMacros(message.getContextMap(), messageRecord.title()),
+				replaceMacros(message.getContextMap(), messageRecord.subtitle())
 		);
 	}
 
@@ -89,7 +87,18 @@ public class MacroReplacer implements Replacer {
 	 */
 	public boolean containsMacros(String message)
 	{
-		return MACRO_PATTERN.matcher(message).find();
+		return getMatcher(message).find();
+	}
+
+
+	/**
+	 * Create a {@link Stream} of placeholder strings in a message string
+	 *
+	 * @param input the message string with placeholders
+	 * @return a {@code Stream} of placeholder strings
+	 */
+	public Stream<String> getPlaceholderStream(final String input) {
+		return getMatcher(input).results().map(matchResult -> matchResult.group(1));
 	}
 
 
@@ -116,7 +125,7 @@ public class MacroReplacer implements Replacer {
 
 			// final result map of keys and processed string values
 			ResultMap replacementStringMap = new ResultMap();
-			replacementStringMap.putAll(convertValuesToStrings(contextMap));
+			replacementStringMap.putAll(resolveContext(contextMap));
 
 			// do macro replacements on message string
 			modifiedMessageString = performReplacements(replacementStringMap, modifiedMessageString);
@@ -126,6 +135,12 @@ public class MacroReplacer implements Replacer {
 	}
 
 
+	/**
+	 * Add the recipient fields to the context map, including location fields if the recipient is a player
+	 *
+	 * @param contextMap a map containing key/value pairs of placeholder names and the value objects from which
+	 *                   their replacement strings will be derived
+	 */
 	void addRecipientContext(ContextMap contextMap)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
@@ -146,7 +161,15 @@ public class MacroReplacer implements Replacer {
 	}
 
 
-	ResultMap convertValuesToStrings(ContextMap contextMap)
+	/**
+	 * Convert the value objects contained in the context map into their string representations in a
+	 * new result map.
+	 *
+	 * @param contextMap a map containing key/value pairs of placeholder strings and their corresponding value object
+	 * @return {@code ResultMap} a map containing the placeholder strings and the string representations of the values
+	 */
+	@Override
+	public ResultMap resolveContext(ContextMap contextMap)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
 
@@ -162,6 +185,13 @@ public class MacroReplacer implements Replacer {
 	}
 
 
+	/**
+	 * Replace values in the message string with macro string values in replacementMap
+	 *
+	 * @param replacementMap a collection of key/value pairs representing the placeholders and their replacement values
+	 * @param messageString the message string containing placeholders to be replaced
+	 * @return {@code String} the final string with all replacements performed
+	 */
 	String performReplacements(final ResultMap replacementMap, final String messageString)
 	{
 		if (replacementMap == null) { throw new LocalizedException(PARAMETER_NULL, REPLACEMENT_MAP); }
@@ -179,9 +209,16 @@ public class MacroReplacer implements Replacer {
 	}
 
 
-	public static Pattern getRegex()
+	/**
+	 * Static method to provide a compiled regex pattern matcher, matching message placeholders with delimiters
+	 *
+	 * @return a compiled regex pattern matcher
+	 */
+	static Matcher getMatcher(final String input)
 	{
-		return Pattern.compile("\\" + DELIMITER_OPEN + "[\\p{Lu}0-9_]+" + DELIMITER_CLOSE);
+		String regex = "\\" + DELIMITER_OPEN + "([\\p{Lu}0-9_]+)" + DELIMITER_CLOSE;
+		Pattern pattern = Pattern.compile(regex);
+		return pattern.matcher(input);
 	}
 
 }
