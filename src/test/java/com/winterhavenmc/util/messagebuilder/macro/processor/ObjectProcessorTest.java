@@ -18,8 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
@@ -27,8 +27,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
