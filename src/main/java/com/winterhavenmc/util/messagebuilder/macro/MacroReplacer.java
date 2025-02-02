@@ -135,6 +135,12 @@ public class MacroReplacer implements Replacer, Resolver {
 	}
 
 
+	/**
+	 * Add the recipient fields to the context map, including location fields if the recipient is a player
+	 *
+	 * @param contextMap a map containing key/value pairs of placeholder names and the value objects from which
+	 *                   their replacement strings will be derived
+	 */
 	void addRecipientContext(ContextMap contextMap)
 	{
 		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
@@ -155,6 +161,13 @@ public class MacroReplacer implements Replacer, Resolver {
 	}
 
 
+	/**
+	 * Convert the value objects contained in the context map into their string representations in a
+	 * new result map.
+	 *
+	 * @param contextMap a map containing key/value pairs of placeholder strings and their corresponding value object
+	 * @return {@code ResultMap} a map containing the placeholder strings and the string representations of the values
+	 */
 	@Override
 	public ResultMap resolveContext(ContextMap contextMap)
 	{
@@ -172,6 +185,13 @@ public class MacroReplacer implements Replacer, Resolver {
 	}
 
 
+	/**
+	 * Replace values in the message string with macro string values in replacementMap
+	 *
+	 * @param replacementMap a collection of key/value pairs representing the placeholders and their replacement values
+	 * @param messageString the message string containing placeholders to be replaced
+	 * @return {@code String} the final string with all replacements performed
+	 */
 	String performReplacements(final ResultMap replacementMap, final String messageString)
 	{
 		if (replacementMap == null) { throw new LocalizedException(PARAMETER_NULL, REPLACEMENT_MAP); }
