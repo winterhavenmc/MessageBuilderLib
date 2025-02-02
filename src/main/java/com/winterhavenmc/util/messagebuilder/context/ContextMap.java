@@ -93,7 +93,9 @@ public class ContextMap {
 	 * @param key the unique key to check
 	 * @return true if the key exists, false otherwise
 	 */
-	public boolean containsKey(String key) {
+	public boolean contains(final String key) {
+		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+
 		return internalMap.containsKey(key);
 	}
 

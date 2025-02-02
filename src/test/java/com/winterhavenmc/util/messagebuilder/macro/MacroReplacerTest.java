@@ -182,7 +182,7 @@ class MacroReplacerTest {
 		macroReplacer.addRecipientContext(contextMap);
 
 		// Assert
-		assertTrue(contextMap.containsKey("RECIPIENT.LOCATION"));
+		assertTrue(contextMap.contains("RECIPIENT.LOCATION"));
 	}
 
 	@Test
@@ -275,7 +275,7 @@ class MacroReplacerTest {
 		ContextMap contextMap = new ContextMap(console, MessageId.ENABLED_MESSAGE.name());
 
 		macroReplacer.addRecipientContext(contextMap);
-		assertTrue(contextMap.containsKey("RECIPIENT"));
+		assertTrue(contextMap.contains("RECIPIENT"));
 		//TODO: fix ths:
 		// assertEquals("console", contextMap.get("RECIPIENT"));
 	}
