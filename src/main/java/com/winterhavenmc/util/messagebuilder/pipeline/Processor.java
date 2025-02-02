@@ -20,5 +20,5 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 import com.winterhavenmc.util.messagebuilder.Message;
 
 public interface Processor {
-	<Macro extends Enum<Macro>> void process(Message<Macro> message);
+	void process(Message message);
 }
