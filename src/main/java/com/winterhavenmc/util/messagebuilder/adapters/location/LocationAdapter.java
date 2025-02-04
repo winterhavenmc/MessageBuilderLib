@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.adapters.location;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
@@ -47,9 +48,9 @@ public class LocationAdapter {
 	 * object does not have a known method of retrieving a gatLocation.
 	 */
 	public static Optional<Locatable> asLocatable(Object obj) {
-		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case Entity entity -> Optional.of(entity::getLocation);
+			case OfflinePlayer offlinePlayer -> Optional.of((offlinePlayer::getLocation));
 			case Block block -> Optional.of(block::getLocation);
 			case BlockState blockState -> Optional.of(blockState::getLocation);
 			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
