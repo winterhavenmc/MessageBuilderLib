@@ -20,8 +20,8 @@ package com.winterhavenmc.util.messagebuilder.adapters.location;
 import org.bukkit.Location;
 
 /**
- * An interface that describes objects that have a {@code getLocation()}
- * method that returns a valid Bukkit gatLocation.
+ * An interface that describes objects that have a {@code getLocation()} method
+ * that returns a {@link Location}.
  */
 @FunctionalInterface
 public interface Locatable {
