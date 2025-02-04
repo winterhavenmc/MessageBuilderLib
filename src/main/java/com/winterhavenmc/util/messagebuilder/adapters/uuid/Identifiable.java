@@ -24,6 +24,7 @@ import java.util.UUID;
  * that have a {@code getUniqueId()}
  * method that returns a valid UUID.
  */
+@FunctionalInterface
 public interface Identifiable {
 	UUID getUniqueId();
 }

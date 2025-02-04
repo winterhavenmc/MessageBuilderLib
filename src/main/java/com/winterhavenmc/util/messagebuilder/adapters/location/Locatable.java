@@ -23,6 +23,7 @@ import org.bukkit.Location;
  * An interface that describes objects that have a {@code getLocation()}
  * method that returns a valid Bukkit gatLocation.
  */
+@FunctionalInterface
 public interface Locatable {
 	Location gatLocation();
 }

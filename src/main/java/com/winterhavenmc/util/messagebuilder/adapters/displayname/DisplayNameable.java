@@ -21,6 +21,7 @@ package com.winterhavenmc.util.messagebuilder.adapters.displayname;
  * An interface that describes objects that have a {@code getDisplayName()}
  * method that returns a valid display name as a string.
  */
+@FunctionalInterface
 public interface DisplayNameable {
 	String getDisplayName();
 }
