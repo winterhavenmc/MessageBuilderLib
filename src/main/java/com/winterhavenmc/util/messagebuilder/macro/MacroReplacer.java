@@ -44,8 +44,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
-public class MacroReplacer implements Replacer, Resolver {
-
+public class MacroReplacer implements Replacer, Resolver
+{
 	private final static String DELIMITER_OPEN = "{";
 	private final static String DELIMITER_CLOSE = "}";
 
@@ -101,7 +101,8 @@ public class MacroReplacer implements Replacer, Resolver {
 	 * @param input the message string with placeholders
 	 * @return a {@code Stream} of placeholder strings
 	 */
-	public Stream<String> getPlaceholderStream(final String input) {
+	public Stream<String> getPlaceholderStream(final String input)
+	{
 		return getMatcher(input).results().map(matchResult -> matchResult.group(1));
 	}
 

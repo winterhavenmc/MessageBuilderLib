@@ -33,8 +33,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
  * A macro processor that resolves a string value of "NULL" for values stored in the context map that are
  * referenced by the given key and contain a null value.
  */
-public class NullProcessor extends MacroProcessorTemplate {
-
+public class NullProcessor extends MacroProcessorTemplate
+{
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
 		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));

@@ -54,10 +54,13 @@ class EntityProcessor extends MacroProcessorTemplate {
 				.filter(Entity.class::isInstance)
 				.map(Entity.class::cast)
 				.ifPresent(entity -> {
+
+					// populate name field
 					NameAdapter.asNameable(entity).ifPresent(name ->
 						resultMap.put(key, entity.getName())
 					);
 
+					// populate display name field if present
 					DisplayNameAdapter.asDisplayNameable(entity).ifPresent(displayNameable ->
 					{
 						if (displayNameable.getDisplayName() != null) {
@@ -66,6 +69,7 @@ class EntityProcessor extends MacroProcessorTemplate {
 						}
 					});
 
+					// populate location fields if present
 					LocationAdapter.asLocatable(entity).ifPresent(locatable ->
 					{
 						if (locatable.gatLocation() != null) {
@@ -73,6 +77,7 @@ class EntityProcessor extends MacroProcessorTemplate {
 						}
 					});
 
+					// populate uuid field if present
 					UniqueIdAdapter.asIdentifiable(entity).ifPresent(identifiable ->
 					{
 						if (identifiable.getUniqueId() != null) {

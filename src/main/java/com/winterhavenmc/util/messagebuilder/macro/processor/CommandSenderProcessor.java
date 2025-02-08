@@ -56,12 +56,14 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 						.map(CommandSender.class::cast)
 						.map(commandSender -> {
 
+							// populate name field
 							NameAdapter.asNameable(commandSender).ifPresent(nameable ->
 							{
 								resultMap.put(key, nameable.getName());
 								resultMap.put(key + ".NAME", nameable.getName());
 							});
 
+							// populate display name field if present
 							DisplayNameAdapter.asDisplayNameable(commandSender).ifPresent(displayNameable ->
 							{
 								if (displayNameable.getDisplayName() != null) {
@@ -69,6 +71,7 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 								}
 							});
 
+							// populate uuid field if present
 							UniqueIdAdapter.asIdentifiable(commandSender).ifPresent(identifiable ->
 							{
 								if (identifiable.getUniqueId() != null) {
@@ -76,6 +79,7 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 								}
 							});
 
+							// populate location field if present
 							LocationAdapter.asLocatable(commandSender).ifPresent(locatable ->
 							{
 								if (locatable.gatLocation() != null) {

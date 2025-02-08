@@ -38,10 +38,11 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
  * A macro processor that resolves fields for a {@link OfflinePlayer} stored in the context map
  * and referenced by the given key.
  */
-public class OfflinePlayerProcessor extends MacroProcessorTemplate {
-
+public class OfflinePlayerProcessor extends MacroProcessorTemplate
+{
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
+	public ResultMap resolveContext(final String key, final ContextMap contextMap)
+	{
 		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));

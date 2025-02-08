@@ -36,8 +36,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
  * A macro processor that resolves fields for a {@link World} stored in the context map
  * and referenced by the given key.
  */
-public class WorldProcessor extends MacroProcessorTemplate {
-
+public class WorldProcessor extends MacroProcessorTemplate
+{
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
@@ -52,6 +52,7 @@ public class WorldProcessor extends MacroProcessorTemplate {
 				.map(World.class::cast)
 				.flatMap(NameAdapter::asNameable).ifPresent(nameable ->
 				{
+					// populate name field is present
 					if (nameable.getName() != null) {
 						resultMap.put(key, nameable.getName());
 						resultMap.put(key + ".NAME", nameable.getName());

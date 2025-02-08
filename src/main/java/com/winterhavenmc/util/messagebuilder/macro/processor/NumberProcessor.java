@@ -34,8 +34,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
  * A macro processor that resolves a value for a {@link Number} stored in the context map
  * and referenced by the given key.
  */
-public class NumberProcessor extends MacroProcessorTemplate {
-
+public class NumberProcessor extends MacroProcessorTemplate
+{
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{

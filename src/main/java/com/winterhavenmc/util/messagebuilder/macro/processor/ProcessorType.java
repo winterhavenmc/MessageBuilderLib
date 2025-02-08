@@ -28,8 +28,8 @@ import java.time.Duration;
 import java.util.function.Function;
 
 
-public enum ProcessorType {
-
+public enum ProcessorType
+{
 	ENTITY(ctx -> new EntityProcessor()),
 	COMMAND_SENDER(ctx -> new CommandSenderProcessor()),
 	ITEM_STACK(ctx -> new ItemStackProcessor()),
@@ -50,7 +50,8 @@ public enum ProcessorType {
 	 * Enum constructor
 	 *
 	 */
-	ProcessorType(Function<DependencyContext, MacroProcessor> creator) {
+	ProcessorType(Function<DependencyContext, MacroProcessor> creator)
+	{
 		this.creator = creator;
 	}
 
@@ -61,7 +62,8 @@ public enum ProcessorType {
 	 * @param context a dependency injection container
 	 * @return a newly created instance of a macro processor
 	 */
-	public MacroProcessor create(DependencyContext context) {
+	public MacroProcessor create(DependencyContext context)
+	{
 		return creator.apply(context);
 	}
 
@@ -74,7 +76,8 @@ public enum ProcessorType {
 	 * @param object the object to match to a ProcessorType
 	 * @return {@code ProcessorType} the matching processor type for the object
 	 */
-	public static ProcessorType matchType(final Object object) {
+	public static ProcessorType matchType(final Object object)
+	{
 		return switch (object) {
 			case Entity ignored -> ENTITY;
 			case CommandSender ignored -> COMMAND_SENDER;

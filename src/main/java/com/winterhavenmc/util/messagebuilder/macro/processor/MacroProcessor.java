@@ -69,7 +69,8 @@ import org.bukkit.Location;
  * @see ContextMap
  */
 @FunctionalInterface
-public interface MacroProcessor {
+public interface MacroProcessor
+{
 
 	/**
 	 * Resolves contextual information from the given value and populates the context map.

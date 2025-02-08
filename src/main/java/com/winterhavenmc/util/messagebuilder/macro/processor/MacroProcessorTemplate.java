@@ -27,7 +27,8 @@ import java.util.function.Supplier;
  * as well as the UNKNOWN_VALUE string constant.
  * Methods used by all classes may be placed here in the future.
  */
-public abstract class MacroProcessorTemplate implements MacroProcessor {
+public abstract class MacroProcessorTemplate implements MacroProcessor
+{
 	final static String UNKNOWN_VALUE = "???";
 
 
