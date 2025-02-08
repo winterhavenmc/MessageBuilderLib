@@ -33,8 +33,8 @@ import java.util.Optional;
  * {@code String} name, regardless of its real method name. Any object that is not known to have a
  * name will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
  */
-public class NameAdapter {
-
+public class NameAdapter
+{
 	private NameAdapter() { /* private constructor to prevent instantiation */ }
 
 	/**
@@ -46,7 +46,8 @@ public class NameAdapter {
 	 * @return an {@code Optional} of the object as a {@code Locatable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a gatLocation.
 	 */
-	public static Optional<Nameable> asNameable(Object obj) {
+	public static Optional<Nameable> asNameable(Object obj)
+	{
 		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case CommandSender commandSender -> Optional.of(commandSender::getName); // includes players, entities, console, command blocks, etc
@@ -57,4 +58,5 @@ public class NameAdapter {
 			case null, default -> Optional.empty();
 		};
 	}
+
 }
