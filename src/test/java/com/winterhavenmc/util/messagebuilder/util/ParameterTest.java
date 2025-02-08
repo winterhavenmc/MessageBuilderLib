@@ -15,16 +15,25 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline;
+package com.winterhavenmc.util.messagebuilder.util;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import org.junit.jupiter.api.Test;
 
-import java.util.function.Predicate;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MessagePredicates {
 
-	private MessagePredicates() { /* PRIVATE CONSTRUCTOR TO PREVENT INSTANTIATION */ }
+class ParameterTest {
 
-	public static final Predicate<MessageRecord> IS_ENABLED = MessageRecord::enabled;
+	@Test
+	void getDisplayName() {
+		assertEquals("recipient", Parameter.RECIPIENT.getDisplayName());
+		assertEquals("contextMap", Parameter.CONTEXT_MAP.getDisplayName());
+	}
+
+	@Test
+	void testToString() {
+		assertEquals("recipient", Parameter.RECIPIENT.toString());
+		assertEquals("contextMap", Parameter.CONTEXT_MAP.toString());
+	}
 
 }

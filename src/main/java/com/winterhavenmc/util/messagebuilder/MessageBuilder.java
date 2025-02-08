@@ -169,8 +169,10 @@ public final class MessageBuilder
 	/**
 	 * Reload messages from configured language file
 	 */
-	public void reload() {
-		if (!languageResourceManager.reload()) {
+	public void reload()
+	{
+		if (!languageResourceManager.reload())
+		{
 			plugin.getLogger().warning(BUNDLE.getString(RELOAD_FAILED.name()));
 		}
 	}

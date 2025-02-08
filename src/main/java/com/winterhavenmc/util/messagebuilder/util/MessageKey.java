@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-public enum MessageKey {
+public enum MessageKey
+{
 	INVALID_SECTION,
 	MISSING_RESOURCE,
 	PARAMETER_EMPTY,

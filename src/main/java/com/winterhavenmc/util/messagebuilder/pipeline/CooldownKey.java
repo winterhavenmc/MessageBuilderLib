@@ -41,8 +41,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
  * This behavior could be adapted by generating random uuids, or specific uuids for various non-uuid
  * message recipient types.
  */
-public class CooldownKey {
-
+public class CooldownKey
+{
 	final static UUID DEFAULT_UUID = new UUID(0, 0);
 
 	private final UUID uuid;
@@ -55,7 +55,8 @@ public class CooldownKey {
 	 * @param recipient the message recipient
 	 * @param messageId the unique message id
 	 */
-	public CooldownKey(final CommandSender recipient, final String messageId) {
+	public CooldownKey(final CommandSender recipient, final String messageId)
+	{
 		validate(recipient, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RECIPIENT));
 		validate(messageId, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_ID));
 
@@ -69,29 +70,39 @@ public class CooldownKey {
 		}
 	}
 
-	public static Optional<CooldownKey> optional(final CommandSender recipient, final String messageId) {
+
+	public static Optional<CooldownKey> optional(final CommandSender recipient, final String messageId)
+	{
 		return Optional.of(new CooldownKey(recipient, messageId));
 	}
 
-	public String getMessageId() {
+
+	public String getMessageId()
+	{
 		return this.messageId;
 	}
 
+
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return messageId + "|" + this.uuid;
 	}
 
+
 	@Override
-	public final boolean equals(Object object) {
+	public final boolean equals(Object object)
+	{
 		if (!(object instanceof CooldownKey that)) {
 			return false;
 		}
 		return uuid.equals(that.uuid) && messageId.equals(that.messageId);
 	}
 
+
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		int result = uuid.hashCode();
 		result = 31 * result + messageId.hashCode();
 		return result;

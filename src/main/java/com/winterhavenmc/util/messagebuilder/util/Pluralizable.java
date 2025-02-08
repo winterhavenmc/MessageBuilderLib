@@ -19,7 +19,8 @@ package com.winterhavenmc.util.messagebuilder.util;
 
 import java.util.Optional;
 
-public interface Pluralizable {
+public interface Pluralizable
+{
 	Optional<String> nameSingular();
 	Optional<String> namePlural();
 	Optional<String> nameFor(int quantity);

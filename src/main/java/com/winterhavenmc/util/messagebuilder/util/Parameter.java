@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-public enum Parameter {
+public enum Parameter
+{
 	CONTEXT_MAP("contextMap"),
 	COMMAND_SENDER("commandSender"),
 	CONFIGURATION_SUPPLIER("configurationSupplier"),
@@ -50,16 +51,23 @@ public enum Parameter {
 
 	private final String displayName;
 
-	Parameter(final String displayName) {
+
+	Parameter(final String displayName)
+	{
 		this.displayName = displayName;
 	}
 
-	public String getDisplayName() {
+
+	public String getDisplayName()
+	{
 		return displayName;
 	}
 
+
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return displayName;
 	}
+
 }

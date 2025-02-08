@@ -20,10 +20,13 @@ package com.winterhavenmc.util.messagebuilder.util;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public interface Validator {
+public interface Validator
+{
 
-	public static <T> T staticValidate(T value, Predicate<T> predicate, Supplier<RuntimeException> exceptionSupplier) {
-		if (predicate.test(value)) {
+	static <T> T staticValidate(T value, Predicate<T> predicate, Supplier<RuntimeException> exceptionSupplier)
+	{
+		if (predicate.test(value))
+		{
 			throw exceptionSupplier.get(); // Throws from the call site!
 		}
 		return value; // Pass through the valid value for functional chains.

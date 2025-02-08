@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-public interface MacroInterface {
+public interface MacroInterface
+{
 	String name();
 	String toString();
 }
