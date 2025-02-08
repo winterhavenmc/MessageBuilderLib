@@ -57,13 +57,14 @@ public class ItemStackProcessor extends MacroProcessorTemplate {
 					// if an itemstack quantity field does not exist in the context map, use itemStack amount for quantity
 					if (!contextMap.contains(key + ".QUANTITY")) {
 						QuantityAdapter.asQuantifiable(itemStack).ifPresent(quantifiable ->
-								resultMap.put(key + ".QUANTITY", String.valueOf(quantifiable.getQuantity())));
+								resultMap.put(key + ".QUANTITY", String.valueOf(quantifiable.getQuantity()))
+						);
+
+						// put item stack translation key in result map for possible use
+						//resultMap.put(key + ".TRANSLATION_KEY", itemStack.getTranslationKey());
+
+						//TODO: add adapter or otherwise extract metadata for fields (displayName, lore, quantity, etc)
 					}
-
-					// put item stack translation key in result map for possible use
-					resultMap.put(key + ".TRANSLATION_KEY", itemStack.getTranslationKey());
-
-					//TODO: add adapter or otherwise extract metadata for fields (displayName, lore, quantity, etc)
 				});
 
 		return resultMap;
