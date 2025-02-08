@@ -22,10 +22,12 @@ import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 public class MessageProcessor implements Processor
 {
@@ -52,7 +54,7 @@ public class MessageProcessor implements Processor
 
 	public void process(final Message message)
 	{
-		if (message == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE); }
+		validate(message, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE));
 
 		List<Sender> senders = List.of(messageSender, titleSender);
 

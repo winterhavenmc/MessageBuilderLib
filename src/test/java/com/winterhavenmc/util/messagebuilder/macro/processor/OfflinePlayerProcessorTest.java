@@ -19,8 +19,9 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -31,11 +32,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -43,6 +46,7 @@ class OfflinePlayerProcessorTest {
 
 	@Mock Player playerMock;
 	@Mock OfflinePlayer offlinePlayerMock;
+	@Mock Location locationMock;
 
 	@AfterEach
 	public void tearDown() {
@@ -52,13 +56,16 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContextTest() {
 		// Arrange
+		when(offlinePlayerMock.getName()).thenReturn("Offline Player");
+		when(offlinePlayerMock.getUniqueId()).thenReturn(new UUID(42, 42));
+		when(offlinePlayerMock.getLocation()).thenReturn(locationMock);
+
 		String key = "KEY";
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
-		contextMap.put(key, offlinePlayerMock);
-
 		// Act
+		contextMap.put(key, offlinePlayerMock);
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert

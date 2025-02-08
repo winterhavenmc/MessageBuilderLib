@@ -18,16 +18,38 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.util.Validator;
+
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
+/**
+ * A macro processor that resolves a value for a {@link Number} stored in the context map
+ * and referenced by the given key.
+ */
 public class NumberProcessor extends MacroProcessorTemplate {
 
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
-		Object value = contextMap.get(key);
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
+
 		ResultMap resultMap = new ResultMap();
-		resultMap.put(key, String.valueOf(value));
+
+		contextMap.getOpt(key)
+				.filter(Number.class::isInstance)
+				.map(Number.class::cast)
+				.ifPresent(number -> resultMap.put(key, String.valueOf(number)));
+
 		return resultMap;
 	}
 

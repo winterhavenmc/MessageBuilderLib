@@ -17,34 +17,54 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.inventory.ItemStack;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
+/**
+ * A macro processor that resolves fields for an {@link ItemStack} stored in the context map
+ * and referenced by the given key.
+ */
 public class ItemStackProcessor extends MacroProcessorTemplate {
 
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
-		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
-
-		// get value from container
-		Object value = contextMap.get(key);
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 
 		ResultMap resultMap = new ResultMap();
 
-		if (value instanceof ItemStack itemStack) {
-			resultMap.put(key, itemStack.getType().toString());
-		}
+		contextMap.getOpt(key)
+				.filter(ItemStack.class::isInstance)
+				.map(ItemStack.class::cast)
+				.ifPresent(itemStack -> {
+					// put item stack type as replacement string for key, in case other suitable field is not present
+					resultMap.put(key, itemStack.getType().toString());
+
+					// if an itemstack quantity field does not exist in the context map, use itemStack amount for quantity
+					if (!contextMap.contains(key + ".QUANTITY")) {
+						QuantityAdapter.asQuantifiable(itemStack).ifPresent(quantifiable ->
+								resultMap.put(key + ".QUANTITY", String.valueOf(quantifiable.getQuantity())));
+					}
+
+					// put item stack translation key in result map for possible use
+					resultMap.put(key + ".TRANSLATION_KEY", itemStack.getTranslationKey());
+
+					//TODO: add adapter or otherwise extract metadata for fields (displayName, lore, quantity, etc)
+				});
 
 		return resultMap;
 	}

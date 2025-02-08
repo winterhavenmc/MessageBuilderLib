@@ -22,6 +22,8 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -30,6 +32,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -40,6 +44,7 @@ class CommandSenderProcessorTest {
 
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
+	@Mock World worldMock;
 
 	MacroProcessor macroProcessor;
 
@@ -91,27 +96,34 @@ class CommandSenderProcessorTest {
 	void resolveContext() {
 		// Arrange
 		when(playerMock.getName()).thenReturn("player one");
-		String keyPath = "SOME_KEY";
+		when(playerMock.getDisplayName()).thenReturn("&aPlayer One");
+		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
+		when(worldMock.getName()).thenReturn("test_world");
+		Location location = new Location(worldMock, 10, 20, 30);
+		when(playerMock.getLocation()).thenReturn(location);
+
+		String key = "SOME_KEY";
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(keyPath, playerMock);
+		contextMap.put(key, playerMock);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(keyPath));
-		assertNotNull(resultMap.get(keyPath));
+		assertTrue(resultMap.containsKey(key));
+		assertNotNull(resultMap.get(key));
 	}
+
 
 	@Test
 	void resolveContext_not_command_sender() {
 		// Arrange
-		String keyPath = "SOME_KEY";
+		String key = "SOME_KEY";
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(keyPath, 42);
+		contextMap.put(key, 42);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
 		assertTrue(resultMap.isEmpty());

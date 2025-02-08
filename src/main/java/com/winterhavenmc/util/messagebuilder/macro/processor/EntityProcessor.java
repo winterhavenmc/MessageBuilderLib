@@ -17,38 +17,69 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.entity.Entity;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
+/**
+ * A macro processor that resolves fields for an {@link Entity} stored in the context map
+ * and referenced by the given key.
+ */
 class EntityProcessor extends MacroProcessorTemplate {
 
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
-		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
-
-		// get value from context map
-		Object value = contextMap.get(key);
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 
 		ResultMap resultMap = new ResultMap();
 
-		if (value instanceof Entity entity) {
+		contextMap.getOpt(key)
+				.filter(Entity.class::isInstance)
+				.map(Entity.class::cast)
+				.ifPresent(entity -> {
+					NameAdapter.asNameable(entity).ifPresent(name ->
+						resultMap.put(key, entity.getName())
+					);
 
-			// put entity macro replacements in result map
-			resultMap.put(key, entity.getName());
+					DisplayNameAdapter.asDisplayNameable(entity).ifPresent(displayNameable ->
+					{
+						if (displayNameable.getDisplayName() != null) {
+							resultMap.put(key, displayNameable.getDisplayName());
+							resultMap.put(key + ".DISPLAY_NAME", displayNameable.getDisplayName());
+						}
+					});
 
-			//TODO: put additional field processing here, including entity location
-		}
+					LocationAdapter.asLocatable(entity).ifPresent(locatable ->
+					{
+						if (locatable.gatLocation() != null) {
+							resultMap.putAll(insertLocationFields(key, locatable.gatLocation()));
+						}
+					});
+
+					UniqueIdAdapter.asIdentifiable(entity).ifPresent(identifiable ->
+					{
+						if (identifiable.getUniqueId() != null) {
+							resultMap.put(key + ".UUID", identifiable.getUniqueId().toString());
+						}
+					});
+				});
 
 		return resultMap;
 	}

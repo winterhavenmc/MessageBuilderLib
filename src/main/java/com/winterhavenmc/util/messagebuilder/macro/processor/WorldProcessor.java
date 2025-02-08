@@ -17,32 +17,46 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.World;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
+/**
+ * A macro processor that resolves fields for a {@link World} stored in the context map
+ * and referenced by the given key.
+ */
 public class WorldProcessor extends MacroProcessorTemplate {
 
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
-		if (key == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, KEY); }
-		if (key.isBlank()) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_EMPTY, KEY); }
-		if (contextMap == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, CONTEXT_MAP); }
-
-		// get value from context map
-		Object value = contextMap.get(key);
+	public ResultMap resolveContext(final String key, final ContextMap contextMap)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 
 		ResultMap resultMap = new ResultMap();
 
-		if (value instanceof World world) {
-			//TODO: reimplement world name lookups after Multiverse alias lookups are reimplemented
-			resultMap.put(key, world.getName());
-		}
+		contextMap.getOpt(key)
+				.filter(World.class::isInstance)
+				.map(World.class::cast)
+				.flatMap(NameAdapter::asNameable).ifPresent(nameable ->
+				{
+					if (nameable.getName() != null) {
+						resultMap.put(key, nameable.getName());
+						resultMap.put(key + ".NAME", nameable.getName());
+					}
+				});
 
 		return resultMap;
 	}

@@ -18,14 +18,18 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_ID;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
@@ -52,8 +56,8 @@ public class CooldownKey {
 	 * @param messageId the unique message id
 	 */
 	public CooldownKey(final CommandSender recipient, final String messageId) {
-		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
+		validate(recipient, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RECIPIENT));
+		validate(messageId, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_ID));
 
 		this.messageId = messageId;
 

@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.name;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -49,6 +50,7 @@ public class NameAdapter {
 		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case CommandSender commandSender -> Optional.of(commandSender::getName); // includes players, entities, console, command blocks, etc
+			case OfflinePlayer offlinePlayer -> Optional.of(offlinePlayer::getName);
 			case World world -> Optional.of(world::getName);
 			case Server server -> Optional.of(server::getName);
 			case Plugin plugin -> Optional.of(plugin::getName);

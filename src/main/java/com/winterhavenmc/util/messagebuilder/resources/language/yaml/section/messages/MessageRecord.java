@@ -17,18 +17,20 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.time.Duration;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.List;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_ID;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_SECTION;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_SECTION;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
@@ -100,25 +102,27 @@ public record MessageRecord (
 	/**
 	 * A static method to retrieve a message record.
 	 *
-	 * @param messageId the {@code MessageId} for the message to be retrieved from the language file
+	 * @param key the {@code MessageId} for the message to be retrieved from the language file
 	 * @param messageSection the message section containing the messages
 	 * @return a MessageRecord if an entry could be found for the {@code MessageId}, otherwise an empty Optional.
 	 */
-	public static Optional<MessageRecord> getRecord(final String messageId, final ConfigurationSection messageSection)
+	public static Optional<MessageRecord> getRecord(final String key, final ConfigurationSection messageSection)
 	{
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
-		if (messageSection == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_SECTION); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(messageSection, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_SECTION));
 
-		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
-		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
-			throw new LocalizedException(INVALID_SECTION, Section.MESSAGES.name());
-		}
+		//TODO: replace this with a custom exception
+//		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
+//		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
+//			throw LocalizedException.InvalidSection(Section.MESSAGES);
+//		}
 
 		// get entry for messageId
-		ConfigurationSection messageEntry = messageSection.getConfigurationSection(messageId);
+		ConfigurationSection messageEntry = messageSection.getConfigurationSection(key);
 		if (messageEntry == null) { return Optional.empty(); }
 
-		return Optional.of(new MessageRecord(messageId,
+		return Optional.of(new MessageRecord(key,
 				messageEntry.getBoolean(Field.ENABLED.toKey()),
 				messageEntry.getBoolean(Field.TRANSLATABLE.toKey()),
 				messageEntry.getString(Field.TRANSLATABLE_KEY.toKey()),

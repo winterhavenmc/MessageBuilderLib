@@ -20,9 +20,12 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONFIGURATION_SUPPLIER;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.SECTION;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.SECTION;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
@@ -31,7 +34,6 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  */
 public class SectionQueryHandlerFactory {
 
-//	private final Map<Section, SectionQueryHandler> sectionHandlerCache = new EnumMap<>(Section.class);
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
@@ -43,7 +45,8 @@ public class SectionQueryHandlerFactory {
 	 * @param configurationSupplier the provider of the language configuration
 	 */
 	public SectionQueryHandlerFactory(YamlConfigurationSupplier configurationSupplier) {
-		if (configurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER); }
+		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+
 		this.configurationSupplier = configurationSupplier;
 	}
 
@@ -56,6 +59,8 @@ public class SectionQueryHandlerFactory {
 	 * @return The requested SectionQueryHandler
 	 */
 	public SectionQueryHandler getQueryHandler(Section section) {
+		validate(section, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, SECTION));
+
 		return section.getQueryHandler(configurationSupplier);
 	}
 
@@ -68,7 +73,8 @@ public class SectionQueryHandlerFactory {
 	 * @throws LocalizedException if section parameter is null
 	 */
 	public SectionQueryHandler createSectionHandler(Section section) {
-		if (section == null) { throw new LocalizedException(PARAMETER_NULL, SECTION); }
+		validate(section, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, SECTION));
+
 		return section.getQueryHandler(configurationSupplier);
 	}
 

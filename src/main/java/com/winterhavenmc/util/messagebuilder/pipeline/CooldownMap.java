@@ -23,10 +23,14 @@ import org.bukkit.command.CommandSender;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_RECORD;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 public final class CooldownMap implements Cooldown {
@@ -43,8 +47,8 @@ public final class CooldownMap implements Cooldown {
 	 * @throws LocalizedException if any parameter is null
 	 */
 	public void putExpirationTime(final CommandSender recipient, final MessageRecord messageRecord) {
-		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
-		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
+		validate(recipient, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RECIPIENT));
+		validate(messageRecord, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD));
 
 		CooldownKey key = new CooldownKey(recipient, messageRecord.messageId());
 		if (notCooling(key)) {
@@ -62,7 +66,7 @@ public final class CooldownMap implements Cooldown {
 	 * @throws LocalizedException if any parameter is null
 	 */
 	public boolean notCooling(final CooldownKey key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
 
 		return !(COOLDOWN_MAP.containsKey(key) && Instant.now().isBefore(COOLDOWN_MAP.get(key)));
 	}

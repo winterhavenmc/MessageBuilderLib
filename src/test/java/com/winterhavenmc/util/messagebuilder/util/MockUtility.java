@@ -32,11 +32,13 @@ import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.RESOURCE_NAME;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.TARGET_DIR_PATH;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.RESOURCE_NAME;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.TARGET_DIR_PATH;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 public final class MockUtility {
@@ -114,9 +116,9 @@ public final class MockUtility {
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
 	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
-		if (resourceName == null) { throw new LocalizedException(PARAMETER_NULL, RESOURCE_NAME); }
-		if (resourceName.isEmpty()) { throw new LocalizedException(PARAMETER_EMPTY, RESOURCE_NAME); }
-		if (targetDirPath == null) { throw new LocalizedException(PARAMETER_NULL, TARGET_DIR_PATH); }
+		validate(resourceName, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RESOURCE_NAME));
+		validate(resourceName, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, RESOURCE_NAME));
+		validate(targetDirPath, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, TARGET_DIR_PATH));
 
 		// Ensure the target directory exists
 		Files.createDirectories(targetDirPath);

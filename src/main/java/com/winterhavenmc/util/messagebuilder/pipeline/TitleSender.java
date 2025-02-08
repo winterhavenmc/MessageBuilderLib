@@ -18,14 +18,18 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.RECIPIENT;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_RECORD;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 public class TitleSender implements Sender {
@@ -39,8 +43,8 @@ public class TitleSender implements Sender {
 
 	@Override
 	public void send(final CommandSender recipient, final MessageRecord messageRecord) {
-		if (recipient == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, RECIPIENT); }
-		if (messageRecord == null) { throw new LocalizedException(LocalizedException.MessageKey.PARAMETER_NULL, MESSAGE_RECORD); }
+		validate(recipient, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RECIPIENT));
+		validate(messageRecord, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD));
 
 		if (recipient instanceof Player player) {
 			player.sendTitle(ChatColor.translateAlternateColorCodes('&', messageRecord.title()),

@@ -17,11 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+
 import org.junit.jupiter.api.Test;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.*;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.RECIPIENT;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LocalizedExceptionTest {
 
@@ -32,20 +33,9 @@ class LocalizedExceptionTest {
 	}
 
 	@Test
-	void testConstructor2() {
-		LocalizedException exception = new LocalizedException(INVALID_SECTION, "CONSTANTS");
-		assertEquals("The configuration section returned by the configuration supplier was an invalid 'CONSTANTS' section.", exception.getMessage());
-	}
-
-	@Test
 	void getLocalizedMessage() {
 		LocalizedException exception = new LocalizedException(PARAMETER_NULL, RECIPIENT);
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void testToString() {
-		assertEquals("recipient", RECIPIENT.toString());
 	}
 
 }

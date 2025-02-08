@@ -19,15 +19,20 @@ package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+
 
 /**
  * This class implements a map of macro objects that have been passed in by the message builder
@@ -84,8 +89,12 @@ public class ContextMap {
 	 * @param <T>           the type of the value
 	 */
 	public <T> void put(final String key, final T value) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		// allow null value to be inserted into the context map. uncomment line below to throw exception on null 'value' parameter
+		//staticValidate(value, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, VALUE));
 
+		// insert value into map with key, replacing null values with string "NULL"
 		internalMap.put(key, Objects.requireNonNullElse(value, "NULL"));
 	}
 
@@ -96,8 +105,23 @@ public class ContextMap {
 	 * @param key the context map key
 	 * @return the value for the key
 	 */
+	public Optional<Object> getOpt(final String key) {
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+
+		return Optional.ofNullable(internalMap.get(key));
+	}
+
+
+	/**
+	 * Retrieve a value from the context map for the specified key.
+	 *
+	 * @param key the context map key
+	 * @return the value for the key
+	 */
 	public Object get(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 
 		return internalMap.get(key);
 	}
@@ -110,7 +134,8 @@ public class ContextMap {
 	 * @return true if the key exists, false otherwise
 	 */
 	public boolean contains(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 
 		return internalMap.containsKey(key);
 	}
@@ -123,7 +148,8 @@ public class ContextMap {
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
 	public Object remove(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 
 		return internalMap.remove(key);
 	}

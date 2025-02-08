@@ -21,8 +21,8 @@ import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

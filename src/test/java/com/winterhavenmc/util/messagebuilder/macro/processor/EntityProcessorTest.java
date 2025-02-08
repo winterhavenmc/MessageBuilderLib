@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -29,6 +30,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -39,6 +42,7 @@ class EntityProcessorTest {
 
 	@Mock Player playerMock;
 	@Mock Entity entityMock;
+	@Mock Location locationMock;
 
 
 	@AfterEach
@@ -83,18 +87,21 @@ class EntityProcessorTest {
 	void resolveContext() {
 		// Arrange
 		when(entityMock.getName()).thenReturn("Entity Name");
-		String keyPath = "ENTITY";
+		when(entityMock.getUniqueId()).thenReturn(new UUID(42, 42));
+		when(entityMock.getLocation()).thenReturn(locationMock);
+
+		String key = "ENTITY";
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(keyPath, entityMock);
+		contextMap.put(key, entityMock);
 
 		MacroProcessor macroProcessor = new EntityProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(keyPath));
-		assertEquals("Entity Name", resultMap.get(keyPath));
+		assertTrue(resultMap.containsKey(key));
+		assertEquals("Entity Name", resultMap.get(key));
 	}
 
 	@Test

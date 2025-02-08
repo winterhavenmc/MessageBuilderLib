@@ -18,17 +18,31 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
+/**
+ * A macro processor that resolves a string value for an {@link Object} stored in the context map
+ * and referenced by the given key.
+ */
 public class ObjectProcessor extends MacroProcessorTemplate {
 
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
-		Object value = contextMap.get(key);
-		ResultMap resultMap = new ResultMap();
-		resultMap.put(key, value.toString());
-		return resultMap;
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
+
+		return new ResultMap() {{ put(key, contextMap.get(key).toString()); }};
 	}
 
 }

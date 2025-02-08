@@ -23,8 +23,13 @@ import com.winterhavenmc.util.messagebuilder.pipeline.*;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.MACRO;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.VALUE;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.util.Validator.staticValidate;
 
 
 /**
@@ -63,14 +68,12 @@ public final class Message
 	 */
 	public <Macro extends Enum<Macro>, T> Message setMacro(final Macro macro, final T value)
 	{
-		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
-		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
+		validate(macro, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MACRO));
+		staticValidate(value, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, VALUE));
+		// allow null 'value' parameter to be inserted into context map
 
-		// use macro enum constant name as key
-		String key = macro.name();
-
-		// put value into context map
-		this.contextMap.put(key, value);
+		// put value into context map using macro enum constant name as key
+		this.contextMap.put(macro.name(), value);
 
 		// return this instance of Message class to the builder chain
 		return this;
@@ -86,15 +89,13 @@ public final class Message
 	 */
 	public <Macro extends Enum<Macro>, T> Message setMacro(int quantity, final Macro macro, final T value)
 	{
-		if (macro == null) { throw new LocalizedException(PARAMETER_NULL, MACRO); }
-		if (value == null) { throw new LocalizedException(PARAMETER_NULL, VALUE); }
+		validate(macro, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MACRO));
+		staticValidate(value, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, VALUE));
+		// allow null 'value' parameter to be inserted into context map
 
-		// use macro enum constant name as key
-		String key = macro.name();
-
-		// put value into context map
-		this.contextMap.put(key, value);
-		this.contextMap.put(key + ".QUANTITY", quantity);
+		// put value into context map using macro enum constant name for key
+		this.contextMap.put(macro.name(), value);
+		this.contextMap.put(macro.name() + ".QUANTITY", quantity);
 
 		// return this instance of Message class to the builder chain
 		return this;

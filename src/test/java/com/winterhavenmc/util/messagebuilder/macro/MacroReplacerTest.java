@@ -24,8 +24,8 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -133,7 +133,7 @@ class MacroReplacerTest {
 				() -> macroReplacer.replaceMacros(messageRecord, null));
 
 		// Assert
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'message' cannot be null.", exception.getMessage());
 	}
 
 
@@ -194,8 +194,6 @@ class MacroReplacerTest {
 		// Assert
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
-
-
 
 
 	@Test

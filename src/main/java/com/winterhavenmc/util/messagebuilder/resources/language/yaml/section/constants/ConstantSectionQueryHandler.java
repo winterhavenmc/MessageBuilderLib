@@ -24,11 +24,14 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Sec
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
@@ -46,19 +49,15 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	/**
 	 * Class constructor
 	 *
-	 * @param yamlConfigurationSupplier the provider of the current language configuration object
+	 * @param configurationSupplier the provider of the current language configuration object
 	 * @throws LocalizedException if the {@code yamlConfigurationSupplier} parameter is null or invalid
 	 */
-	public ConstantSectionQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
-		super(yamlConfigurationSupplier, section, primaryType, handledTypes);
-
-		// ensure the 'CONSTANTS' section exists in the configuration provided by the supplier
-		if (yamlConfigurationSupplier.getSection(section) == null) {
-			throw new LocalizedException(INVALID_SECTION, section.name());
-		}
+	public ConstantSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier) {
+		super(configurationSupplier, section, primaryType, handledTypes);
+		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		// get configuration supplier
-		this.configurationSupplier = yamlConfigurationSupplier;
+		this.configurationSupplier = configurationSupplier;
 	}
 
 
@@ -70,7 +69,9 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public Optional<String> getString(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+
 		return Optional.ofNullable(configurationSupplier.getSection(section).getString(key));
 	}
 
@@ -83,7 +84,9 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public List<String> getStringList(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+
 		return configurationSupplier.getSection(section).getStringList(key);
 	}
 
@@ -96,7 +99,9 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public int getInt(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+
 		return configurationSupplier.getSection(section).getInt(key);
 	}
 
@@ -110,6 +115,9 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 */
 	@Override
 	public <T> Optional<T> getRecord(String key) {
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+
 		return Optional.empty();
 	}
 

@@ -55,7 +55,7 @@ class NumberProcessorTest {
 
 
 	@Test
-	void execute_integer() {
+	void resolveContext_integer() {
 		// Arrange
 		String key = "SOME_INTEGER";
 		Integer number = 42;
@@ -71,7 +71,7 @@ class NumberProcessorTest {
 
 
 	@Test
-	void execute_null_integer() {
+	void resolveContext_null_integer() {
 		// Arrange
 		String key = "SOME_NULL_INTEGER";
 		Integer number = null;
@@ -81,11 +81,11 @@ class NumberProcessorTest {
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assert(resultMap.containsKey("SOME_NULL_INTEGER"));
+		assertFalse(resultMap.containsKey("SOME_NULL_INTEGER"));
 	}
 
 	@Test
-	void execute_long() {
+	void resolveContext_long() {
 		// Arrange
 		String key = "SOME_LONG";
 		Long number = 420L;
@@ -100,18 +100,17 @@ class NumberProcessorTest {
 	}
 
 	@Test
-	void execute_null_long() {
+	void resolveContext_null_long() {
 		// Arrange
 		String key = "SOME_NULL_LONG";
 		Long number = null;
-		contextMap.put(key,number);
+		contextMap.put(key, number);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey("SOME_NULL_LONG"));
-		assertEquals("NULL", resultMap.get(key));
+		assertFalse(resultMap.containsKey("SOME_NULL_LONG"));
 	}
 
 }
