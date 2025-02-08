@@ -36,8 +36,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
  * A macro processor that resolves fields for an {@link ItemStack} stored in the context map
  * and referenced by the given key.
  */
-public class ItemStackProcessor extends MacroProcessorTemplate {
-
+public class ItemStackProcessor extends MacroProcessorTemplate
+{
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
