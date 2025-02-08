@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.time;
 
-public enum TimeUnit {
-
+public enum TimeUnit
+{
 	// pass number of milliseconds for each time unit as parameter to constructor
 	MILLISECONDS(1L),
 	TICKS(50L),
@@ -37,51 +37,64 @@ public enum TimeUnit {
 	 * Class constructor
 	 * @param millis milliseconds for time unit
 	 */
-	TimeUnit(final long millis) {
+	TimeUnit(final long millis)
+	{
 		this.millis = millis;
 	}
 
-	public final long toMillis(final long duration) {
+	public final long toMillis(final long duration)
+	{
 		return convert(duration, MILLISECONDS);
 	}
 
-	public final long toTicks(final long duration) {
+	public final long toTicks(final long duration)
+	{
 		return convert(duration, TICKS);
 	}
 
-	public final long toSeconds(final long duration) {
+	public final long toSeconds(final long duration)
+	{
 		return convert(duration, SECONDS);
 	}
 
-	public final long toMinutes(final long duration) {
+	public final long toMinutes(final long duration)
+	{
 		return convert(duration, MINUTES);
 	}
 
-	public final long toHours(final long duration) {
+	public final long toHours(final long duration)
+	{
 		return convert(duration, HOURS);
 	}
 
-	public final long toDays(final long duration) {
+	public final long toDays(final long duration)
+	{
 		return convert(duration, DAYS);
 	}
 
-	public final long toWeeks(final long duration) {
+	public final long toWeeks(final long duration)
+	{
 		return convert(duration, WEEKS);
 	}
 
-	public final long toMonths(final long duration) {
+	public final long toMonths(final long duration)
+	{
 		return convert(duration, MONTHS);
 	}
 
-	public final long toYears(final long duration) {
+	public final long toYears(final long duration)
+	{
 		return convert(duration, YEARS);
 	}
 
-	public final long convert(final long duration, final TimeUnit unit) {
-		if (duration < Long.MIN_VALUE / this.millis) {
+	public final long convert(final long duration, final TimeUnit unit)
+	{
+		if (duration < Long.MIN_VALUE / this.millis)
+		{
 			throw new IllegalArgumentException("duration of " + duration + " " + this + " would cause an underflow in conversion to " + unit + ".");
 		}
-		if (duration > Long.MAX_VALUE / this.millis) {
+		if (duration > Long.MAX_VALUE / this.millis)
+		{
 			throw new IllegalArgumentException("duration of " + duration + " " + this + " would cause an overflow in conversion to " + unit + ".");
 		}
 		return duration * this.millis / unit.millis;
@@ -92,35 +105,50 @@ public enum TimeUnit {
 	 *
 	 * @return the number of milliseconds equal to each time unit
 	 */
-	public final long getMillis() {
+	public final long getMillis()
+	{
 		return this.millis;
 	}
 
-	public final boolean isLessThan(final long millis) {
+
+	public final boolean isLessThan(final long millis)
+	{
 		return this.millis < millis;
 	}
 
-	public final boolean isGreaterThan(final long millis) {
+
+	public final boolean isGreaterThan(final long millis)
+	{
 		return this.millis > millis;
 	}
 
-	public final boolean isLessThan(final TimeUnit timeUnit) {
+
+	public final boolean isLessThan(final TimeUnit timeUnit)
+	{
 		return this.millis < timeUnit.millis;
 	}
 
-	public final boolean isGreaterThan(final TimeUnit timeUnit) {
+
+	public final boolean isGreaterThan(final TimeUnit timeUnit)
+	{
 		return this.millis > timeUnit.millis;
 	}
 
-	public final long times(int multiplier) {
+
+	public final long times(int multiplier)
+	{
 		return this.millis * multiplier;
 	}
 
-	public final long justShyOf(int number) {
+
+	public final long justShyOf(int number)
+	{
 		return this.millis * number - 1;
 	}
 
-	public final long one() {
+
+	public final long one()
+	{
 		return this.millis;
 	}
 

@@ -37,8 +37,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
  * Format a time string using the Time4J PrettyTime formatter. When given a locale and a duration, a formatted string
  * with pluralized time units appropriate for the duration is returned as a string.
  */
-public final class PrettyTimeFormatter implements TimeFormatter {
-
+public final class PrettyTimeFormatter implements TimeFormatter
+{
 	/**
 	 * Return a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale provided.<br>
 	 * <b><i>Note:</i></b> Duration type used in this method are of the net.time4j.Duration type, except for
@@ -48,7 +48,8 @@ public final class PrettyTimeFormatter implements TimeFormatter {
 	 * @param duration a time duration
 	 * @return the {@code PrettyTime} formatted string
 	 */
-	public String getFormatted(final Locale locale, final java.time.Duration duration) {
+	public String getFormatted(final Locale locale, final java.time.Duration duration)
+	{
 		validate(locale, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, LOCALE));
 		validate(duration, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, DURATION));
 
