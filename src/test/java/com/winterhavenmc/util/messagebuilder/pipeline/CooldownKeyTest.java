@@ -198,4 +198,11 @@ class CooldownKeyTest {
 		assertTrue(cooldownKey.isPresent());
 		assertEquals("ENABLED_MESSAGE", cooldownKey.get().getMessageId());
 	}
+
+	@Test
+	void testEquals() {
+		CooldownKey cooldownKey = new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name());
+
+		assertFalse(cooldownKey.equals("not a cooldown key"));
+	}
 }
