@@ -19,23 +19,28 @@ package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+
 
 /**
  * This class implements a map of macro objects that have been passed in by the message builder
  * to be processed for replacement strings. The map key is an enum member, and the corresponding value
  * is the object to be processed. It is backed by a HashMap.
  */
-public class ContextMap {
-
+public class ContextMap
+{
 	private final CommandSender recipient;
 	private final String messageId;
 
@@ -49,7 +54,8 @@ public class ContextMap {
 	 * @param recipient the message recipient
 	 * @param messageId the message unique identifier as a string
 	 */
-	public ContextMap(final CommandSender recipient, final String messageId) {
+	public ContextMap(final CommandSender recipient, final String messageId)
+	{
 		this.recipient = recipient;
 		this.messageId = messageId;
 	}
@@ -60,7 +66,8 @@ public class ContextMap {
 	 *
 	 * @return the recipient that was used to create the context map
 	 */
-	public CommandSender getRecipient() {
+	public CommandSender getRecipient()
+	{
 		return recipient;
 	}
 
@@ -71,7 +78,8 @@ public class ContextMap {
 	 * @return {@code MessageId} the MessageId associated with this context map
 	 */
 
-	public String getMessageId() {
+	public String getMessageId()
+	{
 		return messageId;
 	}
 
@@ -83,9 +91,14 @@ public class ContextMap {
 	 * @param value         the value to store
 	 * @param <T>           the type of the value
 	 */
-	public <T> void put(final String key, final T value) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+	public <T> void put(final String key, final T value)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		// allow null value to be inserted into the context map. uncomment line below to throw exception on null 'value' parameter
+		//staticValidate(value, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, VALUE));
 
+		// insert value into map with key, replacing null values with string "NULL"
 		internalMap.put(key, Objects.requireNonNullElse(value, "NULL"));
 	}
 
@@ -96,8 +109,25 @@ public class ContextMap {
 	 * @param key the context map key
 	 * @return the value for the key
 	 */
-	public Object get(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+	public Optional<Object> getOpt(final String key)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+
+		return Optional.ofNullable(internalMap.get(key));
+	}
+
+
+	/**
+	 * Retrieve a value from the context map for the specified key.
+	 *
+	 * @param key the context map key
+	 * @return the value for the key
+	 */
+	public Object get(final String key)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 
 		return internalMap.get(key);
 	}
@@ -109,8 +139,10 @@ public class ContextMap {
 	 * @param key the unique key to check
 	 * @return true if the key exists, false otherwise
 	 */
-	public boolean contains(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+	public boolean contains(final String key)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 
 		return internalMap.containsKey(key);
 	}
@@ -122,8 +154,10 @@ public class ContextMap {
 	 * @param key The enum member used as the key.
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
-	public Object remove(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+	public Object remove(final String key)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 
 		return internalMap.remove(key);
 	}
@@ -134,7 +168,8 @@ public class ContextMap {
 	 *
 	 * @return A set of entries in the map.
 	 */
-	public @NotNull Set<Map.Entry<String, Object>> entrySet() {
+	public @NotNull Set<Map.Entry<String, Object>> entrySet()
+	{
 		return internalMap.entrySet();
 	}
 
@@ -142,7 +177,8 @@ public class ContextMap {
 	/**
 	 * Clears all entries in the map.
 	 */
-	public void clear() {
+	public void clear()
+	{
 		internalMap.clear();
 	}
 
@@ -151,7 +187,8 @@ public class ContextMap {
 	 *
 	 * @return The size of the map.
 	 */
-	public int size() {
+	public int size()
+	{
 		return this.internalMap.size();
 	}
 
@@ -160,7 +197,8 @@ public class ContextMap {
 	 *
 	 * @return {@code true} if the map contains no entries, {@code false} otherwise.
 	 */
-	public boolean isEmpty() {
+	public boolean isEmpty()
+	{
 		return this.internalMap.isEmpty();
 	}
 

@@ -25,37 +25,41 @@ import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.Locale;
+import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
+/**
+ * A macro processor that resolves a string value for a {@link Duration} stored in the context map
+ * and referenced by the given key.
+ */
 public class DurationProcessor extends MacroProcessorTemplate {
 
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
-		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
-
-		// get value from context map
-		Object value = contextMap.get(key);
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 
 		ResultMap resultMap = new ResultMap();
 
-		if (value instanceof Duration duration) {
+		contextMap.getOpt(key)
+				.filter(Duration.class::isInstance)
+				.map(Duration.class::cast)
+				.ifPresent(duration -> {
+					Locale locale = Locale.getDefault();
+					if (contextMap.getRecipient() instanceof Player player) {
+						locale = Locale.forLanguageTag(player.getLocale()); //TODO: deal with minecraft's mangled language tag
+					}
+					resultMap.put(key, new PrettyTimeFormatter().getFormatted(locale, duration));
+				});
 
-			Locale locale = Locale.getDefault();
-
-			if (contextMap.getRecipient() instanceof Player player) {
-				locale = Locale.forLanguageTag(player.getLocale());
-			}
-
-			resultMap.put(key, new PrettyTimeFormatter().getFormatted(locale, duration));
-		}
 		return resultMap;
 	}
 

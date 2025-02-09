@@ -20,24 +20,28 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
-public class NullProcessor extends MacroProcessorTemplate {
-
+/**
+ * A macro processor that resolves a string value of "NULL" for values stored in the context map that are
+ * referenced by the given key and contain a null value.
+ */
+public class NullProcessor extends MacroProcessorTemplate
+{
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
-		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 
-		ResultMap resultMap = new ResultMap();
-		resultMap.put(key, "NULL");
-
-		return resultMap;
+		return new ResultMap() {{ put(key, "NULL"); }};
 	}
 
 }

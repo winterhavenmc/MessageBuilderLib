@@ -22,11 +22,14 @@ import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.ITEM_SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.ITEM_SECTION;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
@@ -75,21 +78,22 @@ public record ItemRecord(
 	 * Static method for retrieving an {@link ItemRecord} from the language file. Return an ItemRecord if one can be found
 	 * for the kepPath, or returns an empty {@link Optional} if no record could be found.
 	 *
-	 * @param keyPath the key for the item record to be retrieved
+	 * @param key the key for the item record to be retrieved
 	 * @param itemSection the ITEMS section of the language file
 	 * @return An {@code ItemRecord} from the language file, or an empty Optional if no record could be found
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
-	public static Optional<ItemRecord> getRecord(final String keyPath, final ConfigurationSection itemSection) {
-		if (keyPath == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
-		if (itemSection == null) { throw new LocalizedException(PARAMETER_NULL, ITEM_SECTION); }
+	public static Optional<ItemRecord> getRecord(final String key, final ConfigurationSection itemSection) {
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(itemSection, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, ITEM_SECTION));
 
 		// get configuration section for item key
-		ConfigurationSection itemEntry = itemSection.getConfigurationSection(keyPath);
+		ConfigurationSection itemEntry = itemSection.getConfigurationSection(key);
 		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
-		return Optional.of(new ItemRecord(keyPath,
+		return Optional.of(new ItemRecord(key,
 				// looping over these would be nice, and checking types against those listed in the query handler
 				// would be to any fields that do not match a type listed in the query handler will be returned as
 				// an empty optional or empty list or throw an exception

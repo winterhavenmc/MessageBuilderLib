@@ -21,13 +21,15 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import java.util.List;
+import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
-public abstract class AbstractSectionQueryHandler implements SectionQueryHandler {
-
+public abstract class AbstractSectionQueryHandler implements SectionQueryHandler
+{
 	protected final Section section;
 	protected Class<?> primaryType;
 	protected List<Class<?>> handledTypes;
@@ -37,8 +39,9 @@ public abstract class AbstractSectionQueryHandler implements SectionQueryHandler
 	protected AbstractSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier,
 	                                      final Section section,
 	                                      final Class<?> primaryType,
-	                                      final List<Class<?>> handledTypes) {
-		if (configurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER); }
+	                                      final List<Class<?>> handledTypes)
+	{
+		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		this.configurationSupplier = configurationSupplier;
 		this.section = section;

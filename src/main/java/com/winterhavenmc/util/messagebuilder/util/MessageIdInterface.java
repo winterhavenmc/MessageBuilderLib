@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-public interface MessageIdInterface {
+public interface MessageIdInterface
+{
 	String name();
 	String toString();
 }

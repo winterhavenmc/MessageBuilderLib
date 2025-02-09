@@ -25,31 +25,35 @@ import net.time4j.PrettyTime;
 import net.time4j.format.TextWidth;
 
 import java.util.Locale;
+import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.DURATION;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.LOCALE;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.DURATION;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.LOCALE;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
  * Format a time string using the Time4J PrettyTime formatter. When given a locale and a duration, a formatted string
  * with pluralized time units appropriate for the duration is returned as a string.
  */
-public final class PrettyTimeFormatter implements TimeFormatter {
-
+public final class PrettyTimeFormatter implements TimeFormatter
+{
 	/**
 	 * Return a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale provided.<br>
-	 * <b><i>Note:</i></b> Duration type used in this method are of the net.time4j.Duration type, with the exception
-	 * of the java.time.Duration type that is accepted as a parameter
+	 * <b><i>Note:</i></b> Duration type used in this method are of the net.time4j.Duration type, except for
+	 * the java.time.Duration type that is accepted as a parameter
 	 *
 	 * @param locale the Locale to use for {@code PrettyTime} translation and pluralization
 	 * @param duration a time duration
 	 * @return the {@code PrettyTime} formatted string
 	 */
-	public String getFormatted(final Locale locale, final java.time.Duration duration) {
-		if (locale == null) { throw new LocalizedException(PARAMETER_NULL, LOCALE); }
-		if (duration == null) { throw new LocalizedException(PARAMETER_NULL, DURATION); }
+	public String getFormatted(final Locale locale, final java.time.Duration duration)
+	{
+		validate(locale, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, LOCALE));
+		validate(duration, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, DURATION));
 
+		// get instance of PrettyTime
 		PrettyTime prettyTime = PrettyTime.of(locale);
 
 		// convert java.time.Duration to net.time4j.Duration

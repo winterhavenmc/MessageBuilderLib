@@ -33,6 +33,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,11 +108,11 @@ class ContextMapTest {
 		contextMap.put(key, location);
 
 		// Act
-		Location retrievedValue = (Location) contextMap.get(key);
+		Optional<Object> retrievedValue = contextMap.getOpt(key);
 
 		// Assert
 		assertNotNull(retrievedValue, "Value should be non-null");
-		assertEquals(location, retrievedValue, "Retrieved value should match the original");
+		assertEquals(Optional.of(location), retrievedValue, "Retrieved value should match the original");
 	}
 
 	@Test
@@ -122,10 +123,11 @@ class ContextMapTest {
 		contextMap.put(key, itemStack);
 
 		// Act
-		Object retrievedValue = contextMap.get(key);
+		Optional<Object> retrievedValue = contextMap.getOpt(key);
 
 		// Assert
-		assertInstanceOf(ItemStack.class, retrievedValue, "Value should not be present for mismatched type");
+		assertTrue(retrievedValue.isPresent());
+		assertInstanceOf(ItemStack.class, retrievedValue.get(), "Value should not be present for mismatched type");
 	}
 
 	@Test

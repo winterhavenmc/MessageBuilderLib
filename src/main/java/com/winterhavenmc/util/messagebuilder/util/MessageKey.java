@@ -17,22 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface Toolkit {
-
-	void setDelimiters(Character character);
-
-	void setDelimiters(Character leftCharacter, Character rightCharacter);
-
-	Optional<String> getSpawnDisplayName();
-
-	Optional<String> getHomeDisplayName();
-
-	Optional<String> getString(String key);
-
-	List<String> getStringList(String key);
-
-	int getInt(String key);
+public enum MessageKey
+{
+	INVALID_SECTION,
+	MISSING_RESOURCE,
+	PARAMETER_EMPTY,
+	PARAMETER_INVALID,
+	PARAMETER_NULL,
+	PARAMETER_TYPE_MISMATCH,
+	RELOAD_FAILED,
 }

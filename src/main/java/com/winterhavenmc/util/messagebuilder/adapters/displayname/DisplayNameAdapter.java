@@ -31,8 +31,8 @@ import java.util.Optional;
  * {@code String} display name, regardless of its actual method name. Any object that is not known to have a
  * display name will result in an empty {@code Optional} being returned from the static {@code asDisplayNameable} method.
  */
-public class DisplayNameAdapter {
-
+public class DisplayNameAdapter
+{
 	private DisplayNameAdapter() { /* private constructor to prevent instantiation */ }
 
 	/**
@@ -44,7 +44,8 @@ public class DisplayNameAdapter {
 	 * @return {@code Optional} of the object as a {@code DisplayNameable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a display name.
 	 */
-	public static Optional<DisplayNameable> asDisplayNameable(Object obj) {
+	public static Optional<DisplayNameable> asDisplayNameable(Object obj)
+	{
 		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case Player player -> Optional.of(player::getDisplayName);
@@ -53,4 +54,5 @@ public class DisplayNameAdapter {
 			case null, default -> Optional.empty();
 		};
 	}
+
 }

@@ -23,26 +23,29 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.*;
 import com.winterhavenmc.util.messagebuilder.pipeline.Replacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.Resolver;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
  * This class provides handling of the Macro Processors and their Registry
  */
-public class MacroReplacer implements Replacer, Resolver {
-
+public class MacroReplacer implements Replacer, Resolver
+{
 	private final static String DELIMITER_OPEN = "{";
 	private final static String DELIMITER_CLOSE = "}";
 
@@ -67,8 +70,8 @@ public class MacroReplacer implements Replacer, Resolver {
 	@Override
 	public Optional<MessageRecord> replaceMacros(final MessageRecord messageRecord, final Message message)
 	{
-		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
-		if (message == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
+		validate(messageRecord, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD));
+		validate(message, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE));
 
 		// return new message record with final string fields added with macro replacements performed
 		return messageRecord.withFinalStrings(
@@ -98,7 +101,8 @@ public class MacroReplacer implements Replacer, Resolver {
 	 * @param input the message string with placeholders
 	 * @return a {@code Stream} of placeholder strings
 	 */
-	public Stream<String> getPlaceholderStream(final String input) {
+	public Stream<String> getPlaceholderStream(final String input)
+	{
 		return getMatcher(input).results().map(matchResult -> matchResult.group(1));
 	}
 
@@ -112,8 +116,9 @@ public class MacroReplacer implements Replacer, Resolver {
 	 */
 	public String replaceMacros(final ContextMap contextMap, final String messageString)
 	{
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
-		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_STRING); }
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
+		validate(messageString, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_STRING));
+		validate(messageString, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, MESSAGE_STRING));
 
 		// copy message string to local variable
 		String modifiedMessageString = messageString;
@@ -144,7 +149,7 @@ public class MacroReplacer implements Replacer, Resolver {
 	 */
 	void addRecipientContext(ContextMap contextMap)
 	{
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 
 		// get recipient from context map
 		CommandSender recipient = contextMap.getRecipient();
@@ -172,7 +177,7 @@ public class MacroReplacer implements Replacer, Resolver {
 	@Override
 	public ResultMap resolveContext(ContextMap contextMap)
 	{
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 
 		ResultMap resultMap = new ResultMap();
 		for (Map.Entry<String, Object> entry : contextMap.entrySet())
@@ -195,8 +200,9 @@ public class MacroReplacer implements Replacer, Resolver {
 	 */
 	String performReplacements(final ResultMap replacementMap, final String messageString)
 	{
-		if (replacementMap == null) { throw new LocalizedException(PARAMETER_NULL, REPLACEMENT_MAP); }
-		if (messageString == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_STRING); }
+		validate(replacementMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, REPLACEMENT_MAP));
+		validate(messageString, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_STRING));
+		validate(messageString, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, MESSAGE_STRING));
 
 		String modifiedMessageString = messageString;
 

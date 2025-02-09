@@ -23,14 +23,18 @@ import org.bukkit.command.CommandSender;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_RECORD;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
-public final class CooldownMap implements Cooldown {
-
+public final class CooldownMap implements Cooldown
+{
 	// cooldown backing map
 	private final Map<CooldownKey, Instant> COOLDOWN_MAP = new ConcurrentHashMap<>();
 
@@ -42,12 +46,14 @@ public final class CooldownMap implements Cooldown {
 	 * @param messageRecord the message to be placed in the cooldown map for recipient
 	 * @throws LocalizedException if any parameter is null
 	 */
-	public void putExpirationTime(final CommandSender recipient, final MessageRecord messageRecord) {
-		if (recipient == null) { throw new LocalizedException(PARAMETER_NULL, RECIPIENT); }
-		if (messageRecord == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD); }
+	public void putExpirationTime(final CommandSender recipient, final MessageRecord messageRecord)
+	{
+		validate(recipient, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RECIPIENT));
+		validate(messageRecord, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD));
 
 		CooldownKey key = new CooldownKey(recipient, messageRecord.messageId());
-		if (notCooling(key)) {
+		if (notCooling(key))
+		{
 			Instant expirationTime = Instant.now().plus(messageRecord.repeatDelay());
 			COOLDOWN_MAP.put(key, expirationTime);
 		}
@@ -61,8 +67,9 @@ public final class CooldownMap implements Cooldown {
 	 * @return true if player message is in cooldown map and has not reached its expiration time, false if it is not
 	 * @throws LocalizedException if any parameter is null
 	 */
-	public boolean notCooling(final CooldownKey key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+	public boolean notCooling(final CooldownKey key)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
 
 		return !(COOLDOWN_MAP.containsKey(key) && Instant.now().isBefore(COOLDOWN_MAP.get(key)));
 	}
@@ -71,10 +78,13 @@ public final class CooldownMap implements Cooldown {
 	/**
 	 * Iterate the cooldown map and remove any entries whose expire time has passed.
 	 */
-	public int removeExpired() {
+	public int removeExpired()
+	{
 		int count = 0;
-		for (Map.Entry<CooldownKey, Instant> entry : COOLDOWN_MAP.entrySet()) {
-			if (Instant.now().isAfter(entry.getValue())) {
+		for (Map.Entry<CooldownKey, Instant> entry : COOLDOWN_MAP.entrySet())
+		{
+			if (Instant.now().isAfter(entry.getValue()))
+			{
 				COOLDOWN_MAP.remove(entry.getKey());
 				count++;
 			}

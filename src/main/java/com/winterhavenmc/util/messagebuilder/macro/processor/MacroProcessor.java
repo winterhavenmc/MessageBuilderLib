@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import org.bukkit.Location;
 
 
 /**
@@ -68,7 +69,8 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
  * @see ContextMap
  */
 @FunctionalInterface
-public interface MacroProcessor {
+public interface MacroProcessor
+{
 
 	/**
 	 * Resolves contextual information from the given value and populates the context map.

@@ -31,8 +31,8 @@ import java.util.Optional;
  * to the actual method of the object that returns a UUID, regardless of its method name. Any object that is not
  * known to have a UUID will result in an empty {@code Optional} being returned from the asIdentifiable method.
  */
-public class UniqueIdAdapter {
-
+public class UniqueIdAdapter
+{
 	private UniqueIdAdapter() { /* private constructor to prevent instantiation */ }
 
 	/**
@@ -43,7 +43,8 @@ public class UniqueIdAdapter {
 	 * @return the object, wrapped in a Identifiable type, with its method to retrieve a UUID mapped to
 	 * the getUniqueId() method of the Identifiable type.
 	 */
-	public static Optional<Identifiable> asIdentifiable(Object obj) {
+	public static Optional<Identifiable> asIdentifiable(Object obj)
+	{
 		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case Entity entity -> Optional.of(entity::getUniqueId);
@@ -53,4 +54,5 @@ public class UniqueIdAdapter {
 			case null, default -> Optional.empty();
 		};
 	}
+
 }

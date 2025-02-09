@@ -128,7 +128,7 @@ class YamlLanguageQueryHandlerTest {
 				() -> messageSectionQueryHandler.getRecord(null));
 
 		// Assert
-		assertEquals("The parameter 'messageId' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 	@Test

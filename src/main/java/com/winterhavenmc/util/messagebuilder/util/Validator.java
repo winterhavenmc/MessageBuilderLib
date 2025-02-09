@@ -17,8 +17,19 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-public interface MacroInterface
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+public interface Validator
 {
-	String name();
-	String toString();
+
+	static <T> T staticValidate(T value, Predicate<T> predicate, Supplier<RuntimeException> exceptionSupplier)
+	{
+		if (predicate.test(value))
+		{
+			throw exceptionSupplier.get(); // Throws from the call site!
+		}
+		return value; // Pass through the valid value for functional chains.
+	}
+
 }

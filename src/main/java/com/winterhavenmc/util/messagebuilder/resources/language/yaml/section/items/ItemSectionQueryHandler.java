@@ -26,11 +26,14 @@ import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.SECTION;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
@@ -56,9 +59,7 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 		super(configurationSupplier, section, primaryType, handledTypes);
 
 		// check that 'ITEMS' section returned by the configuration supplier is not null
-		if (configurationSupplier.getSection(section) == null) {
-			throw new LocalizedException(INVALID_SECTION, section.name());
-		}
+		validate(section, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, SECTION));
 
 		this.configurationSupplier = configurationSupplier;
 	}
@@ -72,7 +73,8 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	public <T> Optional<T> getRecord(final String key) {
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 
 		// get configuration section for item key
 		ConfigurationSection itemEntry = configurationSupplier.getSection(Section.ITEMS).getConfigurationSection(key);

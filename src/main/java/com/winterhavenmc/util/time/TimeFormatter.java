@@ -21,6 +21,7 @@ import java.time.Duration;
 import java.util.Locale;
 
 @FunctionalInterface
-public interface TimeFormatter {
+public interface TimeFormatter
+{
 	String getFormatted(Locale locale, Duration duration);
 }

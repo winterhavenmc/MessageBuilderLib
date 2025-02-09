@@ -17,36 +17,82 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.CommandSender;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import java.util.Objects;
+import java.util.Optional;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
-public class CommandSenderProcessor extends MacroProcessorTemplate {
-
+/**
+ * A macro processor that resolves fields for a {@link CommandSender} stored in the context map
+ * and referenced by the given key.
+ */
+public class CommandSenderProcessor extends MacroProcessorTemplate
+{
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
-		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 
-		// get value from context map
-		Object value = contextMap.get(key);
+		return Optional.of(new ResultMap())
+				.flatMap(resultMap ->
+						contextMap.getOpt(key)
+						.filter(CommandSender.class::isInstance)
+						.map(CommandSender.class::cast)
+						.map(commandSender ->
+						{
+							// populate name field
+							NameAdapter.asNameable(commandSender).ifPresent(nameable ->
+							{
+								resultMap.put(key, nameable.getName());
+								resultMap.put(key + ".NAME", nameable.getName());
+							});
 
-		ResultMap resultMap = new ResultMap();
+							// populate display name field if present
+							DisplayNameAdapter.asDisplayNameable(commandSender).ifPresent(displayNameable ->
+							{
+								if (displayNameable.getDisplayName() != null)
+								{
+									resultMap.put(key + ".DISPLAY_NAME", displayNameable.getDisplayName());
+								}
+							});
 
-		if (value instanceof CommandSender commandSender) {
-			resultMap.put(key, commandSender.getName());
-		}
+							// populate uuid field if present
+							UniqueIdAdapter.asIdentifiable(commandSender).ifPresent(identifiable ->
+							{
+								if (identifiable.getUniqueId() != null)
+								{
+									resultMap.put(key + ".UUID", identifiable.getUniqueId().toString());
+								}
+							});
 
-		return resultMap;
+							// populate location field if present
+							LocationAdapter.asLocatable(commandSender).ifPresent(locatable ->
+							{
+								if (locatable.gatLocation() != null)
+								{
+									resultMap.putAll(insertLocationFields(key, locatable.gatLocation()));
+								}
+							});
+
+							return resultMap;
+						}))
+				.orElseGet(ResultMap::new);
 	}
 
 }

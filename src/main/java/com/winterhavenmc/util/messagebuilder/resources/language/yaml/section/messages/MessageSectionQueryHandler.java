@@ -21,16 +21,18 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.INVALID_SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_ID;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
@@ -54,11 +56,7 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	 */
 	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier) {
 		super(configurationSupplier, section, primaryType, handledTypes);
-
-		// check that 'MESSAGES' section returned by the configuration supplier is not null
-		if (configurationSupplier.getSection(Section.MESSAGES) == null) {
-			throw new LocalizedException(INVALID_SECTION, section.name());
-		}
+		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		// set field from parameter
 		this.messageSection = configurationSupplier.getSection(Section.MESSAGES);
@@ -68,13 +66,14 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	/**
 	 * Retrieve a message record from the language file for the provided messageId
 	 *
-	 * @param messageId the MessageId of the message record to be retrieved
+	 * @param key the MessageId of the message record to be retrieved
 	 * @return the message record for the MessageId
 	 */
-	public <T> Optional<T> getRecord(final String messageId) {
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
+	public <T> Optional<T> getRecord(final String key) {
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_NULL, KEY));
 
-		return (Optional<T>) MessageRecord.getRecord(messageId, messageSection);
+		return (Optional<T>) MessageRecord.getRecord(key, messageSection);
 	}
 
 }

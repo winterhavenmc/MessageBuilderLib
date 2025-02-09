@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.adapters.location;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
@@ -33,8 +34,8 @@ import java.util.Optional;
  * {@code Location}, regardless of its real method name. Any object that is not known to have a
  * gatLocation will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
  */
-public class LocationAdapter {
-
+public class LocationAdapter
+{
 	private LocationAdapter() { /* private constructor to prevent instantiation */ }
 
 	/**
@@ -46,10 +47,11 @@ public class LocationAdapter {
 	 * @return an {@code Optional} of the object as a {@code Locatable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a gatLocation.
 	 */
-	public static Optional<Locatable> asLocatable(Object obj) {
-		// no null check necessary, the switch will return an empty optional
+	public static Optional<Locatable> asLocatable(Object obj)
+	{
 		return switch (obj) {
 			case Entity entity -> Optional.of(entity::getLocation);
+			case OfflinePlayer offlinePlayer -> Optional.of((offlinePlayer::getLocation));
 			case Block block -> Optional.of(block::getLocation);
 			case BlockState blockState -> Optional.of(blockState::getLocation);
 			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
@@ -57,4 +59,5 @@ public class LocationAdapter {
 			case null, default -> Optional.empty();
 		};
 	}
+
 }

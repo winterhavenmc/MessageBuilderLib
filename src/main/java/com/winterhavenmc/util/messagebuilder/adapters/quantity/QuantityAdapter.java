@@ -30,8 +30,8 @@ import java.util.Optional;
  * is not known to have a quantity will result in an empty {@code Optional} being returned from the
  * static {@code asQuantifiable} method.
  */
-public class QuantityAdapter {
-
+public class QuantityAdapter
+{
 	private QuantityAdapter() { /* private constructor to prevent instantiation */ }
 
 	/**
@@ -43,7 +43,8 @@ public class QuantityAdapter {
 	 * @return an {@code Optional} of the object as a {@code Quantifiable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a quantity.
 	 */
-	public static Optional<Quantifiable> asQuantifiable(Object obj) {
+	public static Optional<Quantifiable> asQuantifiable(Object obj)
+	{
 		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case ItemStack itemStack -> Optional.of(itemStack::getAmount);
@@ -51,4 +52,5 @@ public class QuantityAdapter {
 			case null, default -> Optional.empty();
 		};
 	}
+
 }

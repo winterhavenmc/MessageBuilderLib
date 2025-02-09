@@ -20,17 +20,19 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import java.util.EnumMap;
+import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.DEPENDENCY_CONTEXT;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.DEPENDENCY_CONTEXT;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
  * This class implements a map of unique macro processor instances using ProcessorType Enum members as keys.
  * As such, it is backed by an EnumMap.
  */
-public class ProcessorRegistry {
-
+public class ProcessorRegistry
+{
 	private final EnumMap<ProcessorType, MacroProcessor> macroProcessorMap;
 	private final DependencyContext context;
 
@@ -38,8 +40,9 @@ public class ProcessorRegistry {
 	/**
 	 * Class constructor
 	 */
-	public ProcessorRegistry(final DependencyContext dependencyContext) {
-		if (dependencyContext == null) { throw new LocalizedException(PARAMETER_NULL, DEPENDENCY_CONTEXT); }
+	public ProcessorRegistry(final DependencyContext dependencyContext)
+	{
+		validate(dependencyContext, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, DEPENDENCY_CONTEXT));
 
 		this.context = dependencyContext;
 		macroProcessorMap = new EnumMap<>(ProcessorType.class);
@@ -47,7 +50,8 @@ public class ProcessorRegistry {
 
 
 	// Get a processor, creating it lazily if necessary
-	public MacroProcessor get(ProcessorType type) {
+	public MacroProcessor get(ProcessorType type)
+	{
 		return macroProcessorMap.computeIfAbsent(type, t -> t.create(context));
 	}
 

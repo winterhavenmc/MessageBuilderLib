@@ -18,8 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
@@ -197,5 +197,12 @@ class CooldownKeyTest {
 		// Assert
 		assertTrue(cooldownKey.isPresent());
 		assertEquals("ENABLED_MESSAGE", cooldownKey.get().getMessageId());
+	}
+
+	@Test
+	void testEquals() {
+		CooldownKey cooldownKey = new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name());
+
+		assertFalse(cooldownKey.equals("not a cooldown key"));
 	}
 }

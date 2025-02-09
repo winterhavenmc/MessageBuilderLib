@@ -22,10 +22,13 @@ import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.Location;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.KEY;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONTEXT_MAP;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
@@ -38,17 +41,17 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  * <p>
  * The following placeholders are resolved:
  * <ul>
- *     <li><b>%<i>key</i>_LOCATION_WORLD%</b>: The name of the world (e.g., "world", "nether").</li>
- *     <li><b>%<i>key</i>_LOCATION_X%</b>: The integer X-coordinate of the location (e.g., "123").</li>
- *     <li><b>%<i>key</i>_LOCATION_Y%</b>: The integer Y-coordinate of the location (e.g., "64").</li>
- *     <li><b>%<i>key</i>_LOCATION_Z%</b>: The integer Z-coordinate of the location (e.g., "-789").</li>
- *     <li><b>%<i>key</i>_LOCATION%</b>: A preformatted string combining the world and coordinates
+ *     <li><b>{<i>key</i>.LOCATION.WORLD}</b>: The name of the world (e.g., "world", "nether").</li>
+ *     <li><b>{<i>key</i>.LOCATION.X}</b>: The integer X-coordinate of the location (e.g., "123").</li>
+ *     <li><b>{<i>key</i>.LOCATION.Y}</b>: The integer Y-coordinate of the location (e.g., "64").</li>
+ *     <li><b>{<i>key</i>.LOCATION.Z}</b>: The integer Z-coordinate of the location (e.g., "-789").</li>
+ *     <li><b>{<i>key</i>.LOCATION}</b>: A preformatted string combining the world and coordinates
  *         (e.g., "world [123, 64, -789]").</li>
  * </ul>
  * 
  *
  * <p>
- * This processor ensures that placeholders are unique by suffixing "_LOCATION" to the key if it is not
+ * This processor ensures that placeholders are unique by suffixing ".LOCATION" to the key if it is not
  * already present. Null values or missing components, such as the world name, are replaced with the
  * default placeholder {@code UNKNOWN_VALUE}.
  * <b>Example Usage:</b>
@@ -59,11 +62,11 @@ import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Para
  * ResultMap resultMap = processor.resolveContext("HOME", contextMap, location);
  *
  * // Resolved Placeholders:
- * // %HOME_LOCATION_WORLD% -> "world"
- * // %HOME_LOCATION_X% -> "123"
- * // %HOME_LOCATION_Y% -> "64"
- * // %HOME_LOCATION_Z% -> "-789"
- * // %HOME_LOCATION% -> "world [123, 64, -789]"
+ * // {HOME.LOCATION.WORLD} -> "world"
+ * // {HOME.LOCATION.X} -> "123"
+ * // {HOME.LOCATION.Y} -> "64"
+ * // {HOME.LOCATION.Z} -> "-789"
+ * // {HOME.LOCATION} -> "world [123, 64, -789]"
  * }
  * </pre>
  *
@@ -96,49 +99,17 @@ public class LocationProcessor extends MacroProcessorTemplate {
 	@Override
 	public ResultMap resolveContext(final String key, final ContextMap contextMap)
 	{
-		if (key == null) { throw new LocalizedException(PARAMETER_NULL, KEY); }
-		if (key.isBlank()) { throw new LocalizedException(PARAMETER_EMPTY, KEY); }
-		if (contextMap == null) { throw new LocalizedException(PARAMETER_NULL, CONTEXT_MAP); }
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 
-		// create empty result map
 		ResultMap resultMap = new ResultMap();
 
-		// get value from container
-		Object value = contextMap.get(key);
+		contextMap.getOpt(key)
+				.filter(Location.class::isInstance)
+				.map(Location.class::cast)
+				.ifPresent(location -> resultMap.putAll(insertLocationFields(key, location)));
 
-		// if passed object is a Location, process fields
-		if (value instanceof Location location) {
-
-			// copy of original key before appending component field suffixes
-			String resultKey = key;
-
-			// Get components
-			String locationWorld;
-			if (location.getWorld() == null) {
-				locationWorld = UNKNOWN_VALUE;
-			}
-			else {
-				locationWorld = location.getWorld().getName();
-			}
-			String locationX = String.valueOf(location.getBlockX());
-			String locationY = String.valueOf(location.getBlockY());
-			String locationZ = String.valueOf(location.getBlockZ());
-			String locationString = locationWorld + " [" + locationX + ", " + locationY + ", " + locationZ + "]";
-
-			// if macroName does not end in _LOCATION, suffix it to the end of the key
-			if (!resultKey.endsWith(".LOCATION")) {
-				resultKey = resultKey.concat(".LOCATION");
-			}
-
-			// Store placeholders
-			resultMap.put(resultKey, locationString);
-			resultMap.put(resultKey.concat(".WORLD"), locationWorld);
-			resultMap.put(resultKey.concat(".X"), locationX);
-			resultMap.put(resultKey.concat(".Y"), locationY);
-			resultMap.put(resultKey.concat(".Z"), locationZ);
-		}
-
-		// return result map
 		return resultMap;
 	}
 

@@ -102,7 +102,7 @@ class MessageBuilderTest {
 	@Test
 	void compose_parameter_null_player() {
 		// Arrange & Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		LocalizedException exception = assertThrows(LocalizedException.class,
 				() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
 
 		// Assert

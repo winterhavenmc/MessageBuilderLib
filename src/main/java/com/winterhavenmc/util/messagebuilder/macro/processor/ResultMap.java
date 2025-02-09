@@ -17,34 +17,58 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.VALUE;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
-public class ResultMap {
-
+public class ResultMap
+{
 	private final Map<String, String> internalResultMap;
 
 
-	// Public constructor for regular instantiation
-	public ResultMap() {
+	/**
+	 * Class constructor
+	 */
+	public ResultMap()
+	{
 		this.internalResultMap = new HashMap<>();
 	}
 
 
-	public void put(final String key, final String value) {
+	public void put(final String key, final String value)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(value, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, VALUE));
+		// allow blank string value to be passed in. Uncomment line below to throw exception on blank string value
+		//staticValidate(value, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, VALUE));
+
 		internalResultMap.put(key, value);
 	}
 
 
-	public String get(final String key) {
+	public String get(final String key)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+
 		return internalResultMap.get(key);
 	}
 
 
-	public void putAll(final @NotNull ResultMap insertionMap) {
+	public void putAll(final @NotNull ResultMap insertionMap)
+	{
 		for (Map.Entry<String, String> entry : insertionMap.entrySet()) {
 			String key = entry.getKey();
 			String value = entry.getValue();
@@ -52,15 +76,24 @@ public class ResultMap {
 		}
 	}
 
-	public boolean containsKey(final String key) {
+
+	public boolean containsKey(final String key)
+	{
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+
 		return internalResultMap.containsKey(key);
 	}
 
-	public Iterable<? extends Map.Entry<String, String>> entrySet() {
+
+	public Iterable<? extends Map.Entry<String, String>> entrySet()
+	{
 		return internalResultMap.entrySet();
 	}
 
-	public boolean isEmpty() {
+
+	public boolean isEmpty()
+	{
 		return internalResultMap.isEmpty();
 	}
 

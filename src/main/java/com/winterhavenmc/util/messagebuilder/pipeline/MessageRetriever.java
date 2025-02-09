@@ -24,11 +24,14 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.mes
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.LANGUAGE_QUERY_HANDLER;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.MESSAGE_ID;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+
 
 public class MessageRetriever implements Retriever {
 
@@ -40,13 +43,13 @@ public class MessageRetriever implements Retriever {
 	}
 
 	@Override
-	public Optional<MessageRecord> getRecord(String messageId) {
-		if (messageId == null) { throw new LocalizedException(PARAMETER_NULL, MESSAGE_ID); }
-		if (languageQueryHandler == null) { throw new LocalizedException(PARAMETER_NULL, LANGUAGE_QUERY_HANDLER); }
+	public Optional<MessageRecord> getRecord(String key) {
+		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 
 		SectionQueryHandler sectionQueryHandler = languageQueryHandler.getSectionQueryHandler(Section.MESSAGES);
 		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
-			return messageSectionQueryHandler.getRecord(messageId);
+			return messageSectionQueryHandler.getRecord(key);
 		}
 		return Optional.empty();
 	}

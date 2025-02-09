@@ -22,8 +22,11 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Sec
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.LocalizedException.Parameter.*;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 public class YamlLanguageQueryHandler implements LanguageQueryHandler {
@@ -33,12 +36,12 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	/**
 	 * Class constructor
 	 *
-	 * @param yamlConfigurationSupplier the language configuration supplier
+	 * @param configurationSupplier the language configuration supplier
 	 */
-	public YamlLanguageQueryHandler(final YamlConfigurationSupplier yamlConfigurationSupplier) {
-		if (yamlConfigurationSupplier == null) { throw new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER); }
+	public YamlLanguageQueryHandler(final YamlConfigurationSupplier configurationSupplier) {
+		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
-		this.yamlConfigurationSupplier = yamlConfigurationSupplier;
+		this.yamlConfigurationSupplier = configurationSupplier;
 	}
 
 
