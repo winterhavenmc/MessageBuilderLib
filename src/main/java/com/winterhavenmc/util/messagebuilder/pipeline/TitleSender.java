@@ -25,6 +25,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_RECORD;
@@ -32,29 +33,34 @@ import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
 import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
-public class TitleSender implements Sender {
-
+public class TitleSender implements Sender
+{
 	private final CooldownMap cooldownMap;
 
 
-	public TitleSender(final CooldownMap cooldownMap) {
+	public TitleSender(final CooldownMap cooldownMap)
+	{
 		this.cooldownMap = cooldownMap;
 	}
 
+
 	@Override
-	public void send(final CommandSender recipient, final MessageRecord messageRecord) {
+	public void send(final CommandSender recipient, final MessageRecord messageRecord)
+	{
 		validate(recipient, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RECIPIENT));
 		validate(messageRecord, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD));
 
-		if (recipient instanceof Player player) {
-			player.sendTitle(ChatColor.translateAlternateColorCodes('&', messageRecord.title()),
+		if (recipient instanceof Player player)
+		{
+			player.sendTitle(
+					ChatColor.translateAlternateColorCodes('&', messageRecord.title()),
 					ChatColor.translateAlternateColorCodes('&', messageRecord.subtitle()),
 					messageRecord.titleFadeIn(),
 					messageRecord.titleStay(),
 					messageRecord.titleFadeOut());
-		}
 
-		cooldownMap.putExpirationTime(recipient, messageRecord);
+			cooldownMap.putExpirationTime(recipient, messageRecord);
+		}
 	}
 
 }
