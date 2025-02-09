@@ -18,14 +18,13 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_RECORD;
