@@ -54,8 +54,8 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 						contextMap.getOpt(key)
 						.filter(CommandSender.class::isInstance)
 						.map(CommandSender.class::cast)
-						.map(commandSender -> {
-
+						.map(commandSender ->
+						{
 							// populate name field
 							NameAdapter.asNameable(commandSender).ifPresent(nameable ->
 							{
@@ -66,7 +66,8 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 							// populate display name field if present
 							DisplayNameAdapter.asDisplayNameable(commandSender).ifPresent(displayNameable ->
 							{
-								if (displayNameable.getDisplayName() != null) {
+								if (displayNameable.getDisplayName() != null)
+								{
 									resultMap.put(key + ".DISPLAY_NAME", displayNameable.getDisplayName());
 								}
 							});
@@ -74,7 +75,8 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 							// populate uuid field if present
 							UniqueIdAdapter.asIdentifiable(commandSender).ifPresent(identifiable ->
 							{
-								if (identifiable.getUniqueId() != null) {
+								if (identifiable.getUniqueId() != null)
+								{
 									resultMap.put(key + ".UUID", identifiable.getUniqueId().toString());
 								}
 							});
@@ -82,7 +84,8 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 							// populate location field if present
 							LocationAdapter.asLocatable(commandSender).ifPresent(locatable ->
 							{
-								if (locatable.gatLocation() != null) {
+								if (locatable.gatLocation() != null)
+								{
 									resultMap.putAll(insertLocationFields(key, locatable.gatLocation()));
 								}
 							});
