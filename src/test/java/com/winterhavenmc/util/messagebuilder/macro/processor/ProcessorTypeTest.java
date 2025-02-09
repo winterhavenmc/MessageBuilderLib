@@ -23,8 +23,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +47,6 @@ import static org.mockito.Mockito.mock;
 class ProcessorTypeTest {
 
 	@Mock CommandSender commandSenderMock;
-	@Mock Entity entityMock;
 	@Mock OfflinePlayer offlinePlayer;
 	@Mock World worldMock;
 	@Mock Location locationMock;
@@ -61,7 +58,6 @@ class ProcessorTypeTest {
 	void setUp() {
 		nameMap.put("COMMAND_SENDER", ProcessorType.COMMAND_SENDER);
 		nameMap.put("DURATION", ProcessorType.DURATION);
-		nameMap.put("ENTITY", ProcessorType.ENTITY);
 		nameMap.put("ITEM_STACK", ProcessorType.ITEM_STACK);
 		nameMap.put("LOCATION", ProcessorType.LOCATION);
 		nameMap.put("NULL", ProcessorType.NULL);
@@ -76,7 +72,6 @@ class ProcessorTypeTest {
 	@AfterEach
 	void tearDown() {
 		commandSenderMock = null;
-		entityMock = null;
 		offlinePlayer = null;
 		worldMock = null;
 		locationMock = null;
@@ -91,11 +86,6 @@ class ProcessorTypeTest {
 	@Test
 	void matchType_duration() {
 		assertEquals(ProcessorType.DURATION, ProcessorType.matchType(Duration.ofMillis(2000)));
-	}
-
-	@Test
-	void matchType_entity() {
-		assertEquals(ProcessorType.ENTITY, ProcessorType.matchType(entityMock));
 	}
 
 	@Test
@@ -145,7 +135,7 @@ class ProcessorTypeTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "COMMAND_SENDER", "DURATION", "ENTITY", "ITEM_STACK", "LOCATION", "NULL", "NUMBER", "OBJECT", "OFFLINE_PLAYER", "STRING", "WORLD" } )
+	@ValueSource(strings = { "COMMAND_SENDER", "DURATION", "ITEM_STACK", "LOCATION", "NULL", "NUMBER", "OBJECT", "OFFLINE_PLAYER", "STRING", "WORLD" } )
 	void testValueCreate(String name) {
 		assertEquals(nameMap.get(name), ProcessorType.valueOf(name));
 	}
@@ -164,13 +154,6 @@ class ProcessorTypeTest {
 	void matchTypeDuration() {
 		Duration duration = Duration.ofMillis(2000);
 		assertEquals(ProcessorType.DURATION, ProcessorType.matchType(duration));
-	}
-
-	@Test
-	void matchTypeEntity() {
-		Player player = mock(Player.class);
-		assertNotNull(player, "Mock player is null.");
-		assertEquals(ProcessorType.ENTITY, ProcessorType.matchType(player), "Mock player does not match processor type ENTITY");
 	}
 
 	@Test

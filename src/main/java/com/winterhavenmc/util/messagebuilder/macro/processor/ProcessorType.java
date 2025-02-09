@@ -21,7 +21,6 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.Duration;
@@ -30,7 +29,6 @@ import java.util.function.Function;
 
 public enum ProcessorType
 {
-	ENTITY(ctx -> new EntityProcessor()),
 	COMMAND_SENDER(ctx -> new CommandSenderProcessor()),
 	ITEM_STACK(ctx -> new ItemStackProcessor()),
 	LOCATION(ctx -> new LocationProcessor()),
@@ -79,7 +77,6 @@ public enum ProcessorType
 	public static ProcessorType matchType(final Object object)
 	{
 		return switch (object) {
-			case Entity ignored -> ENTITY;
 			case CommandSender ignored -> COMMAND_SENDER;
 			case OfflinePlayer ignored -> OFFLINE_PLAYER;
 			case ItemStack ignored -> ITEM_STACK;
