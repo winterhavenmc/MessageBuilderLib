@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,7 +25,6 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section.MESSAGES;
 import static com.winterhavenmc.util.messagebuilder.util.MessageKey.*;

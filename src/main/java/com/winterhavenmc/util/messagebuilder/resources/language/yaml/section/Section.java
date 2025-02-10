@@ -64,7 +64,7 @@ public enum Section {
 		// Validate the First Law of the Library
 		if (!SectionQueryHandler.class.isAssignableFrom(handlerClass))
 		{
-			throw new RuntimeException(handlerClass.getSimpleName() + " must implement SectionQueryHandler");
+			throw new IllegalStateException(handlerClass.getSimpleName() + " must implement SectionQueryHandler");
 		}
 	}
 
@@ -86,7 +86,7 @@ public enum Section {
 				return section.handlerClass.getConstructor(YamlConfigurationSupplier.class).newInstance(configurationSupplier);
 			}
 			catch (ReflectiveOperationException exception) {
-				throw new RuntimeException("Failed to instantiate SectionQueryHandler for " + section.name(), exception);
+				throw new IllegalStateException("Failed to instantiate SectionQueryHandler for " + section.name(), exception);
 			}
 		});
 	}
