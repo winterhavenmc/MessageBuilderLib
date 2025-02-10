@@ -21,8 +21,8 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
@@ -40,8 +40,8 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * message section.
  */
-public class MessageSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler {
-
+public class MessageSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler
+{
 	private final static Section section = Section.MESSAGES;
 	private final static Class<?> primaryType = MessageRecord.class;
 	private final static List<Class<?>> handledTypes = List.of(MessageRecord.class);
@@ -54,7 +54,8 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	 *
 	 * @param configurationSupplier the configuration supplier that provides access to the configuration object for the language file.
 	 */
-	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier) {
+	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier)
+	{
 		super(configurationSupplier, section, primaryType, handledTypes);
 		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
@@ -69,7 +70,8 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	 * @param key the MessageId of the message record to be retrieved
 	 * @return the message record for the MessageId
 	 */
-	public <T> Optional<T> getRecord(final String key) {
+	public <T> Optional<T> getRecord(final String key)
+	{
 		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_NULL, KEY));
 
