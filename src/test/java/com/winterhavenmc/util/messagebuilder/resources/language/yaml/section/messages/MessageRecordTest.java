@@ -25,7 +25,6 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -55,9 +54,6 @@ class MessageRecordTest {
 	public void tearDown() {
 		messageSection = null;
 	}
-
-	//TODO: Each test should have its own distinct test entries in the language configuration resource
-	// that are only used for that test, so changes to entries will not effect other tests
 
 	@Test
 	void constructorTest() {
@@ -92,13 +88,13 @@ class MessageRecordTest {
 	}
 
 	@Test
-	void testGetRecord_parameter_keyPath_invalid() {
+	void testGetRecord_nonexistent_entry() {
 		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(NONEXISTENT_ENTRY.name(), messageSection);
 		assertTrue(messageRecord.isEmpty());
 	}
 
 	@Test
-	void testGetRecord_parameter_itemSection_null() {
+	void testGetRecord_parameter_messageSection_null() {
 		LocalizedException exception = assertThrows(LocalizedException.class,
 				() ->  MessageRecord.getRecord(ENABLED_MESSAGE.name(), null));
 
@@ -106,8 +102,7 @@ class MessageRecordTest {
 	}
 
 	@Test
-	@Disabled
-	void testGetRecord_parameter_itemSection_invalid() {
+	void testGetRecord_parameter_messageSection_invalid() {
 		// Arrange
 		messageSection = configuration.getConfigurationSection("ITEMS");
 
@@ -116,7 +111,7 @@ class MessageRecordTest {
 				() ->  MessageRecord.getRecord(ENABLED_MESSAGE.name(), messageSection));
 
 		// Assert
-		assertEquals("The configuration section returned by the configuration supplier was an invalid 'MESSAGES' section.", exception.getMessage());
+		assertEquals("The parameter 'messageSection' was invalid.", exception.getMessage());
 	}
 
 }

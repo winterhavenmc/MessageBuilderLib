@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,11 +26,13 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.List;
+import java.util.function.Predicate;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section.MESSAGES;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_SECTION;
+import static com.winterhavenmc.util.messagebuilder.util.Predicates.sectionNameNotEqual;
 import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
@@ -111,14 +114,9 @@ public record MessageRecord (
 		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 		validate(messageSection, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_SECTION));
+		validate(messageSection, sectionNameNotEqual(MESSAGES), () -> new LocalizedException(PARAMETER_INVALID, MESSAGE_SECTION));
 
-		//TODO: replace this with a custom exception
-//		// only allow the 'MESSAGES' section of the language file to be passed as the constructor parameter
-//		if (!Section.MESSAGES.name().equals(messageSection.getName())) {
-//			throw LocalizedException.InvalidSection(Section.MESSAGES);
-//		}
-
-		// get entry for messageId
+		// get entry for key
 		ConfigurationSection messageEntry = messageSection.getConfigurationSection(key);
 		if (messageEntry == null) { return Optional.empty(); }
 
