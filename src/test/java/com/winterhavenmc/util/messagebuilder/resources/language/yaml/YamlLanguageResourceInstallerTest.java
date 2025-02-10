@@ -102,7 +102,7 @@ public class YamlLanguageResourceInstallerTest {
 	@Nested
 	public class MockingSetupTests {
 
-		@Test
+	@Test
 	public void testResourceStream() throws IOException {
 			// Arrange & Act
 			InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
@@ -115,8 +115,8 @@ public class YamlLanguageResourceInstallerTest {
 		}
 
 
-		@Test
-	public void testSaveResource_MocksCorrectly() throws Exception {
+	@Test
+	public void testSaveResource_MocksCorrectly() throws IOException {
 			// Arrange
 			Path targetFilePath = tempDataDir.toPath().resolve(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
@@ -348,14 +348,9 @@ public class YamlLanguageResourceInstallerTest {
 
 
 	@Test
-	public void verifyLanguageDirectoryTest_exists() {
+	public void verifyLanguageDirectoryTest_exists() throws IOException {
 		// Arrange
-		try {
-			MockUtility.installResource("language/en-US.yml", new File(tempDataDir, "language").toPath());
-		}
-		catch (IOException e) {
-			throw new RuntimeException();
-		}
+		MockUtility.installResource("language/en-US.yml", new File(tempDataDir, "language").toPath());
 
 		// Act
 		File languageDir = new File(tempDataDir, "language");
@@ -366,8 +361,8 @@ public class YamlLanguageResourceInstallerTest {
 
 
 	@Test
-	public void testInstallByNameResource_CreatesFileSuccessfully() {
-		try {
+	public void testInstallByNameResource_CreatesFileSuccessfully() throws IOException {
+
 			// Arrange: Create a temporary directory for the test
 			Path tempDir = Files.createTempDirectory("installer-test");
 
@@ -382,10 +377,6 @@ public class YamlLanguageResourceInstallerTest {
 			Files.walk(tempDir)
 					.sorted(Comparator.reverseOrder())
 					.forEach(path -> path.toFile().delete());
-		}
-		catch (IOException e) {
-			throw new RuntimeException();
-		}
 	}
 
 
