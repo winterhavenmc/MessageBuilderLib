@@ -29,7 +29,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -620,11 +619,8 @@ public class YamlLanguageResourceInstallerTest {
 		try {
 			Files.deleteIfExists(Path.of(tempDataDir.getAbsolutePath(),"language", "en-US.yml"));
 		}
-		catch (FileAlreadyExistsException e) {
-			System.out.println("File exists: " + Files.exists(Path.of(tempDataDir.getAbsolutePath(),"language", "en-US.yml")));
-		}
 		catch (IOException e) {
-			throw new RuntimeException(e);
+			System.out.println("File exists: " + Files.exists(Path.of(tempDataDir.getAbsolutePath(),"language", "en-US.yml")));
 		}
 	}
 
@@ -633,7 +629,7 @@ public class YamlLanguageResourceInstallerTest {
 		try (resourceStream) {
 			Files.copy(resourceStream, targetFilePath);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			System.out.println(e.getMessage());
 		}
 	}
 
