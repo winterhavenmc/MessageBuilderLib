@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.it
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -52,8 +53,6 @@ public class ItemRecordTest {
 		itemSection = null;
 	}
 
-	//TODO: Each test should have its own distinct test entries in the language configuration resource
-	// that are only used for that test, so changes to entries will not effect other tests
 
 	@Test
 	public void constructorTest() {

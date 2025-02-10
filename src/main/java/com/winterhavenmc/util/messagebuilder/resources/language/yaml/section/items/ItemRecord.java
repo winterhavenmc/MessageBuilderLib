@@ -19,16 +19,18 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.it
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section.ITEMS;
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.util.Parameter.ITEM_SECTION;
 import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.util.Predicates.sectionNameNotEqual;
 import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
@@ -49,7 +51,8 @@ public record ItemRecord(
 		Optional<String> namePlural,
 		Optional<String> inventoryItemSingular,
 		Optional<String> inventoryItemPlural,
-		List<String> itemLore) implements Pluralizable {
+		List<String> itemLore) implements Pluralizable
+{
 
 
 	/**
@@ -57,7 +60,8 @@ public record ItemRecord(
 	 * item record field constants and their corresponding keyPaths. Other field metadata may be
 	 * encapsulated in this enum in the future.
 	 */
-	enum Field {
+	enum Field
+	{
 		NAME_SINGULAR("NAME.SINGULAR"),
 		NAME_PLURAL("NAME.PLURAL"),
 		INVENTORY_NAME_SINGULAR("INVENTORY_NAME.SINGULAR"),
@@ -83,10 +87,12 @@ public record ItemRecord(
 	 * @return An {@code ItemRecord} from the language file, or an empty Optional if no record could be found
 	 * for the provided key in the provided {@code ConfigurationSection}.
 	 */
-	public static Optional<ItemRecord> getRecord(final String key, final ConfigurationSection itemSection) {
+	public static Optional<ItemRecord> getRecord(final String key, final ConfigurationSection itemSection)
+	{
 		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
 		validate(itemSection, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, ITEM_SECTION));
+		validate(itemSection, sectionNameNotEqual(ITEMS), () -> new LocalizedException(PARAMETER_INVALID, ITEM_SECTION));
 
 		// get configuration section for item key
 		ConfigurationSection itemEntry = itemSection.getConfigurationSection(key);
@@ -106,8 +112,10 @@ public record ItemRecord(
 
 
 	@Override
-	public Optional<String> nameFor(int quantity) {
-		if (quantity != 1) {
+	public Optional<String> nameFor(int quantity)
+	{
+		if (quantity != 1)
+		{
 			return namePlural;
 		}
 		return nameSingular;

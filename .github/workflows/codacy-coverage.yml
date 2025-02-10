@@ -6,6 +6,8 @@ on:
       - main
       - develop
 
+permissions: read-all
+
 jobs:
   build-and-report:
     name: Generate Coverage Report

@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import org.bukkit.Location;
 
 
 /**

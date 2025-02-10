@@ -32,17 +32,31 @@ import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
 import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
+/**
+ * This class is an implementation of the Sender interface, and is used to display a title to a player.
+ */
 public class TitleSender implements Sender
 {
 	private final CooldownMap cooldownMap;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param cooldownMap an instance of the message cooldown map
+	 */
 	public TitleSender(final CooldownMap cooldownMap)
 	{
 		this.cooldownMap = cooldownMap;
 	}
 
 
+	/**
+	 * Display a title for recipient, if recipient is a player, using the relevant fields from a MessageRecord.
+	 *
+	 * @param recipient a message recipient
+	 * @param messageRecord a message record containing the fields necessary for sending a title to a player
+	 */
 	@Override
 	public void send(final CommandSender recipient, final MessageRecord messageRecord)
 	{

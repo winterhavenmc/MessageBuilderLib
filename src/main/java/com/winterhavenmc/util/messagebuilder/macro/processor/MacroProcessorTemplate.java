@@ -19,8 +19,6 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import org.bukkit.Location;
 
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * This skeleton class makes the queryHandler available to any extending classes,
