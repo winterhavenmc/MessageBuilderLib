@@ -34,12 +34,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -66,6 +68,24 @@ class MessageProcessorTest {
 				messageSenderMock,
 				titleSenderMock);
 
+		messageRecord = new MessageRecord(
+				ENABLED_MESSAGE.name(),
+				true,
+				true,
+				"this-is-a_string-key",
+				List.of("list", "of", "arguments"),
+				"this is a test message",
+				Duration.ofSeconds(11),
+				"this is a test title",
+				22,
+				33,
+				44,
+				"this is a test subtitle",
+				"this is a final message",
+				"this is a final title",
+				"this is a final subtitle");
+
+
 		messageRecord = MockUtility.getTestMessageRecord(MessageId.ENABLED_MESSAGE);
 	}
 
@@ -84,13 +104,16 @@ class MessageProcessorTest {
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(ENABLED_MESSAGE.name())).thenReturn(Optional.of(messageRecord));
 		Message message = new Message(playerMock, ENABLED_MESSAGE.name(), messageProcessor);
+		when(macroReplacerMock.replaceMacros(messageRecord, message)).thenReturn(Optional.ofNullable(messageRecord));
 
-		// Act
-		messageProcessor.process(message);
+		// Act & Assert
+		assertDoesNotThrow(() -> messageProcessor.process(message));
 
-		// Assert
-		// TODO: assert something here
+		// Verify
+		verify(playerMock, atLeastOnce()).getUniqueId();
+		verify(messageRetrieverMock, atLeastOnce()).getRecord(anyString());
 	}
+
 
 	@Test
 	void process_parameter_null_message() {

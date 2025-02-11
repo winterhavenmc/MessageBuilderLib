@@ -20,7 +20,6 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import org.bukkit.command.CommandSender;
 
-
 @FunctionalInterface
 public interface Sender {
 	void send(CommandSender recipient, MessageRecord messageRecord);
