@@ -61,8 +61,9 @@ class TitleSenderTest {
 		messageRecord = null;
 	}
 
+
 	@Test
-	void testSend() {
+	void testSend_player() {
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 
@@ -75,7 +76,7 @@ class TitleSenderTest {
 	}
 
 	@Test
-	void testSend_not_player() {
+	void testSend_console() {
 		// Arrange
 		ConsoleCommandSender consoleMock = mock(ConsoleCommandSender.class, "Mock Console");
 
