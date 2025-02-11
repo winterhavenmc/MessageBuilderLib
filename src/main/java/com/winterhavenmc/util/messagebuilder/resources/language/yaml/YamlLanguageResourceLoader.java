@@ -24,7 +24,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 
 /**
@@ -34,11 +33,8 @@ import java.util.regex.Pattern;
  * result in a new configuration object loaded from the currently configured language file, or the us-EN language
  * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
-public final class YamlLanguageResourceLoader {
-
-	// compiled regex pattern matching valid yaml keys for this application (upper snake case only)
-	final static Pattern UPPER_SNAKE_CASE = Pattern.compile("[A-Z0-9_]+", Pattern.UNICODE_CHARACTER_CLASS);
-
+public final class YamlLanguageResourceLoader
+{
 	// reference to plugin main class instance
 	private final Plugin plugin;
 
@@ -91,8 +87,8 @@ public final class YamlLanguageResourceLoader {
 	 *
 	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
-	Configuration loadConfiguration(final LanguageTag languageTag) {
-
+	Configuration loadConfiguration(final LanguageTag languageTag)
+	{
 		// create new YamlConfiguration object
 		YamlConfiguration configuration = new YamlConfiguration();
 
@@ -100,34 +96,21 @@ public final class YamlLanguageResourceLoader {
 		{
 			configuration.load(languageTag.getFileName());
 			plugin.getLogger().info("Language file " + languageTag.getFileName() + " successfully loaded.");
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e)
+		{
 			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " does not exist.");
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " could not be read.");
-		} catch (InvalidConfigurationException e) {
+		}
+		catch (InvalidConfigurationException e)
+		{
 			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " is not valid yaml.");
 		}
 
 		return configuration;
-	}
-
-
-	/**
-	 * Test all keys of the configuration object for compliance with this application's key standard.
-	 * Nonconforming keys will be noted in the log, but not modified in any way.
-	 *
-	 * @param configuration the configuration object loaded from the language resource
-	 * @return {@code true} if all keys conform ot the standard, {@code false} if not
-	 */
-	boolean validateKeys(final Configuration configuration)
-	{
-		for (String key : configuration.getKeys(true)) {
-			if (!key.matches(UPPER_SNAKE_CASE.pattern())) {
-				plugin.getLogger().warning("Nonconforming key detected: " + key);
-				return false;
-			}
-		}
-		return true;
 	}
 
 }
