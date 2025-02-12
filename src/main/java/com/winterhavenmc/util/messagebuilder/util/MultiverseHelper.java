@@ -25,11 +25,24 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
+
+/**
+ * A static helper class that provides a method to query Multiverse for a world alias if present.
+ */
 public class MultiverseHelper
 {
+	/**
+	 * Class constructor
+	 */
 	private MultiverseHelper() { /* Private constructor to prevent instantiation */ }
 
 
+	/**
+	 * Attempt to retrieve a pretty formatted world alias from Multiverse for the given world.
+	 *
+	 * @param world a world to attempt lookup of a Multiverse alias
+	 * @return an Optional string containing the world alias if available, otherwise an empty Optional
+	 */
 	public static Optional<String> getAlias(final World world)
 	{
 		Plugin plugin = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
