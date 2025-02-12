@@ -114,7 +114,7 @@ public class MacroReplacer implements Replacer, Resolver
 	 * @param messageString the message with placeholders to be replaced by macro values
 	 * @return the string with all macro replacements performed
 	 */
-	public String replaceMacros(final ContextMap contextMap, final String messageString)
+	String replaceMacros(final ContextMap contextMap, final String messageString)
 	{
 		validate(contextMap, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONTEXT_MAP));
 		validate(messageString, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_STRING));

@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
+
 import org.bukkit.World;
 
 import java.util.Objects;
@@ -47,17 +47,12 @@ public class WorldProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
-				.filter(World.class::isInstance)
-				.map(World.class::cast)
-				.flatMap(NameAdapter::asNameable).ifPresent(nameable ->
-				{
-					// populate name field is present
-					if (nameable.getName() != null) {
-						resultMap.put(key, nameable.getName());
-						resultMap.put(key + ".NAME", nameable.getName());
-					}
-				});
+		if (contextMap.get(key) instanceof World world)
+		{
+			String worldName = MultiverseHelper.getAlias(world).orElse(world.getName());
+			resultMap.put(key, worldName);
+			resultMap.put(key + ".NAME", worldName);
+		}
 
 		return resultMap;
 	}

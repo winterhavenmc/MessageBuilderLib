@@ -274,8 +274,6 @@ class MacroReplacerTest {
 
 		macroReplacer.addRecipientContext(contextMap);
 		assertTrue(contextMap.contains("RECIPIENT"));
-		//TODO: fix ths:
-		// assertEquals("console", contextMap.get("RECIPIENT"));
 	}
 
 	@Test
