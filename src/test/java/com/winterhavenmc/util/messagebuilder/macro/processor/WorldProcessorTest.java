@@ -21,6 +21,8 @@ import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -28,9 +30,13 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 
@@ -40,9 +46,16 @@ class WorldProcessorTest {
 	@Mock Player playerMock;
 	@Mock World worldMock;
 
+	static MockedStatic<MultiverseHelper> mockStatic;
+
+
+	@BeforeAll
+	static void preSetup() {
+		mockStatic = mockStatic(MultiverseHelper.class);
+	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		playerMock = null;
 		worldMock = null;
 	}
@@ -81,9 +94,30 @@ class WorldProcessorTest {
 
 
 	@Test
-	void resolveContext() {
+	void resolveContext_with_multiverse() {
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
+		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.of("MV Alias"));
+
+		String keyPath = "SOME_WORLD";
+		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		MacroProcessor macroProcessor = new WorldProcessor();
+		contextMap.put(keyPath, worldMock);
+
+		// Act
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+
+		// Assert
+		assertTrue(resultMap.containsKey(keyPath));
+		assertEquals("MV Alias", resultMap.get(keyPath));
+	}
+
+
+	@Test
+	void resolveContext_without_multiverse() {
+		// Arrange
+		when(worldMock.getName()).thenReturn("test_world");
+		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.empty());
 
 		String keyPath = "SOME_WORLD";
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
