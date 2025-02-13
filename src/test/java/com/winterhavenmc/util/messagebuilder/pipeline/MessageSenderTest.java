@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+
 import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,8 +29,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 
+import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -45,7 +48,22 @@ class MessageSenderTest {
 
 	@BeforeEach
 	void setUp() {
-		messageRecord = MockUtility.getTestMessageRecord(MessageId.ENABLED_MESSAGE);
+		messageRecord = new MessageRecord(
+				ENABLED_MESSAGE.name(),
+				true,
+				true,
+				"this-is-a_string-key",
+				List.of("list", "of", "arguments"),
+				"this is a test message",
+				Duration.ofSeconds(11),
+				"this is a test title",
+				22,
+				33,
+				44,
+				"this is a test subtitle",
+				"this is a final message",
+				"this is a final title",
+				"this is a final subtitle");
 	}
 
 	@AfterEach
