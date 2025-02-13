@@ -17,21 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.nio.file.*;
-import java.time.Duration;
-import java.util.List;
 import java.util.Objects;
 
 import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
@@ -83,31 +75,6 @@ public final class MockUtility {
 
 
 	/**
-	 * Get a resource as a File object for the named resource
-	 *
-	 * @param name the name of the resource to return as a file object
-	 * @return a file object for the named resource
-	 * @throws URISyntaxException Let's hope it doesn't.
-	 * @deprecated use {@code getResourceStream}
-	 */
-	@Deprecated
-	public static File getResourceFile(final String name) throws URISyntaxException {
-		return Paths.get(Thread.currentThread().getContextClassLoader().getResource(name).toURI()).toAbsolutePath().toFile();
-	}
-
-
-	// Keep for now (1/5/25)
-	public Configuration getConfig() {
-
-		Configuration configuration = new MemoryConfiguration();
-		configuration.set("locale", "en-US");
-		configuration.set("language", "en-US");
-
-		return configuration;
-	}
-
-
-	/**
 	 * Installs a resource file from the classpath to the specified target directory.
 	 *
 	 * @param resourceName  the name of the resource file in the classpath
@@ -139,26 +106,6 @@ public final class MockUtility {
 			Files.copy(inputStream, targetFilePath); // DO NOT REPLACE EXISTING FILES
 			return true;
 		}
-	}
-
-
-	public static MessageRecord getTestMessageRecord(final MessageId messageId) {
-		return new MessageRecord(
-				messageId.name(),
-				true,
-				false,
-				"key",
-				List.of("arg1", "arg2"),
-				"this is a message.",
-				Duration.ofSeconds(3),
-				"this is a title.",
-				20,
-				40,
-				30,
-				"this is a subtitle.",
-				"this is a final message string",
-				"this is a final title string",
-				"this is a final subtitle string");
 	}
 
 }
