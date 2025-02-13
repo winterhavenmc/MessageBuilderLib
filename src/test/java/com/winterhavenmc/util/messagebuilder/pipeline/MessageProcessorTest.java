@@ -19,11 +19,9 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.AfterEach;
@@ -84,9 +82,6 @@ class MessageProcessorTest {
 				"this is a final message",
 				"this is a final title",
 				"this is a final subtitle");
-
-
-		messageRecord = MockUtility.getTestMessageRecord(MessageId.ENABLED_MESSAGE);
 	}
 
 	@AfterEach
