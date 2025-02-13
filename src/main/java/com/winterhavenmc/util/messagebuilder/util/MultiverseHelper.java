@@ -47,7 +47,7 @@ public class MultiverseHelper
 	{
 		Plugin plugin = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
 
-		if (plugin != null && plugin.isEnabled() && plugin instanceof MultiverseCore multiverseCore)
+		if (plugin instanceof MultiverseCore multiverseCore && multiverseCore.isEnabled())
 		{
 			return Optional.ofNullable(multiverseCore.getMVWorldManager().getMVWorld(world).getAlias());
 		}
