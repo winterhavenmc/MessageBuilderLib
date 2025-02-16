@@ -24,26 +24,25 @@ import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-
 import org.bukkit.inventory.ItemStack;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -77,9 +76,6 @@ class MacroReplacerTest {
 		MessageRecord messageRecord = new MessageRecord(
 				MessageId.ENABLED_MESSAGE.name(),
 				true,
-				false,
-				"key",
-				List.of("arg1", "arg2"),
 				"this is a message.",
 				Duration.ofSeconds(3),
 				"this is a title.",
@@ -113,9 +109,6 @@ class MacroReplacerTest {
 		MessageRecord messageRecord = new MessageRecord(
 				MessageId.ENABLED_MESSAGE.name(),
 				true,
-				false,
-				"key",
-				List.of("arg1", "arg2"),
 				"this is a message.",
 				Duration.ofSeconds(3),
 				"this is a title.",

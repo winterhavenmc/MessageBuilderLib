@@ -24,6 +24,10 @@ import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 
 import org.bukkit.entity.Player;
 
+import java.time.Duration;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,11 +35,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,9 +68,6 @@ class MessageProcessorTest {
 		messageRecord = new MessageRecord(
 				ENABLED_MESSAGE.name(),
 				true,
-				true,
-				"this-is-a_string-key",
-				List.of("list", "of", "arguments"),
 				"this is a test message",
 				Duration.ofSeconds(11),
 				"this is a test title",

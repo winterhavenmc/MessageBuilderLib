@@ -28,7 +28,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
@@ -60,9 +59,6 @@ class MessageRecordTest {
 		MessageRecord testRecord = new MessageRecord(
 				ENABLED_MESSAGE.name(),
 				true,
-				true,
-				"this-is-a_string-key",
-				List.of("list", "of", "arguments"),
 				"this is a test message",
 				Duration.ofSeconds(11),
 				"this is a test title",

@@ -29,14 +29,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.Duration;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.Duration;
-import java.util.List;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,9 +70,6 @@ class MessageTest {
 		messageRecord = new MessageRecord(
 				ENABLED_MESSAGE.name(),
 				true,
-				true,
-				"this-is-a_string-key",
-				List.of("list", "of", "arguments"),
 				"this is a test message",
 				Duration.ofSeconds(11),
 				"this is a test title",
