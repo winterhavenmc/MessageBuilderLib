@@ -65,17 +65,6 @@ class ConstantSectionQueryHandlerTest {
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
 	}
 
-//	@Test
-//	void testConstructor_supplier_contains_null() {
-//		// Arrange
-//		configuration.set("CONSTANTS", null);
-//		YamlConfigurationSupplier supplier = new YamlConfigurationSupplier(configuration);
-//
-//		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-//				() ->  new ConstantSectionQueryHandler(supplier));
-//		assertEquals("The configuration section returned by the configuration supplier was an invalid 'CONSTANTS' section.", exception.getMessage());
-//	}
-
 	@Test
 	void getString_keyPath_valid() {
 		assertEquals(Optional.of("&aSpawn"), queryHandler.getString("SPAWN.DISPLAY_NAME"));
