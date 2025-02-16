@@ -19,19 +19,22 @@ package com.winterhavenmc.util.messagebuilder.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+
 import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -50,11 +53,24 @@ class MultiverseHelperTest {
 	@AfterEach
 	void tearDown() {
 		worldMock = null;
+		pluginManagerMock = null;
 	}
 
 
 	@Test
-	void getAlias() {
+	@Disabled
+	void getAlias_parameter_null_world() {
+		mockStatic.when(Bukkit::getPluginManager).thenReturn(pluginManagerMock);
+
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> MultiverseHelper.getAlias(null));
+
+		assertEquals("The parameter 'world' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void getAlias_no_multiverse() {
 		// Arrange
 		mockStatic.when(Bukkit::getPluginManager).thenReturn(pluginManagerMock);
 
@@ -62,7 +78,7 @@ class MultiverseHelperTest {
 		Optional<String> alias = MultiverseHelper.getAlias(worldMock);
 
 		// Assert
-		assertTrue(alias.isEmpty());
+		assertEquals(Optional.empty(), alias);
 	}
 
 }

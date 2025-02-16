@@ -24,7 +24,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.List;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section.MESSAGES;
 import static com.winterhavenmc.util.messagebuilder.util.MessageKey.*;
@@ -51,9 +50,6 @@ import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 public record MessageRecord (
 		String messageId,
 		boolean enabled,
-		boolean translatable,
-		String translatableKey,
-		List<String> translatableArgs,
 		String message,
 		Duration repeatDelay,
 		String title,
@@ -74,9 +70,6 @@ public record MessageRecord (
 	public enum Field
 	{
 		ENABLED("ENABLED"),
-		TRANSLATABLE("TRANSLATABLE"),
-		TRANSLATABLE_KEY("TRANSLATABLE_KEY"),
-		TRANSLATABLE_ARGS("TRANSLATABLE_ARGS"),
 		REPEAT_DELAY("REPEAT_DELAY"),
 		MESSAGE_TEXT("MESSAGE_TEXT"),
 		TITLE_TEXT("TITLE_TEXT"),
@@ -120,9 +113,6 @@ public record MessageRecord (
 
 		return Optional.of(new MessageRecord(key,
 				messageEntry.getBoolean(Field.ENABLED.toKey()),
-				messageEntry.getBoolean(Field.TRANSLATABLE.toKey()),
-				messageEntry.getString(Field.TRANSLATABLE_KEY.toKey()),
-				messageEntry.getStringList(Field.TRANSLATABLE_ARGS.toKey()),
 				messageEntry.getString(Field.MESSAGE_TEXT.toKey()),
 				Duration.ofSeconds(messageEntry.getLong(Field.REPEAT_DELAY.toKey())),
 				messageEntry.getString(Field.TITLE_TEXT.toKey()),
@@ -152,9 +142,6 @@ public record MessageRecord (
 		return Optional.of(new MessageRecord(
 				this.messageId,
 				this.enabled,
-				this.translatable,
-				this.translatableKey,
-				this.translatableArgs,
 				this.message,
 				this.repeatDelay,
 				this.title,

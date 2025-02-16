@@ -47,7 +47,7 @@ public enum Parameter
 	TARGET_DIR_PATH("targetDirPath"),
 	UNKNOWN("«UNKNOWN»"),
 	VALUE("value"),
-	;
+	WORLD("world");
 
 	private final String displayName;
 

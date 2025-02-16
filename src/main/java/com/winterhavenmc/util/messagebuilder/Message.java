@@ -83,6 +83,7 @@ public final class Message
 	/**
 	 * set macro for message replacements, with a corresponding quantity
 	 *
+	 * @param quantity an integer representing a quantity associated with the macro value
 	 * @param macro token for placeholder
 	 * @param value object that contains value that will be substituted in message
 	 * @return this message object with macro value set in map

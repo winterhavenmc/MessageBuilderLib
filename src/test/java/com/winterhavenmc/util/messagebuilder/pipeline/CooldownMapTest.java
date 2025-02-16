@@ -19,23 +19,25 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+
+import java.time.Duration;
+import java.util.UUID;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Duration;
-import java.util.List;
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class CooldownMapTest {
@@ -55,9 +57,6 @@ class CooldownMapTest {
 		messageRecord = new MessageRecord(
 				MessageId.ENABLED_MESSAGE.name(),
 				true,
-				false,
-				"key",
-				List.of("arg1", "arg2"),
 				"this is a message.",
 				Duration.ofSeconds(3),
 				"this is a title.",
@@ -207,9 +206,6 @@ class CooldownMapTest {
 			messageRecord = new MessageRecord(
 					MessageId.ENABLED_MESSAGE.name(),
 					true,
-					false,
-					"key",
-					List.of("arg1", "arg2"),
 					"this is a message.",
 					Duration.ofSeconds(-10),
 					"this is a title.",
