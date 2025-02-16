@@ -140,27 +140,6 @@ ARBITRARY_STRING_LIST:
 # Messages
 ##########
 MESSAGES:
-  ENABLED_RICH_TEXT_MESSAGE:
-    ENABLED: true
-    TRANSLATABLE: false
-    TRANSLATION_KEY: A_STRING_OF_A_TRANSLATABLE_MESSAGE_KEY
-    TRANSLATION_ARGS: [ PLACEHOLDER1, PLACEHOLDER2 ]
-    MESSAGE_TEXT:
-      "This is an enabled rich text message."
-
-  ALT_SCHEMA_MESSAGE:
-    MESSAGE:
-      ENABLED: true
-      REPEAT_DELAY: 10
-      TEXT: "This is an enabled chat message."
-    TITLE:
-      ENABLED: true
-      TEXT: "This is an enabled title message."
-      SUBTITLE_TEXT: "this is a subtitle."
-      FADE_IN: 20
-      STAY: 40
-      FADE_OUT: 30
-
   ENABLED_MESSAGE:
     ENABLED: true
     MESSAGE_TEXT: "This is an enabled message"
@@ -253,7 +232,7 @@ MESSAGES:
     MESSAGE_TEXT: "Duration is %DURATION%"
 
 
-  # all number fields are unique from each other and defaults(20, 70, 10)
+  # all number fields are present and unique from each other and the bukkit defaults (20, 70, 10)
   ALL_FIELDS_PRESENT:
     MESSAGE_TEXT: "This entry has all fields present - message"
     REPEAT_DELAY: 14
