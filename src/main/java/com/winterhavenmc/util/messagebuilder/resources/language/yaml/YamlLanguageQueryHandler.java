@@ -26,11 +26,12 @@ import java.util.Objects;
 
 import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.SECTION;
 import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
-public class YamlLanguageQueryHandler implements LanguageQueryHandler {
-
+public class YamlLanguageQueryHandler implements LanguageQueryHandler
+{
 	private final YamlConfigurationSupplier yamlConfigurationSupplier;
 
 	/**
@@ -38,7 +39,8 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	 *
 	 * @param configurationSupplier the language configuration supplier
 	 */
-	public YamlLanguageQueryHandler(final YamlConfigurationSupplier configurationSupplier) {
+	public YamlLanguageQueryHandler(final YamlConfigurationSupplier configurationSupplier)
+	{
 		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		this.yamlConfigurationSupplier = configurationSupplier;
@@ -46,7 +48,10 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 
 
 	@Override
-	public SectionQueryHandler getSectionQueryHandler(Section section) {
+	public SectionQueryHandler getSectionQueryHandler(Section section)
+	{
+		validate(section, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, SECTION));
+
 		return section.getQueryHandler(yamlConfigurationSupplier);
 	}
 
@@ -55,7 +60,8 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler {
 	 * @return the language configuration supplier
 	 */
 	@Override
-	public YamlConfigurationSupplier getConfigurationSupplier() {
+	public YamlConfigurationSupplier getConfigurationSupplier()
+	{
 		return yamlConfigurationSupplier;
 	}
 
