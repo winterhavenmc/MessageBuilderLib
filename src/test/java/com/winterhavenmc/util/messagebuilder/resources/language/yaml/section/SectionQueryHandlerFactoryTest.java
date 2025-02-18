@@ -18,8 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
 import org.bukkit.configuration.Configuration;
 import org.junit.jupiter.api.AfterEach;
@@ -28,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.winterhavenmc.util.messagebuilder.util.MockUtility.loadConfigurationFromResource;
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class SectionQueryHandlerFactoryTest {
 
@@ -63,10 +62,8 @@ class SectionQueryHandlerFactoryTest {
 
 	@Test
 	void createSectionHandler() {
-
+		SectionQueryHandler queryHandler = queryHandlerFactory.createSectionHandler(Section.ITEMS);
+		assertNotNull(queryHandler);
 	}
 
-	@Test
-	void createSectionHandlerDynamically() {
-	}
 }

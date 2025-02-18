@@ -131,11 +131,4 @@ class YamlLanguageQueryHandlerTest {
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
-	@Test
-	void testGetItemRecord() {
-	}
-
-	@Test
-	void testGetMessageRecord() {
-	}
 }

@@ -78,19 +78,4 @@ public class SectionQueryHandlerFactory {
 		return section.getQueryHandler(configurationSupplier);
 	}
 
-
-	/**
-	 * Creates a section query handler for the section indicated by the {@link Section} enum constant parameter.
-	 *
-	 * @param section a constant of the {@code Section} enum
-	 * @return {@code SectionQueryHandler} of the appropriate type for the section
-	 */
-	public SectionQueryHandler createSectionHandlerDynamically(Section section) {
-		try {
-			return section.getHandlerClass().getDeclaredConstructor().newInstance();
-		} catch (Exception e) {
-			throw new IllegalStateException("Failed to create handler for section: " + section, e);
-		}
-	}
-
 }
