@@ -61,6 +61,12 @@ class YamlLanguageQueryHandlerTest {
 	}
 
 	@Test
+	void testConstructor() {
+		YamlLanguageQueryHandler yamlLanguageQueryHandler = new YamlLanguageQueryHandler(configurationSupplier);
+		assertNotNull(yamlLanguageQueryHandler);
+	}
+
+	@Test
 	void testConstructor_parameter_null() {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new YamlLanguageQueryHandler(null));
@@ -129,6 +135,11 @@ class YamlLanguageQueryHandlerTest {
 
 		// Assert
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void getConfigurationSupplier() {
+		assertNotNull(queryHandler.getConfigurationSupplier());
 	}
 
 }
