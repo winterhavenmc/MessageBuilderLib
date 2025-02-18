@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -114,6 +115,25 @@ class ConstantSectionQueryHandlerTest {
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> queryHandler.getInt(null));
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void getRecord_parameter_null_key() {
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> queryHandler.getRecord(null));
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void getRecord_parameter_empty_key() {
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> queryHandler.getRecord(""));
+		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
+	}
+
+	@Test
+	void testGetRecord() {
+		assertEquals(Optional.empty(), queryHandler.getRecord("KEY"));
 	}
 
 }
