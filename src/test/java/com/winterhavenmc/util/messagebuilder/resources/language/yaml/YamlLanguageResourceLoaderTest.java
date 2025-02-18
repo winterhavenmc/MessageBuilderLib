@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -81,34 +82,45 @@ public class YamlLanguageResourceLoaderTest {
 
 
 	@Test
-	public void FileLoaderNotNull() {
-		assertNotNull(yamlLanguageResourceLoader);
-	}
-
-
-	@Test
 	public void testLoadConfiguration() {
+		// Arrange
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
-		// Arrange & Act
+		// Act
 		Configuration configuration = yamlLanguageResourceLoader.loadConfiguration();
 
 		// Assert
 		assertNotNull(configuration);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+		verify(pluginMock, atLeastOnce()).getLogger();
 	}
 
 
 	@Test
-	public void GetLanguageFilenameTest() {
-		assertEquals("language" + File.separator + "en-US.yml",
-				new LanguageTag(DEFAULT_LANGUAGE_TAG.toString()).getFileName());
+	void getConfiguredLanguageTag() {
+		// Arrange
+		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+
+		// Act
+		String languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag(pluginMock);
+
+		// Assert
+		assertEquals("en-US", languageTag);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
 	}
 
+
 	@Test
-	public void GetLanguageFilenameTest_nonexistent() {
-		assertEquals("language" + File.separator + "not-a-valid-tag.yml",
-				new LanguageTag("not-a-valid-tag").getFileName());
+	void getConfiguredLanguageTag_parameter_null_plugin() {
+		LocalizedException exception = assertThrows(LocalizedException.class,
+				() -> yamlLanguageResourceLoader.getConfiguredLanguageTag(null));
+
+		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
 	}
 
 }
