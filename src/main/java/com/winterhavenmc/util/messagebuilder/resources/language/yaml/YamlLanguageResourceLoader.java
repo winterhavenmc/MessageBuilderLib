@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -24,6 +25,11 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.util.Parameter.PLUGIN;
+import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
 
 
 /**
@@ -65,6 +71,8 @@ public final class YamlLanguageResourceLoader
 	 */
 	String getConfiguredLanguageTag(final Plugin plugin)
 	{
+		validate(plugin, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, PLUGIN));
+
 		return plugin.getConfig().getString(Option.CONFIG_LANGUAGE_KEY.toString());
 	}
 
@@ -89,22 +97,24 @@ public final class YamlLanguageResourceLoader
 	 */
 	Configuration loadConfiguration(final LanguageTag languageTag)
 	{
-		// create new YamlConfiguration object
 		YamlConfiguration configuration = new YamlConfiguration();
 
-		try // to load specified language file into new YamlConfiguration object
+		try
 		{
 			configuration.load(languageTag.getFileName());
 			plugin.getLogger().info("Language file " + languageTag.getFileName() + " successfully loaded.");
 		}
+
 		catch (FileNotFoundException e)
 		{
 			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " does not exist.");
 		}
+
 		catch (IOException e)
 		{
 			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " could not be read.");
 		}
+
 		catch (InvalidConfigurationException e)
 		{
 			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " is not valid yaml.");
