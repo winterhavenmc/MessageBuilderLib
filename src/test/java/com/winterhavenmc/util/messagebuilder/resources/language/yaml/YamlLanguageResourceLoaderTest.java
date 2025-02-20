@@ -82,13 +82,13 @@ public class YamlLanguageResourceLoaderTest {
 
 
 	@Test
-	public void testLoadConfiguration() {
+	public void testLoad() {
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
 		// Act
-		Configuration configuration = yamlLanguageResourceLoader.loadConfiguration();
+		Configuration configuration = yamlLanguageResourceLoader.load();
 
 		// Assert
 		assertNotNull(configuration);

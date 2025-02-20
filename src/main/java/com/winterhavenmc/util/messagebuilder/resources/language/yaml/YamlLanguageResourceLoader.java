@@ -83,9 +83,9 @@ public final class YamlLanguageResourceLoader
 	 *
 	 * @return Configuration - message configuration object
 	 */
-	Configuration loadConfiguration()
+	Configuration load()
 	{
-		return loadConfiguration(new LanguageTag(getConfiguredLanguageTag(plugin)));
+		return load(new LanguageTag(getConfiguredLanguageTag(plugin)));
 	}
 
 
@@ -95,7 +95,7 @@ public final class YamlLanguageResourceLoader
 	 *
 	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
-	Configuration loadConfiguration(final LanguageTag languageTag)
+	Configuration load(final LanguageTag languageTag)
 	{
 		YamlConfiguration configuration = new YamlConfiguration();
 

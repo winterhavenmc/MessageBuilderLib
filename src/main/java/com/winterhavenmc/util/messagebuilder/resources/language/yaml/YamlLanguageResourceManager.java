@@ -67,7 +67,7 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 		languageResourceInstaller.autoInstall();
 
 		// get newly loaded configuration from loader
-		this.languageConfiguration = languageResourceLoader.loadConfiguration();
+		this.languageConfiguration = languageResourceLoader.load();
 
 		// instantiate supplier with language configuration from resource loader, and assign to field
 		this.configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
@@ -111,7 +111,7 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 		languageResourceInstaller.autoInstall();
 
 		// Reload the configuration and get the new configuration from the loader
-		this.languageConfiguration = languageResourceLoader.loadConfiguration();
+		this.languageConfiguration = languageResourceLoader.load();
 
 		// create a new configuration supplier with the new configuration
 		this.configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
