@@ -52,6 +52,7 @@ public class MessageProcessor implements Processor
 	}
 
 
+	@Override
 	public void process(final Message message)
 	{
 		validate(message, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE));
