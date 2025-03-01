@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.*;
 
 import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
@@ -64,9 +64,11 @@ public final class Message
 	 *
 	 * @param macro token for placeholder
 	 * @param value object that contains value that will be substituted in message
+	 * @param <K> type parameter for key
+	 * @param <V> type parameter for value
 	 * @return this message object with macro value set in map
 	 */
-	public <Macro extends Enum<Macro>, T> Message setMacro(final Macro macro, final T value)
+	public <K extends Enum<K>, V> Message setMacro(final K macro, final V value)
 	{
 		validate(macro, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MACRO));
 		staticValidate(value, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, VALUE));
@@ -86,9 +88,11 @@ public final class Message
 	 * @param quantity an integer representing a quantity associated with the macro value
 	 * @param macro token for placeholder
 	 * @param value object that contains value that will be substituted in message
+	 * @param <K> type parameter for key
+	 * @param <V> type parameter for value
 	 * @return this message object with macro value set in map
 	 */
-	public <Macro extends Enum<Macro>, T> Message setMacro(int quantity, final Macro macro, final T value)
+	public <K extends Enum<K>, V> Message setMacro(int quantity, final K macro, final V value)
 	{
 		validate(macro, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MACRO));
 		staticValidate(value, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, VALUE));
@@ -149,9 +153,10 @@ public final class Message
 	 * Examine the contents of the context map for testing purposes
 	 *
 	 * @param macro the key to retrieve from the context map
+	 * @param <K> type parameter for key
 	 * @return {@code Object} the value stored in the map, or {@code null} if no value is present for key
 	 */
-	<Macro extends Enum<Macro>> Object peek(Macro macro)
+	<K extends Enum<K>> Object peek(K macro)
 	{
 		return contextMap.get(macro.name());
 	}
