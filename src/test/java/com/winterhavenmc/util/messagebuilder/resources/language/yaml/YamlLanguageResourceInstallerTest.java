@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
@@ -43,16 +43,16 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class YamlLanguageResourceInstallerTest {
-
+public class YamlLanguageResourceInstallerTest
+{
 	@TempDir File tempDataDir;
 	@Mock Plugin pluginMock;
 
 	YamlLanguageResourceInstaller resourceInstaller;
 
 	@BeforeEach
-	public void setUp() {
-
+	public void setUp()
+	{
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 
@@ -65,7 +65,8 @@ public class YamlLanguageResourceInstallerTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	public void tearDown()
+	{
 		pluginMock = null;
 		resourceInstaller = null;
 		deleteTempFiles();
@@ -73,7 +74,8 @@ public class YamlLanguageResourceInstallerTest {
 
 
 	@Test
-	public void testRegExWhitespacePattern() {
+	public void testRegExWhitespacePattern()
+	{
 		String whitespace = "this string contains \t whitespace";
 		String nonWhitespace = "nonwhitespace";
 		assertTrue(WHITESPACE.matcher(whitespace).find());
@@ -83,7 +85,7 @@ public class YamlLanguageResourceInstallerTest {
 
 	@Test
 	public void isInstalledForTag_parameter_null() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> resourceInstaller.isInstalledForTag(null));
 
 		assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
@@ -91,7 +93,7 @@ public class YamlLanguageResourceInstallerTest {
 
 	@Test
 	public void testInstallIfMissing_parameter_null() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> resourceInstaller.installIfMissing(null));
 
 		assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
@@ -101,8 +103,8 @@ public class YamlLanguageResourceInstallerTest {
 	@Nested
 	public class MockingSetupTests {
 
-	@Test
-	public void testResourceStream() throws IOException {
+		@Test
+		public void testResourceStream() throws IOException {
 			// Arrange & Act
 			InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
@@ -114,8 +116,8 @@ public class YamlLanguageResourceInstallerTest {
 		}
 
 
-	@Test
-	public void testSaveResource_MocksCorrectly() throws IOException {
+		@Test
+		public void testSaveResource_MocksCorrectly() throws IOException {
 			// Arrange
 			Path targetFilePath = tempDataDir.toPath().resolve(Option.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
@@ -323,7 +325,8 @@ public class YamlLanguageResourceInstallerTest {
 
 
 	@Test
-	public void testInstallByNameForTag_resource_unavailable() {
+	public void testInstallByNameForTag_resource_unavailable()
+	{
 		// Arrange
 		LanguageTag languageTag = new LanguageTag("nonexistent-language-tag");
 
@@ -336,7 +339,8 @@ public class YamlLanguageResourceInstallerTest {
 
 
 	@Test
-	public void testInstallByNameForTag_parameter_null() {
+	public void testInstallByNameForTag_parameter_null()
+	{
 		// Arrange
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> resourceInstaller.install(null));
@@ -347,7 +351,8 @@ public class YamlLanguageResourceInstallerTest {
 
 
 	@Test
-	public void verifyLanguageDirectoryTest_exists() throws IOException {
+	public void verifyLanguageDirectoryTest_exists() throws IOException
+	{
 		// Arrange
 		MockUtility.installResource("language/en-US.yml", new File(tempDataDir, "language").toPath());
 
@@ -360,22 +365,22 @@ public class YamlLanguageResourceInstallerTest {
 
 
 	@Test
-	public void testInstallByNameResource_CreatesFileSuccessfully() throws IOException {
+	public void testInstallByNameResource_CreatesFileSuccessfully() throws IOException
+	{
+		// Arrange: Create a temporary directory for the test
+		Path tempDir = Files.createTempDirectory("installer-test");
 
-			// Arrange: Create a temporary directory for the test
-			Path tempDir = Files.createTempDirectory("installer-test");
+		// Act: Install a resource into the temporary directory
+		long result = installResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString(), tempDir);
 
-			// Act: Install a resource into the temporary directory
-			boolean result = installResource(Option.RESOURCE_LANGUAGE_EN_US_YML.toString(), tempDir);
+		// Assert: Verify the file exists and was successfully copied
+		assertTrue(result> 0, "ResourceType should have been installed successfully.");
+		assertTrue(Files.exists(tempDir.resolve(Option.RESOURCE_LANGUAGE_EN_US_YML.toString())));
 
-			// Assert: Verify the file exists and was successfully copied
-			assertTrue(result, "ResourceType should have been installed successfully.");
-			assertTrue(Files.exists(tempDir.resolve(Option.RESOURCE_LANGUAGE_EN_US_YML.toString())));
-
-			// Cleanup: Delete the temporary directory and its contents
-			Files.walk(tempDir)
-					.sorted(Comparator.reverseOrder())
-					.forEach(path -> path.toFile().delete());
+		// Cleanup: Delete the temporary directory and its contents
+		Files.walk(tempDir)
+				.sorted(Comparator.reverseOrder())
+				.forEach(path -> path.toFile().delete());
 	}
 
 
@@ -404,7 +409,7 @@ public class YamlLanguageResourceInstallerTest {
 		@Test
 		public void autoInstallResourceExistsTest_null_parameter() {
 			// Act
-			LocalizedException exception = assertThrowsExactly(LocalizedException.class,
+			ValidationException exception = assertThrowsExactly(ValidationException.class,
 					() -> resourceInstaller.resourceExists((LanguageTag) null));
 
 			// Assert

@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -111,7 +111,7 @@ class MessageTest {
 
 		@Test
 		void testSetMacro_parameter_null_macro() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
+			ValidationException exception = assertThrows(ValidationException.class,
 					() -> message.setMacro(null, new ItemStack(Material.DIAMOND_SWORD)));
 
 			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
@@ -119,7 +119,7 @@ class MessageTest {
 
 		@Test
 		void testSetMacro_parameter_null_object() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
+			ValidationException exception = assertThrows(ValidationException.class,
 					() -> message.setMacro(Macro.OWNER, null));
 
 			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
@@ -140,7 +140,7 @@ class MessageTest {
 
 		@Test
 		void testSetMacro2_parameter_null_macro() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
+			ValidationException exception = assertThrows(ValidationException.class,
 					() -> message.setMacro(5, null, new ItemStack(Material.DIAMOND_SWORD)));
 
 			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
@@ -148,7 +148,7 @@ class MessageTest {
 
 		@Test
 		void testSetMacro2_parameter_null_object() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
+			ValidationException exception = assertThrows(ValidationException.class,
 					() -> message.setMacro(6, Macro.OWNER, null));
 
 			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());

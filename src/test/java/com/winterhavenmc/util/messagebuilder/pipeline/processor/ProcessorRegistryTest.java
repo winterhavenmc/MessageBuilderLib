@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,13 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.DependencyContext;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ProcessorRegistry;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -56,7 +59,7 @@ class ProcessorRegistryTest {
 
 		@Test
 		void testConstructor_parameter_null() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
+			ValidationException exception = assertThrows(ValidationException.class,
 					() -> new ProcessorRegistry(null));
 
 			assertEquals("The parameter 'dependencyContext' cannot be null.", exception.getMessage());

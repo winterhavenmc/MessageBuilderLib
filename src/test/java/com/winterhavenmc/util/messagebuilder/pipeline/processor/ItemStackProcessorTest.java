@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,17 +15,18 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
-
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-
+import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
-import org.bukkit.Location;
-import org.bukkit.World;
+
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ItemStackProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.inventory.ItemStack;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,38 +34,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class CommandSenderProcessorTest {
+class ItemStackProcessorTest {
 
-	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
-	@Mock World worldMock;
 
-	MacroProcessor macroProcessor;
-
-	@BeforeEach
-	public void setUp() {
-		macroProcessor = new CommandSenderProcessor();
-	}
 
 	@AfterEach
 	public void tearDown() {
-		pluginMock = null;
-		macroProcessor = null;
+		playerMock = null;
 	}
 
 
 	@Test
 	void testResolveContext_parameter_null_key() {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new CommandSenderProcessor();
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		MacroProcessor macroProcessor = new ItemStackProcessor();
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
 
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
@@ -74,8 +63,8 @@ class CommandSenderProcessorTest {
 	@Test
 	void testResolveContext_parameter_empty_key() {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new CommandSenderProcessor();
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		MacroProcessor macroProcessor = new ItemStackProcessor();
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
 
 		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
@@ -84,8 +73,8 @@ class CommandSenderProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_context_map() {
-		MacroProcessor macroProcessor = new CommandSenderProcessor();
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		MacroProcessor macroProcessor = new ItemStackProcessor();
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext("KEY", null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
@@ -93,40 +82,38 @@ class CommandSenderProcessorTest {
 
 
 	@Test
-	void resolveContext() {
+	void resolveContext_no_metadata() {
 		// Arrange
-		when(playerMock.getName()).thenReturn("player one");
-		when(playerMock.getDisplayName()).thenReturn("&aPlayer One");
-		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
-		when(worldMock.getName()).thenReturn("test_world");
-		Location location = new Location(worldMock, 10, 20, 30);
-		when(playerMock.getLocation()).thenReturn(location);
+		String keyPath = "ITEM_STACK";
+		ItemStack itemStack = new ItemStack(Material.GOLDEN_AXE);
 
-		String key = "SOME_KEY";
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(key, playerMock);
+		contextMap.put(keyPath, itemStack);
+		MacroProcessor macroProcessor = new ItemStackProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(key));
-		assertNotNull(resultMap.get(key));
+		assertTrue(resultMap.containsKey(keyPath));
+		assertEquals("GOLDEN_AXE", resultMap.get(keyPath));
 	}
 
 
 	@Test
-	void resolveContext_not_command_sender() {
+	void resolveContext_not_an_itemstack() {
 		// Arrange
-		String key = "SOME_KEY";
+		String keyPath = "ITEM_STACK";
+		int value = 42;
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(key, 42);
+		contextMap.put(keyPath, value);
+		MacroProcessor macroProcessor = new ItemStackProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
 
 		// Assert
-		assertTrue(resultMap.isEmpty());
+		assertFalse(resultMap.containsKey(keyPath));
 	}
 
 }

@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -26,11 +27,11 @@ import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.RESOURCE_NAME;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.TARGET_DIR_PATH;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_NAME;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.TARGET_DIR_PATH;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 public final class MockUtility {
@@ -82,16 +83,17 @@ public final class MockUtility {
 	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
-	public static boolean installResource(final String resourceName, final Path targetDirPath) throws IOException {
-		validate(resourceName, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RESOURCE_NAME));
-		validate(resourceName, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, RESOURCE_NAME));
-		validate(targetDirPath, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, TARGET_DIR_PATH));
+	public static long installResource(final String resourceName, final Path targetDirPath) throws IOException {
+		validate(resourceName, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RESOURCE_NAME));
+		validate(resourceName, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, RESOURCE_NAME));
+		validate(targetDirPath, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, TARGET_DIR_PATH));
 
 		// Ensure the target directory exists
 		Files.createDirectories(targetDirPath);
 
 		// Get the resource as an InputStream
-		try (var inputStream = getResourceStream(resourceName)) {
+		try (var inputStream = getResourceStream(resourceName))
+		{
 			if (inputStream == null) {
 				throw new IOException("ResourceType '" + resourceName + "' not found in the classpath.");
 			}
@@ -103,8 +105,7 @@ public final class MockUtility {
 			Files.createDirectories(targetFilePath.getParent());
 
 			// Copy the resource to the target directory
-			Files.copy(inputStream, targetFilePath); // DO NOT REPLACE EXISTING FILES
-			return true;
+			return Files.copy(inputStream, targetFilePath); // DO NOT REPLACE EXISTING FILES
 		}
 	}
 

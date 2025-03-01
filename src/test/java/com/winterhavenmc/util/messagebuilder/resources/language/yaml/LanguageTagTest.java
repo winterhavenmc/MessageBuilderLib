@@ -25,6 +25,7 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class LanguageTagTest {
 
 	@Nested
@@ -82,19 +83,6 @@ class LanguageTagTest {
 		// Act & Assert
 		assertEquals("language" + File.separator + "en-US.yml", languageTag.getFileName());
 		assertNotEquals("language" + File.separator + "fr-FR.yml", languageTag.getFileName());
-	}
-
-	@Test
-	void testGetFile() {
-		// Arrange
-		LanguageTag languageTag = new LanguageTag("en-US");
-
-		// Act
-		File file = languageTag.getFile();
-
-		// Assert
-		assertEquals("en-US.yml", file.getName());
-		assertInstanceOf(File.class, file);
 	}
 
 	@Test

@@ -1,10 +1,8 @@
 package com.winterhavenmc.util.messagebuilder.messages;
 
 
-import com.winterhavenmc.util.messagebuilder.util.MacroInterface;
-
-public enum Macro implements MacroInterface {
-
+public enum Macro
+{
 	DURATION,
 	LOCATION,
 	PLUGIN,
@@ -14,6 +12,5 @@ public enum Macro implements MacroInterface {
 	OWNER,
 	KILLER,
 	VIEWER,
-	TOOL,
-
+	TOOL
 }

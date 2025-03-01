@@ -15,26 +15,26 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.validation;
 
 
 import org.junit.jupiter.api.Test;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class LocalizedExceptionTest {
+class ValidationExceptionTest {
 
 	@Test
 	void testConstructor() {
-		LocalizedException exception = new LocalizedException(PARAMETER_NULL, RECIPIENT);
+		ValidationException exception = new ValidationException(PARAMETER_NULL, RECIPIENT);
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void getLocalizedMessage() {
-		LocalizedException exception = new LocalizedException(PARAMETER_NULL, RECIPIENT);
+		ValidationException exception = new ValidationException(PARAMETER_NULL, RECIPIENT);
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}
 

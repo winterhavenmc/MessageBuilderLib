@@ -18,7 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -71,7 +72,7 @@ class ContextMapTest {
 		Integer number = 42;
 
 		// Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> contextMap.put(null, number));
 
 		// Assert
@@ -93,7 +94,7 @@ class ContextMapTest {
 	@Test
 	void testGet_parameter_null_key() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> contextMap.get(null));
 
 		// Assert
@@ -146,7 +147,7 @@ class ContextMapTest {
 	@Test
 	void testContains_parameter_null_key() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> contextMap.contains(null));
 
 		// Assert
@@ -205,7 +206,7 @@ class ContextMapTest {
 	@Test
 	void testRemove_parameter_null_key() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> contextMap.remove(null));
 
 		// Assert

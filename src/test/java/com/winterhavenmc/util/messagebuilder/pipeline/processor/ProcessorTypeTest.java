@@ -15,8 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.DependencyContext;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ProcessorType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;

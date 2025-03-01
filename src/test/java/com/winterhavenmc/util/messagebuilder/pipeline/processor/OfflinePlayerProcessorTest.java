@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.OfflinePlayerProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -81,7 +84,7 @@ class OfflinePlayerProcessorTest {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		// Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
 
 		// Assert
@@ -95,7 +98,7 @@ class OfflinePlayerProcessorTest {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		// Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
 
 		// Assert
@@ -108,7 +111,7 @@ class OfflinePlayerProcessorTest {
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 
 		// Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext("KEY", null));
 
 		// Assert

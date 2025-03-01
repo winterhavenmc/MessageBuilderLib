@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
@@ -55,7 +55,7 @@ class CooldownKeyTest {
 	@Test
 	void testConstructor_parameter_null_recipient() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new CooldownKey(null, MessageId.ENABLED_MESSAGE.name()));
 
 		// Assert
@@ -65,7 +65,7 @@ class CooldownKeyTest {
 	@Test
 	void testConstructor_parameter_null_messageId() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new CooldownKey(playerMock, null));
 
 		// Assert

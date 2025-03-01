@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
+import com.winterhavenmc.util.messagebuilder.pipeline.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -102,7 +102,7 @@ class MessageBuilderTest {
 	@Test
 	void compose_parameter_null_player() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
 
 		// Assert
@@ -112,7 +112,7 @@ class MessageBuilderTest {
 	@Test
 	void compose_parameter_null_message_id() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> messageBuilder.compose(playerMock, null));
 
 		// Assert

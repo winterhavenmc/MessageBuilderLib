@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -100,7 +100,7 @@ class TitleSenderTest
 	@Test
 	void testSend_parameter_null_recipient() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new TitleSender(new CooldownMap()).send(null, messageRecord));
 
 		// Assert
@@ -110,7 +110,7 @@ class TitleSenderTest
 	@Test
 	void testSend_parameter_null_messageRecord() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new TitleSender(new CooldownMap()).send(playerMock, null));
 
 		// Assert

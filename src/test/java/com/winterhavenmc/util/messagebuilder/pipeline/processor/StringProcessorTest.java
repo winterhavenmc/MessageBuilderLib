@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,31 +15,34 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.StringProcessor;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class NullProcessorTest {
+class StringProcessorTest {
 
 	@Mock Player playerMock;
 
+
 	@AfterEach
-	void tearDown() {
+	public void tearDown() {
 		playerMock = null;
 	}
 
@@ -47,8 +50,8 @@ class NullProcessorTest {
 	@Test
 	void testResolveContext_parameter_null_key() {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new NullProcessor();
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		MacroProcessor macroProcessor = new StringProcessor();
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
 
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
@@ -58,8 +61,8 @@ class NullProcessorTest {
 	@Test
 	void testResolveContext_parameter_empty_key() {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new NullProcessor();
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		MacroProcessor macroProcessor = new StringProcessor();
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
 
 		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
@@ -68,9 +71,8 @@ class NullProcessorTest {
 
 	@Test
 	void testResolveContext_parameter_null_context_map() {
-		MacroProcessor macroProcessor = new NullProcessor();
-
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		MacroProcessor macroProcessor = new StringProcessor();
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext("KEY", null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
@@ -79,33 +81,37 @@ class NullProcessorTest {
 
 	@Test
 	void resolveContext() {
-		// Arrange
-		String key = "KEY";
-		NullProcessor nullProcessor = new NullProcessor();
+
+		String keyPath = "SOME_NAME";
+		String stringObject = "some name";
+
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(key, null);
 
-		// Act
-		ResultMap resultMap = nullProcessor.resolveContext(key, contextMap);
+		contextMap.put(keyPath, stringObject);
 
-		// Assert
-		assertEquals("NULL", resultMap.get(key));
+		MacroProcessor macroProcessor = new StringProcessor();
+
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+
+		assertTrue(resultMap.containsKey(keyPath));
+		assertEquals(stringObject, resultMap.get(keyPath));
 	}
 
-
 	@Test
-	void resolveContext_not_null() {
-		// Arrange
-		String key = "KEY";
-		NullProcessor nullProcessor = new NullProcessor();
+	void resolveContext_not_string() {
+
+		String keyPath = "SOME_NAME";
+		Duration duration  = Duration.ofMillis(2000);
+
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(key, 42);
 
-		// Act
-		ResultMap resultMap = nullProcessor.resolveContext(key, contextMap);
+		contextMap.put(keyPath, duration);
 
-		// Assert
-		assertEquals("NULL", resultMap.get(key));
+		MacroProcessor macroProcessor = new StringProcessor();
+
+		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+
+		assertFalse(resultMap.containsKey(keyPath));
 	}
 
 }

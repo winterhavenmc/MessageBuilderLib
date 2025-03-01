@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2024-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,16 +15,14 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
@@ -97,7 +95,7 @@ class MacroReplacerTest {
 
 	@Test
 	void testReplaceMacros1_parameter_null_messageRecord() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroReplacer.replaceMacros(null, message));
 
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
@@ -122,7 +120,7 @@ class MacroReplacerTest {
 		);
 
 		// Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroReplacer.replaceMacros(messageRecord, null));
 
 		// Assert
@@ -144,7 +142,7 @@ class MacroReplacerTest {
 	@Test
 	void testReplaceMacros2_parameter_null_contextMap() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroReplacer.replaceMacros(null, "Some message string."));
 
 		// Assert
@@ -158,7 +156,7 @@ class MacroReplacerTest {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 
 		// Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroReplacer.replaceMacros(contextMap, null));
 
 		// Assert
@@ -181,7 +179,7 @@ class MacroReplacerTest {
 	@Test
 	void testAddRecipientContext_parameter_null_context_map() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroReplacer.addRecipientContext(null));
 
 		// Assert
@@ -209,7 +207,7 @@ class MacroReplacerTest {
 
 	@Test
 	void testResolveContext_parameter_null_context_map() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroReplacer.resolveContext(null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
@@ -235,7 +233,7 @@ class MacroReplacerTest {
 
 	@Test
 	void testPerformReplacements_parameter_nul_replacement_map() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroReplacer.performReplacements(null, "some string"));
 
 		assertEquals("The parameter 'replacementMap' cannot be null.", exception.getMessage());
@@ -248,7 +246,7 @@ class MacroReplacerTest {
 		resultMap.put("KEY2", "value2");
 		resultMap.put("KEY3", "value3");
 
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroReplacer.performReplacements(resultMap, null));
 
 		assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());

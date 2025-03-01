@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.time;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -46,7 +46,7 @@ class PrettyTimeFormatterTest {
 		Duration duration = Duration.ofMillis(millis);
 
 		// Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new PrettyTimeFormatter().getFormatted(null, duration));
 
 		// Assert
@@ -56,7 +56,7 @@ class PrettyTimeFormatterTest {
 	@Test
 	void testGetFormatted_parameter_null_duration() {
 		// Arrange & Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new PrettyTimeFormatter().getFormatted(Locale.US, null));
 
 		// Assert

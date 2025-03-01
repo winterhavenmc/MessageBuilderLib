@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tim Savage.
+ * Copyright (c) 2024-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.LocationProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -67,7 +70,7 @@ class LocationProcessorTest {
 	void testResolveContext_parameter_null_key() {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new LocationProcessor();
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext(null, contextMap));
 
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
@@ -78,7 +81,7 @@ class LocationProcessorTest {
 	void testResolveContext_parameter_empty_key() {
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new LocationProcessor();
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext("", contextMap));
 
 		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
@@ -88,7 +91,7 @@ class LocationProcessorTest {
 	@Test
 	void testResolveContext_parameter_null_context_map() {
 		MacroProcessor macroProcessor = new LocationProcessor();
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext("KEY", null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
