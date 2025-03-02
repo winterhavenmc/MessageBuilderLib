@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,16 +15,16 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.EnumMap;
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.DEPENDENCY_CONTEXT;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.DEPENDENCY_CONTEXT;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -42,7 +42,7 @@ public class ProcessorRegistry
 	 */
 	public ProcessorRegistry(final DependencyContext dependencyContext)
 	{
-		validate(dependencyContext, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, DEPENDENCY_CONTEXT));
+		validate(dependencyContext, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, DEPENDENCY_CONTEXT));
 
 		this.context = dependencyContext;
 		macroProcessorMap = new EnumMap<>(ProcessorType.class);
