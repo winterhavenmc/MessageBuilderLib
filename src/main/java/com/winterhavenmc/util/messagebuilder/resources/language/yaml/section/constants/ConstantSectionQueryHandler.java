@@ -37,8 +37,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate
 /**
  * Query handler for the 'CONSTANTS' section of the language file.
  */
-public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler {
-
+public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler
+{
 	private final static Section section = Section.CONSTANTS;
 	private final static Class<?> primaryType = String.class;
 	private final static List<Class<?>> handledTypes = List.of(String.class, List.class, Integer.class);
@@ -52,7 +52,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * @param configurationSupplier the provider of the current language configuration object
 	 * @throws ValidationException if the {@code yamlConfigurationSupplier} parameter is null or invalid
 	 */
-	public ConstantSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier) {
+	public ConstantSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier)
+	{
 		super(configurationSupplier, section, primaryType, handledTypes);
 		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
@@ -68,7 +69,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * @return an {@code Optional} String containing the String retrieved with keyPath, or an empty Optional if no
 	 * value was found for the keyPath
 	 */
-	public Optional<String> getString(final String key) {
+	public Optional<String> getString(final String key)
+	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
@@ -83,7 +85,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * @return a {@code List} of String containing the values retrieved using keyPath, or an empty List if no
 	 * value was found for the keyPath
 	 */
-	public List<String> getStringList(final String key) {
+	public List<String> getStringList(final String key)
+	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
@@ -98,7 +101,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * @return {@code int} containing the values retrieved using keyPath, or zero (0) if no
 	 * value was found for the keyPath
 	 */
-	public int getInt(final String key) {
+	public int getInt(final String key)
+	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
@@ -114,7 +118,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * @param <T> the return record type
 	 */
 	@Override
-	public <T> Optional<T> getRecord(String key) {
+	public <T> Optional<T> getRecord(String key)
+	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
