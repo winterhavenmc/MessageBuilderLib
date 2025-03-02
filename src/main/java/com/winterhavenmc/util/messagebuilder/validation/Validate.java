@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.validation;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;

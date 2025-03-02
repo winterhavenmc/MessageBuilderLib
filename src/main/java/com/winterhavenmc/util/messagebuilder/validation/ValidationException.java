@@ -15,14 +15,14 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.validation;
 
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 
-public class LocalizedException extends IllegalArgumentException
+public class ValidationException extends IllegalArgumentException
 {
 
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
@@ -32,7 +32,7 @@ public class LocalizedException extends IllegalArgumentException
 	private final Object[] params;
 
 
-	public LocalizedException(MessageKey messageKey, Parameter parameter, Object... params)
+	public ValidationException(MessageKey messageKey, Parameter parameter, Object... params)
 	{
 		super(formatMessage(messageKey, parameter, params));
 		this.messageKey = messageKey;

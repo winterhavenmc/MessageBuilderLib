@@ -15,21 +15,21 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
-
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import org.bukkit.configuration.ConfigurationSection;
+package com.winterhavenmc.util.messagebuilder.validation;
 
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
-public class Predicates {
+public interface Validator
+{
 
-	private Predicates() { /* Private constructor to prevent instantiation */ }
-
-
-	public static Predicate<ConfigurationSection> sectionNameNotEqual(Section section) {
-		return s -> !section.name().equals(s.getName());
+	static <T> T staticValidate(T value, Predicate<T> predicate, Supplier<RuntimeException> exceptionSupplier)
+	{
+		if (predicate.test(value))
+		{
+			throw exceptionSupplier.get(); // Throws from the call site!
+		}
+		return value; // Pass through the valid value for functional chains.
 	}
-
 
 }
