@@ -17,10 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.macro.processor.ResultMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+
 
 @FunctionalInterface
-public interface Resolver {
+public interface Resolver
+{
 	ResultMap resolveContext(ContextMap contextMap);
 }
