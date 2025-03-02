@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.macro.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 public class DependencyContext {
 	/* this class is intended to be a dependency container for injection */
