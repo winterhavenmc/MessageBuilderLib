@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -77,7 +77,7 @@ class MessageRecordTest {
 
 	@Test
 	void testGetRecord_parameter_messageId_null() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() ->  MessageRecord.getRecord(null, messageSection));
 
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
@@ -91,7 +91,7 @@ class MessageRecordTest {
 
 	@Test
 	void testGetRecord_parameter_messageSection_null() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() ->  MessageRecord.getRecord(ENABLED_MESSAGE.name(), null));
 
 		assertEquals("The parameter 'messageSection' cannot be null.", exception.getMessage());
@@ -103,7 +103,7 @@ class MessageRecordTest {
 		messageSection = configuration.getConfigurationSection("ITEMS");
 
 		// Act
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() ->  MessageRecord.getRecord(ENABLED_MESSAGE.name(), messageSection));
 
 		// Assert

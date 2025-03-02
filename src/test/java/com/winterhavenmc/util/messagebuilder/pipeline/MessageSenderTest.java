@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.entity.Player;
 
@@ -82,14 +82,14 @@ class MessageSenderTest {
 
 	@Test
 	void send_parameter_null_recipient() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new MessageSender(new CooldownMap()).send(null, messageRecord));
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}
 
 	@Test
 	void send_parameter_null_messageRecord() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new MessageSender(new CooldownMap()).send(playerMock, null));
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 	}

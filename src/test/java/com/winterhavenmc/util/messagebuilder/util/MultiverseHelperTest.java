@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -62,7 +63,7 @@ class MultiverseHelperTest {
 	void getAlias_parameter_null_world() {
 		mockStatic.when(Bukkit::getPluginManager).thenReturn(pluginManagerMock);
 
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MultiverseHelper.getAlias(null));
 
 		assertEquals("The parameter 'world' cannot be null.", exception.getMessage());

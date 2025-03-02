@@ -18,9 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
-import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.entity.Player;
 
@@ -108,7 +107,7 @@ class MessageProcessorTest {
 
 	@Test
 	void process_parameter_null_message() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> messageProcessor.process(null));
 
 		assertEquals("The parameter 'message' cannot be null.", exception.getMessage());

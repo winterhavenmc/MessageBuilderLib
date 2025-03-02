@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -26,11 +26,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section.MESSAGES;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.*;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.Predicates.sectionNameNotEqual;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_SECTION;
+import static com.winterhavenmc.util.messagebuilder.validation.Predicates.sectionNameNotEqual;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -102,10 +102,10 @@ public record MessageRecord (
 	 */
 	public static Optional<MessageRecord> getRecord(final String key, final ConfigurationSection messageSection)
 	{
-		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
-		validate(messageSection, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_SECTION));
-		validate(messageSection, sectionNameNotEqual(MESSAGES), () -> new LocalizedException(PARAMETER_INVALID, MESSAGE_SECTION));
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
+		validate(messageSection, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_SECTION));
+		validate(messageSection, sectionNameNotEqual(MESSAGES), () -> new ValidationException(PARAMETER_INVALID, MESSAGE_SECTION));
 
 		// get entry for key
 		ConfigurationSection messageEntry = messageSection.getConfigurationSection(key);

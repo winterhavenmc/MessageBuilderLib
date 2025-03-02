@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -76,7 +76,7 @@ class ItemSectionQueryHandlerTest {
 
 	@Test
 	void testGetRecord_parameter_null() {
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> queryHandler.getRecord(null));
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}

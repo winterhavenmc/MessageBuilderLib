@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -27,11 +27,11 @@ import java.util.regex.Pattern;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_AUTO_INSTALL;
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_SUBDIRECTORY;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.LANGUAGE_TAG;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.RESOURCE_NAME;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_TAG;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_NAME;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -138,7 +138,7 @@ public final class YamlLanguageResourceInstaller {
 	 * @param languageTag the language tag for the resource to be installed
 	 */
 	InstallerStatus installIfMissing(final LanguageTag languageTag) {
-		validate(languageTag, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG));
+		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
 
 		if (!isInstalledForTag(languageTag)) {
 			return installByName(languageTag.getResourceName());
@@ -154,8 +154,8 @@ public final class YamlLanguageResourceInstaller {
 	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
 	 */
 	InstallerStatus installByName(final String resourceName) {
-		validate(resourceName, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RESOURCE_NAME));
-		validate(resourceName, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, RESOURCE_NAME));
+		validate(resourceName, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RESOURCE_NAME));
+		validate(resourceName, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, RESOURCE_NAME));
 
 		if (plugin.getResource(resourceName) == null) {
 			plugin.getLogger().warning("The resource '" + resourceName
@@ -197,7 +197,7 @@ public final class YamlLanguageResourceInstaller {
 	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
 	 */
 	InstallerStatus install(final LanguageTag languageTag) {
-		validate(languageTag, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG));
+		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
 
 		return installByName(languageTag.getResourceName());
 	}
@@ -221,7 +221,7 @@ public final class YamlLanguageResourceInstaller {
 	 * @return {@code true} if the resource exists, {@code false} if it does not
 	 */
 	boolean resourceExists(final LanguageTag languageTag) {
-		validate(languageTag, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG));
+		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
 
 		return plugin.getResource(languageTag.getResourceName()) != null;
 	}
@@ -244,7 +244,7 @@ public final class YamlLanguageResourceInstaller {
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
 	boolean isInstalledForTag(final LanguageTag languageTag) {
-		validate(languageTag, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, LANGUAGE_TAG));
+		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
 
 		return new File(plugin.getDataFolder(), languageTag.getFileName()).exists();
 	}

@@ -20,14 +20,14 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.SECTION;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 public class YamlLanguageQueryHandler implements LanguageQueryHandler
@@ -41,7 +41,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler
 	 */
 	public YamlLanguageQueryHandler(final YamlConfigurationSupplier configurationSupplier)
 	{
-		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		this.yamlConfigurationSupplier = configurationSupplier;
 	}
@@ -50,7 +50,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler
 	@Override
 	public SectionQueryHandler getSectionQueryHandler(Section section)
 	{
-		validate(section, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, SECTION));
+		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
 
 		return section.getQueryHandler(yamlConfigurationSupplier);
 	}

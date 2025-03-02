@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -103,7 +103,7 @@ class CooldownMapTest {
 		@DisplayName("Test putExpirationTime with null recipient")
 		void testPutExpirationTime_parameter_null_recipient() {
 			// Arrange & Act
-			LocalizedException exception = assertThrows(LocalizedException.class,
+			ValidationException exception = assertThrows(ValidationException.class,
 					() -> cooldownMap.putExpirationTime(null, messageRecord));
 
 			// Assert
@@ -114,7 +114,7 @@ class CooldownMapTest {
 		@DisplayName("Test putExpirationTime with null messageRecord")
 		void testPutExpirationTime_parameter_null_messageRecord() {
 			// Arrange & Act
-			LocalizedException exception = assertThrows(LocalizedException.class,
+			ValidationException exception = assertThrows(ValidationException.class,
 					() -> cooldownMap.putExpirationTime(playerMock, null));
 
 			// Assert
@@ -163,7 +163,7 @@ class CooldownMapTest {
 		@Test
 		@DisplayName("Test isCooling with null key")
 		void testIsCooling_parameter_null_key() {
-			LocalizedException exception = assertThrows(LocalizedException.class,
+			ValidationException exception = assertThrows(ValidationException.class,
 					() -> cooldownMap.notCooling(null));
 
 			assertEquals("The parameter 'key' cannot be null.", exception.getMessage());

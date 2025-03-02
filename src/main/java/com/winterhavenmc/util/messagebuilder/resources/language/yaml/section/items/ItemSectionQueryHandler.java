@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -29,11 +29,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.SECTION;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -60,7 +60,7 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 		super(configurationSupplier, section, primaryType, handledTypes);
 
 		// check that 'ITEMS' section returned by the configuration supplier is not null
-		validate(section, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, SECTION));
+		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
 
 		this.configurationSupplier = configurationSupplier;
 	}
@@ -75,8 +75,8 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 	 */
 	public <T> Optional<T> getRecord(final String key)
 	{
-		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
 		// get configuration section for item key
 		ConfigurationSection itemEntry = configurationSupplier.getSection(Section.ITEMS).getConfigurationSection(key);

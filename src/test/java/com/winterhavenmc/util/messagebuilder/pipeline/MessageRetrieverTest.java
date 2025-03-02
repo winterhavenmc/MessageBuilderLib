@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHan
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -82,7 +82,7 @@ class MessageRetrieverTest {
 	@Test
 	void getMessageRecord_parameter_null_Id() {
 		Retriever retriever = new MessageRetriever(languageQueryHandlerMock);
-		LocalizedException exception = assertThrows(LocalizedException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> retriever.getRecord(null));
 
 		// Assert

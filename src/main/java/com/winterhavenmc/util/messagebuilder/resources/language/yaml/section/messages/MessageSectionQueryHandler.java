@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -29,10 +29,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -57,7 +57,7 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier)
 	{
 		super(configurationSupplier, section, primaryType, handledTypes);
-		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		// set field from parameter
 		this.messageSection = configurationSupplier.getSection(Section.MESSAGES);
@@ -72,8 +72,8 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	 */
 	public <T> Optional<T> getRecord(final String key)
 	{
-		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_NULL, KEY));
 
 		return (Optional<T>) MessageRecord.getRecord(key, messageSection);
 	}

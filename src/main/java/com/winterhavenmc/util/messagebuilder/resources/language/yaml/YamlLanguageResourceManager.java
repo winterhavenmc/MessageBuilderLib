@@ -18,16 +18,16 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.Configuration;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.RESOURCE_INSTALLER;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.RESOURCE_LOADER;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_INSTALLER;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_LOADER;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -67,7 +67,7 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 		languageResourceInstaller.autoInstall();
 
 		// get newly loaded configuration from loader
-		this.languageConfiguration = languageResourceLoader.loadConfiguration();
+		this.languageConfiguration = languageResourceLoader.load();
 
 		// instantiate supplier with language configuration from resource loader, and assign to field
 		this.configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
@@ -82,8 +82,8 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	public static YamlLanguageResourceManager getInstance(final YamlLanguageResourceInstaller resourceInstaller,
 	                                                      final YamlLanguageResourceLoader resourceLoader)
 	{
-		validate(resourceInstaller, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RESOURCE_INSTALLER));
-		validate(resourceLoader, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RESOURCE_LOADER));
+		validate(resourceInstaller, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RESOURCE_INSTALLER));
+		validate(resourceLoader, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RESOURCE_LOADER));
 
 		if (instance == null) {
 			synchronized (YamlLanguageResourceManager.class) {
@@ -111,7 +111,7 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 		languageResourceInstaller.autoInstall();
 
 		// Reload the configuration and get the new configuration from the loader
-		this.languageConfiguration = languageResourceLoader.loadConfiguration();
+		this.languageConfiguration = languageResourceLoader.load();
 
 		// create a new configuration supplier with the new configuration
 		this.configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);

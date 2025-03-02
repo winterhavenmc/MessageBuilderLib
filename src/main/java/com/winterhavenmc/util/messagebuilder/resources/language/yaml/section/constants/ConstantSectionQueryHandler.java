@@ -21,17 +21,17 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -50,11 +50,11 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * Class constructor
 	 *
 	 * @param configurationSupplier the provider of the current language configuration object
-	 * @throws LocalizedException if the {@code yamlConfigurationSupplier} parameter is null or invalid
+	 * @throws ValidationException if the {@code yamlConfigurationSupplier} parameter is null or invalid
 	 */
 	public ConstantSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier) {
 		super(configurationSupplier, section, primaryType, handledTypes);
-		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		// get configuration supplier
 		this.configurationSupplier = configurationSupplier;
@@ -69,8 +69,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public Optional<String> getString(final String key) {
-		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
 		return Optional.ofNullable(configurationSupplier.getSection(section).getString(key));
 	}
@@ -84,8 +84,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public List<String> getStringList(final String key) {
-		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
 		return configurationSupplier.getSection(section).getStringList(key);
 	}
@@ -99,8 +99,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 * value was found for the keyPath
 	 */
 	public int getInt(final String key) {
-		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
 		return configurationSupplier.getSection(section).getInt(key);
 	}
@@ -115,8 +115,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 */
 	@Override
 	public <T> Optional<T> getRecord(String key) {
-		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
 		return Optional.empty();
 	}

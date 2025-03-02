@@ -1,14 +1,12 @@
 package com.winterhavenmc.util.messagebuilder.messages;
 
 
-import com.winterhavenmc.util.messagebuilder.util.MessageIdInterface;
-
 /**
  * An enum whose values represent the text messages displayed to users, corresponding to user
  * configured text in the language yaml files.
  */
-public enum MessageId implements MessageIdInterface {
-
+public enum MessageId
+{
 	ENABLED_MESSAGE,
 	DISABLED_MESSAGE,
 	REPEAT_DELAYED_MESSAGE,
@@ -28,5 +26,5 @@ public enum MessageId implements MessageIdInterface {
 	UNDEFINED_FIELD_TITLE_FADE_IN,
 	UNDEFINED_FIELD_TITLE_STAY,
 	UNDEFINED_FIELD_TITLE_FADE_OUT,
-	UNDEFINED_FIELD_SUBTITLE,
+	UNDEFINED_FIELD_SUBTITLE
 }
