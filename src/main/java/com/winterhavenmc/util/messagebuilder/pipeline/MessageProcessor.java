@@ -18,18 +18,18 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
-import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
-public class MessageProcessor implements Processor
+
+public final class MessageProcessor implements Processor
 {
 	private final MessageRetriever messageRetriever;
 	private final MacroReplacer macroReplacer;
@@ -55,7 +55,7 @@ public class MessageProcessor implements Processor
 	@Override
 	public void process(final Message message)
 	{
-		validate(message, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE));
+		validate(message, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE));
 
 		List<Sender> senders = List.of(messageSender, titleSender);
 

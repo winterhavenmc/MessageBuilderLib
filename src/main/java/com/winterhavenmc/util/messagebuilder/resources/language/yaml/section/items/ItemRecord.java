@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -27,11 +27,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section.ITEMS;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.*;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.ITEM_SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.util.Predicates.sectionNameNotEqual;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.ITEM_SECTION;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.Predicates.sectionNameNotEqual;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -89,10 +89,10 @@ public record ItemRecord(
 	 */
 	public static Optional<ItemRecord> getRecord(final String key, final ConfigurationSection itemSection)
 	{
-		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new LocalizedException(PARAMETER_EMPTY, KEY));
-		validate(itemSection, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, ITEM_SECTION));
-		validate(itemSection, sectionNameNotEqual(ITEMS), () -> new LocalizedException(PARAMETER_INVALID, ITEM_SECTION));
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
+		validate(itemSection, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, ITEM_SECTION));
+		validate(itemSection, sectionNameNotEqual(ITEMS), () -> new ValidationException(PARAMETER_INVALID, ITEM_SECTION));
 
 		// get configuration section for item key
 		ConfigurationSection itemEntry = itemSection.getConfigurationSection(key);

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,9 +27,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.PLUGIN;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_TAG;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.PLUGIN;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -71,15 +72,15 @@ public final class YamlLanguageResourceLoader
 	 */
 	String getConfiguredLanguageTag(final Plugin plugin)
 	{
-		validate(plugin, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, PLUGIN));
+		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
 
 		return plugin.getConfig().getString(Option.CONFIG_LANGUAGE_KEY.toString());
 	}
 
 
 	/**
-	 * Load the language configuration object for the configured language from file and return it, without
-	 * loading configuration defaults
+	 * Load the language configuration object for the configured language from file and return it. The returned
+	 * configuration object contains no default values loaded, by design
 	 *
 	 * @return Configuration - message configuration object
 	 */
@@ -90,13 +91,15 @@ public final class YamlLanguageResourceLoader
 
 
 	/**
-	 * Load the language configuration object for the given IETF language tag and return it, without loading
-	 * configuration defaults
+	 * Load the language configuration object for the configured language from file and return it. The returned
+	 * configuration object contains no default values loaded, by design
 	 *
 	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
 	Configuration load(final LanguageTag languageTag)
 	{
+		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
+
 		YamlConfiguration configuration = new YamlConfiguration();
 
 		try

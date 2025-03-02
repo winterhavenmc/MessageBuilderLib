@@ -28,8 +28,8 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.macro.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.pipeline.MacroReplacer;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.time.Tick;
 
 import org.bukkit.command.CommandSender;
@@ -40,11 +40,11 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.RELOAD_FAILED;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_ID;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.RELOAD_FAILED;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_ID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -159,8 +159,8 @@ public final class MessageBuilder
 	public <MessageId extends Enum<MessageId>>
 	Message compose(final CommandSender recipient, final MessageId messageId)
 	{
-		validate(recipient, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RECIPIENT));
-		validate(messageId, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_ID));
+		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
+		validate(messageId, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
 		return new Message(recipient, messageId.name(), messageProcessor);
 	}

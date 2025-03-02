@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -26,16 +26,16 @@ import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
  * This class is an implementation of the Sender interface, and is used to display a title to a player.
  */
-public class TitleSender implements Sender
+public final class TitleSender implements Sender
 {
 	private final CooldownMap cooldownMap;
 
@@ -60,8 +60,8 @@ public class TitleSender implements Sender
 	@Override
 	public void send(final CommandSender recipient, final MessageRecord messageRecord)
 	{
-		validate(recipient, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RECIPIENT));
-		validate(messageRecord, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD));
+		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
+		validate(messageRecord, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_RECORD));
 
 		if (recipient instanceof Player player)
 		{

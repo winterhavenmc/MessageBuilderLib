@@ -20,16 +20,16 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.*;
 
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.command.CommandSender;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.MACRO;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.VALUE;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
-import static com.winterhavenmc.util.messagebuilder.util.Validator.staticValidate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MACRO;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.VALUE;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.staticValidate;
 
 
 /**
@@ -70,8 +70,8 @@ public final class Message
 	 */
 	public <K extends Enum<K>, V> Message setMacro(final K macro, final V value)
 	{
-		validate(macro, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MACRO));
-		staticValidate(value, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, VALUE));
+		validate(macro, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MACRO));
+		staticValidate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
 		// put value into context map using macro enum constant name as key
@@ -94,8 +94,8 @@ public final class Message
 	 */
 	public <K extends Enum<K>, V> Message setMacro(int quantity, final K macro, final V value)
 	{
-		validate(macro, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MACRO));
-		staticValidate(value, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, VALUE));
+		validate(macro, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MACRO));
+		staticValidate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
 		// put value into context map using macro enum constant name for key

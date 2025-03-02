@@ -18,14 +18,14 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.CONFIGURATION_SUPPLIER;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.SECTION;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -45,7 +45,7 @@ public class SectionQueryHandlerFactory {
 	 * @param configurationSupplier the provider of the language configuration
 	 */
 	public SectionQueryHandlerFactory(YamlConfigurationSupplier configurationSupplier) {
-		validate(configurationSupplier, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		this.configurationSupplier = configurationSupplier;
 	}
@@ -59,7 +59,7 @@ public class SectionQueryHandlerFactory {
 	 * @return The requested SectionQueryHandler
 	 */
 	public SectionQueryHandler getQueryHandler(Section section) {
-		validate(section, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, SECTION));
+		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
 
 		return section.getQueryHandler(configurationSupplier);
 	}
@@ -70,10 +70,10 @@ public class SectionQueryHandlerFactory {
 	 *
 	 * @param section the section for which the query handler is to be created
 	 * @return the corresponding SectionQueryHandler
-	 * @throws LocalizedException if section parameter is null
+	 * @throws ValidationException if section parameter is null
 	 */
 	public SectionQueryHandler createSectionHandler(Section section) {
-		validate(section, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, SECTION));
+		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
 
 		return section.getQueryHandler(configurationSupplier);
 	}

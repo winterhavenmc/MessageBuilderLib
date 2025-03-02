@@ -18,16 +18,16 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.SECTION;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.SECTION;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -67,7 +67,7 @@ public final class YamlConfigurationSupplier implements Supplier<Configuration> 
 	 * @throws IllegalArgumentException if section parameter is null
 	 */
 	public ConfigurationSection getSection(final Section section) {
-		validate(section, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, SECTION));
+		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
 
 		return configuration.getConfigurationSection(section.name());
 	}

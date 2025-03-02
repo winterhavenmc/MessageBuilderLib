@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.LocalizedException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.command.CommandSender;
 
 import java.time.Instant;
@@ -26,11 +26,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.util.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.util.Parameter.RECIPIENT;
-import static com.winterhavenmc.util.messagebuilder.util.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 public final class CooldownMap implements Cooldown
@@ -44,12 +44,12 @@ public final class CooldownMap implements Cooldown
 	 *
 	 * @param recipient the entity whose uuid will be added as a key to the cooldown map
 	 * @param messageRecord the message to be placed in the cooldown map for recipient
-	 * @throws LocalizedException if any parameter is null
+	 * @throws ValidationException if any parameter is null
 	 */
 	public void putExpirationTime(final CommandSender recipient, final MessageRecord messageRecord)
 	{
-		validate(recipient, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, RECIPIENT));
-		validate(messageRecord, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, MESSAGE_RECORD));
+		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
+		validate(messageRecord, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_RECORD));
 
 		CooldownKey key = new CooldownKey(recipient, messageRecord.messageId());
 		if (notCooling(key))
@@ -65,11 +65,11 @@ public final class CooldownMap implements Cooldown
 	 *
 	 * @param key the cooldown map key for the recipient/message
 	 * @return true if player message is in cooldown map and has not reached its expiration time, false if it is not
-	 * @throws LocalizedException if any parameter is null
+	 * @throws ValidationException if any parameter is null
 	 */
 	public boolean notCooling(final CooldownKey key)
 	{
-		validate(key, Objects::isNull, () -> new LocalizedException(PARAMETER_NULL, KEY));
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 
 		return !(COOLDOWN_MAP.containsKey(key) && Instant.now().isBefore(COOLDOWN_MAP.get(key)));
 	}
