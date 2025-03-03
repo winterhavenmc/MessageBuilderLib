@@ -50,7 +50,8 @@ public abstract class AbstractSectionQueryHandler implements SectionQueryHandler
 	}
 
 
-	public Object query(final String keyPath) {
+	public Object query(final String keyPath)
+	{
 		return configurationSupplier.getSection(section).getMapList(keyPath);
 	}
 

@@ -33,8 +33,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate
 /**
  * Class that implements the Java Supplier interface to provide the Bukkit {@link Configuration} object to consumers
  */
-public final class YamlConfigurationSupplier implements Supplier<Configuration> {
-
+public final class YamlConfigurationSupplier implements Supplier<Configuration>
+{
 	private final Configuration configuration;
 
 
@@ -43,7 +43,8 @@ public final class YamlConfigurationSupplier implements Supplier<Configuration> 
 	 *
 	 * @param configuration the Configuration object loaded from the yaml language configuration file
 	 */
-	public YamlConfigurationSupplier(Configuration configuration) {
+	public YamlConfigurationSupplier(Configuration configuration)
+	{
 		this.configuration = configuration;
 	}
 
@@ -54,7 +55,8 @@ public final class YamlConfigurationSupplier implements Supplier<Configuration> 
 	 * @return {@code Configuration} object containing the language resource
 	 */
 	@Override
-	public Configuration get() {
+	public Configuration get()
+	{
 		return configuration;
 	}
 
@@ -66,7 +68,8 @@ public final class YamlConfigurationSupplier implements Supplier<Configuration> 
 	 * @return {@code ConfigurationSection} of the language resource pertaining to the enum constant parameter
 	 * @throws IllegalArgumentException if section parameter is null
 	 */
-	public ConfigurationSection getSection(final Section section) {
+	public ConfigurationSection getSection(final Section section)
+	{
 		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
 
 		return configuration.getConfigurationSection(section.name());

@@ -28,7 +28,7 @@ public class ValidationException extends IllegalArgumentException
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
 
 	private final MessageKey messageKey;
-	private final String paramterDisplayName;
+	private final String parameterDisplayName;
 	private final Object[] params;
 
 
@@ -36,7 +36,7 @@ public class ValidationException extends IllegalArgumentException
 	{
 		super(formatMessage(messageKey, parameter, params));
 		this.messageKey = messageKey;
-		this.paramterDisplayName = parameter.getDisplayName();
+		this.parameterDisplayName = parameter.getDisplayName();
 		this.params = params;
 	}
 
@@ -69,7 +69,7 @@ public class ValidationException extends IllegalArgumentException
 	{
 		ResourceBundle bundle = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, locale);
 		String pattern = bundle.getString(messageKey.name());
-		return MessageFormat.format(pattern, paramterDisplayName, params);
+		return MessageFormat.format(pattern, parameterDisplayName, params);
 	}
 
 }

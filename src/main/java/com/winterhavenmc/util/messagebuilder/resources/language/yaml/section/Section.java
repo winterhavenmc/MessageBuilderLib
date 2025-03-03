@@ -28,7 +28,8 @@ import java.util.EnumMap;
 /**
  * An enumeration of Sections that correspond directly to each top level {@code ConfigurationSection} of the language file.
  */
-public enum Section {
+public enum Section
+{
 	CONSTANTS(ConstantSectionQueryHandler.class, "Constant", "Constants", "CONST"),
 	ITEMS(ItemSectionQueryHandler.class, "Item", "Items", "ITEM"),
 	MESSAGES(MessageSectionQueryHandler.class, "Message", "Messages", "MSG"),

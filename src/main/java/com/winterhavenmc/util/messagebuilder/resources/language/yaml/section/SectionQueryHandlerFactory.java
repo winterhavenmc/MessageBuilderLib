@@ -32,8 +32,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate
  * A factory that produces section query handlers for each top level section of the language file,
  * as enumerated by the constants of the {@link Section} enum
  */
-public class SectionQueryHandlerFactory {
-
+public class SectionQueryHandlerFactory
+{
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
@@ -44,7 +44,8 @@ public class SectionQueryHandlerFactory {
 	 *
 	 * @param configurationSupplier the provider of the language configuration
 	 */
-	public SectionQueryHandlerFactory(YamlConfigurationSupplier configurationSupplier) {
+	public SectionQueryHandlerFactory(YamlConfigurationSupplier configurationSupplier)
+	{
 		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		this.configurationSupplier = configurationSupplier;
@@ -58,7 +59,8 @@ public class SectionQueryHandlerFactory {
 	 * @param section A constant of the Section enum specifying which SectionQueryHandler to return
 	 * @return The requested SectionQueryHandler
 	 */
-	public SectionQueryHandler getQueryHandler(Section section) {
+	public SectionQueryHandler getQueryHandler(Section section)
+	{
 		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
 
 		return section.getQueryHandler(configurationSupplier);
@@ -72,7 +74,8 @@ public class SectionQueryHandlerFactory {
 	 * @return the corresponding SectionQueryHandler
 	 * @throws ValidationException if section parameter is null
 	 */
-	public SectionQueryHandler createSectionHandler(Section section) {
+	public SectionQueryHandler createSectionHandler(Section section)
+	{
 		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
 
 		return section.getQueryHandler(configurationSupplier);
