@@ -20,8 +20,8 @@ package com.winterhavenmc.util.messagebuilder.resources.language;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 
 
-public interface LanguageResourceManager {
-
+public interface LanguageResourceManager
+{
 	/**
 	 * Retrieve the configuration supplier
 	 *

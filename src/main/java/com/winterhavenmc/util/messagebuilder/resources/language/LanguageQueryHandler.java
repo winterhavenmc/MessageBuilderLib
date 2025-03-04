@@ -22,8 +22,8 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Sec
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 
 
-public interface LanguageQueryHandler {
-
+public interface LanguageQueryHandler
+{
 	/**
 	 * Get a section query handler for a section type
 	 *
