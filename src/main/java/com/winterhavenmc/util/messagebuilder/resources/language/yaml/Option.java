@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-enum Option {
+enum Option
+{
 	CONFIG_LANGUAGE_KEY("language"),
 	CONFIG_LOCALE_KEY("locale"),
 	DEFAULT_LANGUAGE_TAG("en-US"),
