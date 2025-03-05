@@ -24,10 +24,13 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHan
  * Base for resource factories.
  * Implements common functionality for all resource factories.
  */
-public abstract class AbstractQueryHandlerFactory implements QueryHandlerFactory {
+public abstract class AbstractQueryHandlerFactory implements QueryHandlerFactory
+{
 	@Override
-	public LanguageQueryHandlerFactory getFactory(ResourceType resourceType) {
-		if (resourceType == ResourceType.LANGUAGE) {
+	public LanguageQueryHandlerFactory getFactory(ResourceType resourceType)
+	{
+		if (resourceType == ResourceType.LANGUAGE)
+		{
 			return createLanguageFactory();
 		}
 		throw new IllegalArgumentException("Unsupported ResourceType: " + resourceType);
