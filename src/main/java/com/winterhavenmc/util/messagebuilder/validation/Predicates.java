@@ -22,14 +22,15 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.function.Predicate;
 
-public class Predicates {
 
+public class Predicates
+{
 	private Predicates() { /* Private constructor to prevent instantiation */ }
 
 
-	public static Predicate<ConfigurationSection> sectionNameNotEqual(Section section) {
+	public static Predicate<ConfigurationSection> sectionNameNotEqual(Section section)
+	{
 		return s -> !section.name().equals(s.getName());
 	}
-
 
 }
