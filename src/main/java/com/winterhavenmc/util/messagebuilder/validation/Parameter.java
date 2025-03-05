@@ -43,6 +43,7 @@ public enum Parameter
 	RESOURCE_INSTALLER("resourceInstaller"),
 	RESOURCE_LOADER("resourceLoader"),
 	RESOURCE_NAME("resourceName"),
+	RESOURCE_TYPE("resourceType"),
 	SECTION("section"),
 	TARGET_DIR_PATH("targetDirPath"),
 	UNKNOWN("«UNKNOWN»"),
