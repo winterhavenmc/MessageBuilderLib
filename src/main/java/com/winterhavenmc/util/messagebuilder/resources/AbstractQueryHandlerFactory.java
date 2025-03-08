@@ -18,6 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_TYPE;
+import static com.winterhavenmc.util.messagebuilder.validation.Predicates.resourceTypeValid;
+import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
 /**
@@ -29,11 +35,11 @@ public abstract class AbstractQueryHandlerFactory implements QueryHandlerFactory
 	@Override
 	public LanguageQueryHandlerFactory getFactory(ResourceType resourceType)
 	{
-		if (resourceType == ResourceType.LANGUAGE)
-		{
-			return createLanguageFactory();
-		}
-		throw new IllegalArgumentException("Unsupported ResourceType: " + resourceType);
+		validate(resourceType,resourceTypeValid(resourceType), () -> new ValidationException(PARAMETER_INVALID, RESOURCE_TYPE));
+
+		return switch(resourceType) {
+			case ResourceType.LANGUAGE -> createLanguageFactory();
+		};
 	}
 
 	protected abstract LanguageQueryHandlerFactory createLanguageFactory();
