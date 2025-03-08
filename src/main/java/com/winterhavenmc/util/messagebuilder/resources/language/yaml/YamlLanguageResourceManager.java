@@ -124,7 +124,8 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 *
 	 * @return the configuration supplier
 	 */
-	public YamlConfigurationSupplier getConfigurationSupplier() {
+	public YamlConfigurationSupplier getConfigurationSupplier()
+	{
 		return configurationSupplier;
 	}
 
