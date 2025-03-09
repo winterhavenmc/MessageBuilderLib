@@ -24,7 +24,4 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHan
  * Abstract factory for resources.
  * Defines a method to get a resource-specific factory.
  */
-public interface QueryHandlerFactory
-{
-	LanguageQueryHandlerFactory getFactory(ResourceType resourceType);
-}
+public interface QueryHandlerFactory { }
