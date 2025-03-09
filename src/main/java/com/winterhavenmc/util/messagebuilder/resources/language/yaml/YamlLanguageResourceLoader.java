@@ -74,7 +74,7 @@ public final class YamlLanguageResourceLoader
 	{
 		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
 
-		return plugin.getConfig().getString(Option.CONFIG_LANGUAGE_KEY.toString());
+		return plugin.getConfig().getString(LanguageSetting.CONFIG_LANGUAGE_KEY.toString());
 	}
 
 

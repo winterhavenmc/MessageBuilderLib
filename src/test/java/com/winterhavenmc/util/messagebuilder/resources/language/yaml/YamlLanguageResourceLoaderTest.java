@@ -36,8 +36,8 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.DEFAULT_LANGUAGE_TAG;
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Option.RESOURCE_LANGUAGE_EN_US_YML;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.LanguageSetting.DEFAULT_LANGUAGE_TAG;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
