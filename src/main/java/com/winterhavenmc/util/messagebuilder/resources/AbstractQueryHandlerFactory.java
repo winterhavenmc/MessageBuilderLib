@@ -35,9 +35,10 @@ public abstract class AbstractQueryHandlerFactory implements QueryHandlerFactory
 	@Override
 	public LanguageQueryHandlerFactory getFactory(ResourceType resourceType)
 	{
-		validate(resourceType,resourceTypeValid(resourceType), () -> new ValidationException(PARAMETER_INVALID, RESOURCE_TYPE));
+		validate(resourceType, resourceTypeValid(resourceType), () -> new ValidationException(PARAMETER_INVALID, RESOURCE_TYPE));
 
-		return switch(resourceType) {
+		return switch(resourceType)
+		{
 			case ResourceType.LANGUAGE -> createLanguageFactory();
 		};
 	}
