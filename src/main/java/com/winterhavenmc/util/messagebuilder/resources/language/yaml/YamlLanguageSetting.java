@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-enum Option {
+enum YamlLanguageSetting
+{
 	CONFIG_LANGUAGE_KEY("language"),
 	CONFIG_LOCALE_KEY("locale"),
 	DEFAULT_LANGUAGE_TAG("en-US"),
@@ -28,7 +29,7 @@ enum Option {
 
 	private final String value;
 
-	Option(final String value) {
+	YamlLanguageSetting(final String value) {
 		this.value = value;
 	}
 

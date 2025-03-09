@@ -44,8 +44,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate
  * globally, anywhere within this library using this static method.
  * 
  */
-public final class YamlLanguageResourceManager implements LanguageResourceManager {
-
+public final class YamlLanguageResourceManager implements LanguageResourceManager
+{
 	private static YamlLanguageResourceManager instance;
 
 	private final YamlLanguageResourceLoader languageResourceLoader;
@@ -124,7 +124,8 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 *
 	 * @return the configuration supplier
 	 */
-	public YamlConfigurationSupplier getConfigurationSupplier() {
+	public YamlConfigurationSupplier getConfigurationSupplier()
+	{
 		return configurationSupplier;
 	}
 
