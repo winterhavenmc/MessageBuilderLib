@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandlerFactory;
-
 
 /**
  * Abstract factory for resources.
