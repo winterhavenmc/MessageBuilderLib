@@ -19,12 +19,15 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Objects;
 
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
@@ -50,9 +53,12 @@ public abstract class AbstractSectionQueryHandler implements SectionQueryHandler
 	}
 
 
-	public Object query(final String keyPath)
+	public ConfigurationSection query(final String key)
 	{
-		return configurationSupplier.getSection(section).getMapList(keyPath);
+		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
+
+		return configurationSupplier.getSection(section).getConfigurationSection(key);
 	}
 
 }
