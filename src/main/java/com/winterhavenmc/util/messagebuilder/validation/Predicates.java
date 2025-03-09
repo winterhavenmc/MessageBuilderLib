@@ -17,11 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-import com.winterhavenmc.util.messagebuilder.resources.ResourceType;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.Arrays;
 import java.util.function.Predicate;
 
 
@@ -35,9 +33,4 @@ public class Predicates
 		return s -> !section.name().equals(s.getName());
 	}
 
-
-	public static Predicate<ResourceType> resourceTypeValid(ResourceType resourceType)
-	{
-		return ignored -> Arrays.asList(ResourceType.values()).contains(resourceType);
-	}
 }
