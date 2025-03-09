@@ -53,7 +53,7 @@ class YamlLanguageResourceManagerTest {
 		pluginConfiguration.set("locale", "en-US");
 
 		// create real language configuration
-		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
+		languageConfiguration = MockUtility.loadConfigurationFromResource(YamlLanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// instantiate real language handler with mocked parameters
 		resourceManager = YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock);

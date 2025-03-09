@@ -25,8 +25,8 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.LanguageSetting.RESOURCE_AUTO_INSTALL;
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.LanguageSetting.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_AUTO_INSTALL;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_SUBDIRECTORY;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_TAG;
@@ -63,7 +63,7 @@ public final class YamlLanguageResourceInstaller
 
 	/**
 	 * Retrieve {@link Set} of resource filenames from a plain text resource in the language directory of the plugin jar.
-	 * The plain text resource name elements are currently set in the LanguageSetting enum. The valid pathname for the resource
+	 * The plain text resource name elements are currently set in the YamlLanguageSetting enum. The valid pathname for the resource
 	 * can be retrieved using the getAutoInstallResourcePath method of this class
 	 *
 	 * @param autoInstallPathName a {@code String} containing the resource path of the auto install plain text resource

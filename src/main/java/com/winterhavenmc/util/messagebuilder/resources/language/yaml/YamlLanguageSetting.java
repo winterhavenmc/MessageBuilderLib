@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-enum LanguageSetting
+enum YamlLanguageSetting
 {
 	CONFIG_LANGUAGE_KEY("language"),
 	CONFIG_LOCALE_KEY("locale"),
@@ -29,7 +29,7 @@ enum LanguageSetting
 
 	private final String value;
 
-	LanguageSetting(final String value) {
+	YamlLanguageSetting(final String value) {
 		this.value = value;
 	}
 

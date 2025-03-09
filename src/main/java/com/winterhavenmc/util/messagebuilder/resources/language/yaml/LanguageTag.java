@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 import java.io.File;
 import java.util.Locale;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.LanguageSetting.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_SUBDIRECTORY;
 
 
 public class LanguageTag
