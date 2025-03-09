@@ -19,10 +19,5 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 
-import java.util.Optional;
-
 @FunctionalInterface
-public interface SectionQueryHandler extends QueryHandler
-{
-	<T> Optional<T> getRecord(String messageId);
-}
+public interface SectionQueryHandler extends QueryHandler { }
