@@ -57,7 +57,6 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 		super(configurationSupplier, section, primaryType, handledTypes);
 		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
-		// get configuration supplier
 		this.configurationSupplier = configurationSupplier;
 	}
 
