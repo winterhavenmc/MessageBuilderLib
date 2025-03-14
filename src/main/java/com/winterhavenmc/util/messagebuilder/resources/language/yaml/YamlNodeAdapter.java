@@ -33,30 +33,64 @@ import java.util.stream.Collectors;
  */
 public class YamlNodeAdapter
 {
-	private final Supplier<Configuration> supplier;
+	private final YamlConfigurationSupplier configurationSupplier;
 
 
-	public YamlNodeAdapter(Supplier<Configuration> supplier)
+	/**
+	 * Class constructor. Takes YamlConfigurationSupplier as parameter
+	 *
+	 * @param configurationSupplier the Supplier containing a bukkit Configuration object
+	 */
+	public YamlNodeAdapter(final YamlConfigurationSupplier configurationSupplier)
 	{
-		this.supplier = supplier;
+		this.configurationSupplier = configurationSupplier;
 	}
 
 
+	/**
+	 * Get root node of YamlConfiguration
+	 *
+	 * @return Optional of YamlNode
+	 */
 	Optional<YamlNode> getRoot()
 	{
-		return fromBukkitObject(supplier.get());
+		return fromBukkitObject(configurationSupplier.get());
 	}
 
 
+	/**
+	 * Get root node of YamlConfiguration for Section type
+	 *
+	 * @param section enum constant representing the configuration section to use as root node
+	 * @return Optional YamlNode root for section
+	 */
 	Optional<YamlNode> getRoot(final Section section)
 	{
-		return fromBukkitObject(supplier.get().get(section.name()));
+		return fromBukkitObject(configurationSupplier.get().get(section.name()));
 	}
 
 
-	YamlNode getRootOrThrow() {
+	/**
+	 * Get root node of YamlConfiguration or throw IllegalStateException
+	 *
+	 * @return YamlNode the root node of the Configuration
+	 */
+	YamlNode getRootOrThrow()
+	{
 		return getRoot().orElseThrow(() ->
 				new IllegalStateException("Root YAML node could not be created."));
+	}
+
+
+	/**
+	 * Get root node of YamlConfiguration or throw IllegalStateException
+	 *
+	 * @return YamlNode the root node of the Configuration
+	 */
+	YamlNode getRootOrThrow(final Section section)
+	{
+		return fromBukkitObject(configurationSupplier.get().get(section.name()))
+				.orElseThrow(() -> new IllegalStateException("Root YAML node could not be created."));
 	}
 
 
@@ -67,7 +101,7 @@ public class YamlNodeAdapter
 	 * @param obj the bukkit yaml object to adapt
 	 * @return YamlNode object
 	 */
-	static Optional<YamlNode> fromBukkitObject(Object obj)
+	static Optional<YamlNode> fromBukkitObject(final Object obj)
 	{
 		return switch (obj)
 		{
