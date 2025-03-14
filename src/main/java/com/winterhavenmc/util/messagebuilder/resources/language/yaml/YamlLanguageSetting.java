@@ -17,6 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+
+/**
+ * Enum containing constants for various yaml parameters
+ */
 enum YamlLanguageSetting
 {
 	CONFIG_LANGUAGE_KEY("language"),
