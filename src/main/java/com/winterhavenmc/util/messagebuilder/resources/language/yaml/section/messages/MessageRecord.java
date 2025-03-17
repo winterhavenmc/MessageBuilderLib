@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -59,7 +60,7 @@ public record MessageRecord (
 		String subtitle,
 		String finalMessageString,
 		String finalTitleString,
-		String finalSubTitleString)
+		String finalSubTitleString) implements SectionRecord
 {
 
 	/**
