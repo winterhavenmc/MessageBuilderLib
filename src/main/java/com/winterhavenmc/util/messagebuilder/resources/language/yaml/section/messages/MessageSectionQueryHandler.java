@@ -18,14 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
-import org.bukkit.configuration.ConfigurationSection;
-
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -40,13 +36,10 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * message section.
  */
-public class MessageSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler
+public class MessageSectionQueryHandler implements SectionQueryHandler
 {
 	private final static Section section = Section.MESSAGES;
-	private final static Class<?> primaryType = MessageRecord.class;
-	private final static List<Class<?>> handledTypes = List.of(MessageRecord.class);
-
-	private final ConfigurationSection messageSection;
+	private final YamlConfigurationSupplier configurationSupplier;
 
 
 	/**
@@ -56,11 +49,9 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	 */
 	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier)
 	{
-		super(configurationSupplier, section, primaryType, handledTypes);
 		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
-		// set field from parameter
-		this.messageSection = configurationSupplier.getSection(Section.MESSAGES);
+		this.configurationSupplier = configurationSupplier;
 	}
 
 
@@ -70,12 +61,13 @@ public class MessageSectionQueryHandler extends AbstractSectionQueryHandler impl
 	 * @param key the MessageId of the message record to be retrieved
 	 * @return the message record for the MessageId
 	 */
-	public <T> Optional<T> getRecord(final String key)
+	@Override
+	public Optional<MessageRecord> getRecord(final String key)
 	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_NULL, KEY));
 
-		return (Optional<T>) MessageRecord.getRecord(key, messageSection);
+		return MessageRecord.getRecord(key, configurationSupplier.getSection(section));
 	}
 
 }
