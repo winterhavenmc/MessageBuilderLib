@@ -33,18 +33,25 @@ import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
 
 
-public final class MessageRetriever implements Retriever {
-
+public final class MessageRetriever implements Retriever
+{
 	private final LanguageQueryHandler languageQueryHandler;
 
 
-	public MessageRetriever(final LanguageQueryHandler languageQueryHandler) {
+	/**
+	 * Class constructor
+	 *
+	 * @param languageQueryHandler the query handler to be used to retrieve a message record
+	 */
+	public MessageRetriever(final LanguageQueryHandler languageQueryHandler)
+	{
 		this.languageQueryHandler = languageQueryHandler;
 	}
 
 
 	@Override
-	public Optional<MessageRecord> getRecord(String key) {
+	public Optional<MessageRecord> getRecord(String key)
+	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
