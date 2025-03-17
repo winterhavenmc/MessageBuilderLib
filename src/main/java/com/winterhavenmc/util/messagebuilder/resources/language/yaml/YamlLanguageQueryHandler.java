@@ -32,7 +32,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate
 
 public class YamlLanguageQueryHandler implements LanguageQueryHandler
 {
-	private final YamlConfigurationSupplier yamlConfigurationSupplier;
+	private final YamlConfigurationSupplier configurationSupplier;
 
 	/**
 	 * Class constructor
@@ -43,7 +43,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler
 	{
 		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
-		this.yamlConfigurationSupplier = configurationSupplier;
+		this.configurationSupplier = configurationSupplier;
 	}
 
 
@@ -52,7 +52,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler
 	{
 		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
 
-		return section.getQueryHandler(yamlConfigurationSupplier);
+		return section.getQueryHandler(configurationSupplier);
 	}
 
 
@@ -62,7 +62,7 @@ public class YamlLanguageQueryHandler implements LanguageQueryHandler
 	@Override
 	public YamlConfigurationSupplier getConfigurationSupplier()
 	{
-		return yamlConfigurationSupplier;
+		return configurationSupplier;
 	}
 
 }
