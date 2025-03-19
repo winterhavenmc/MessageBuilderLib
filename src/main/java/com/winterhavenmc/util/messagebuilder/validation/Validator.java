@@ -17,4 +17,27 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-public interface Validator { }
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+public interface Validator
+{
+	/**
+	 * Test value using predicate and throw supplied exception if test fails
+	 *
+	 * @param value the value to validate
+	 * @param predicate the test to be performed to validate the value
+	 * @param exceptionSupplier an exception supplier containing the exception to be thrown
+	 * @return the passed value, for use in functional chains
+	 * @param <T> the type of the passed value
+	 */
+	static <T> T validate(T value, Predicate<T> predicate, Supplier<RuntimeException> exceptionSupplier)
+	{
+		if (predicate.test(value))
+		{
+			throw exceptionSupplier.get(); // Throws from the call site
+		}
+		return value; // Pass through the valid value for functional chains
+	}
+
+}
