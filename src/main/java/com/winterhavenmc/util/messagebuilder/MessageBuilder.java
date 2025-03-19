@@ -44,7 +44,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.RELOAD
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_ID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**

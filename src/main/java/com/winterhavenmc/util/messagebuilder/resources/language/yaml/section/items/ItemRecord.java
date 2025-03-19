@@ -32,7 +32,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.ITEM_SECTION;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Predicates.sectionNameNotEqual;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**

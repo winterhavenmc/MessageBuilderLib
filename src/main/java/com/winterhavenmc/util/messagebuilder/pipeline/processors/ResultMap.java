@@ -29,7 +29,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAME
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.VALUE;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public class ResultMap

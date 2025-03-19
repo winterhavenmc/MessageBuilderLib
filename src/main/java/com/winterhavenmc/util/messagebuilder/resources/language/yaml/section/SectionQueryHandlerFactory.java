@@ -25,7 +25,7 @@ import java.util.Objects;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.SECTION;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
