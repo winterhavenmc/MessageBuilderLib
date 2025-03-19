@@ -17,19 +17,4 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
-public interface Validator
-{
-
-	static <T> T staticValidate(T value, Predicate<T> predicate, Supplier<RuntimeException> exceptionSupplier)
-	{
-		if (predicate.test(value))
-		{
-			throw exceptionSupplier.get(); // Throws from the call site!
-		}
-		return value; // Pass through the valid value for functional chains.
-	}
-
-}
+public interface Validator { }
