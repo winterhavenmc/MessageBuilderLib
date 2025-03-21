@@ -35,38 +35,25 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public enum Section
 {
-	CONSTANTS(ConstantSectionQueryHandler::new, "Constant", "Constants", "CONST"),
-	ITEMS(ItemSectionQueryHandler::new, "Item", "Items", "ITEM"),
-	MESSAGES(MessageSectionQueryHandler::new, "Message", "Messages", "MSG"),
+	CONSTANTS(ConstantSectionQueryHandler::new),
+	ITEMS(ItemSectionQueryHandler::new),
+	MESSAGES(MessageSectionQueryHandler::new),
 	;
 
 	// Enum map serves as a cache for instances of query handlers
 	private static final EnumMap<Section, QueryHandler<?>> HANDLER_MAP = new EnumMap<>(Section.class);
 
 	private final Function<YamlConfigurationSupplier, ? extends QueryHandler<? extends SectionRecord>> handlerFactory;
-	private final String singularName;
-	private final String pluralName;
-	private final String mnemonic;
 
 
 	/**
 	 * Constructor for enum constant instances
 	 *
 	 * @param handlerFactory the Class of {@link QueryHandler} that is immutably bound to this enum constant
-	 * @param singularName   the singular name of this section (ex: Item)
-	 * @param pluralName     the plural name for this section (ex: Items)
-	 * @param mnemonic       the short mnemonic for this section. To be used in key generation, or other programmatic purposes.
 	 */
-	<R extends SectionRecord> Section(
-			final Function<YamlConfigurationSupplier, QueryHandler<R>> handlerFactory,
-			final String singularName,
-			final String pluralName,
-			final String mnemonic)
+	<R extends SectionRecord> Section(final Function<YamlConfigurationSupplier, QueryHandler<R>> handlerFactory)
 	{
 		this.handlerFactory = handlerFactory;
-		this.singularName = singularName;
-		this.pluralName = pluralName;
-		this.mnemonic = mnemonic;
 	}
 
 
@@ -85,37 +72,6 @@ public enum Section
 		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		return (QueryHandler<R>) HANDLER_MAP.computeIfAbsent(this, section -> handlerFactory.apply(configurationSupplier));
-	}
-
-
-	/**
-	 * Retrieve the singular, pretty formatted name for this enum constant
-	 *
-	 * @return the formatted singular name for this enum constant
-	 */
-	public String getSingularName()
-	{
-		return singularName;
-	}
-
-	/**
-	 * Retrieve the plural, pretty formatted name for this enum constant
-	 *
-	 * @return the formatted plural name for this enum constant
-	 */
-	public String getPluralName()
-	{
-		return pluralName;
-	}
-
-	/**
-	 * Retrieve the mnemonic abbreviation for this enum constant
-	 *
-	 * @return the mnemonic for this enum constant
-	 */
-	public String getMnemonic()
-	{
-		return mnemonic;
 	}
 
 }
