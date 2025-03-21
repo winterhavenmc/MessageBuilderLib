@@ -42,8 +42,7 @@ import java.util.ResourceBundle;
 
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_ID;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -116,6 +115,8 @@ public final class MessageBuilder
 	 */
 	public static MessageBuilder create(final Plugin plugin)
 	{
+		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
+
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
 		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
 		LanguageResourceManager languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
@@ -137,15 +138,19 @@ public final class MessageBuilder
 	 * Its visibility is restricted to package-private, so it cannot be used to instantiate an instance of the class
 	 * from outside its package.
 	 *
-	 * @param pluginMock a mock plugin instance
-	 * @param languageResourceManagerMock a mock language resource manager instance
+	 * @param plugin a mock plugin instance
+	 * @param languageResourceManager a mock language resource manager instance
 	 * @return an instance of this class, instantiated with the mock objects
 	 */
-	static MessageBuilder test(final Plugin pluginMock,
-         final YamlLanguageResourceManager languageResourceManagerMock,
+	static MessageBuilder test(final Plugin plugin,
+         final YamlLanguageResourceManager languageResourceManager,
          final MessageProcessor messageProcessor)
 	{
-		return new MessageBuilder(pluginMock, languageResourceManagerMock, messageProcessor);
+		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
+		validate(languageResourceManager, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
+		validate(messageProcessor, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_PROCESSOR));
+
+		return new MessageBuilder(plugin, languageResourceManager, messageProcessor);
 	}
 
 
