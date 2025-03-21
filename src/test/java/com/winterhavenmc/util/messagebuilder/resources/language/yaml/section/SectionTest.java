@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
@@ -31,50 +32,38 @@ import static org.junit.jupiter.api.Assertions.*;
 class SectionTest {
 
 
-	@Test
-	void getSingularName() {
-		assertEquals("Constant", Section.CONSTANTS.getSingularName());
-		assertEquals("Item", Section.ITEMS.getSingularName());
-		assertEquals("Message", Section.MESSAGES.getSingularName());
-	}
-
-	@Test
-	void getPluralName() {
-		assertEquals("Constants", Section.CONSTANTS.getPluralName());
-		assertEquals("Items", Section.ITEMS.getPluralName());
-		assertEquals("Messages", Section.MESSAGES.getPluralName());
-	}
-
-	@Test
-	void getMnemonic() {
-		assertEquals("CONST", Section.CONSTANTS.getMnemonic());
-		assertEquals("ITEM", Section.ITEMS.getMnemonic());
-		assertEquals("MSG", Section.MESSAGES.getMnemonic());
-	}
-
 	@ParameterizedTest
 	@EnumSource
-	void getQueryHandler(Section section) {
+	void getQueryHandler(Section section)
+	{
 		// Arrange
 		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
 
-		// Act & Assert
-		assertNotNull(section.createHandler(configurationSupplier));
+		// Act
+		QueryHandler<SectionRecord> queryHandler = section.createHandler(configurationSupplier);
+
+		// Assert
+		assertNotNull(queryHandler);
 	}
 
+
 	@Test
-	void values() {
+	void values()
+	{
 		Section[] values = Section.values();
 		assertEquals(Section.CONSTANTS, values[0]);
 		assertEquals(Section.ITEMS, values[1]);
 		assertEquals(Section.MESSAGES, values[2]);
 	}
 
+
 	@Test
-	void valueOf() {
+	void valueOf()
+	{
 		assertEquals(Section.CONSTANTS, Section.valueOf("CONSTANTS"));
 		assertEquals(Section.ITEMS, Section.valueOf("ITEMS"));
 		assertEquals(Section.MESSAGES, Section.valueOf("MESSAGES"));
 	}
+
 }
