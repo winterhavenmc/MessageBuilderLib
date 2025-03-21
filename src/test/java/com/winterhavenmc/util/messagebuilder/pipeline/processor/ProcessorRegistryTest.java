@@ -20,10 +20,11 @@ package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.DependencyContext;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ProcessorRegistry;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ProcessorType;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -34,7 +35,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProcessorRegistryTest {
 
 	@Mock
-	YamlLanguageQueryHandler queryHandler;
 	ProcessorRegistry processorRegistry;
 
 	@BeforeEach

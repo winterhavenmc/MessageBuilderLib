@@ -17,11 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants;
 
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +35,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 /**
  * Query handler for the 'CONSTANTS' section of the language file.
  */
-public class ConstantSectionQueryHandler implements SectionQueryHandler
+public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 {
 	private final static Section section = Section.CONSTANTS;
 	private final YamlConfigurationSupplier configurationSupplier;

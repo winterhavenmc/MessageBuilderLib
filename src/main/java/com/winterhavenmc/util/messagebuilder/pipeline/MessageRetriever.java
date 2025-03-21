@@ -17,11 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
@@ -35,17 +32,17 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 
 public final class MessageRetriever implements Retriever
 {
-	private final LanguageQueryHandler languageQueryHandler;
+	private final QueryHandler<MessageRecord> queryHandler;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param languageQueryHandler the query handler to be used to retrieve a message record
+	 * @param queryHandler the query handler to be used to retrieve a message record
 	 */
-	public MessageRetriever(final LanguageQueryHandler languageQueryHandler)
+	public MessageRetriever(final QueryHandler<MessageRecord> queryHandler)
 	{
-		this.languageQueryHandler = languageQueryHandler;
+		this.queryHandler = queryHandler;
 	}
 
 
@@ -55,11 +52,9 @@ public final class MessageRetriever implements Retriever
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
-		SectionQueryHandler sectionQueryHandler = languageQueryHandler.getSectionQueryHandler(Section.MESSAGES);
-		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
-			return messageSectionQueryHandler.getRecord(key);
-		}
-		return Optional.empty();
+		return queryHandler.getRecord(key);
+//				.filter(MessageRecord.class::isInstance)
+//				.map(MessageRecord.class::cast);
 	}
 
 }

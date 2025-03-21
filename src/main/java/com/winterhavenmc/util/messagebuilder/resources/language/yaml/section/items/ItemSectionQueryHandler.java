@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -38,7 +38,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * item section.
  */
-public class ItemSectionQueryHandler implements SectionQueryHandler
+public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 {
 	private final static Section section = Section.ITEMS;
 	private final YamlConfigurationSupplier configurationSupplier;

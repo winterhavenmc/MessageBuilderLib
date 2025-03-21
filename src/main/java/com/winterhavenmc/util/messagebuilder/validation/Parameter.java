@@ -39,6 +39,7 @@ public enum Parameter
 	MESSAGE_STRING("messageString"),
 	PLUGIN("plugin"),
 	RECIPIENT("recipient"),
+	RECORD_TYPE("recordType"),
 	REPLACEMENT_MAP("replacementMap"),
 	RESOURCE_INSTALLER("resourceInstaller"),
 	RESOURCE_LOADER("resourceLoader"),

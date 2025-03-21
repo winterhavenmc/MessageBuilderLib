@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
@@ -36,9 +36,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * message section.
  */
-public class MessageSectionQueryHandler implements SectionQueryHandler
+public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 {
-	private final static Section section = Section.MESSAGES;
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
@@ -67,7 +66,7 @@ public class MessageSectionQueryHandler implements SectionQueryHandler
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_NULL, KEY));
 
-		return MessageRecord.getRecord(key, configurationSupplier.getSection(section));
+		return MessageRecord.getRecord(key, configurationSupplier.getSection(Section.MESSAGES));
 	}
 
 }

@@ -23,7 +23,7 @@ import java.util.Optional;
  * This interface declares the most general type of query handler.
  * Classes implementing this interface must have a query method.
  */
-public interface QueryHandler
+public interface QueryHandler<R extends Record>
 {
-	<R> Optional<R> getRecord(String key);
+	Optional<R> getRecord(String key);
 }
