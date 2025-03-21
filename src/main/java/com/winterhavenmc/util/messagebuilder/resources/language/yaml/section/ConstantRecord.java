@@ -15,31 +15,6 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-public class QueryResult {
-
-	private final Object object;
-	private final Class<?> objectClass;
-	private final QueryResultStatus status;
-
-
-	public QueryResult(final Object object, final Class<?> objectClass, final QueryResultStatus status) {
-		this.object = object;
-		this.objectClass = objectClass;
-		this.status = status;
-	}
-
-	public Object getObject() {
-		return object;
-	}
-
-	public Class<?> getObjectClass() {
-		return objectClass;
-	}
-
-	public QueryResultStatus getStatus() {
-		return status;
-	}
-
-}
+public record ConstantRecord(String key, Object obj) implements SectionRecord { }

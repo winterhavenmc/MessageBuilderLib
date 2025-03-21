@@ -15,9 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;

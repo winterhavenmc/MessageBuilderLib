@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 
 
 public class QueryHandlerFactory
@@ -43,7 +44,7 @@ public class QueryHandlerFactory
 	 * @param section the section for which a query handler is returned
 	 * @return a query handler for the section
 	 */
-	public <R extends Record> QueryHandler<R> getQueryHandler(Section section)
+	public <R extends SectionRecord> QueryHandler<R> getQueryHandler(Section section)
 	{
 		return section.createHandler(configurationSupplier);
 	}

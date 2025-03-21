@@ -19,9 +19,6 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.EnumMap;
@@ -46,11 +43,10 @@ public enum Section
 	// Enum map serves as a cache for instances of query handlers
 	private static final EnumMap<Section, QueryHandler<?>> HANDLER_MAP = new EnumMap<>(Section.class);
 
-	private final Function<YamlConfigurationSupplier, ? extends QueryHandler<? extends Record>> handlerFactory;
+	private final Function<YamlConfigurationSupplier, ? extends QueryHandler<? extends SectionRecord>> handlerFactory;
 	private final String singularName;
 	private final String pluralName;
 	private final String mnemonic;
-//	private final Predicate<Class<? extends Record>> matchesSectionType;
 
 
 	/**
@@ -61,7 +57,7 @@ public enum Section
 	 * @param pluralName     the plural name for this section (ex: Items)
 	 * @param mnemonic       the short mnemonic for this section. To be used in key generation, or other programmatic purposes.
 	 */
-	<R extends Record> Section(
+	<R extends SectionRecord> Section(
 			final Function<YamlConfigurationSupplier, QueryHandler<R>> handlerFactory,
 			final String singularName,
 			final String pluralName,
@@ -71,7 +67,6 @@ public enum Section
 		this.singularName = singularName;
 		this.pluralName = pluralName;
 		this.mnemonic = mnemonic;
-//		this.matchesSectionType = type -> type.equals(this.recordType);
 	}
 
 
@@ -86,7 +81,7 @@ public enum Section
 	 * @param <R> the specific type of the section query handler being returned
 	 */
 	@SuppressWarnings("unchecked")
-	public <R extends Record> QueryHandler<R> createHandler(YamlConfigurationSupplier configurationSupplier) {
+	public <R extends SectionRecord> QueryHandler<R> createHandler(YamlConfigurationSupplier configurationSupplier) {
 		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		return (QueryHandler<R>) HANDLER_MAP.computeIfAbsent(this, section -> handlerFactory.apply(configurationSupplier));

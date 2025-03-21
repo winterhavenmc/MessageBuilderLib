@@ -15,9 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
