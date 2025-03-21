@@ -45,8 +45,8 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MessageBuilderTest {
-
+class MessageBuilderTest
+{
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
 
@@ -61,7 +61,8 @@ class MessageBuilderTest {
 
 
 	@BeforeEach
-	void setUp() {
+	void setUp()
+	{
 		// load configuration from resource
 		pluginConfiguration = new YamlConfiguration();
 		pluginConfiguration.set("language", "en-US");
@@ -74,7 +75,8 @@ class MessageBuilderTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	public void tearDown()
+	{
 		playerMock = null;
 		pluginMock = null;
 		pluginConfiguration = null;
@@ -86,12 +88,15 @@ class MessageBuilderTest {
 
 
 	@Test
-	void testTickUnit() {
+	void testTickUnit()
+	{
 		assertEquals(Duration.ofMillis(50), TICKS.getDuration());
 	}
 
+
 	@Test
-	void compose() {
+	void compose()
+	{
 		// Arrange & Act
 		Message message = messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE);
 
@@ -99,8 +104,10 @@ class MessageBuilderTest {
 		assertNotNull(message);
 	}
 
+
 	@Test
-	void compose_parameter_null_player() {
+	void compose_parameter_null_player()
+	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
@@ -109,8 +116,10 @@ class MessageBuilderTest {
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}
 
+
 	@Test
-	void compose_parameter_null_message_id() {
+	void compose_parameter_null_message_id()
+	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> messageBuilder.compose(playerMock, null));
@@ -121,7 +130,8 @@ class MessageBuilderTest {
 
 
 	@Test
-	void reload() {
+	void reload()
+	{
 		when(languageResourceManagerMock.reload()).thenReturn(true);
 
 		messageBuilder.reload();
@@ -129,8 +139,10 @@ class MessageBuilderTest {
 		verify(languageResourceManagerMock, atLeastOnce()).reload();
 	}
 
+
 	@Test
-	void reload_failed() {
+	void reload_failed()
+	{
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
 		messageBuilder.reload();
@@ -138,8 +150,10 @@ class MessageBuilderTest {
 		verify(languageResourceManagerMock, atLeastOnce()).reload();
 	}
 
+
 	@Test
-	void testCreate() {
+	void testCreate()
+	{
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
@@ -149,6 +163,60 @@ class MessageBuilderTest {
 
 		// Assert
 		assertNotNull(messageBuilder1);
+	}
+
+
+	@Test
+	void testCreate_parameter_null_plugin()
+	{
+		// Arrange & Act
+		ValidationException exception = assertThrows(ValidationException.class,
+				() -> MessageBuilder.create(null));
+
+		// Assert
+		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void test_parameter_null_plugin()
+	{
+		// Arrange & Act
+		ValidationException exception = assertThrows(ValidationException.class,
+				() -> MessageBuilder.test(null,
+						languageResourceManagerMock,
+						messageProcessorMock));
+
+		// Assert
+		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void test_parameter_null_languageResourceManager()
+	{
+		// Arrange & Act
+		ValidationException exception = assertThrows(ValidationException.class,
+				() -> MessageBuilder.test(pluginMock,
+						null,
+						messageProcessorMock));
+
+		// Assert
+		assertEquals("The parameter 'languageResourceManager' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void test_parameter_null_messageProcessor()
+	{
+		// Arrange & Act
+		ValidationException exception = assertThrows(ValidationException.class,
+				() -> MessageBuilder.test(pluginMock,
+						languageResourceManagerMock,
+						null));
+
+		// Assert
+		assertEquals("The parameter 'messageProcessor' cannot be null.", exception.getMessage());
 	}
 
 }
