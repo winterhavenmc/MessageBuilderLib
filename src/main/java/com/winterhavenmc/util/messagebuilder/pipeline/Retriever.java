@@ -22,7 +22,8 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Mes
 import java.util.Optional;
 
 
-public sealed interface Retriever permits MessageRetriever
+@FunctionalInterface
+public interface Retriever
 {
 	Optional<MessageRecord> getRecord(String key);
 }
