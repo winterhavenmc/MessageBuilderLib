@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.logging.Logger;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller.WHITESPACE;
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller.*;
 import static com.winterhavenmc.util.messagebuilder.util.MockUtility.*;
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.DEFAULT_LANGUAGE_TAG;
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,13 +73,38 @@ public class YamlLanguageResourceInstallerTest
 	}
 
 
-	@Test
-	public void testRegExWhitespacePattern()
+	@Nested
+	class PatternTests
 	{
-		String whitespace = "this string contains \t whitespace";
-		String nonWhitespace = "nonwhitespace";
-		assertTrue(WHITESPACE.matcher(whitespace).find());
-		assertFalse(WHITESPACE.matcher(nonWhitespace).find());
+		@Test
+		void testWhitespacePattern()
+		{
+			assertTrue(WHITESPACE.matcher(" ").find());
+			assertTrue(WHITESPACE.matcher("\t").find());
+			assertTrue(WHITESPACE.matcher("\n").find());
+			assertFalse(WHITESPACE.matcher("abc").find());
+		}
+
+		@Test
+		void testTwoOrMoreDotsPattern() {
+			assertTrue(TWO_OR_MORE_DOTS.matcher("..").find());
+			assertTrue(TWO_OR_MORE_DOTS.matcher("abc...def").find());
+			assertFalse(TWO_OR_MORE_DOTS.matcher(".").find());
+		}
+
+		@Test
+		void testLeadingSlashesPattern() {
+			assertTrue(LEADING_SLASHES.matcher("/abc").find());
+			assertTrue(LEADING_SLASHES.matcher("//xyz").find());
+			assertFalse(LEADING_SLASHES.matcher("abc/xyz").find());
+		}
+
+		@Test
+		void testTwoOrMoreSlashesPattern() {
+			assertTrue(TWO_OR_MORE_SLASHES.matcher("//").find());
+			assertTrue(TWO_OR_MORE_SLASHES.matcher("http://example.com").find());
+			assertFalse(TWO_OR_MORE_SLASHES.matcher("/").find());
+		}
 	}
 
 
