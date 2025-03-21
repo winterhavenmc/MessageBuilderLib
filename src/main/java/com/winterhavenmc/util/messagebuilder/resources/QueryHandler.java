@@ -21,10 +21,12 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Sec
 
 import java.util.Optional;
 
+
 /**
  * This interface declares the most general type of query handler.
  * Classes implementing this interface must have a query method.
  */
+@FunctionalInterface
 public interface QueryHandler<R extends SectionRecord>
 {
 	Optional<R> getRecord(String key);
