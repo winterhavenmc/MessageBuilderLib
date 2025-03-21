@@ -17,13 +17,15 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
+
 import java.util.Optional;
 
 /**
  * This interface declares the most general type of query handler.
  * Classes implementing this interface must have a query method.
  */
-public interface QueryHandler<R extends Record>
+public interface QueryHandler<R extends SectionRecord>
 {
 	Optional<R> getRecord(String key);
 }

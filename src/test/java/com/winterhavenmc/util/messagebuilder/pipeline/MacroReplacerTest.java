@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.Message;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.Material;

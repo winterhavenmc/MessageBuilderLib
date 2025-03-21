@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.*;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.command.CommandSender;

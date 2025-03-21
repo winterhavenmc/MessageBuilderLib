@@ -17,4 +17,4 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-public interface SectionRecord { }
+public sealed interface SectionRecord permits ConstantRecord, ItemRecord, MessageRecord { }
