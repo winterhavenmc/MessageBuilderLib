@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 
@@ -31,7 +32,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.ITEM_SECTION;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Predicates.sectionNameNotEqual;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -51,7 +52,7 @@ public record ItemRecord(
 		Optional<String> namePlural,
 		Optional<String> inventoryItemSingular,
 		Optional<String> inventoryItemPlural,
-		List<String> itemLore) implements Pluralizable
+		List<String> itemLore) implements SectionRecord, Pluralizable
 {
 
 

@@ -15,10 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants;
 
-import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 
-public interface LanguageQueryHandlerFactory extends QueryHandlerFactory {
-
-}
+public record ConstantRecord(String key, Object obj) implements SectionRecord { }

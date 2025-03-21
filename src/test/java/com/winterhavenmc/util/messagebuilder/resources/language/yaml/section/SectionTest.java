@@ -18,11 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants.ConstantSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items.ItemSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+
 import org.bukkit.configuration.Configuration;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -31,13 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SectionTest {
 
-
-	@Test
-	void getHandlerClass() {
-		assertEquals(ConstantSectionQueryHandler.class, Section.CONSTANTS.getHandlerClass());
-		assertEquals(ItemSectionQueryHandler.class, Section.ITEMS.getHandlerClass());
-		assertEquals(MessageSectionQueryHandler.class, Section.MESSAGES.getHandlerClass());
-	}
 
 	@Test
 	void getSingularName() {
@@ -68,7 +60,7 @@ class SectionTest {
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
 
 		// Act & Assert
-		assertNotNull(section.getQueryHandler(configurationSupplier));
+		assertNotNull(section.createHandler(configurationSupplier));
 	}
 
 	@Test

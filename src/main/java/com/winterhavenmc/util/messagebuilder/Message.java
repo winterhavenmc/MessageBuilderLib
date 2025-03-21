@@ -28,8 +28,7 @@ import java.util.Objects;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MACRO;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.VALUE;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.staticValidate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -71,7 +70,7 @@ public final class Message
 	public <K extends Enum<K>, V> Message setMacro(final K macro, final V value)
 	{
 		validate(macro, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MACRO));
-		staticValidate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
+		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
 		// put value into context map using macro enum constant name as key
@@ -95,7 +94,7 @@ public final class Message
 	public <K extends Enum<K>, V> Message setMacro(int quantity, final K macro, final V value)
 	{
 		validate(macro, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MACRO));
-		staticValidate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
+		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
 		// put value into context map using macro enum constant name for key

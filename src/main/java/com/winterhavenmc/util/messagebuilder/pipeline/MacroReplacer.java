@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**

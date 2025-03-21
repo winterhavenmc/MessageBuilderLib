@@ -17,23 +17,20 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.items;
 
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.SECTION;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -41,12 +38,9 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * item section.
  */
-public class ItemSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler
+public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 {
 	private final static Section section = Section.ITEMS;
-	private final static Class<?> primaryType = ItemRecord.class;
-	private final static List<Class<?>> handledTypes = List.of(ItemRecord.class);
-
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
@@ -57,10 +51,7 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 	 */
 	public ItemSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier)
 	{
-		super(configurationSupplier, section, primaryType, handledTypes);
-
-		// check that 'ITEMS' section returned by the configuration supplier is not null
-		validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
+		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		this.configurationSupplier = configurationSupplier;
 	}
@@ -73,17 +64,18 @@ public class ItemSectionQueryHandler extends AbstractSectionQueryHandler impleme
 	 * @param key the keyPath for the item record in the language file
 	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
 	 */
-	public <T> Optional<T> getRecord(final String key)
+	@Override
+	public Optional<ItemRecord> getRecord(final String key)
 	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
 		// get configuration section for item key
-		ConfigurationSection itemEntry = configurationSupplier.getSection(Section.ITEMS).getConfigurationSection(key);
+		ConfigurationSection itemEntry = configurationSupplier.getSection(section).getConfigurationSection(key);
 		if (itemEntry == null) { return Optional.empty(); }
 
 		// return new ItemRecord
-		return (Optional<T>) ItemRecord.getRecord(key, configurationSupplier.getSection(Section.ITEMS));
+		return ItemRecord.getRecord(key, configurationSupplier.getSection(section));
 	}
 
 }

@@ -132,8 +132,8 @@ class ConstantSectionQueryHandlerTest {
 	}
 
 	@Test
-	void testGetRecord() {
-		assertEquals(Optional.empty(), queryHandler.getRecord("KEY"));
+	void testGetRecord_key_invalid() {
+		assertEquals(Optional.empty(), queryHandler.getRecord("INVALID_KEY"));
 	}
 
 }

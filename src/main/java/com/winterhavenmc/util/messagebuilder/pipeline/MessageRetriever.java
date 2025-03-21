@@ -17,11 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
@@ -30,29 +27,34 @@ import java.util.Optional;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
-public final class MessageRetriever implements Retriever {
+public final class MessageRetriever implements Retriever
+{
+	private final QueryHandler<MessageRecord> queryHandler;
 
-	private final LanguageQueryHandler languageQueryHandler;
 
-
-	public MessageRetriever(final LanguageQueryHandler languageQueryHandler) {
-		this.languageQueryHandler = languageQueryHandler;
+	/**
+	 * Class constructor
+	 *
+	 * @param queryHandler the query handler to be used to retrieve a message record
+	 */
+	public MessageRetriever(final QueryHandler<MessageRecord> queryHandler)
+	{
+		this.queryHandler = queryHandler;
 	}
 
 
 	@Override
-	public Optional<MessageRecord> getRecord(String key) {
+	public Optional<MessageRecord> getRecord(String key)
+	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
-		SectionQueryHandler sectionQueryHandler = languageQueryHandler.getSectionQueryHandler(Section.MESSAGES);
-		if (sectionQueryHandler instanceof MessageSectionQueryHandler messageSectionQueryHandler) {
-			return messageSectionQueryHandler.getRecord(key);
-		}
-		return Optional.empty();
+		return queryHandler.getRecord(key);
+//				.filter(MessageRecord.class::isInstance)
+//				.map(MessageRecord.class::cast);
 	}
 
 }

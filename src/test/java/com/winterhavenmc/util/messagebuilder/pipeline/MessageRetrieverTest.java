@@ -18,10 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
@@ -37,27 +37,26 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class MessageRetrieverTest {
 
-	@Mock LanguageQueryHandler languageQueryHandlerMock;
+	@Mock QueryHandler<MessageRecord> queryHandlerMock;
 
 	@AfterEach
 	void tearDown() {
-		this.languageQueryHandlerMock = null;
+		this.queryHandlerMock = null;
 	}
 
 
 	@Test
 	void getRecord() {
-		Retriever retriever = new MessageRetriever(languageQueryHandlerMock);
 		// Arrange
 		FileConfiguration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		when(languageQueryHandlerMock.getSectionQueryHandler(Section.MESSAGES)).thenReturn(Section.MESSAGES.getQueryHandler(configurationSupplier));
+		QueryHandler<MessageRecord> queryHandler = new MessageSectionQueryHandler(configurationSupplier);
+		Retriever retriever = new MessageRetriever(queryHandler);
 
 		// Act
 		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name());
@@ -65,14 +64,12 @@ class MessageRetrieverTest {
 		// Assert
 		assertNotNull(messageRecord);
 		assertTrue(messageRecord.isPresent());
-
-		// Verify
-		verify(languageQueryHandlerMock, atLeastOnce()).getSectionQueryHandler(Section.MESSAGES);
+		assertEquals("This is an enabled message", messageRecord.get().message());
 	}
 
 	@Test
 	void getRecord_section_query_handler_null() {
-		Retriever retriever = new MessageRetriever(languageQueryHandlerMock);
+		Retriever retriever = new MessageRetriever(queryHandlerMock);
 
 		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name());
 		assertNotNull(messageRecord);
@@ -81,7 +78,7 @@ class MessageRetrieverTest {
 
 	@Test
 	void getMessageRecord_parameter_null_Id() {
-		Retriever retriever = new MessageRetriever(languageQueryHandlerMock);
+		Retriever retriever = new MessageRetriever(queryHandlerMock);
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> retriever.getRecord(null));
 

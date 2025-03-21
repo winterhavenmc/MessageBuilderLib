@@ -31,7 +31,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAME
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_NAME;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.TARGET_DIR_PATH;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public final class MockUtility {

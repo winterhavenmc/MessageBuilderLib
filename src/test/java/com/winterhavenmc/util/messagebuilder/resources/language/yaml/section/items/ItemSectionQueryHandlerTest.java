@@ -59,7 +59,7 @@ class ItemSectionQueryHandlerTest {
 
 	@Test
 	void testConstructor_parameter_null() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new ItemSectionQueryHandler(null));
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
 	}

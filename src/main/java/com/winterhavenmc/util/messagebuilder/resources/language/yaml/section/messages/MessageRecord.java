@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.messages;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -30,7 +31,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_SECTION;
 import static com.winterhavenmc.util.messagebuilder.validation.Predicates.sectionNameNotEqual;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -59,7 +60,7 @@ public record MessageRecord (
 		String subtitle,
 		String finalMessageString,
 		String finalTitleString,
-		String finalSubTitleString)
+		String finalSubTitleString) implements SectionRecord
 {
 
 	/**

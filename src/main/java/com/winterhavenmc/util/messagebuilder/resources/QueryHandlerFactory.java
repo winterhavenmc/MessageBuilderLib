@@ -17,11 +17,35 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageQueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 
 
-/**
- * Abstract factory for resources.
- * Defines a method to get a resource-specific factory.
- */
-public interface QueryHandlerFactory { }
+public class QueryHandlerFactory
+{
+	private final YamlConfigurationSupplier configurationSupplier;
+
+
+	/**
+	 * Class constructor
+	 *
+	 * @param configurationSupplier yaml configuration supplier
+	 */
+	public QueryHandlerFactory(YamlConfigurationSupplier configurationSupplier)
+	{
+		this.configurationSupplier = configurationSupplier;
+	}
+
+
+	/**
+	 * Retrieve query handler for section
+	 *
+	 * @param section the section for which a query handler is returned
+	 * @return a query handler for the section
+	 */
+	public <R extends Record> QueryHandler<R> getQueryHandler(Section section)
+	{
+		return section.createHandler(configurationSupplier);
+	}
+
+}

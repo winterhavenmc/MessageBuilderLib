@@ -17,10 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constants;
 
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.AbstractSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.List;
@@ -29,20 +28,16 @@ import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.validation.Validate.validate;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
  * Query handler for the 'CONSTANTS' section of the language file.
  */
-public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler implements SectionQueryHandler
+public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 {
 	private final static Section section = Section.CONSTANTS;
-	private final static Class<?> primaryType = String.class;
-	private final static List<Class<?>> handledTypes = List.of(String.class, List.class, Integer.class);
-
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
@@ -54,10 +49,8 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 */
 	public ConstantSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier)
 	{
-		super(configurationSupplier, section, primaryType, handledTypes);
 		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
-		// get configuration supplier
 		this.configurationSupplier = configurationSupplier;
 	}
 
@@ -115,15 +108,16 @@ public class ConstantSectionQueryHandler extends AbstractSectionQueryHandler imp
 	 *
 	 * @param key the record key
 	 * @return an option of a ConstantRecord
-	 * @param <T> the return record type
 	 */
 	@Override
-	public <T> Optional<T> getRecord(String key)
+	public Optional<ConstantRecord> getRecord(String key)
 	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
-		return Optional.empty();
+		return Optional.ofNullable(configurationSupplier.getSection(section))
+				.map(s -> s.get(key))
+				.map(value -> new ConstantRecord(key, value));
 	}
 
 }
