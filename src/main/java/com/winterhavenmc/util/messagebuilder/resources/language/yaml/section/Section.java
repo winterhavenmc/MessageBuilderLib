@@ -40,9 +40,7 @@ public enum Section
 	MESSAGES(MessageSectionQueryHandler::new),
 	;
 
-	// Enum map serves as a cache for instances of query handlers
 	private static final EnumMap<Section, QueryHandler<?>> HANDLER_MAP = new EnumMap<>(Section.class);
-
 	private final Function<YamlConfigurationSupplier, ? extends QueryHandler<? extends SectionRecord>> handlerFactory;
 
 
