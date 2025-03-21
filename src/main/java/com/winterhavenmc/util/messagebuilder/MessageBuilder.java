@@ -137,15 +137,15 @@ public final class MessageBuilder
 	 * Its visibility is restricted to package-private, so it cannot be used to instantiate an instance of the class
 	 * from outside its package.
 	 *
-	 * @param pluginMock a mock plugin instance
-	 * @param languageResourceManagerMock a mock language resource manager instance
+	 * @param plugin a mock plugin instance
+	 * @param languageResourceManager a mock language resource manager instance
 	 * @return an instance of this class, instantiated with the mock objects
 	 */
-	static MessageBuilder test(final Plugin pluginMock,
-         final YamlLanguageResourceManager languageResourceManagerMock,
+	static MessageBuilder test(final Plugin plugin,
+         final YamlLanguageResourceManager languageResourceManager,
          final MessageProcessor messageProcessor)
 	{
-		return new MessageBuilder(pluginMock, languageResourceManagerMock, messageProcessor);
+		return new MessageBuilder(plugin, languageResourceManager, messageProcessor);
 	}
 
 
