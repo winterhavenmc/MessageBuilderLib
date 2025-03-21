@@ -28,12 +28,14 @@ public enum Parameter
 	ITEM_SECTION("itemSection"),
 	KEY("key"),
 	LANGUAGE_QUERY_HANDLER("languageQueryHandler"),
+	LANGUAGE_RESOURCE_MANAGER("languageResourceManager"),
 	LANGUAGE_TAG("languageTag"),
 	LOCALE("locale"),
 	LOCATION("location"),
 	MACRO("macro"),
 	MESSAGE("message"),
 	MESSAGE_ID("messageId"),
+	MESSAGE_PROCESSOR("messageProcessor"),
 	MESSAGE_SECTION("messageSection"),
 	MESSAGE_RECORD("messageRecord"),
 	MESSAGE_STRING("messageString"),
@@ -49,7 +51,8 @@ public enum Parameter
 	TARGET_DIR_PATH("targetDirPath"),
 	UNKNOWN("«UNKNOWN»"),
 	VALUE("value"),
-	WORLD("world");
+	WORLD("world"),
+	;
 
 	private final String displayName;
 
