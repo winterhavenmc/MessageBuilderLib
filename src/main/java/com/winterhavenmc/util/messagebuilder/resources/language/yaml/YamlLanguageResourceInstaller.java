@@ -132,10 +132,7 @@ public final class YamlLanguageResourceInstaller
 	 */
 	void autoInstall()
 	{
-		for (String resourceName : getAutoInstallResourceNames(getAutoInstallResourcePath()))
-		{
-			installByName(resourceName);
-		}
+		getAutoInstallResourceNames(getAutoInstallResourcePath()).forEach(this::installByName);
 	}
 
 
