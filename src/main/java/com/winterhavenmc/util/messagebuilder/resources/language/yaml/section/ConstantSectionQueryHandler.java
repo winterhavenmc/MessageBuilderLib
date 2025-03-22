@@ -114,9 +114,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
-		return Optional.ofNullable(configurationSupplier.getSection(section))
-				.map(s -> s.get(key))
-				.map(value -> new ConstantRecord(key, value));
+		return ConstantRecord.getRecord(key, configurationSupplier.getSection(section));
 	}
 
 }
