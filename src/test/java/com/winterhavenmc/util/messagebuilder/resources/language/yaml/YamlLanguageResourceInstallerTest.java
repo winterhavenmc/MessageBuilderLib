@@ -87,9 +87,9 @@ public class YamlLanguageResourceInstallerTest
 
 		@Test
 		void testTwoOrMoreDotsPattern() {
-			assertTrue(TWO_OR_MORE_DOTS.matcher("..").find());
-			assertTrue(TWO_OR_MORE_DOTS.matcher("abc...def").find());
-			assertFalse(TWO_OR_MORE_DOTS.matcher(".").find());
+			assertTrue(TWO_OR_MORE_DOTS.matcher("../example/path/name").find());
+			assertTrue(TWO_OR_MORE_DOTS.matcher("example/../../path/name").find());
+			assertFalse(TWO_OR_MORE_DOTS.matcher(".dotfile").find());
 		}
 
 		@Test
@@ -102,8 +102,8 @@ public class YamlLanguageResourceInstallerTest
 		@Test
 		void testTwoOrMoreSlashesPattern() {
 			assertTrue(TWO_OR_MORE_SLASHES.matcher("//").find());
-			assertTrue(TWO_OR_MORE_SLASHES.matcher("http://example.com").find());
-			assertFalse(TWO_OR_MORE_SLASHES.matcher("/").find());
+			assertTrue(TWO_OR_MORE_SLASHES.matcher("example//path/name").find());
+			assertFalse(TWO_OR_MORE_SLASHES.matcher("example/path/name").find());
 		}
 	}
 
@@ -448,7 +448,8 @@ public class YamlLanguageResourceInstallerTest
 	@Test
 	public void testResourceExists() {
 		// Arrange
-		when(pluginMock.getResource( resourceInstaller.getAutoInstallResourcePath())).thenReturn(MockUtility.getResourceStream( resourceInstaller.getAutoInstallResourcePath()));
+		when(pluginMock.getResource(resourceInstaller.getAutoInstallResourcePath()))
+				.thenReturn(MockUtility.getResourceStream( resourceInstaller.getAutoInstallResourcePath()));
 
 		// Act
 		boolean result = resourceInstaller.resourceExists( resourceInstaller.getAutoInstallResourcePath());
