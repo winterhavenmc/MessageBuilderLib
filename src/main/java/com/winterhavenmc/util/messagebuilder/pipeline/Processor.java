@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
 
+
 @FunctionalInterface
 public interface Processor {
 	void process(Message message);

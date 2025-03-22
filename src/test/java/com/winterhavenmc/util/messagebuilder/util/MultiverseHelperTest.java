@@ -23,7 +23,6 @@ import org.bukkit.World;
 
 import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,20 +38,17 @@ import static org.mockito.Mockito.mockStatic;
 
 
 @ExtendWith(MockitoExtension.class)
-class MultiverseHelperTest {
-
+class MultiverseHelperTest
+{
 	@Mock World worldMock;
 	@Mock PluginManager pluginManagerMock;
 
-	static MockedStatic<Bukkit> mockStatic;
+	static MockedStatic<Bukkit> mockStatic = mockStatic(Bukkit.class);
 
-	@BeforeAll
-	static void preSetup() {
-		mockStatic = mockStatic(Bukkit.class);
-	}
 
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
 		worldMock = null;
 		pluginManagerMock = null;
 	}
@@ -60,7 +56,8 @@ class MultiverseHelperTest {
 
 	@Test
 	@Disabled
-	void getAlias_parameter_null_world() {
+	void getAlias_parameter_null_world()
+	{
 		mockStatic.when(Bukkit::getPluginManager).thenReturn(pluginManagerMock);
 
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -71,7 +68,8 @@ class MultiverseHelperTest {
 
 
 	@Test
-	void getAlias_no_multiverse() {
+	void getAlias_no_multiverse()
+	{
 		// Arrange
 		mockStatic.when(Bukkit::getPluginManager).thenReturn(pluginManagerMock);
 

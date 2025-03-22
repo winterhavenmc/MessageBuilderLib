@@ -53,8 +53,6 @@ public final class MessageRetriever implements Retriever
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
 		return queryHandler.getRecord(key);
-//				.filter(MessageRecord.class::isInstance)
-//				.map(MessageRecord.class::cast);
 	}
 
 }

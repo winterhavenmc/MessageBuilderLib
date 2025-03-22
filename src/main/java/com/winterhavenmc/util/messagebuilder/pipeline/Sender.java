@@ -21,7 +21,8 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Mes
 import org.bukkit.command.CommandSender;
 
 
-public sealed interface Sender permits MessageSender, TitleSender
+@FunctionalInterface
+public interface Sender
 {
 	void send(CommandSender recipient, MessageRecord messageRecord);
 }

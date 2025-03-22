@@ -22,6 +22,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Mes
 
 import java.util.Optional;
 
+
 @FunctionalInterface
 public interface Replacer {
 	Optional<MessageRecord> replaceMacros(MessageRecord messageRecord, Message message);
