@@ -27,6 +27,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
@@ -37,7 +38,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.DEFAULT_LANGUAGE_TAG;
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_LANGUAGE_EN_US_YML;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -63,16 +63,16 @@ public class YamlLanguageResourceLoaderTest
 		pluginConfiguration.set("locale", DEFAULT_LANGUAGE_TAG);
 		pluginConfiguration.set("language", DEFAULT_LANGUAGE_TAG);
 
-		// create real language configuration
-		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
+		// Install resource to temp directory
+		Path filePath = tempDataDir.toPath().resolve("language/en-US.yml");
+		long bytes = MockUtility.installResource("language/en-US.yml", filePath);
+		File file = filePath.toFile();
 
-		// create new real file loader
-		yamlLanguageResourceLoader = new YamlLanguageResourceLoader(pluginMock);
-
-		// install resource to temp directory; assert return value is true, indicating success
-		long bytes = MockUtility.installResource(RESOURCE_LANGUAGE_EN_US_YML.toString(), tempDataDir.toPath());
 		assertTrue(bytes > 0);
-		System.out.println("Bytes copied: " + bytes + "     filepath: " + tempDataDir.getAbsolutePath());
+		assertTrue(file.exists());
+
+		// Create loader
+		yamlLanguageResourceLoader = new YamlLanguageResourceLoader(pluginMock);
 	}
 
 	@AfterEach
