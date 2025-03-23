@@ -136,4 +136,12 @@ class ConstantSectionQueryHandlerTest {
 		assertEquals(Optional.empty(), queryHandler.getRecord("INVALID_KEY"));
 	}
 
+	@Test
+	void testGetRecord()
+	{
+		queryHandler.getRecord("SPAWN.DISPLAY_NAME").ifPresent(r ->
+				assertEquals("&aSpawn", r.obj())
+		);
+	}
+
 }

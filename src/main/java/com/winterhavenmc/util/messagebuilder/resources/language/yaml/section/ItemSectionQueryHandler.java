@@ -21,13 +21,10 @@ import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -69,12 +66,30 @@ public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 
-		// get configuration section for item key
-		ConfigurationSection itemEntry = configurationSupplier.getSection(section).getConfigurationSection(key);
-		if (itemEntry == null) { return Optional.empty(); }
-
-		// return new ItemRecord
-		return ItemRecord.getRecord(key, configurationSupplier.getSection(section));
+		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key))
+				.map(itemEntry -> new ItemRecord(key,
+						Optional.ofNullable(itemEntry.getString(Field.NAME_SINGULAR.getKeyPath())),
+						Optional.ofNullable(itemEntry.getString(Field.NAME_PLURAL.getKeyPath())),
+						Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath())),
+						Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_PLURAL.getKeyPath())),
+						itemEntry.getStringList(Field.LORE.getKeyPath())));
 	}
 
+
+	enum Field
+	{
+		NAME_SINGULAR("NAME.SINGULAR"),
+		NAME_PLURAL("NAME.PLURAL"),
+		INVENTORY_NAME_SINGULAR("INVENTORY_NAME.SINGULAR"),
+		INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL"),
+		LORE("LORE");
+
+		private final String keyPath; // keyPath field
+
+		// constructor for enum constants
+		Field(String keyPath) { this.keyPath = keyPath; }
+
+		// getter for keyPath field
+		String getKeyPath() { return this.keyPath; }
+	}
 }

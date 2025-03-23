@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ConstantRecordTest {
 
     @Test
-    void testConstantRecordCreation() {
+    void constructorTest() {
         String key = "testKey";
         Object value = 42;
         ConstantRecord record = new ConstantRecord(key, value);

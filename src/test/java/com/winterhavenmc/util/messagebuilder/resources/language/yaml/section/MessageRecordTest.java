@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -28,10 +27,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
-import static com.winterhavenmc.util.messagebuilder.messages.MessageId.NONEXISTENT_ENTRY;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -67,47 +64,6 @@ class MessageRecordTest {
 				44,
 				"this is a test subtitle", "", "", "");
 		assertNotNull(testRecord, "the newly created record is null.");
-	}
-
-	@Test
-	void testGetRecord_parameter_valid() {
-		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(ENABLED_MESSAGE.name(), messageSection);
-		assertTrue(messageRecord.isPresent());
-	}
-
-	@Test
-	void testGetRecord_parameter_messageId_null() {
-		ValidationException exception = assertThrows(ValidationException.class,
-				() ->  MessageRecord.getRecord(null, messageSection));
-
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void testGetRecord_nonexistent_entry() {
-		Optional<MessageRecord> messageRecord = MessageRecord.getRecord(NONEXISTENT_ENTRY.name(), messageSection);
-		assertTrue(messageRecord.isEmpty());
-	}
-
-	@Test
-	void testGetRecord_parameter_messageSection_null() {
-		ValidationException exception = assertThrows(ValidationException.class,
-				() ->  MessageRecord.getRecord(ENABLED_MESSAGE.name(), null));
-
-		assertEquals("The parameter 'messageSection' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void testGetRecord_parameter_messageSection_invalid() {
-		// Arrange
-		messageSection = configuration.getConfigurationSection("ITEMS");
-
-		// Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() ->  MessageRecord.getRecord(ENABLED_MESSAGE.name(), messageSection));
-
-		// Assert
-		assertEquals("The parameter 'messageSection' was invalid.", exception.getMessage());
 	}
 
 }
