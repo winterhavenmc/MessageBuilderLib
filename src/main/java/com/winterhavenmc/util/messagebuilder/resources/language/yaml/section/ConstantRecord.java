@@ -17,29 +17,5 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.Objects;
-import java.util.Optional;
-
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.SECTION;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
-
-public record ConstantRecord(String key, Object obj) implements SectionRecord
-{
-    public static Optional<ConstantRecord> getRecord(final String key, final ConfigurationSection section)
-    {
-        validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-        validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
-        validate(section, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, SECTION));
-
-        return Optional.ofNullable(section)
-                .map(s -> s.get(key))
-                .map(value -> new ConstantRecord(key, value));
-    }
-
-}
+public record ConstantRecord(String key, Object obj) implements SectionRecord { }

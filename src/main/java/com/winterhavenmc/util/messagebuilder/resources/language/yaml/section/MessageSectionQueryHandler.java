@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
+import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,6 +38,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 {
+	private final static Section section = Section.MESSAGES;
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
@@ -65,7 +67,50 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
 		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_NULL, KEY));
 
-		return MessageRecord.getRecord(key, configurationSupplier.getSection(Section.MESSAGES));
+		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key))
+				.map(messageEntry -> new MessageRecord(key,
+						messageEntry.getBoolean(Field.ENABLED.toKey()),
+						messageEntry.getString(Field.MESSAGE_TEXT.toKey()),
+						Duration.ofSeconds(messageEntry.getLong(Field.REPEAT_DELAY.toKey())),
+						messageEntry.getString(Field.TITLE_TEXT.toKey()),
+						messageEntry.getInt(Field.TITLE_FADE_IN.toKey()),
+						messageEntry.getInt(Field.TITLE_STAY.toKey()),
+						messageEntry.getInt(Field.TITLE_FADE_OUT.toKey()),
+						messageEntry.getString(Field.SUBTITLE_TEXT.toKey()),
+						"",
+						"",
+						""));
+	}
+
+
+	/**
+	 * Enum of MessageRecord fields and their corresponding keyPath. This enum is the source of truth for
+	 * message record field constants and their corresponding keyPaths. Other field metadata may be
+	 * encapsulated in this enum in the future.
+	 */
+	public enum Field
+	{
+		ENABLED("ENABLED"),
+		REPEAT_DELAY("REPEAT_DELAY"),
+		MESSAGE_TEXT("MESSAGE_TEXT"),
+		TITLE_TEXT("TITLE_TEXT"),
+		TITLE_FADE_IN("TITLE_FADE_IN"),
+		TITLE_STAY("TITLE_STAY"),
+		TITLE_FADE_OUT("TITLE_FADE_OUT"),
+		SUBTITLE_TEXT("SUBTITLE_TEXT"),
+		;
+
+		private final String key;
+
+		// class constructor
+		Field(final String key) {
+			this.key = key;
+		}
+
+		// getter for key
+		public String toKey() {
+			return this.key;
+		}
 	}
 
 }
