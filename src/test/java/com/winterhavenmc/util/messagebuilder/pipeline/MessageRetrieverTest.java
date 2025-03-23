@@ -40,18 +40,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MessageRetrieverTest {
-
+class MessageRetrieverTest
+{
 	@Mock QueryHandler<MessageRecord> queryHandlerMock;
 
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
 		this.queryHandlerMock = null;
 	}
 
 
 	@Test
-	void getRecord() {
+	void getRecord()
+	{
 		// Arrange
 		FileConfiguration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
@@ -68,7 +70,8 @@ class MessageRetrieverTest {
 	}
 
 	@Test
-	void getRecord_section_query_handler_null() {
+	void getRecord_section_query_handler_null()
+	{
 		Retriever retriever = new MessageRetriever(queryHandlerMock);
 
 		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name());
@@ -77,7 +80,8 @@ class MessageRetrieverTest {
 	}
 
 	@Test
-	void getMessageRecord_parameter_null_Id() {
+	void getMessageRecord_parameter_null_Id()
+	{
 		Retriever retriever = new MessageRetriever(queryHandlerMock);
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> retriever.getRecord(null));
