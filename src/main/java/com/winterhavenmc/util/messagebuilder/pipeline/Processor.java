@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.Message;
 
 
 @FunctionalInterface
-public interface Processor {
+public interface Processor
+{
 	void process(Message message);
 }
