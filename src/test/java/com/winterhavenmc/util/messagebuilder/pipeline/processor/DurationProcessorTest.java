@@ -28,6 +28,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -43,21 +44,23 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class DurationProcessorTest {
-
+class DurationProcessorTest
+{
 	@Mock Player playerMock;
 	@Mock ConsoleCommandSender consoleMock;
 
 
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
 		playerMock = null;
 		consoleMock = null;
 	}
 
 
-	@Test
-	void testResolveContext_parameter_null_key() {
+	@Test @DisplayName("Test resolveContext method with null key parameter")
+	void testResolveContext_parameter_null_key()
+	{
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new DurationProcessor();
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -67,8 +70,9 @@ class DurationProcessorTest {
 	}
 
 
-	@Test
-	void testResolveContext_parameter_empty_key() {
+	@Test @DisplayName("Test resolveContext method with empty key parameter")
+	void testResolveContext_parameter_empty_key()
+	{
 		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
 		MacroProcessor macroProcessor = new DurationProcessor();
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -78,7 +82,7 @@ class DurationProcessorTest {
 	}
 
 
-	@Test
+	@Test @DisplayName("Test resolveContext method with null contextMap parameter")
 	void testResolveContext_parameter_null_context_map() {
 		MacroProcessor macroProcessor = new DurationProcessor();
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -88,7 +92,7 @@ class DurationProcessorTest {
 	}
 
 
-	@Test
+	@Test @DisplayName("Test resolveContext method with valid parameters")
 	void resolveContext() {
 		// Arrange
 		when(playerMock.getLocale()).thenReturn("en-US");
@@ -108,7 +112,7 @@ class DurationProcessorTest {
 	}
 
 
-	@Test
+	@Test @DisplayName("Test resolveContext method with console as recipient")
 	void resolveContext_console() {
 		// Arrange
 		String keyPath = "DURATION";
@@ -161,7 +165,7 @@ class DurationProcessorTest {
 	}
 
 
-	@Test
+	@Test @DisplayName("Test resolveContext method with wrong type for duration in map")
 	void resolveContext_value_not_duration() {
 		// Arrange
 		String keyPath = "DURATION";
