@@ -17,8 +17,5 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import org.bukkit.configuration.ConfigurationSection;
-
-import java.util.Optional;
 
 public sealed interface SectionRecord permits ConstantRecord, ItemRecord, MessageRecord { }
