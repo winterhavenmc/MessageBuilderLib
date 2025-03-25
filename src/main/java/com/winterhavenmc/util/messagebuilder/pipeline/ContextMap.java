@@ -73,6 +73,17 @@ public class ContextMap
 
 
 	/**
+	 * Retrieve Optional recipient
+	 *
+	 * @return the recipient that was used to create the context map
+	 */
+	public Optional<CommandSender> getOptionalRecipient()
+	{
+		return Optional.ofNullable(recipient);
+	}
+
+
+	/**
 	 * Retrieve messageId
 	 *
 	 * @return {@code MessageId} the MessageId associated with this context map
