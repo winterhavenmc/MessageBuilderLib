@@ -40,6 +40,7 @@ public enum Parameter
 	MESSAGE_RECORD("messageRecord"),
 	MESSAGE_STRING("messageString"),
 	PLUGIN("plugin"),
+	QUERY_HANDLER("queryHandler"),
 	RECIPIENT("recipient"),
 	RECORD_TYPE("recordType"),
 	REPLACEMENT_MAP("replacementMap"),
