@@ -57,17 +57,13 @@ public final class MessageProcessor implements Processor
 	{
 		validate(message, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE));
 
-		List<Sender> senders = List.of(messageSender, titleSender);
-
 		CooldownKey.optional(message.getRecipient(), message.getMessageId())
 				.filter(notCooling)
-				.flatMap(key ->
-						messageRetriever.getRecord(key.getMessageId()))
-				.flatMap(messageRecord ->
-						macroReplacer.replaceMacros(messageRecord, message))
-				.ifPresent(processedMessage ->
-						senders.forEach(sender ->
-								sender.send(message.getRecipient(), processedMessage)));
+				.flatMap(key -> messageRetriever.getRecord(key.getMessageId()))
+				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message))
+				.ifPresent(processedMessage -> List.of(messageSender, titleSender)
+						.forEach(sender -> sender
+								.send(message.getRecipient(), processedMessage)));
 	}
 
 }
