@@ -27,6 +27,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
@@ -64,12 +65,13 @@ public class YamlLanguageResourceLoaderTest
 		pluginConfiguration.set("language", DEFAULT_LANGUAGE_TAG);
 
 		// Install resource to temp directory
-		Path filePath = tempDataDir.toPath().resolve("language/en-US.yml");
+		LanguageTag languageTag = new LanguageTag(DEFAULT_LANGUAGE_TAG.toString());
+		Path filePath = tempDataDir.toPath().resolve(languageTag.getFileName());
 		long bytes = MockUtility.installResource("language/en-US.yml", filePath);
 		File file = filePath.toFile();
 
-		assertTrue(bytes > 0);
-		assertTrue(file.exists());
+		assertTrue(bytes > 0, "Zero bytes written copying resource to temp directory.");
+		assertTrue(file.exists(), "The file '" + languageTag.getFileName() + "' in the temporary directory does not exist.");
 
 		// Create loader
 		yamlLanguageResourceLoader = new YamlLanguageResourceLoader(pluginMock);
@@ -86,13 +88,19 @@ public class YamlLanguageResourceLoaderTest
 
 
 	@Test
-	public void testLoad()
-	{
+	public void testLoad() throws IOException
+    {
 		// Arrange
+		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 		LanguageTag languageTag = new LanguageTag("en-US");
 
 		// Act
+		Files.list(new File(pluginMock.getDataFolder(), "language").toPath()).forEach(path ->
+				{
+					assertTrue(path.toFile().exists());
+					System.out.println("File in tempDataDir: " + path);
+				});
 		Configuration configuration = yamlLanguageResourceLoader.load(languageTag);
 
 		// Assert
@@ -107,6 +115,7 @@ public class YamlLanguageResourceLoaderTest
 	public void testLoad_file_not_found()
 	{
 		// Arrange
+		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 

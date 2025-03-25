@@ -32,7 +32,7 @@ public class QueryHandlerFactory
 	 *
 	 * @param configurationSupplier yaml configuration supplier
 	 */
-	public QueryHandlerFactory(YamlConfigurationSupplier configurationSupplier)
+	public QueryHandlerFactory(final YamlConfigurationSupplier configurationSupplier)
 	{
 		this.configurationSupplier = configurationSupplier;
 	}
@@ -44,7 +44,7 @@ public class QueryHandlerFactory
 	 * @param section the section for which a query handler is returned
 	 * @return a query handler for the section
 	 */
-	public <R extends SectionRecord> QueryHandler<R> getQueryHandler(Section section)
+	public <R extends SectionRecord> QueryHandler<R> getQueryHandler(final Section section)
 	{
 		return section.createHandler(configurationSupplier);
 	}

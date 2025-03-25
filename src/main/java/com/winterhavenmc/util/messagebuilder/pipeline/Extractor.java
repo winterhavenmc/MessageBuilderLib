@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import java.util.stream.Stream;
 
 
 @FunctionalInterface
-public interface Resolver
+public interface Extractor
 {
-	ResultMap resolve(ContextMap contextMap);
+	Stream<String> extract(String input);
 }

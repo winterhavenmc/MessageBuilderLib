@@ -28,6 +28,7 @@ import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -40,18 +41,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MessageRetrieverTest {
-
+class MessageRetrieverTest
+{
 	@Mock QueryHandler<MessageRecord> queryHandlerMock;
 
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
 		this.queryHandlerMock = null;
 	}
 
 
-	@Test
-	void getRecord() {
+	@Test @DisplayName("Test getRecord method with valid parameters")
+	void getRecord()
+	{
 		// Arrange
 		FileConfiguration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
@@ -67,8 +70,10 @@ class MessageRetrieverTest {
 		assertEquals("This is an enabled message", messageRecord.get().message());
 	}
 
-	@Test
-	void getRecord_section_query_handler_null() {
+
+	@Test @DisplayName("Test getRecord method with valid parameters")
+	void testGetRecord2()
+	{
 		Retriever retriever = new MessageRetriever(queryHandlerMock);
 
 		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name());
@@ -76,14 +81,27 @@ class MessageRetrieverTest {
 		assertFalse(messageRecord.isPresent());
 	}
 
+
 	@Test
-	void getMessageRecord_parameter_null_Id() {
+	void getMessageRecord_parameter_null_Id()
+	{
 		Retriever retriever = new MessageRetriever(queryHandlerMock);
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> retriever.getRecord(null));
 
 		// Assert
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testConstructor_parameter_null_query_handler()
+	{
+		ValidationException exception = assertThrows(ValidationException.class,
+				() -> new MessageRetriever(null));
+
+		// Assert
+		assertEquals("The parameter 'queryHandler' cannot be null.", exception.getMessage());
 	}
 
 }

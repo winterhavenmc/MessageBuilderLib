@@ -27,6 +27,7 @@ import java.util.Optional;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.QUERY_HANDLER;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -42,6 +43,8 @@ public final class MessageRetriever implements Retriever
 	 */
 	public MessageRetriever(final QueryHandler<MessageRecord> queryHandler)
 	{
+		validate(queryHandler, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, QUERY_HANDLER));
+
 		this.queryHandler = queryHandler;
 	}
 

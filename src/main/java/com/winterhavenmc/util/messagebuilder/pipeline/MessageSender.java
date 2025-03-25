@@ -36,6 +36,11 @@ public final class MessageSender implements Sender
 	private final CooldownMap cooldownMap;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param cooldownMap map of recipients/messages and their cooldown expiration times
+	 */
 	public MessageSender(final CooldownMap cooldownMap)
 	{
 		this.cooldownMap = cooldownMap;
@@ -49,7 +54,6 @@ public final class MessageSender implements Sender
 		validate(messageRecord, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_RECORD));
 
 		recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', messageRecord.finalMessageString()));
-
 		cooldownMap.putExpirationTime(recipient, messageRecord);
 	}
 

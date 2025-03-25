@@ -67,6 +67,11 @@ public class ResultMap
 	}
 
 
+	public String getValueOrKey(String key) {
+		return internalResultMap.getOrDefault(key, key); // Return key itself if not found
+	}
+
+
 	public void putAll(final @NotNull ResultMap insertionMap)
 	{
 		for (Map.Entry<String, String> entry : insertionMap.entrySet()) {

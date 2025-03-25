@@ -29,6 +29,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +42,8 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MessageProcessorTest {
+class MessageProcessorTest
+{
 
 	@Mock MessageRetriever messageRetrieverMock;
 	@Mock MacroReplacer macroReplacerMock;
@@ -55,7 +57,8 @@ class MessageProcessorTest {
 
 
 	@BeforeEach
-	void setUp() {
+	void setUp()
+	{
 		cooldownMap = new CooldownMap();
 		messageProcessor = new MessageProcessor(
 				messageRetrieverMock,
@@ -79,17 +82,23 @@ class MessageProcessorTest {
 				"this is a final subtitle");
 	}
 
+
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
+		messageRetrieverMock = null;
 		macroReplacerMock = null;
 		playerMock = null;
-
+		messageSenderMock = null;
+		titleSenderMock = null;
 		cooldownMap = null;
 		messageProcessor = null;
+		messageRecord = null;
 	}
 
-	@Test
-	void process() {
+
+	@Test @DisplayName("Test process method with valid parameter")
+	void testProcess() {
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(ENABLED_MESSAGE.name())).thenReturn(Optional.of(messageRecord));
@@ -105,8 +114,8 @@ class MessageProcessorTest {
 	}
 
 
-	@Test
-	void process_parameter_null_message() {
+	@Test @DisplayName("Test process method with null parameter")
+	void testProcess_parameter_null_message() {
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> messageProcessor.process(null));
 

@@ -23,6 +23,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
@@ -42,7 +43,6 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public final class YamlLanguageResourceLoader
 {
-	// reference to plugin main class instance
 	private final Plugin plugin;
 
 
@@ -101,26 +101,27 @@ public final class YamlLanguageResourceLoader
 		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
 
 		YamlConfiguration configuration = new YamlConfiguration();
+		File languageFile = new File(plugin.getDataFolder(), languageTag.getFileName());
 
 		try
 		{
-			configuration.load(languageTag.getFileName());
-			plugin.getLogger().info("Language file " + languageTag.getFileName() + " successfully loaded.");
+			configuration.load(languageFile);
+			plugin.getLogger().info("Language file " + languageFile + " successfully loaded.");
 		}
 
 		catch (FileNotFoundException e)
 		{
-			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " does not exist.");
+			plugin.getLogger().severe("Language file " + languageFile + " does not exist.");
 		}
 
 		catch (IOException e)
 		{
-			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " could not be read.");
+			plugin.getLogger().severe("Language file " + languageFile + " could not be read.");
 		}
 
 		catch (InvalidConfigurationException e)
 		{
-			plugin.getLogger().severe("Language file " + languageTag.getFileName() + " is not valid yaml.");
+			plugin.getLogger().severe("Language file " + languageFile + " is not valid yaml.");
 		}
 
 		return configuration;

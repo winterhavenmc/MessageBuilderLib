@@ -23,8 +23,8 @@ import java.util.Optional;
 
 
 /**
- * This interface declares the most general type of query handler.
- * Classes implementing this interface must have a query method.
+ * An interface that declares a query handler that is typed constrained to
+ * implementations of the SectionRecord interface
  */
 @FunctionalInterface
 public interface QueryHandler<R extends SectionRecord>

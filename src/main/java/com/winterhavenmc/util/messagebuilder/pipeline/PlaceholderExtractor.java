@@ -17,11 +17,22 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 
-@FunctionalInterface
-public interface Resolver
+public class PlaceholderExtractor implements Extractor
 {
-	ResultMap resolve(ContextMap contextMap);
+	private static final Pattern pattern = Pattern.compile(
+            Pattern.quote(Delimiter.OPEN.toString()) +
+                    "([\\p{Lu}0-9_]+)" +
+                    Pattern.quote(Delimiter.CLOSE.toString()));
+
+
+	@Override
+	public Stream<String> extract(final String input)
+	{
+		return pattern.matcher(input).results().map(matchResult -> matchResult.group(1));
+	}
+
 }

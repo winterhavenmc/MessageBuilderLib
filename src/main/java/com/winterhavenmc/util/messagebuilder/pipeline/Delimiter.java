@@ -17,11 +17,22 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
-
-
-@FunctionalInterface
-public interface Resolver
+public enum Delimiter
 {
-	ResultMap resolve(ContextMap contextMap);
+	OPEN("{"),
+	CLOSE("}");
+
+	private final String defaultString;
+
+	// constructor
+	Delimiter(final String string) {
+		this.defaultString = string;
+	}
+
+    @Override
+    public String toString()
+    {
+        return this.defaultString;
+    }
+
 }
