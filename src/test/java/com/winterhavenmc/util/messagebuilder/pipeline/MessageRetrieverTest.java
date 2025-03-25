@@ -28,6 +28,7 @@ import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -51,7 +52,7 @@ class MessageRetrieverTest
 	}
 
 
-	@Test
+	@Test @DisplayName("Test getRecord method with valid parameters")
 	void getRecord()
 	{
 		// Arrange
@@ -69,8 +70,9 @@ class MessageRetrieverTest
 		assertEquals("This is an enabled message", messageRecord.get().message());
 	}
 
-	@Test
-	void getRecord_section_query_handler_null()
+
+	@Test @DisplayName("Test getRecord method with valid parameters")
+	void testGetRecord2()
 	{
 		Retriever retriever = new MessageRetriever(queryHandlerMock);
 
@@ -78,6 +80,7 @@ class MessageRetrieverTest
 		assertNotNull(messageRecord);
 		assertFalse(messageRecord.isPresent());
 	}
+
 
 	@Test
 	void getMessageRecord_parameter_null_Id()
@@ -88,6 +91,17 @@ class MessageRetrieverTest
 
 		// Assert
 		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testConstructor_parameter_null_query_handler()
+	{
+		ValidationException exception = assertThrows(ValidationException.class,
+				() -> new MessageRetriever(null));
+
+		// Assert
+		assertEquals("The parameter 'queryHandler' cannot be null.", exception.getMessage());
 	}
 
 }
