@@ -47,12 +47,14 @@ public class WorldProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		if (contextMap.get(key) instanceof World world)
-		{
-			String worldName = MultiverseHelper.getAlias(world).orElse(world.getName());
-			resultMap.put(key, worldName);
-			resultMap.put(key + ".NAME", worldName);
-		}
+		contextMap.getOpt(key)
+				.filter(World.class::isInstance)
+				.map(World.class::cast)
+				.map(world -> MultiverseHelper.getAlias(world).orElse(world.getName()))
+				.ifPresent(worldName -> {
+					resultMap.put(key, worldName);
+					resultMap.put(key + ".NAME", worldName);
+				});
 
 		return resultMap;
 	}
