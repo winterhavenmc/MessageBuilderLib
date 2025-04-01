@@ -130,21 +130,6 @@ public class ContextMap
 
 
 	/**
-	 * Retrieve a value from the context map for the specified key.
-	 *
-	 * @param key the context map key
-	 * @return the value for the key
-	 */
-	public Object get(final String key)
-	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
-
-		return internalMap.get(key);
-	}
-
-
-	/**
 	 * Check if the map contains a value for the specified key.
 	 *
 	 * @param key the unique key to check
