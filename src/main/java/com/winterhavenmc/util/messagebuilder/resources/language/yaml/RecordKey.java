@@ -24,9 +24,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationMessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationMessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -49,7 +48,7 @@ public class RecordKey
 	private RecordKey(final String key)
 	{
 		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, IS_INVALID_KEY, () -> new ValidationException(PARAMETER_EMPTY, KEY));
+		validate(key, IS_INVALID_KEY, () -> new ValidationException(PARAMETER_INVALID, KEY));
 
 		this.key = key;
 	}
