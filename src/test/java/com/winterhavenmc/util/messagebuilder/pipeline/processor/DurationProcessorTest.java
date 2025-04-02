@@ -18,11 +18,11 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.DurationProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -49,6 +49,8 @@ class DurationProcessorTest
 	@Mock Player playerMock;
 	@Mock ConsoleCommandSender consoleMock;
 
+	RecordKey macroKey = RecordKey.create("KEY").orElseThrow();
+
 
 	@AfterEach
 	void tearDown()
@@ -58,35 +60,11 @@ class DurationProcessorTest
 	}
 
 
-	@Test @DisplayName("Test resolveContext method with null key parameter")
-	void testResolveContext_parameter_null_key()
-	{
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new DurationProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(null, contextMap));
-
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test @DisplayName("Test resolveContext method with empty key parameter")
-	void testResolveContext_parameter_empty_key()
-	{
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new DurationProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("", contextMap));
-
-		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
-	}
-
-
 	@Test @DisplayName("Test resolveContext method with null contextMap parameter")
 	void testResolveContext_parameter_null_context_map() {
 		MacroProcessor macroProcessor = new DurationProcessor();
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("KEY", null));
+				() -> macroProcessor.resolveContext(macroKey, null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
@@ -97,28 +75,26 @@ class DurationProcessorTest
 		// Arrange
 		when(playerMock.getLocale()).thenReturn("en-US");
 
-		String keyPath = "DURATION";
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		ContextMap contextMap = new ContextMap(playerMock, macroKey);
 		Duration durationObject = Duration.ofMillis(12300);
-		contextMap.put(keyPath,durationObject);
+		contextMap.put(macroKey, durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(keyPath));
-		assertEquals("12 seconds", resultMap.get(keyPath));
+		assertTrue(resultMap.containsKey(macroKey.toString()));
+		assertEquals("12 seconds", resultMap.get(macroKey.toString()));
 	}
 
 
 	@Test @DisplayName("Test resolveContext method with console as recipient")
 	void resolveContext_console() {
 		// Arrange
-		String keyPath = "DURATION";
-		ContextMap contextMap = new ContextMap(consoleMock, MessageId.ENABLED_MESSAGE.name());
+		ContextMap contextMap = new ContextMap(consoleMock, macroKey);
 		Duration durationObject = Duration.ofMillis(12300);
-		contextMap.put(keyPath,durationObject);
+		contextMap.put(macroKey, durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Mock the static method Locale.forLanguageTag
@@ -157,28 +133,27 @@ class DurationProcessorTest
 		}
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(keyPath));
-		assertEquals("12 seconds", resultMap.get(keyPath));
+		assertTrue(resultMap.containsKey(macroKey.toString()));
+		assertEquals("12 seconds", resultMap.get(macroKey.toString()));
 	}
 
 
 	@Test @DisplayName("Test resolveContext method with wrong type for duration in map")
 	void resolveContext_value_not_duration() {
 		// Arrange
-		String keyPath = "DURATION";
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		ContextMap contextMap = new ContextMap(playerMock, macroKey);
 		Object object = "a string";
-		contextMap.put(keyPath, object);
+		contextMap.put(macroKey, object);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey(keyPath));
+		assertFalse(resultMap.containsKey(macroKey.toString()));
 	}
 
 }

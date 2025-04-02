@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
@@ -67,7 +68,8 @@ class ItemSectionQueryHandlerTest {
 	@Test
 	void testGetRecord_parameter_valid() {
 		// Arrange & Act
-		Optional<ItemRecord> itemRecord = queryHandler.getRecord("TEST_ITEM_1");
+		RecordKey recordKey = RecordKey.create("TEST_ITEM_1").orElseThrow();
+		Optional<ItemRecord> itemRecord = queryHandler.getRecord(recordKey);
 
 		// Assert
 		assertTrue(itemRecord.isPresent());
@@ -75,15 +77,9 @@ class ItemSectionQueryHandlerTest {
 	}
 
 	@Test
-	void testGetRecord_parameter_null() {
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> queryHandler.getRecord(null));
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-	@Test
 	void testGetRecord_parameter_invalid() {
-		Optional<ItemRecord> itemRecord = queryHandler.getRecord("NONEXISTENT_ITEM");
+		RecordKey recordKey = RecordKey.create("NONEXISTENT_ITEM").orElseThrow();
+		Optional<ItemRecord> itemRecord = queryHandler.getRecord(recordKey);
 		assertFalse(itemRecord.isPresent());
 	}
 

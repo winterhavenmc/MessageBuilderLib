@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_TAG;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.PLUGIN;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;

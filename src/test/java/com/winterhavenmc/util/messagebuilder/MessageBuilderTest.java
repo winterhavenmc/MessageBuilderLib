@@ -125,7 +125,7 @@ class MessageBuilderTest
 				() -> messageBuilder.compose(playerMock, null));
 
 		// Assert
-		assertEquals("The parameter 'messageId' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
 	}
 
 

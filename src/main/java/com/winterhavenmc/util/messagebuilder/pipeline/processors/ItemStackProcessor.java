@@ -20,15 +20,14 @@ package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -39,10 +38,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 public class ItemStackProcessor extends MacroProcessorTemplate
 {
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap)
+	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 		validate(contextMap, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONTEXT_MAP));
 
 		ResultMap resultMap = new ResultMap();
@@ -52,12 +49,13 @@ public class ItemStackProcessor extends MacroProcessorTemplate
 				.map(ItemStack.class::cast)
 				.ifPresent(itemStack -> {
 					// put item stack type as replacement string for key, in case other suitable field is not present
-					resultMap.put(key, itemStack.getType().toString());
+					resultMap.put(key.toString(), itemStack.getType().toString());
 
 					// if an itemstack quantity field does not exist in the context map, use itemStack amount for quantity
-					if (!contextMap.contains(key + ".QUANTITY")) {
-						QuantityAdapter.asQuantifiable(itemStack).ifPresent(quantifiable ->
-								resultMap.put(key + ".QUANTITY", String.valueOf(quantifiable.getQuantity()))
+					RecordKey quantityRecordKey = RecordKey.create(key + ".QUANTITY").orElseThrow();
+					if (!contextMap.contains(quantityRecordKey)) {
+						new QuantityAdapter().adapt(itemStack).ifPresent(quantifiable ->
+								resultMap.put(quantityRecordKey.toString(), String.valueOf(quantifiable.getQuantity()))
 						);
 
 						// put item stack translation key in result map for possible use

@@ -41,7 +41,7 @@ class UniqueIdAdapterTest {
 		UUID uuid = null;
 
 		// Act
-		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(entityMock);
+		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(entityMock);
 		if (resolver.isPresent()) {
 			uuid = resolver.get().getUniqueId();
 		}
@@ -62,7 +62,7 @@ class UniqueIdAdapterTest {
 		UUID uuid = null;
 
 		// Act
-		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(playerProfileMock);
+		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(playerProfileMock);
 		if (resolver.isPresent()) {
 			uuid = resolver.get().getUniqueId();
 		}
@@ -83,7 +83,7 @@ class UniqueIdAdapterTest {
 		UUID uuid = null;
 
 		// Act
-		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(offlinePlayerMock);
+		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(offlinePlayerMock);
 		if (resolver.isPresent()) {
 			uuid = resolver.get().getUniqueId();
 		}
@@ -104,7 +104,7 @@ class UniqueIdAdapterTest {
 		UUID uuid = null;
 
 		// Act
-		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(worldMock);
+		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(worldMock);
 		if (resolver.isPresent()) {
 			uuid = resolver.get().getUniqueId();
 		}
@@ -123,7 +123,7 @@ class UniqueIdAdapterTest {
 		UUID uuid = null;
 
 		// Act
-		Optional<Identifiable> resolver = UniqueIdAdapter.asIdentifiable(null);
+		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(null);
 		if (resolver.isPresent()) {
 			uuid = resolver.get().getUniqueId();
 		}

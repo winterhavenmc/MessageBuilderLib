@@ -17,12 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.NumberProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
@@ -35,8 +36,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class NumberProcessorTest {
-
+class NumberProcessorTest
+{
 	@Mock Player playerMock;
 
 	MacroProcessor macroProcessor;
@@ -44,13 +45,17 @@ class NumberProcessorTest {
 
 
 	@BeforeEach
-	public void setUp() {
+	public void setUp()
+	{
 		macroProcessor = new NumberProcessor();
-		contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		RecordKey key = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+		contextMap = new ContextMap(playerMock, key);
 	}
 
+
 	@AfterEach
-	public void tearDown() {
+	public void tearDown()
+	{
 		playerMock = null;
 		macroProcessor = null;
 		contextMap = null;
@@ -58,9 +63,10 @@ class NumberProcessorTest {
 
 
 	@Test
-	void resolveContext_integer() {
+	void resolveContext_integer()
+	{
 		// Arrange
-		String key = "SOME_INTEGER";
+		RecordKey key = RecordKey.create("SOME_INTEGER").orElseThrow();
 		Integer number = 42;
 		contextMap.put(key, number);
 
@@ -68,29 +74,31 @@ class NumberProcessorTest {
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey("SOME_INTEGER"));
-		assertEquals("42", resultMap.get("SOME_INTEGER"));
+		assertTrue(resultMap.containsKey(key.toString()));
+		assertEquals("42", resultMap.get(key.toString()));
 	}
 
 
 	@Test
-	void resolveContext_null_integer() {
+	void resolveContext_null_integer()
+	{
 		// Arrange
-		String key = "SOME_NULL_INTEGER";
-		Integer number = null;
-		contextMap.put(key, number);
+		RecordKey key = RecordKey.create("KEY").orElseThrow();
+		contextMap.put(key, null);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey("SOME_NULL_INTEGER"));
+		assertFalse(resultMap.containsKey(key.toString()));
 	}
 
+
 	@Test
-	void resolveContext_long() {
+	void resolveContext_long()
+	{
 		// Arrange
-		String key = "SOME_LONG";
+		RecordKey key = RecordKey.create("SOME_LONG").orElseThrow();
 		Long number = 420L;
 		contextMap.put(key, number);
 
@@ -98,22 +106,23 @@ class NumberProcessorTest {
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey("SOME_LONG"));
-		assertEquals("420", resultMap.get("SOME_LONG"));
+		assertTrue(resultMap.containsKey(key.toString()));
+		assertEquals("420", resultMap.get(key.toString()));
 	}
 
+
 	@Test
-	void resolveContext_null_long() {
+	void resolveContext_null_long()
+	{
 		// Arrange
-		String key = "SOME_NULL_LONG";
-		Long number = null;
-		contextMap.put(key, number);
+		RecordKey key = RecordKey.create("KEY").orElseThrow();
+		contextMap.put(key, null);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey("SOME_NULL_LONG"));
+		assertFalse(resultMap.containsKey(key.toString()));
 	}
 
 }

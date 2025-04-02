@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.command.ConsoleCommandSender;
@@ -52,19 +53,21 @@ class TitleSenderTest
 
 	@BeforeEach
 	void setUp() {
+		RecordKey recordKey = RecordKey.create(ENABLED_MESSAGE).orElseThrow();
+
 		messageRecord = new MessageRecord(
-				ENABLED_MESSAGE.name(),
-				true,
-				"this is a test message",
-				Duration.ofSeconds(11),
-				"this is a test title",
-				22,
-				33,
-				44,
-				"this is a test subtitle",
-				"this is a final message",
-				"this is a final title",
-				"this is a final subtitle");
+		recordKey,
+		true,
+		"this is a test message",
+		Duration.ofSeconds(11),
+		"this is a test title",
+		22,
+		33,
+		44,
+		"this is a test subtitle",
+		"this is a final message",
+		"this is a final title",
+		"this is a final subtitle");
 
 	}
 

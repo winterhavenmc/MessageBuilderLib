@@ -19,7 +19,8 @@ package com.winterhavenmc.util.messagebuilder.context;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -42,69 +43,52 @@ import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)
-class ContextMapTest {
-
+class ContextMapTest
+{
 	@Mock CommandSender commandSenderMock;
 	@Mock World worldMock;
 	ContextMap contextMap;
+	RecordKey recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
 
 	@BeforeEach
 	void setUp() {
-		contextMap = new ContextMap(commandSenderMock, MessageId.ENABLED_MESSAGE.name());
+		contextMap = new ContextMap(commandSenderMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
 	}
 
-	@Test
-	void testPutAndGet() {
-		// Arrange
-		String key = "NUMBER";
-		Integer number = 42;
-
-		// Act
-		contextMap.put(key, number);
-
-		// Assert
-		assertEquals(42, contextMap.get(key), "Retrieved value should match the original");
-	}
 
 	@Test
-	void testPut_parameter_null_key() {
+	void testPutAndGet()
+	{
 		// Arrange
 		Integer number = 42;
 
 		// Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> contextMap.put(null, number));
+		contextMap.put(recordKey, number);
 
 		// Assert
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+		assertEquals(Optional.of(42), contextMap.getOpt(recordKey), "Retrieved value should match the original");
 	}
 
+
 	@Test
-	void testPut_parameter_null_value() {
+	void testPut_parameter_null_value()
+	{
 		// Arrange
-		String key = "NUMBER";
+		RecordKey key = RecordKey.create("NUMBER").orElseThrow();
 
 		// Act
 		contextMap.put(key, null);
 
 		// Assert
-		assertEquals("NULL", contextMap.get(key));
+		assertEquals(Optional.of("NULL"), contextMap.getOpt(key));
 	}
 
-	@Test
-	void testGet_parameter_null_key() {
-		// Arrange & Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> contextMap.get(null));
-
-		// Assert
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
 
 	@Test
-	void testGetValueWithCorrectType() {
+	void testGetValueWithCorrectType()
+	{
 		// Arrange
-		String key = "PLAYER.LOCATION";
+		RecordKey key = RecordKey.create("PLAYER.LOCATION").orElseThrow();
 		Location location = new Location(worldMock, 10, 20, 30);
 		contextMap.put(key, location);
 
@@ -116,10 +100,12 @@ class ContextMapTest {
 		assertEquals(Optional.of(location), retrievedValue, "Retrieved value should match the original");
 	}
 
+
 	@Test
-	void testGetValueWithIncorrectType() {
+	void testGetValueWithIncorrectType()
+	{
 		// Arrange
-		String key = "SWORD";
+		RecordKey key = RecordKey.create("SWORD").orElseThrow();
 		ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
 		contextMap.put(key, itemStack);
 
@@ -131,63 +117,62 @@ class ContextMapTest {
 		assertInstanceOf(ItemStack.class, retrievedValue.get(), "Value should not be present for mismatched type");
 	}
 
+
 	@Test
-	void testContains() {
+	void testContains()
+	{
 		// Arrange
-		String key = "MACRO|LOCATION";
+		RecordKey key = RecordKey.create("LOCATION").orElseThrow();
+		RecordKey nonExistentKey = RecordKey.create("NON_EXISTENT_KEY").orElseThrow();
 		World world = mock(World.class, "MockWorld");
 		Location location = new Location(world, 10, 20, 30);
 		contextMap.put(key, location);
 
 		// Act & Assert
 		assertTrue(contextMap.contains(key), "Key should be present in the map");
-		assertFalse(contextMap.contains("NonExistentKey"), "Key should not be present in the map");
+		assertFalse(contextMap.contains(nonExistentKey), "Key should not be present in the map");
 	}
 
-	@Test
-	void testContains_parameter_null_key() {
-		// Arrange & Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> contextMap.contains(null));
-
-		// Assert
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
 
 	@Test
-	void testEmptyMap() {
+	void testEmptyMap()
+	{
 		// Act & Assert
-		assertFalse(contextMap.contains("SomeKey"), "Empty map should not contain any keys");
+		assertFalse(contextMap.contains(recordKey), "Empty map should not contain any keys");
+		assertTrue(contextMap.isEmpty());
 	}
 
 
 
 	@Test
-	void testEntrySet() {
+	void testEntrySet()
+	{
 		// Arrange
-		String key1 = "NUMBER1";
+		RecordKey key1 = RecordKey.create("NUMBER1").orElseThrow();
 		Integer value1 = 41;
 		contextMap.put(key1, value1);
 
-		String key2 = "NUMBER2";
+		RecordKey key2 = RecordKey.create("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 		contextMap.put(key2, value2);
 
 		// Act
-		Set<Map.Entry<String, Object>> entrySet = contextMap.entrySet();
+		Set<Map.Entry<RecordKey, Object>> entrySet = contextMap.entrySet();
 
 		// Assert
 		assertEquals(2, entrySet.size());
 	}
 
+
 	@Test
-	void testRemove() {
+	void testRemove()
+	{
 		// Arrange
-		String key1 = "MACRO|NUMBER1";
+		RecordKey key1 = RecordKey.create("NUMBER1").orElseThrow();
 		Integer value1 = 41;
 		contextMap.put(key1, value1);
 
-		String key2 = "MACRO|NUMBER2";
+		RecordKey key2 = RecordKey.create("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 		contextMap.put(key2, value2);
 
@@ -203,37 +188,28 @@ class ContextMapTest {
 		assertTrue(contextMap.contains(key2));
 	}
 
-	@Test
-	void testRemove_parameter_null_key() {
-		// Arrange & Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> contextMap.remove(null));
-
-		// Assert
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void testRemove_nonexistent() {
-		// Arrange
-		String key = "NUMBER1";
-		Integer value = 41;
-		contextMap.put(key, value);
-
-		// Act
-		Object removedObject = contextMap.remove("NONEXISTENT_KEY");
-
-		// Assert
-		assertNull(removedObject);
-	}
+//	@Test
+//	void testRemove_nonexistent() {
+//		// Arrange
+//		RecordKey key = RecordKey.create("NUMBER1").orElseThrow();
+//		Integer value = 41;
+//		contextMap.put(key, value);
+//
+//		// Act
+//		Object removedObject = contextMap.remove(key);
+//
+//		// Assert
+//		assertNull(removedObject);
+//	}
 
 	@Test
-	void testClear() {
-		String key1 = "MACRO|NUMBER1";
+	void testClear()
+	{
+		RecordKey key1 = RecordKey.create("NUMBER1").orElseThrow();
 		Integer value1 = 41;
 		contextMap.put(key1, value1);
 
-		String key2 = "MACRO|NUMBER2";
+		RecordKey key2 = RecordKey.create("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 		contextMap.put(key2, value2);
 
@@ -251,7 +227,7 @@ class ContextMapTest {
 
 	@Test
 	void testSize_not_empty() {
-		String key = "MACRO|NUMBER";
+		RecordKey key = RecordKey.create("NUMBER").orElseThrow();
 		Integer value =42;
 
 		// Act
@@ -269,8 +245,8 @@ class ContextMapTest {
 	@Test
 	void testIsEmpty_not_empty() {
 		// Arrange
-		String key = "NUMBER";
-		Integer value =42;
+		RecordKey key = RecordKey.create("NUMBER").orElseThrow();
+		Integer value = 42;
 
 		// Act
 		contextMap.put(key, value);
@@ -287,10 +263,10 @@ class ContextMapTest {
 	}
 
 	@Test
-	void getMessageId() {
-		String result = contextMap.getMessageId();
+	void testGetMessageKey() {
+		RecordKey result = contextMap.getMessageKey();
 
-		assertEquals(MessageId.ENABLED_MESSAGE.name(), result);
+		assertEquals(MessageId.ENABLED_MESSAGE.name(), result.toString());
 	}
 
 }

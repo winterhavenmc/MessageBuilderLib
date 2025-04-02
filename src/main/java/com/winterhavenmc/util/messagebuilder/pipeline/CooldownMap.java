@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -51,7 +51,8 @@ public final class CooldownMap implements Cooldown
 		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
 		validate(messageRecord, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_RECORD));
 
-		CooldownKey key = new CooldownKey(recipient, messageRecord.messageId());
+		CooldownKey key = new CooldownKey(recipient, messageRecord.key());
+
 		if (notCooling(key))
 		{
 			Instant expirationTime = Instant.now().plus(messageRecord.repeatDelay());

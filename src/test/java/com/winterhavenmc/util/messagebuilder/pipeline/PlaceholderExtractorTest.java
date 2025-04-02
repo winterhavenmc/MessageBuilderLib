@@ -20,6 +20,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +45,7 @@ class PlaceholderExtractorTest
 
 	@BeforeEach
 	public void setUp() {
-		message = new Message(playerMock, MessageId.ENABLED_MESSAGE.name(), messageProcessorMock);
+		message = new Message(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow(), messageProcessorMock);
 		macroReplacer = new MacroReplacer();
 	}
 

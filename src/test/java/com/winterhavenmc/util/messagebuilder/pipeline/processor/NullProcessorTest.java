@@ -18,11 +18,11 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.NullProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 
@@ -41,31 +41,11 @@ class NullProcessorTest {
 
 	@Mock Player playerMock;
 
+	RecordKey macroKey = RecordKey.create("KEY").orElseThrow();
+
 	@AfterEach
 	void tearDown() {
 		playerMock = null;
-	}
-
-
-	@Test
-	void testResolveContext_parameter_null_key() {
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new NullProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(null, contextMap));
-
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	void testResolveContext_parameter_empty_key() {
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new NullProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("", contextMap));
-
-		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
 	}
 
 
@@ -74,7 +54,7 @@ class NullProcessorTest {
 		MacroProcessor macroProcessor = new NullProcessor();
 
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("KEY", null));
+				() -> macroProcessor.resolveContext(macroKey, null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
@@ -83,32 +63,30 @@ class NullProcessorTest {
 	@Test
 	void resolveContext() {
 		// Arrange
-		String key = "KEY";
 		NullProcessor nullProcessor = new NullProcessor();
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(key, null);
+		ContextMap contextMap = new ContextMap(playerMock, macroKey);
+		contextMap.put(macroKey, null);
 
 		// Act
-		ResultMap resultMap = nullProcessor.resolveContext(key, contextMap);
+		ResultMap resultMap = nullProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertEquals("NULL", resultMap.get(key));
+		assertEquals("NULL", resultMap.get(macroKey.toString()));
 	}
 
 
 	@Test
 	void resolveContext_not_null() {
 		// Arrange
-		String key = "KEY";
 		NullProcessor nullProcessor = new NullProcessor();
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(key, 42);
+		ContextMap contextMap = new ContextMap(playerMock, macroKey);
+		contextMap.put(macroKey, 42);
 
 		// Act
-		ResultMap resultMap = nullProcessor.resolveContext(key, contextMap);
+		ResultMap resultMap = nullProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertEquals("NULL", resultMap.get(key));
+		assertEquals("NULL", resultMap.get(macroKey.toString()));
 	}
 
 }

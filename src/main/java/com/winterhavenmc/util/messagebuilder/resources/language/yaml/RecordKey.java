@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationMessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 

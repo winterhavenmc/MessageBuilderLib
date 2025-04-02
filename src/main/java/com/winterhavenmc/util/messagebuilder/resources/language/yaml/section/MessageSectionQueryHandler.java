@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -25,9 +26,8 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -56,30 +56,27 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 
 
 	/**
-	 * Retrieve a message record from the language file for the provided messageId
+	 * Retrieve a message record from the language file for the provided key
 	 *
 	 * @param key the MessageId of the message record to be retrieved
 	 * @return the message record for the MessageId
 	 */
 	@Override
-	public Optional<MessageRecord> getRecord(final String key)
+	public Optional<MessageRecord> getRecord(final RecordKey key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_NULL, KEY));
-
-		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key))
+		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
 				.map(messageEntry -> new MessageRecord(key,
-						messageEntry.getBoolean(Field.ENABLED.toKey()),
-						messageEntry.getString(Field.MESSAGE_TEXT.toKey()),
-						Duration.ofSeconds(messageEntry.getLong(Field.REPEAT_DELAY.toKey())),
-						messageEntry.getString(Field.TITLE_TEXT.toKey()),
-						messageEntry.getInt(Field.TITLE_FADE_IN.toKey()),
-						messageEntry.getInt(Field.TITLE_STAY.toKey()),
-						messageEntry.getInt(Field.TITLE_FADE_OUT.toKey()),
-						messageEntry.getString(Field.SUBTITLE_TEXT.toKey()),
-						"",
-						"",
-						""));
+					messageEntry.getBoolean(Field.ENABLED.toKey()),
+					messageEntry.getString(Field.MESSAGE_TEXT.toKey()),
+					Duration.ofSeconds(messageEntry.getLong(Field.REPEAT_DELAY.toKey())),
+					messageEntry.getString(Field.TITLE_TEXT.toKey()),
+					messageEntry.getInt(Field.TITLE_FADE_IN.toKey()),
+					messageEntry.getInt(Field.TITLE_STAY.toKey()),
+					messageEntry.getInt(Field.TITLE_FADE_OUT.toKey()),
+					messageEntry.getString(Field.SUBTITLE_TEXT.toKey()),
+					"",
+					"",
+					""));
 	}
 
 

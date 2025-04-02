@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.WorldProcessor;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
 
@@ -65,32 +66,11 @@ class WorldProcessorTest {
 
 
 	@Test
-	void testResolveContext_parameter_null_key() {
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new WorldProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(null, contextMap));
-
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	void testResolveContext_parameter_empty_key() {
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new WorldProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("", contextMap));
-
-		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
-	}
-
-
-	@Test
 	void testResolveContext_parameter_null_context_map() {
 		MacroProcessor macroProcessor = new WorldProcessor();
+		RecordKey recordKey = RecordKey.create("KEY").orElseThrow();
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("KEY", null));
+				() -> macroProcessor.resolveContext(recordKey, null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
@@ -102,17 +82,17 @@ class WorldProcessorTest {
 		when(worldMock.getName()).thenReturn("test_world");
 		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.of("MV Alias"));
 
-		String keyPath = "SOME_WORLD";
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		RecordKey recordKey = RecordKey.create("SOME_WORLD").orElseThrow();
+		ContextMap contextMap = new ContextMap(playerMock, recordKey);
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(keyPath, worldMock);
+		contextMap.put(recordKey, worldMock);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(keyPath));
-		assertEquals("MV Alias", resultMap.get(keyPath));
+		assertTrue(resultMap.containsKey(recordKey.toString()));
+		assertEquals("MV Alias", resultMap.get(recordKey.toString()));
 	}
 
 
@@ -122,33 +102,33 @@ class WorldProcessorTest {
 		when(worldMock.getName()).thenReturn("test_world");
 		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.empty());
 
-		String keyPath = "SOME_WORLD";
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		RecordKey recordKey = RecordKey.create("SOME_WORLD").orElseThrow();
+		ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(keyPath, worldMock);
+		contextMap.put(recordKey, worldMock);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(keyPath));
-		assertEquals("test_world", resultMap.get(keyPath));
+		assertTrue(resultMap.containsKey(recordKey.toString()));
+		assertEquals("test_world", resultMap.get(recordKey.toString()));
 	}
 
 
 	@Test
 	void resolveContext_with_null_world() {
 		// Arrange
-		String key = "SOME_WORLD";
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		RecordKey recordKey = RecordKey.create("SOME_WORLD").orElseThrow();
+		ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(key, null);
+		contextMap.put(recordKey, null);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
 
 		// Assert
-		assertNull(resultMap.get(key));
+		assertNull(resultMap.get(recordKey.toString()));
 	}
 
 }

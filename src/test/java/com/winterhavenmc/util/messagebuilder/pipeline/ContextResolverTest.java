@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -59,9 +60,11 @@ class ContextResolverTest
     {
 		// Arrange
 		ItemStack itemStack = new ItemStack(Material.STONE);
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put("NUMBER", 42);
-		contextMap.put("ITEM_STACK", itemStack);
+		ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
+		RecordKey numberRecordKey = RecordKey.create("NUMBER").orElseThrow();
+		RecordKey itemStackRecordKey = RecordKey.create("ITEM_STACK").orElseThrow();
+		contextMap.put(numberRecordKey, 42);
+		contextMap.put(itemStackRecordKey, itemStack);
 
 		// Act
         ResultMap resultMap = contextResolver.resolve(contextMap);

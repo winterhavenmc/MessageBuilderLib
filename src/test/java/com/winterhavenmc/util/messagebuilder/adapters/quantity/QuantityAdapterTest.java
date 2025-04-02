@@ -41,7 +41,7 @@ public class QuantityAdapterTest {
 
 			// Act
 			int quantity = -888;
-			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(collection);
+			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(collection);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -57,7 +57,7 @@ public class QuantityAdapterTest {
 
 			// Act
 			int quantity = -777;
-			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(collection);
+			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(collection);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -71,7 +71,7 @@ public class QuantityAdapterTest {
 			// Act & Assert
 			int quantity = -999;
 			Collection<String> collection = null;
-			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(collection);
+			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(collection);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -91,7 +91,7 @@ public class QuantityAdapterTest {
 
 			// Act
 			int quantity = -888;
-			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(itemStackMock);
+			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(itemStackMock);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -108,7 +108,7 @@ public class QuantityAdapterTest {
 
 			// Act
 			int quantity = -777;
-			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(itemStackMock);
+			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(itemStackMock);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}
@@ -121,7 +121,7 @@ public class QuantityAdapterTest {
 		public void testConstructor_withNullItemStack() {
 			// Act & Assert
 			int quantity = -999;
-			Optional<Quantifiable> resolver = QuantityAdapter.asQuantifiable(null);
+			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(null);
 			if (resolver.isPresent()) {
 				quantity = resolver.get().getQuantity();
 			}

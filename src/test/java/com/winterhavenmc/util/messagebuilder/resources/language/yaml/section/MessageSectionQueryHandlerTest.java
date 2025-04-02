@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
@@ -79,7 +80,8 @@ class MessageSectionQueryHandlerTest {
 	@Test
 	void testGetRecord_parameter_valid() {
 		// Arrange & Act
-		Optional<MessageRecord> messageRecord = queryHandler.getRecord(MessageId.ENABLED_MESSAGE.name());
+		RecordKey recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+		Optional<MessageRecord> messageRecord = queryHandler.getRecord(recordKey);
 
 		// Assert
 		assertTrue(messageRecord.isPresent());
@@ -87,15 +89,9 @@ class MessageSectionQueryHandlerTest {
 	}
 
 	@Test
-	void testGetRecord_parameter_null() {
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> queryHandler.getRecord(null));
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-	@Test
 	void testGetRecord_parameter_invalid() {
-		Optional<MessageRecord> messageRecord = queryHandler.getRecord(MessageId.NONEXISTENT_ENTRY.name());
+		RecordKey recordKey = RecordKey.create(MessageId.NONEXISTENT_ENTRY).orElseThrow();
+		Optional<MessageRecord> messageRecord = queryHandler.getRecord(recordKey);
 		assertFalse(messageRecord.isPresent());
 	}
 

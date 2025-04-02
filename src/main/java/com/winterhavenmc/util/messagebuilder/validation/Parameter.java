@@ -34,7 +34,7 @@ public enum Parameter
 	LOCATION("location"),
 	MACRO("macro"),
 	MESSAGE("message"),
-	MESSAGE_ID("messageId"),
+	MESSAGE_ID("key"),
 	MESSAGE_PROCESSOR("messageProcessor"),
 	MESSAGE_SECTION("messageSection"),
 	MESSAGE_RECORD("messageRecord"),

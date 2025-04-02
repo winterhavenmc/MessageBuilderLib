@@ -19,13 +19,15 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.*;
-
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
 import org.bukkit.command.CommandSender;
 
 import java.util.Objects;
+import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MACRO;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.VALUE;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -37,7 +39,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 public final class Message
 {
 	private final CommandSender recipient;
-	private final String messageId;
+	private final RecordKey recordKey;
 	private final MessageProcessor messageProcessor;
 	private final ContextMap contextMap;
 
@@ -46,15 +48,15 @@ public final class Message
 	 * Class constructor
 	 *
 	 * @param recipient message recipient
-	 * @param messageId message identifier
+	 * @param recordKey message identifier
 	 * @param messageProcessor the message processor that will receive the message when the send method is called
 	 */
-	public Message(final CommandSender recipient, final String messageId, final MessageProcessor messageProcessor)
+	public Message(final CommandSender recipient, final RecordKey recordKey, final MessageProcessor messageProcessor)
 	{
 		this.recipient = recipient;
-		this.messageId = messageId;
+		this.recordKey = recordKey;
 		this.messageProcessor = messageProcessor;
-		this.contextMap = new ContextMap(recipient, messageId);
+		this.contextMap = new ContextMap(recipient, recordKey);
 	}
 
 
@@ -73,8 +75,10 @@ public final class Message
 		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
+		RecordKey recordKey = RecordKey.create(macro).orElseThrow();
+
 		// put value into context map using macro enum constant name as key
-		this.contextMap.put(macro.name(), value);
+		this.contextMap.put(recordKey, value);
 
 		// return this instance of Message class to the builder chain
 		return this;
@@ -97,9 +101,11 @@ public final class Message
 		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
+		RecordKey recordKey = RecordKey.create(macro).orElseThrow();
+
 		// put value into context map using macro enum constant name for key
-		this.contextMap.put(macro.name(), value);
-		this.contextMap.put(macro.name() + ".QUANTITY", quantity);
+		this.contextMap.put(recordKey, value);
+		this.contextMap.put(RecordKey.create(macro.name() + ".QUANTITY").orElseThrow(), quantity);
 
 		// return this instance of Message class to the builder chain
 		return this;
@@ -127,13 +133,19 @@ public final class Message
 
 
 	/**
-	 * Getter for messageId
+	 * Getter for key
 	 *
 	 * @return {@code String} the unique message identifier
 	 */
 	public String getMessageId()
 	{
-		return messageId;
+		return recordKey.toString();
+	}
+
+
+	public RecordKey getMessageKey()
+	{
+		return recordKey;
 	}
 
 
@@ -155,9 +167,9 @@ public final class Message
 	 * @param <K> type parameter for key
 	 * @return {@code Object} the value stored in the map, or {@code null} if no value is present for key
 	 */
-	<K extends Enum<K>> Object peek(K macro)
+	<K extends Enum<K>> Optional<Object> peek(K macro)
 	{
-		return contextMap.get(macro.name());
+		return contextMap.getOpt(RecordKey.create(macro).orElseThrow());
 	}
 
 }

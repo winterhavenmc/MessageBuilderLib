@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -67,8 +68,10 @@ class MessageProcessorTest
 				messageSenderMock,
 				titleSenderMock);
 
+		RecordKey recordKey = RecordKey.create(ENABLED_MESSAGE).orElseThrow();
+
 		messageRecord = new MessageRecord(
-				ENABLED_MESSAGE.name(),
+				recordKey,
 				true,
 				"this is a test message",
 				Duration.ofSeconds(11),
@@ -100,9 +103,10 @@ class MessageProcessorTest
 	@Test @DisplayName("Test process method with valid parameter")
 	void testProcess() {
 		// Arrange
+		RecordKey recordKey = RecordKey.create(ENABLED_MESSAGE).orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
-		when(messageRetrieverMock.getRecord(ENABLED_MESSAGE.name())).thenReturn(Optional.of(messageRecord));
-		Message message = new Message(playerMock, ENABLED_MESSAGE.name(), messageProcessor);
+		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(Optional.of(messageRecord));
+		Message message = new Message(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
 		when(macroReplacerMock.replaceMacros(messageRecord, message)).thenReturn(Optional.ofNullable(messageRecord));
 
 		// Act & Assert
@@ -110,7 +114,7 @@ class MessageProcessorTest
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();
-		verify(messageRetrieverMock, atLeastOnce()).getRecord(anyString());
+		verify(messageRetrieverMock, atLeastOnce()).getRecord(recordKey);
 	}
 
 

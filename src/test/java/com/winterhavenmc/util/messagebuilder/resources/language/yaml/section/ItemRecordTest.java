@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -43,10 +44,12 @@ public class ItemRecordTest {
 
 
 	@Test
-	public void constructorTest() {
+	public void constructorTest()
+	{
+		RecordKey recordKey = RecordKey.create(TEST_ITEM).orElseThrow();
 
 		ItemRecord testRecord = new ItemRecord(
-				TEST_ITEM,
+				recordKey,
 				Optional.of("Test Item"),
 				Optional.of("Test Items"),
 				Optional.of("Inventory Test Item"),
@@ -64,9 +67,12 @@ public class ItemRecordTest {
 	}
 
 	@Test
-	public void testPluralized() {
+	public void testPluralized()
+	{
+		RecordKey recordKey = RecordKey.create(TEST_ITEM).orElseThrow();
+
 		ItemRecord testRecord = new ItemRecord(
-				TEST_ITEM,
+				recordKey,
 				Optional.of("Test Item"),
 				Optional.of("Test Items"),
 				Optional.of("Inventory Test Item"),

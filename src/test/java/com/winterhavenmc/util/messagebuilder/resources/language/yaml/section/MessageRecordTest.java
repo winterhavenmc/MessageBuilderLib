@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -54,7 +55,7 @@ class MessageRecordTest {
 	@Test
 	void constructorTest() {
 		MessageRecord testRecord = new MessageRecord(
-				ENABLED_MESSAGE.name(),
+				RecordKey.create(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",
 				Duration.ofSeconds(11),

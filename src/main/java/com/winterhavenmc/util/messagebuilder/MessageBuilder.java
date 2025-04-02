@@ -28,6 +28,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.pipeline.MacroReplacer;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.time.Tick;
@@ -40,8 +41,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.RELOAD_FAILED;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.RELOAD_FAILED;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -50,7 +51,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * A class that implements a builder pattern for messages to be sent to a player or console.
  * <p>
  * It should be instantiated in a plugin's onEnable method, and the build method is called
- * with a CommandSender as recipient and a MessageId enum member to reference the message defined
+ * with a CommandSender as recipient and an E enum member to reference the message defined
  * in the language file. Macro replacements can then be assigned with a chained method call to
  * the setMacro method, which can be repeated as necessary to set all the macros to be replaced
  * in the message string. Finally, the send method is called, usually as a final chained method call
@@ -62,7 +63,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * <p>
  * <i>example:</i>
  * <pre>
- * {@code messageBuilder.compose(recipient, MessageId.ENABLED_MESSAGE.name())
+ * {@code messageBuilder.compose(recipient, E.ENABLED_MESSAGE.name())
  *     .setMacro(Macro.PLACEHOLDER1, object)
  *     .setMacro(Macro.PLACEHOLDER2, replacementString)
  *     .send();
@@ -161,13 +162,13 @@ public final class MessageBuilder
 	 * @param messageId the message identifier
 	 * @return {@code Message} an initialized message object
 	 */
-	public <MessageId extends Enum<MessageId>>
-	Message compose(final CommandSender recipient, final MessageId messageId)
+	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
 	{
 		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
-		validate(messageId, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
-		return new Message(recipient, messageId.name(), messageProcessor);
+		RecordKey recordKey = RecordKey.create(messageId).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
+
+		return new Message(recipient, recordKey, messageProcessor);
 	}
 
 
