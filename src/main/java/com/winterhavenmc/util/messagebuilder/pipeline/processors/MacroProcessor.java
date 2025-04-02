@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 
 
 /**
@@ -86,6 +87,6 @@ public interface MacroProcessor
 	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
 	 * @return a {@link ResultMap} containing resolved macros and their replacements
 	 */
-	ResultMap resolveContext(String key, ContextMap contextMap);
+	ResultMap resolveContext(RecordKey key, ContextMap contextMap);
 
 }

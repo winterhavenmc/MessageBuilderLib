@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -57,13 +57,27 @@ public final class MessageProcessor implements Processor
 	{
 		validate(message, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE));
 
-		CooldownKey.optional(message.getRecipient(), message.getMessageId())
+		CooldownKey.optional(message.getRecipient(), message.getMessageKey())
 				.filter(notCooling)
-				.flatMap(key -> messageRetriever.getRecord(key.getMessageId()))
+				.flatMap(key -> messageRetriever.getRecord(key.getRecordKey()))
 				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message))
 				.ifPresent(processedMessage -> List.of(messageSender, titleSender)
 						.forEach(sender -> sender
 								.send(message.getRecipient(), processedMessage)));
 	}
 
+
+//	@Override
+//	public void process(final Message message)
+//	{
+//		validate(message, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE));
+//
+//		CooldownKey.optional(message.getRecipient(), message.getMessageId())
+//				.filter(notCooling)
+//				.flatMap(key -> messageRetriever.getRecord(key.getMessageId()))
+//				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message))
+//				.ifPresent(processedMessage -> List.of(messageSender, titleSender)
+//						.forEach(sender -> sender
+//								.send(message.getRecipient(), processedMessage)));
+//	}
 }

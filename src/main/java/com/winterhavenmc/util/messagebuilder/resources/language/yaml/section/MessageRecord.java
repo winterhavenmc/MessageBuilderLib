@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+
 import java.time.Duration;
 import java.util.Optional;
 
@@ -25,7 +27,7 @@ import java.util.Optional;
  * A data object record for message information contained in the language file. This class also contains
  * an enum of fields with their corresponding path key, and a static method for retrieving a record.
  *
- * @param messageId the key for the message
+ * @param key the key for the message
  * @param enabled the enabled setting for the message
  * @param message the raw message string, with placeholders
  * @param repeatDelay the repeat delay setting for the message
@@ -36,7 +38,7 @@ import java.util.Optional;
  * @param subtitle the subtitle for the message
  */
 public record MessageRecord (
-		String messageId,
+		RecordKey key,
 		boolean enabled,
 		String message,
 		Duration repeatDelay,
@@ -62,7 +64,7 @@ public record MessageRecord (
 	                                                final String newFinalSubTitleString)
 	{
 		return Optional.of(new MessageRecord(
-				this.messageId,
+				this.key,
 				this.enabled,
 				this.message,
 				this.repeatDelay,

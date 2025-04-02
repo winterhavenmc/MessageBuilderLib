@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.Optional;
  * @param itemLore a List of Strings containing the lines of lore for this item
  */
 public record ItemRecord(
-		String key,
+		RecordKey key,
 		Optional<String> nameSingular,
 		Optional<String> namePlural,
 		Optional<String> inventoryItemSingular,

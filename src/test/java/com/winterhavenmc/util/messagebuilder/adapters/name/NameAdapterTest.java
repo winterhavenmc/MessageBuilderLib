@@ -44,7 +44,7 @@ public class NameAdapterTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> adapter = NameAdapter.asNameable(commandSenderMock);
+			Optional<Nameable> adapter = new NameAdapter().adapt(commandSenderMock);
 			if (adapter.isPresent()) {
 				name = adapter.get().getName();
 			}
@@ -62,7 +62,7 @@ public class NameAdapterTest {
 			String name = null;
 
 			// Act
-			Optional<Nameable> adapter = NameAdapter.asNameable(nullPlayer);
+			Optional<Nameable> adapter = new NameAdapter().adapt(nullPlayer);
 			if (adapter.isPresent()) {
 				name = adapter.get().getName();
 			}
@@ -84,7 +84,7 @@ public class NameAdapterTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> adapter = NameAdapter.asNameable(worldMock);
+			Optional<Nameable> adapter = new NameAdapter().adapt(worldMock);
 			if (adapter.isPresent()) {
 				name = adapter.get().getName();
 			}
@@ -105,7 +105,7 @@ public class NameAdapterTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> adapter = NameAdapter.asNameable(serverMock);
+			Optional<Nameable> adapter = new NameAdapter().adapt(serverMock);
 			if (adapter.isPresent()) {
 				name = adapter.get().getName();
 			}
@@ -126,7 +126,7 @@ public class NameAdapterTest {
 			String name = "";
 
 			// Act
-			Optional<Nameable> adapter = NameAdapter.asNameable(pluginMock);
+			Optional<Nameable> adapter = new NameAdapter().adapt(pluginMock);
 			if (adapter.isPresent()) {
 				name = adapter.get().getName();
 			}

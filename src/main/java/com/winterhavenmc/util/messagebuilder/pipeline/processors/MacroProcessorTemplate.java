@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import org.bukkit.Location;
 
 
@@ -37,12 +38,12 @@ public abstract class MacroProcessorTemplate implements MacroProcessor
 	 * @param location the location to extract fields
 	 * @return a {@link ResultMap} populated with the location fields
 	 */
-	static ResultMap insertLocationFields(final String key, final Location location)
+	static ResultMap insertLocationFields(final RecordKey key, final Location location)
 	{
 		ResultMap resultMap = new ResultMap();
 
 		// copy of original key before appending component field suffixes
-		String resultKey = key;
+		String resultKey = key.toString();
 
 		// Get components
 		String locationWorld;

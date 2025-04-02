@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.displayname;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 import org.bukkit.Nameable;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -31,22 +32,10 @@ import java.util.Optional;
  * {@code String} display name, regardless of its actual method name. Any object that is not known to have a
  * display name will result in an empty {@code Optional} being returned from the static {@code asDisplayNameable} method.
  */
-public class DisplayNameAdapter
+public class DisplayNameAdapter implements Adapter
 {
-	private DisplayNameAdapter() { /* private constructor to prevent instantiation */ }
-
-	/**
-	 * Static method that returns an {@link Optional} of {@code DisplayNameable}, or an empty Optional if the passed
-	 * object is not known to have an associated display name. The Optional value, if present, implements the
-	 * {@code DisplayNameable} Interface, and is guaranteed to have a {@code getDisplayName()} method.
-	 *
-	 * @param obj the object being evaluated as to be DisplayNameable
-	 * @return {@code Optional} of the object as a {@code DisplayNameable}, or an empty Optional if the passed
-	 * object does not have a known method of retrieving a display name.
-	 */
-	public static Optional<DisplayNameable> asDisplayNameable(Object obj)
+	public Optional<DisplayNameable> adapt(final Object obj)
 	{
-		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
 			case Player player -> Optional.of(player::getDisplayName);
 			case Nameable nameable -> Optional.of(nameable::getCustomName);

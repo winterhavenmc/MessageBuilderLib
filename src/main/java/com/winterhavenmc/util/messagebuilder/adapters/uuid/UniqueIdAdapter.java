@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.uuid;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -31,10 +32,8 @@ import java.util.Optional;
  * to the actual method of the object that returns a UUID, regardless of its method name. Any object that is not
  * known to have a UUID will result in an empty {@code Optional} being returned from the asIdentifiable method.
  */
-public class UniqueIdAdapter
+public class UniqueIdAdapter implements Adapter
 {
-	private UniqueIdAdapter() { /* private constructor to prevent instantiation */ }
-
 	/**
 	 * Static method that returns an object of type Identifiable, or null if the passed object is not known to have
 	 * an associated UUID.
@@ -43,7 +42,7 @@ public class UniqueIdAdapter
 	 * @return the object, wrapped in a Identifiable type, with its method to retrieve a UUID mapped to
 	 * the getUniqueId() method of the Identifiable type.
 	 */
-	public static Optional<Identifiable> asIdentifiable(Object obj)
+	public Optional<Identifiable> adapt(final Object obj)
 	{
 		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {

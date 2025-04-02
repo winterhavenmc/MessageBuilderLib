@@ -18,15 +18,14 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.QUERY_HANDLER;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -50,11 +49,8 @@ public final class MessageRetriever implements Retriever
 
 
 	@Override
-	public Optional<MessageRecord> getRecord(String key)
+	public Optional<MessageRecord> getRecord(RecordKey key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
-
 		return queryHandler.getRecord(key);
 	}
 

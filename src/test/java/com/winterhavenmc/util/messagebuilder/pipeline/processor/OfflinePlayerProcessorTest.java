@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.OfflinePlayerProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -51,6 +52,8 @@ class OfflinePlayerProcessorTest {
 	@Mock OfflinePlayer offlinePlayerMock;
 	@Mock Location locationMock;
 
+	RecordKey macroKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+
 	@AfterEach
 	public void tearDown() {
 		offlinePlayerMock = null;
@@ -63,47 +66,18 @@ class OfflinePlayerProcessorTest {
 		when(offlinePlayerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(offlinePlayerMock.getLocation()).thenReturn(locationMock);
 
-		String key = "KEY";
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		ContextMap contextMap = new ContextMap(playerMock, macroKey);
 
 		// Act
-		contextMap.put(key, offlinePlayerMock);
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
+		contextMap.put(macroKey, offlinePlayerMock);
+		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
 		assertFalse(resultMap.isEmpty());
-		assertTrue(resultMap.containsKey(key));
+		assertTrue(resultMap.containsKey(macroKey.toString()));
 	}
 
-
-	@Test
-	void resolveContext_with_null_key() {
-		// Arrange
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-
-		// Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(null, contextMap));
-
-		// Assert
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void resolveContext_with_empty_key() {
-		// Arrange
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-
-		// Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("", contextMap));
-
-		// Assert
-		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
-	}
 
 	@Test
 	void resolveContext_with_null_contextMap() {
@@ -112,7 +86,7 @@ class OfflinePlayerProcessorTest {
 
 		// Act
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("KEY", null));
+				() -> macroProcessor.resolveContext(macroKey, null));
 
 		// Assert
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
@@ -122,18 +96,17 @@ class OfflinePlayerProcessorTest {
 	@Test
 	void resolveContext_mismatched_type() {
 
-		String keyPath = "SOME_NAME";
 		Duration duration  = Duration.ofMillis(2000);
 
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		ContextMap contextMap = new ContextMap(playerMock, macroKey);
 
-		contextMap.put(keyPath, duration);
+		contextMap.put(macroKey, duration);
 
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
-		assertFalse(resultMap.containsKey(keyPath));
+		assertFalse(resultMap.containsKey(macroKey.toString()));
 	}
 
 }

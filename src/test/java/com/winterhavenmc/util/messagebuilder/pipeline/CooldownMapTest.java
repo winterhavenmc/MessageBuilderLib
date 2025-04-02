@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -55,7 +56,7 @@ class CooldownMapTest {
 		cooldownMap = new CooldownMap();
 
 		messageRecord = new MessageRecord(
-				MessageId.ENABLED_MESSAGE.name(),
+				RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a message.",
 				Duration.ofSeconds(3),
@@ -93,7 +94,7 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// Assert
-			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name())));
+			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow())));
 
 			// Verify
 			verify(playerMock, atLeastOnce()).getUniqueId();
@@ -133,7 +134,7 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// Assert TODO: test that second put did not overwrite first entry
-			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name())));
+			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow())));
 
 			// Verify
 			verify(playerMock, atLeast(2)).getUniqueId();
@@ -154,7 +155,7 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// assert
-			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, MessageId.ENABLED_MESSAGE.name())));
+			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow())));
 
 			// Verify
 			verify(playerMock, atLeastOnce()).getUniqueId();
@@ -204,7 +205,7 @@ class CooldownMapTest {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 			messageRecord = new MessageRecord(
-					MessageId.ENABLED_MESSAGE.name(),
+					RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow(),
 					true,
 					"this is a message.",
 					Duration.ofSeconds(-10),

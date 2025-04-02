@@ -25,7 +25,7 @@ import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONTEXT_MAP;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 

@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 
 import java.util.Optional;
@@ -29,5 +30,5 @@ import java.util.Optional;
 @FunctionalInterface
 public interface QueryHandler<R extends SectionRecord>
 {
-	Optional<R> getRecord(String key);
+	Optional<R> getRecord(RecordKey key);
 }

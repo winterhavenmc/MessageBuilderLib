@@ -18,11 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.LocationProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -45,8 +44,8 @@ import static org.hamcrest.Matchers.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class LocationProcessorTest {
-
+class LocationProcessorTest
+{
 	@Mock World worldMock;
 	@Mock Location locationMock;
 	@Mock Player playerMock;
@@ -54,12 +53,14 @@ class LocationProcessorTest {
 	// real location processor
 	LocationProcessor locationProcessor;
 	ContextMap contextMap;
+	RecordKey key = RecordKey.create("HOME").orElseThrow();
 
 
 	@BeforeEach
-	public void setUp() {
+	public void setUp()
+	{
 		// real context map
-		contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		contextMap = new ContextMap(playerMock, key);
 
 		// Initialize the processor
 		locationProcessor = new LocationProcessor();
@@ -67,39 +68,20 @@ class LocationProcessorTest {
 
 
 	@Test
-	void testResolveContext_parameter_null_key() {
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+	void testResolveContext_parameter_null_context_map()
+	{
+		// Arrange
 		MacroProcessor macroProcessor = new LocationProcessor();
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(null, contextMap));
-
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	void testResolveContext_parameter_empty_key() {
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new LocationProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("", contextMap));
-
-		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
-	}
-
-
-	@Test
-	void testResolveContext_parameter_null_context_map() {
-		MacroProcessor macroProcessor = new LocationProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("KEY", null));
+				() -> macroProcessor.resolveContext(key, null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
 
 
 	@Test
-	void testResolveContext_ValidLocation() {
+	void testResolveContext_ValidLocation()
+	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
 		when(locationMock.getWorld()).thenReturn(worldMock);
@@ -107,73 +89,70 @@ class LocationProcessorTest {
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put("HOME",locationMock);
-
-		// Act
-		ResultMap result = locationProcessor.resolveContext("HOME", contextMap);
-
-		// Assert
-		assertThat(result, is(notNullValue()));
-		assertThat(result.get("HOME.LOCATION.WORLD"), is("test_world"));
-		assertThat(result.get("HOME.LOCATION.X"), is("123"));
-		assertThat(result.get("HOME.LOCATION.Y"), is("64"));
-		assertThat(result.get("HOME.LOCATION.Z"), is("-789"));
-		assertThat(result.get("HOME.LOCATION"), is("test_world [123, 64, -789]"));
-	}
-
-	@Test
-	void testResolveContext_ValidLocation2() {
-		// Arrange
-		when(worldMock.getName()).thenReturn("test_world");
-		when(locationMock.getWorld()).thenReturn(worldMock);
-		when(locationMock.getBlockX()).thenReturn(123);
-		when(locationMock.getBlockY()).thenReturn(64);
-		when(locationMock.getBlockZ()).thenReturn(-789);
-
-		String key = "PLAYER.LOCATION";
 		contextMap.put(key, locationMock);
 
 		// Act
 		ResultMap result = locationProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertThat(result, is(notNullValue()));
-		assertThat(result.get("PLAYER.LOCATION.WORLD"), is("test_world"));
-		assertThat(result.get("PLAYER.LOCATION.X"), is("123"));
-		assertThat(result.get("PLAYER.LOCATION.Y"), is("64"));
-		assertThat(result.get("PLAYER.LOCATION.Z"), is("-789"));
-		assertThat(result.get("PLAYER.LOCATION"), is("test_world [123, 64, -789]"));
+		assertNotNull(result);
+		assertEquals("test_world", result.get("HOME.LOCATION.WORLD"));
+		assertEquals("123", result.get("HOME.LOCATION.X"));
+		assertEquals("64", result.get("HOME.LOCATION.Y"));
+		assertEquals("-789", result.get("HOME.LOCATION.Z"));
+		assertEquals("test_world [123, 64, -789]", result.get("HOME.LOCATION"));
 	}
 
+
 	@Test
-	void testResolveContext_MissingWorld() {
+	void testResolveContext_ValidLocation2()
+	{
+		// Arrange
+		RecordKey playerKey = RecordKey.create("PLAYER").orElseThrow();
+		when(worldMock.getName()).thenReturn("test_world");
+		when(locationMock.getWorld()).thenReturn(worldMock);
+		when(locationMock.getBlockX()).thenReturn(123);
+		when(locationMock.getBlockY()).thenReturn(64);
+		when(locationMock.getBlockZ()).thenReturn(-789);
+
+		contextMap.put(playerKey, locationMock);
+
+		// Act
+		ResultMap result = locationProcessor.resolveContext(playerKey, contextMap);
+
+		// Assert
+		assertNotNull(result);
+		assertEquals("test_world", result.get("PLAYER.LOCATION.WORLD"));
+		assertEquals("123", result.get("PLAYER.LOCATION.X"));
+		assertEquals("64", result.get("PLAYER.LOCATION.Y"));
+		assertEquals("-789", result.get("PLAYER.LOCATION.Z"));
+		assertEquals("test_world [123, 64, -789]", result.get("PLAYER.LOCATION"));
+	}
+
+
+	@Test
+	void testResolveContext_MissingWorld()
+	{
 		// Arrange
 		when(locationMock.getWorld()).thenReturn(null);
 		when(locationMock.getBlockX()).thenReturn(123);
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put("HOME", locationMock);
+		contextMap.put(key, locationMock);
 
 		// Act
-		ResultMap result = locationProcessor.resolveContext("HOME", contextMap);
+		ResultMap result = locationProcessor.resolveContext(key, contextMap);
 
 		// Assert
 		assertThat(result.get("HOME.LOCATION.WORLD"), is("???"));
 		assertThat(result.get("HOME.LOCATION"), is("??? [123, 64, -789]"));
 	}
 
-	@Test
-	void testResolveContext_EmptyKey() {
-		// Act & Assert
-		assertThrows(IllegalArgumentException.class,
-				() -> locationProcessor.resolveContext("", contextMap),
-				"Expected resolveContext to throw IllegalArgumentException for empty key"
-		);
-	}
 
 	@Test
-	void testResolveContext_KeyWithoutLocationSuffix() {
+	void testResolveContext_KeyWithoutLocationSuffix()
+	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
 		when(locationMock.getWorld()).thenReturn(worldMock);
@@ -181,10 +160,10 @@ class LocationProcessorTest {
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put("HOME", locationMock);
+		contextMap.put(key, locationMock);
 
 		// Act
-		ResultMap result = locationProcessor.resolveContext("HOME", contextMap);
+		ResultMap result = locationProcessor.resolveContext(key, contextMap);
 
 		// Assert
 		assertThat(result.get("HOME.LOCATION.WORLD"), is("test_world"));
@@ -194,20 +173,21 @@ class LocationProcessorTest {
 		assertThat(result.get("HOME.LOCATION"), is("test_world [123, 64, -789]"));
 	}
 
+
 	@Test
-	void resolveContext_mismatched_type() {
+	void resolveContext_mismatched_type()
+	{
 		// Arrange
-		String keyPath = "SOME_NAME";
 		Duration duration  = Duration.ofMillis(2000);
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(keyPath, duration);
+		ContextMap contextMap = new ContextMap(playerMock, key);
+		contextMap.put(key, duration);
 		MacroProcessor macroProcessor = new LocationProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(keyPath, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey(keyPath));
+		assertFalse(resultMap.containsKey(key.toString()));
 	}
 
 }

@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
 
@@ -25,10 +26,8 @@ import org.bukkit.World;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -39,20 +38,20 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 public class WorldProcessor extends MacroProcessorTemplate
 {
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap)
+	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 		validate(contextMap, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONTEXT_MAP));
 
 		ResultMap resultMap = new ResultMap();
 
-		if (contextMap.get(key) instanceof World world)
-		{
-			String worldName = MultiverseHelper.getAlias(world).orElse(world.getName());
-			resultMap.put(key, worldName);
-			resultMap.put(key + ".NAME", worldName);
-		}
+		contextMap.getOpt(key)
+				.filter(World.class::isInstance)
+				.map(World.class::cast)
+				.map(world -> MultiverseHelper.getAlias(world).orElse(world.getName()))
+				.ifPresent(worldName -> {
+					resultMap.put(key.toString(), worldName);
+					resultMap.put(key + ".NAME", worldName);
+				});
 
 		return resultMap;
 	}

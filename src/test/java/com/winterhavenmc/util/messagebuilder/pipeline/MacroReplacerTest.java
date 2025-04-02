@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.Message;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -46,12 +47,14 @@ class MacroReplacerTest
 	@Mock Player playerMock;
 	@Mock MessageProcessor messageProcessorMock;
 	MacroReplacer macroReplacer;
+	RecordKey recordKey;
 
 	Message message;
 
 	@BeforeEach
 	public void setUp() {
-		message = new Message(playerMock, MessageId.ENABLED_MESSAGE.name(), messageProcessorMock);
+		recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+		message = new Message(playerMock, recordKey, messageProcessorMock);
 		macroReplacer = new MacroReplacer();
 	}
 
@@ -71,7 +74,7 @@ class MacroReplacerTest
 		{
 			// Arrange
 			MessageRecord messageRecord = new MessageRecord(
-					MessageId.ENABLED_MESSAGE.name(),
+					recordKey,
 					true,
 					"this is a message.",
 					Duration.ofSeconds(3),
@@ -110,7 +113,7 @@ class MacroReplacerTest
 		{
 			// Arrange
 			MessageRecord messageRecord = new MessageRecord(
-					MessageId.ENABLED_MESSAGE.name(),
+					recordKey,
 					true,
 					"this is a message.",
 					Duration.ofSeconds(3),
@@ -140,9 +143,9 @@ class MacroReplacerTest
 		@Test @DisplayName("Test replaceMacrosInString method with valid parameters")
 		void testReplaceMacrosInString()
 		{
-			ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+			RecordKey key = RecordKey.create("ITEM_NAME").orElseThrow();
+			ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
 			MacroReplacer macroReplacer = new MacroReplacer();
-			String key = "ITEM_NAME";
 			contextMap.put(key, "TEST_STRING");
 
 			String resultString = macroReplacer.replaceMacrosInString(contextMap, "Replace this: {ITEM_NAME}");
@@ -166,7 +169,7 @@ class MacroReplacerTest
 		void testReplaceMacrosInString_parameter_null_messageString()
 		{
 			// Arrange
-			ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+			ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
 
 			// Act
 			ValidationException exception = assertThrows(ValidationException.class,
@@ -181,13 +184,14 @@ class MacroReplacerTest
 	@Test
 	void testAddRecipientContext() {
 		// Arrange
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		RecordKey key = RecordKey.create("RECIPIENT.LOCATION").orElseThrow();
+		ContextMap contextMap = new ContextMap(playerMock, key);
 
 		// Act
 		macroReplacer.addRecipientContext(contextMap);
 
 		// Assert
-		assertTrue(contextMap.contains("RECIPIENT.LOCATION"));
+		assertTrue(contextMap.contains(key));
 	}
 
 
@@ -243,10 +247,11 @@ class MacroReplacerTest
 	@Test
 	void addRecipientContext() {
 		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
-		ContextMap contextMap = new ContextMap(console, MessageId.ENABLED_MESSAGE.name());
+		RecordKey key = RecordKey.create("RECIPIENT").orElseThrow();
+		ContextMap contextMap = new ContextMap(console, key);
 
 		macroReplacer.addRecipientContext(contextMap);
-		assertTrue(contextMap.contains("RECIPIENT"));
+		assertTrue(contextMap.contains(key));
 	}
 
 }

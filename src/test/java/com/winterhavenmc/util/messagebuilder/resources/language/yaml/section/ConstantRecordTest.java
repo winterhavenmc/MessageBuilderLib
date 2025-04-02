@@ -17,15 +17,17 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ConstantRecordTest {
-
+class ConstantRecordTest
+{
     @Test
-    void constructorTest() {
-        String key = "testKey";
+    void constructorTest()
+    {
+        RecordKey key = RecordKey.create("testKey").orElseThrow();
         Object value = 42;
         ConstantRecord record = new ConstantRecord(key, value);
 
@@ -44,8 +46,10 @@ class ConstantRecordTest {
 
     @Test
     void testConstantRecordEquality() {
-        ConstantRecord record1 = new ConstantRecord("key", 123);
-        ConstantRecord record2 = new ConstantRecord("key", 123);
+        RecordKey key = RecordKey.create("key").orElseThrow();
+
+        ConstantRecord record1 = new ConstantRecord(key, 123);
+        ConstantRecord record2 = new ConstantRecord(key, 123);
 
         assertEquals(record1, record2);
         assertEquals(record1.hashCode(), record2.hashCode());
@@ -53,8 +57,11 @@ class ConstantRecordTest {
 
     @Test
     void testConstantRecordInequality() {
-        ConstantRecord record1 = new ConstantRecord("key1", 123);
-        ConstantRecord record2 = new ConstantRecord("key2", 456);
+        RecordKey key1 = RecordKey.create("key").orElseThrow();
+        RecordKey key2 = RecordKey.create("key").orElseThrow();
+
+        ConstantRecord record1 = new ConstantRecord(key1, 123);
+        ConstantRecord record2 = new ConstantRecord(key2, 456);
 
         assertNotEquals(record1, record2);
     }

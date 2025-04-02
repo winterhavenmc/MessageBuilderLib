@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageSectionQueryHandler;
@@ -60,9 +61,10 @@ class MessageRetrieverTest
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
 		QueryHandler<MessageRecord> queryHandler = new MessageSectionQueryHandler(configurationSupplier);
 		Retriever retriever = new MessageRetriever(queryHandler);
+		RecordKey recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
 
 		// Act
-		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name());
+		Optional<MessageRecord> messageRecord = retriever.getRecord(recordKey);
 
 		// Assert
 		assertNotNull(messageRecord);
@@ -71,32 +73,10 @@ class MessageRetrieverTest
 	}
 
 
-	@Test @DisplayName("Test getRecord method with valid parameters")
-	void testGetRecord2()
-	{
-		Retriever retriever = new MessageRetriever(queryHandlerMock);
-
-		Optional<MessageRecord> messageRecord = retriever.getRecord(MessageId.ENABLED_MESSAGE.name());
-		assertNotNull(messageRecord);
-		assertFalse(messageRecord.isPresent());
-	}
-
-
-	@Test
-	void getMessageRecord_parameter_null_Id()
-	{
-		Retriever retriever = new MessageRetriever(queryHandlerMock);
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> retriever.getRecord(null));
-
-		// Assert
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-
 	@Test
 	void testConstructor_parameter_null_query_handler()
 	{
+		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new MessageRetriever(null));
 

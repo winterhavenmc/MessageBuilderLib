@@ -15,15 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.validation;
+package com.winterhavenmc.util.messagebuilder.adapters;
 
-public enum MessageKey
+
+import java.util.Optional;
+
+public interface Adapter
 {
-	INVALID_SECTION,
-	MISSING_RESOURCE,
-	PARAMETER_EMPTY,
-	PARAMETER_INVALID,
-	PARAMETER_NULL,
-	PARAMETER_TYPE_MISMATCH,
-	RELOAD_FAILED,
+    Optional<?> adapt(Object obj);
 }

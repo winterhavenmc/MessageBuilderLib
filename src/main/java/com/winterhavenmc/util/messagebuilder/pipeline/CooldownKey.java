@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.command.CommandSender;
@@ -26,7 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_ID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -46,21 +47,21 @@ public class CooldownKey
 	final static UUID DEFAULT_UUID = new UUID(0, 0);
 
 	private final UUID uuid;
-	private final String messageId;
+	private final RecordKey recordKey;
 
 
 	/**
 	 * Class constructor
 	 *
 	 * @param recipient the message recipient
-	 * @param messageId the unique message id
+	 * @param recordKey the unique message id
 	 */
-	public CooldownKey(final CommandSender recipient, final String messageId)
+	public CooldownKey(final CommandSender recipient, final RecordKey recordKey)
 	{
 		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
-		validate(messageId, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
+		validate(recordKey, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
-		this.messageId = messageId;
+		this.recordKey = recordKey;
 
 		if (recipient instanceof Entity entity) {
 			this.uuid = entity.getUniqueId();
@@ -71,22 +72,22 @@ public class CooldownKey
 	}
 
 
-	public static Optional<CooldownKey> optional(final CommandSender recipient, final String messageId)
+	public static Optional<CooldownKey> optional(final CommandSender recipient, final RecordKey messageId)
 	{
 		return Optional.of(new CooldownKey(recipient, messageId));
 	}
 
 
-	public String getMessageId()
+	public RecordKey getRecordKey()
 	{
-		return this.messageId;
+		return this.recordKey;
 	}
 
 
 	@Override
 	public String toString()
 	{
-		return messageId + "|" + this.uuid;
+		return recordKey + "|" + this.uuid;
 	}
 
 
@@ -96,7 +97,7 @@ public class CooldownKey
 		if (!(object instanceof CooldownKey that)) {
 			return false;
 		}
-		return uuid.equals(that.uuid) && messageId.equals(that.messageId);
+		return uuid.equals(that.uuid) && recordKey.equals(that.recordKey);
 	}
 
 
@@ -104,7 +105,7 @@ public class CooldownKey
 	public int hashCode()
 	{
 		int result = uuid.hashCode();
-		result = 31 * result + messageId.hashCode();
+		result = 31 * result + recordKey.hashCode();
 		return result;
 	}
 

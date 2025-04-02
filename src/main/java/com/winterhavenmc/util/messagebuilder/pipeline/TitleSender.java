@@ -26,7 +26,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;

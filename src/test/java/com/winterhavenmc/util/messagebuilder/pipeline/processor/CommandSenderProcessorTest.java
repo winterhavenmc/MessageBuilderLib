@@ -20,10 +20,10 @@ package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.CommandSenderProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -50,6 +50,7 @@ class CommandSenderProcessorTest {
 	@Mock World worldMock;
 
 	MacroProcessor macroProcessor;
+	RecordKey recordKey = RecordKey.create("KEY").orElseThrow();
 
 	@BeforeEach
 	public void setUp() {
@@ -64,32 +65,10 @@ class CommandSenderProcessorTest {
 
 
 	@Test
-	void testResolveContext_parameter_null_key() {
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new CommandSenderProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(null, contextMap));
-
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	void testResolveContext_parameter_empty_key() {
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		MacroProcessor macroProcessor = new CommandSenderProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("", contextMap));
-
-		assertEquals("The parameter 'key' cannot be empty.", exception.getMessage());
-	}
-
-
-	@Test
 	void testResolveContext_parameter_null_context_map() {
 		MacroProcessor macroProcessor = new CommandSenderProcessor();
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext("KEY", null));
+				() -> macroProcessor.resolveContext(recordKey, null));
 
 		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
@@ -105,28 +84,27 @@ class CommandSenderProcessorTest {
 		Location location = new Location(worldMock, 10, 20, 30);
 		when(playerMock.getLocation()).thenReturn(location);
 
-		String key = "SOME_KEY";
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
+		RecordKey key = RecordKey.create("SOME_KEY").orElseThrow();
+		ContextMap contextMap = new ContextMap(playerMock, key);
 		contextMap.put(key, playerMock);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(key));
-		assertNotNull(resultMap.get(key));
+		assertTrue(resultMap.containsKey(key.toString()));
+		assertNotNull(resultMap.get(key.toString()));
 	}
 
 
 	@Test
 	void resolveContext_not_command_sender() {
 		// Arrange
-		String key = "SOME_KEY";
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(key, 42);
+		ContextMap contextMap = new ContextMap(playerMock, recordKey);
+		contextMap.put(recordKey, 42);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
 
 		// Assert
 		assertTrue(resultMap.isEmpty());

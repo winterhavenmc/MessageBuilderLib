@@ -15,16 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline;
+package com.winterhavenmc.util.messagebuilder.validation;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
-
-import java.util.Optional;
-
-
-@FunctionalInterface
-public interface Retriever
+public enum ExceptionMessageKey
 {
-	Optional<MessageRecord> getRecord(RecordKey key);
+	INVALID_SECTION,
+	MISSING_RESOURCE,
+	PARAMETER_EMPTY,
+	PARAMETER_INVALID,
+	PARAMETER_NULL,
+	PARAMETER_TYPE_MISMATCH,
+	RELOAD_FAILED,
 }

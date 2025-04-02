@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -25,8 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -61,12 +61,9 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return an {@code Optional} String containing the String retrieved with keyPath, or an empty Optional if no
 	 * value was found for the keyPath
 	 */
-	public Optional<String> getString(final String key)
+	public Optional<String> getString(final RecordKey key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
-
-		return Optional.ofNullable(configurationSupplier.getSection(section).getString(key));
+		return Optional.ofNullable(configurationSupplier.getSection(section).getString(key.toString()));
 	}
 
 
@@ -77,12 +74,9 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return a {@code List} of String containing the values retrieved using keyPath, or an empty List if no
 	 * value was found for the keyPath
 	 */
-	public List<String> getStringList(final String key)
+	public List<String> getStringList(final RecordKey key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
-
-		return configurationSupplier.getSection(section).getStringList(key);
+		return configurationSupplier.getSection(section).getStringList(key.toString());
 	}
 
 
@@ -93,12 +87,9 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return {@code int} containing the values retrieved using keyPath, or zero (0) if no
 	 * value was found for the keyPath
 	 */
-	public int getInt(final String key)
+	public int getInt(final RecordKey key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
-
-		return configurationSupplier.getSection(section).getInt(key);
+		return configurationSupplier.getSection(section).getInt(key.toString());
 	}
 
 
@@ -109,13 +100,10 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return an option of a ConstantRecord
 	 */
 	@Override
-	public Optional<ConstantRecord> getRecord(String key)
+	public Optional<ConstantRecord> getRecord(RecordKey key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
-
-		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key))
-				.map(s -> s.get(key))
+		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
+				.map(s -> s.get(key.toString()))
 				.map(value -> new ConstantRecord(key, value));
 	}
 

@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ObjectProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
@@ -40,6 +41,8 @@ class ObjectProcessorTest {
 	@Mock Player playerMock;
 	MacroProcessor macroProcessor;
 
+	RecordKey recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+
 
 	@BeforeEach
 	public void setUp() {
@@ -55,17 +58,16 @@ class ObjectProcessorTest {
 	@Test
 	void resolveContext_integer() {
 		// Arrange
-		String key = "SOME_INTEGER";
 		Integer value = 42;
-		ContextMap contextMap = new ContextMap(playerMock, MessageId.ENABLED_MESSAGE.name());
-		contextMap.put(key, value);
+		ContextMap contextMap = new ContextMap(playerMock, recordKey);
+		contextMap.put(recordKey, value);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(key));
-		assertEquals("42", resultMap.get(key));
+		assertTrue(resultMap.containsKey(recordKey.toString()));
+		assertEquals("42", resultMap.get(recordKey.toString()));
 	}
 
 

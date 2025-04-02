@@ -18,16 +18,15 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.Location;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -97,10 +96,8 @@ public class LocationProcessor extends MacroProcessorTemplate {
 	 * @throws IllegalArgumentException if any parameter is null or invalid
 	 */
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap)
+	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 		validate(contextMap, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONTEXT_MAP));
 
 		ResultMap resultMap = new ResultMap();
