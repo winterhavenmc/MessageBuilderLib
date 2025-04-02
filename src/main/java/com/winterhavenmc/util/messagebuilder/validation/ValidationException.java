@@ -27,24 +27,24 @@ public class ValidationException extends IllegalArgumentException
 
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
 
-	private final MessageKey messageKey;
+	private final ExceptionMessageKey exceptionMessageKey;
 	private final String parameterDisplayName;
 	private final Object[] params;
 
 
-	public ValidationException(MessageKey messageKey, Parameter parameter, Object... params)
+	public ValidationException(ExceptionMessageKey exceptionMessageKey, Parameter parameter, Object... params)
 	{
-		super(formatMessage(messageKey, parameter, params));
-		this.messageKey = messageKey;
+		super(formatMessage(exceptionMessageKey, parameter, params));
+		this.exceptionMessageKey = exceptionMessageKey;
 		this.parameterDisplayName = parameter.getDisplayName();
 		this.params = params;
 	}
 
 
-	private static String formatMessage(MessageKey messageKey, Parameter parameter, Object... params)
+	private static String formatMessage(ExceptionMessageKey exceptionMessageKey, Parameter parameter, Object... params)
 	{
 		// Fetch localized message pattern from resource bundle
-		String pattern = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, getConfiguredLocale()).getString(messageKey.name());
+		String pattern = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, getConfiguredLocale()).getString(exceptionMessageKey.name());
 
 		// Insert parameter name into the pattern with additional parameters
 		return MessageFormat.format(pattern, parameter.getDisplayName(), params);
@@ -68,7 +68,7 @@ public class ValidationException extends IllegalArgumentException
 	public String getLocalizedMessage(Locale locale)
 	{
 		ResourceBundle bundle = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, locale);
-		String pattern = bundle.getString(messageKey.name());
+		String pattern = bundle.getString(exceptionMessageKey.name());
 		return MessageFormat.format(pattern, parameterDisplayName, params);
 	}
 
