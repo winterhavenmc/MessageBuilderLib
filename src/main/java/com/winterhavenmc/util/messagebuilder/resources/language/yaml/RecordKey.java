@@ -56,6 +56,19 @@ public class RecordKey
 
 
 	/**
+	 * Static factory method for instantiating a record key from a string
+	 * @param key a String to be used in the creation of a record key
+	 * @return An Optional record key
+	 */
+	public static Optional<RecordKey> create(final String key)
+	{
+		return Optional.ofNullable(key)
+				.filter(VALID_KEY.asMatchPredicate())
+				.map(RecordKey::new);
+	}
+
+
+	/**
 	 * Static factory method for instantiating a record key from an enum constant
 	 *
 	 * @param key an enum constant whose name is used to create a record key
@@ -66,19 +79,6 @@ public class RecordKey
 	{
 		return Optional.ofNullable(key)
 				.map(Enum::name)
-				.map(RecordKey::new);
-	}
-
-
-	/**
-	 * Static factory method for instantiating a record key from a string
-	 * @param key a String to be used in the creation of a record key
-	 * @return An Optional record key
-	 */
-	public static Optional<RecordKey> create(final String key)
-	{
-		return Optional.ofNullable(key)
-				.filter(VALID_KEY.asMatchPredicate())
 				.map(RecordKey::new);
 	}
 
