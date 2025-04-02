@@ -18,13 +18,14 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -61,12 +62,9 @@ public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	@Override
-	public Optional<ItemRecord> getRecord(final String key)
+	public Optional<ItemRecord> getRecord(final RecordKey key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
-
-		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key))
+		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
 				.map(itemEntry -> new ItemRecord(key,
 						Optional.ofNullable(itemEntry.getString(Field.NAME_SINGULAR.getKeyPath())),
 						Optional.ofNullable(itemEntry.getString(Field.NAME_PLURAL.getKeyPath())),

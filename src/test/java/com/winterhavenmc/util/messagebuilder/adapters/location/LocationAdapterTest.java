@@ -42,7 +42,7 @@ class LocationAdapterTest {
 		Location location = new Location(worldMock, 1,2,3);
 
 		// Act
-		Optional<Locatable> resolver = LocationAdapter.asLocatable(location);
+		Optional<Locatable> resolver = new LocationAdapter().adapt(location);
 		if (resolver.isPresent()) {
 			location = resolver.get().gatLocation();
 		}
@@ -60,7 +60,7 @@ class LocationAdapterTest {
 		Location location = null;
 
 		// Act
-		Optional<Locatable> resolver = LocationAdapter.asLocatable(playerMock);
+		Optional<Locatable> resolver = new LocationAdapter().adapt(playerMock);
 		if (resolver.isPresent()) {
 			location = resolver.get().gatLocation();
 		}
@@ -78,7 +78,7 @@ class LocationAdapterTest {
 		Location location = null;
 
 		// Act
-		Optional<Locatable> resolver = LocationAdapter.asLocatable(blockMock);
+		Optional<Locatable> resolver = new LocationAdapter().adapt(blockMock);
 		if (resolver.isPresent()) {
 			location = resolver.get().gatLocation();
 		}
@@ -96,7 +96,7 @@ class LocationAdapterTest {
 		Location location = null;
 
 		// Act
-		Optional<Locatable> resolver = LocationAdapter.asLocatable(blockStateMock);
+		Optional<Locatable> resolver = new LocationAdapter().adapt(blockStateMock);
 		if (resolver.isPresent()) {
 			location = resolver.get().gatLocation();
 		}
@@ -114,7 +114,7 @@ class LocationAdapterTest {
 		Location location = null;
 
 		// Act
-		Optional<Locatable> resolver = LocationAdapter.asLocatable(doubleChestMock);
+		Optional<Locatable> resolver = new LocationAdapter().adapt(doubleChestMock);
 		if (resolver.isPresent()) {
 			location = resolver.get().gatLocation();
 		}
@@ -129,7 +129,7 @@ class LocationAdapterTest {
 		Location location = null;
 
 		// Act & Assert
-		Optional<Locatable> resolver = LocationAdapter.asLocatable(null);
+		Optional<Locatable> resolver = new LocationAdapter().adapt(null);
 		if (resolver.isPresent()) {
 			location = resolver.get().gatLocation();
 		}

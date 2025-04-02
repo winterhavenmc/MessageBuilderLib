@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.*;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -27,8 +28,8 @@ import org.bukkit.entity.Entity;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -89,11 +90,14 @@ public class MacroReplacer implements Replacer
 	{
 		validate(contextMap, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONTEXT_MAP));
 
-		contextMap.getOptionalRecipient().ifPresent(r -> contextMap.put("RECIPIENT", r.getName()));
+		RecordKey recordKey = RecordKey.create("RECIPIENT").orElseThrow();
+		RecordKey locationRecordKey = RecordKey.create("RECIPIENT.LOCATION").orElseThrow();
+
+		contextMap.getOptionalRecipient().ifPresent(r -> contextMap.put(recordKey, r.getName()));
 		contextMap.getOptionalRecipient()
 				.filter(Entity.class::isInstance)
 				.map(Entity.class::cast)
-				.ifPresent(entity -> contextMap.put("RECIPIENT.LOCATION", entity.getLocation()));
+				.ifPresent(entity -> contextMap.put(locationRecordKey, entity.getLocation()));
 
 		return contextMap;
 	}

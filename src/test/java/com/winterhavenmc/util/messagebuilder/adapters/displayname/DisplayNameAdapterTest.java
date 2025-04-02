@@ -42,7 +42,7 @@ public class DisplayNameAdapterTest {
 			String displayName = "";
 
 			// Act
-			Optional<DisplayNameable> resolver = DisplayNameAdapter.asDisplayNameable(playerMock);
+			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(playerMock); // DisplayNameAdapter.asDisplayNameable(playerMock);
 			if (resolver.isPresent()) {
 				displayName = resolver.get().getDisplayName();
 			}
@@ -58,7 +58,7 @@ public class DisplayNameAdapterTest {
 			String displayName = null;
 
 			// Act
-			Optional<DisplayNameable> resolver = DisplayNameAdapter.asDisplayNameable(nullPlayer);
+			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(nullPlayer); // DisplayNameAdapter.asDisplayNameable(nullPlayer);
 			if (resolver.isPresent()) {
 				displayName = resolver.get().getDisplayName();
 			}
@@ -73,7 +73,7 @@ public class DisplayNameAdapterTest {
 			String displayName = null;
 
 			// Act
-			Optional<DisplayNameable> resolver = DisplayNameAdapter.asDisplayNameable(null);
+			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(null); // DisplayNameAdapter.asDisplayNameable(null);
 			if (resolver.isPresent()) {
 				displayName = resolver.get().getDisplayName();
 			}
@@ -95,7 +95,7 @@ public class DisplayNameAdapterTest {
 			String displayName = "";
 
 			// Act
-			Optional<DisplayNameable> resolver = DisplayNameAdapter.asDisplayNameable(entityMock);
+			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(entityMock); // DisplayNameAdapter.asDisplayNameable(entityMock);
 			if (resolver.isPresent()) {
 				displayName = resolver.get().getDisplayName();
 			}
@@ -116,7 +116,7 @@ public class DisplayNameAdapterTest {
 			String displayName = "";
 
 			// Act
-			Optional<DisplayNameable> resolver = DisplayNameAdapter.asDisplayNameable(worldMock);
+			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(worldMock); // DisplayNameAdapter.asDisplayNameable(worldMock);
 			if (resolver.isPresent()) {
 				displayName = resolver.get().getDisplayName();
 			}

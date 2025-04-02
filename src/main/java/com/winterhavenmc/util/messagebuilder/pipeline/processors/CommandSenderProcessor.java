@@ -23,15 +23,14 @@ import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.command.CommandSender;
 
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.MessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONTEXT_MAP;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -43,10 +42,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 public class CommandSenderProcessor extends MacroProcessorTemplate
 {
 	@Override
-	public ResultMap resolveContext(final String key, final ContextMap contextMap)
+	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
 		validate(contextMap, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONTEXT_MAP));
 
 		return Optional.of(new ResultMap())
@@ -57,14 +54,14 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 						.map(commandSender ->
 						{
 							// populate name field
-							NameAdapter.asNameable(commandSender).ifPresent(nameable ->
+							new NameAdapter().adapt(commandSender).ifPresent(nameable ->
 							{
-								resultMap.put(key, nameable.getName());
+								resultMap.put(key.toString(), nameable.getName());
 								resultMap.put(key + ".NAME", nameable.getName());
 							});
 
 							// populate display name field if present
-							DisplayNameAdapter.asDisplayNameable(commandSender).ifPresent(displayNameable ->
+							new DisplayNameAdapter().adapt(commandSender).ifPresent(displayNameable ->
 							{
 								if (displayNameable.getDisplayName() != null)
 								{
@@ -73,7 +70,7 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 							});
 
 							// populate uuid field if present
-							UniqueIdAdapter.asIdentifiable(commandSender).ifPresent(identifiable ->
+							new UniqueIdAdapter().adapt(commandSender).ifPresent(identifiable ->
 							{
 								if (identifiable.getUniqueId() != null)
 								{
@@ -82,7 +79,7 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 							});
 
 							// populate location field if present
-							LocationAdapter.asLocatable(commandSender).ifPresent(locatable ->
+							new LocationAdapter().adapt(commandSender).ifPresent(locatable ->
 							{
 								if (locatable.gatLocation() != null)
 								{
