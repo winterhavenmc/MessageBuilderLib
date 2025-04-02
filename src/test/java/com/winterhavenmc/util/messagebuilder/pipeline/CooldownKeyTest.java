@@ -47,7 +47,7 @@ class CooldownKeyTest {
 	@Test
 	void testConstructor() {
 		// Arrange & Act
-		RecordKey recordKey = RecordKey.create(ENABLED_MESSAGE).orElseThrow();
+		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		CooldownKey cooldownKey = new CooldownKey(playerMock, recordKey);
 
 		// Assert
@@ -58,7 +58,7 @@ class CooldownKeyTest {
 	void testConstructor_parameter_null_recipient() {
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new CooldownKey(null, RecordKey.create(ENABLED_MESSAGE).orElseThrow()));
+				() -> new CooldownKey(null, RecordKey.of(ENABLED_MESSAGE).orElseThrow()));
 
 		// Assert
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
@@ -80,7 +80,7 @@ class CooldownKeyTest {
 		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
 
 		//  Act
-		CooldownKey cooldownKey = new CooldownKey(console, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey cooldownKey = new CooldownKey(console, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		// Assert
 		assertNotNull(cooldownKey);
@@ -93,7 +93,7 @@ class CooldownKeyTest {
 		when(playerMock.getUniqueId()).thenReturn(randomUUID);
 
 		// Act
-		CooldownKey cooldownKey = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey cooldownKey = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		// Assert
 		assertEquals("ENABLED_MESSAGE|" + randomUUID, cooldownKey.toString());
@@ -102,7 +102,7 @@ class CooldownKeyTest {
 	@Test
 	void testEquals_SameObject() {
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		CooldownKey key = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		assertEquals(key, key); // An object should be equal to itself
 	}
@@ -110,8 +110,8 @@ class CooldownKeyTest {
 	@Test
 	void testEquals_EqualObjects() {
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
-		CooldownKey key2 = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key2 = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		assertEquals(key1, key2); // Objects with the same uuid and messageIdString should be equal
 	}
@@ -121,8 +121,8 @@ class CooldownKeyTest {
 		Player player2Mock = mock(Player.class, "Player Two");
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 		when(player2Mock.getUniqueId()).thenReturn(UUID.randomUUID());
-		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
-		CooldownKey key2 = new CooldownKey(player2Mock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key2 = new CooldownKey(player2Mock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		assertNotEquals(key1, key2); // Different UUIDs should result in inequality
 	}
@@ -130,22 +130,22 @@ class CooldownKeyTest {
 	@Test
 	void testEquals_DifferentMessageIdStrings() {
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
-		CooldownKey key2 = new CooldownKey(playerMock, RecordKey.create(DISABLED_MESSAGE).orElseThrow());
+		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key2 = new CooldownKey(playerMock, RecordKey.of(DISABLED_MESSAGE).orElseThrow());
 
 		assertNotEquals(key1, key2); // Different messageIdStrings should result in inequality
 	}
 
 	@Test
 	void testEquals_Null() {
-		CooldownKey key = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		assertNotEquals(null, key); // An object should not be equal to null
 	}
 
 	@Test
 	void testEquals_DifferentClass() {
-		CooldownKey key = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		assertNotEquals("some string", key); // An object should not be equal to an instance of another class
 	}
@@ -153,8 +153,8 @@ class CooldownKeyTest {
 	@Test
 	void testHashCode_EqualObjects() {
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
-		CooldownKey key2 = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key2 = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		assertEquals(key1.hashCode(), key2.hashCode()); // Equal objects must have the same hash code
 	}
@@ -164,8 +164,8 @@ class CooldownKeyTest {
 		Player player2Mock = mock(Player.class, "Player Two");
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 		when(player2Mock.getUniqueId()).thenReturn(UUID.randomUUID());
-		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
-		CooldownKey key2 = new CooldownKey(player2Mock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key2 = new CooldownKey(player2Mock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		assertNotEquals(key1.hashCode(), key2.hashCode()); // Different UUIDs likely result in different hash codes
 	}
@@ -173,8 +173,8 @@ class CooldownKeyTest {
 	@Test
 	void testHashCode_DifferentMessageIdStrings() {
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
-		CooldownKey key2 = new CooldownKey(playerMock, RecordKey.create(DISABLED_MESSAGE).orElseThrow());
+		CooldownKey key1 = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey key2 = new CooldownKey(playerMock, RecordKey.of(DISABLED_MESSAGE).orElseThrow());
 
 		assertNotEquals(key1.hashCode(), key2.hashCode()); // Different messageIdStrings should result in different hash codes
 	}
@@ -182,7 +182,7 @@ class CooldownKeyTest {
 	@Test
 	void testGetMessageId() {
 		// Arrange
-		CooldownKey cooldownKey = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey cooldownKey = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		// Act
 		RecordKey recordKey = cooldownKey.getRecordKey();
@@ -194,7 +194,7 @@ class CooldownKeyTest {
 	@Test
 	void testOptional() {
 		// Arrange & Act
-		Optional<CooldownKey> cooldownKey = CooldownKey.optional(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		Optional<CooldownKey> cooldownKey = CooldownKey.optional(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
 		// Assert
 		assertTrue(cooldownKey.isPresent());
@@ -203,7 +203,7 @@ class CooldownKeyTest {
 
 	@Test
 	void testEquals() {
-		CooldownKey cooldownKey = new CooldownKey(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow());
+		CooldownKey cooldownKey = new CooldownKey(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow());
 
         assertNotEquals("not a cooldown key", cooldownKey.getRecordKey().toString());
 	}

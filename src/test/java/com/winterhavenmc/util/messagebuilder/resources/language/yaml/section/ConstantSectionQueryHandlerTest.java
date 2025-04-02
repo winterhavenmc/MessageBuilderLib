@@ -78,7 +78,7 @@ class ConstantSectionQueryHandlerTest
 	@Test
 	void getString_keyPath_valid()
 	{
-		RecordKey recordKey = RecordKey.create("SPAWN.DISPLAY_NAME").orElseThrow();
+		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
 		assertEquals(Optional.of("&aSpawn"), queryHandler.getString(recordKey));
 	}
 
@@ -86,7 +86,7 @@ class ConstantSectionQueryHandlerTest
 	@Test
 	void getString_keyPath_invalid()
 	{
-		RecordKey recordKey = RecordKey.create("INVALID_PATH").orElseThrow();
+		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 		assertEquals(Optional.empty(), queryHandler.getString(recordKey));
 	}
 
@@ -94,7 +94,7 @@ class ConstantSectionQueryHandlerTest
 	@Test
 	void getStringList_keyPath_valid()
 	{
-		RecordKey recordKey = RecordKey.create("TEST_LIST").orElseThrow();
+		RecordKey recordKey = RecordKey.of("TEST_LIST").orElseThrow();
 		assertEquals(List.of("item 1", "item 2", "item 3"), queryHandler.getStringList(recordKey));
 	}
 
@@ -102,7 +102,7 @@ class ConstantSectionQueryHandlerTest
 	@Test
 	void getStringList_keyPath_invalid()
 	{
-		RecordKey recordKey = RecordKey.create("INVALID_PATH").orElseThrow();
+		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 		assertEquals(Collections.emptyList(), queryHandler.getStringList(recordKey));
 	}
 
@@ -110,7 +110,7 @@ class ConstantSectionQueryHandlerTest
 	@Test
 	void getInt_keyPath_valid()
 	{
-		RecordKey recordKey = RecordKey.create("TEST_INT").orElseThrow();
+		RecordKey recordKey = RecordKey.of("TEST_INT").orElseThrow();
 		assertEquals(42, queryHandler.getInt(recordKey));
 	}
 
@@ -118,7 +118,7 @@ class ConstantSectionQueryHandlerTest
 	@Test
 	void getInt_keyPath_invalid()
 	{
-		RecordKey recordKey = RecordKey.create("INVALID_PATH").orElseThrow();
+		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 		assertEquals(0, queryHandler.getInt(recordKey));
 	}
 
@@ -126,7 +126,7 @@ class ConstantSectionQueryHandlerTest
 	@Test
 	void testGetRecord_key_invalid()
 	{
-		RecordKey recordKey = RecordKey.create("INVALID_PATH").orElseThrow();
+		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 		assertEquals(Optional.empty(), queryHandler.getRecord(recordKey));
 	}
 
@@ -134,7 +134,7 @@ class ConstantSectionQueryHandlerTest
 	@Test
 	void testGetRecord()
 	{
-		RecordKey recordKey = RecordKey.create("SPAWN.DISPLAY_NAME").orElseThrow();
+		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
 		queryHandler.getRecord(recordKey).ifPresent(r ->
 				assertEquals("&aSpawn", r.obj())
 		);

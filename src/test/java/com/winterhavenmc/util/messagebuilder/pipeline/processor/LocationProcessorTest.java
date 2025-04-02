@@ -53,7 +53,7 @@ class LocationProcessorTest
 	// real location processor
 	LocationProcessor locationProcessor;
 	ContextMap contextMap;
-	RecordKey key = RecordKey.create("HOME").orElseThrow();
+	RecordKey key = RecordKey.of("HOME").orElseThrow();
 
 
 	@BeforeEach
@@ -108,7 +108,7 @@ class LocationProcessorTest
 	void testResolveContext_ValidLocation2()
 	{
 		// Arrange
-		RecordKey playerKey = RecordKey.create("PLAYER").orElseThrow();
+		RecordKey playerKey = RecordKey.of("PLAYER").orElseThrow();
 		when(worldMock.getName()).thenReturn("test_world");
 		when(locationMock.getWorld()).thenReturn(worldMock);
 		when(locationMock.getBlockX()).thenReturn(123);

@@ -27,7 +27,7 @@ class ConstantRecordTest
     @Test
     void constructorTest()
     {
-        RecordKey key = RecordKey.create("testKey").orElseThrow();
+        RecordKey key = RecordKey.of("testKey").orElseThrow();
         Object value = 42;
         ConstantRecord record = new ConstantRecord(key, value);
 
@@ -46,7 +46,7 @@ class ConstantRecordTest
 
     @Test
     void testConstantRecordEquality() {
-        RecordKey key = RecordKey.create("key").orElseThrow();
+        RecordKey key = RecordKey.of("key").orElseThrow();
 
         ConstantRecord record1 = new ConstantRecord(key, 123);
         ConstantRecord record2 = new ConstantRecord(key, 123);
@@ -57,8 +57,8 @@ class ConstantRecordTest
 
     @Test
     void testConstantRecordInequality() {
-        RecordKey key1 = RecordKey.create("key").orElseThrow();
-        RecordKey key2 = RecordKey.create("key").orElseThrow();
+        RecordKey key1 = RecordKey.of("key").orElseThrow();
+        RecordKey key2 = RecordKey.of("key").orElseThrow();
 
         ConstantRecord record1 = new ConstantRecord(key1, 123);
         ConstantRecord record2 = new ConstantRecord(key2, 456);

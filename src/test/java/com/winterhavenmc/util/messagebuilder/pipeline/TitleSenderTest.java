@@ -53,7 +53,7 @@ class TitleSenderTest
 
 	@BeforeEach
 	void setUp() {
-		RecordKey recordKey = RecordKey.create(ENABLED_MESSAGE).orElseThrow();
+		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		messageRecord = new MessageRecord(
 		recordKey,

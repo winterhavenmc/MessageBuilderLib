@@ -48,11 +48,11 @@ class ContextMapTest
 	@Mock CommandSender commandSenderMock;
 	@Mock World worldMock;
 	ContextMap contextMap;
-	RecordKey recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+	RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
 	@BeforeEach
 	void setUp() {
-		contextMap = new ContextMap(commandSenderMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
+		contextMap = new ContextMap(commandSenderMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
 	}
 
 
@@ -74,7 +74,7 @@ class ContextMapTest
 	void testPut_parameter_null_value()
 	{
 		// Arrange
-		RecordKey key = RecordKey.create("NUMBER").orElseThrow();
+		RecordKey key = RecordKey.of("NUMBER").orElseThrow();
 
 		// Act
 		contextMap.put(key, null);
@@ -88,7 +88,7 @@ class ContextMapTest
 	void testGetValueWithCorrectType()
 	{
 		// Arrange
-		RecordKey key = RecordKey.create("PLAYER.LOCATION").orElseThrow();
+		RecordKey key = RecordKey.of("PLAYER.LOCATION").orElseThrow();
 		Location location = new Location(worldMock, 10, 20, 30);
 		contextMap.put(key, location);
 
@@ -105,7 +105,7 @@ class ContextMapTest
 	void testGetValueWithIncorrectType()
 	{
 		// Arrange
-		RecordKey key = RecordKey.create("SWORD").orElseThrow();
+		RecordKey key = RecordKey.of("SWORD").orElseThrow();
 		ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
 		contextMap.put(key, itemStack);
 
@@ -122,8 +122,8 @@ class ContextMapTest
 	void testContains()
 	{
 		// Arrange
-		RecordKey key = RecordKey.create("LOCATION").orElseThrow();
-		RecordKey nonExistentKey = RecordKey.create("NON_EXISTENT_KEY").orElseThrow();
+		RecordKey key = RecordKey.of("LOCATION").orElseThrow();
+		RecordKey nonExistentKey = RecordKey.of("NON_EXISTENT_KEY").orElseThrow();
 		World world = mock(World.class, "MockWorld");
 		Location location = new Location(world, 10, 20, 30);
 		contextMap.put(key, location);
@@ -148,11 +148,11 @@ class ContextMapTest
 	void testEntrySet()
 	{
 		// Arrange
-		RecordKey key1 = RecordKey.create("NUMBER1").orElseThrow();
+		RecordKey key1 = RecordKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
 		contextMap.put(key1, value1);
 
-		RecordKey key2 = RecordKey.create("NUMBER2").orElseThrow();
+		RecordKey key2 = RecordKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 		contextMap.put(key2, value2);
 
@@ -168,11 +168,11 @@ class ContextMapTest
 	void testRemove()
 	{
 		// Arrange
-		RecordKey key1 = RecordKey.create("NUMBER1").orElseThrow();
+		RecordKey key1 = RecordKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
 		contextMap.put(key1, value1);
 
-		RecordKey key2 = RecordKey.create("NUMBER2").orElseThrow();
+		RecordKey key2 = RecordKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 		contextMap.put(key2, value2);
 
@@ -205,11 +205,11 @@ class ContextMapTest
 	@Test
 	void testClear()
 	{
-		RecordKey key1 = RecordKey.create("NUMBER1").orElseThrow();
+		RecordKey key1 = RecordKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
 		contextMap.put(key1, value1);
 
-		RecordKey key2 = RecordKey.create("NUMBER2").orElseThrow();
+		RecordKey key2 = RecordKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 		contextMap.put(key2, value2);
 
@@ -227,7 +227,7 @@ class ContextMapTest
 
 	@Test
 	void testSize_not_empty() {
-		RecordKey key = RecordKey.create("NUMBER").orElseThrow();
+		RecordKey key = RecordKey.of("NUMBER").orElseThrow();
 		Integer value =42;
 
 		// Act
@@ -245,7 +245,7 @@ class ContextMapTest
 	@Test
 	void testIsEmpty_not_empty() {
 		// Arrange
-		RecordKey key = RecordKey.create("NUMBER").orElseThrow();
+		RecordKey key = RecordKey.of("NUMBER").orElseThrow();
 		Integer value = 42;
 
 		// Act

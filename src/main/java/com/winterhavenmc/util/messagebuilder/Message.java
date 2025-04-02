@@ -75,7 +75,7 @@ public final class Message
 		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
-		RecordKey recordKey = RecordKey.create(macro).orElseThrow();
+		RecordKey recordKey = RecordKey.of(macro).orElseThrow();
 
 		// put value into context map using macro enum constant name as key
 		this.contextMap.put(recordKey, value);
@@ -101,11 +101,11 @@ public final class Message
 		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
-		RecordKey recordKey = RecordKey.create(macro).orElseThrow();
+		RecordKey recordKey = RecordKey.of(macro).orElseThrow();
 
 		// put value into context map using macro enum constant name for key
 		this.contextMap.put(recordKey, value);
-		this.contextMap.put(RecordKey.create(macro.name() + ".QUANTITY").orElseThrow(), quantity);
+		this.contextMap.put(RecordKey.of(macro.name() + ".QUANTITY").orElseThrow(), quantity);
 
 		// return this instance of Message class to the builder chain
 		return this;
@@ -169,7 +169,7 @@ public final class Message
 	 */
 	<K extends Enum<K>> Optional<Object> peek(K macro)
 	{
-		return contextMap.getOpt(RecordKey.create(macro).orElseThrow());
+		return contextMap.getOpt(RecordKey.of(macro).orElseThrow());
 	}
 
 }

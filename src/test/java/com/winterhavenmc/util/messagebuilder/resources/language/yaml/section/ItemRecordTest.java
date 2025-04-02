@@ -46,7 +46,7 @@ public class ItemRecordTest {
 	@Test
 	public void constructorTest()
 	{
-		RecordKey recordKey = RecordKey.create(TEST_ITEM).orElseThrow();
+		RecordKey recordKey = RecordKey.of(TEST_ITEM).orElseThrow();
 
 		ItemRecord testRecord = new ItemRecord(
 				recordKey,
@@ -69,7 +69,7 @@ public class ItemRecordTest {
 	@Test
 	public void testPluralized()
 	{
-		RecordKey recordKey = RecordKey.create(TEST_ITEM).orElseThrow();
+		RecordKey recordKey = RecordKey.of(TEST_ITEM).orElseThrow();
 
 		ItemRecord testRecord = new ItemRecord(
 				recordKey,

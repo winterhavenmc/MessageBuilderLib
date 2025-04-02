@@ -45,7 +45,7 @@ class PlaceholderExtractorTest
 
 	@BeforeEach
 	public void setUp() {
-		message = new Message(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow(), messageProcessorMock);
+		message = new Message(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(), messageProcessorMock);
 		macroReplacer = new MacroReplacer();
 	}
 

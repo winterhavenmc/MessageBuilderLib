@@ -166,7 +166,7 @@ public final class MessageBuilder
 	{
 		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
 
-		RecordKey recordKey = RecordKey.create(messageId).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
+		RecordKey recordKey = RecordKey.of(messageId).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
 		return new Message(recipient, recordKey, messageProcessor);
 	}

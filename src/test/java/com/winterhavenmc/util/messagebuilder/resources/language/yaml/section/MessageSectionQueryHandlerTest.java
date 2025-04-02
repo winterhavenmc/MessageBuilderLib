@@ -80,7 +80,7 @@ class MessageSectionQueryHandlerTest {
 	@Test
 	void testGetRecord_parameter_valid() {
 		// Arrange & Act
-		RecordKey recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		Optional<MessageRecord> messageRecord = queryHandler.getRecord(recordKey);
 
 		// Assert
@@ -90,7 +90,7 @@ class MessageSectionQueryHandlerTest {
 
 	@Test
 	void testGetRecord_parameter_invalid() {
-		RecordKey recordKey = RecordKey.create(MessageId.NONEXISTENT_ENTRY).orElseThrow();
+		RecordKey recordKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
 		Optional<MessageRecord> messageRecord = queryHandler.getRecord(recordKey);
 		assertFalse(messageRecord.isPresent());
 	}

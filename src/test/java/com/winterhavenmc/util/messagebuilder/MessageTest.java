@@ -66,7 +66,7 @@ class MessageTest
 
 		itemStack = new ItemStack(Material.DIAMOND_SWORD);
 
-		RecordKey recordKey = RecordKey.create(ENABLED_MESSAGE).orElseThrow();
+		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		message = new Message(
 				playerMock, recordKey, messageProcessorMock);

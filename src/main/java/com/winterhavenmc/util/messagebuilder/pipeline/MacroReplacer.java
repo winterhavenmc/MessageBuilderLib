@@ -90,8 +90,8 @@ public class MacroReplacer implements Replacer
 	{
 		validate(contextMap, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONTEXT_MAP));
 
-		RecordKey recordKey = RecordKey.create("RECIPIENT").orElseThrow();
-		RecordKey locationRecordKey = RecordKey.create("RECIPIENT.LOCATION").orElseThrow();
+		RecordKey recordKey = RecordKey.of("RECIPIENT").orElseThrow();
+		RecordKey locationRecordKey = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
 
 		contextMap.getOptionalRecipient().ifPresent(r -> contextMap.put(recordKey, r.getName()));
 		contextMap.getOptionalRecipient()

@@ -43,7 +43,7 @@ class ItemStackProcessorTest {
 
 	@Mock Player playerMock;
 
-	RecordKey recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+	RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
 	@AfterEach
 	public void tearDown() {

@@ -52,7 +52,7 @@ public class ItemStackProcessor extends MacroProcessorTemplate
 					resultMap.put(key.toString(), itemStack.getType().toString());
 
 					// if an itemstack quantity field does not exist in the context map, use itemStack amount for quantity
-					RecordKey quantityRecordKey = RecordKey.create(key + ".QUANTITY").orElseThrow();
+					RecordKey quantityRecordKey = RecordKey.of(key + ".QUANTITY").orElseThrow();
 					if (!contextMap.contains(quantityRecordKey)) {
 						new QuantityAdapter().adapt(itemStack).ifPresent(quantifiable ->
 								resultMap.put(quantityRecordKey.toString(), String.valueOf(quantifiable.getQuantity()))

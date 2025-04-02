@@ -68,7 +68,7 @@ class MessageProcessorTest
 				messageSenderMock,
 				titleSenderMock);
 
-		RecordKey recordKey = RecordKey.create(ENABLED_MESSAGE).orElseThrow();
+		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		messageRecord = new MessageRecord(
 				recordKey,
@@ -103,10 +103,10 @@ class MessageProcessorTest
 	@Test @DisplayName("Test process method with valid parameter")
 	void testProcess() {
 		// Arrange
-		RecordKey recordKey = RecordKey.create(ENABLED_MESSAGE).orElseThrow();
+		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(Optional.of(messageRecord));
-		Message message = new Message(playerMock, RecordKey.create(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
+		Message message = new Message(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
 		when(macroReplacerMock.replaceMacros(messageRecord, message)).thenReturn(Optional.ofNullable(messageRecord));
 
 		// Act & Assert

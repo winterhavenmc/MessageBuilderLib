@@ -61,7 +61,7 @@ class MessageRetrieverTest
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
 		QueryHandler<MessageRecord> queryHandler = new MessageSectionQueryHandler(configurationSupplier);
 		Retriever retriever = new MessageRetriever(queryHandler);
-		RecordKey recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
 		// Act
 		Optional<MessageRecord> messageRecord = retriever.getRecord(recordKey);

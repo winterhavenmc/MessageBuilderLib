@@ -68,7 +68,7 @@ class WorldProcessorTest {
 	@Test
 	void testResolveContext_parameter_null_context_map() {
 		MacroProcessor macroProcessor = new WorldProcessor();
-		RecordKey recordKey = RecordKey.create("KEY").orElseThrow();
+		RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroProcessor.resolveContext(recordKey, null));
 
@@ -82,7 +82,7 @@ class WorldProcessorTest {
 		when(worldMock.getName()).thenReturn("test_world");
 		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.of("MV Alias"));
 
-		RecordKey recordKey = RecordKey.create("SOME_WORLD").orElseThrow();
+		RecordKey recordKey = RecordKey.of("SOME_WORLD").orElseThrow();
 		ContextMap contextMap = new ContextMap(playerMock, recordKey);
 		MacroProcessor macroProcessor = new WorldProcessor();
 		contextMap.put(recordKey, worldMock);
@@ -102,8 +102,8 @@ class WorldProcessorTest {
 		when(worldMock.getName()).thenReturn("test_world");
 		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.empty());
 
-		RecordKey recordKey = RecordKey.create("SOME_WORLD").orElseThrow();
-		ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
+		RecordKey recordKey = RecordKey.of("SOME_WORLD").orElseThrow();
+		ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
 		MacroProcessor macroProcessor = new WorldProcessor();
 		contextMap.put(recordKey, worldMock);
 
@@ -119,8 +119,8 @@ class WorldProcessorTest {
 	@Test
 	void resolveContext_with_null_world() {
 		// Arrange
-		RecordKey recordKey = RecordKey.create("SOME_WORLD").orElseThrow();
-		ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
+		RecordKey recordKey = RecordKey.of("SOME_WORLD").orElseThrow();
+		ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
 		MacroProcessor macroProcessor = new WorldProcessor();
 		contextMap.put(recordKey, null);
 

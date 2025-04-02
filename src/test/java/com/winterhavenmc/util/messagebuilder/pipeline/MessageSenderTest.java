@@ -50,7 +50,7 @@ class MessageSenderTest {
 	@BeforeEach
 	void setUp() {
 		messageRecord = new MessageRecord(
-				RecordKey.create(ENABLED_MESSAGE).orElseThrow(),
+				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",
 				Duration.ofSeconds(11),
