@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-public enum MessageKey
+public enum ExceptionMessageKey
 {
 	INVALID_SECTION,
 	MISSING_RESOURCE,
