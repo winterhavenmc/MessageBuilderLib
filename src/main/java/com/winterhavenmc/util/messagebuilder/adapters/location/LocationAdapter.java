@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.location;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -34,10 +35,8 @@ import java.util.Optional;
  * {@code Location}, regardless of its real method name. Any object that is not known to have a
  * gatLocation will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
  */
-public class LocationAdapter
+public class LocationAdapter implements Adapter
 {
-	private LocationAdapter() { /* private constructor to prevent instantiation */ }
-
 	/**
 	 * Static method that returns an {@link Optional} of {@code Locatable}, or an empty Optional if the passed
 	 * object is not known to have an associated gatLocation. The Optional value, if present, implements the
@@ -47,7 +46,7 @@ public class LocationAdapter
 	 * @return an {@code Optional} of the object as a {@code Locatable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a gatLocation.
 	 */
-	public static Optional<Locatable> asLocatable(Object obj)
+	public Optional<Locatable> adapt(final Object obj)
 	{
 		return switch (obj) {
 			case Entity entity -> Optional.of(entity::getLocation);

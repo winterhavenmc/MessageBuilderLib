@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 import org.bukkit.inventory.ItemStack;
 import java.util.Collection;
 import java.util.Optional;
@@ -30,10 +31,8 @@ import java.util.Optional;
  * is not known to have a quantity will result in an empty {@code Optional} being returned from the
  * static {@code asQuantifiable} method.
  */
-public class QuantityAdapter
+public class QuantityAdapter implements Adapter
 {
-	private QuantityAdapter() { /* private constructor to prevent instantiation */ }
-
 	/**
 	 * Static method that returns an {@link Optional} of {@code Quantifiable}, or an empty {@code Optional} if the passed
 	 * object is not known to have an associated quantity. The {@code Optional} value, if present, implements the
@@ -43,7 +42,7 @@ public class QuantityAdapter
 	 * @return an {@code Optional} of the object as a {@code Quantifiable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a quantity.
 	 */
-	public static Optional<Quantifiable> asQuantifiable(Object obj)
+	public Optional<Quantifiable> adapt(Object obj)
 	{
 		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {

@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.name;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -28,29 +29,27 @@ import java.util.Optional;
 
 /**
  * Adapter for {@link Nameable} objects with an associated name. Any object that has a known method
- * for retrieving a name as a {@code String} will be returned as an {@link Optional} {@code Nameable} object type, with a
- * {@code getName()} method. This method will be mapped to the actual method of the object that returns a
+ * for retrieving a name as a {@code String} will be returned as an {@link Optional} {@code Nameable} object type,
+ * with a {@code getName()} method. This method will be mapped to the actual method of the object that returns a
  * {@code String} name, regardless of its real method name. Any object that is not known to have a
  * name will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
  */
-public class NameAdapter
+public class NameAdapter implements Adapter
 {
-	private NameAdapter() { /* private constructor to prevent instantiation */ }
-
 	/**
-	 * Static method that returns an {@link Optional} of {@code Locatable}, or an empty Optional if the passed
-	 * object is not known to have an associated gatLocation. The Optional value, if present, implements the
-	 * {@code Locatable} Interface, and is guaranteed to have a {@code getLocation()} method.
+	 * Return an {@link Optional} of {@code Nameable}, or an empty Optional if the passed
+	 * object is not known to have an associated gatName method. The Optional value, if present,
+	 * implements the {@code Nameable} Interface, and is guaranteed to have a {@code getName()} method
+	 * that maps to the adapted type's underlying {@code getName()} method.
 	 *
-	 * @param obj the object being evaluated as being Locatable
-	 * @return an {@code Optional} of the object as a {@code Locatable}, or an empty Optional if the passed
-	 * object does not have a known method of retrieving a gatLocation.
+	 * @param obj the object being evaluated as being {@code Nameable}
+	 * @return an {@code Optional} of the object as a Nameable type, or an empty Optional if the passed
+	 * object does not have a known method of retrieving a name.
 	 */
-	public static Optional<Nameable> asNameable(Object obj)
+	public Optional<Nameable> adapt(Object obj)
 	{
-		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {
-			case CommandSender commandSender -> Optional.of(commandSender::getName); // includes players, entities, console, command blocks, etc
+			case CommandSender commandSender -> Optional.of(commandSender::getName);
 			case OfflinePlayer offlinePlayer -> Optional.of(offlinePlayer::getName);
 			case World world -> Optional.of(world::getName);
 			case Server server -> Optional.of(server::getName);
