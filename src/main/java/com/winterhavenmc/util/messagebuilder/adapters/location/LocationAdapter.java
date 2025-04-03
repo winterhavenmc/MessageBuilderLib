@@ -46,6 +46,7 @@ public class LocationAdapter implements Adapter
 	 * @return an {@code Optional} of the object as a {@code Locatable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a gatLocation.
 	 */
+	@Override
 	public Optional<Locatable> adapt(final Object obj)
 	{
 		return switch (obj) {

@@ -46,6 +46,7 @@ public class NameAdapter implements Adapter
 	 * @return an {@code Optional} of the object as a Nameable type, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a name.
 	 */
+	@Override
 	public Optional<Nameable> adapt(Object obj)
 	{
 		return switch (obj) {
