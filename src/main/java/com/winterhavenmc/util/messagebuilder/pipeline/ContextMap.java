@@ -57,22 +57,11 @@ public class ContextMap
 
 
 	/**
-	 * Retrieve recipient
-	 *
-	 * @return the recipient that was used to create the context map
-	 */
-	public CommandSender getRecipient()
-	{
-		return recipient;
-	}
-
-
-	/**
 	 * Retrieve Optional recipient
 	 *
 	 * @return the recipient that was used to create the context map
 	 */
-	public Optional<CommandSender> getOptionalRecipient()
+	public Optional<CommandSender> getRecipient()
 	{
 		return Optional.ofNullable(recipient);
 	}
@@ -113,7 +102,7 @@ public class ContextMap
 	 * @param key the context map key
 	 * @return the value for the key
 	 */
-	public Optional<Object> getOpt(final RecordKey key)
+	public Optional<Object> get(final RecordKey key)
 	{
 		return Optional.ofNullable(internalMap.get(key));
 	}
