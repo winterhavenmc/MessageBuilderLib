@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_ID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -56,25 +55,21 @@ public class CooldownKey
 	 * @param recipient the message recipient
 	 * @param recordKey the unique message id
 	 */
-	public CooldownKey(final CommandSender recipient, final RecordKey recordKey)
+	private CooldownKey(final CommandSender recipient, final RecordKey recordKey)
 	{
 		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
-		validate(recordKey, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
 		this.recordKey = recordKey;
 
-		if (recipient instanceof Entity entity) {
-			this.uuid = entity.getUniqueId();
-		}
-		else {
-			this.uuid = DEFAULT_UUID;
-		}
+		this.uuid = (recipient instanceof Entity entity) ? entity.getUniqueId() : DEFAULT_UUID;
 	}
 
 
-	public static Optional<CooldownKey> optional(final CommandSender recipient, final RecordKey messageId)
+	public static Optional<CooldownKey> of(final CommandSender recipient, final RecordKey recordKey)
 	{
-		return Optional.of(new CooldownKey(recipient, messageId));
+		return recipient == null
+				? Optional.empty()
+				: Optional.of(new CooldownKey(recipient, recordKey));
 	}
 
 
@@ -94,10 +89,9 @@ public class CooldownKey
 	@Override
 	public final boolean equals(Object object)
 	{
-		if (!(object instanceof CooldownKey that)) {
-			return false;
-		}
-		return uuid.equals(that.uuid) && recordKey.equals(that.recordKey);
+		return object instanceof CooldownKey that
+				&& Objects.equals(uuid, that.uuid)
+				&& Objects.equals(recordKey, that.recordKey);
 	}
 
 

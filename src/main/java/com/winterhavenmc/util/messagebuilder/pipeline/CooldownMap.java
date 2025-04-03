@@ -51,13 +51,8 @@ public final class CooldownMap implements Cooldown
 		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
 		validate(messageRecord, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_RECORD));
 
-		CooldownKey key = new CooldownKey(recipient, messageRecord.key());
-
-		if (notCooling(key))
-		{
-			Instant expirationTime = Instant.now().plus(messageRecord.repeatDelay());
-			COOLDOWN_MAP.put(key, expirationTime);
-		}
+		CooldownKey.of(recipient, messageRecord.key())
+				.ifPresent(key -> COOLDOWN_MAP.put(key, Instant.now().plus(messageRecord.repeatDelay())));
 	}
 
 
