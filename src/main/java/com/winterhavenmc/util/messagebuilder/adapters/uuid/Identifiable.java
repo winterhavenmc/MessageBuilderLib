@@ -17,6 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.uuid;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.profile.PlayerProfile;
+
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -25,6 +32,7 @@ import java.util.UUID;
  * method that returns a valid UUID.
  */
 @FunctionalInterface
-public interface Identifiable {
+public interface Identifiable
+{
 	UUID getUniqueId();
 }
