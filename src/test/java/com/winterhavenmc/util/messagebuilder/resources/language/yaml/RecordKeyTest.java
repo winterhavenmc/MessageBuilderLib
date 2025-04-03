@@ -27,37 +27,37 @@ import static org.junit.jupiter.api.Assertions.*;
 class RecordKeyTest {
 
     @Test
-    void createFromValidString_ShouldReturnRecordKey() {
-        Optional<RecordKey> result = RecordKey.create("VALID_KEY");
+    void ofFromValidString_ShouldReturnRecordKey() {
+        Optional<RecordKey> result = RecordKey.of("VALID_KEY");
         assertTrue(result.isPresent());
         assertEquals("VALID_KEY", result.get().toString());
     }
 
     @Test
-    void createFromInvalidString_ShouldReturnEmpty() {
-        assertTrue(RecordKey.create("123INVALID").isEmpty(), "Should return empty for invalid format.");
-        assertTrue(RecordKey.create("").isEmpty(), "Should return empty for empty string.");
-        assertTrue(RecordKey.create(" ").isEmpty(), "Should return empty for whitespace.");
-        assertTrue(RecordKey.create((String) null).isEmpty(), "Should return empty for null.");
-        assertTrue(RecordKey.create((MessageId) null).isEmpty(), "Should return empty for null.");
+    void ofFromInvalidString_ShouldReturnEmpty() {
+        assertTrue(RecordKey.of("123INVALID").isEmpty(), "Should return empty for invalid format.");
+        assertTrue(RecordKey.of("").isEmpty(), "Should return empty for empty string.");
+        assertTrue(RecordKey.of(" ").isEmpty(), "Should return empty for whitespace.");
+        assertTrue(RecordKey.of((String) null).isEmpty(), "Should return empty for null.");
+        assertTrue(RecordKey.of((MessageId) null).isEmpty(), "Should return empty for null.");
     }
 
     @Test
-    void createFromEnum_ShouldReturnRecordKey() {
-        Optional<RecordKey> result = RecordKey.create(MessageId.ENABLED_MESSAGE);
+    void ofFromEnum_ShouldReturnRecordKey() {
+        Optional<RecordKey> result = RecordKey.of(MessageId.ENABLED_MESSAGE);
         assertTrue(result.isPresent());
         assertEquals("ENABLED_MESSAGE", result.get().toString());
     }
 
     @Test
-    void createFromNullEnum_ShouldReturnEmpty() {
-        assertTrue(RecordKey.create((MessageId) null).isEmpty());
+    void ofFromNullEnum_ShouldReturnEmpty() {
+        assertTrue(RecordKey.of((MessageId) null).isEmpty());
     }
 
     @Test
     void recordKeyEquality_ShouldBeTrueForSameKey() {
-        Optional<RecordKey> key1 = RecordKey.create("SAME_KEY");
-        Optional<RecordKey> key2 = RecordKey.create("SAME_KEY");
+        Optional<RecordKey> key1 = RecordKey.of("SAME_KEY");
+        Optional<RecordKey> key2 = RecordKey.of("SAME_KEY");
 
         assertTrue(key1.isPresent() && key2.isPresent());
         assertEquals(key1.get(), key2.get());
@@ -65,8 +65,8 @@ class RecordKeyTest {
 
     @Test
     void recordKeyEquality_ShouldBeFalseForDifferentKeys() {
-        Optional<RecordKey> key1 = RecordKey.create("KEY_ONE");
-        Optional<RecordKey> key2 = RecordKey.create("KEY_TWO");
+        Optional<RecordKey> key1 = RecordKey.of("KEY_ONE");
+        Optional<RecordKey> key2 = RecordKey.of("KEY_TWO");
 
         assertTrue(key1.isPresent() && key2.isPresent());
         assertNotEquals(key1.get(), key2.get());
@@ -74,8 +74,8 @@ class RecordKeyTest {
 
     @Test
     void hashCode_ShouldBeConsistentWithEquals() {
-        Optional<RecordKey> key1 = RecordKey.create("HASH_TEST");
-        Optional<RecordKey> key2 = RecordKey.create("HASH_TEST");
+        Optional<RecordKey> key1 = RecordKey.of("HASH_TEST");
+        Optional<RecordKey> key2 = RecordKey.of("HASH_TEST");
 
         assertTrue(key1.isPresent() && key2.isPresent());
         assertEquals(key1.get().hashCode(), key2.get().hashCode());
@@ -83,7 +83,7 @@ class RecordKeyTest {
 
     @Test
     void toString_ShouldReturnCorrectKey() {
-        Optional<RecordKey> key = RecordKey.create("TO_STRING_TEST");
+        Optional<RecordKey> key = RecordKey.of("TO_STRING_TEST");
         assertTrue(key.isPresent());
         assertEquals("TO_STRING_TEST", key.get().toString());
     }

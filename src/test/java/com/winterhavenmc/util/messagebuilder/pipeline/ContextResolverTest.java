@@ -60,9 +60,9 @@ class ContextResolverTest
     {
 		// Arrange
 		ItemStack itemStack = new ItemStack(Material.STONE);
-		ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
-		RecordKey numberRecordKey = RecordKey.create("NUMBER").orElseThrow();
-		RecordKey itemStackRecordKey = RecordKey.create("ITEM_STACK").orElseThrow();
+		ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
+		RecordKey numberRecordKey = RecordKey.of("NUMBER").orElseThrow();
+		RecordKey itemStackRecordKey = RecordKey.of("ITEM_STACK").orElseThrow();
 		contextMap.put(numberRecordKey, 42);
 		contextMap.put(itemStackRecordKey, itemStack);
 

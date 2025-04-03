@@ -52,7 +52,7 @@ class OfflinePlayerProcessorTest {
 	@Mock OfflinePlayer offlinePlayerMock;
 	@Mock Location locationMock;
 
-	RecordKey macroKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+	RecordKey macroKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
 	@AfterEach
 	public void tearDown() {

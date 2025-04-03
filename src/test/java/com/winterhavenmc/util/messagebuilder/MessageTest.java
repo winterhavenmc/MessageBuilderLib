@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
@@ -66,7 +67,7 @@ class MessageTest
 
 		itemStack = new ItemStack(Material.DIAMOND_SWORD);
 
-		RecordKey recordKey = RecordKey.create(ENABLED_MESSAGE).orElseThrow();
+		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		message = new Message(
 				playerMock, recordKey, messageProcessorMock);
@@ -103,6 +104,17 @@ class MessageTest
 	void getMessageId()
 	{
 		assertEquals(ENABLED_MESSAGE.name(), message.getMessageId());
+	}
+
+
+	@Test
+	void getRecordKey()
+	{
+		// Act
+		RecordKey recordKey = message.getMessageKey();
+
+		// Assert
+		assertEquals(ENABLED_MESSAGE.name(), recordKey.toString());
 	}
 
 
@@ -145,14 +157,21 @@ class MessageTest
 
 	@Nested
 	class SetMacro2Tests {
-//		@Test
-//		void testSetMacro2() {
-//			// Arrange
-//			Message newMessage = message.setMacro(10, Macro.TOOL, itemStack);
-//
-//			// Act & Assert
-//			assertEquals(itemStack, newMessage.peek(Macro.TOOL));
-//		}
+		@Test
+		void testSetMacro2() {
+			// Arrange
+			Message newMessage = message.setMacro(10, Macro.TOOL, itemStack);
+			RecordKey recordKey = RecordKey.of(Macro.TOOL).orElseThrow();
+			ContextMap contextMap = newMessage.getContextMap();
+
+			// Act
+			Object object = contextMap.getOpt(recordKey).orElseThrow();
+
+			// Assert
+			assertInstanceOf(ItemStack.class, object);
+			assertEquals(itemStack, object);
+		}
+
 
 		@Test
 		void testSetMacro2_parameter_null_macro() {
@@ -161,6 +180,7 @@ class MessageTest
 
 			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
 		}
+
 
 		@Test
 		void testSetMacro2_parameter_null_object() {

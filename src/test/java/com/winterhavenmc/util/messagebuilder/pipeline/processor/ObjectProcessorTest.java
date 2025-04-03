@@ -41,7 +41,7 @@ class ObjectProcessorTest {
 	@Mock Player playerMock;
 	MacroProcessor macroProcessor;
 
-	RecordKey recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+	RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
 
 	@BeforeEach

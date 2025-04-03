@@ -48,7 +48,7 @@ class NumberProcessorTest
 	public void setUp()
 	{
 		macroProcessor = new NumberProcessor();
-		RecordKey key = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+		RecordKey key = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		contextMap = new ContextMap(playerMock, key);
 	}
 
@@ -66,7 +66,7 @@ class NumberProcessorTest
 	void resolveContext_integer()
 	{
 		// Arrange
-		RecordKey key = RecordKey.create("SOME_INTEGER").orElseThrow();
+		RecordKey key = RecordKey.of("SOME_INTEGER").orElseThrow();
 		Integer number = 42;
 		contextMap.put(key, number);
 
@@ -83,7 +83,7 @@ class NumberProcessorTest
 	void resolveContext_null_integer()
 	{
 		// Arrange
-		RecordKey key = RecordKey.create("KEY").orElseThrow();
+		RecordKey key = RecordKey.of("KEY").orElseThrow();
 		contextMap.put(key, null);
 
 		// Act
@@ -98,7 +98,7 @@ class NumberProcessorTest
 	void resolveContext_long()
 	{
 		// Arrange
-		RecordKey key = RecordKey.create("SOME_LONG").orElseThrow();
+		RecordKey key = RecordKey.of("SOME_LONG").orElseThrow();
 		Long number = 420L;
 		contextMap.put(key, number);
 
@@ -115,7 +115,7 @@ class NumberProcessorTest
 	void resolveContext_null_long()
 	{
 		// Arrange
-		RecordKey key = RecordKey.create("KEY").orElseThrow();
+		RecordKey key = RecordKey.of("KEY").orElseThrow();
 		contextMap.put(key, null);
 
 		// Act

@@ -33,6 +33,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 
+/**
+ * Registry of adapters provides cache of built-in and plugin registered adapters.
+ * Lazy loading of adapters is provided by computeIfAbsent method.
+ */
 public class AdapterRegistry
 {
     private final Map<Class<?>, Adapter> adapterCache = new ConcurrentHashMap<>();
@@ -45,7 +49,8 @@ public class AdapterRegistry
     );
 
 
-    public Adapter getAdapter(final Class<?> type) {
+    public Adapter getAdapter(final Class<?> type)
+    {
         return adapterCache.computeIfAbsent(type, key -> {
             Supplier<Adapter> supplier = builtInAdapters.get(key);
             return (supplier != null) ? supplier.get() : null;
@@ -53,7 +58,8 @@ public class AdapterRegistry
     }
 
 
-    public void registerAdapter(final Class<?> type, final Adapter adapter) {
+    public void registerAdapter(final Class<?> type, final Adapter adapter)
+    {
         adapterCache.put(type, adapter);
     }
 

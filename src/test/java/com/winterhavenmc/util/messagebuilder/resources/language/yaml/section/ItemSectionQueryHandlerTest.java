@@ -68,7 +68,7 @@ class ItemSectionQueryHandlerTest {
 	@Test
 	void testGetRecord_parameter_valid() {
 		// Arrange & Act
-		RecordKey recordKey = RecordKey.create("TEST_ITEM_1").orElseThrow();
+		RecordKey recordKey = RecordKey.of("TEST_ITEM_1").orElseThrow();
 		Optional<ItemRecord> itemRecord = queryHandler.getRecord(recordKey);
 
 		// Assert
@@ -78,7 +78,7 @@ class ItemSectionQueryHandlerTest {
 
 	@Test
 	void testGetRecord_parameter_invalid() {
-		RecordKey recordKey = RecordKey.create("NONEXISTENT_ITEM").orElseThrow();
+		RecordKey recordKey = RecordKey.of("NONEXISTENT_ITEM").orElseThrow();
 		Optional<ItemRecord> itemRecord = queryHandler.getRecord(recordKey);
 		assertFalse(itemRecord.isPresent());
 	}

@@ -53,7 +53,7 @@ class MacroReplacerTest
 
 	@BeforeEach
 	public void setUp() {
-		recordKey = RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow();
+		recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		message = new Message(playerMock, recordKey, messageProcessorMock);
 		macroReplacer = new MacroReplacer();
 	}
@@ -143,8 +143,8 @@ class MacroReplacerTest
 		@Test @DisplayName("Test replaceMacrosInString method with valid parameters")
 		void testReplaceMacrosInString()
 		{
-			RecordKey key = RecordKey.create("ITEM_NAME").orElseThrow();
-			ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
+			RecordKey key = RecordKey.of("ITEM_NAME").orElseThrow();
+			ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
 			MacroReplacer macroReplacer = new MacroReplacer();
 			contextMap.put(key, "TEST_STRING");
 
@@ -169,7 +169,7 @@ class MacroReplacerTest
 		void testReplaceMacrosInString_parameter_null_messageString()
 		{
 			// Arrange
-			ContextMap contextMap = new ContextMap(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow());
+			ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
 
 			// Act
 			ValidationException exception = assertThrows(ValidationException.class,
@@ -184,7 +184,7 @@ class MacroReplacerTest
 	@Test
 	void testAddRecipientContext() {
 		// Arrange
-		RecordKey key = RecordKey.create("RECIPIENT.LOCATION").orElseThrow();
+		RecordKey key = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
 		ContextMap contextMap = new ContextMap(playerMock, key);
 
 		// Act
@@ -247,7 +247,7 @@ class MacroReplacerTest
 	@Test
 	void addRecipientContext() {
 		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
-		RecordKey key = RecordKey.create("RECIPIENT").orElseThrow();
+		RecordKey key = RecordKey.of("RECIPIENT").orElseThrow();
 		ContextMap contextMap = new ContextMap(console, key);
 
 		macroReplacer.addRecipientContext(contextMap);

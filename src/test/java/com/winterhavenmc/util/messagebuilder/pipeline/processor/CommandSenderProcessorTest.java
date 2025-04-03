@@ -50,7 +50,7 @@ class CommandSenderProcessorTest {
 	@Mock World worldMock;
 
 	MacroProcessor macroProcessor;
-	RecordKey recordKey = RecordKey.create("KEY").orElseThrow();
+	RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
 
 	@BeforeEach
 	public void setUp() {
@@ -84,7 +84,7 @@ class CommandSenderProcessorTest {
 		Location location = new Location(worldMock, 10, 20, 30);
 		when(playerMock.getLocation()).thenReturn(location);
 
-		RecordKey key = RecordKey.create("SOME_KEY").orElseThrow();
+		RecordKey key = RecordKey.of("SOME_KEY").orElseThrow();
 		ContextMap contextMap = new ContextMap(playerMock, key);
 		contextMap.put(key, playerMock);
 

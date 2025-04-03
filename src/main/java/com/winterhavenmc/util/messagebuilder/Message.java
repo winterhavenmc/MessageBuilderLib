@@ -27,6 +27,7 @@ import org.bukkit.command.CommandSender;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MACRO;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.VALUE;
@@ -75,7 +76,7 @@ public final class Message
 		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
-		RecordKey recordKey = RecordKey.create(macro).orElseThrow();
+		RecordKey recordKey = RecordKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO));
 
 		// put value into context map using macro enum constant name as key
 		this.contextMap.put(recordKey, value);
@@ -101,11 +102,11 @@ public final class Message
 		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
-		RecordKey recordKey = RecordKey.create(macro).orElseThrow();
+		RecordKey recordKey = RecordKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO));
 
 		// put value into context map using macro enum constant name for key
 		this.contextMap.put(recordKey, value);
-		this.contextMap.put(RecordKey.create(macro.name() + ".QUANTITY").orElseThrow(), quantity);
+		this.contextMap.put(RecordKey.of(macro.name() + ".QUANTITY").orElseThrow(), quantity);
 
 		// return this instance of Message class to the builder chain
 		return this;
@@ -169,7 +170,7 @@ public final class Message
 	 */
 	<K extends Enum<K>> Optional<Object> peek(K macro)
 	{
-		return contextMap.getOpt(RecordKey.create(macro).orElseThrow());
+		return contextMap.getOpt(RecordKey.of(macro).orElseThrow());
 	}
 
 }

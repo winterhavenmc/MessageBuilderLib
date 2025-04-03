@@ -56,7 +56,7 @@ class CooldownMapTest {
 		cooldownMap = new CooldownMap();
 
 		messageRecord = new MessageRecord(
-				RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow(),
+				RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a message.",
 				Duration.ofSeconds(3),
@@ -86,19 +86,24 @@ class CooldownMapTest {
 	class PutExpirationTimeTests {
 		@Test
 		@DisplayName("Test putExpirationTime with valid parameters")
-		void testPutExpirationTime() {
+		void testPutExpirationTime()
+		{
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
+			CooldownKey cooldownKey = RecordKey.of(MessageId.ENABLED_MESSAGE)
+					.flatMap(recordKey -> CooldownKey.of(playerMock, recordKey))
+					.orElseThrow();
 
 			// Act
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// Assert
-			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow())));
+			assertFalse(cooldownMap.notCooling(cooldownKey));
 
 			// Verify
 			verify(playerMock, atLeastOnce()).getUniqueId();
 		}
+
 
 		@Test
 		@DisplayName("Test putExpirationTime with null recipient")
@@ -110,6 +115,7 @@ class CooldownMapTest {
 			// Assert
 			assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 		}
+
 
 		@Test
 		@DisplayName("Test putExpirationTime with null messageRecord")
@@ -134,7 +140,10 @@ class CooldownMapTest {
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// Assert TODO: test that second put did not overwrite first entry
-			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow())));
+			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+			CooldownKey cooldownKey = CooldownKey.of(playerMock, recordKey).orElseThrow();
+
+			assertFalse(cooldownMap.notCooling(cooldownKey));
 
 			// Verify
 			verify(playerMock, atLeast(2)).getUniqueId();
@@ -150,16 +159,19 @@ class CooldownMapTest {
 		void testIsCooling() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
+			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+			CooldownKey cooldownKey = CooldownKey.of(playerMock, recordKey).orElseThrow();
 
 			// Act
 			cooldownMap.putExpirationTime(playerMock, messageRecord);
 
 			// assert
-			assertFalse(cooldownMap.notCooling(new CooldownKey(playerMock, RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow())));
+			assertFalse(cooldownMap.notCooling(cooldownKey));
 
 			// Verify
 			verify(playerMock, atLeastOnce()).getUniqueId();
 		}
+
 
 		@Test
 		@DisplayName("Test isCooling with null key")
@@ -205,7 +217,7 @@ class CooldownMapTest {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 			messageRecord = new MessageRecord(
-					RecordKey.create(MessageId.ENABLED_MESSAGE).orElseThrow(),
+					RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
 					true,
 					"this is a message.",
 					Duration.ofSeconds(-10),

@@ -55,7 +55,7 @@ class MessageRecordTest {
 	@Test
 	void constructorTest() {
 		MessageRecord testRecord = new MessageRecord(
-				RecordKey.create(ENABLED_MESSAGE).orElseThrow(),
+				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",
 				Duration.ofSeconds(11),

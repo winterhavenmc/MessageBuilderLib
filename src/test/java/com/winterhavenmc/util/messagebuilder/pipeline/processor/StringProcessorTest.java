@@ -40,7 +40,7 @@ class StringProcessorTest {
 
 	@Mock Player playerMock;
 
-	RecordKey macroKey = RecordKey.create("KEY").orElseThrow();
+	RecordKey macroKey = RecordKey.of("KEY").orElseThrow();
 
 	@AfterEach
 	public void tearDown() {
