@@ -41,7 +41,7 @@ public class StringProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.filter(String.class::isInstance)
 				.map(String.class::cast)
 				.ifPresent(string -> resultMap.put(key.toString(), string));

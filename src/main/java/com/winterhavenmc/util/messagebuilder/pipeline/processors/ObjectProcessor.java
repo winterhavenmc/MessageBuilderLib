@@ -41,7 +41,7 @@ public class ObjectProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.map(Object::toString)
 				.ifPresent(value -> resultMap.put(key.toString(), value));
 

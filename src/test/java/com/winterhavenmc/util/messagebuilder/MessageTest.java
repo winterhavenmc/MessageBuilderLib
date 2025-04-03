@@ -165,7 +165,7 @@ class MessageTest
 			ContextMap contextMap = newMessage.getContextMap();
 
 			// Act
-			Object object = contextMap.getOpt(recordKey).orElseThrow();
+			Object object = contextMap.get(recordKey).orElseThrow();
 
 			// Assert
 			assertInstanceOf(ItemStack.class, object);

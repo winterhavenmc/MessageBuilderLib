@@ -170,7 +170,7 @@ public final class Message
 	 */
 	<K extends Enum<K>> Optional<Object> peek(K macro)
 	{
-		return contextMap.getOpt(RecordKey.of(macro).orElseThrow());
+		return contextMap.get(RecordKey.of(macro).orElseThrow());
 	}
 
 }

@@ -44,7 +44,7 @@ public class WorldProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.filter(World.class::isInstance)
 				.map(World.class::cast)
 				.map(world -> MultiverseHelper.getAlias(world).orElse(world.getName()))

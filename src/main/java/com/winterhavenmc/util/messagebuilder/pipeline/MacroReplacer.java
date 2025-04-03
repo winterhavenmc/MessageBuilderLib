@@ -93,8 +93,8 @@ public class MacroReplacer implements Replacer
 		RecordKey recordKey = RecordKey.of("RECIPIENT").orElseThrow();
 		RecordKey locationRecordKey = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
 
-		contextMap.getOptionalRecipient().ifPresent(r -> contextMap.put(recordKey, r.getName()));
-		contextMap.getOptionalRecipient()
+		contextMap.getRecipient().ifPresent(r -> contextMap.put(recordKey, r.getName()));
+		contextMap.getRecipient()
 				.filter(Entity.class::isInstance)
 				.map(Entity.class::cast)
 				.ifPresent(entity -> contextMap.put(locationRecordKey, entity.getLocation()));

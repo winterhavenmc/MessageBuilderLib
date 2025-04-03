@@ -48,7 +48,7 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 
 		return Optional.of(new ResultMap())
 				.flatMap(resultMap ->
-						contextMap.getOpt(key)
+						contextMap.get(key)
 						.filter(CommandSender.class::isInstance)
 						.map(CommandSender.class::cast)
 						.map(commandSender ->

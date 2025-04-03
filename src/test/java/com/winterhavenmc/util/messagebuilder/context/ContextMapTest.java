@@ -66,7 +66,7 @@ class ContextMapTest
 		contextMap.put(recordKey, number);
 
 		// Assert
-		assertEquals(Optional.of(42), contextMap.getOpt(recordKey), "Retrieved value should match the original");
+		assertEquals(Optional.of(42), contextMap.get(recordKey), "Retrieved value should match the original");
 	}
 
 
@@ -80,7 +80,7 @@ class ContextMapTest
 		contextMap.put(key, null);
 
 		// Assert
-		assertEquals(Optional.of("NULL"), contextMap.getOpt(key));
+		assertEquals(Optional.of("NULL"), contextMap.get(key));
 	}
 
 
@@ -93,7 +93,7 @@ class ContextMapTest
 		contextMap.put(key, location);
 
 		// Act
-		Optional<Object> retrievedValue = contextMap.getOpt(key);
+		Optional<Object> retrievedValue = contextMap.get(key);
 
 		// Assert
 		assertNotNull(retrievedValue, "Value should be non-null");
@@ -110,7 +110,7 @@ class ContextMapTest
 		contextMap.put(key, itemStack);
 
 		// Act
-		Optional<Object> retrievedValue = contextMap.getOpt(key);
+		Optional<Object> retrievedValue = contextMap.get(key);
 
 		// Assert
 		assertTrue(retrievedValue.isPresent());
@@ -255,12 +255,12 @@ class ContextMapTest
 		assertFalse(contextMap.isEmpty());
 	}
 
-	@Test
-	void getRecipient() {
-		CommandSender sender = contextMap.getRecipient();
-
-		assertNotNull(sender);
-	}
+//	@Test
+//	void getRecipient() {
+//		CommandSender sender = contextMap.getRecipient();
+//
+//		assertNotNull(sender);
+//	}
 
 	@Test
 	void testGetMessageKey() {

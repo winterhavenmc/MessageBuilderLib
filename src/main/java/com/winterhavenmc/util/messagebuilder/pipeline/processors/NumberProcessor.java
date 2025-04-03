@@ -41,7 +41,7 @@ public class NumberProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.filter(Number.class::isInstance)
 				.map(Number.class::cast)
 				.ifPresent(number -> resultMap.put(key.toString(), String.valueOf(number)));

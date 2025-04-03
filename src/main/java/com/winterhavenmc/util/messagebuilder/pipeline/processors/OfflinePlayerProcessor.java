@@ -46,7 +46,7 @@ public class OfflinePlayerProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.filter(OfflinePlayer.class::isInstance)
 				.map(OfflinePlayer.class::cast)
 				.ifPresent(offlinePlayer -> {

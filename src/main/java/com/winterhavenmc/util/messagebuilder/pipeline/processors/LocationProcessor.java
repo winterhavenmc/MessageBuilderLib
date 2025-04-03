@@ -102,7 +102,7 @@ public class LocationProcessor extends MacroProcessorTemplate {
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.filter(Location.class::isInstance)
 				.map(Location.class::cast)
 				.ifPresent(location -> resultMap.putAll(insertLocationFields(key, location)));

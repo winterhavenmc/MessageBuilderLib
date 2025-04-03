@@ -44,7 +44,7 @@ public class ItemStackProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.filter(ItemStack.class::isInstance)
 				.map(ItemStack.class::cast)
 				.ifPresent(itemStack -> {
