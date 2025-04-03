@@ -37,8 +37,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * A macro processor that resolves a string value for a {@link Duration} stored in the context map
  * and referenced by the given key.
  */
-public class DurationProcessor extends MacroProcessorTemplate {
-
+public class DurationProcessor extends MacroProcessorTemplate
+{
 	@Override
 	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
@@ -46,14 +46,18 @@ public class DurationProcessor extends MacroProcessorTemplate {
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.filter(Duration.class::isInstance)
 				.map(Duration.class::cast)
 				.ifPresent(duration -> {
-					Locale locale = Locale.getDefault();
-					if (contextMap.getRecipient() instanceof Player player) {
-						locale = Locale.forLanguageTag(player.getLocale()); //TODO: deal with minecraft's mangled language tag
-					}
+					//TODO: deal with minecraft's mangled language tags
+					Locale locale = contextMap.getRecipient()
+							.filter(Player.class::isInstance)
+							.map(Player.class::cast)
+							.map(Player::getLocale)
+							.map(Locale::forLanguageTag)
+							.orElse(Locale.getDefault());
+
 					resultMap.put(key.toString(), new PrettyTimeFormatter().getFormatted(locale, duration));
 				});
 
