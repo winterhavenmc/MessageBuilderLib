@@ -22,6 +22,7 @@ package com.winterhavenmc.util.messagebuilder.adapters.quantity;
  * method that returns a quantity as an {@code int}.
  */
 @FunctionalInterface
-public interface Quantifiable {
+public interface Quantifiable
+{
 	int getQuantity();
 }

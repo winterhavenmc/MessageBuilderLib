@@ -22,6 +22,7 @@ package com.winterhavenmc.util.messagebuilder.adapters.displayname;
  * method that returns a valid display name as a string.
  */
 @FunctionalInterface
-public interface DisplayNameable {
+public interface DisplayNameable
+{
 	String getDisplayName();
 }
