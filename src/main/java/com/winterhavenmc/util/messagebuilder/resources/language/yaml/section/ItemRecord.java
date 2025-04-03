@@ -46,11 +46,7 @@ public record ItemRecord(
 	@Override
 	public Optional<String> nameFor(int quantity)
 	{
-		if (quantity != 1)
-		{
-			return namePlural;
-		}
-		return nameSingular;
+		return (quantity == 1) ? nameSingular : namePlural;
 	}
 
 }
