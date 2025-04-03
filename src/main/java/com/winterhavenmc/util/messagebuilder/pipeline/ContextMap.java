@@ -126,6 +126,7 @@ public class ContextMap
 	 * @param key The enum member used as the key.
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
+	@SuppressWarnings("UnusedReturnValue")
 	public Object remove(final RecordKey key)
 	{
 		return internalMap.remove(key);
