@@ -60,7 +60,7 @@ class DurationProcessorTest
 	}
 
 
-	@Test @DisplayName("Test resolveContext method with null contextMap parameter")
+	@Test @DisplayName("resolveContext with null contextMap parameter")
 	void testResolveContext_parameter_null_context_map() {
 		MacroProcessor macroProcessor = new DurationProcessor();
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -70,7 +70,7 @@ class DurationProcessorTest
 	}
 
 
-	@Test @DisplayName("Test resolveContext method with valid parameters")
+	@Test @DisplayName("resolveContext with valid parameters")
 	void resolveContext() {
 		// Arrange
 		when(playerMock.getLocale()).thenReturn("en-US");
@@ -89,7 +89,7 @@ class DurationProcessorTest
 	}
 
 
-	@Test @DisplayName("Test resolveContext method with console as recipient")
+	@Test @DisplayName("resolveContext with console as recipient")
 	void resolveContext_console() {
 		// Arrange
 		ContextMap contextMap = new ContextMap(consoleMock, macroKey);
@@ -141,7 +141,7 @@ class DurationProcessorTest
 	}
 
 
-	@Test @DisplayName("Test resolveContext method with wrong type for duration in map")
+	@Test @DisplayName("resolveContext with wrong type for duration in map")
 	void resolveContext_value_not_duration() {
 		// Arrange
 		ContextMap contextMap = new ContextMap(playerMock, macroKey);
