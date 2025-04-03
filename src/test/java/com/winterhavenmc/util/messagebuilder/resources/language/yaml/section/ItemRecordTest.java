@@ -18,9 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
-
-import org.bukkit.configuration.Configuration;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,15 +29,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class ItemRecordTest {
-
+public class ItemRecordTest
+{
 	private final static String TEST_ITEM = "TEST_ITEM_1";
-
-	@BeforeEach
-	public void setUp() {
-		// create real configuration from resource
-		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-	}
 
 
 	@Test
@@ -59,12 +50,15 @@ public class ItemRecordTest {
 		assertNotNull(testRecord, "the newly created record is null.");
 	}
 
+
 	@ParameterizedTest
 	@EnumSource
-	void testFields(ItemSectionQueryHandler.Field field) {
+	void testFields(ItemSectionQueryHandler.Field field)
+	{
 		String keyPath = field.getKeyPath();
-		assertTrue(keyPath.matches("[A-Z0-9_.]+"));
+		assertTrue(keyPath.matches("[A-Za-z][A-Za-z\\d_.]*"));
 	}
+
 
 	@Test
 	public void testPluralized()
