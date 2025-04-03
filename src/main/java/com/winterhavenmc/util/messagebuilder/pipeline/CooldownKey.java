@@ -60,7 +60,6 @@ public class CooldownKey
 		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
 
 		this.recordKey = recordKey;
-
 		this.uuid = (recipient instanceof Entity entity) ? entity.getUniqueId() : DEFAULT_UUID;
 	}
 
