@@ -28,7 +28,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.pipeline.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.time.Tick;

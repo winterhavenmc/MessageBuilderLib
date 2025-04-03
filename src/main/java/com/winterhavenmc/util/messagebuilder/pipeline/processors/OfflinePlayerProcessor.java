@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.OfflinePlayer;
 

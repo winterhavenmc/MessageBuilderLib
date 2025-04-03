@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.command.ConsoleCommandSender;

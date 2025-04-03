@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline;
 import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

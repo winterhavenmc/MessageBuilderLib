@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.NullProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 

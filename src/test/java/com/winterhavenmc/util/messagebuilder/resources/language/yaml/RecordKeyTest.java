@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

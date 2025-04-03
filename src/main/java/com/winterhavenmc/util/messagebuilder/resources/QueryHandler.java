@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 
 import java.util.Optional;

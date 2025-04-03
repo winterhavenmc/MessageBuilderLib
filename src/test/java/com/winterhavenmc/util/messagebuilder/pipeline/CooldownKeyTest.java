@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 

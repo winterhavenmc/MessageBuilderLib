@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.NumberProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
