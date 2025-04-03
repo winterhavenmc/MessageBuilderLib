@@ -42,6 +42,7 @@ public class UniqueIdAdapter implements Adapter
 	 * @return the object, wrapped in a Identifiable type, with its method to retrieve a UUID mapped to
 	 * the getUniqueId() method of the Identifiable type.
 	 */
+	@Override
 	public Optional<Identifiable> adapt(final Object obj)
 	{
 		// no null check necessary, the switch will return an empty optional
