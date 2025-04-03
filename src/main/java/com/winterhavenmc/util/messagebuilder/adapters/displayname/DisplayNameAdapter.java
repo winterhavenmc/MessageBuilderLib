@@ -34,6 +34,7 @@ import java.util.Optional;
  */
 public class DisplayNameAdapter implements Adapter
 {
+	@Override
 	public Optional<DisplayNameable> adapt(final Object obj)
 	{
 		return switch (obj) {
