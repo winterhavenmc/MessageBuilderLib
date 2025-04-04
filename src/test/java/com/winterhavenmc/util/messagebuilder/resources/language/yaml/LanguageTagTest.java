@@ -17,68 +17,77 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class LanguageTagTest {
-
-	@Nested
-	class ConstructorTests {
-		@Test
-		void testConstructor_locale() {
+class LanguageTagTest
+{
+	@Nested @DisplayName("Test static factory methods")
+	class ConstructorTests
+	{
+		@Test @DisplayName("with valid parameter locale")
+		void testConstructor_locale()
+		{
 			// Arrange
-			LanguageTag languageTag = new LanguageTag(Locale.US);
+			LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 			// Act
-			String result = languageTag.getLanguageTag();
+			String result = languageTag.toString();
 
 			// Assert
 			assertEquals("en-US", result);
 		}
 
-		@Test
-		void testConstructor_languageTag() {
-			// Arrange
-			LanguageTag languageTag = new LanguageTag("en-US");
 
-			// Act
-			Locale result = languageTag.getLocale();
+		@Test @DisplayName("with null parameter locale")
+		void testConstructor_null_parameter_locale()
+		{
+			// Arrange & Act
+			Optional<LanguageTag> result = LanguageTag.of(null);
 
 			// Assert
-			assertEquals(Locale.US, result);
+			assertTrue(result.isEmpty());
 		}
 	}
 
+
 	@Test
-	void testGetLanguageTag() {
+	void testToString()
+	{
 		// Arrange
-		LanguageTag languageTag = new LanguageTag("en-US");
+		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act & Assert
-		assertEquals("en-US", languageTag.getLanguageTag());
-		assertNotEquals("fr-FR", languageTag.getLanguageTag());
+		assertEquals("en-US", languageTag.toString());
+		assertNotEquals("fr-FR", languageTag.toString());
 	}
 
+
 	@Test
-	void testGetResourceName() {
+	void testGetResourceName()
+	{
 		// Arrange
-		LanguageTag languageTag = new LanguageTag("en-US");
+		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act & Assert
 		assertEquals("language/en-US.yml", languageTag.getResourceName());
 		assertNotEquals("language/fr-FR.yml", languageTag.getResourceName());
 	}
 
+
 	@Test
-	void testGetFileName() {
+	void testGetFileName()
+	{
 		// Arrange
-		LanguageTag languageTag = new LanguageTag("en-US");
+		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act & Assert
 		assertEquals("language" + File.separator + "en-US.yml", languageTag.getFileName());
@@ -88,7 +97,7 @@ class LanguageTagTest {
 	@Test
 	void testGetLocale() {
 		// Arrange
-		LanguageTag languageTag = new LanguageTag("en-US");
+		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act
 		Locale locale = languageTag.getLocale();

@@ -24,6 +24,7 @@ import org.bukkit.Location;
  * that returns a {@link Location}.
  */
 @FunctionalInterface
-public interface Locatable {
+public interface Locatable
+{
 	Location gatLocation();
 }

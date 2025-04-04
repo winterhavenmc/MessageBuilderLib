@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.bukkit.command.CommandSender;
 
 import org.jetbrains.annotations.NotNull;
@@ -57,22 +57,11 @@ public class ContextMap
 
 
 	/**
-	 * Retrieve recipient
-	 *
-	 * @return the recipient that was used to create the context map
-	 */
-	public CommandSender getRecipient()
-	{
-		return recipient;
-	}
-
-
-	/**
 	 * Retrieve Optional recipient
 	 *
 	 * @return the recipient that was used to create the context map
 	 */
-	public Optional<CommandSender> getOptionalRecipient()
+	public Optional<CommandSender> getRecipient()
 	{
 		return Optional.ofNullable(recipient);
 	}
@@ -113,7 +102,7 @@ public class ContextMap
 	 * @param key the context map key
 	 * @return the value for the key
 	 */
-	public Optional<Object> getOpt(final RecordKey key)
+	public Optional<Object> get(final RecordKey key)
 	{
 		return Optional.ofNullable(internalMap.get(key));
 	}
@@ -137,6 +126,7 @@ public class ContextMap
 	 * @param key The enum member used as the key.
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
+	@SuppressWarnings("UnusedReturnValue")
 	public Object remove(final RecordKey key)
 	{
 		return internalMap.remove(key);

@@ -42,6 +42,7 @@ public class QuantityAdapter implements Adapter
 	 * @return an {@code Optional} of the object as a {@code Quantifiable}, or an empty Optional if the passed
 	 * object does not have a known method of retrieving a quantity.
 	 */
+	@Override
 	public Optional<Quantifiable> adapt(Object obj)
 	{
 		// no null check necessary, the switch will return an empty optional

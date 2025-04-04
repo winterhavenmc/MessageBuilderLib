@@ -19,8 +19,8 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -165,7 +165,7 @@ class MessageTest
 			ContextMap contextMap = newMessage.getContextMap();
 
 			// Act
-			Object object = contextMap.getOpt(recordKey).orElseThrow();
+			Object object = contextMap.get(recordKey).orElseThrow();
 
 			// Assert
 			assertInstanceOf(ItemStack.class, object);

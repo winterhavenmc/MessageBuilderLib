@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
@@ -41,7 +41,7 @@ public class ObjectProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.map(Object::toString)
 				.ifPresent(value -> resultMap.put(key.toString(), value));
 

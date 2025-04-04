@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
 
@@ -44,7 +44,7 @@ public class WorldProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.filter(World.class::isInstance)
 				.map(World.class::cast)
 				.map(world -> MultiverseHelper.getAlias(world).orElse(world.getName()))

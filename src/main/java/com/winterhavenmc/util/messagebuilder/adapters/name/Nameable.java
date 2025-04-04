@@ -22,6 +22,7 @@ package com.winterhavenmc.util.messagebuilder.adapters.name;
  * method that returns a valid name as a {@code String}.
  */
 @FunctionalInterface
-public interface Nameable {
+public interface Nameable
+{
 	String getName();
 }

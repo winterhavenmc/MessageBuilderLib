@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.inventory.ItemStack;
 
@@ -44,7 +44,7 @@ public class ItemStackProcessor extends MacroProcessorTemplate
 
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.getOpt(key)
+		contextMap.get(key)
 				.filter(ItemStack.class::isInstance)
 				.map(ItemStack.class::cast)
 				.ifPresent(itemStack -> {
