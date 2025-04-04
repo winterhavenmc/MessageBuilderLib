@@ -98,8 +98,6 @@ public final class YamlLanguageResourceLoader
 	 */
 	Configuration load(final LanguageTag languageTag)
 	{
-		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
-
 		YamlConfiguration configuration = new YamlConfiguration();
 		File languageFile = new File(plugin.getDataFolder(), languageTag.getFileName());
 
