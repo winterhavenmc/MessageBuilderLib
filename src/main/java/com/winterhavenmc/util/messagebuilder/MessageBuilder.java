@@ -17,17 +17,17 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.MessageProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.MessageRetriever;
-import com.winterhavenmc.util.messagebuilder.pipeline.MessageSender;
-import com.winterhavenmc.util.messagebuilder.pipeline.TitleSender;
+import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
+import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
+import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.pipeline.MacroReplacer;
+import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
