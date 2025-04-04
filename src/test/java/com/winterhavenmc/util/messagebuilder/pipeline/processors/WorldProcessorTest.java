@@ -20,9 +20,6 @@ package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.WorldProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
