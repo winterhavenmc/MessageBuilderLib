@@ -53,14 +53,10 @@ public class MultiverseHelper
 	{
 		validate(world, Objects::isNull, () -> new ValidationException(ExceptionMessageKey.PARAMETER_NULL, Parameter.WORLD));
 
-		Plugin plugin = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
-
-		if (plugin instanceof MultiverseCore multiverseCore && multiverseCore.isEnabled())
-		{
-			return Optional.ofNullable(multiverseCore.getMVWorldManager().getMVWorld(world).getAlias());
-		}
-
-		return Optional.empty();
+		Plugin mvPlugin = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
+		return mvPlugin instanceof MultiverseCore multiverseCore && multiverseCore.isEnabled()
+				? Optional.ofNullable(multiverseCore.getMVWorldManager().getMVWorld(world).getAlias())
+				: Optional.empty();
 	}
 
 }
