@@ -33,12 +33,16 @@ enum YamlLanguageSetting
 
 	private final String value;
 
-	YamlLanguageSetting(final String value) {
+
+	YamlLanguageSetting(final String value)
+	{
 		this.value = value;
 	}
 
+
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return value;
 	}
 
