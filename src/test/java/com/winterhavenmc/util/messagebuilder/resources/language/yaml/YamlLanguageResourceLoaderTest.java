@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
@@ -143,6 +144,42 @@ public class YamlLanguageResourceLoaderTest
 
 		// Assert
 		assertEquals("en-US", languageTag.toString());
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+	@Test
+	void getConfiguredLanguageTag_parameter_null()
+	{
+		// Arrange
+		pluginConfiguration.set("language", null);
+		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+
+		// Act
+		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag(pluginMock);
+
+		// Assert
+		assertTrue(languageTag.isEmpty());
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+	@Test
+	void getConfiguredLanguageTag_parameter_empty()
+	{
+		// Arrange
+		pluginConfiguration.set("language", "");
+		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+
+		// Act
+		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag(pluginMock);
+
+		// Assert
+		assertTrue(languageTag.isEmpty());
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getConfig();
