@@ -214,8 +214,6 @@ public final class YamlLanguageResourceInstaller
 	 */
 	InstallerStatus install(final LanguageTag languageTag)
 	{
-		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
-
 		return installByName(languageTag.getResourceName());
 	}
 
@@ -240,8 +238,6 @@ public final class YamlLanguageResourceInstaller
 	 */
 	boolean resourceExists(final LanguageTag languageTag)
 	{
-		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
-
 		return plugin.getResource(languageTag.getResourceName()) != null;
 	}
 
