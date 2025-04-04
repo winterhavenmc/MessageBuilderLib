@@ -17,39 +17,45 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
 import java.io.File;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_TAG;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public class LanguageTag
 {
-	private final Locale locale;
-	private final String languageTag;
+	private final String wrappedLanguageTag;
 
 
 	/**
 	 * Class constructor that takes a String language tag as a parameter
 	 *
 	 * @param languageTag the language tag representing a potential language resource
+	 * @throws ValidationException if parameter is null or empty
 	 */
-	public LanguageTag(final String languageTag)
+	private LanguageTag(final String languageTag)
 	{
-		this.languageTag = languageTag;
-		this.locale = Locale.forLanguageTag(languageTag);
+		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
+		validate(languageTag, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, LANGUAGE_TAG));
+
+		this.wrappedLanguageTag = languageTag;
 	}
 
 
-	/**
-	 * Class constructor that takes a Locale as a parameter to indicate a potential language resource
-	 *
-	 * @param locale the {@link Locale} representing a potential language resource
-	 */
-	public LanguageTag(final Locale locale)
+	public static Optional<LanguageTag> of(final Locale locale)
 	{
-		this.locale = locale;
-		this.languageTag = locale.toLanguageTag();
+		return locale == null
+				? Optional.empty()
+				: Optional.of(new LanguageTag(locale.toLanguageTag()));
 	}
 
 
@@ -60,7 +66,7 @@ public class LanguageTag
 	 */
 	public Locale getLocale()
 	{
-		return locale;
+		return Locale.forLanguageTag(wrappedLanguageTag);
 	}
 
 
@@ -69,9 +75,10 @@ public class LanguageTag
 	 *
 	 * @return {@code String} representing the IETF language tag associated with a potential language resource
 	 */
-	public String getLanguageTag()
+	@Override
+	public String toString()
 	{
-		return languageTag;
+		return this.wrappedLanguageTag;
 	}
 
 
@@ -82,7 +89,7 @@ public class LanguageTag
 	 */
 	public String getResourceName()
 	{
-		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), languageTag).concat(".yml");
+		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), wrappedLanguageTag).concat(".yml");
 	}
 
 
@@ -93,7 +100,7 @@ public class LanguageTag
 	 */
 	public String getFileName()
 	{
-		return String.join(File.separator, RESOURCE_SUBDIRECTORY.toString(), languageTag).concat(".yml");
+		return String.join(File.separator, RESOURCE_SUBDIRECTORY.toString(), wrappedLanguageTag).concat(".yml");
 	}
 
 }

@@ -26,10 +26,11 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_TAG;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.PLUGIN;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -70,11 +71,25 @@ public final class YamlLanguageResourceLoader
 	 * @param plugin reference to plugin main class
 	 * @return IETF language tag as string from config.yml
 	 */
-	String getConfiguredLanguageTag(final Plugin plugin)
+	Optional<LanguageTag> getConfiguredLanguageTag(final Plugin plugin)
 	{
 		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
 
-		return plugin.getConfig().getString(YamlLanguageSetting.CONFIG_LANGUAGE_KEY.toString());
+		String configLanguageTag = plugin.getConfig().getString(YamlLanguageSetting.CONFIG_LANGUAGE_KEY.toString());
+
+		return configLanguageTag == null || configLanguageTag.isBlank()
+				? Optional.empty()
+				: LanguageTag.of(Locale.forLanguageTag(configLanguageTag));
+	}
+
+
+	Locale getConfiguredLocale(final Plugin plugin)
+	{
+		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
+
+		return getConfiguredLanguageTag(plugin)
+				.map(tag -> Locale.forLanguageTag(tag.toString()))
+				.orElse(Locale.getDefault());
 	}
 
 
@@ -86,8 +101,10 @@ public final class YamlLanguageResourceLoader
 	 */
 	Configuration load()
 	{
-		return load(new LanguageTag(getConfiguredLanguageTag(plugin)));
-	}
+        return LanguageTag.of(getConfiguredLocale(plugin))
+				.map(this::load)
+				.orElse(null);
+    }
 
 
 	/**
