@@ -49,7 +49,7 @@ public final class MessageRetriever implements Retriever
 
 
 	@Override
-	public Optional<MessageRecord> getRecord(RecordKey key)
+	public Optional<MessageRecord> getRecord(final RecordKey key)
 	{
 		return queryHandler.getRecord(key);
 	}
