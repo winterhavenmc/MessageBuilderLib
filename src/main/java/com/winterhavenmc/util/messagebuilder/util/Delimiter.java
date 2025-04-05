@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+
 public enum Delimiter
 {
 	OPEN("{"),
