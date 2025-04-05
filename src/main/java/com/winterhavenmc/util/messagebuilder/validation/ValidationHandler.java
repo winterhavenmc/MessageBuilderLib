@@ -18,60 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.validation;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 
-public sealed interface ValidationHandler<T>
-		permits ValidationHandler.Throwing, ValidationHandler.Logging, ValidationHandler.LoggingAndThrowing, ValidationHandler.DefaultValue
+public sealed interface ValidationHandler<T> permits Throwing, Logging, LoggingAndThrowing, DefaultValue
 {
 	@SuppressWarnings("UnusedReturnValue")
 	T handleInvalid(T value);
-
-
-	record Throwing<T>(Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
-	{
-		@Override
-		public T handleInvalid(T value)
-		{
-			ValidationException exception = exceptionSupplier.get();
-			exception.fillInStackTrace(); // Maintain call-site accuracy
-			throw exception;
-		}
-	}
-
-
-	record Logging<T>(Consumer<? super T> logger) implements ValidationHandler<T>
-	{
-		@Override
-		public T handleInvalid(T value)
-		{
-			logger.accept(value);
-			return value;
-		}
-	}
-
-
-	record LoggingAndThrowing<T>(
-			Consumer<? super T> logger,
-			Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
-	{
-		@Override
-		public T handleInvalid(T value) {
-			logger.accept(value);
-			ValidationException ex = exceptionSupplier.get();
-			ex.fillInStackTrace();
-			throw ex;
-		}
-	}
-
-
-	record DefaultValue<T>(T defaultValue) implements ValidationHandler<T>
-	{
-		@Override
-		public T handleInvalid(T value) {
-			return defaultValue;
-		}
-	}
 
 
 	static <T> ValidationHandler<T> throwing(ExceptionMessageKey messageKey, Parameter parameter)
@@ -92,6 +44,12 @@ public sealed interface ValidationHandler<T>
                                                        Parameter parameter)
 	{
 		return new LoggingAndThrowing<>(logger, () -> new ValidationException(messageKey, parameter));
+	}
+
+
+	static <T> ValidationHandler<T> defaultValue(T value)
+	{
+		return new DefaultValue<>(value);
 	}
 
 }
