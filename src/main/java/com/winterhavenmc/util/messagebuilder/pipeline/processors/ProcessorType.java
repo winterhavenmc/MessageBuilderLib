@@ -48,7 +48,7 @@ public enum ProcessorType
 	 * Enum constructor
 	 *
 	 */
-	ProcessorType(Function<DependencyContext, MacroProcessor> creator)
+	ProcessorType(final Function<DependencyContext, MacroProcessor> creator)
 	{
 		this.creator = creator;
 	}
@@ -60,7 +60,7 @@ public enum ProcessorType
 	 * @param context a dependency injection container
 	 * @return a newly created instance of a macro processor
 	 */
-	public MacroProcessor create(DependencyContext context)
+	public MacroProcessor create(final DependencyContext context)
 	{
 		return creator.apply(context);
 	}
