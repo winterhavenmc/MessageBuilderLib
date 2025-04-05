@@ -17,9 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-
-import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -69,7 +66,7 @@ public class ResultMap
 	}
 
 
-	public String getValueOrKey(String key) {
+	public String getValueOrKey(final String key) {
 		return internalResultMap.getOrDefault(key, key); // Return key itself if not found
 	}
 
