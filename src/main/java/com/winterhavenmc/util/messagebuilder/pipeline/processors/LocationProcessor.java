@@ -72,9 +72,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * @see Location
  * @see ContextMap
  */
-public class LocationProcessor extends MacroProcessorTemplate {
-
-
+public class LocationProcessor extends MacroProcessorTemplate
+{
 	/**
 	 * Resolves placeholders from a {@link Location} object and populates the context map.
 	 * <p>
