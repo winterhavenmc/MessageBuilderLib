@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.validation;
 
 import java.util.function.Predicate;
 
+
 public interface Validator
 {
 	/**
