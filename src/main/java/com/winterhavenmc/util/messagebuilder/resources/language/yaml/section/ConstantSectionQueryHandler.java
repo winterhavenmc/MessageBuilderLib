@@ -101,7 +101,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return an option of a ConstantRecord
 	 */
 	@Override
-	public Optional<ConstantRecord> getRecord(RecordKey key)
+	public Optional<ConstantRecord> getRecord(final RecordKey key)
 	{
 		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
 				.map(s -> s.get(key.toString()))
