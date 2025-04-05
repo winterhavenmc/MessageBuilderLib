@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.validation;
 
 import java.util.function.Consumer;
 
+
 public record Logging<T>(Consumer<? super T> logger) implements ValidationHandler<T>
 {
     @Override
@@ -27,4 +28,5 @@ public record Logging<T>(Consumer<? super T> logger) implements ValidationHandle
         logger.accept(value);
         return value;
     }
+
 }

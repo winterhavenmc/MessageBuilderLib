@@ -20,6 +20,7 @@ package com.winterhavenmc.util.messagebuilder.validation;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+
 public record LoggingAndThrowing<T>(
         Consumer<? super T> logger,
         Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
@@ -32,4 +33,5 @@ public record LoggingAndThrowing<T>(
         ex.fillInStackTrace();
         throw ex;
     }
+
 }

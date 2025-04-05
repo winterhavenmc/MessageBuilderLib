@@ -24,7 +24,6 @@ import java.util.ResourceBundle;
 
 public class ValidationException extends IllegalArgumentException
 {
-
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
 
 	private final ExceptionMessageKey exceptionMessageKey;

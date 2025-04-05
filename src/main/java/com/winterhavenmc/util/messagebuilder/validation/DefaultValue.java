@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
+
 public record DefaultValue<T>(T defaultValue) implements ValidationHandler<T>
 {
     @Override
