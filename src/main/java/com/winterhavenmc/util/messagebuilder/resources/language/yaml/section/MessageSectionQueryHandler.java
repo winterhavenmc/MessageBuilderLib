@@ -47,7 +47,7 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 	 *
 	 * @param configurationSupplier the configuration supplier that provides access to the configuration object for the language file.
 	 */
-	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier)
+	public MessageSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier)
 	{
 		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
