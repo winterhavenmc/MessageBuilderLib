@@ -49,7 +49,7 @@ public class ProcessorRegistry
 
 
 	// Get a processor, creating it lazily if necessary
-	public MacroProcessor get(ProcessorType type)
+	public MacroProcessor get(final ProcessorType type)
 	{
 		return macroProcessorMap.computeIfAbsent(type, t -> t.create(context));
 	}
