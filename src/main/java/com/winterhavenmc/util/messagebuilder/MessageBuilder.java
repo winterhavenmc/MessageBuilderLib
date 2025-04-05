@@ -44,6 +44,7 @@ import java.util.ResourceBundle;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -116,7 +117,7 @@ public final class MessageBuilder
 	 */
 	public static MessageBuilder create(final Plugin plugin)
 	{
-		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
+		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
 		YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
 		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
@@ -147,9 +148,9 @@ public final class MessageBuilder
          final YamlLanguageResourceManager languageResourceManager,
          final MessageProcessor messageProcessor)
 	{
-		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
-		validate(languageResourceManager, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
-		validate(messageProcessor, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_PROCESSOR));
+		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
+		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
+		validate(messageProcessor, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
 		return new MessageBuilder(plugin, languageResourceManager, messageProcessor);
 	}
@@ -164,7 +165,7 @@ public final class MessageBuilder
 	 */
 	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
 	{
-		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
+		validate(recipient, Objects::isNull, throwing(PARAMETER_NULL, RECIPIENT));
 
 		RecordKey recordKey = RecordKey.of(messageId).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 

@@ -30,7 +30,7 @@ import java.util.Optional;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MACRO;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.VALUE;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -72,9 +72,9 @@ public final class Message
 	 */
 	public <K extends Enum<K>, V> Message setMacro(final K macro, final V value)
 	{
-		validate(macro, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MACRO));
-		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
-		// allow null 'value' parameter to be inserted into context map
+		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
+		// allow null 'value' parameter to be inserted into context map. uncomment below line to throw on null value
+		//Validator2.validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
 
 		RecordKey recordKey = RecordKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO));
 
@@ -98,8 +98,8 @@ public final class Message
 	 */
 	public <K extends Enum<K>, V> Message setMacro(int quantity, final K macro, final V value)
 	{
-		validate(macro, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MACRO));
-		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
+		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
+		//Validator2.validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
 		// allow null 'value' parameter to be inserted into context map
 
 		RecordKey recordKey = RecordKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO));

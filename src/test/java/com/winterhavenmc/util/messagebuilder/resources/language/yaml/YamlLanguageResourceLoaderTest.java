@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
@@ -90,6 +91,18 @@ public class YamlLanguageResourceLoaderTest
 
 
 	@Test
+	@Disabled("currently not validating against null parameter")
+	void testConstructor_parameter_null() {
+		// Arrange & Act
+		ValidationException exception = assertThrows(ValidationException.class,
+				()-> new YamlLanguageResourceLoader(null));
+
+		// Assert
+		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
 	public void testLoad() throws IOException
     {
 		// Arrange
@@ -139,7 +152,7 @@ public class YamlLanguageResourceLoaderTest
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		// Act
-		LanguageTag languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag(pluginMock).orElseThrow();
+		LanguageTag languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag().orElseThrow();
 
 		// Assert
 		assertEquals("en-US", languageTag.toString());
@@ -150,12 +163,48 @@ public class YamlLanguageResourceLoaderTest
 
 
 	@Test
-	void getConfiguredLanguageTag_parameter_null_plugin()
+	void getConfiguredLanguageTag_parameter_null()
 	{
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> yamlLanguageResourceLoader.getConfiguredLanguageTag(null));
+		// Arrange
+		pluginConfiguration.set("language", null);
+		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
-		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
+		// Act
+		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag();
+
+		// Assert
+		assertTrue(languageTag.isEmpty());
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
 	}
+
+
+	@Test
+	void getConfiguredLanguageTag_parameter_empty()
+	{
+		// Arrange
+		pluginConfiguration.set("language", "");
+		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+
+		// Act
+		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag();
+
+		// Assert
+		assertTrue(languageTag.isEmpty());
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+//	@Test
+//	void getConfiguredLanguageTag_parameter_null_plugin()
+//	{
+//		ValidationException exception = assertThrows(ValidationException.class,
+//				() -> yamlLanguageResourceLoader.getConfiguredLanguageTag());
+//
+//		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
+//	}
 
 }

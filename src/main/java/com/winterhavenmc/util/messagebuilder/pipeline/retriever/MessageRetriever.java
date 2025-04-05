@@ -20,13 +20,13 @@ package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.QUERY_HANDLER;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -42,7 +42,7 @@ public final class MessageRetriever implements Retriever
 	 */
 	public MessageRetriever(final QueryHandler<MessageRecord> queryHandler)
 	{
-		validate(queryHandler, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, QUERY_HANDLER));
+		validate(queryHandler, Objects::isNull, throwing(PARAMETER_NULL, QUERY_HANDLER));
 
 		this.queryHandler = queryHandler;
 	}

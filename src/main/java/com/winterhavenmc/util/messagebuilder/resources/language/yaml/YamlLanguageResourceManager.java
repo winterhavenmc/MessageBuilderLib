@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.Configuration;
 
@@ -27,6 +26,7 @@ import java.util.Objects;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_INSTALLER;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_LOADER;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -82,8 +82,8 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	public static YamlLanguageResourceManager getInstance(final YamlLanguageResourceInstaller resourceInstaller,
 	                                                      final YamlLanguageResourceLoader resourceLoader)
 	{
-		validate(resourceInstaller, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RESOURCE_INSTALLER));
-		validate(resourceLoader, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RESOURCE_LOADER));
+		validate(resourceInstaller, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_INSTALLER));
+		validate(resourceLoader, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_LOADER));
 
 		if (instance == null) {
 			synchronized (YamlLanguageResourceManager.class) {

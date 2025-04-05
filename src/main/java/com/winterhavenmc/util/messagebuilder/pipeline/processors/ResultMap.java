@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
+import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageK
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.VALUE;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -48,9 +50,9 @@ public class ResultMap
 
 	public void put(final String key, final String value)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
-		validate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
+		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, throwing(PARAMETER_EMPTY, KEY));
+		validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
 		// allow blank string value to be passed in. Uncomment line below to throw exception on blank string value
 		//staticValidate(value, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, VALUE));
 
@@ -60,8 +62,8 @@ public class ResultMap
 
 	public String get(final String key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
+		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, throwing(PARAMETER_EMPTY, KEY));
 
 		return internalResultMap.get(key);
 	}
@@ -84,8 +86,8 @@ public class ResultMap
 
 	public boolean containsKey(final String key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, KEY));
+		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
+		validate(key, String::isBlank, throwing(PARAMETER_EMPTY, KEY));
 
 		return internalResultMap.containsKey(key);
 	}

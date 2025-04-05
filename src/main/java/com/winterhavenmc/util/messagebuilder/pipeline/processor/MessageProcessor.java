@@ -24,7 +24,6 @@ import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +31,7 @@ import java.util.function.Predicate;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -61,7 +61,7 @@ public final class MessageProcessor implements Processor
 	@Override
 	public void process(final Message message)
 	{
-		validate(message, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE));
+		validate(message, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE));
 
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())
 				.filter(notCooling)

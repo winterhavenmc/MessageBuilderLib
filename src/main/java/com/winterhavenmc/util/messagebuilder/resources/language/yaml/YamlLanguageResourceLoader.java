@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,12 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Optional;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.PLUGIN;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -68,13 +62,10 @@ public final class YamlLanguageResourceLoader
 	 * <p>
 	 * The language yaml file must match the specified tag, with a .yml extension appended.
 	 *
-	 * @param plugin reference to plugin main class
-	 * @return IETF language tag as string from config.yml
+	 * @return Optional {@code LanguageTag} or an empty Optional if config setting is null or empty
 	 */
-	Optional<LanguageTag> getConfiguredLanguageTag(final Plugin plugin)
+	Optional<LanguageTag> getConfiguredLanguageTag()
 	{
-		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
-
 		String configLanguageTag = plugin.getConfig().getString(YamlLanguageSetting.CONFIG_LANGUAGE_KEY.toString());
 
 		return configLanguageTag == null || configLanguageTag.isBlank()
@@ -83,11 +74,9 @@ public final class YamlLanguageResourceLoader
 	}
 
 
-	Locale getConfiguredLocale(final Plugin plugin)
+	Locale getConfiguredLocale()
 	{
-		validate(plugin, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, PLUGIN));
-
-		return getConfiguredLanguageTag(plugin)
+		return getConfiguredLanguageTag()
 				.map(tag -> Locale.forLanguageTag(tag.toString()))
 				.orElse(Locale.getDefault());
 	}
@@ -101,7 +90,7 @@ public final class YamlLanguageResourceLoader
 	 */
 	Configuration load()
 	{
-        return LanguageTag.of(getConfiguredLocale(plugin))
+        return LanguageTag.of(getConfiguredLocale())
 				.map(this::load)
 				.orElse(null);
     }

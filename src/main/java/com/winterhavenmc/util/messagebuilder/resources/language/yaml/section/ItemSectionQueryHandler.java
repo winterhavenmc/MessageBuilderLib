@@ -21,12 +21,14 @@ import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -48,7 +50,7 @@ public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 	 */
 	public ItemSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier)
 	{
-		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		this.configurationSupplier = configurationSupplier;
 	}

@@ -25,7 +25,6 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.Delimiter;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.entity.Entity;
 
@@ -35,6 +34,7 @@ import java.util.Optional;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -52,8 +52,8 @@ public class MacroReplacer implements Replacer
 	@Override
 	public Optional<MessageRecord> replaceMacros(final MessageRecord messageRecord, final Message message)
 	{
-		validate(messageRecord, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_RECORD));
-		validate(message, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE));
+		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
+		validate(message, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE));
 
 		// return new message record with final string fields added with macro replacements performed
 		return messageRecord.withFinalStrings(
@@ -73,9 +73,9 @@ public class MacroReplacer implements Replacer
 	 */
 	public String replaceMacrosInString(final ContextMap contextMap, final String messageString)
 	{
-		validate(contextMap, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONTEXT_MAP));
-		validate(messageString, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_STRING));
-		validate(messageString, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, MESSAGE_STRING));
+		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
+		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
+		validate(messageString, String::isBlank, throwing(PARAMETER_EMPTY, MESSAGE_STRING));
 
 		return Optional.of(messageString)
 				.map(msg -> performReplacements(new ContextResolver().resolve(addRecipientContext(contextMap)), msg))
@@ -92,7 +92,7 @@ public class MacroReplacer implements Replacer
 	 */
     public ContextMap addRecipientContext(final ContextMap contextMap)
 	{
-		validate(contextMap, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONTEXT_MAP));
+		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
 
 		RecordKey recordKey = RecordKey.of("RECIPIENT").orElseThrow();
 		RecordKey locationRecordKey = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
@@ -116,9 +116,9 @@ public class MacroReplacer implements Replacer
 	 */
     public String performReplacements(final ResultMap replacementMap, final String messageString)
 	{
-		validate(replacementMap, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, REPLACEMENT_MAP));
-		validate(messageString, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_STRING));
-		validate(messageString, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, MESSAGE_STRING));
+		validate(replacementMap, Objects::isNull, throwing(PARAMETER_NULL, REPLACEMENT_MAP));
+		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
+		validate(messageString, String::isBlank, throwing(PARAMETER_EMPTY, MESSAGE_STRING));
 
 		return new PlaceholderMatcher().match(messageString)
 				.reduce(messageString, (msg, placeholder) ->

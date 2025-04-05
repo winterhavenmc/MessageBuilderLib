@@ -89,7 +89,7 @@ public class ContextMap
 	public <T> void put(final RecordKey key, final T value)
 	{
 		// allow null value to be inserted into the context map. uncomment line below to throw exception on null 'value' parameter
-		//staticValidate(value, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, VALUE));
+		//validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
 
         // insert value into map with key, replacing null values with string "NULL"
 		internalMap.put(key, Objects.requireNonNullElse(value, "NULL"));

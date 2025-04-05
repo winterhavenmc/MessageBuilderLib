@@ -30,6 +30,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -48,8 +49,8 @@ public final class CooldownMap implements Cooldown
 	 */
 	public void putExpirationTime(final CommandSender recipient, final MessageRecord messageRecord)
 	{
-		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
-		validate(messageRecord, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_RECORD));
+		validate(recipient, Objects::isNull, throwing(PARAMETER_NULL, RECIPIENT));
+		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
 
 		CooldownKey.of(recipient, messageRecord.key())
 				.ifPresent(key -> COOLDOWN_MAP.put(key, Instant.now().plus(messageRecord.repeatDelay())));
@@ -65,7 +66,7 @@ public final class CooldownMap implements Cooldown
 	 */
 	public boolean notCooling(final CooldownKey key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
+		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
 
 		return !(COOLDOWN_MAP.containsKey(key) && Instant.now().isBefore(COOLDOWN_MAP.get(key)));
 	}

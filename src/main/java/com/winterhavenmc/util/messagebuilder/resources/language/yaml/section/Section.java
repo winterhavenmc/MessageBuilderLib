@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.util.EnumMap;
 import java.util.Objects;
@@ -27,6 +26,7 @@ import java.util.function.Function;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -66,8 +66,9 @@ public enum Section
 	 * @param <R> the specific type of the section query handler being returned
 	 */
 	@SuppressWarnings("unchecked")
-	public <R extends SectionRecord> QueryHandler<R> createHandler(YamlConfigurationSupplier configurationSupplier) {
-		validate(configurationSupplier, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+	public <R extends SectionRecord> QueryHandler<R> createHandler(YamlConfigurationSupplier configurationSupplier)
+	{
+		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
 		return (QueryHandler<R>) HANDLER_MAP.computeIfAbsent(this, section -> handlerFactory.apply(configurationSupplier));
 	}

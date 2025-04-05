@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -30,6 +29,7 @@ import java.util.Objects;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -61,8 +61,8 @@ public final class TitleSender implements Sender
 	@Override
 	public void send(final CommandSender recipient, final MessageRecord messageRecord)
 	{
-		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
-		validate(messageRecord, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, MESSAGE_RECORD));
+		validate(recipient, Objects::isNull, throwing(PARAMETER_NULL, RECIPIENT));
+		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
 
 		if (recipient instanceof Player player)
 		{

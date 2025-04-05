@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -34,11 +35,11 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * validated upon creation. The static factory methods return an Optional of the RecordKey,
  * or an empty Optional if the parameter was invalid, as determined by regex pattern and Predicate.
  */
-public class RecordKey
+public final class RecordKey
 {
 	// valid key must begin with alpha only and may contain alpha, digits, underscore or period
 	private static final Pattern VALID_KEY = Pattern.compile("^[a-zA-Z][a-zA-Z\\d_.]*$");
-	private static final Predicate<String> IS_INVALID_KEY = s -> !VALID_KEY.matcher(s).matches();
+	private static final Predicate<String> IS_INVALID_KEY = string -> !VALID_KEY.matcher(string).matches();
 
 	private final String wrappedString;
 
@@ -51,8 +52,8 @@ public class RecordKey
 	 */
 	private RecordKey(final String key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, IS_INVALID_KEY, () -> new ValidationException(PARAMETER_INVALID, KEY));
+		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
+		validate(key, IS_INVALID_KEY, throwing(PARAMETER_INVALID, KEY));
 
 		this.wrappedString = key;
 	}
@@ -62,7 +63,7 @@ public class RecordKey
 	 * Static factory method for instantiating a record key from a string
 	 *
 	 * @param key a String to be used in the creation of a record key
-	 * @return an Optional record key, or an empty Optional if the key parameter is null or invalid
+	 * @return an Optional RecordKey, or an empty Optional if the key parameter is null or invalid
 	 */
 	public static Optional<RecordKey> of(final String key)
 	{
@@ -76,7 +77,7 @@ public class RecordKey
 	 * Static factory method for instantiating a record key from an enum constant
 	 *
 	 * @param key an enum constant whose name is used to create a record key
-	 * @return an Optional record key, or an empty Optional if the key parameter is null or invalid
+	 * @return an Optional RecordKey, or an empty Optional if the key parameter is null or invalid
 	 * @param <E> an enum constant
 	 */
 	public static <E extends Enum<E>> Optional<RecordKey> of(final E key)
@@ -100,7 +101,7 @@ public class RecordKey
 
 
 	@Override
-	public final boolean equals(final Object object)
+	public boolean equals(final Object object)
 	{
 		if (!(object instanceof RecordKey recordKey)) { return false; }
 

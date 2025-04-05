@@ -19,9 +19,6 @@ package com.winterhavenmc.util.messagebuilder.util;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey;
-import com.winterhavenmc.util.messagebuilder.validation.Parameter;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -29,6 +26,9 @@ import org.bukkit.plugin.Plugin;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.WORLD;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -51,16 +51,12 @@ public class MultiverseHelper
 	 */
 	public static Optional<String> getAlias(final World world)
 	{
-		validate(world, Objects::isNull, () -> new ValidationException(ExceptionMessageKey.PARAMETER_NULL, Parameter.WORLD));
+		validate(world, Objects::isNull, throwing(PARAMETER_NULL, WORLD));
 
-		Plugin plugin = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
-
-		if (plugin instanceof MultiverseCore multiverseCore && multiverseCore.isEnabled())
-		{
-			return Optional.ofNullable(multiverseCore.getMVWorldManager().getMVWorld(world).getAlias());
-		}
-
-		return Optional.empty();
+		Plugin mvPlugin = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
+		return mvPlugin instanceof MultiverseCore multiverseCore && multiverseCore.isEnabled()
+				? Optional.ofNullable(multiverseCore.getMVWorldManager().getMVWorld(world).getAlias())
+				: Optional.empty();
 	}
 
 }
