@@ -23,31 +23,31 @@ import java.util.function.Consumer;
 public sealed interface ValidationHandler<T> permits Throwing, Logging, LoggingAndThrowing, DefaultValue
 {
 	@SuppressWarnings("UnusedReturnValue")
-	T handleInvalid(T value);
+	T handleInvalid(final T value);
 
 
-	static <T> ValidationHandler<T> throwing(ExceptionMessageKey messageKey, Parameter parameter)
+	static <T> ValidationHandler<T> throwing(final ExceptionMessageKey messageKey, final Parameter parameter)
 	{
 		return new Throwing<>(() -> new ValidationException(messageKey, parameter));
 	}
 
 
-	static <T> ValidationHandler<T> logging(Consumer<? super T> logger)
+	static <T> ValidationHandler<T> logging(final Consumer<? super T> logger)
 	{
 		return new Logging<>(logger);
 	}
 
 
-	static <T> ValidationHandler<T> loggingAndThrowing(Consumer<? super T> logger,
-                                                       String message,
-                                                       ExceptionMessageKey messageKey,
-                                                       Parameter parameter)
+	static <T> ValidationHandler<T> loggingAndThrowing(final Consumer<? super T> logger,
+                                                       final String message,
+                                                       final ExceptionMessageKey messageKey,
+                                                       final Parameter parameter)
 	{
 		return new LoggingAndThrowing<>(logger, () -> new ValidationException(messageKey, parameter));
 	}
 
 
-	static <T> ValidationHandler<T> defaultValue(T value)
+	static <T> ValidationHandler<T> defaultValue(final T value)
 	{
 		return new DefaultValue<>(value);
 	}
