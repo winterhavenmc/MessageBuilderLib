@@ -91,6 +91,17 @@ public class YamlLanguageResourceLoaderTest
 
 
 	@Test
+	void testConstructor_parameter_null() {
+		// Arrange & Act
+		ValidationException exception = assertThrows(ValidationException.class,
+				()-> new YamlLanguageResourceLoader(null));
+
+		// Assert
+		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
 	public void testLoad() throws IOException
     {
 		// Arrange
@@ -140,7 +151,7 @@ public class YamlLanguageResourceLoaderTest
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		// Act
-		LanguageTag languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag(pluginMock).orElseThrow();
+		LanguageTag languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag().orElseThrow();
 
 		// Assert
 		assertEquals("en-US", languageTag.toString());
@@ -158,7 +169,7 @@ public class YamlLanguageResourceLoaderTest
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		// Act
-		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag(pluginMock);
+		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag();
 
 		// Assert
 		assertTrue(languageTag.isEmpty());
@@ -176,7 +187,7 @@ public class YamlLanguageResourceLoaderTest
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		// Act
-		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag(pluginMock);
+		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag();
 
 		// Assert
 		assertTrue(languageTag.isEmpty());
@@ -186,13 +197,13 @@ public class YamlLanguageResourceLoaderTest
 	}
 
 
-	@Test
-	void getConfiguredLanguageTag_parameter_null_plugin()
-	{
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> yamlLanguageResourceLoader.getConfiguredLanguageTag(null));
-
-		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
-	}
+//	@Test
+//	void getConfiguredLanguageTag_parameter_null_plugin()
+//	{
+//		ValidationException exception = assertThrows(ValidationException.class,
+//				() -> yamlLanguageResourceLoader.getConfiguredLanguageTag());
+//
+//		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
+//	}
 
 }
