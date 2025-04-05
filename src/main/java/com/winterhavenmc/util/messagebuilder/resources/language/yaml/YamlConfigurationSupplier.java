@@ -44,7 +44,7 @@ public final class YamlConfigurationSupplier implements Supplier<Configuration>
 	 *
 	 * @param configuration the Configuration object loaded from the yaml language configuration file
 	 */
-	public YamlConfigurationSupplier(Configuration configuration)
+	public YamlConfigurationSupplier(final Configuration configuration)
 	{
 		this.configuration = configuration;
 	}
