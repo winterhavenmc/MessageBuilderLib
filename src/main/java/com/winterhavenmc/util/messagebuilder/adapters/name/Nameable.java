@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.name;
 
+
 /**
  * An interface that describes objects that have a {@code getName()}
  * method that returns a valid name as a {@code String}.

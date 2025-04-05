@@ -52,7 +52,7 @@ public class ContextResolver implements Resolver
 	 * @return {@code ResultMap} a map containing the placeholder strings and the string representations of the values
 	 */
 	@Override
-	public ResultMap resolve(ContextMap contextMap)
+	public ResultMap resolve(final ContextMap contextMap)
 	{
 		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
 

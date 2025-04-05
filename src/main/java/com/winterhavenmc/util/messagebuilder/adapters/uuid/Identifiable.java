@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.adapters.uuid;
 
 import java.util.UUID;
 
+
 /**
  * An interface that describes objects
  * that have a {@code getUniqueId()}

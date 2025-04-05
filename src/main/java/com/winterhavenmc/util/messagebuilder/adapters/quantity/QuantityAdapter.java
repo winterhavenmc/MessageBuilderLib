@@ -43,7 +43,7 @@ public class QuantityAdapter implements Adapter
 	 * object does not have a known method of retrieving a quantity.
 	 */
 	@Override
-	public Optional<Quantifiable> adapt(Object obj)
+	public Optional<Quantifiable> adapt(final Object obj)
 	{
 		// no null check necessary, the switch will return an empty optional
 		return switch (obj) {

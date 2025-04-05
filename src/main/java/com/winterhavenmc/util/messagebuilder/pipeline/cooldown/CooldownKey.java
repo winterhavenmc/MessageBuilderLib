@@ -86,7 +86,7 @@ public class CooldownKey
 
 
 	@Override
-	public final boolean equals(Object object)
+	public final boolean equals(final Object object)
 	{
 		return object instanceof CooldownKey that
 				&& Objects.equals(uuid, that.uuid)
