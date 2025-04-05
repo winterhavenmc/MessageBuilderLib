@@ -66,7 +66,7 @@ public enum Section
 	 * @param <R> the specific type of the section query handler being returned
 	 */
 	@SuppressWarnings("unchecked")
-	public <R extends SectionRecord> QueryHandler<R> createHandler(YamlConfigurationSupplier configurationSupplier)
+	public <R extends SectionRecord> QueryHandler<R> createHandler(final YamlConfigurationSupplier configurationSupplier)
 	{
 		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
