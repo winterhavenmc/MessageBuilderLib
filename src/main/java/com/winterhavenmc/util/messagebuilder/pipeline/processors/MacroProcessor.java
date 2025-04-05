@@ -71,7 +71,6 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 @FunctionalInterface
 public interface MacroProcessor
 {
-
 	/**
 	 * Resolves contextual information from the given value and populates the context map.
 	 * <p>
@@ -87,6 +86,6 @@ public interface MacroProcessor
 	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
 	 * @return a {@link ResultMap} containing resolved macros and their replacements
 	 */
-	ResultMap resolveContext(RecordKey key, ContextMap contextMap);
+	ResultMap resolveContext(final RecordKey key, final ContextMap contextMap);
 
 }
