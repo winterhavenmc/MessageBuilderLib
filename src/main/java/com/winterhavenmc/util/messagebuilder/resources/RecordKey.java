@@ -38,7 +38,7 @@ public final class RecordKey
 {
 	// valid key must begin with alpha only and may contain alpha, digits, underscore or period
 	private static final Pattern VALID_KEY = Pattern.compile("^[a-zA-Z][a-zA-Z\\d_.]*$");
-	private static final Predicate<String> IS_INVALID_KEY = s -> !VALID_KEY.matcher(s).matches();
+	private static final Predicate<String> IS_INVALID_KEY = string -> !VALID_KEY.matcher(string).matches();
 
 	private final String wrappedString;
 
