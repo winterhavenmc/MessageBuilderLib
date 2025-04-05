@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
 import java.util.Map;
 
+
 @FunctionalInterface
 public interface FieldExtractor<T>
 {
