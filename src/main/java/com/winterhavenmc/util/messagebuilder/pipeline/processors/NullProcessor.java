@@ -35,7 +35,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 public class NullProcessor extends MacroProcessorTemplate
 {
 	@Override
-	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap) {
+	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
+	{
 		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
 
 		return new ResultMap() {{ put(key.toString(), "NULL"); }};
