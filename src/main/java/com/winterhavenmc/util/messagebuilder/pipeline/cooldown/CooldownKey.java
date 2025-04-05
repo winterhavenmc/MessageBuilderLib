@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -29,6 +28,7 @@ import java.util.UUID;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -57,7 +57,7 @@ public class CooldownKey
 	 */
 	private CooldownKey(final CommandSender recipient, final RecordKey recordKey)
 	{
-		validate(recipient, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RECIPIENT));
+		validate(recipient, Objects::isNull, throwing(PARAMETER_NULL, RECIPIENT));
 
 		this.recordKey = recordKey;
 		this.uuid = (recipient instanceof Entity entity) ? entity.getUniqueId() : DEFAULT_UUID;

@@ -17,13 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-
 import java.util.EnumMap;
 import java.util.Objects;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.DEPENDENCY_CONTEXT;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -42,7 +41,7 @@ public class ProcessorRegistry
 	 */
 	public ProcessorRegistry(final DependencyContext dependencyContext)
 	{
-		validate(dependencyContext, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, DEPENDENCY_CONTEXT));
+		validate(dependencyContext, Objects::isNull, throwing(PARAMETER_NULL, DEPENDENCY_CONTEXT));
 
 		this.context = dependencyContext;
 		macroProcessorMap = new EnumMap<>(ProcessorType.class);

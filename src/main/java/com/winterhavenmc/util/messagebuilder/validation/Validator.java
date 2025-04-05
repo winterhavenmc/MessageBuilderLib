@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.validation;
 
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public interface Validator
 {
@@ -27,17 +26,15 @@ public interface Validator
 	 *
 	 * @param value the value to validate
 	 * @param predicate the test to be performed to validate the value
-	 * @param exceptionSupplier an exception supplier containing the exception to be thrown
+	 * @param handler a supplier containing the validation handler to be used
 	 * @return the passed value, for use in functional chains
 	 * @param <T> the type of the passed value
 	 */
-	static <T> T validate(T value, Predicate<T> predicate, Supplier<RuntimeException> exceptionSupplier)
+	static <T> T validate(T value, Predicate<T> predicate, ValidationHandler<T> handler)
 	{
-		if (predicate.test(value))
-		{
-			throw exceptionSupplier.get(); // Throws from the call site
-		}
-		return value; // Pass through the valid value for functional chains
+		return predicate.test(value)
+				? handler.handleInvalid(value)
+				: value;
 	}
 
 }

@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -51,8 +52,8 @@ public final class RecordKey
 	 */
 	private RecordKey(final String key)
 	{
-		validate(key, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, KEY));
-		validate(key, IS_INVALID_KEY, () -> new ValidationException(PARAMETER_INVALID, KEY));
+		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
+		validate(key, IS_INVALID_KEY, throwing(PARAMETER_INVALID, KEY));
 
 		this.wrappedString = key;
 	}
@@ -62,7 +63,7 @@ public final class RecordKey
 	 * Static factory method for instantiating a record key from a string
 	 *
 	 * @param key a String to be used in the creation of a record key
-	 * @return an Optional record key, or an empty Optional if the key parameter is null or invalid
+	 * @return an Optional RecordKey, or an empty Optional if the key parameter is null or invalid
 	 */
 	public static Optional<RecordKey> of(final String key)
 	{
@@ -76,7 +77,7 @@ public final class RecordKey
 	 * Static factory method for instantiating a record key from an enum constant
 	 *
 	 * @param key an enum constant whose name is used to create a record key
-	 * @return an Optional record key, or an empty Optional if the key parameter is null or invalid
+	 * @return an Optional RecordKey, or an empty Optional if the key parameter is null or invalid
 	 * @param <E> an enum constant
 	 */
 	public static <E extends Enum<E>> Optional<RecordKey> of(final E key)
@@ -100,7 +101,7 @@ public final class RecordKey
 
 
 	@Override
-	public final boolean equals(final Object object)
+	public boolean equals(final Object object)
 	{
 		if (!(object instanceof RecordKey recordKey)) { return false; }
 

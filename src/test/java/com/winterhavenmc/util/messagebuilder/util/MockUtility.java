@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -31,6 +30,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageK
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_NAME;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.TARGET_DIR_PATH;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -84,9 +84,9 @@ public final class MockUtility {
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
 	public static long installResource(final String resourceName, final Path targetDirPath) throws IOException {
-		validate(resourceName, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, RESOURCE_NAME));
-		validate(resourceName, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, RESOURCE_NAME));
-		validate(targetDirPath, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, TARGET_DIR_PATH));
+		validate(resourceName, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_NAME));
+		validate(resourceName, String::isBlank, throwing(PARAMETER_EMPTY, RESOURCE_NAME));
+		validate(targetDirPath, Objects::isNull, throwing(PARAMETER_NULL, TARGET_DIR_PATH));
 
 		// Ensure the target directory exists
 		Files.createDirectories(targetDirPath);

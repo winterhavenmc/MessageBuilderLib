@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.time;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import net.time4j.CalendarUnit;
 import net.time4j.ClockUnit;
 import net.time4j.Duration;
@@ -30,6 +29,7 @@ import java.util.Objects;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.DURATION;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LOCALE;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -50,8 +50,8 @@ public final class PrettyTimeFormatter implements TimeFormatter
 	 */
 	public String getFormatted(final Locale locale, final java.time.Duration duration)
 	{
-		validate(locale, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LOCALE));
-		validate(duration, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, DURATION));
+		validate(locale, Objects::isNull, throwing(PARAMETER_NULL, LOCALE));
+		validate(duration, Objects::isNull, throwing(PARAMETER_NULL, DURATION));
 
 		// get instance of PrettyTime
 		PrettyTime prettyTime = PrettyTime.of(locale);

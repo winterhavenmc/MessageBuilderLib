@@ -28,6 +28,7 @@ import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.Yaml
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_TAG;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -44,8 +45,8 @@ public class LanguageTag
 	 */
 	private LanguageTag(final String languageTag)
 	{
-		validate(languageTag, Objects::isNull, () -> new ValidationException(PARAMETER_NULL, LANGUAGE_TAG));
-		validate(languageTag, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, LANGUAGE_TAG));
+		validate(languageTag, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_TAG));
+		validate(languageTag, String::isBlank, throwing(PARAMETER_EMPTY, LANGUAGE_TAG));
 
 		this.wrappedLanguageTag = languageTag;
 	}
