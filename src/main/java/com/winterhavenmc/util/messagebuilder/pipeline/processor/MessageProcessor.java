@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
 import com.winterhavenmc.util.messagebuilder.Message;
+import com.winterhavenmc.util.messagebuilder.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
@@ -59,10 +60,8 @@ public final class MessageProcessor implements Processor
 
 
 	@Override
-	public void process(final Message message)
+	public void process(final ValidMessage message)
 	{
-		validate(message, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE));
-
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())
 				.filter(notCooling)
 				.flatMap(cooldownKey -> messageRetriever.getRecord(cooldownKey.getMessageKey()))

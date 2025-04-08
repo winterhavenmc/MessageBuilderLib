@@ -18,10 +18,11 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
 import com.winterhavenmc.util.messagebuilder.Message;
+import com.winterhavenmc.util.messagebuilder.ValidMessage;
 
 
 @FunctionalInterface
 public interface Processor
 {
-	void process(Message message);
+	void process(ValidMessage message);
 }
