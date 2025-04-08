@@ -54,14 +54,14 @@ public record ValidMessageRecord(
 	/**
 	 * Create a duplicate record with the final message string fields populated
 	 *
-	 * @param newFinalMessageString final message string
-	 * @param newFinalTitleString final title string
-	 * @param newFinalSubTitleString final subtitle string
+	 * @param finalMessageString final message string
+	 * @param finalTitleString final title string
+	 * @param finalSubTitleString final subtitle string
 	 * @return a new {@code ValidMessageRecord} with the final message string fields populated
 	 */
-	public Optional<ValidMessageRecord> withFinalStrings(final String newFinalMessageString,
-														 final String newFinalTitleString,
-														 final String newFinalSubTitleString)
+	public Optional<ValidMessageRecord> withFinalStrings(final String finalMessageString,
+														 final String finalTitleString,
+														 final String finalSubTitleString)
 	{
 		return Optional.of(new ValidMessageRecord(
 				this.key,
