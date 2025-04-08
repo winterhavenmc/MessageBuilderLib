@@ -42,7 +42,7 @@ class ValidationUtilityTest
 	{
 		Locale result = getConfiguredLocale();
 
-		assertEquals(Locale.US, result);
+		assertEquals(Locale.getDefault(), result);
 	}
 
 }
