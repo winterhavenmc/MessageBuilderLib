@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -33,7 +34,8 @@ class DefaultFieldExtractorTest
 		Function<String, Map<String, String>> logic = str -> Map.of("LENGTH", String.valueOf(str.length()), "UPPER", str.toUpperCase());
 		DefaultFieldExtractor<String> extractor = new DefaultFieldExtractor<>(logic);
 
-		Map<String, String> result = extractor.extract("test", "STRING");
+		RecordKey macroKey = RecordKey.of("STRING").orElseThrow();
+		Map<String, String> result = extractor.extract("test", macroKey);
 
 		assertEquals(2, result.size());
 		assertEquals("4", result.get("STRING.LENGTH"));
@@ -47,7 +49,8 @@ class DefaultFieldExtractorTest
 		Function<Integer, Map<String, String>> logic = num -> Map.of();
 		DefaultFieldExtractor<Integer> extractor = new DefaultFieldExtractor<>(logic);
 
-		Map<String, String> result = extractor.extract(123, "NUMBER");
+		RecordKey macroKey = RecordKey.of("NUMBER").orElseThrow();
+		Map<String, String> result = extractor.extract(123, macroKey);
 
 		assertTrue(result.isEmpty());
 	}
@@ -70,7 +73,8 @@ class DefaultFieldExtractorTest
 		DefaultFieldExtractor<CustomType> extractor = new DefaultFieldExtractor<>(logic);
 
 		CustomType custom = new CustomType("Alice", 30);
-		Map<String, String> result = extractor.extract(custom, "CUSTOM");
+		RecordKey macroKey = RecordKey.of("CUSTOM").orElseThrow();
+		Map<String, String> result = extractor.extract(custom, macroKey);
 
 		assertEquals(2, result.size());
 		assertEquals("Alice", result.get("CUSTOM.NAME"));
@@ -84,7 +88,8 @@ class DefaultFieldExtractorTest
 		Function<Double, Map<String, String>> logic = num -> Map.of("VALUE", String.format("%.2f", num));
 		DefaultFieldExtractor<Double> extractor = new DefaultFieldExtractor<>(logic);
 
-		Map<String, String> result = extractor.extract(3.14159, "PI");
+		RecordKey macroKey = RecordKey.of("PI").orElseThrow();
+		Map<String, String> result = extractor.extract(3.14159, macroKey);
 
 		assertEquals(1, result.size());
 		assertEquals("3.14", result.get("PI.VALUE"));
@@ -97,7 +102,8 @@ class DefaultFieldExtractorTest
 		Function<String, Map<String, String>> logic = str -> Map.of("SPECIAL-KEY", str);
 		DefaultFieldExtractor<String> extractor = new DefaultFieldExtractor<>(logic);
 
-		Map<String, String> result = extractor.extract("Hello", "TEST");
+		RecordKey macroKey = RecordKey.of("TEST").orElseThrow();
+		Map<String, String> result = extractor.extract("Hello", macroKey);
 
 		assertEquals(1, result.size());
 		assertEquals("Hello", result.get("TEST.SPECIAL-KEY"));
