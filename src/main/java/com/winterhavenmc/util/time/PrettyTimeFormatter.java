@@ -26,7 +26,7 @@ import net.time4j.format.TextWidth;
 import java.util.Locale;
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.DURATION;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LOCALE;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;

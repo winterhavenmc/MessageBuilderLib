@@ -24,7 +24,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigu
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;

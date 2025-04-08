@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.validation;
 
 import org.junit.jupiter.api.Test;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

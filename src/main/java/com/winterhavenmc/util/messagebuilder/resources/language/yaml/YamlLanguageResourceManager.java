@@ -23,7 +23,7 @@ import org.bukkit.configuration.Configuration;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_INSTALLER;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_LOADER;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;

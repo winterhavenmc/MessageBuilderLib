@@ -26,8 +26,8 @@ import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_NAME;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.TARGET_DIR_PATH;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;

@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -65,7 +65,7 @@ public final class MessageProcessor implements Processor
 
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())
 				.filter(notCooling)
-				.flatMap(cooldownKey -> messageRetriever.getRecord(cooldownKey.getRecordKey()))
+				.flatMap(cooldownKey -> messageRetriever.getRecord(cooldownKey.getMessageKey()))
 				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message))
 				.ifPresent(processedMessage -> List.of(messageSender, titleSender)
 						.forEach(sender -> sender
