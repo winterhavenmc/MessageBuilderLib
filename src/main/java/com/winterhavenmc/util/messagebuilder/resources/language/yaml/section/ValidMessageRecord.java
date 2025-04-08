@@ -73,9 +73,9 @@ public record ValidMessageRecord(
 				this.titleStay,
 				this.titleFadeOut,
 				this.subtitle,
-				newFinalMessageString,
-				newFinalTitleString,
-				newFinalSubTitleString)
+				finalMessageString,
+				finalTitleString,
+				finalSubTitleString)
 		);
 	}
 
