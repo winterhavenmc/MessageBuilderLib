@@ -17,12 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.LocationProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -36,6 +37,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -53,29 +56,20 @@ class LocationProcessorTest
 	// real location processor
 	LocationProcessor locationProcessor;
 	ContextMap contextMap;
-	RecordKey key = RecordKey.of("HOME").orElseThrow();
+	ValidRecipient recipient;
+	RecordKey key;
 
 
 	@BeforeEach
 	public void setUp()
 	{
-		// real context map
-		contextMap = new ContextMap(playerMock, key);
-
-		// Initialize the processor
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		key = RecordKey.of("HOME").orElseThrow();
+		contextMap = ContextMap.of(recipient, key).orElseThrow();
 		locationProcessor = new LocationProcessor();
-	}
-
-
-	@Test
-	void testResolveContext_parameter_null_context_map()
-	{
-		// Arrange
-		MacroProcessor macroProcessor = new LocationProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(key, null));
-
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
 
 
@@ -179,7 +173,7 @@ class LocationProcessorTest
 	{
 		// Arrange
 		Duration duration  = Duration.ofMillis(2000);
-		ContextMap contextMap = new ContextMap(playerMock, key);
+		ContextMap contextMap = ContextMap.of(recipient, key).orElseThrow();
 		contextMap.put(key, duration);
 		MacroProcessor macroProcessor = new LocationProcessor();
 

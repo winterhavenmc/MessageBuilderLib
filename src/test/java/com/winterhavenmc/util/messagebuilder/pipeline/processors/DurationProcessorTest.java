@@ -17,17 +17,23 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,6 +41,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Duration;
 import java.util.Locale;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
@@ -46,8 +54,19 @@ class DurationProcessorTest
 	@Mock Player playerMock;
 	@Mock ConsoleCommandSender consoleMock;
 
-	RecordKey macroKey = RecordKey.of("KEY").orElseThrow();
+	ValidRecipient recipient;
+	RecordKey messageKey;
 
+
+	@BeforeEach
+	void setUp()
+	{
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+	}
 
 	@AfterEach
 	void tearDown()
@@ -57,41 +76,33 @@ class DurationProcessorTest
 	}
 
 
-	@Test @DisplayName("resolveContext with null contextMap parameter")
-	void testResolveContext_parameter_null_context_map() {
-		MacroProcessor macroProcessor = new DurationProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(macroKey, null));
-
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test @DisplayName("resolveContext with valid parameters")
-	void resolveContext() {
+	@Test @DisplayName("resolveContext with Valid parameters")
+	void resolveContext()
+	{
 		// Arrange
 		when(playerMock.getLocale()).thenReturn("en-US");
-
-		ContextMap contextMap = new ContextMap(playerMock, macroKey);
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		Duration durationObject = Duration.ofMillis(12300);
-		contextMap.put(macroKey, durationObject);
+		contextMap.put(messageKey, durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(macroKey.toString()));
-		assertEquals("12 seconds", resultMap.get(macroKey.toString()));
+		assertTrue(resultMap.containsKey(messageKey.toString()));
+		assertEquals("12 seconds", resultMap.get(messageKey.toString()));
 	}
 
 
 	@Test @DisplayName("resolveContext with console as recipient")
-	void resolveContext_console() {
+	void resolveContext_console()
+	{
 		// Arrange
-		ContextMap contextMap = new ContextMap(consoleMock, macroKey);
+		when(playerMock.getLocale()).thenReturn("en-US");
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		Duration durationObject = Duration.ofMillis(12300);
-		contextMap.put(macroKey, durationObject);
+		contextMap.put(messageKey, durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Mock the static method Locale.forLanguageTag
@@ -130,27 +141,29 @@ class DurationProcessorTest
 		}
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(macroKey.toString()));
-		assertEquals("12 seconds", resultMap.get(macroKey.toString()));
+		assertTrue(resultMap.containsKey(messageKey.toString()));
+		assertEquals("12 seconds", resultMap.get(messageKey.toString()));
 	}
 
 
 	@Test @DisplayName("resolveContext with wrong type for duration in map")
-	void resolveContext_value_not_duration() {
+	void resolveContext_value_not_duration()
+	{
 		// Arrange
-		ContextMap contextMap = new ContextMap(playerMock, macroKey);
+		when(playerMock.getLocale()).thenReturn("en-US");
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		Object object = "a string";
-		contextMap.put(macroKey, object);
+		contextMap.put(messageKey, object);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey(macroKey.toString()));
+		assertFalse(resultMap.containsKey(messageKey.toString()));
 	}
 
 }

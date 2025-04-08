@@ -15,18 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.uuid;
+package com.winterhavenmc.util.messagebuilder.recipient;
 
-import java.util.UUID;
+import org.bukkit.command.CommandSender;
 
-
-/**
- * An interface that describes objects
- * that have a {@code getUniqueId()}
- * method that returns a valid UUID.
- */
-@FunctionalInterface
-public interface Identifiable
-{
-	UUID getUniqueId();
-}
+public record ValidRecipient(CommandSender sender) implements RecipientResult { }

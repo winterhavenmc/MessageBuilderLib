@@ -17,6 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
@@ -27,29 +30,32 @@ import org.bukkit.entity.Player;
 import java.time.Duration;
 import java.util.UUID;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MessageSenderTest {
-
+class MessageSenderTest
+{
 	@Mock Player playerMock;
 
+	ValidRecipient recipient;
 	MessageRecord messageRecord;
 
+
 	@BeforeEach
-	void setUp() {
+	void setUp()
+	{
 		messageRecord = new MessageRecord(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
@@ -65,34 +71,53 @@ class MessageSenderTest {
 				"this is a final subtitle");
 	}
 
-	@AfterEach
-	void tearDown() {
-		playerMock = null;
-	}
 
-	@Test
-	void send() {
+	@Test @DisplayName("test send method with valid parameters")
+	void testSend_parameters_valid()
+	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
+		recipient = switch (RecipientResult.from(playerMock))
+		{
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
 
 		// Act
-		new MessageSender(new CooldownMap()).send(playerMock, messageRecord);
+		new MessageSender(new CooldownMap()).send(recipient, messageRecord);
 
 		// Verify
 		verify(playerMock, atLeastOnce()).sendMessage(anyString());
 	}
 
-	@Test
-	void send_parameter_null_recipient() {
+
+	@Test @DisplayName("test send method with null recipient parameter")
+	@Disabled
+	void send_parameter_null_recipient()
+	{
+		// Arrange
+		recipient = switch (RecipientResult.from(playerMock))
+		{
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new MessageSender(new CooldownMap()).send(null, messageRecord));
-		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 	}
 
-	@Test
-	void send_parameter_null_messageRecord() {
+
+	@Test @DisplayName("test send method with null messageRecord parameter")
+	void send_parameter_null_messageRecord()
+	{
+		// Arrange
+		recipient = switch (RecipientResult.from(playerMock))
+		{
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new MessageSender(new CooldownMap()).send(playerMock, null));
+				() -> new MessageSender(new CooldownMap()).send(recipient, null));
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 	}
 

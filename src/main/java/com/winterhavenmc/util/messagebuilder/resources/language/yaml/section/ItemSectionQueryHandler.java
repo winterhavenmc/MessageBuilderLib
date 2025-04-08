@@ -20,13 +20,11 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;
 
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;

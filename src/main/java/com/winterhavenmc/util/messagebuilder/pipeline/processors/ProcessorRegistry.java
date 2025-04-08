@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 import java.util.EnumMap;
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.DEPENDENCY_CONTEXT;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -49,7 +49,7 @@ public class ProcessorRegistry
 
 
 	// Get a processor, creating it lazily if necessary
-	public MacroProcessor get(ProcessorType type)
+	public MacroProcessor get(final ProcessorType type)
 	{
 		return macroProcessorMap.computeIfAbsent(type, t -> t.create(context));
 	}

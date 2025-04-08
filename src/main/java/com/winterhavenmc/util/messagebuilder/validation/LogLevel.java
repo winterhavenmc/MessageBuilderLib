@@ -15,18 +15,31 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.uuid;
+package com.winterhavenmc.util.messagebuilder.validation;
 
-import java.util.UUID;
+import java.util.logging.Level;
 
 
-/**
- * An interface that describes objects
- * that have a {@code getUniqueId()}
- * method that returns a valid UUID.
- */
-@FunctionalInterface
-public interface Identifiable
+public enum LogLevel
 {
-	UUID getUniqueId();
+	TRACE(Level.FINEST),
+	DEBUG(Level.FINER),
+	INFO(Level.INFO),
+	WARN(Level.WARNING),
+	ERROR(Level.SEVERE);
+
+	private final Level javaLevel;
+
+
+	LogLevel(Level javaLevel)
+	{
+		this.javaLevel = javaLevel;
+	}
+
+
+	public Level toJavaUtilLevel()
+	{
+		return javaLevel;
+	}
+
 }

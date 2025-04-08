@@ -31,7 +31,7 @@ public class FieldExtractorRegistry
 	 * @param type The class type for which the extractor applies.
 	 * @param extractor A function that extracts fields from an object of the given type.
 	 */
-	public <T> void registerExtractor(Class<T> type, Function<T, Map<String, Object>> extractor)
+	public <T> void registerExtractor(final Class<T> type, final Function<T, Map<String, Object>> extractor)
 	{
 		EXTRACTOR_MAP.put(type, obj -> extractor.apply(type.cast(obj)));
 	}
@@ -42,7 +42,7 @@ public class FieldExtractorRegistry
 	 * @param value The object to extract fields from.
 	 * @return A map of extracted field names and values.
 	 */
-	public Optional<Map<String, Object>> extractFields(Object value)
+	public Optional<Map<String, Object>> extractFields(final Object value)
 	{
 		return value == null
 				? Optional.empty()

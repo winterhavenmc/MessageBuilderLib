@@ -27,14 +27,14 @@ public class DefaultFieldExtractor<T> implements FieldExtractor<T>
 	private final Function<T, Map<String, String>> extractionLogic;
 
 
-	public DefaultFieldExtractor(Function<T, Map<String, String>> extractionLogic)
+	public DefaultFieldExtractor(final Function<T, Map<String, String>> extractionLogic)
 	{
 		this.extractionLogic = extractionLogic;
 	}
 
 
 	@Override
-	public Map<String, String> extract(T source, String macroKey)
+	public Map<String, String> extract(final T source, final String macroKey)
 	{
 		return extractionLogic.apply(source)
 				.entrySet().stream()

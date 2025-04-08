@@ -44,7 +44,7 @@ public record ItemRecord(
 		List<String> itemLore) implements SectionRecord, Pluralizable
 {
 	@Override
-	public Optional<String> nameFor(int quantity)
+	public Optional<String> nameFor(final int quantity)
 	{
 		return (quantity == 1) ? nameSingular : namePlural;
 	}

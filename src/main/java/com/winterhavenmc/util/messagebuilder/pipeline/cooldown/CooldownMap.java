@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import org.bukkit.command.CommandSender;
 
 import java.time.Instant;
 import java.util.Map;
@@ -28,8 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -44,12 +43,11 @@ public final class CooldownMap implements Cooldown
 	 * Add entry to message cooldown map
 	 *
 	 * @param recipient the entity whose uuid will be added as a key to the cooldown map
-	 * @param messageRecord the message to be placed in the cooldown map for recipient
+	 * @param messageRecord the message to be placed in the cooldown map for protoRecipient
 	 * @throws ValidationException if any parameter is null
 	 */
-	public void putExpirationTime(final CommandSender recipient, final MessageRecord messageRecord)
+	public void putExpirationTime(final ValidRecipient recipient, final MessageRecord messageRecord)
 	{
-		validate(recipient, Objects::isNull, throwing(PARAMETER_NULL, RECIPIENT));
 		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
 
 		CooldownKey.of(recipient, messageRecord.key())

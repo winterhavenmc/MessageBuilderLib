@@ -17,13 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ObjectProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
@@ -32,6 +33,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -41,11 +44,19 @@ class ObjectProcessorTest {
 	@Mock Player playerMock;
 	MacroProcessor macroProcessor;
 
-	RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+	ValidRecipient recipient;
+	RecordKey recordKey;
+	ContextMap contextMap;
 
 
 	@BeforeEach
 	public void setUp() {
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
 		macroProcessor = new ObjectProcessor();
 	}
 
@@ -59,7 +70,6 @@ class ObjectProcessorTest {
 	void resolveContext_integer() {
 		// Arrange
 		Integer value = 42;
-		ContextMap contextMap = new ContextMap(playerMock, recordKey);
 		contextMap.put(recordKey, value);
 
 		// Act

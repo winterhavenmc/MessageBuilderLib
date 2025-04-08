@@ -17,81 +17,24 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
-
-public sealed interface ValidationHandler<T>
-		permits ValidationHandler.Throwing, ValidationHandler.Logging, ValidationHandler.LoggingAndThrowing, ValidationHandler.DefaultValue
+public sealed interface ValidationHandler<T> permits Throwing, Logging
 {
 	@SuppressWarnings("UnusedReturnValue")
-	T handleInvalid(T value);
+	T handleInvalid(final T value);
 
 
-	record Throwing<T>(Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
-	{
-		@Override
-		public T handleInvalid(T value)
-		{
-			ValidationException exception = exceptionSupplier.get();
-			exception.fillInStackTrace(); // Maintain call-site accuracy
-			throw exception;
-		}
-	}
-
-
-	record Logging<T>(Consumer<? super T> logger) implements ValidationHandler<T>
-	{
-		@Override
-		public T handleInvalid(T value)
-		{
-			logger.accept(value);
-			return value;
-		}
-	}
-
-
-	record LoggingAndThrowing<T>(
-			Consumer<? super T> logger,
-			Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
-	{
-		@Override
-		public T handleInvalid(T value) {
-			logger.accept(value);
-			ValidationException ex = exceptionSupplier.get();
-			ex.fillInStackTrace();
-			throw ex;
-		}
-	}
-
-
-	record DefaultValue<T>(T defaultValue) implements ValidationHandler<T>
-	{
-		@Override
-		public T handleInvalid(T value) {
-			return defaultValue;
-		}
-	}
-
-
-	static <T> ValidationHandler<T> throwing(ExceptionMessageKey messageKey, Parameter parameter)
+	static <T> ValidationHandler<T> throwing(final ErrorMessageKey messageKey, final Parameter parameter)
 	{
 		return new Throwing<>(() -> new ValidationException(messageKey, parameter));
 	}
 
 
-	static <T> ValidationHandler<T> logging(Consumer<? super T> logger)
+	static <T> ValidationHandler<T> logging(final LogLevel level,
+											final ErrorMessageKey messageKey,
+											final Parameter parameter)
 	{
-		return new Logging<>(logger);
-	}
-
-
-	static <T> ValidationHandler<T> loggingAndThrowing(Consumer<? super T> logger,
-                                                       String message,
-                                                       ExceptionMessageKey messageKey,
-                                                       Parameter parameter)
-	{
-		return new LoggingAndThrowing<>(logger, () -> new ValidationException(messageKey, parameter));
+		return new Logging<>(level, messageKey, parameter);
 	}
 
 }

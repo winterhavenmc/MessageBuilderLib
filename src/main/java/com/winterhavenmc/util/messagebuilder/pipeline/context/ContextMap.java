@@ -15,11 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline;
+package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import org.bukkit.command.CommandSender;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -36,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ContextMap
 {
-	private final CommandSender recipient;
+	private final ValidRecipient recipient;
 	private final RecordKey messageKey;
 
 	// Backing store map (use linked hash map to maintain insertion order)
@@ -46,24 +45,30 @@ public class ContextMap
 	/**
 	 * Class constructor
 	 *
-	 * @param recipient the message recipient
+	 * @param recipient the message protoRecipient
 	 * @param messageKey the message unique identifier as a string
 	 */
-	public ContextMap(final CommandSender recipient, final RecordKey messageKey)
+	private ContextMap(final ValidRecipient recipient, final RecordKey messageKey)
 	{
 		this.recipient = recipient;
 		this.messageKey = messageKey;
 	}
 
 
-	/**
-	 * Retrieve Optional recipient
-	 *
-	 * @return the recipient that was used to create the context map
-	 */
-	public Optional<CommandSender> getRecipient()
+	public static Optional<ContextMap> of(final ValidRecipient protoRecipient, final RecordKey messageKey)
 	{
-		return Optional.ofNullable(recipient);
+		return Optional.of(new ContextMap(protoRecipient, messageKey));
+	}
+
+
+	/**
+	 * Retrieve Optional protoRecipient
+	 *
+	 * @return the protoRecipient that was used to create the context map
+	 */
+	public ValidRecipient getRecipient()
+	{
+		return recipient;
 	}
 
 
@@ -82,54 +87,51 @@ public class ContextMap
 	/**
 	 * Create and puts a new value with its associated ProcessorType into the context map.
 	 *
-	 * @param key           the unique key for the value
+	 * @param macroKey      the unique key for the value
 	 * @param value         the value to store
 	 * @param <T>           the type of the value
 	 */
-	public <T> void put(final RecordKey key, final T value)
+	public <T> void put(final RecordKey macroKey, final T value)
 	{
-		// allow null value to be inserted into the context map. uncomment line below to throw exception on null 'value' parameter
-		//validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
-
         // insert value into map with key, replacing null values with string "NULL"
-		internalMap.put(key, Objects.requireNonNullElse(value, "NULL"));
+		internalMap.put(macroKey, Objects.requireNonNullElse(value, "NULL"));
 	}
 
 
 	/**
 	 * Retrieve a value from the context map for the specified key.
 	 *
-	 * @param key the context map key
+	 * @param macroKey the context map key
 	 * @return the value for the key
 	 */
-	public Optional<Object> get(final RecordKey key)
+	public Optional<Object> get(final RecordKey macroKey)
 	{
-		return Optional.ofNullable(internalMap.get(key));
+		return Optional.ofNullable(internalMap.get(macroKey));
 	}
 
 
 	/**
 	 * Check if the map contains a value for the specified key.
 	 *
-	 * @param key the unique key to check
+	 * @param macroKey the unique key to check
 	 * @return true if the key exists, false otherwise
 	 */
-	public boolean contains(final RecordKey key)
+	public boolean contains(final RecordKey macroKey)
 	{
-		return internalMap.containsKey(key);
+		return internalMap.containsKey(macroKey);
 	}
 
 
 	/**
 	 * Remove an entry from the map by key.
 	 *
-	 * @param key The enum member used as the key.
+	 * @param macroKey The enum member used as the key.
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
 	@SuppressWarnings("UnusedReturnValue")
-	public Object remove(final RecordKey key)
+	public Object remove(final RecordKey macroKey)
 	{
-		return internalMap.remove(key);
+		return internalMap.remove(macroKey);
 	}
 
 

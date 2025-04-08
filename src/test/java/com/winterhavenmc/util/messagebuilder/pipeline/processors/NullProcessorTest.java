@@ -17,22 +17,26 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.NullProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -41,7 +45,18 @@ class NullProcessorTest {
 
 	@Mock Player playerMock;
 
-	RecordKey macroKey = RecordKey.of("KEY").orElseThrow();
+	ValidRecipient recipient;
+	RecordKey messageKey;
+
+	@BeforeEach
+	void setUp()
+	{
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+	}
 
 	@AfterEach
 	void tearDown() {
@@ -50,28 +65,17 @@ class NullProcessorTest {
 
 
 	@Test
-	void testResolveContext_parameter_null_context_map() {
-		MacroProcessor macroProcessor = new NullProcessor();
-
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(macroKey, null));
-
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
 	void resolveContext() {
 		// Arrange
 		NullProcessor nullProcessor = new NullProcessor();
-		ContextMap contextMap = new ContextMap(playerMock, macroKey);
-		contextMap.put(macroKey, null);
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+		contextMap.put(messageKey, null);
 
 		// Act
-		ResultMap resultMap = nullProcessor.resolveContext(macroKey, contextMap);
+		ResultMap resultMap = nullProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertEquals("NULL", resultMap.get(macroKey.toString()));
+		assertEquals("NULL", resultMap.get(messageKey.toString()));
 	}
 
 
@@ -79,14 +83,14 @@ class NullProcessorTest {
 	void resolveContext_not_null() {
 		// Arrange
 		NullProcessor nullProcessor = new NullProcessor();
-		ContextMap contextMap = new ContextMap(playerMock, macroKey);
-		contextMap.put(macroKey, 42);
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+		contextMap.put(messageKey, 42);
 
 		// Act
-		ResultMap resultMap = nullProcessor.resolveContext(macroKey, contextMap);
+		ResultMap resultMap = nullProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertEquals("NULL", resultMap.get(macroKey.toString()));
+		assertEquals("NULL", resultMap.get(messageKey.toString()));
 	}
 
 }

@@ -17,13 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.NumberProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
@@ -32,6 +33,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -41,6 +44,7 @@ class NumberProcessorTest
 	@Mock Player playerMock;
 
 	MacroProcessor macroProcessor;
+	ValidRecipient recipient;
 	ContextMap contextMap;
 
 
@@ -49,7 +53,11 @@ class NumberProcessorTest
 	{
 		macroProcessor = new NumberProcessor();
 		RecordKey key = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		contextMap = new ContextMap(playerMock, key);
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		contextMap = ContextMap.of(recipient, key).orElseThrow();
 	}
 
 

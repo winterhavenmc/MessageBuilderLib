@@ -25,8 +25,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_SUBDIRECTORY;
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_TAG;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;

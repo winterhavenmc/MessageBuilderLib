@@ -17,17 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-
-import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.VALUE;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
@@ -69,7 +66,7 @@ public class ResultMap
 	}
 
 
-	public String getValueOrKey(String key) {
+	public String getValueOrKey(final String key) {
 		return internalResultMap.getOrDefault(key, key); // Return key itself if not found
 	}
 

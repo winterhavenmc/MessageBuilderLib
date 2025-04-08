@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -101,7 +101,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return an option of a ConstantRecord
 	 */
 	@Override
-	public Optional<ConstantRecord> getRecord(RecordKey key)
+	public Optional<ConstantRecord> getRecord(final RecordKey key)
 	{
 		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
 				.map(s -> s.get(key.toString()))

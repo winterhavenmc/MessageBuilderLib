@@ -17,12 +17,16 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.util.messagebuilder.Message;
+import com.winterhavenmc.util.messagebuilder.*;
 
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -39,6 +43,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -47,24 +53,27 @@ import static org.mockito.Mockito.mock;
 class MacroReplacerTest
 {
 	@Mock Player playerMock;
-	@Mock
-	MessageProcessor messageProcessorMock;
-	MacroReplacer macroReplacer;
-	RecordKey recordKey;
+	@Mock MessageProcessor messageProcessorMock;
 
+	ValidRecipient recipient;
+	RecordKey messageKey;
+	RecordKey macroKey;
+	MacroReplacer macroReplacer;
 	Message message;
 
-	@BeforeEach
-	public void setUp() {
-		recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		message = new Message(playerMock, recordKey, messageProcessorMock);
-		macroReplacer = new MacroReplacer();
-	}
 
-	@AfterEach
-	public void tearDown() {
-		playerMock = null;
-		macroReplacer = null;
+	@BeforeEach
+	public void setUp()
+	{
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		macroKey = RecordKey.of(Macro.OWNER).orElseThrow();
+
+		message = new Message(recipient, messageKey, messageProcessorMock);
+		macroReplacer = new MacroReplacer();
 	}
 
 
@@ -72,12 +81,12 @@ class MacroReplacerTest
 	class ReplaceMacrosTests
 	{
 		@Test
-		@DisplayName("Test replaceMacros method with valid parameter")
+		@DisplayName("Test replaceMacros method with Valid parameter")
 		void testReplaceMacros_valid_parameters()
 		{
 			// Arrange
 			MessageRecord messageRecord = new MessageRecord(
-					recordKey,
+					messageKey,
 					true,
 					"this is a message.",
 					Duration.ofSeconds(3),
@@ -111,12 +120,12 @@ class MacroReplacerTest
 
 
 		@Test
-		@DisplayName("Test replaceMacros method with null contextMap parameter")
-		void testReplaceMacros_parameter_null_contextMap()
+		@DisplayName("Test replaceMacros method with null message parameter")
+		void testReplaceMacros_parameter_null_message()
 		{
 			// Arrange
 			MessageRecord messageRecord = new MessageRecord(
-					recordKey,
+					messageKey,
 					true,
 					"this is a message.",
 					Duration.ofSeconds(3),
@@ -143,12 +152,12 @@ class MacroReplacerTest
 	@Nested
 	class ReplaceMacrosInStringTests
 	{
-		@Test @DisplayName("Test replaceMacrosInString method with valid parameters")
+		@Test @DisplayName("Test replaceMacrosInString method with Valid parameters")
 		void testReplaceMacrosInString()
 		{
-			RecordKey key = RecordKey.of("ITEM_NAME").orElseThrow();
-			ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
+			ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 			MacroReplacer macroReplacer = new MacroReplacer();
+			RecordKey key = RecordKey.of("ITEM_NAME").orElseThrow();
 			contextMap.put(key, "TEST_STRING");
 
 			String resultString = macroReplacer.replaceMacrosInString(contextMap, "Replace this: {ITEM_NAME}");
@@ -156,23 +165,11 @@ class MacroReplacerTest
 		}
 
 
-		@Test @DisplayName("Test replaceMacrosInString method with null contextMap parameter")
-		void testReplaceMacrosInString_parameter_null_contextMap()
-		{
-			// Arrange & Act
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> macroReplacer.replaceMacrosInString(null, "Some message string."));
-
-			// Assert
-			assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-		}
-
-
 		@Test @DisplayName("Test replaceMacrosInString method with null messageString parameter")
 		void testReplaceMacrosInString_parameter_null_messageString()
 		{
 			// Arrange
-			ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
+			ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 
 			// Act
 			ValidationException exception = assertThrows(ValidationException.class,
@@ -185,27 +182,17 @@ class MacroReplacerTest
 
 
 	@Test
-	void testAddRecipientContext() {
+	void testAddRecipientContext()
+	{
 		// Arrange
-		RecordKey key = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
-		ContextMap contextMap = new ContextMap(playerMock, key);
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+		RecordKey recipientKey = RecordKey.of("RECIPIENT").orElseThrow();
 
 		// Act
 		macroReplacer.addRecipientContext(contextMap);
 
 		// Assert
-		assertTrue(contextMap.contains(key));
-	}
-
-
-	@Test
-	void testAddRecipientContext_parameter_null_context_map() {
-		// Arrange & Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroReplacer.addRecipientContext(null));
-
-		// Assert
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+		assertTrue(contextMap.contains(recipientKey));
 	}
 
 
@@ -248,10 +235,15 @@ class MacroReplacerTest
 
 
 	@Test
-	void addRecipientContext() {
+	void addRecipientContext()
+	{
 		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
+		recipient = switch (RecipientResult.from(console)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
 		RecordKey key = RecordKey.of("RECIPIENT").orElseThrow();
-		ContextMap contextMap = new ContextMap(console, key);
+		ContextMap contextMap = ContextMap.of(recipient, key).orElseThrow();
 
 		macroReplacer.addRecipientContext(contextMap);
 		assertTrue(contextMap.contains(key));

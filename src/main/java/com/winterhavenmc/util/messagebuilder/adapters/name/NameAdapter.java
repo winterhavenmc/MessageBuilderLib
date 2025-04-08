@@ -47,7 +47,7 @@ public class NameAdapter implements Adapter
 	 * object does not have a known method of retrieving a name.
 	 */
 	@Override
-	public Optional<Nameable> adapt(Object obj)
+	public Optional<Nameable> adapt(final Object obj)
 	{
 		return switch (obj) {
 			case CommandSender commandSender -> Optional.of(commandSender::getName);

@@ -15,15 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class RecordKeyTest {
 

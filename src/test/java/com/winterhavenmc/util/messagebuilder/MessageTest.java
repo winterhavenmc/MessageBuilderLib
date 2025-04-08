@@ -17,10 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.messages.Macro;
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -40,6 +43,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -55,6 +60,8 @@ class MessageTest
 	Message message;
 	ItemStack itemStack;
 	MessageRecord messageRecord;
+	ValidRecipient recipient;
+	RecordKey messageKey;
 
 
 	@BeforeEach
@@ -67,13 +74,17 @@ class MessageTest
 
 		itemStack = new ItemStack(Material.DIAMOND_SWORD);
 
-		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
 
-		message = new Message(
-				playerMock, recordKey, messageProcessorMock);
+		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+
+		message = new Message(recipient, messageKey, messageProcessorMock);
 
 		messageRecord = new MessageRecord(
-				recordKey,
+				messageKey,
 				true,
 				"this is a test message",
 				Duration.ofSeconds(11),
@@ -85,69 +96,75 @@ class MessageTest
 	}
 
 
-	@AfterEach
-	public void tearDown()
+	@Test @DisplayName("test recipient accessor")
+	void testGetRecipient()
 	{
-		playerMock = null;
-		pluginConfiguration = null;
+		assertEquals(recipient, message.getRecipient());
 	}
 
 
-	@Test
-	void getRecipient()
-	{
-		assertEquals(playerMock, message.getRecipient());
-	}
-
-
-	@Test
-	void getMessageId()
+	@Test @DisplayName("test messageId accessor")
+	void testGetMessageId()
 	{
 		assertEquals(ENABLED_MESSAGE.name(), message.getMessageId());
 	}
 
 
-	@Test
-	void getRecordKey()
+	@Test @DisplayName("test messageKey accessor")
+	void testGetMessageKey()
 	{
 		// Act
-		RecordKey recordKey = message.getMessageKey();
+		RecordKey messageKey = message.getMessageKey();
 
 		// Assert
-		assertEquals(ENABLED_MESSAGE.name(), recordKey.toString());
+		assertEquals(ENABLED_MESSAGE.name(), messageKey.toString());
+	}
+
+
+	@Test @DisplayName("test contextMap accessor")
+	void testGetContextMap()
+	{
+		assertNotNull(message.getContextMap());
 	}
 
 
 	@Test
-	void getContextMap()
+	void testIsEmpty()
 	{
-		assertNotNull(message.getContextMap());
+		assertFalse(message.isEmpty());
 	}
 
 
 	@Nested
 	class SetMacroTests
 	{
-		@Test
+		@Test @DisplayName("test setMacro (two parameter) method with valid parameters")
 		void testSetMacro()
 		{
+			// Act
 			Message newMessage = message.setMacro(Macro.TOOL, itemStack);
+
+			// Assert
 			assertEquals(Optional.of(itemStack), newMessage.peek(Macro.TOOL));
 		}
 
 
-		@Test
-		void testSetMacro_parameter_null_macro() {
+		@Test  @DisplayName("test setMacro method with null macro")
+		// Act
+		void testSetMacro_parameter_null_macro()
+		{
 			ValidationException exception = assertThrows(ValidationException.class,
 					() -> message.setMacro(null, new ItemStack(Material.DIAMOND_SWORD)));
 
+			// Assert
 			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
 		}
 
 
-		@Test
-		@Disabled("currently not validating against null macro")
-		void testSetMacro_parameter_null_object() {
+		@Test @DisplayName("test setMacro method with null value")
+		@Disabled("currently not validating against null value")
+		void testSetMacro_parameter_null_value()
+		{
 			ValidationException exception = assertThrows(ValidationException.class,
 					() -> message.setMacro(Macro.OWNER, null));
 
@@ -157,16 +174,18 @@ class MessageTest
 
 
 	@Nested
-	class SetMacro2Tests {
-		@Test
-		void testSetMacro2() {
+	class SetMacro2Tests
+	{
+		@Test @DisplayName("test setMacro (three parameter) method with valid parameters")
+		void testSetMacro2()
+		{
 			// Arrange
 			Message newMessage = message.setMacro(10, Macro.TOOL, itemStack);
-			RecordKey recordKey = RecordKey.of(Macro.TOOL).orElseThrow();
+			RecordKey macroKey = RecordKey.of(Macro.TOOL).orElseThrow();
 			ContextMap contextMap = newMessage.getContextMap();
 
 			// Act
-			Object object = contextMap.get(recordKey).orElseThrow();
+			Object object = contextMap.get(macroKey).orElseThrow();
 
 			// Assert
 			assertInstanceOf(ItemStack.class, object);
@@ -174,8 +193,9 @@ class MessageTest
 		}
 
 
-		@Test
-		void testSetMacro2_parameter_null_macro() {
+		@Test @DisplayName("test setMacro (three parameter) method with null macro parameter")
+		void testSetMacro2_parameter_null_macro()
+		{
 			ValidationException exception = assertThrows(ValidationException.class,
 					() -> message.setMacro(5, null, new ItemStack(Material.DIAMOND_SWORD)));
 
@@ -185,7 +205,8 @@ class MessageTest
 
 		@Test
 		@Disabled("currently not validating against null macro")
-		void testSetMacro2_parameter_null_object() {
+		void testSetMacro2_parameter_null_object()
+		{
 			ValidationException exception = assertThrows(ValidationException.class,
 					() -> message.setMacro(6, Macro.OWNER, null));
 
@@ -195,8 +216,57 @@ class MessageTest
 
 
 	@Test
-	void testSend() {
-		message.send();
+	void testSend()
+	{
+		assertDoesNotThrow(() -> message.send());
+	}
+
+
+	@Test
+	void emptyMessage_shouldNotBeNull()
+	{
+		Message empty = Message.empty();
+		assertNotNull(empty, "empty() should not return null");
+	}
+
+	@Test
+	void emptyMessage_shouldBeInstanceOfMessage()
+	{
+		Message empty = Message.empty();
+		assertInstanceOf(Message.class, empty, "empty() should return a Message instance");
+	}
+
+	@Test
+	void emptyMessage_isEmptyShouldReturnTrue()
+	{
+		Message empty = Message.empty();
+		assertTrue(empty.isEmpty(), "isEmpty() should return true for empty messages");
+	}
+
+	@Test
+	void emptyMessage_setMacroShouldReturnSameInstance()
+	{
+		Message empty = Message.empty();
+		Message result = empty.setMacro(DummyMacro.TEST, "value");
+		assertSame(empty, result, "setMacro() on empty message should return the same instance");
+	}
+
+	@Test
+	void testEmptyMessage_send()
+	{
+		// Arrange
+		Message emptyMessage = Message.empty();
+
+		// Act & Assert
+		assertDoesNotThrow(emptyMessage::send);
+	}
+
+	/**
+	 * Dummy enum for macro test – replace with your actual Macro enum if available.
+	 */
+	private enum DummyMacro
+	{
+		TEST
 	}
 
 }

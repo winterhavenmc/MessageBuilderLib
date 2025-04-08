@@ -18,12 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.CommandSenderProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,44 +38,48 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class CommandSenderProcessorTest {
-
+class CommandSenderProcessorTest
+{
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
 	@Mock World worldMock;
 
+	ValidRecipient recipient;
+	RecordKey recordKey;
+	ContextMap contextMap;
 	MacroProcessor macroProcessor;
-	RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+
 
 	@BeforeEach
-	public void setUp() {
+	public void setUp()
+	{
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		recordKey = RecordKey.of("KEY").orElseThrow();
+		contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
 		macroProcessor = new CommandSenderProcessor();
 	}
 
 	@AfterEach
-	public void tearDown() {
+	public void tearDown()
+	{
 		pluginMock = null;
 		macroProcessor = null;
 	}
 
 
 	@Test
-	void testResolveContext_parameter_null_context_map() {
-		MacroProcessor macroProcessor = new CommandSenderProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(recordKey, null));
-
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	void resolveContext() {
+	void resolveContext()
+	{
 		// Arrange
 		when(playerMock.getName()).thenReturn("player one");
 		when(playerMock.getDisplayName()).thenReturn("&aPlayer One");
@@ -85,7 +89,6 @@ class CommandSenderProcessorTest {
 		when(playerMock.getLocation()).thenReturn(location);
 
 		RecordKey key = RecordKey.of("SOME_KEY").orElseThrow();
-		ContextMap contextMap = new ContextMap(playerMock, key);
 		contextMap.put(key, playerMock);
 
 		// Act
@@ -98,9 +101,9 @@ class CommandSenderProcessorTest {
 
 
 	@Test
-	void resolveContext_not_command_sender() {
+	void resolveContext_not_command_sender()
+	{
 		// Arrange
-		ContextMap contextMap = new ContextMap(playerMock, recordKey);
 		contextMap.put(recordKey, 42);
 
 		// Act

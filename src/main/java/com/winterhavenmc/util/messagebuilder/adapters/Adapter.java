@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters;
 
-
 import java.util.Optional;
+
 
 public interface Adapter
 {

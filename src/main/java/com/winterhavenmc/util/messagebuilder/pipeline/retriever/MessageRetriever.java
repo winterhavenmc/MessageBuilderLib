@@ -24,7 +24,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Mes
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.QUERY_HANDLER;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -49,7 +49,7 @@ public final class MessageRetriever implements Retriever
 
 
 	@Override
-	public Optional<MessageRecord> getRecord(RecordKey key)
+	public Optional<MessageRecord> getRecord(final RecordKey key)
 	{
 		return queryHandler.getRecord(key);
 	}

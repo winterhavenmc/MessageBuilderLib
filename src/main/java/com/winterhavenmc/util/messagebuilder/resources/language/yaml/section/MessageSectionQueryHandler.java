@@ -25,7 +25,7 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -47,7 +47,7 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 	 *
 	 * @param configurationSupplier the configuration supplier that provides access to the configuration object for the language file.
 	 */
-	public MessageSectionQueryHandler(YamlConfigurationSupplier configurationSupplier)
+	public MessageSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier)
 	{
 		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 

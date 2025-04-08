@@ -17,18 +17,17 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -53,18 +52,17 @@ public final class TitleSender implements Sender
 
 
 	/**
-	 * Display a title for recipient, if recipient is a player, using the relevant fields from a MessageRecord.
+	 * Display a title for protoRecipient, if protoRecipient is a player, using the relevant fields from a MessageRecord.
 	 *
-	 * @param recipient a message recipient
+	 * @param recipient a message protoRecipient
 	 * @param messageRecord a message record containing the fields necessary for sending a title to a player
 	 */
 	@Override
-	public void send(final CommandSender recipient, final MessageRecord messageRecord)
+	public void send(final ValidRecipient recipient, final MessageRecord messageRecord)
 	{
-		validate(recipient, Objects::isNull, throwing(PARAMETER_NULL, RECIPIENT));
 		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
 
-		if (recipient instanceof Player player)
+		if (recipient.sender() instanceof Player player)
 		{
 			player.sendTitle(
 					ChatColor.translateAlternateColorCodes('&', messageRecord.title()),

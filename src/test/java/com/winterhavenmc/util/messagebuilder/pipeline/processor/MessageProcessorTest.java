@@ -17,12 +17,15 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.util.messagebuilder.Message;
+import com.winterhavenmc.util.messagebuilder.*;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -43,6 +46,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -51,16 +56,13 @@ import static org.mockito.Mockito.*;
 class MessageProcessorTest
 {
 
-	@Mock
-	MessageRetriever messageRetrieverMock;
-	@Mock
-	MacroReplacer macroReplacerMock;
+	@Mock MessageRetriever messageRetrieverMock;
+	@Mock MacroReplacer macroReplacerMock;
 	@Mock Player playerMock;
-	@Mock
-	MessageSender messageSenderMock;
-	@Mock
-    TitleSender titleSenderMock;
+	@Mock MessageSender messageSenderMock;
+	@Mock TitleSender titleSenderMock;
 
+	ValidRecipient recipient;
 	CooldownMap cooldownMap;
 	MessageProcessor messageProcessor;
 	MessageRecord messageRecord;
@@ -69,6 +71,10 @@ class MessageProcessorTest
 	@BeforeEach
 	void setUp()
 	{
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
 		cooldownMap = new CooldownMap();
 		messageProcessor = new MessageProcessor(
 				messageRetrieverMock,
@@ -109,13 +115,13 @@ class MessageProcessorTest
 	}
 
 
-	@Test @DisplayName("Test process method with valid parameter")
+	@Test @DisplayName("Test process method with Valid parameter")
 	void testProcess() {
 		// Arrange
 		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(Optional.of(messageRecord));
-		Message message = new Message(playerMock, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
+		Message message = new Message(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
 		when(macroReplacerMock.replaceMacros(messageRecord, message)).thenReturn(Optional.ofNullable(messageRecord));
 
 		// Act & Assert

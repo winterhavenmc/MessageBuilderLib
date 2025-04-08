@@ -108,34 +108,37 @@ class MessageBuilderTest
 	@Test
 	void compose_parameter_null_player()
 	{
-		// Arrange & Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
+		// Arrange
+//		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
-		// Assert
-		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
+		// Act & Assert
+		assertDoesNotThrow(() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
 	}
 
 
 	@Test
 	void compose_parameter_null_message_id()
 	{
-		// Arrange & Act
+		// Act
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> messageBuilder.compose(playerMock, null));
 
 		// Assert
-		assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'messageId' cannot be null.", exception.getMessage());
 	}
 
 
 	@Test
 	void reload()
 	{
+		// Arrange
 		when(languageResourceManagerMock.reload()).thenReturn(true);
 
-		messageBuilder.reload();
+		// Act
+		// Assert
+		assertDoesNotThrow(() -> messageBuilder.reload());
 
+		// Verify
 		verify(languageResourceManagerMock, atLeastOnce()).reload();
 	}
 
@@ -143,10 +146,14 @@ class MessageBuilderTest
 	@Test
 	void reload_failed()
 	{
+		// Arrange
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
-		messageBuilder.reload();
+		// Act
+		// Assert
+		assertDoesNotThrow(() -> messageBuilder.reload());
 
+		// Verify
 		verify(languageResourceManagerMock, atLeastOnce()).reload();
 	}
 
@@ -155,8 +162,8 @@ class MessageBuilderTest
 	void testCreate()
 	{
 		// Arrange
-		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
 		// Act
 		MessageBuilder messageBuilder1 = MessageBuilder.create(pluginMock);

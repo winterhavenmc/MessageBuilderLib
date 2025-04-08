@@ -15,18 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.uuid;
+package com.winterhavenmc.util.messagebuilder.validation;
 
-import java.util.UUID;
-
-
-/**
- * An interface that describes objects
- * that have a {@code getUniqueId()}
- * method that returns a valid UUID.
- */
-@FunctionalInterface
-public interface Identifiable
+public enum ErrorMessageKey
 {
-	UUID getUniqueId();
+	INVALID_SECTION,
+	MISSING_RESOURCE,
+	PARAMETER_EMPTY,
+	PARAMETER_INVALID,
+	PARAMETER_NULL,
+	PARAMETER_TYPE_MISMATCH,
+	RELOAD_FAILED,
 }

@@ -15,15 +15,17 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.validation;
+package com.winterhavenmc.util.messagebuilder.recipient;
 
-public enum ExceptionMessageKey
+import org.bukkit.command.CommandSender;
+
+
+public sealed interface RecipientResult permits ValidRecipient, InvalidRecipient
 {
-	INVALID_SECTION,
-	MISSING_RESOURCE,
-	PARAMETER_EMPTY,
-	PARAMETER_INVALID,
-	PARAMETER_NULL,
-	PARAMETER_TYPE_MISMATCH,
-	RELOAD_FAILED,
+	static RecipientResult from(CommandSender sender)
+	{
+		return sender == null
+			? new InvalidRecipient()
+			: new ValidRecipient(sender);
+	}
 }

@@ -17,27 +17,24 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
+import java.util.logging.Logger;
+
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationUtility.formatMessage;
 
 
-public class ValidationException extends IllegalArgumentException
+public record Logging<T>(LogLevel logLevel,
+                         ErrorMessageKey messageKey,
+                         Parameter parameter) implements ValidationHandler<T>
 {
-	private final ErrorMessageKey errorMessageKey;
-	private final Parameter parameter;
+    private static final Logger LOGGER = Logger.getLogger("ValidationLogger");
 
 
-	public ValidationException(final ErrorMessageKey errorMessageKey, final Parameter parameter)
-	{
-		super(formatMessage(errorMessageKey, parameter));
-		this.errorMessageKey = errorMessageKey;
-		this.parameter = parameter;
-	}
+    @Override
+    public T handleInvalid(final T value)
+    {
+        LOGGER.log(logLevel.toJavaUtilLevel(), formatMessage(messageKey, parameter));
 
-
-	@Override
-	public String getMessage()
-	{
-		return formatMessage(errorMessageKey, parameter);
-	}
+        return value; // return the value even though it failed validation
+    }
 
 }

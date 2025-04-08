@@ -15,18 +15,19 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.uuid;
+package com.winterhavenmc.util.messagebuilder.validation;
 
-import java.util.UUID;
+import java.util.function.Supplier;
 
 
-/**
- * An interface that describes objects
- * that have a {@code getUniqueId()}
- * method that returns a valid UUID.
- */
-@FunctionalInterface
-public interface Identifiable
+public record Throwing<T>(Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
 {
-	UUID getUniqueId();
+    @Override
+    public T handleInvalid(final T value)
+    {
+        ValidationException exception = exceptionSupplier.get();
+        exception.fillInStackTrace(); // Maintain call-site accuracy
+        throw exception;
+    }
+
 }
