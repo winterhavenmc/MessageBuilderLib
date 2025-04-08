@@ -162,8 +162,8 @@ class MessageBuilderTest
 	void testCreate()
 	{
 		// Arrange
-		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
 		// Act
 		MessageBuilder messageBuilder1 = MessageBuilder.create(pluginMock);
