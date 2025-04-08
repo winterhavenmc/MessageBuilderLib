@@ -66,7 +66,10 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * <p>
  * <i>example:</i>
  * <pre>
- * {@code messageBuilder.compose(recipient, E.ENABLED_MESSAGE.name())
+ * {@code
+ * MessageBuilder messageBuilder = MessageBuilder.create(plugin)
+ *
+ * messageBuilder.compose(recipient, MessageId.MESSAGE_KEY)
  *     .setMacro(Macro.PLACEHOLDER1, object)
  *     .setMacro(Macro.PLACEHOLDER2, replacementString)
  *     .send();
