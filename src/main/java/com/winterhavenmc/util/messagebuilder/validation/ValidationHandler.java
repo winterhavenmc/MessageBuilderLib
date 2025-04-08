@@ -17,10 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-
-public sealed interface ValidationHandler<T> permits Throwing, Logging
+@FunctionalInterface
+public interface ValidationHandler<T>
 {
-	@SuppressWarnings("UnusedReturnValue")
 	T handleInvalid(final T value);
 
 
