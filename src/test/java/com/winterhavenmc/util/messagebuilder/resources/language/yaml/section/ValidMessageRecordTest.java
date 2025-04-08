@@ -33,7 +33,8 @@ import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_M
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class MessageRecordTest {
+class ValidMessageRecordTest
+{
 
 	Configuration configuration;
 	ConfigurationSection messageSection;
@@ -54,7 +55,7 @@ class MessageRecordTest {
 
 	@Test
 	void constructorTest() {
-		MessageRecord testRecord = new MessageRecord(
+		ValidMessageRecord testRecord = new ValidMessageRecord(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",

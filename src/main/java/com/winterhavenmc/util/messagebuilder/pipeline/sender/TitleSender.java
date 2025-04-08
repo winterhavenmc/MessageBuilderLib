@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -52,13 +52,13 @@ public final class TitleSender implements Sender
 
 
 	/**
-	 * Display a title for protoRecipient, if protoRecipient is a player, using the relevant fields from a MessageRecord.
+	 * Display a title for protoRecipient, if protoRecipient is a player, using the relevant fields from a ValidMessageRecord.
 	 *
 	 * @param recipient a message protoRecipient
 	 * @param messageRecord a message record containing the fields necessary for sending a title to a player
 	 */
 	@Override
-	public void send(final ValidRecipient recipient, final MessageRecord messageRecord)
+	public void send(final ValidRecipient recipient, final ValidMessageRecord messageRecord)
 	{
 		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
 

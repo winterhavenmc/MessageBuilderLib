@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class MessageRetrieverTest
 {
-	@Mock QueryHandler<MessageRecord> queryHandlerMock;
+	@Mock QueryHandler<ValidMessageRecord> queryHandlerMock;
 
 	@AfterEach
 	void tearDown()
@@ -59,12 +59,12 @@ class MessageRetrieverTest
 		// Arrange
 		FileConfiguration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		QueryHandler<MessageRecord> queryHandler = new MessageSectionQueryHandler(configurationSupplier);
+		QueryHandler<ValidMessageRecord> queryHandler = new MessageSectionQueryHandler(configurationSupplier);
 		Retriever retriever = new MessageRetriever(queryHandler);
 		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
 		// Act
-		Optional<MessageRecord> messageRecord = retriever.getRecord(recordKey);
+		Optional<ValidMessageRecord> messageRecord = retriever.getRecord(recordKey);
 
 		// Assert
 		assertNotNull(messageRecord);

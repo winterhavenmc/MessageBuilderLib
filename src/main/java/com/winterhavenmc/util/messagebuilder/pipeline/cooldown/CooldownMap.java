@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.time.Instant;
@@ -45,7 +45,7 @@ public final class CooldownMap implements Cooldown
 	 * @param messageRecord the message to be placed in the cooldown map for protoRecipient
 	 * @throws ValidationException if any parameter is null
 	 */
-	public void putExpirationTime(final ValidRecipient recipient, final MessageRecord messageRecord)
+	public void putExpirationTime(final ValidRecipient recipient, final ValidMessageRecord messageRecord)
 	{
 		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
 

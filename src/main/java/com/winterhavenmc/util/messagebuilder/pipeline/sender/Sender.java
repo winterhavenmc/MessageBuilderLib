@@ -18,11 +18,11 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
 
 @FunctionalInterface
 public interface Sender
 {
-	void send(ValidRecipient recipient, MessageRecord messageRecord);
+	void send(ValidRecipient recipient, ValidMessageRecord messageRecord);
 }

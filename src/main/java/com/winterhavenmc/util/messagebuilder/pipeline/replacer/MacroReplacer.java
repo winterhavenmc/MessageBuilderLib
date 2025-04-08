@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.*;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.Delimiter;
 
 import org.bukkit.entity.Player;
@@ -47,10 +47,10 @@ public class MacroReplacer implements Replacer
 	 * Replace macros in a message to be sent
 	 *
 	 * @param messageRecord the message record to have macro placeholders replaced in message and title strings
-	 * @return a new {@code MessageRecord} with all macro replacements performed and placed into the final string fields
+	 * @return a new {@code ValidMessageRecord} with all macro replacements performed and placed into the final string fields
 	 */
 	@Override
-	public Optional<MessageRecord> replaceMacros(final MessageRecord messageRecord, final Message message)
+	public Optional<ValidMessageRecord> replaceMacros(final ValidMessageRecord messageRecord, final Message message)
 	{
 		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
 		validate(message, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE));

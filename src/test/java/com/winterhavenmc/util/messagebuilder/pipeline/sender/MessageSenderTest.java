@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -50,13 +50,13 @@ class MessageSenderTest
 	@Mock Player playerMock;
 
 	ValidRecipient recipient;
-	MessageRecord messageRecord;
+	ValidMessageRecord messageRecord;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		messageRecord = new MessageRecord(
+		messageRecord = new ValidMessageRecord(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",

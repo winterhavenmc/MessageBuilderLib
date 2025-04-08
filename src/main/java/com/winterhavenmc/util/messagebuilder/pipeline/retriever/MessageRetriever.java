@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -32,7 +32,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 
 public final class MessageRetriever implements Retriever
 {
-	private final QueryHandler<MessageRecord> queryHandler;
+	private final QueryHandler<ValidMessageRecord> queryHandler;
 
 
 	/**
@@ -40,7 +40,7 @@ public final class MessageRetriever implements Retriever
 	 *
 	 * @param queryHandler the query handler to be used to retrieve a message record
 	 */
-	public MessageRetriever(final QueryHandler<MessageRecord> queryHandler)
+	public MessageRetriever(final QueryHandler<ValidMessageRecord> queryHandler)
 	{
 		validate(queryHandler, Objects::isNull, throwing(PARAMETER_NULL, QUERY_HANDLER));
 
@@ -49,7 +49,7 @@ public final class MessageRetriever implements Retriever
 
 
 	@Override
-	public Optional<MessageRecord> getRecord(final RecordKey key)
+	public Optional<ValidMessageRecord> getRecord(final RecordKey key)
 	{
 		return queryHandler.getRecord(key);
 	}

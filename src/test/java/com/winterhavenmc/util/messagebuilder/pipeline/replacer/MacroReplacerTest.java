@@ -28,7 +28,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.command.ConsoleCommandSender;
@@ -85,7 +85,7 @@ class MacroReplacerTest
 		void testReplaceMacros_valid_parameters()
 		{
 			// Arrange
-			MessageRecord messageRecord = new MessageRecord(
+			ValidMessageRecord messageRecord = new ValidMessageRecord(
 					messageKey,
 					true,
 					"this is a message.",
@@ -101,7 +101,7 @@ class MacroReplacerTest
 			);
 
 			// Act
-			Optional<MessageRecord> result = macroReplacer.replaceMacros(messageRecord, message);
+			Optional<ValidMessageRecord> result = macroReplacer.replaceMacros(messageRecord, message);
 
 			// Assert
 			assertNotNull(result);
@@ -124,7 +124,7 @@ class MacroReplacerTest
 		void testReplaceMacros_parameter_null_message()
 		{
 			// Arrange
-			MessageRecord messageRecord = new MessageRecord(
+			ValidMessageRecord messageRecord = new ValidMessageRecord(
 					messageKey,
 					true,
 					"this is a message.",
