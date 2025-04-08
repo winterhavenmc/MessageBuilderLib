@@ -17,30 +17,31 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
+import com.winterhavenmc.util.messagebuilder.validation.Parameter;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-
-import org.bukkit.command.CommandSender;
 
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MACRO;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.logging;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
  * The message object being built with builder pattern
  */
-public final class Message
+public class Message
 {
-	private final CommandSender recipient;
-	private final RecordKey recordKey;
+	private final ValidRecipient recipient;
+	private final RecordKey messageKey;
 	private final MessageProcessor messageProcessor;
 	private final ContextMap contextMap;
 
@@ -49,15 +50,16 @@ public final class Message
 	 * Class constructor
 	 *
 	 * @param recipient message recipient
-	 * @param recordKey message identifier
+	 * @param messageKey message identifier
 	 * @param messageProcessor the message processor that will receive the message when the send method is called
 	 */
-	public Message(final CommandSender recipient, final RecordKey recordKey, final MessageProcessor messageProcessor)
+	public Message(final ValidRecipient recipient, final RecordKey messageKey, final MessageProcessor messageProcessor)
 	{
 		this.recipient = recipient;
-		this.recordKey = recordKey;
+		this.messageKey = messageKey;
 		this.messageProcessor = messageProcessor;
-		this.contextMap = new ContextMap(recipient, recordKey);
+		this.contextMap = ContextMap.of(this.recipient, this.messageKey)
+				.orElseThrow(() -> new ValidationException(PARAMETER_INVALID, CONTEXT_MAP));
 	}
 
 
@@ -72,14 +74,14 @@ public final class Message
 	 */
 	public <K extends Enum<K>, V> Message setMacro(final K macro, final V value)
 	{
-		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
-		// allow null 'value' parameter to be inserted into context map. uncomment below line to throw on null value
-		//Validator2.validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
+		// throw exception on passed in null enum constant
+		RecordKey macroKey = RecordKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MACRO));
 
-		RecordKey recordKey = RecordKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO));
+		// allow null value to be inserted into context map. uncomment below line to throw on null value
+		//Validator.validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
 
-		// put value into context map using macro enum constant name as key
-		this.contextMap.put(recordKey, value);
+		// insert value into context map using validated macro key
+		this.contextMap.put(macroKey, value);
 
 		// return this instance of Message class to the builder chain
 		return this;
@@ -98,15 +100,19 @@ public final class Message
 	 */
 	public <K extends Enum<K>, V> Message setMacro(int quantity, final K macro, final V value)
 	{
-		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
-		//Validator2.validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
-		// allow null 'value' parameter to be inserted into context map
+		// throw exception on passed in null enum constant
+		RecordKey macroKey = RecordKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MACRO));
 
-		RecordKey recordKey = RecordKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO));
+		// unwrap quantityKey or throw exception if InvalidRecipient
+		RecordKey quantityKey = RecordKey.of(macroKey + ".QUANTITY")
+				.orElseThrow(() -> new ValidationException(PARAMETER_INVALID, Parameter.QUANTITY));
+
+		// allow null 'value' parameter to be inserted into context map. uncomment below line to throw on null value
+		//Validator.validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
 
 		// put value into context map using macro enum constant name for key
-		this.contextMap.put(recordKey, value);
-		this.contextMap.put(RecordKey.of(macro.name() + ".QUANTITY").orElseThrow(), quantity);
+		this.contextMap.put(macroKey, value);
+		this.contextMap.put(quantityKey, quantity);
 
 		// return this instance of Message class to the builder chain
 		return this;
@@ -125,9 +131,9 @@ public final class Message
 	/**
 	 * Getter for recipient
 	 *
-	 * @return {@code CommandSender} the message recipient
+	 * @return {@code ValidRecipientRecipient} the message recipient
 	 */
-	public CommandSender getRecipient()
+	public ValidRecipient getRecipient()
 	{
 		return recipient;
 	}
@@ -140,13 +146,13 @@ public final class Message
 	 */
 	public String getMessageId()
 	{
-		return recordKey.toString();
+		return messageKey.toString();
 	}
 
 
 	public RecordKey getMessageKey()
 	{
-		return recordKey;
+		return messageKey;
 	}
 
 
@@ -161,6 +167,11 @@ public final class Message
 	}
 
 
+	public boolean isEmpty() {
+		return false;
+	}
+
+
 	/**
 	 * Examine the contents of the context map for testing purposes
 	 *
@@ -170,7 +181,40 @@ public final class Message
 	 */
 	<K extends Enum<K>> Optional<Object> peek(K macro)
 	{
-		return contextMap.get(RecordKey.of(macro).orElseThrow());
+		RecordKey macroKey = RecordKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO));
+
+		return contextMap.get(macroKey);
+	}
+
+
+	/**
+	 * Static method that returns a no-op stubbed message. This method is called when an InvalidRecipient parameter
+	 * is passed in to the compose method.
+	 *
+	 * @return a no-op stubbed Message object
+	 */
+	public static Message empty()
+	{
+		return new Message(null, null, null)
+		{
+			@Override
+			public <K extends Enum<K>, V> Message setMacro(K macro, V value)
+			{
+				return this; // no-op
+			}
+
+			@Override
+			public void send()
+			{
+				// no-op method, log error message
+				validate(null, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, RECIPIENT));
+			}
+
+			@Override
+			public boolean isEmpty() {
+				return true;
+			}
+		};
 	}
 
 }

@@ -17,16 +17,24 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-import java.util.function.Consumer;
+import java.util.logging.Logger;
+
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationUtility.formatMessage;
 
 
-public record Logging<T>(Consumer<? super T> logger) implements ValidationHandler<T>
+public record Logging<T>(LogLevel logLevel,
+                         ErrorMessageKey messageKey,
+                         Parameter parameter) implements ValidationHandler<T>
 {
+    private static final Logger LOGGER = Logger.getLogger("ValidationLogger");
+
+
     @Override
-    public T handleInvalid(T value)
+    public T handleInvalid(final T value)
     {
-        logger.accept(value);
-        return value;
+        LOGGER.log(logLevel.toJavaUtilLevel(), formatMessage(messageKey, parameter));
+
+        return value; // return the value even though it failed validation
     }
 
 }

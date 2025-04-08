@@ -17,13 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ItemStackProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -35,63 +35,63 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ItemStackProcessorTest {
-
+class ItemStackProcessorTest
+{
 	@Mock Player playerMock;
 
-	RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+	ValidRecipient recipient;
+	RecordKey messageKey;
+	ContextMap contextMap;
+	MacroProcessor macroProcessor;
 
-	@AfterEach
-	public void tearDown() {
-		playerMock = null;
+
+	@BeforeEach
+	void setUp()
+	{
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+		macroProcessor = new ItemStackProcessor();
 	}
 
 
-	@Test
-	void testResolveContext_parameter_null_context_map() {
-		MacroProcessor macroProcessor = new ItemStackProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(recordKey, null));
-
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	void resolveContext_no_metadata() {
+	@Test @DisplayName("test resolve context for ItemStack without metadata")
+	void resolveContext_no_metadata()
+	{
 		// Arrange
 		ItemStack itemStack = new ItemStack(Material.GOLDEN_AXE);
-
-		ContextMap contextMap = new ContextMap(playerMock, recordKey);
-		contextMap.put(recordKey, itemStack);
-		MacroProcessor macroProcessor = new ItemStackProcessor();
+		contextMap.put(messageKey, itemStack);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(recordKey.toString()));
-		assertEquals("GOLDEN_AXE", resultMap.get(recordKey.toString()));
+		assertTrue(resultMap.containsKey(messageKey.toString()));
+		assertEquals("GOLDEN_AXE", resultMap.get(messageKey.toString()));
 	}
 
 
-	@Test
-	void resolveContext_not_an_itemstack() {
+	@Test @DisplayName("test resolve context with Invalid type")
+	void resolveContext_not_an_itemstack()
+	{
 		// Arrange
 		int value = 42;
-		ContextMap contextMap = new ContextMap(playerMock, recordKey);
-		contextMap.put(recordKey, value);
-		MacroProcessor macroProcessor = new ItemStackProcessor();
+		contextMap.put(messageKey, value);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey(recordKey.toString()));
+		assertFalse(resultMap.containsKey(messageKey.toString()));
 	}
 
 }

@@ -17,27 +17,30 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationUtility.formatMessage;
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-
-public class ValidationException extends IllegalArgumentException
+public class ValidationUtility
 {
-	private final ErrorMessageKey errorMessageKey;
-	private final Parameter parameter;
+	private static final String BUNDLE_NAME = "language.errors";
 
 
-	public ValidationException(final ErrorMessageKey errorMessageKey, final Parameter parameter)
+	static String formatMessage(final ErrorMessageKey errorMessageKey,
+								final Parameter parameter)
 	{
-		super(formatMessage(errorMessageKey, parameter));
-		this.errorMessageKey = errorMessageKey;
-		this.parameter = parameter;
+		// Fetch localized message pattern from resource bundle
+		String pattern = ResourceBundle.getBundle(BUNDLE_NAME, getConfiguredLocale()).getString(errorMessageKey.name());
+
+		// Insert parameter name into the pattern
+		return MessageFormat.format(pattern, parameter.getDisplayName());
 	}
 
 
-	@Override
-	public String getMessage()
+	//TODO: fetch locale from plugin config.yml ?
+	static Locale getConfiguredLocale()
 	{
-		return formatMessage(errorMessageKey, parameter);
+		return Locale.getDefault();
 	}
 
 }

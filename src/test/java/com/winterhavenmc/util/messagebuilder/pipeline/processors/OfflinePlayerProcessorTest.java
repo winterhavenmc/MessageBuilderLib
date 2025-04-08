@@ -17,13 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.OfflinePlayerProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -38,74 +38,81 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Duration;
 import java.util.UUID;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class OfflinePlayerProcessorTest {
-
+class OfflinePlayerProcessorTest
+{
 	@Mock Player playerMock;
 	@Mock OfflinePlayer offlinePlayerMock;
 	@Mock Location locationMock;
 
-	RecordKey macroKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+	ValidRecipient recipient;
+	RecordKey macroKey;
+
+
+	@BeforeEach
+	void setUp()
+	{
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		macroKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+	}
+
 
 	@AfterEach
-	public void tearDown() {
+	public void tearDown()
+	{
 		offlinePlayerMock = null;
 	}
 
+
 	@Test
-	void resolveContextTest() {
+	void resolveContextTest()
+	{
 		// Arrange
 		when(offlinePlayerMock.getName()).thenReturn("Offline Player");
 		when(offlinePlayerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(offlinePlayerMock.getLocation()).thenReturn(locationMock);
 
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-		ContextMap contextMap = new ContextMap(playerMock, macroKey);
+		ContextMap contextMap = ContextMap.of(recipient, macroKey).orElseThrow();
+		contextMap.put(macroKey, offlinePlayerMock);
 
 		// Act
-		contextMap.put(macroKey, offlinePlayerMock);
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
 		assertFalse(resultMap.isEmpty());
 		assertTrue(resultMap.containsKey(macroKey.toString()));
+
+		// Verify
+		verify(offlinePlayerMock, atLeastOnce()).getName();
+		verify(offlinePlayerMock, atLeastOnce()).getUniqueId();
+		verify(offlinePlayerMock, atLeastOnce()).getLocation();
 	}
 
 
 	@Test
-	void resolveContext_with_null_contextMap() {
+	void resolveContext_mismatched_type()
+	{
 		// Arrange
+		Duration duration  = Duration.ofMillis(2000);
+		ContextMap contextMap = ContextMap.of(recipient, macroKey).orElseThrow();
+		contextMap.put(macroKey, duration);
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 
 		// Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(macroKey, null));
-
-		// Assert
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	void resolveContext_mismatched_type() {
-
-		Duration duration  = Duration.ofMillis(2000);
-
-		ContextMap contextMap = new ContextMap(playerMock, macroKey);
-
-		contextMap.put(macroKey, duration);
-
-		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
-
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
+		// Assert
 		assertFalse(resultMap.containsKey(macroKey.toString()));
 	}
 

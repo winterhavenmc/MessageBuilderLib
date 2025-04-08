@@ -15,15 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.validation;
+package com.winterhavenmc.util.messagebuilder.recipient;
 
+import org.bukkit.command.CommandSender;
 
-public record DefaultValue<T>(T defaultValue) implements ValidationHandler<T>
-{
-    @Override
-    public T handleInvalid(T value)
-    {
-        return defaultValue;
-    }
-
-}
+public record ValidRecipient(CommandSender sender) implements RecipientResult { }

@@ -17,6 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
@@ -28,7 +32,6 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.time.Tick;
@@ -41,8 +44,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.RELOAD_FAILED;
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -157,7 +159,12 @@ public final class MessageBuilder
 
 
 	/**
-	 * Initiate the message building sequence
+	 * Initiate the message building sequence. Parameters of this method are passed into this library domain
+	 * from the plugin, so robust validation is employed and type-safety is enforced by converting to domain specific
+	 * types and validating on creation. If a null {@code CommandSender} is passed as the recipient parameter, an
+	 * empty, no-op message is returned, as it is plausible a null or invalid value could be passed.
+	 * The enum constant messageId parameter, conversely, cannot be null under normal conditions, and therefore
+	 * throws a validation exception if a null is encountered.
 	 *
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
@@ -165,11 +172,15 @@ public final class MessageBuilder
 	 */
 	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
 	{
-		validate(recipient, Objects::isNull, throwing(PARAMETER_NULL, RECIPIENT));
+		// exception thrown if null enum constant passed in messageId parameter
+		RecordKey validMessageKey = RecordKey.of(messageId).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
-		RecordKey recordKey = RecordKey.of(messageId).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
-
-		return new Message(recipient, recordKey, messageProcessor);
+		// empty no-op message returned if null CommandSender is passed in recipient parameter
+		return switch (RecipientResult.from(recipient))
+		{
+			case ValidRecipient r -> new Message(r, validMessageKey, messageProcessor);
+			case InvalidRecipient ignored -> Message.empty();
+		};
 	}
 
 

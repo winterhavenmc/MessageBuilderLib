@@ -15,7 +15,6 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.recipient;
 
-
-public sealed interface SectionRecord permits ConstantRecord, ItemRecord, MessageRecord, MessageRecordResult { }
+public record InvalidRecipient() implements RecipientResult { }

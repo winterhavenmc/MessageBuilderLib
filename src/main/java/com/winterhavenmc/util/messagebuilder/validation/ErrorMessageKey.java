@@ -15,7 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.validation;
 
-
-public sealed interface SectionRecord permits ConstantRecord, ItemRecord, MessageRecord, MessageRecordResult { }
+public enum ErrorMessageKey
+{
+	INVALID_SECTION,
+	MISSING_RESOURCE,
+	PARAMETER_EMPTY,
+	PARAMETER_INVALID,
+	PARAMETER_NULL,
+	PARAMETER_TYPE_MISMATCH,
+	RELOAD_FAILED,
+}

@@ -17,39 +17,24 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-import java.util.function.Consumer;
 
-
-public sealed interface ValidationHandler<T> permits Throwing, Logging, LoggingAndThrowing, DefaultValue
+public sealed interface ValidationHandler<T> permits Throwing, Logging
 {
 	@SuppressWarnings("UnusedReturnValue")
 	T handleInvalid(final T value);
 
 
-	static <T> ValidationHandler<T> throwing(final ExceptionMessageKey messageKey, final Parameter parameter)
+	static <T> ValidationHandler<T> throwing(final ErrorMessageKey messageKey, final Parameter parameter)
 	{
 		return new Throwing<>(() -> new ValidationException(messageKey, parameter));
 	}
 
 
-	static <T> ValidationHandler<T> logging(final Consumer<? super T> logger)
+	static <T> ValidationHandler<T> logging(final LogLevel level,
+											final ErrorMessageKey messageKey,
+											final Parameter parameter)
 	{
-		return new Logging<>(logger);
-	}
-
-
-	static <T> ValidationHandler<T> loggingAndThrowing(final Consumer<? super T> logger,
-                                                       final String message,
-                                                       final ExceptionMessageKey messageKey,
-                                                       final Parameter parameter)
-	{
-		return new LoggingAndThrowing<>(logger, () -> new ValidationException(messageKey, parameter));
-	}
-
-
-	static <T> ValidationHandler<T> defaultValue(final T value)
-	{
-		return new DefaultValue<>(value);
+		return new Logging<>(level, messageKey, parameter);
 	}
 
 }

@@ -17,12 +17,16 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.matcher;
 
-import com.winterhavenmc.util.messagebuilder.Message;
+import com.winterhavenmc.util.messagebuilder.*;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +37,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -40,16 +46,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlaceholderMatcherTest
 {
 	@Mock Player playerMock;
-	@Mock
-    MessageProcessor messageProcessorMock;
-	MacroReplacer macroReplacer;
+	@Mock MessageProcessor messageProcessorMock;
 
+	ValidRecipient recipient;
+	MacroReplacer macroReplacer;
 	Message message;
 
 	@BeforeEach
 	public void setUp()
 	{
-		message = new Message(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(), messageProcessorMock);
+		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		message = new Message(recipient, messageKey, messageProcessorMock);
 		macroReplacer = new MacroReplacer();
 	}
 

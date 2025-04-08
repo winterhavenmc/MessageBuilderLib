@@ -17,17 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
 import org.bukkit.Location;
-
-import java.util.Objects;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -92,13 +85,11 @@ public class LocationProcessor extends MacroProcessorTemplate
 	 * @param key         the unique key or namespace for this macro entry
 	 * @param contextMap  the {@link ContextMap} to populate with resolved placeholders
 	 * @return a {@link ResultMap} containing the resolved placeholders and their replacements
-	 * @throws IllegalArgumentException if any parameter is null or invalid
+	 * @throws IllegalArgumentException if any parameter is null or Invalid
 	 */
 	@Override
 	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
-		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
-
 		ResultMap resultMap = new ResultMap();
 
 		contextMap.get(key)

@@ -17,12 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
-import org.bukkit.command.CommandSender;
 
 
 @FunctionalInterface
 public interface Sender
 {
-	void send(CommandSender recipient, MessageRecord messageRecord);
+	void send(ValidRecipient recipient, MessageRecord messageRecord);
 }

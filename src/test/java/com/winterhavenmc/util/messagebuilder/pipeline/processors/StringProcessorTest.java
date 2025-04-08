@@ -17,11 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.MacroProcessor;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.StringProcessor;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 
@@ -32,6 +33,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -40,21 +43,28 @@ class StringProcessorTest {
 
 	@Mock Player playerMock;
 
-	RecordKey macroKey = RecordKey.of("KEY").orElseThrow();
+	ValidRecipient recipient;
+	RecordKey macroKey;
+	ContextMap contextMap;
 
-	@AfterEach
-	public void tearDown() {
-		playerMock = null;
+
+	@BeforeEach
+	void setUp() {
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		macroKey = RecordKey.of("KEY").orElseThrow();
+		contextMap = ContextMap.of(recipient, macroKey).orElseThrow();
 	}
 
 
-	@Test
-	void testResolveContext_parameter_null_context_map() {
-		MacroProcessor macroProcessor = new StringProcessor();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(macroKey, null));
-
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
+	@AfterEach
+	public void tearDown()
+	{
+		playerMock = null;
+		recipient = null;
+		macroKey = null;
 	}
 
 
@@ -62,8 +72,6 @@ class StringProcessorTest {
 	void resolveContext()
 	{
 		String stringObject = "some name";
-
-		ContextMap contextMap = new ContextMap(playerMock, macroKey);
 
 		contextMap.put(macroKey, stringObject);
 
@@ -75,12 +83,11 @@ class StringProcessorTest {
 		assertEquals(stringObject, resultMap.get(macroKey.toString()));
 	}
 
+
 	@Test
-	void resolveContext_not_string() {
-
+	void resolveContext_not_string()
+	{
 		Duration duration  = Duration.ofMillis(2000);
-
-		ContextMap contextMap = new ContextMap(playerMock, macroKey);
 
 		contextMap.put(macroKey, duration);
 

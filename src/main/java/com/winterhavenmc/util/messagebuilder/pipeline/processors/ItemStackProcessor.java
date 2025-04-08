@@ -18,17 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Objects;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -40,8 +33,6 @@ public class ItemStackProcessor extends MacroProcessorTemplate
 	@Override
 	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
-		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
-
 		ResultMap resultMap = new ResultMap();
 
 		contextMap.get(key)

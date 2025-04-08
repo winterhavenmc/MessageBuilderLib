@@ -17,15 +17,15 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -36,18 +36,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class CooldownMapTest {
-
-	@Mock Plugin pluginMock;
-	@Mock Server serverMock;
-	@Mock PluginManager pluginManagerMock;
+class CooldownMapTest
+{
 	@Mock Player playerMock;
 
+	ValidRecipient recipient;
+	CooldownKey cooldownKey;
 	CooldownMap cooldownMap;
 	MessageRecord messageRecord;
 
@@ -71,31 +72,27 @@ class CooldownMapTest {
 		);
 	}
 
-	@AfterEach
-	void tearDown() {
-		pluginMock = null;
-		serverMock = null;
-		pluginManagerMock = null;
-		playerMock = null;
-		cooldownMap = null;
-		messageRecord = null;
-	}
 
 	@Nested
 	@DisplayName("putExpirationTime Tests")
 	class PutExpirationTimeTests {
 		@Test
-		@DisplayName("Test putExpirationTime with valid parameters")
+		@DisplayName("Test putExpirationTime with Valid parameters")
 		void testPutExpirationTime()
 		{
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			CooldownKey cooldownKey = RecordKey.of(MessageId.ENABLED_MESSAGE)
-					.flatMap(recordKey -> CooldownKey.of(playerMock, recordKey))
+			recipient = switch (RecipientResult.from(playerMock)) {
+				case ValidRecipient validRecipient -> validRecipient;
+				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			};
+
+			cooldownKey = RecordKey.of(MessageId.ENABLED_MESSAGE)
+					.flatMap(recordKey -> CooldownKey.of(recipient, recordKey))
 					.orElseThrow();
 
 			// Act
-			cooldownMap.putExpirationTime(playerMock, messageRecord);
+			cooldownMap.putExpirationTime(recipient, messageRecord);
 
 			// Assert
 			assertFalse(cooldownMap.notCooling(cooldownKey));
@@ -106,42 +103,23 @@ class CooldownMapTest {
 
 
 		@Test
-		@DisplayName("Test putExpirationTime with null recipient")
-		void testPutExpirationTime_parameter_null_recipient() {
-			// Arrange & Act
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> cooldownMap.putExpirationTime(null, messageRecord));
-
-			// Assert
-			assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
-		}
-
-
-		@Test
-		@DisplayName("Test putExpirationTime with null messageRecord")
-		void testPutExpirationTime_parameter_null_messageRecord() {
-			// Arrange & Act
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> cooldownMap.putExpirationTime(playerMock, null));
-
-			// Assert
-			assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
-		}
-
-		@Test
 		@DisplayName("Test putExpirationTime when already cooling")
 		void testPutExpirationTime_already_cooling() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(new UUID(42, 17));
+			recipient = switch (RecipientResult.from(playerMock)) {
+				case ValidRecipient validRecipient -> validRecipient;
+				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			};
 
 			// Act
-			cooldownMap.putExpirationTime(playerMock, messageRecord);
+			cooldownMap.putExpirationTime(recipient, messageRecord);
 			// put second time
-			cooldownMap.putExpirationTime(playerMock, messageRecord);
+			cooldownMap.putExpirationTime(recipient, messageRecord);
 
 			// Assert TODO: test that second put did not overwrite first entry
 			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-			CooldownKey cooldownKey = CooldownKey.of(playerMock, recordKey).orElseThrow();
+			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 			assertFalse(cooldownMap.notCooling(cooldownKey));
 
@@ -155,15 +133,20 @@ class CooldownMapTest {
 	@DisplayName("isCooling Tests")
 	class isCoolingTests {
 		@Test
-		@DisplayName("Test isCooling with valid parameters")
+		@DisplayName("Test isCooling with Valid parameters")
 		void testIsCooling() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
+			recipient = switch (RecipientResult.from(playerMock)) {
+				case ValidRecipient validRecipient -> validRecipient;
+				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			};
+
 			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-			CooldownKey cooldownKey = CooldownKey.of(playerMock, recordKey).orElseThrow();
+			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 			// Act
-			cooldownMap.putExpirationTime(playerMock, messageRecord);
+			cooldownMap.putExpirationTime(recipient, messageRecord);
 
 			// assert
 			assertFalse(cooldownMap.notCooling(cooldownKey));
@@ -202,7 +185,12 @@ class CooldownMapTest {
 		void testRemoveExpired() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			cooldownMap.putExpirationTime(playerMock, messageRecord);
+			recipient = switch (RecipientResult.from(playerMock)) {
+				case ValidRecipient validRecipient -> validRecipient;
+				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			};
+
+			cooldownMap.putExpirationTime(recipient, messageRecord);
 
 			// Act
 			int count = cooldownMap.removeExpired();
@@ -216,6 +204,10 @@ class CooldownMapTest {
 		void testRemoveExpired_expired() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
+			recipient = switch (RecipientResult.from(playerMock)) {
+				case ValidRecipient validRecipient -> validRecipient;
+				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			};
 			messageRecord = new MessageRecord(
 					RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
 					true,
@@ -231,7 +223,7 @@ class CooldownMapTest {
 					"this is a final subtitle string"
 			);
 
-			cooldownMap.putExpirationTime(playerMock, messageRecord);
+			cooldownMap.putExpirationTime(recipient, messageRecord);
 
 			// Act
 			int count = cooldownMap.removeExpired();

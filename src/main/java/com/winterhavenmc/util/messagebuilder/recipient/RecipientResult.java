@@ -15,23 +15,17 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.validation;
+package com.winterhavenmc.util.messagebuilder.recipient;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import org.bukkit.command.CommandSender;
 
 
-public record LoggingAndThrowing<T>(
-        Consumer<? super T> logger,
-        Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
+public sealed interface RecipientResult permits ValidRecipient, InvalidRecipient
 {
-    @Override
-    public T handleInvalid(T value)
-    {
-        logger.accept(value);
-        ValidationException ex = exceptionSupplier.get();
-        ex.fillInStackTrace();
-        throw ex;
-    }
-
+	static RecipientResult from(CommandSender sender)
+	{
+		return sender == null
+			? new InvalidRecipient()
+			: new ValidRecipient(sender);
+	}
 }

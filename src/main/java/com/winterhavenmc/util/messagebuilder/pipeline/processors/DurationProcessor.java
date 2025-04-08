@@ -18,19 +18,14 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.time.PrettyTimeFormatter;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.Locale;
-import java.util.Objects;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -42,24 +37,19 @@ public class DurationProcessor extends MacroProcessorTemplate
 	@Override
 	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
-		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
-
 		ResultMap resultMap = new ResultMap();
+		CommandSender sender = contextMap.getRecipient().sender();
+
+		Locale locale = sender instanceof Player player
+				? Locale.forLanguageTag(player.getLocale())
+				: Locale.getDefault();
 
 		contextMap.get(key)
 				.filter(Duration.class::isInstance)
 				.map(Duration.class::cast)
-				.ifPresent(duration -> {
-					//TODO: deal with minecraft's mangled language tags
-					Locale locale = contextMap.getRecipient()
-							.filter(Player.class::isInstance)
-							.map(Player.class::cast)
-							.map(Player::getLocale)
-							.map(Locale::forLanguageTag)
-							.orElse(Locale.getDefault());
-
-					resultMap.put(key.toString(), new PrettyTimeFormatter().getFormatted(locale, duration));
-				});
+				.ifPresent(duration -> resultMap
+						.put(key.toString(), new PrettyTimeFormatter().getFormatted(locale, duration))
+				);
 
 		return resultMap;
 	}

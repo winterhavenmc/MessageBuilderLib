@@ -15,11 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.context;
+package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.messages.Macro;
+import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,6 +42,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -47,12 +53,23 @@ class ContextMapTest
 {
 	@Mock CommandSender commandSenderMock;
 	@Mock World worldMock;
+
+	ValidRecipient recipient;
+	RecordKey messageKey;
+	RecordKey macroKey;
 	ContextMap contextMap;
-	RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+
 
 	@BeforeEach
-	void setUp() {
-		contextMap = new ContextMap(commandSenderMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
+	void setUp()
+	{
+		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		macroKey = RecordKey.of(Macro.TOOL).orElseThrow();
+		recipient = switch (RecipientResult.from(commandSenderMock)) {
+			case ValidRecipient vr -> vr;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 	}
 
 
@@ -61,12 +78,13 @@ class ContextMapTest
 	{
 		// Arrange
 		Integer number = 42;
+		macroKey = RecordKey.of(Macro.PAGE_NUMBER).orElseThrow();
 
 		// Act
-		contextMap.put(recordKey, number);
+		contextMap.put(macroKey, number);
 
 		// Assert
-		assertEquals(Optional.of(42), contextMap.get(recordKey), "Retrieved value should match the original");
+		assertEquals(Optional.of(42), contextMap.get(macroKey), "Retrieved value should match the original");
 	}
 
 
@@ -74,13 +92,14 @@ class ContextMapTest
 	void testPut_parameter_null_value()
 	{
 		// Arrange
-		RecordKey key = RecordKey.of("NUMBER").orElseThrow();
+		macroKey = RecordKey.of("NUMBER").orElseThrow();
+		contextMap.put(macroKey, null);
 
 		// Act
-		contextMap.put(key, null);
+		Optional<Object> retrievedValue = contextMap.get(macroKey);
 
 		// Assert
-		assertEquals(Optional.of("NULL"), contextMap.get(key));
+		assertEquals(Optional.of("NULL"), retrievedValue);
 	}
 
 
@@ -88,12 +107,12 @@ class ContextMapTest
 	void testGetValueWithCorrectType()
 	{
 		// Arrange
-		RecordKey key = RecordKey.of("PLAYER.LOCATION").orElseThrow();
+		macroKey = RecordKey.of("PLAYER.LOCATION").orElseThrow();
 		Location location = new Location(worldMock, 10, 20, 30);
-		contextMap.put(key, location);
+		contextMap.put(macroKey, location);
 
 		// Act
-		Optional<Object> retrievedValue = contextMap.get(key);
+		Optional<Object> retrievedValue = contextMap.get(macroKey);
 
 		// Assert
 		assertNotNull(retrievedValue, "Value should be non-null");
@@ -105,12 +124,12 @@ class ContextMapTest
 	void testGetValueWithIncorrectType()
 	{
 		// Arrange
-		RecordKey key = RecordKey.of("SWORD").orElseThrow();
+		macroKey = RecordKey.of("SWORD").orElseThrow();
 		ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
-		contextMap.put(key, itemStack);
+		contextMap.put(macroKey, itemStack);
 
 		// Act
-		Optional<Object> retrievedValue = contextMap.get(key);
+		Optional<Object> retrievedValue = contextMap.get(macroKey);
 
 		// Assert
 		assertTrue(retrievedValue.isPresent());
@@ -122,14 +141,14 @@ class ContextMapTest
 	void testContains()
 	{
 		// Arrange
-		RecordKey key = RecordKey.of("LOCATION").orElseThrow();
+		macroKey = RecordKey.of("LOCATION").orElseThrow();
 		RecordKey nonExistentKey = RecordKey.of("NON_EXISTENT_KEY").orElseThrow();
 		World world = mock(World.class, "MockWorld");
 		Location location = new Location(world, 10, 20, 30);
-		contextMap.put(key, location);
+		contextMap.put(macroKey, location);
 
 		// Act & Assert
-		assertTrue(contextMap.contains(key), "Key should be present in the map");
+		assertTrue(contextMap.contains(macroKey), "Key should be present in the map");
 		assertFalse(contextMap.contains(nonExistentKey), "Key should not be present in the map");
 	}
 
@@ -138,7 +157,7 @@ class ContextMapTest
 	void testEmptyMap()
 	{
 		// Act & Assert
-		assertFalse(contextMap.contains(recordKey), "Empty map should not contain any keys");
+		assertFalse(contextMap.contains(macroKey), "Empty map should not contain any keys");
 		assertTrue(contextMap.isEmpty());
 	}
 
@@ -180,12 +199,13 @@ class ContextMapTest
 		assertEquals(2, contextMap.size());
 
 		// Act
-		contextMap.remove(key1);
+		Object removedObject = contextMap.remove(key1);
 
 		// Assert
 		assertEquals(1, contextMap.size());
 		assertFalse(contextMap.contains(key1));
 		assertTrue(contextMap.contains(key2));
+		assertNotNull(removedObject);
 	}
 
 //	@Test
@@ -205,33 +225,40 @@ class ContextMapTest
 	@Test
 	void testClear()
 	{
-		RecordKey key1 = RecordKey.of("NUMBER1").orElseThrow();
+		// Arrange
+		RecordKey macroKey1 = RecordKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
-		contextMap.put(key1, value1);
+		contextMap.put(macroKey1, value1);
 
-		RecordKey key2 = RecordKey.of("NUMBER2").orElseThrow();
+		RecordKey macroKey2 = RecordKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
-		contextMap.put(key2, value2);
 
+		contextMap.put(macroKey2, value2);
 		assertFalse(contextMap.isEmpty());
 		assertEquals(2, contextMap.size());
+
+		// Act
 		contextMap.clear();
 
+		// Assert
 		assertTrue(contextMap.isEmpty());
 	}
 
 	@Test
 	void testSize_empty() {
 		assertEquals(0, contextMap.size());
+		contextMap.put(macroKey, 42);
+		assertNotEquals(0, contextMap.size());
 	}
 
 	@Test
 	void testSize_not_empty() {
-		RecordKey key = RecordKey.of("NUMBER").orElseThrow();
-		Integer value =42;
+		// Arrange
+		RecordKey macroKey = RecordKey.of("NUMBER").orElseThrow();
+		Integer value = 42;
 
 		// Act
-		contextMap.put(key, value);
+		contextMap.put(macroKey, value);
 
 		// Assert
 		assertEquals(1, contextMap.size());
@@ -245,27 +272,31 @@ class ContextMapTest
 	@Test
 	void testIsEmpty_not_empty() {
 		// Arrange
-		RecordKey key = RecordKey.of("NUMBER").orElseThrow();
+		RecordKey macroKey = RecordKey.of("NUMBER").orElseThrow();
 		Integer value = 42;
 
 		// Act
-		contextMap.put(key, value);
+		contextMap.put(macroKey, value);
 
 		// Assert
 		assertFalse(contextMap.isEmpty());
 	}
 
-//	@Test
-//	void getRecipient() {
-//		CommandSender sender = contextMap.getRecipient();
-//
-//		assertNotNull(sender);
-//	}
+	@Test
+	void getRecipient() {
+		// Arrange & Act
+		ValidRecipient recipient = contextMap.getRecipient();
+
+		// Assert
+		assertNotNull(recipient);
+	}
 
 	@Test
 	void testGetMessageKey() {
+		// Arrange & Act
 		RecordKey result = contextMap.getMessageKey();
 
+		// Assert
 		assertEquals(MessageId.ENABLED_MESSAGE.name(), result.toString());
 	}
 

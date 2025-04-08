@@ -17,21 +17,29 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -61,7 +69,12 @@ class ContextResolverTest
     {
 		// Arrange
 		ItemStack itemStack = new ItemStack(Material.STONE);
-		ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
+		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		ValidRecipient recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		ContextMap contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
 		RecordKey numberRecordKey = RecordKey.of("NUMBER").orElseThrow();
 		RecordKey itemStackRecordKey = RecordKey.of("ITEM_STACK").orElseThrow();
 		contextMap.put(numberRecordKey, 42);
@@ -75,16 +88,6 @@ class ContextResolverTest
 		assertEquals("42", resultMap.get("NUMBER"));
 		assertTrue(resultMap.containsKey("ITEM_STACK"));
 		assertEquals("STONE", resultMap.get("ITEM_STACK"));
-	}
-
-
-	@Test
-	void testResolveContext_parameter_null__map()
-    {
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> contextResolver.resolve(null));
-
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
 	}
 
 }

@@ -17,13 +17,29 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-public enum ExceptionMessageKey
+import java.util.logging.Level;
+
+
+public enum LogLevel
 {
-	INVALID_SECTION,
-	MISSING_RESOURCE,
-	PARAMETER_EMPTY,
-	PARAMETER_INVALID,
-	PARAMETER_NULL,
-	PARAMETER_TYPE_MISMATCH,
-	RELOAD_FAILED,
+	TRACE(Level.FINEST),
+	DEBUG(Level.FINER),
+	INFO(Level.INFO),
+	WARN(Level.WARNING),
+	ERROR(Level.SEVERE);
+
+	private final Level javaLevel;
+
+
+	LogLevel(Level javaLevel)
+	{
+		this.javaLevel = javaLevel;
+	}
+
+
+	public Level toJavaUtilLevel()
+	{
+		return javaLevel;
+	}
+
 }

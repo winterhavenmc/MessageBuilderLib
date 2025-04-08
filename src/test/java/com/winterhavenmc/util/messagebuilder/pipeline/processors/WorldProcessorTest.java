@@ -17,12 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
-
+import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -36,71 +38,80 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class WorldProcessorTest {
-
+class WorldProcessorTest
+{
 	@Mock Player playerMock;
 	@Mock World worldMock;
+
+	RecordKey macroKey;
+	RecordKey messageKey;
+	ValidRecipient recipient;
 
 	static MockedStatic<MultiverseHelper> mockStatic;
 
 
 	@BeforeAll
-	static void preSetup() {
+	static void preSetup()
+	{
 		mockStatic = mockStatic(MultiverseHelper.class);
 	}
 
+	@BeforeEach
+	void setUp()
+	{
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+		macroKey = RecordKey.of("KEY").orElseThrow();
+		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+	}
+
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
 		playerMock = null;
 		worldMock = null;
 	}
 
 
 	@Test
-	void testResolveContext_parameter_null_context_map() {
-		MacroProcessor macroProcessor = new WorldProcessor();
-		RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroProcessor.resolveContext(recordKey, null));
-
-		assertEquals("The parameter 'contextMap' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	void resolveContext_with_multiverse() {
+	void resolveContext_with_multiverse()
+	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
 		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.of("MV Alias"));
-
-		RecordKey recordKey = RecordKey.of("SOME_WORLD").orElseThrow();
-		ContextMap contextMap = new ContextMap(playerMock, recordKey);
+		RecordKey macroKey = RecordKey.of("SOME_WORLD").orElseThrow();
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(recordKey, worldMock);
+		contextMap.put(macroKey, worldMock);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(recordKey.toString()));
-		assertEquals("MV Alias", resultMap.get(recordKey.toString()));
+		assertTrue(resultMap.containsKey(macroKey.toString()));
+		assertEquals("MV Alias", resultMap.get(macroKey.toString()));
 	}
 
 
 	@Test
-	void resolveContext_without_multiverse() {
+	void resolveContext_without_multiverse()
+	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
 		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.empty());
 
 		RecordKey recordKey = RecordKey.of("SOME_WORLD").orElseThrow();
-		ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
+		ContextMap contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
 		MacroProcessor macroProcessor = new WorldProcessor();
 		contextMap.put(recordKey, worldMock);
 
@@ -114,18 +125,18 @@ class WorldProcessorTest {
 
 
 	@Test
-	void resolveContext_with_null_world() {
+	void resolveContext_with_null_world()
+	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("SOME_WORLD").orElseThrow();
-		ContextMap contextMap = new ContextMap(playerMock, RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow());
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(recordKey, null);
+		contextMap.put(macroKey, null);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertNull(resultMap.get(recordKey.toString()));
+		assertNull(resultMap.get(macroKey.toString()));
 	}
 
 }

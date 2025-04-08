@@ -17,18 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.DependencyContext;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ProcessorRegistry;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ProcessorType;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 
-import java.util.Objects;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONTEXT_MAP;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 public class ContextResolver implements Resolver
 {
@@ -54,8 +48,6 @@ public class ContextResolver implements Resolver
 	@Override
 	public ResultMap resolve(final ContextMap contextMap)
 	{
-		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
-
 		return contextMap.entrySet().stream()
 				.map(entry -> processorRegistry.get(ProcessorType.matchType(entry.getValue()))
 						.resolveContext(entry.getKey(), contextMap))

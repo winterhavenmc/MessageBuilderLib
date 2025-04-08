@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.util.messagebuilder.Message;
-import com.winterhavenmc.util.messagebuilder.pipeline.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.*;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
@@ -26,13 +26,13 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.Delimiter;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.ExceptionMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -73,7 +73,6 @@ public class MacroReplacer implements Replacer
 	 */
 	public String replaceMacrosInString(final ContextMap contextMap, final String messageString)
 	{
-		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
 		validate(messageString, String::isBlank, throwing(PARAMETER_EMPTY, MESSAGE_STRING));
 
@@ -92,16 +91,15 @@ public class MacroReplacer implements Replacer
 	 */
     public ContextMap addRecipientContext(final ContextMap contextMap)
 	{
-		validate(contextMap, Objects::isNull, throwing(PARAMETER_NULL, CONTEXT_MAP));
-
-		RecordKey recordKey = RecordKey.of("RECIPIENT").orElseThrow();
+		RecordKey macroKey = RecordKey.of("RECIPIENT").orElseThrow();
 		RecordKey locationRecordKey = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
 
-		contextMap.getRecipient().ifPresent(r -> contextMap.put(recordKey, r.getName()));
-		contextMap.getRecipient()
-				.filter(Entity.class::isInstance)
-				.map(Entity.class::cast)
-				.ifPresent(entity -> contextMap.put(locationRecordKey, entity.getLocation()));
+		contextMap.put(macroKey, contextMap.getRecipient());
+
+		if (contextMap.getRecipient().sender() instanceof Player player)
+		{
+			contextMap.put(locationRecordKey, player.getLocation());
+		}
 
 		return contextMap;
 	}
