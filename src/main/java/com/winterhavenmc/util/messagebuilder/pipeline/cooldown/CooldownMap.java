@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
@@ -64,8 +63,6 @@ public final class CooldownMap implements Cooldown
 	 */
 	public boolean notCooling(final CooldownKey key)
 	{
-		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
-
 		return !(COOLDOWN_MAP.containsKey(key) && Instant.now().isBefore(COOLDOWN_MAP.get(key)));
 	}
 
