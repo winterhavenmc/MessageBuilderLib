@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
 import org.bukkit.ChatColor;
 
@@ -48,7 +48,7 @@ public final class MessageSender implements Sender
 
 
 	@Override
-	public void send(final ValidRecipient recipient, final MessageRecord messageRecord)
+	public void send(final ValidRecipient recipient, final ValidMessageRecord messageRecord)
 	{
 		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
 

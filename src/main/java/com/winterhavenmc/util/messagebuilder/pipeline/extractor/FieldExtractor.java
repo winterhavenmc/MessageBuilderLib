@@ -17,11 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
 import java.util.Map;
 
 
 @FunctionalInterface
 public interface FieldExtractor<T>
 {
-	Map<String, String> extract(T source, String macroKey);
+	Map<String, String> extract(T source, RecordKey macroKey);
 }

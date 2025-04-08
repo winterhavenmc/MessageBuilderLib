@@ -17,23 +17,32 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
-@FunctionalInterface
-public interface ValidationHandler<T>
+import org.junit.jupiter.api.Test;
+
+import java.util.Locale;
+
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationUtility.formatMessage;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationUtility.getConfiguredLocale;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+class ValidationUtilityTest
 {
-	T handleInvalid(final T value);
 
-
-	static <T> ValidationHandler<T> throwing(final ErrorMessageKey messageKey, final Parameter parameter)
+	@Test
+	void testFormatMessage()
 	{
-		return new Throwing<>(() -> new ValidationException(messageKey, parameter));
+		String result = formatMessage(ErrorMessageKey.PARAMETER_NULL, Parameter.RECIPIENT);
+
+		assertEquals("The parameter 'recipient' cannot be null.", result);
 	}
 
-
-	static <T> ValidationHandler<T> logging(final LogLevel level,
-											final ErrorMessageKey messageKey,
-											final Parameter parameter)
+	@Test
+	void testGetConfiguredLocale()
 	{
-		return new Logging<>(level, messageKey, parameter);
+		Locale result = getConfiguredLocale();
+
+		assertEquals(Locale.getDefault(), result);
 	}
 
 }

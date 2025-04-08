@@ -24,7 +24,7 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Material;
@@ -59,7 +59,7 @@ class MessageTest
 	FileConfiguration pluginConfiguration;
 	Message message;
 	ItemStack itemStack;
-	MessageRecord messageRecord;
+	ValidMessageRecord messageRecord;
 	ValidRecipient recipient;
 	RecordKey messageKey;
 
@@ -83,7 +83,7 @@ class MessageTest
 
 		message = new Message(recipient, messageKey, messageProcessorMock);
 
-		messageRecord = new MessageRecord(
+		messageRecord = new ValidMessageRecord(
 				messageKey,
 				true,
 				"this is a test message",

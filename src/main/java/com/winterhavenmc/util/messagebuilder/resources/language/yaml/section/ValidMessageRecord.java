@@ -37,7 +37,7 @@ import java.util.Optional;
  * @param titleFadeOut the title fade out setting for the message
  * @param subtitle the subtitle for the message
  */
-public record MessageRecord (
+public record ValidMessageRecord(
 		RecordKey key,
 		boolean enabled,
 		String message,
@@ -54,16 +54,16 @@ public record MessageRecord (
 	/**
 	 * Create a duplicate record with the final message string fields populated
 	 *
-	 * @param newFinalMessageString final message string
-	 * @param newFinalTitleString final title string
-	 * @param newFinalSubTitleString final subtitle string
-	 * @return a new {@code MessageRecord} with the final message string fields populated
+	 * @param finalMessageString final message string
+	 * @param finalTitleString final title string
+	 * @param finalSubTitleString final subtitle string
+	 * @return a new {@code ValidMessageRecord} with the final message string fields populated
 	 */
-	public Optional<MessageRecord> withFinalStrings(final String newFinalMessageString,
-	                                                final String newFinalTitleString,
-	                                                final String newFinalSubTitleString)
+	public Optional<ValidMessageRecord> withFinalStrings(final String finalMessageString,
+														 final String finalTitleString,
+														 final String finalSubTitleString)
 	{
-		return Optional.of(new MessageRecord(
+		return Optional.of(new ValidMessageRecord(
 				this.key,
 				this.enabled,
 				this.message,
@@ -73,9 +73,9 @@ public record MessageRecord (
 				this.titleStay,
 				this.titleFadeOut,
 				this.subtitle,
-				newFinalMessageString,
-				newFinalTitleString,
-				newFinalSubTitleString)
+				finalMessageString,
+				finalTitleString,
+				finalSubTitleString)
 		);
 	}
 

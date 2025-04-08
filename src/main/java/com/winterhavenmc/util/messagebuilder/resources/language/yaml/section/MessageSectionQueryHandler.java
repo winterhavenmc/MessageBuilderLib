@@ -36,7 +36,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * message section.
  */
-public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
+public class MessageSectionQueryHandler implements QueryHandler<ValidMessageRecord>
 {
 	private final static Section section = Section.MESSAGES;
 	private final YamlConfigurationSupplier configurationSupplier;
@@ -62,10 +62,10 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 	 * @return the message record for the MessageId
 	 */
 	@Override
-	public Optional<MessageRecord> getRecord(final RecordKey key)
+	public Optional<ValidMessageRecord> getRecord(final RecordKey key)
 	{
 		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
-				.map(messageEntry -> new MessageRecord(key,
+				.map(messageEntry -> new ValidMessageRecord(key,
 					messageEntry.getBoolean(Field.ENABLED.toKey()),
 					messageEntry.getString(Field.MESSAGE_TEXT.toKey()),
 					Duration.ofSeconds(messageEntry.getLong(Field.REPEAT_DELAY.toKey())),
@@ -81,7 +81,7 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 
 
 	/**
-	 * Enum of MessageRecord fields and their corresponding keyPath. This enum is the source of truth for
+	 * Enum of ValidMessageRecord fields and their corresponding keyPath. This enum is the source of truth for
 	 * message record field constants and their corresponding keyPaths. Other field metadata may be
 	 * encapsulated in this enum in the future.
 	 */
