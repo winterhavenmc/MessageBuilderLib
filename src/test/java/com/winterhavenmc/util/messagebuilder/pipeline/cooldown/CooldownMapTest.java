@@ -129,42 +129,27 @@ class CooldownMapTest
 	}
 
 
-	@Nested
-	@DisplayName("isCooling Tests")
-	class isCoolingTests {
-		@Test
-		@DisplayName("Test isCooling with Valid parameters")
-		void testIsCooling() {
-			// Arrange
-			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			recipient = switch (RecipientResult.from(playerMock)) {
-				case ValidRecipient validRecipient -> validRecipient;
-				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			};
+	@Test
+	@DisplayName("Test isCooling with Valid parameters")
+	void testIsCooling() {
+		// Arrange
+		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
 
-			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
+		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
-			// Act
-			cooldownMap.putExpirationTime(recipient, messageRecord);
+		// Act
+		cooldownMap.putExpirationTime(recipient, messageRecord);
 
-			// assert
-			assertFalse(cooldownMap.notCooling(cooldownKey));
+		// assert
+		assertFalse(cooldownMap.notCooling(cooldownKey));
 
-			// Verify
-			verify(playerMock, atLeastOnce()).getUniqueId();
-		}
-
-
-		@Test
-		@DisplayName("Test isCooling with null key")
-		@Disabled("not validating 'key' parameter")
-		void testIsCooling_parameter_null_key() {
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> cooldownMap.notCooling(null));
-
-			assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-		}
+		// Verify
+		verify(playerMock, atLeastOnce()).getUniqueId();
 	}
 
 
