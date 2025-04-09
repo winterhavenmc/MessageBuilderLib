@@ -119,7 +119,7 @@ public final class MessageBuilder
 	 * throws a validation exception if a null is encountered.
 	 *
 	 * @param recipient the command sender to whom the message will be sent
-	 * @param messageId the message identifier
+	 * @param messageId the message identifier enum constant
 	 * @return {@code Message} an initialized message object
 	 */
 	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
