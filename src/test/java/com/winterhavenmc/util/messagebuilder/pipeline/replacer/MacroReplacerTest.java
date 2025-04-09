@@ -72,7 +72,7 @@ class MacroReplacerTest
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		macroKey = RecordKey.of(Macro.OWNER).orElseThrow();
 
-		message = new Message(recipient, messageKey, messageProcessorMock);
+		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
 		macroReplacer = new MacroReplacer();
 	}
 

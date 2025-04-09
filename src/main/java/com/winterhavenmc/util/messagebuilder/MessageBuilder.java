@@ -125,12 +125,13 @@ public final class MessageBuilder
 	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
 	{
 		// exception thrown if null enum constant passed in messageId parameter
-		RecordKey validMessageKey = RecordKey.of(messageId).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
+		RecordKey validMessageKey = RecordKey.of(messageId)
+				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
-		// empty no-op message returned if null CommandSender is passed in recipient parameter
+		// return ValidMessage on valid RecipientResult, else empty no-op message
 		return switch (RecipientResult.from(recipient))
 		{
-			case ValidRecipient validRecipient -> new Message(validRecipient, validMessageKey, messageProcessor);
+			case ValidRecipient validRecipient -> new ValidMessage(validRecipient, validMessageKey, messageProcessor);
 			case InvalidRecipient ignored -> Message.empty();
 		};
 	}

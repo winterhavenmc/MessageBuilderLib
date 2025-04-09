@@ -25,8 +25,8 @@ import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
-
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -34,7 +34,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.Duration;
-import java.util.Optional;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +48,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MessageTest
+class ValidMessageTest
 {
 	// declare mocks
 	@Mock Player playerMock;
@@ -81,7 +80,7 @@ class MessageTest
 
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
-		message = new Message(recipient, messageKey, messageProcessorMock);
+		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
 
 		messageRecord = new ValidMessageRecord(
 				messageKey,
@@ -103,13 +102,6 @@ class MessageTest
 	}
 
 
-	@Test @DisplayName("test messageId accessor")
-	void testGetMessageId()
-	{
-		assertEquals(ENABLED_MESSAGE.name(), message.getMessageId());
-	}
-
-
 	@Test @DisplayName("test messageKey accessor")
 	void testGetMessageKey()
 	{
@@ -128,24 +120,24 @@ class MessageTest
 	}
 
 
-	@Test
-	void testIsEmpty()
-	{
-		assertFalse(message.isEmpty());
-	}
-
-
 	@Nested
 	class SetMacroTests
 	{
 		@Test @DisplayName("test setMacro (two parameter) method with valid parameters")
 		void testSetMacro()
 		{
-			// Act
+			// Arrange
 			Message newMessage = message.setMacro(Macro.TOOL, itemStack);
+			RecordKey macroKey = RecordKey.of(Macro.TOOL).orElseThrow();
+			ContextMap contextMap = newMessage.getContextMap();
+
+			// Act
+			Object object = contextMap.get(macroKey).orElseThrow();
 
 			// Assert
-			assertEquals(Optional.of(itemStack), newMessage.peek(Macro.TOOL));
+			assertInstanceOf(ItemStack.class, object);
+			assertEquals(itemStack, object);
+
 		}
 
 
@@ -234,13 +226,6 @@ class MessageTest
 	{
 		Message empty = Message.empty();
 		assertInstanceOf(Message.class, empty, "empty() should return a Message instance");
-	}
-
-	@Test
-	void emptyMessage_isEmptyShouldReturnTrue()
-	{
-		Message empty = Message.empty();
-		assertTrue(empty.isEmpty(), "isEmpty() should return true for empty messages");
 	}
 
 	@Test
