@@ -60,7 +60,7 @@ class PlaceholderMatcherTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		message = new Message(recipient, messageKey, messageProcessorMock);
+		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
 		macroReplacer = new MacroReplacer();
 	}
 

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.util.messagebuilder.Message;
+import com.winterhavenmc.util.messagebuilder.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
@@ -26,13 +26,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public final class MessageProcessor implements Processor
@@ -59,10 +53,8 @@ public final class MessageProcessor implements Processor
 
 
 	@Override
-	public void process(final Message message)
+	public void process(final ValidMessage message)
 	{
-		validate(message, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE));
-
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())
 				.filter(notCooling)
 				.flatMap(cooldownKey -> messageRetriever.getRecord(cooldownKey.getMessageKey()))

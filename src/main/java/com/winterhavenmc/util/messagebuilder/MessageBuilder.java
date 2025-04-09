@@ -66,7 +66,10 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * <p>
  * <i>example:</i>
  * <pre>
- * {@code messageBuilder.compose(recipient, E.ENABLED_MESSAGE.name())
+ * {@code
+ * MessageBuilder messageBuilder = MessageBuilder.create(plugin)
+ *
+ * messageBuilder.compose(recipient, MessageId.MESSAGE_KEY)
  *     .setMacro(Macro.PLACEHOLDER1, object)
  *     .setMacro(Macro.PLACEHOLDER2, replacementString)
  *     .send();
@@ -104,6 +107,45 @@ public final class MessageBuilder
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
 		this.messageProcessor = messageProcessor;
+	}
+
+
+	/**
+	 * Initiate the message building sequence. Parameters of this method are passed into this library domain
+	 * from the plugin, so robust validation is employed and type-safety is enforced by converting to domain specific
+	 * types and validating on creation. If a null {@code CommandSender} is passed as the recipient parameter, an
+	 * empty, no-op message is returned, as it is plausible a null or invalid value could be passed.
+	 * The enum constant messageId parameter, conversely, cannot be null under normal conditions, and therefore
+	 * throws a validation exception if a null is encountered.
+	 *
+	 * @param recipient the command sender to whom the message will be sent
+	 * @param messageId the message identifier
+	 * @return {@code Message} an initialized message object
+	 */
+	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
+	{
+		// exception thrown if null enum constant passed in messageId parameter
+		RecordKey validMessageKey = RecordKey.of(messageId)
+				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
+
+		// return ValidMessage on valid RecipientResult, else empty no-op message
+		return switch (RecipientResult.from(recipient))
+		{
+			case ValidRecipient validRecipient -> new ValidMessage(validRecipient, validMessageKey, messageProcessor);
+			case InvalidRecipient ignored -> Message.empty();
+		};
+	}
+
+
+	/**
+	 * Reload messages from configured language file
+	 */
+	public void reload()
+	{
+		if (!languageResourceManager.reload())
+		{
+			plugin.getLogger().warning(BUNDLE.getString(RELOAD_FAILED.name()));
+		}
 	}
 
 
@@ -147,52 +189,14 @@ public final class MessageBuilder
 	 * @return an instance of this class, instantiated with the mock objects
 	 */
 	static MessageBuilder test(final Plugin plugin,
-         final YamlLanguageResourceManager languageResourceManager,
-         final MessageProcessor messageProcessor)
+							   final YamlLanguageResourceManager languageResourceManager,
+							   final MessageProcessor messageProcessor)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
 		validate(messageProcessor, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
 		return new MessageBuilder(plugin, languageResourceManager, messageProcessor);
-	}
-
-
-	/**
-	 * Initiate the message building sequence. Parameters of this method are passed into this library domain
-	 * from the plugin, so robust validation is employed and type-safety is enforced by converting to domain specific
-	 * types and validating on creation. If a null {@code CommandSender} is passed as the recipient parameter, an
-	 * empty, no-op message is returned, as it is plausible a null or invalid value could be passed.
-	 * The enum constant messageId parameter, conversely, cannot be null under normal conditions, and therefore
-	 * throws a validation exception if a null is encountered.
-	 *
-	 * @param recipient the command sender to whom the message will be sent
-	 * @param messageId the message identifier
-	 * @return {@code Message} an initialized message object
-	 */
-	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
-	{
-		// exception thrown if null enum constant passed in messageId parameter
-		RecordKey validMessageKey = RecordKey.of(messageId).orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
-
-		// empty no-op message returned if null CommandSender is passed in recipient parameter
-		return switch (RecipientResult.from(recipient))
-		{
-			case ValidRecipient r -> new Message(r, validMessageKey, messageProcessor);
-			case InvalidRecipient ignored -> Message.empty();
-		};
-	}
-
-
-	/**
-	 * Reload messages from configured language file
-	 */
-	public void reload()
-	{
-		if (!languageResourceManager.reload())
-		{
-			plugin.getLogger().warning(BUNDLE.getString(RELOAD_FAILED.name()));
-		}
 	}
 
 }

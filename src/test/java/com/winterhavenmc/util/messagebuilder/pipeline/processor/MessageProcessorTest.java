@@ -121,7 +121,7 @@ class MessageProcessorTest
 		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(Optional.of(messageRecord));
-		Message message = new Message(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
+		ValidMessage message = new ValidMessage(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
 		when(macroReplacerMock.replaceMacros(messageRecord, message)).thenReturn(Optional.ofNullable(messageRecord));
 
 		// Act & Assert
@@ -130,15 +130,6 @@ class MessageProcessorTest
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();
 		verify(messageRetrieverMock, atLeastOnce()).getRecord(recordKey);
-	}
-
-
-	@Test @DisplayName("Test process method with null parameter")
-	void testProcess_parameter_null_message() {
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> messageProcessor.process(null));
-
-		assertEquals("The parameter 'message' cannot be null.", exception.getMessage());
 	}
 
 }
