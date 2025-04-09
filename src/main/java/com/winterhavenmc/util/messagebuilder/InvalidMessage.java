@@ -23,7 +23,6 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;

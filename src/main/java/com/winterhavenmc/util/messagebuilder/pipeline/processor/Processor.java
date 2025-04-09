@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.util.messagebuilder.Message;
 import com.winterhavenmc.util.messagebuilder.ValidMessage;
 
 
