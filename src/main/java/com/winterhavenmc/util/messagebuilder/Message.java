@@ -31,6 +31,6 @@ public sealed interface Message permits ValidMessage, InvalidMessage {
     ContextMap getContextMap();
 
     static Message empty() {
-        return new InvalidMessage("Null recipient passed to compose()");
+        return InvalidMessage.empty();
     }
 }
