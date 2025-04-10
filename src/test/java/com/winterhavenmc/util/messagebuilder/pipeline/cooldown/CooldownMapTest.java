@@ -216,7 +216,7 @@ class CooldownMapTest
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
-			section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), 11);
+			section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), -10);
 
 			validMessageRecord = ValidMessageRecord.from(recordKey, section);
 
