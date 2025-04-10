@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,25 +26,21 @@ import java.time.Duration;
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
 
-
-class ValidMessageRecordTest
+class InvalidMessageRecordTest
 {
-	ValidMessageRecord validMessageRecord;
+	InvalidMessageRecord validMessageRecord;
 
 	@BeforeEach
-	public void setUp()
+	void setUp()
 	{
-		validMessageRecord = new ValidMessageRecord(
+		validMessageRecord = new InvalidMessageRecord(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",
 				Duration.ofSeconds(11),
-				"this is a test title",
-				22,
-				33,
-				44,
-				"this is a test subtitle");
+				"failed to pass validation");
 	}
+
 
 	@Test
 	void testKey()
@@ -88,53 +83,13 @@ class ValidMessageRecordTest
 	}
 
 	@Test
-	void testTitle()
+	void testReason()
 	{
 		// Arrange & Act
-		String title = validMessageRecord.title();
+		String reason = validMessageRecord.reason();
 
 		// Assert
-		assertEquals("this is a test title", title);
-	}
-
-	@Test
-	void testTitleFadeIn()
-	{
-		// Arrange & Act
-		int titleFadeIn = validMessageRecord.titleFadeIn();
-
-		// Assert
-		assertEquals(22, titleFadeIn);
-	}
-
-	@Test
-	void testTitleStay()
-	{
-		// Arrange & Act
-		int titleStay = validMessageRecord.titleStay();
-
-		// Assert
-		assertEquals(33, titleStay);
-	}
-
-	@Test
-	void testTitleFadeOut()
-	{
-		// Arrange & Act
-		int titleFadeOut = validMessageRecord.titleFadeOut();
-
-		// Assert
-		assertEquals(44, titleFadeOut);
-	}
-
-	@Test
-	void testSubtitle()
-	{
-		// Arrange & Act
-		String subtitle = validMessageRecord.subtitle();
-
-		// Assert
-		assertEquals("this is a test subtitle", subtitle);
+		assertEquals("failed to pass validation", reason);
 	}
 
 }
