@@ -27,7 +27,7 @@ import java.time.Duration;
 public sealed interface MessageRecord extends SectionRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
 	RecordKey key();
-	Duration repeatDelay();
+//	Duration repeatDelay();
 
 
 	static MessageRecord fromConfiguration(final RecordKey key, final ConfigurationSection section)
@@ -47,7 +47,7 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 
 	static MessageRecord empty()
 	{
-		return new InvalidMessageRecord(null, null, "Missing configuration section.");
+		return new InvalidMessageRecord(null, "Missing configuration section.");
 	}
 
 	/**

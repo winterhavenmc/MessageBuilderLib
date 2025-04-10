@@ -21,21 +21,19 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class InvalidMessageRecordTest
 {
-	InvalidMessageRecord validMessageRecord;
+	InvalidMessageRecord invalidMessageRecord;
 
 	@BeforeEach
 	void setUp()
 	{
-		validMessageRecord = new InvalidMessageRecord(
+		invalidMessageRecord = new InvalidMessageRecord(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
-				Duration.ofSeconds(11),
 				"failed to pass validation");
 	}
 
@@ -44,27 +42,18 @@ class InvalidMessageRecordTest
 	void testKey()
 	{
 		// Arrange & Act
-		RecordKey key = validMessageRecord.key();
+		RecordKey key = invalidMessageRecord.key();
 
 		// Assert
 		assertEquals(ENABLED_MESSAGE.name(), key.toString());
 	}
 
-	@Test
-	void testRepeatDelay()
-	{
-		// Arrange & Act
-		Duration repeatDelay = validMessageRecord.repeatDelay();
-
-		// Assert
-		assertEquals(Duration.ofSeconds(11), repeatDelay);
-	}
 
 	@Test
 	void testReason()
 	{
 		// Arrange & Act
-		String reason = validMessageRecord.reason();
+		String reason = invalidMessageRecord.reason();
 
 		// Assert
 		assertEquals("failed to pass validation", reason);

@@ -130,7 +130,6 @@ public final class ValidMessageRecord implements MessageRecord, SectionRecord
 		return message;
 	}
 
-	@Override
 	public Duration repeatDelay()
 	{
 		return repeatDelay;
