@@ -29,13 +29,14 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
-
-import java.time.Duration;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +44,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,6 +62,9 @@ class MacroReplacerTest
 	RecordKey macroKey;
 	MacroReplacer macroReplacer;
 	Message message;
+	ConfigurationSection section;
+	ValidMessageRecord validMessageRecord;
+	FinalMessageRecord finalMessageRecord;
 
 
 	@BeforeEach
@@ -74,24 +79,31 @@ class MacroReplacerTest
 
 		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
 		macroReplacer = new MacroReplacer();
+
+		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+
+		section = new MemoryConfiguration();
+		section.set(MessageRecord.Field.ENABLED.toKey(), true);
+		section.set(MessageRecord.Field.MESSAGE_TEXT.toKey(), "this is a test message");
+		section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), 11);
+		section.set(MessageRecord.Field.TITLE_TEXT.toKey(), "this is a test title");
+		section.set(MessageRecord.Field.TITLE_FADE_IN.toKey(), 22);
+		section.set(MessageRecord.Field.TITLE_STAY.toKey(), 33);
+		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
+		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
+
+		validMessageRecord = ValidMessageRecord.from(messageKey, section);
+
+		finalMessageRecord = validMessageRecord.withFinalStrings(
+				"this is a final message",
+				"this is a final title",
+				"this is a final subtitle");
 	}
 
 
 	@Test @DisplayName("Test replaceMacros method with Valid parameter")
 	void testReplaceMacros_valid_parameters()
 	{
-		// Arrange
-		ValidMessageRecord validMessageRecord = ValidMessageRecord.of(
-				messageKey,
-				true,
-				"this is a message.",
-				Duration.ofSeconds(3),
-				"this is a title.",
-				20,
-				40,
-				30,
-				"this is a subtitle.");
-
 		// Act
 		FinalMessageRecord result = macroReplacer.replaceMacros(validMessageRecord, message.getContextMap());
 

@@ -19,6 +19,8 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,22 +32,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ValidMessageRecordTest
 {
+	RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 	ValidMessageRecord validMessageRecord;
+	ConfigurationSection section;
 
 	@BeforeEach
 	public void setUp()
 	{
-		validMessageRecord = ValidMessageRecord.of(
-				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
-				true,
-				"this is a test message",
-				Duration.ofSeconds(11),
-				"this is a test title",
-				22,
-				33,
-				44,
-				"this is a test subtitle");
+		section = new MemoryConfiguration();
+		section.set(MessageRecord.Field.ENABLED.toKey(), true);
+		section.set(MessageRecord.Field.MESSAGE_TEXT.toKey(), "this is a test message");
+		section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), 11);
+		section.set(MessageRecord.Field.TITLE_TEXT.toKey(), "this is a test title");
+		section.set(MessageRecord.Field.TITLE_FADE_IN.toKey(), 22);
+		section.set(MessageRecord.Field.TITLE_STAY.toKey(), 33);
+		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
+		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
+
+		validMessageRecord = ValidMessageRecord.from(recordKey, section);
 	}
+
 
 	@Test
 	void testKey()
@@ -61,10 +67,10 @@ class ValidMessageRecordTest
 	void testEnabled()
 	{
 		// Arrange & Act
-		boolean enabled = validMessageRecord.enabled();
+		boolean result = validMessageRecord.enabled();
 
 		// Assert
-		assertTrue(enabled);
+		assertTrue(result);
 	}
 
 	@Test
@@ -81,10 +87,10 @@ class ValidMessageRecordTest
 	void testRepeatDelay()
 	{
 		// Arrange & Act
-		Duration repeatDelay = validMessageRecord.repeatDelay();
+		Duration result = validMessageRecord.repeatDelay();
 
 		// Assert
-		assertEquals(Duration.ofSeconds(11), repeatDelay);
+		assertEquals(Duration.ofSeconds(11), result);
 	}
 
 	@Test

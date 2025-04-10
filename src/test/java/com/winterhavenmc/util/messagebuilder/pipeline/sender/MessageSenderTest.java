@@ -22,13 +22,15 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
 
-import java.time.Duration;
 import java.util.UUID;
 
 import org.junit.jupiter.api.*;
@@ -52,24 +54,31 @@ class MessageSenderTest
 	ValidRecipient recipient;
 	ValidMessageRecord validMessageRecord;
 	FinalMessageRecord finalMessageRecord;
+	RecordKey recordKey;
+	ConfigurationSection section;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		validMessageRecord = ValidMessageRecord.of(
-				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
-				true,
-				"this is a test message",
-				Duration.ofSeconds(11),
-				"this is a test title",
-				22,
-				33,
-				44,
-				"this is a test subtitle");
+		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
-		finalMessageRecord = validMessageRecord.withFinalStrings("this is a final message",
-				"this is a final title", "this is a final subtitle");
+		section = new MemoryConfiguration();
+		section.set(MessageRecord.Field.ENABLED.toKey(), true);
+		section.set(MessageRecord.Field.MESSAGE_TEXT.toKey(), "this is a test message");
+		section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), 11);
+		section.set(MessageRecord.Field.TITLE_TEXT.toKey(), "this is a test title");
+		section.set(MessageRecord.Field.TITLE_FADE_IN.toKey(), 22);
+		section.set(MessageRecord.Field.TITLE_STAY.toKey(), 33);
+		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
+		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
+
+		validMessageRecord = ValidMessageRecord.from(recordKey, section);
+
+		finalMessageRecord = validMessageRecord.withFinalStrings(
+				"this is a final message",
+				"this is a final title",
+				"this is a final subtitle");
 	}
 
 
