@@ -30,14 +30,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ValidItemRecordTest
 {
-	private final static String TEST_ITEM = "TEST_ITEM_1";
+	RecordKey recordKey;
+	ValidItemRecord testRecord;
+
+
+	@BeforeEach
+	void setUp()
+	{
+		recordKey = RecordKey.of("TEST_ITEM").orElseThrow();
+
+		testRecord = ValidItemRecord.of(
+				recordKey,
+				"Test Item",
+				"Test Items",
+				"Inventory Test Item",
+				"Inventory Test Items",
+				List.of("Lore line 1", "Lore line 2"));
+	}
 
 
 	@Test
 	public void constructorTest()
 	{
-		RecordKey recordKey = RecordKey.of(TEST_ITEM).orElseThrow();
-
 		ValidItemRecord testRecord = ValidItemRecord.of(
 				recordKey,
 				"Test Item",
@@ -62,19 +76,28 @@ public class ValidItemRecordTest
 	@Test
 	public void testPluralized()
 	{
-		RecordKey recordKey = RecordKey.of(TEST_ITEM).orElseThrow();
-
-		ValidItemRecord testRecord = ValidItemRecord.of(
-				recordKey,
-				"Test Item",
-				"Test Items",
-				"Inventory Test Item",
-				"Inventory Test Items",
-				List.of("Lore line 1", "Lore line 2"));
 
 		assertEquals("Test Items", testRecord.nameFor(0));
 		assertEquals("Test Item", testRecord.nameFor(1));
 		assertEquals("Test Items", testRecord.nameFor(2));
+	}
+
+	@Test
+	void testKey()
+	{
+		assertEquals("TEST_ITEM", testRecord.key().toString());
+	}
+
+	@Test
+	void nameSingular()
+	{
+		assertEquals("Test Item", testRecord.nameSingular());
+	}
+
+	@Test
+	void namePlural()
+	{
+		assertEquals("Test Items", testRecord.namePlural());
 	}
 
 }

@@ -36,7 +36,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
-import java.util.Optional;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -94,7 +93,7 @@ class MacroReplacerTest
 				"this is a subtitle.");
 
 		// Act
-		Optional<FinalMessageRecord> result = macroReplacer.replaceMacros(validMessageRecord, message.getContextMap());
+		FinalMessageRecord result = macroReplacer.replaceMacros(validMessageRecord, message.getContextMap());
 
 		// Assert
 		assertNotNull(result);

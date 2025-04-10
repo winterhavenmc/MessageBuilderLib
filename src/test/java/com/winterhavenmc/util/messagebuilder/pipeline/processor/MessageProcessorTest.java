@@ -34,7 +34,6 @@ import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
@@ -136,7 +135,7 @@ class MessageProcessorTest
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(validMessageRecord);
 		ValidMessage message = new ValidMessage(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
 
-		when(macroReplacerMock.replaceMacros(validMessageRecord, message.getContextMap())).thenReturn(Optional.of(finalMessageRecord));
+		when(macroReplacerMock.replaceMacros(validMessageRecord, message.getContextMap())).thenReturn(finalMessageRecord);
 
 		// Act & Assert
 		assertDoesNotThrow(() -> messageProcessor.process(message));

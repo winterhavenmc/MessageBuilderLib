@@ -40,7 +40,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -91,38 +90,6 @@ class MessageSenderTest
 
 		// Verify
 		verify(playerMock, atLeastOnce()).sendMessage(anyString());
-	}
-
-
-	@Test @DisplayName("test send method with null recipient parameter")
-	@Disabled("null recipient is not possible")
-	void send_parameter_null_recipient()
-	{
-		// Arrange
-		recipient = switch (RecipientResult.from(playerMock))
-		{
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new MessageSender(new CooldownMap()).send(null, finalMessageRecord));
-		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test @DisplayName("test send method with null messageRecord parameter")
-	@Disabled("null messageRecord is not possible")
-	void send_parameter_null_messageRecord()
-	{
-		// Arrange
-		recipient = switch (RecipientResult.from(playerMock))
-		{
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new MessageSender(new CooldownMap()).send(recipient, null));
-		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 	}
 
 }

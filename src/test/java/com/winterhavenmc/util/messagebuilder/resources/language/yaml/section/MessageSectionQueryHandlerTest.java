@@ -67,7 +67,8 @@ class MessageSectionQueryHandlerTest {
 
 	@Test
 	@Disabled
-	void testConstructor_supplier_contains_null() {
+	void testConstructor_supplier_contains_null()
+	{
 		// Arrange
 		configuration.set("MESSAGES", null);
 		YamlConfigurationSupplier supplier = new YamlConfigurationSupplier(configuration);

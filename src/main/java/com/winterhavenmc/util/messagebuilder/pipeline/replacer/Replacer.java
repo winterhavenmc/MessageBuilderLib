@@ -21,11 +21,9 @@ import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
-import java.util.Optional;
-
 
 @FunctionalInterface
 public interface Replacer
 {
-	Optional<FinalMessageRecord> replaceMacros(ValidMessageRecord messageRecord, ContextMap contextMap);
+	FinalMessageRecord replaceMacros(ValidMessageRecord messageRecord, ContextMap contextMap);
 }

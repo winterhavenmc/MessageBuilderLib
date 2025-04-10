@@ -50,13 +50,13 @@ public class MacroReplacer implements Replacer
 	 * @return a new {@code FinalMessageRecord} with all macro replacements performed and placed into the final string fields
 	 */
 	@Override
-	public Optional<FinalMessageRecord> replaceMacros(final ValidMessageRecord messageRecord, final ContextMap contextMap)
+	public FinalMessageRecord replaceMacros(final ValidMessageRecord messageRecord, final ContextMap contextMap)
 	{
 		// return new message record with final string fields added with macro replacements performed
-		return Optional.of(messageRecord.withFinalStrings(
+		return messageRecord.withFinalStrings(
 				replaceMacrosInString(contextMap, messageRecord.message()),
 				replaceMacrosInString(contextMap, messageRecord.title()),
-				replaceMacrosInString(contextMap, messageRecord.subtitle())));
+				replaceMacrosInString(contextMap, messageRecord.subtitle()));
 	}
 
 

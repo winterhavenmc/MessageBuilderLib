@@ -19,8 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.*;
 
 
 public final class MessageRetriever implements Retriever
@@ -40,9 +39,19 @@ public final class MessageRetriever implements Retriever
 
 
 	@Override
-	public ValidMessageRecord getRecord(final RecordKey key)
+	public MessageRecord getRecord(final RecordKey key)
 	{
-		return (ValidMessageRecord) queryHandler.getRecord(key);
+		SectionRecord result = queryHandler.getRecord(key);
+
+		return switch (result)
+		{
+			case ValidMessageRecord validMessageRecord -> validMessageRecord;
+			case InvalidMessageRecord ignored -> MessageRecord.empty();
+			case FinalMessageRecord ignored -> MessageRecord.empty();
+			case ValidConstantRecord ignored -> MessageRecord.empty();
+			case ValidItemRecord ignored -> MessageRecord.empty();
+		};
+
 	}
 
 }

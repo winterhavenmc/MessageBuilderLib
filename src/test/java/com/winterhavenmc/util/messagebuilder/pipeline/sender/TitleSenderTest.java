@@ -118,32 +118,4 @@ class TitleSenderTest
 		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(consoleRecipient, finalMessageRecord));
 	}
 
-
-	@Test
-	@Disabled("null recipient is impossible")
-	void testSend_parameter_null_recipient()
-	{
-		// Arrange
-		// Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new TitleSender(new CooldownMap()).send(null, finalMessageRecord));
-
-		// Assert
-		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test
-	@Disabled("null messageRecord is impossible")
-	void testSend_parameter_null_messageRecord()
-	{
-		// Arrange
-		// Act
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new TitleSender(new CooldownMap()).send(recipient, null));
-
-		// Assert
-		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
-	}
-
 }
