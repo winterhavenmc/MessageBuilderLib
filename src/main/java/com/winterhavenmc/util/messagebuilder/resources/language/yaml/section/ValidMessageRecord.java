@@ -46,11 +46,7 @@ public record ValidMessageRecord(
 		int titleFadeIn,
 		int titleStay,
 		int titleFadeOut,
-		String subtitle
-//		String finalMessageString,
-//		String finalTitleString,
-//		String finalSubTitleString
-) implements SectionRecord, MessageRecord
+		String subtitle) implements SectionRecord, MessageRecord
 {
 	/**
 	 * Create a duplicate record with the final message string fields populated
