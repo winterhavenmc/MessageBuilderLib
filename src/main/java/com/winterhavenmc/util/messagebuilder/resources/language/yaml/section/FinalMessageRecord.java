@@ -15,15 +15,24 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.sender;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
-import org.jetbrains.annotations.NotNull;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+
+import java.time.Duration;
 
 
-@FunctionalInterface
-public interface Sender
-{
-	void send(ValidRecipient recipient, @NotNull FinalMessageRecord messageRecord);
-}
+public record FinalMessageRecord(
+		RecordKey key,
+		boolean enabled,
+		String message,
+		Duration repeatDelay,
+		String title,
+		int titleFadeIn,
+		int titleStay,
+		int titleFadeOut,
+		String subtitle,
+		String finalMessageString,
+		String finalTitleString,
+		String finalSubTitleString) implements MessageRecord
+{ }

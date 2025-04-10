@@ -22,52 +22,54 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 
-import java.util.Objects;
-
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.logging;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
-public final class InvalidMessage implements Message
+
+public record InvalidMessage(String reason) implements Message
 {
-    private final String reason;
+	private static final InvalidMessage EMPTY_INSTANCE = new InvalidMessage("Null recipient passed to compose()");
 
-    public InvalidMessage(String reason) {
-        this.reason = reason;
-    }
+	@Override
+	public <K extends Enum<K>, V> Message setMacro(K macro, V value)
+	{
+		return this;
+	}
 
-    @Override
-    public <K extends Enum<K>, V> Message setMacro(K macro, V value) {
-        return this;
-    }
+	@Override
+	public <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value)
+	{
+		return this;
+	}
 
-    @Override
-    public <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value) {
-        return this;
-    }
+	@Override
+	public void send()
+	{
+		logging(LogLevel.WARN, PARAMETER_INVALID, RECIPIENT);
+	}
 
-    @Override
-    public void send() {
-        validate(null, Objects::isNull, logging(LogLevel.WARN, PARAMETER_INVALID, RECIPIENT));
-    }
+	@Override
+	public RecordKey getMessageKey()
+	{
+		return null;
+	}
 
-    @Override
-    public RecordKey getMessageKey() {
-        return null;
-    }
+	@Override
+	public ValidRecipient getRecipient()
+	{
+		return null;
+	}
 
-    @Override
-    public ValidRecipient getRecipient() {
-        return null;
-    }
+	@Override
+	public ContextMap getContextMap()
+	{
+		return null;
+	}
 
-    @Override
-    public ContextMap getContextMap() {
-        return null;
-    }
+	public static InvalidMessage empty()
+	{
+		return EMPTY_INSTANCE;
+	}
 
-    public String reason() {
-        return reason;
-    }
 }

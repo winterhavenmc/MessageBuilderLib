@@ -22,6 +22,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -50,13 +51,25 @@ class CooldownMapTest
 	ValidRecipient recipient;
 	CooldownKey cooldownKey;
 	CooldownMap cooldownMap;
-	ValidMessageRecord messageRecord;
+	ValidMessageRecord validMessageRecord;
+	FinalMessageRecord finalMessageRecord;
 
 	@BeforeEach
 	void setUp() {
 		cooldownMap = new CooldownMap();
 
-		messageRecord = new ValidMessageRecord(
+		validMessageRecord = new ValidMessageRecord(
+				RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
+				true,
+				"this is a message.",
+				Duration.ofSeconds(3),
+				"this is a title.",
+				20,
+				40,
+				30,
+				"this is a subtitle.");
+
+		finalMessageRecord = new FinalMessageRecord(
 				RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a message.",
@@ -68,8 +81,7 @@ class CooldownMapTest
 				"this is a subtitle.",
 				"this is a final message string",
 				"this is a final title string",
-				"this is a final subtitle string"
-		);
+				"this is a final subtitle string");
 	}
 
 
@@ -92,7 +104,7 @@ class CooldownMapTest
 					.orElseThrow();
 
 			// Act
-			cooldownMap.putExpirationTime(recipient, messageRecord);
+			cooldownMap.putExpirationTime(recipient, validMessageRecord);
 
 			// Assert
 			assertFalse(cooldownMap.notCooling(cooldownKey));
@@ -113,9 +125,9 @@ class CooldownMapTest
 			};
 
 			// Act
-			cooldownMap.putExpirationTime(recipient, messageRecord);
+			cooldownMap.putExpirationTime(recipient, validMessageRecord);
 			// put second time
-			cooldownMap.putExpirationTime(recipient, messageRecord);
+			cooldownMap.putExpirationTime(recipient, validMessageRecord);
 
 			// Assert TODO: test that second put did not overwrite first entry
 			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
@@ -129,42 +141,27 @@ class CooldownMapTest
 	}
 
 
-	@Nested
-	@DisplayName("isCooling Tests")
-	class isCoolingTests {
-		@Test
-		@DisplayName("Test isCooling with Valid parameters")
-		void testIsCooling() {
-			// Arrange
-			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			recipient = switch (RecipientResult.from(playerMock)) {
-				case ValidRecipient validRecipient -> validRecipient;
-				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			};
+	@Test
+	@DisplayName("Test isCooling with Valid parameters")
+	void testIsCooling() {
+		// Arrange
+		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
+		recipient = switch (RecipientResult.from(playerMock)) {
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
 
-			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
+		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
-			// Act
-			cooldownMap.putExpirationTime(recipient, messageRecord);
+		// Act
+		cooldownMap.putExpirationTime(recipient, validMessageRecord);
 
-			// assert
-			assertFalse(cooldownMap.notCooling(cooldownKey));
+		// assert
+		assertFalse(cooldownMap.notCooling(cooldownKey));
 
-			// Verify
-			verify(playerMock, atLeastOnce()).getUniqueId();
-		}
-
-
-		@Test
-		@DisplayName("Test isCooling with null key")
-		@Disabled("not validating 'key' parameter")
-		void testIsCooling_parameter_null_key() {
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> cooldownMap.notCooling(null));
-
-			assertEquals("The parameter 'key' cannot be null.", exception.getMessage());
-		}
+		// Verify
+		verify(playerMock, atLeastOnce()).getUniqueId();
 	}
 
 
@@ -191,7 +188,7 @@ class CooldownMapTest
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
-			cooldownMap.putExpirationTime(recipient, messageRecord);
+			cooldownMap.putExpirationTime(recipient, validMessageRecord);
 
 			// Act
 			int count = cooldownMap.removeExpired();
@@ -209,7 +206,7 @@ class CooldownMapTest
 				case ValidRecipient validRecipient -> validRecipient;
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
-			messageRecord = new ValidMessageRecord(
+			validMessageRecord = new ValidMessageRecord(
 					RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
 					true,
 					"this is a message.",
@@ -218,13 +215,9 @@ class CooldownMapTest
 					20,
 					40,
 					30,
-					"this is a subtitle.",
-					"this is a final message string",
-					"this is a final title string",
-					"this is a final subtitle string"
-			);
+					"this is a subtitle.");
 
-			cooldownMap.putExpirationTime(recipient, messageRecord);
+			cooldownMap.putExpirationTime(recipient, validMessageRecord);
 
 			// Act
 			int count = cooldownMap.removeExpired();

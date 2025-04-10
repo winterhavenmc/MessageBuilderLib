@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2025 Tim Savage.
  *
@@ -15,15 +16,14 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.sender;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
-import org.jetbrains.annotations.NotNull;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
+import java.time.Duration;
 
-@FunctionalInterface
-public interface Sender
+public sealed interface MessageRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
-	void send(ValidRecipient recipient, @NotNull FinalMessageRecord messageRecord);
+	RecordKey key();
+	Duration repeatDelay();
 }

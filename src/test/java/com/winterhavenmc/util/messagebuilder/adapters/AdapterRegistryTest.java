@@ -52,7 +52,7 @@ class AdapterRegistryTest
 
 		// Assert
 		assertNotNull(adapter);
-		assertTrue(adapter instanceof DisplayNameAdapter);
+		assertInstanceOf(DisplayNameAdapter.class, adapter);
 	}
 
 
