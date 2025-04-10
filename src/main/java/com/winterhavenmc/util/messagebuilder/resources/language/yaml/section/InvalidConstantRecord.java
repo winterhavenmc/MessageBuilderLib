@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
-public sealed interface SectionRecord permits ValidConstantRecord, ItemRecord, ValidMessageRecord
+
+public record InvalidConstantRecord(RecordKey key, String reason) implements ConstantRecord
 { }
