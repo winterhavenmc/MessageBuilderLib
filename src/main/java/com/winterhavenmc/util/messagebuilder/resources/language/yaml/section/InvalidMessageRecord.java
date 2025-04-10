@@ -25,8 +25,6 @@ import java.time.Duration;
 
 public record InvalidMessageRecord(
     RecordKey key,
-	boolean enabled,
-	String message,
 	Duration repeatDelay,
 	String reason
 ) implements MessageRecord { }
