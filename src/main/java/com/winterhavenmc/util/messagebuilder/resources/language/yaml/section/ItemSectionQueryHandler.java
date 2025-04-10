@@ -35,7 +35,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * item section.
  */
-public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
+public class ItemSectionQueryHandler implements QueryHandler<ValidItemRecord>
 {
 	private final static Section section = Section.ITEMS;
 	private final YamlConfigurationSupplier configurationSupplier;
@@ -59,13 +59,13 @@ public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 	 * found for the keyPath, an empty Optional will be returned.
 	 *
 	 * @param key the keyPath for the item record in the language file
-	 * @return an {@code Optional} ItemRecord if a matching record was found, or an empty Optional if not.
+	 * @return an {@code Optional} ValidItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	@Override
-	public Optional<ItemRecord> getRecord(final RecordKey key)
+	public Optional<ValidItemRecord> getRecord(final RecordKey key)
 	{
 		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
-				.map(itemEntry -> new ItemRecord(key,
+				.map(itemEntry -> new ValidItemRecord(key,
 						Optional.ofNullable(itemEntry.getString(Field.NAME_SINGULAR.getKeyPath())),
 						Optional.ofNullable(itemEntry.getString(Field.NAME_PLURAL.getKeyPath())),
 						Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath())),

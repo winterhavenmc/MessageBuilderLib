@@ -29,7 +29,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class ItemRecordTest
+public class ValidItemRecordTest
 {
 	private final static String TEST_ITEM = "TEST_ITEM_1";
 
@@ -39,7 +39,7 @@ public class ItemRecordTest
 	{
 		RecordKey recordKey = RecordKey.of(TEST_ITEM).orElseThrow();
 
-		ItemRecord testRecord = new ItemRecord(
+		ValidItemRecord testRecord = new ValidItemRecord(
 				recordKey,
 				Optional.of("Test Item"),
 				Optional.of("Test Items"),
@@ -65,7 +65,7 @@ public class ItemRecordTest
 	{
 		RecordKey recordKey = RecordKey.of(TEST_ITEM).orElseThrow();
 
-		ItemRecord testRecord = new ItemRecord(
+		ValidItemRecord testRecord = new ValidItemRecord(
 				recordKey,
 				Optional.of("Test Item"),
 				Optional.of("Test Items"),

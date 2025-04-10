@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,35 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
-
-import java.util.List;
-import java.util.Optional;
 
 
-/**
- * A data object record for item information contained in the language file. This class also contains
- * an enum of fields with their corresponding path key, and a static method for retrieving a record.
- *
- * @param key the keyPath in the language file for this record
- * @param nameSingular the singular name of this item
- * @param namePlural the plural name of this item
- * @param inventoryItemSingular the singular inventory name of this item
- * @param inventoryItemPlural the plural inventory name of this item
- * @param itemLore a List of Strings containing the lines of lore for this item
- */
-public record ItemRecord(
-		RecordKey key,
-		Optional<String> nameSingular,
-		Optional<String> namePlural,
-		Optional<String> inventoryItemSingular,
-		Optional<String> inventoryItemPlural,
-		List<String> itemLore) implements SectionRecord, Pluralizable
+public sealed interface ItemRecord permits InvalidItemRecord, ValidItemRecord
 {
-	@Override
-	public Optional<String> nameFor(final int quantity)
-	{
-		return (quantity == 1) ? nameSingular : namePlural;
-	}
-
+	RecordKey key();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Tim Savage.
+ * Copyright (c) 2024-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,10 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
 
-public sealed interface SectionRecord permits ValidConstantRecord, ValidItemRecord, ValidMessageRecord
-{
-	RecordKey key();
-}
+/**
+ * A data object record for item information contained in the language file. This class also contains
+ * an enum of fields with their corresponding path key, and a static method for retrieving a record.
+ *
+ * @param key the keyPath in the language file for this record
+ */
+public record InvalidItemRecord(RecordKey key, String reason) implements ItemRecord { }
