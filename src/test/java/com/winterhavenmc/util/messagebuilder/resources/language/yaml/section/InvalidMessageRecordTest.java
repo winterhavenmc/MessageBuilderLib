@@ -35,8 +35,6 @@ class InvalidMessageRecordTest
 	{
 		validMessageRecord = new InvalidMessageRecord(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
-				true,
-				"this is a test message",
 				Duration.ofSeconds(11),
 				"failed to pass validation");
 	}
@@ -50,26 +48,6 @@ class InvalidMessageRecordTest
 
 		// Assert
 		assertEquals(ENABLED_MESSAGE.name(), key.toString());
-	}
-
-	@Test
-	void testEnabled()
-	{
-		// Arrange & Act
-		boolean enabled = validMessageRecord.enabled();
-
-		// Assert
-		assertTrue(enabled);
-	}
-
-	@Test
-	void testMessage()
-	{
-		// Arrange & Act
-		String message = validMessageRecord.message();
-
-		// Assert
-		assertEquals("this is a test message", message);
 	}
 
 	@Test
