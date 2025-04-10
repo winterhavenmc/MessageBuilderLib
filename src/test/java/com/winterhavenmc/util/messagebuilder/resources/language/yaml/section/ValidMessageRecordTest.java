@@ -35,7 +35,7 @@ class ValidMessageRecordTest
 	@BeforeEach
 	public void setUp()
 	{
-		validMessageRecord = new ValidMessageRecord(
+		validMessageRecord = ValidMessageRecord.of(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",

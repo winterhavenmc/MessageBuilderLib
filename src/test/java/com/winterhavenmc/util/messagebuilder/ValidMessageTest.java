@@ -82,7 +82,7 @@ class ValidMessageTest
 
 		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
 
-		validMessageRecord = new ValidMessageRecord(
+		validMessageRecord = ValidMessageRecord.of(
 				messageKey,
 				true,
 				"this is a test message",

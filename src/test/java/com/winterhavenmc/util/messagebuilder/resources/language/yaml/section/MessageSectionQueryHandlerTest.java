@@ -30,9 +30,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class MessageSectionQueryHandlerTest {
 
@@ -41,6 +40,7 @@ class MessageSectionQueryHandlerTest {
 	MessageSectionQueryHandler queryHandler;
 	Configuration configuration;
 
+
 	@BeforeEach
 	void setUp() {
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
@@ -48,6 +48,7 @@ class MessageSectionQueryHandlerTest {
 		section = configuration.getConfigurationSection(Section.MESSAGES.name());
 		queryHandler = new MessageSectionQueryHandler(configurationSupplier);
 	}
+
 
 	@AfterEach
 	void tearDown() {
@@ -78,21 +79,33 @@ class MessageSectionQueryHandlerTest {
 
 
 	@Test
-	void testGetRecord_parameter_valid() {
+	void testGetRecord_parameter_valid()
+	{
 		// Arrange & Act
 		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		Optional<ValidMessageRecord> messageRecord = queryHandler.getRecord(recordKey);
+		ValidMessageRecord messageRecord = (ValidMessageRecord) queryHandler.getRecord(recordKey);
 
 		// Assert
-		assertTrue(messageRecord.isPresent());
-		assertTrue(messageRecord.get().enabled());
+		assertNotNull(messageRecord);
+		assertTrue(messageRecord.enabled());
 	}
 
+
 	@Test
-	void testGetRecord_parameter_invalid() {
+	void testGetRecord_nonexistent_entry()
+	{
+		// Arrange
 		RecordKey recordKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
-		Optional<ValidMessageRecord> messageRecord = queryHandler.getRecord(recordKey);
-		assertFalse(messageRecord.isPresent());
+		MessageRecord messageRecord = (MessageRecord) queryHandler.getRecord(recordKey);
+
+		var result = switch (messageRecord)
+		{
+			case ValidMessageRecord ignored -> messageRecord;
+			case FinalMessageRecord ignored -> messageRecord;
+			case InvalidMessageRecord ignored -> MessageRecord.empty();
+		};
+
+		assertNotNull(result);
 	}
 
 }

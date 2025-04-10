@@ -20,9 +20,9 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
@@ -62,32 +62,13 @@ public class ItemSectionQueryHandler implements QueryHandler<ValidItemRecord>
 	 * @return an {@code Optional} ValidItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	@Override
-	public Optional<ValidItemRecord> getRecord(final RecordKey key)
+	public SectionRecord getRecord(final RecordKey key)
 	{
-		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
-				.map(itemEntry -> new ValidItemRecord(key,
-						Optional.ofNullable(itemEntry.getString(Field.NAME_SINGULAR.getKeyPath())),
-						Optional.ofNullable(itemEntry.getString(Field.NAME_PLURAL.getKeyPath())),
-						Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath())),
-						Optional.ofNullable(itemEntry.getString(Field.INVENTORY_NAME_PLURAL.getKeyPath())),
-						itemEntry.getStringList(Field.LORE.getKeyPath())));
+		ConfigurationSection itemEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
+
+		return itemEntry == null
+				? (SectionRecord) ItemRecord.empty()
+				: (SectionRecord) ItemRecord.fromConfiguration(key, itemEntry);
 	}
 
-
-	enum Field
-	{
-		NAME_SINGULAR("NAME.SINGULAR"),
-		NAME_PLURAL("NAME.PLURAL"),
-		INVENTORY_NAME_SINGULAR("INVENTORY_NAME.SINGULAR"),
-		INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL"),
-		LORE("LORE");
-
-		private final String keyPath; // keyPath field
-
-		// constructor for enum constants
-		Field(String keyPath) { this.keyPath = keyPath; }
-
-		// getter for keyPath field
-		String getKeyPath() { return this.keyPath; }
-	}
 }

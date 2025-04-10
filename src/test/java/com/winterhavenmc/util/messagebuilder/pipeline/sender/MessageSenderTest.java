@@ -58,7 +58,7 @@ class MessageSenderTest
 	@BeforeEach
 	void setUp()
 	{
-		validMessageRecord = new ValidMessageRecord(
+		validMessageRecord = ValidMessageRecord.of(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",
@@ -70,7 +70,7 @@ class MessageSenderTest
 				"this is a test subtitle");
 
 		finalMessageRecord = validMessageRecord.withFinalStrings("this is a final message",
-				"this is a final title", "this is a final subtitle").orElseThrow();
+				"this is a final title", "this is a final subtitle");
 	}
 
 

@@ -58,7 +58,7 @@ class CooldownMapTest
 	void setUp() {
 		cooldownMap = new CooldownMap();
 
-		validMessageRecord = new ValidMessageRecord(
+		validMessageRecord = ValidMessageRecord.of(
 				RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a message.",
@@ -104,7 +104,7 @@ class CooldownMapTest
 					.orElseThrow();
 
 			// Act
-			cooldownMap.putExpirationTime(recipient, validMessageRecord);
+			cooldownMap.putExpirationTime(recipient, finalMessageRecord);
 
 			// Assert
 			assertFalse(cooldownMap.notCooling(cooldownKey));
@@ -125,9 +125,9 @@ class CooldownMapTest
 			};
 
 			// Act
-			cooldownMap.putExpirationTime(recipient, validMessageRecord);
+			cooldownMap.putExpirationTime(recipient, finalMessageRecord);
 			// put second time
-			cooldownMap.putExpirationTime(recipient, validMessageRecord);
+			cooldownMap.putExpirationTime(recipient, finalMessageRecord);
 
 			// Assert TODO: test that second put did not overwrite first entry
 			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
@@ -155,7 +155,7 @@ class CooldownMapTest
 		CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 		// Act
-		cooldownMap.putExpirationTime(recipient, validMessageRecord);
+		cooldownMap.putExpirationTime(recipient, finalMessageRecord);
 
 		// assert
 		assertFalse(cooldownMap.notCooling(cooldownKey));
@@ -188,7 +188,7 @@ class CooldownMapTest
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
-			cooldownMap.putExpirationTime(recipient, validMessageRecord);
+			cooldownMap.putExpirationTime(recipient, finalMessageRecord);
 
 			// Act
 			int count = cooldownMap.removeExpired();
@@ -206,7 +206,8 @@ class CooldownMapTest
 				case ValidRecipient validRecipient -> validRecipient;
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
-			validMessageRecord = new ValidMessageRecord(
+
+			validMessageRecord = ValidMessageRecord.of(
 					RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
 					true,
 					"this is a message.",
@@ -217,7 +218,12 @@ class CooldownMapTest
 					30,
 					"this is a subtitle.");
 
-			cooldownMap.putExpirationTime(recipient, validMessageRecord);
+			FinalMessageRecord expiredMessageRecord = validMessageRecord.withFinalStrings(
+					"this is a final message.",
+					"this is a finale title.",
+					"this is a final subtitle.");
+
+			cooldownMap.putExpirationTime(recipient, expiredMessageRecord);
 
 			// Act
 			int count = cooldownMap.removeExpired();

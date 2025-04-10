@@ -18,18 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import java.time.Instant;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public final class CooldownMap implements Cooldown
@@ -45,10 +39,8 @@ public final class CooldownMap implements Cooldown
 	 * @param messageRecord the message to be placed in the cooldown map for protoRecipient
 	 * @throws ValidationException if any parameter is null
 	 */
-	public void putExpirationTime(final ValidRecipient recipient, final MessageRecord messageRecord)
+	public void putExpirationTime(final ValidRecipient recipient, final FinalMessageRecord messageRecord)
 	{
-		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
-
 		CooldownKey.of(recipient, messageRecord.key())
 				.ifPresent(key -> COOLDOWN_MAP.put(key, Instant.now().plus(messageRecord.repeatDelay())));
 	}

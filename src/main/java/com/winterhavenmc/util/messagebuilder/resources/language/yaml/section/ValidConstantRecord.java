@@ -19,6 +19,50 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
+import java.util.Objects;
 
-public record ValidConstantRecord(RecordKey key, Object obj) implements SectionRecord, ConstantRecord
-{ }
+
+public final class ValidConstantRecord implements SectionRecord, ConstantRecord
+{
+	private final RecordKey key;
+	private final Object value;
+
+	@Override
+	public boolean equals(Object object)
+	{
+		if (!(object instanceof ValidConstantRecord that)) return false;
+
+		return key.equals(that.key) && Objects.equals(value, that.value);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int result = key.hashCode();
+		result = 31 * result + Objects.hashCode(value);
+		return result;
+	}
+
+	private ValidConstantRecord(final RecordKey key, final Object value)
+	{
+		this.key = key;
+		this.value = value;
+	}
+
+	static ValidConstantRecord of(final RecordKey key, final Object value)
+	{
+		return new ValidConstantRecord(key, value);
+	}
+
+	@Override
+	public RecordKey key()
+	{
+		return this.key;
+	}
+
+	public Object value()
+	{
+		return this.value;
+	}
+
+}

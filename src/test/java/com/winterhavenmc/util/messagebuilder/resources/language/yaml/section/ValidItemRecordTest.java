@@ -24,7 +24,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,12 +38,12 @@ public class ValidItemRecordTest
 	{
 		RecordKey recordKey = RecordKey.of(TEST_ITEM).orElseThrow();
 
-		ValidItemRecord testRecord = new ValidItemRecord(
+		ValidItemRecord testRecord = ValidItemRecord.of(
 				recordKey,
-				Optional.of("Test Item"),
-				Optional.of("Test Items"),
-				Optional.of("Inventory Test Item"),
-				Optional.of("Inventory Test Items"),
+				"Test Item",
+				"Test Items",
+				"Inventory Test Item",
+				"Inventory Test Items",
 				List.of("Lore line 1", "Lore line 2"));
 
 		assertNotNull(testRecord, "the newly created record is null.");
@@ -53,7 +52,7 @@ public class ValidItemRecordTest
 
 	@ParameterizedTest
 	@EnumSource
-	void testFields(ItemSectionQueryHandler.Field field)
+	void testFields(ItemRecord.Field field)
 	{
 		String keyPath = field.getKeyPath();
 		assertTrue(keyPath.matches("[A-Za-z][A-Za-z\\d_.]*"));
@@ -65,17 +64,17 @@ public class ValidItemRecordTest
 	{
 		RecordKey recordKey = RecordKey.of(TEST_ITEM).orElseThrow();
 
-		ValidItemRecord testRecord = new ValidItemRecord(
+		ValidItemRecord testRecord = ValidItemRecord.of(
 				recordKey,
-				Optional.of("Test Item"),
-				Optional.of("Test Items"),
-				Optional.of("Inventory Test Item"),
-				Optional.of("Inventory Test Items"),
+				"Test Item",
+				"Test Items",
+				"Inventory Test Item",
+				"Inventory Test Items",
 				List.of("Lore line 1", "Lore line 2"));
 
-		assertEquals(Optional.of("Test Items"), testRecord.nameFor(0));
-		assertEquals(Optional.of("Test Item"), testRecord.nameFor(1));
-		assertEquals(Optional.of("Test Items"), testRecord.nameFor(2));
+		assertEquals("Test Items", testRecord.nameFor(0));
+		assertEquals("Test Item", testRecord.nameFor(1));
+		assertEquals("Test Items", testRecord.nameFor(2));
 	}
 
 }

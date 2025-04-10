@@ -20,10 +20,9 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import org.bukkit.configuration.ConfigurationSection;
 
-import java.time.Duration;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
@@ -36,7 +35,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * message section.
  */
-public class MessageSectionQueryHandler implements QueryHandler<ValidMessageRecord>
+public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 {
 	private final static Section section = Section.MESSAGES;
 	private final YamlConfigurationSupplier configurationSupplier;
@@ -62,49 +61,11 @@ public class MessageSectionQueryHandler implements QueryHandler<ValidMessageReco
 	 * @return the message record for the MessageId
 	 */
 	@Override
-	public Optional<ValidMessageRecord> getRecord(final RecordKey key)
+	public SectionRecord getRecord(final RecordKey key)
 	{
-		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
-				.map(messageEntry -> new ValidMessageRecord(key,
-					messageEntry.getBoolean(Field.ENABLED.toKey()),
-					messageEntry.getString(Field.MESSAGE_TEXT.toKey()),
-					Duration.ofSeconds(messageEntry.getLong(Field.REPEAT_DELAY.toKey())),
-					messageEntry.getString(Field.TITLE_TEXT.toKey()),
-					messageEntry.getInt(Field.TITLE_FADE_IN.toKey()),
-					messageEntry.getInt(Field.TITLE_STAY.toKey()),
-					messageEntry.getInt(Field.TITLE_FADE_OUT.toKey()),
-					messageEntry.getString(Field.SUBTITLE_TEXT.toKey())));
-	}
+		ConfigurationSection messageEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
 
-
-	/**
-	 * Enum of ValidMessageRecord fields and their corresponding keyPath. This enum is the source of truth for
-	 * message record field constants and their corresponding keyPaths. Other field metadata may be
-	 * encapsulated in this enum in the future.
-	 */
-	public enum Field
-	{
-		ENABLED("ENABLED"),
-		REPEAT_DELAY("REPEAT_DELAY"),
-		MESSAGE_TEXT("MESSAGE_TEXT"),
-		TITLE_TEXT("TITLE_TEXT"),
-		TITLE_FADE_IN("TITLE_FADE_IN"),
-		TITLE_STAY("TITLE_STAY"),
-		TITLE_FADE_OUT("TITLE_FADE_OUT"),
-		SUBTITLE_TEXT("SUBTITLE_TEXT"),
-		;
-
-		private final String key;
-
-		// class constructor
-		Field(final String key) {
-			this.key = key;
-		}
-
-		// getter for key
-		public String toKey() {
-			return this.key;
-		}
+		return MessageRecord.fromConfiguration(key, messageEntry);
 	}
 
 }

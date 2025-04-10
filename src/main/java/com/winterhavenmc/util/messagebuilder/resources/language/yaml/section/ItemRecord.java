@@ -18,9 +18,46 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import org.bukkit.configuration.ConfigurationSection;
 
 
 public sealed interface ItemRecord permits InvalidItemRecord, ValidItemRecord
 {
 	RecordKey key();
+
+	static ItemRecord empty()
+	{
+		return new InvalidItemRecord(null, "Missing item section.");
+	}
+
+		static ItemRecord fromConfiguration(RecordKey key, ConfigurationSection itemEntry)
+		{
+			return itemEntry == null
+					? ItemRecord.empty()
+					: ValidItemRecord.of(key,
+							itemEntry.getString(Field.NAME_SINGULAR.getKeyPath()),
+							itemEntry.getString(Field.NAME_PLURAL.getKeyPath()),
+							itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath()),
+							itemEntry.getString(Field.INVENTORY_NAME_PLURAL.getKeyPath()),
+							itemEntry.getStringList(Field.LORE.getKeyPath()));
+		}
+
+
+	enum Field
+	{
+		NAME_SINGULAR("NAME.SINGULAR"),
+		NAME_PLURAL("NAME.PLURAL"),
+		INVENTORY_NAME_SINGULAR("INVENTORY_NAME.SINGULAR"),
+		INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL"),
+		LORE("LORE");
+
+		private final String keyPath; // keyPath field
+
+		// constructor for enum constants
+		Field(String keyPath) { this.keyPath = keyPath; }
+
+		// getter for keyPath field
+		String getKeyPath() { return this.keyPath; }
+	}
+
 }

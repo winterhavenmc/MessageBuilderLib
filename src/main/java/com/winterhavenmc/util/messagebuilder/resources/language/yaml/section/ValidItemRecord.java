@@ -21,32 +21,80 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 
 import java.util.List;
-import java.util.Optional;
 
 
-/**
- * A data object record for item information contained in the language file. This class also contains
- * an enum of fields with their corresponding path key, and a static method for retrieving a record.
- *
- * @param key the keyPath in the language file for this record
- * @param nameSingular the singular name of this item
- * @param namePlural the plural name of this item
- * @param inventoryItemSingular the singular inventory name of this item
- * @param inventoryItemPlural the plural inventory name of this item
- * @param itemLore a List of Strings containing the lines of lore for this item
- */
-public record ValidItemRecord(
-		RecordKey key,
-		Optional<String> nameSingular,
-		Optional<String> namePlural,
-		Optional<String> inventoryItemSingular,
-		Optional<String> inventoryItemPlural,
-		List<String> itemLore) implements SectionRecord, Pluralizable, ItemRecord
+public final class ValidItemRecord implements ItemRecord, SectionRecord, Pluralizable
 {
-	@Override
-	public Optional<String> nameFor(final int quantity)
+	RecordKey key;
+	String nameSingular;
+	String namePlural;
+	String inventoryItemSingular;
+	String inventoryItemPlural;
+	List<String> itemLore;
+
+
+	/**
+	 * A data object record for item information contained in the language file. This class also contains
+	 * an enum of fields with their corresponding path key, and a static method for retrieving a record.
+	 *
+	 * @param key the keyPath in the language file for this record
+	 * @param nameSingular the singular name of this item
+	 * @param namePlural the plural name of this item
+	 * @param inventoryItemSingular the singular inventory name of this item
+	 * @param inventoryItemPlural the plural inventory name of this item
+	 * @param itemLore a List of Strings containing the lines of lore for this item
+	 */
+	private ValidItemRecord(RecordKey key,
+							String nameSingular,
+							String namePlural,
+							String inventoryItemSingular,
+							String inventoryItemPlural,
+							List<String> itemLore)
 	{
-		return (quantity == 1) ? nameSingular : namePlural;
+		this.key = key;
+		this.nameSingular = nameSingular;
+		this.namePlural = namePlural;
+		this.inventoryItemSingular = inventoryItemSingular;
+		this.inventoryItemPlural = inventoryItemPlural;
+		this.itemLore = itemLore;
+	}
+
+
+	public static ValidItemRecord of(final RecordKey key,
+									 final String nameSingular,
+									 final String namePlural,
+									 final String inventoryItemSingular,
+									 final String inventoryItemPlural,
+									 final List<String> itemLore)
+	{
+		return new ValidItemRecord(key, nameSingular, namePlural, inventoryItemSingular, inventoryItemPlural, itemLore);
+	}
+
+
+	@Override
+	public RecordKey key()
+	{
+		return key;
+	}
+
+	@Override
+	public String nameSingular()
+	{
+		return nameSingular;
+	}
+
+	@Override
+	public String namePlural()
+	{
+		return namePlural;
+	}
+
+	@Override
+	public String nameFor(final int quantity)
+	{
+		return (quantity == 1)
+				? nameSingular
+				: namePlural;
 	}
 
 }

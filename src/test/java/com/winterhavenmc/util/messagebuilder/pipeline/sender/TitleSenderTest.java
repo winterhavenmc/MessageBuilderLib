@@ -68,7 +68,7 @@ class TitleSenderTest
 		};
 
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
-		validMessageRecord = new ValidMessageRecord(
+		validMessageRecord = ValidMessageRecord.of(
 				messageKey,
 				true,
 				"this is a test message",

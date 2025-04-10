@@ -82,7 +82,7 @@ class MacroReplacerTest
 	void testReplaceMacros_valid_parameters()
 	{
 		// Arrange
-		ValidMessageRecord validMessageRecord = new ValidMessageRecord(
+		ValidMessageRecord validMessageRecord = ValidMessageRecord.of(
 				messageKey,
 				true,
 				"this is a message.",

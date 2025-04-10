@@ -87,7 +87,7 @@ class MessageProcessorTest
 
 		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
-		validMessageRecord = new ValidMessageRecord(
+		validMessageRecord = ValidMessageRecord.of(
 				recordKey,
 				true,
 				"this is a test message",
@@ -133,10 +133,10 @@ class MessageProcessorTest
 		// Arrange
 		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
-		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(Optional.of(validMessageRecord));
+		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(validMessageRecord);
 		ValidMessage message = new ValidMessage(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
 
-		when(macroReplacerMock.replaceMacros(validMessageRecord, message.getContextMap())).thenReturn(Optional.ofNullable(finalMessageRecord));
+		when(macroReplacerMock.replaceMacros(validMessageRecord, message.getContextMap())).thenReturn(Optional.of(finalMessageRecord));
 
 		// Act & Assert
 		assertDoesNotThrow(() -> messageProcessor.process(message));

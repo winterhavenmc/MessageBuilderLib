@@ -25,6 +25,6 @@ import java.time.Duration;
 
 public record InvalidMessageRecord(
     RecordKey key,
-	Duration repeatDelay,
-	String reason
-) implements MessageRecord { }
+	Duration repeatDelay, //TODO: eliminate this field, currently used in cooldown map, but only valid records should be put in cooldown map
+	String reason) implements MessageRecord
+{ }
