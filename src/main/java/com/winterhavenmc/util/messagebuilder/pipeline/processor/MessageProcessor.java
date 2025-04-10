@@ -58,7 +58,7 @@ public final class MessageProcessor implements Processor
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())
 				.filter(notCooling)
 				.flatMap(cooldownKey -> messageRetriever.getRecord(cooldownKey.getMessageKey()))
-				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message))
+				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message.getContextMap()))
 				.ifPresent(processedMessage -> List.of(messageSender, titleSender)
 						.forEach(sender -> sender
 								.send(message.getRecipient(), processedMessage)));

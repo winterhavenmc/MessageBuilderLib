@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -50,13 +51,14 @@ class MessageSenderTest
 	@Mock Player playerMock;
 
 	ValidRecipient recipient;
-	ValidMessageRecord messageRecord;
+	ValidMessageRecord validMessageRecord;
+	FinalMessageRecord finalMessageRecord;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		messageRecord = new ValidMessageRecord(
+		validMessageRecord = new ValidMessageRecord(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",
@@ -65,14 +67,15 @@ class MessageSenderTest
 				22,
 				33,
 				44,
-				"this is a test subtitle",
-				"this is a final message",
-				"this is a final title",
-				"this is a final subtitle");
+				"this is a test subtitle");
+
+		finalMessageRecord = validMessageRecord.withFinalStrings("this is a final message",
+				"this is a final title", "this is a final subtitle").orElseThrow();
 	}
 
 
-	@Test @DisplayName("test send method with valid parameters")
+
+@Test @DisplayName("test send method with valid parameters")
 	void testSend_parameters_valid()
 	{
 		// Arrange
@@ -84,7 +87,7 @@ class MessageSenderTest
 		};
 
 		// Act
-		new MessageSender(new CooldownMap()).send(recipient, messageRecord);
+		new MessageSender(new CooldownMap()).send(recipient, finalMessageRecord);
 
 		// Verify
 		verify(playerMock, atLeastOnce()).sendMessage(anyString());
@@ -92,7 +95,7 @@ class MessageSenderTest
 
 
 	@Test @DisplayName("test send method with null recipient parameter")
-	@Disabled
+	@Disabled("null recipient is not possible")
 	void send_parameter_null_recipient()
 	{
 		// Arrange
@@ -102,12 +105,13 @@ class MessageSenderTest
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new MessageSender(new CooldownMap()).send(null, messageRecord));
+				() -> new MessageSender(new CooldownMap()).send(null, finalMessageRecord));
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
 	}
 
 
 	@Test @DisplayName("test send method with null messageRecord parameter")
+	@Disabled("null messageRecord is not possible")
 	void send_parameter_null_messageRecord()
 	{
 		// Arrange

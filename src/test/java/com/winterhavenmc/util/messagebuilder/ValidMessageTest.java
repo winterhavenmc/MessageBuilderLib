@@ -58,7 +58,7 @@ class ValidMessageTest
 	FileConfiguration pluginConfiguration;
 	Message message;
 	ItemStack itemStack;
-	ValidMessageRecord messageRecord;
+	ValidMessageRecord validMessageRecord;
 	ValidRecipient recipient;
 	RecordKey messageKey;
 
@@ -82,7 +82,7 @@ class ValidMessageTest
 
 		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
 
-		messageRecord = new ValidMessageRecord(
+		validMessageRecord = new ValidMessageRecord(
 				messageKey,
 				true,
 				"this is a test message",
@@ -91,7 +91,7 @@ class ValidMessageTest
 				22,
 				33,
 				44,
-				"this is a test subtitle", "", "", "");
+				"this is a test subtitle");
 	}
 
 
@@ -196,7 +196,7 @@ class ValidMessageTest
 
 
 		@Test
-		@Disabled("currently not validating against null macro")
+		@Disabled("currently not validating against null value")
 		void testSetMacro2_parameter_null_object()
 		{
 			ValidationException exception = assertThrows(ValidationException.class,

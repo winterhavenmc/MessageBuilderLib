@@ -73,10 +73,7 @@ public class MessageSectionQueryHandler implements QueryHandler<ValidMessageReco
 					messageEntry.getInt(Field.TITLE_FADE_IN.toKey()),
 					messageEntry.getInt(Field.TITLE_STAY.toKey()),
 					messageEntry.getInt(Field.TITLE_FADE_OUT.toKey()),
-					messageEntry.getString(Field.SUBTITLE_TEXT.toKey()),
-					"",
-					"",
-					""));
+					messageEntry.getString(Field.SUBTITLE_TEXT.toKey())));
 	}
 
 

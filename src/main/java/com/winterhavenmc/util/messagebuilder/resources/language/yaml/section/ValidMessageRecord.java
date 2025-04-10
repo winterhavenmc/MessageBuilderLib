@@ -46,10 +46,11 @@ public record ValidMessageRecord(
 		int titleFadeIn,
 		int titleStay,
 		int titleFadeOut,
-		String subtitle,
-		String finalMessageString,
-		String finalTitleString,
-		String finalSubTitleString) implements SectionRecord
+		String subtitle
+//		String finalMessageString,
+//		String finalTitleString,
+//		String finalSubTitleString
+) implements SectionRecord, MessageRecord
 {
 	/**
 	 * Create a duplicate record with the final message string fields populated
@@ -59,11 +60,11 @@ public record ValidMessageRecord(
 	 * @param finalSubTitleString final subtitle string
 	 * @return a new {@code ValidMessageRecord} with the final message string fields populated
 	 */
-	public Optional<ValidMessageRecord> withFinalStrings(final String finalMessageString,
+	public Optional<FinalMessageRecord> withFinalStrings(final String finalMessageString,
 														 final String finalTitleString,
 														 final String finalSubTitleString)
 	{
-		return Optional.of(new ValidMessageRecord(
+		return Optional.of(new FinalMessageRecord(
 				this.key,
 				this.enabled,
 				this.message,

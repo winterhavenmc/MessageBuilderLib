@@ -23,7 +23,6 @@ import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,8 +38,10 @@ class ValidMessageRecordTest
 	Configuration configuration;
 	ConfigurationSection messageSection;
 
+
 	@BeforeEach
-	public void setUp() {
+	public void setUp()
+	{
 		// create real configuration from resource
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 
@@ -48,14 +49,11 @@ class ValidMessageRecordTest
 		messageSection = configuration.getConfigurationSection("MESSAGES");
 	}
 
-	@AfterEach
-	public void tearDown() {
-		messageSection = null;
-	}
 
 	@Test
-	void constructorTest() {
-		ValidMessageRecord testRecord = new ValidMessageRecord(
+	void constructorTest()
+	{
+		ValidMessageRecord validMessageRecord = new ValidMessageRecord(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",
@@ -64,8 +62,9 @@ class ValidMessageRecordTest
 				22,
 				33,
 				44,
-				"this is a test subtitle", "", "", "");
-		assertNotNull(testRecord, "the newly created record is null.");
+				"this is a test subtitle");
+
+		assertNotNull(validMessageRecord, "the newly created record is null.");
 	}
 
 }

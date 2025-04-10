@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -54,7 +55,8 @@ class TitleSenderTest
 
 	ValidRecipient recipient;
 	RecordKey messageKey;
-	ValidMessageRecord messageRecord;
+	ValidMessageRecord validMessageRecord;
+	FinalMessageRecord finalMessageRecord;
 
 
 	@BeforeEach
@@ -64,20 +66,32 @@ class TitleSenderTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
+
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
-		messageRecord = new ValidMessageRecord(
-		messageKey,
-		true,
-		"this is a test message",
-		Duration.ofSeconds(11),
-		"this is a test title",
-		22,
-		33,
-		44,
-		"this is a test subtitle",
-		"this is a final message",
-		"this is a final title",
-		"this is a final subtitle");
+		validMessageRecord = new ValidMessageRecord(
+				messageKey,
+				true,
+				"this is a test message",
+				Duration.ofSeconds(11),
+				"this is a test title",
+				22,
+				33,
+				44,
+				"this is a test subtitle");
+
+		finalMessageRecord = new FinalMessageRecord(
+				messageKey,
+				true,
+				"this is a test message",
+				Duration.ofSeconds(11),
+				"this is a test title",
+				22,
+				33,
+				44,
+				"this is a test subtitle",
+				"this is a final message",
+				"this is a final title",
+				"this is a final subtitle");
 
 	}
 
@@ -86,7 +100,7 @@ class TitleSenderTest
 	void testSend_player()
 	{
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
-		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(recipient, messageRecord));
+		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(recipient, finalMessageRecord));
 	}
 
 
@@ -101,17 +115,18 @@ class TitleSenderTest
 		};
 
 		// Act & Assert
-		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(consoleRecipient, messageRecord));
+		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(consoleRecipient, finalMessageRecord));
 	}
 
 
 	@Test
-	void testSend_parameter_null_messageRecord()
+	@Disabled("null recipient is impossible")
+	void testSend_parameter_null_recipient()
 	{
 		// Arrange
 		// Act
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new TitleSender(new CooldownMap()).send(recipient, null));
+				() -> new TitleSender(new CooldownMap()).send(null, finalMessageRecord));
 
 		// Assert
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
@@ -119,13 +134,13 @@ class TitleSenderTest
 
 
 	@Test
-	@Disabled
-	void testSend_parameter_null_recipient()
+	@Disabled("null messageRecord is impossible")
+	void testSend_parameter_null_messageRecord()
 	{
 		// Arrange
 		// Act
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new TitleSender(new CooldownMap()).send(null, messageRecord));
+				() -> new TitleSender(new CooldownMap()).send(recipient, null));
 
 		// Assert
 		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());

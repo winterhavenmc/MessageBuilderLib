@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.util.messagebuilder.Message;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
 import java.util.Optional;
@@ -26,5 +27,5 @@ import java.util.Optional;
 @FunctionalInterface
 public interface Replacer
 {
-	Optional<ValidMessageRecord> replaceMacros(ValidMessageRecord messageRecord, Message message);
+	Optional<FinalMessageRecord> replaceMacros(ValidMessageRecord messageRecord, ContextMap contextMap);
 }
