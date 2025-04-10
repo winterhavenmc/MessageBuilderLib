@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,24 +18,24 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-class ValidMessageRecordTest
+class FinalMessageRecordTest
 {
-	ValidMessageRecord validMessageRecord;
+	FinalMessageRecord validMessageRecord;
 
 	@BeforeEach
-	public void setUp()
+	void setUp()
 	{
-		validMessageRecord = new ValidMessageRecord(
+		validMessageRecord = new FinalMessageRecord(
 				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a test message",
@@ -44,8 +44,12 @@ class ValidMessageRecordTest
 				22,
 				33,
 				44,
-				"this is a test subtitle");
+				"this is a test subtitle",
+				"this is a final message string",
+				"this is a final title string",
+				"this is a final subtitle string");
 	}
+
 
 	@Test
 	void testKey()
@@ -135,6 +139,36 @@ class ValidMessageRecordTest
 
 		// Assert
 		assertEquals("this is a test subtitle", subtitle);
+	}
+
+	@Test
+	void testFinalMessageString()
+	{
+		// Arrange & Act
+		String result = validMessageRecord.finalMessageString();
+
+		// Assert
+		assertEquals("this is a final message string", result);
+	}
+
+	@Test
+	void testFinalTitleString()
+	{
+		// Arrange & Act
+		String result = validMessageRecord.finalTitleString();
+
+		// Assert
+		assertEquals("this is a final title string", result);
+	}
+
+	@Test
+	void testFinalSubtitleString()
+	{
+		// Arrange & Act
+		String result = validMessageRecord.finalSubTitleString();
+
+		// Assert
+		assertEquals("this is a final subtitle string", result);
 	}
 
 }

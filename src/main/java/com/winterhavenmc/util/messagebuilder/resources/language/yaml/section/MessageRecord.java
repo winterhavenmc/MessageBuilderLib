@@ -22,6 +22,7 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
 import java.time.Duration;
 
+
 public sealed interface MessageRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
 	RecordKey key();
