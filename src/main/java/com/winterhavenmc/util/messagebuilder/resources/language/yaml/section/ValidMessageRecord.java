@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.time.Duration;
 
@@ -59,6 +60,7 @@ public final class ValidMessageRecord implements MessageRecord, SectionRecord
 					   int titleFadeOut,
 					   String subtitle)
 	{
+		// replace any null strings with blank strings
 		this.key = key;
 		this.enabled = enabled;
 		this.message = message != null ? message : "";
@@ -71,18 +73,17 @@ public final class ValidMessageRecord implements MessageRecord, SectionRecord
 	}
 
 
-	public static ValidMessageRecord of(final RecordKey key,
-										final boolean enabled,
-										final String message,
-										final Duration repeatDelay,
-										final String title,
-										final int titleFadeIn,
-										final int titleStay,
-										final int titleFadeOut,
-										final String subtitle)
+	public static ValidMessageRecord from(final RecordKey key, final ConfigurationSection section)
 	{
-		return new ValidMessageRecord(key, enabled, message, repeatDelay,
-				title, titleFadeIn, titleStay, titleFadeOut, subtitle);
+		return new ValidMessageRecord(key,
+				section.getBoolean(Field.ENABLED.toKey()),
+				section.getString(Field.MESSAGE_TEXT.toKey()),
+				Duration.ofSeconds(section.getLong(Field.REPEAT_DELAY.toKey())),
+				section.getString(Field.TITLE_TEXT.toKey()),
+				section.getInt(Field.TITLE_FADE_IN.toKey()),
+				section.getInt(Field.TITLE_STAY.toKey()),
+				section.getInt(Field.TITLE_FADE_OUT.toKey()),
+				section.getString(Field.SUBTITLE_TEXT.toKey()));
 	}
 
 
@@ -120,40 +121,48 @@ public final class ValidMessageRecord implements MessageRecord, SectionRecord
 		return key;
 	}
 
+
 	public boolean enabled()
 	{
 		return enabled;
 	}
+
 
 	public String message()
 	{
 		return message;
 	}
 
+
 	public Duration repeatDelay()
 	{
 		return repeatDelay;
 	}
+
 
 	public String title()
 	{
 		return title;
 	}
 
+
 	public int titleFadeIn()
 	{
 		return titleFadeIn;
 	}
+
 
 	public int titleStay()
 	{
 		return titleStay;
 	}
 
+
 	public int titleFadeOut()
 	{
 		return titleFadeOut;
 	}
+
 
 	public String subtitle()
 	{

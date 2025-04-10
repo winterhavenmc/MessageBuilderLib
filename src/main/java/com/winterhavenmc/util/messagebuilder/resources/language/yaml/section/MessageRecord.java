@@ -21,8 +21,6 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.time.Duration;
-
 
 public sealed interface MessageRecord extends SectionRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
@@ -33,21 +31,15 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 	{
 		return section == null
 				? MessageRecord.empty()
-				: ValidMessageRecord.of(key,
-						section.getBoolean(Field.ENABLED.toKey()),
-						section.getString(Field.MESSAGE_TEXT.toKey()),
-						Duration.ofSeconds(section.getLong(Field.REPEAT_DELAY.toKey())),
-						section.getString(Field.TITLE_TEXT.toKey()),
-						section.getInt(Field.TITLE_FADE_IN.toKey()),
-						section.getInt(Field.TITLE_STAY.toKey()),
-						section.getInt(Field.TITLE_FADE_OUT.toKey()),
-						section.getString(Field.SUBTITLE_TEXT.toKey()));
+				: ValidMessageRecord.from(key, section);
 	}
+
 
 	static MessageRecord empty()
 	{
 		return new InvalidMessageRecord(null, "Missing configuration section.");
 	}
+
 
 	/**
 	 * Enum of ValidMessageRecord fields and their corresponding keyPath. This enum is the source of truth for
