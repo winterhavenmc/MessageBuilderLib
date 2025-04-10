@@ -78,8 +78,7 @@ class MacroReplacerTest
 	}
 
 
-	@Test
-	@DisplayName("Test replaceMacros method with Valid parameter")
+	@Test @DisplayName("Test replaceMacros method with Valid parameter")
 	void testReplaceMacros_valid_parameters()
 	{
 		// Arrange
@@ -100,44 +99,6 @@ class MacroReplacerTest
 		// Assert
 		assertNotNull(result);
 	}
-
-
-	@Test
-	@DisplayName("Test replaceMacros method with null messageRecord parameter")
-	@Disabled("null messageRecord is impossible")
-	void testReplaceMacros_parameter_null_messageRecord()
-	{
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroReplacer.replaceMacros(null, message.getContextMap()));
-
-		assertEquals("The parameter 'messageRecord' cannot be null.", exception.getMessage());
-	}
-
-
-//		@Test
-//		@DisplayName("Test replaceMacros method with null message parameter")
-//		@Disabled("null message is impossible")
-//		void testReplaceMacros_parameter_null_message()
-//		{
-//			// Arrange
-//			ValidMessageRecord messageRecord = new ValidMessageRecord(
-//					messageKey,
-//					true,
-//					"this is a message.",
-//					Duration.ofSeconds(3),
-//					"this is a title.",
-//					20,
-//					40,
-//					30,
-//					"this is a subtitle.");
-//
-//			// Act
-//			ValidationException exception = assertThrows(ValidationException.class,
-//					() -> macroReplacer.replaceMacros(messageRecord, null));
-//
-//			// Assert
-//			assertEquals("The parameter 'message' cannot be null.", exception.getMessage());
-//		}
 
 
 	@Nested
