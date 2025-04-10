@@ -31,7 +31,6 @@ import org.bukkit.entity.Player;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
@@ -70,7 +69,6 @@ public class MacroReplacer implements Replacer
 	public String replaceMacrosInString(final ContextMap contextMap, final String messageString)
 	{
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
-		validate(messageString, String::isBlank, throwing(PARAMETER_EMPTY, MESSAGE_STRING));
 
 		return Optional.of(messageString)
 				.map(msg -> performReplacements(new ContextResolver().resolve(addRecipientContext(contextMap)), msg))
@@ -112,7 +110,6 @@ public class MacroReplacer implements Replacer
 	{
 		validate(replacementMap, Objects::isNull, throwing(PARAMETER_NULL, REPLACEMENT_MAP));
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
-		validate(messageString, String::isBlank, throwing(PARAMETER_EMPTY, MESSAGE_STRING));
 
 		return new PlaceholderMatcher().match(messageString)
 				.reduce(messageString, (msg, placeholder) ->
