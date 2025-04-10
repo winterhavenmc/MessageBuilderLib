@@ -27,7 +27,6 @@ import java.time.Duration;
 public sealed interface MessageRecord extends SectionRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
 	RecordKey key();
-//	Duration repeatDelay();
 
 
 	static MessageRecord fromConfiguration(final RecordKey key, final ConfigurationSection section)
@@ -64,17 +63,12 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 		TITLE_FADE_IN("TITLE_FADE_IN"),
 		TITLE_STAY("TITLE_STAY"),
 		TITLE_FADE_OUT("TITLE_FADE_OUT"),
-		SUBTITLE_TEXT("SUBTITLE_TEXT"),
-		;
+		SUBTITLE_TEXT("SUBTITLE_TEXT");
 
 		private final String key;
-
-		// class constructor
 		Field(final String key) {
 			this.key = key;
 		}
-
-		// getter for key
 		public String toKey() {
 			return this.key;
 		}
