@@ -30,7 +30,8 @@ public sealed interface Message permits ValidMessage, InvalidMessage {
     ValidRecipient getRecipient();
     ContextMap getContextMap();
 
-    static Message empty() {
+    static Message empty()
+    {
         return InvalidMessage.empty();
     }
 }
