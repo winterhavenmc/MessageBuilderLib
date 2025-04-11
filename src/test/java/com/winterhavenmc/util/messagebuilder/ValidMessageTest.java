@@ -159,7 +159,7 @@ class ValidMessageTest
 
 
 		@Test @DisplayName("test setMacro method with null value")
-		@Disabled("currently not validating against null value")
+		@Disabled("null values allowed")
 		void testSetMacro_parameter_null_value()
 		{
 			ValidationException exception = assertThrows(ValidationException.class,
@@ -201,7 +201,7 @@ class ValidMessageTest
 
 
 		@Test
-		@Disabled("currently not validating against null value")
+		@Disabled("null values allowed")
 		void testSetMacro2_parameter_null_object()
 		{
 			ValidationException exception = assertThrows(ValidationException.class,
