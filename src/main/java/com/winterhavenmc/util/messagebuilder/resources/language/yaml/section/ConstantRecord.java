@@ -26,14 +26,14 @@ public sealed interface ConstantRecord extends SectionRecord permits ValidConsta
 	static ConstantRecord from(RecordKey key, ConfigurationSection constantEntry)
 	{
 		return constantEntry == null
-				? ConstantRecord.empty()
+				? ConstantRecord.empty(key)
 				: ValidConstantRecord.create(key, constantEntry);
 	}
 
 
-	static InvalidConstantRecord empty()
+	static InvalidConstantRecord empty(final RecordKey key)
 	{
-		return new InvalidConstantRecord(null, "Missing constant section.");
+		return new InvalidConstantRecord(key, "Missing constant section.");
 	}
 
 }

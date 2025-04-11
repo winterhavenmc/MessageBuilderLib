@@ -23,17 +23,17 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {
-	static ItemRecord from(RecordKey key, ConfigurationSection itemEntry)
+	static ItemRecord from(final RecordKey itemKey, final ConfigurationSection itemEntry)
 	{
 		return itemEntry == null
-				? ItemRecord.empty()
-				: ValidItemRecord.create(key, itemEntry);
+				? ItemRecord.empty(itemKey)
+				: ValidItemRecord.create(itemKey, itemEntry);
 	}
 
 
-	static InvalidItemRecord empty()
+	static InvalidItemRecord empty(final RecordKey itemKey)
 	{
-		return new InvalidItemRecord(null, "Missing item section.");
+		return new InvalidItemRecord(itemKey, "Missing item section.");
 	}
 
 

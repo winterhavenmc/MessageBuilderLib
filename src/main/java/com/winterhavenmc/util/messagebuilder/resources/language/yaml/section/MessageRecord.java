@@ -24,17 +24,17 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public sealed interface MessageRecord extends SectionRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
-	static MessageRecord from(final RecordKey key, final ConfigurationSection section)
+	static MessageRecord from(final RecordKey messageKey, final ConfigurationSection section)
 	{
-		return section == null
-				? MessageRecord.empty()
-				: ValidMessageRecord.create(key, section);
+		return (section == null)
+				? MessageRecord.empty(messageKey)
+				: ValidMessageRecord.create(messageKey, section);
 	}
 
 
-	static InvalidMessageRecord empty()
+	static InvalidMessageRecord empty(RecordKey messageKey)
 	{
-		return new InvalidMessageRecord(null, "Missing message section.");
+		return new InvalidMessageRecord(messageKey, "Missing message section.");
 	}
 
 
