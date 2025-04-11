@@ -25,7 +25,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Sec
  * implementations of the SectionRecord interface
  */
 @FunctionalInterface
-public interface QueryHandler<R extends SectionRecord>
+public interface QueryHandler<T extends SectionRecord>
 {
-	SectionRecord getRecord(RecordKey key);
+	T getRecord(RecordKey key);
 }

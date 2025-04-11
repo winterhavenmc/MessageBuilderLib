@@ -36,7 +36,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 /**
  * Query handler for the 'CONSTANTS' section of the language file.
  */
-public class ConstantSectionQueryHandler implements QueryHandler<ValidConstantRecord>
+public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 {
 	private final static Section section = Section.CONSTANTS;
 	private final YamlConfigurationSupplier configurationSupplier;
@@ -102,13 +102,13 @@ public class ConstantSectionQueryHandler implements QueryHandler<ValidConstantRe
 	 * @return a ConstantRecord
 	 */
 	@Override
-	public SectionRecord getRecord(final RecordKey key)
+	public ConstantRecord getRecord(final RecordKey key)
 	{
 		ConfigurationSection constantEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
 
-		return constantEntry == null
-				? (SectionRecord) ConstantRecord.empty()
-				: (SectionRecord) ConstantRecord.fromConfiguration(key, constantEntry);
+		return (constantEntry == null)
+				? ConstantRecord.empty()
+				: ConstantRecord.fromConfiguration(key, constantEntry);
 	}
 
 }

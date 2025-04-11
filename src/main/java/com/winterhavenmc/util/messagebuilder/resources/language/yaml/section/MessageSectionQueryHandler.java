@@ -61,11 +61,14 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 	 * @return the message record for the MessageId
 	 */
 	@Override
-	public SectionRecord getRecord(final RecordKey key)
+	public MessageRecord getRecord(final RecordKey key)
 	{
 		ConfigurationSection messageEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
 
-		return MessageRecord.fromConfiguration(key, messageEntry);
+		return (messageEntry == null)
+				? MessageRecord.empty()
+				: MessageRecord.fromConfiguration(key, messageEntry);
+
 	}
 
 }

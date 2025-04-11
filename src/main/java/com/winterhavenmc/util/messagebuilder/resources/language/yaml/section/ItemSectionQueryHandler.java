@@ -35,7 +35,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
  * item section.
  */
-public class ItemSectionQueryHandler implements QueryHandler<ValidItemRecord>
+public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 {
 	private final static Section section = Section.ITEMS;
 	private final YamlConfigurationSupplier configurationSupplier;
@@ -62,13 +62,13 @@ public class ItemSectionQueryHandler implements QueryHandler<ValidItemRecord>
 	 * @return an {@code Optional} ValidItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	@Override
-	public SectionRecord getRecord(final RecordKey key)
+	public ItemRecord getRecord(final RecordKey key)
 	{
 		ConfigurationSection itemEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
 
-		return itemEntry == null
-				? (SectionRecord) ItemRecord.empty()
-				: (SectionRecord) ItemRecord.fromConfiguration(key, itemEntry);
+		return (itemEntry == null)
+				? ItemRecord.empty()
+				: ItemRecord.fromConfiguration(key, itemEntry);
 	}
 
 }
