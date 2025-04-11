@@ -61,7 +61,7 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	}
 
 
-	public static ValidItemRecord from(RecordKey key, ConfigurationSection itemEntry)
+	public static ValidItemRecord create(RecordKey key, ConfigurationSection itemEntry)
 	{
 		return new ValidItemRecord(key,
 				itemEntry.getString(Field.NAME_SINGULAR.getKeyPath()),

@@ -73,7 +73,7 @@ public final class ValidMessageRecord implements MessageRecord
 	}
 
 
-	public static ValidMessageRecord from(final RecordKey key, final ConfigurationSection section)
+	public static ValidMessageRecord create(final RecordKey key, final ConfigurationSection section)
 	{
 		return new ValidMessageRecord(key,
 				section.getBoolean(Field.ENABLED.toKey()),

@@ -23,11 +23,11 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public sealed interface ConstantRecord extends SectionRecord permits ValidConstantRecord, InvalidConstantRecord
 {
-	static ConstantRecord fromConfiguration(RecordKey key, ConfigurationSection constantEntry)
+	static ConstantRecord from(RecordKey key, ConfigurationSection constantEntry)
 	{
 		return constantEntry == null
 				? ConstantRecord.empty()
-				: ValidConstantRecord.of(key, constantEntry);
+				: ValidConstantRecord.create(key, constantEntry);
 	}
 
 

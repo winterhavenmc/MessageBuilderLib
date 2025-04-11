@@ -24,11 +24,11 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public sealed interface MessageRecord extends SectionRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
-	static MessageRecord fromConfiguration(final RecordKey key, final ConfigurationSection section)
+	static MessageRecord from(final RecordKey key, final ConfigurationSection section)
 	{
 		return section == null
 				? MessageRecord.empty()
-				: ValidMessageRecord.from(key, section);
+				: ValidMessageRecord.create(key, section);
 	}
 
 

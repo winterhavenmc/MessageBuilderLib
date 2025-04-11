@@ -49,7 +49,7 @@ public final class ValidConstantRecord implements ConstantRecord
 		this.value = value;
 	}
 
-	static ValidConstantRecord of(final RecordKey key, final Object value)
+	static ValidConstantRecord create(final RecordKey key, final Object value)
 	{
 		return new ValidConstantRecord(key, value);
 	}

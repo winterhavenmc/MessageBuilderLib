@@ -108,7 +108,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 
 		return (constantEntry == null)
 				? ConstantRecord.empty()
-				: ConstantRecord.fromConfiguration(key, constantEntry);
+				: ConstantRecord.from(key, constantEntry);
 	}
 
 }

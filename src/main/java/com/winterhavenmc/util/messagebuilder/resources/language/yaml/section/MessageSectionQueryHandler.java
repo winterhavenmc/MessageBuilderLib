@@ -67,7 +67,7 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 
 		return (messageEntry == null)
 				? MessageRecord.empty()
-				: MessageRecord.fromConfiguration(key, messageEntry);
+				: MessageRecord.from(key, messageEntry);
 
 	}
 

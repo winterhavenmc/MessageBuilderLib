@@ -23,11 +23,11 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {
-	static ItemRecord fromConfiguration(RecordKey key, ConfigurationSection itemEntry)
+	static ItemRecord from(RecordKey key, ConfigurationSection itemEntry)
 	{
 		return itemEntry == null
 				? ItemRecord.empty()
-				: ValidItemRecord.from(key, itemEntry);
+				: ValidItemRecord.create(key, itemEntry);
 	}
 
 

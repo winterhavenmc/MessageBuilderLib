@@ -68,7 +68,7 @@ public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 
 		return (itemEntry == null)
 				? ItemRecord.empty()
-				: ItemRecord.fromConfiguration(key, itemEntry);
+				: ItemRecord.from(key, itemEntry);
 	}
 
 }
