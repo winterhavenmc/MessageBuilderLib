@@ -23,14 +23,6 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Fin
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -59,10 +51,8 @@ public final class TitleSender implements Sender
 	 * @param messageRecord a message record containing the fields necessary for sending a title to a player
 	 */
 	@Override
-	public void send(final ValidRecipient recipient, final @NotNull FinalMessageRecord messageRecord)
+	public void send(final ValidRecipient recipient, final FinalMessageRecord messageRecord)
 	{
-		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
-
 		if (recipient.sender() instanceof Player player)
 		{
 			player.sendTitle(

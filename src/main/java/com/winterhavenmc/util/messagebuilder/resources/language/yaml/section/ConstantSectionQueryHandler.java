@@ -21,7 +21,6 @@ import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Objects;
@@ -104,7 +103,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	@Override
 	public ConstantRecord getRecord(final RecordKey key)
 	{
-		ConfigurationSection constantEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
+		Object constantEntry = configurationSupplier.getSection(section).get(key.toString());
 
 		return (constantEntry == null)
 				? ConstantRecord.empty(key)

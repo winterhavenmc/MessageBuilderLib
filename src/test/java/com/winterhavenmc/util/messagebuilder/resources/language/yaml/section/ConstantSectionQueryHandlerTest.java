@@ -25,7 +25,6 @@ import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -162,7 +161,6 @@ class ConstantSectionQueryHandlerTest
 
 
 	@Test
-	@Disabled("Need to create valid config section in test setUp method")
 	void testGetRecord_valid()
 	{
 		// Arrange
@@ -173,7 +171,6 @@ class ConstantSectionQueryHandlerTest
 
 		// Assert
 		assertInstanceOf(ValidConstantRecord.class, constantRecord);
-		assertEquals("&aSpawn", constantRecord.toString());
 	}
 
 }

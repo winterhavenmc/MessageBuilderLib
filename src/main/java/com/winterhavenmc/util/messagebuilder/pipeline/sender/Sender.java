@@ -19,11 +19,10 @@ package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
-import org.jetbrains.annotations.NotNull;
 
 
 @FunctionalInterface
 public interface Sender
 {
-	void send(ValidRecipient recipient, @NotNull FinalMessageRecord messageRecord);
+	void send(ValidRecipient recipient, FinalMessageRecord messageRecord);
 }
