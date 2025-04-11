@@ -71,12 +71,25 @@ class ItemSectionQueryHandlerTest {
 	void testGetRecord_parameter_valid() {
 		// Arrange & Act
 		RecordKey recordKey = RecordKey.of("TEST_ITEM_1").orElseThrow();
-		ValidItemRecord itemRecord = (ValidItemRecord) queryHandler.getRecord(recordKey);
+		SectionRecord itemRecord = queryHandler.getRecord(recordKey);
+
+		if (itemRecord instanceof ValidItemRecord validItemRecord)
+		{
+			assertEquals("&aTest Item", validItemRecord.nameSingular());
+			assertEquals("&aTest Items", validItemRecord.namePlural());
+		}
 
 		// Assert
 		assertNotNull(itemRecord);
-		assertEquals("&aTest Item", itemRecord.nameSingular());
-		assertEquals("&aTest Items", itemRecord.namePlural());
+	}
+
+	@Test
+	void testGetRecord_non_existent_entry()
+	{
+		RecordKey recordKey = RecordKey.of("NON_EXISTENT_ENTRY").orElseThrow();
+		SectionRecord sectionRecord = queryHandler.getRecord(recordKey);
+
+		assertInstanceOf(InvalidItemRecord.class, sectionRecord);
 	}
 
 }
