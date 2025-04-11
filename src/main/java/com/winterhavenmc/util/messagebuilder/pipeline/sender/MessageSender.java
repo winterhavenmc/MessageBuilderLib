@@ -22,14 +22,6 @@ import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 
 import org.bukkit.ChatColor;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_RECORD;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public final class MessageSender implements Sender
@@ -49,10 +41,8 @@ public final class MessageSender implements Sender
 
 
 	@Override
-	public void send(final ValidRecipient recipient, final @NotNull FinalMessageRecord messageRecord)
+	public void send(final ValidRecipient recipient, final FinalMessageRecord messageRecord)
 	{
-		validate(messageRecord, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_RECORD));
-
 		recipient.sender().sendMessage(ChatColor.translateAlternateColorCodes('&', messageRecord.finalMessageString()));
 		cooldownMap.putExpirationTime(recipient, messageRecord);
 	}
