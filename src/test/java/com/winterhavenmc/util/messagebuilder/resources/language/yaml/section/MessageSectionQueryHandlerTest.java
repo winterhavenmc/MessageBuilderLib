@@ -33,8 +33,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class MessageSectionQueryHandlerTest {
-
+class MessageSectionQueryHandlerTest
+{
 	ConfigurationSection section;
 	YamlConfigurationSupplier configurationSupplier;
 	MessageSectionQueryHandler queryHandler;
@@ -42,7 +42,8 @@ class MessageSectionQueryHandlerTest {
 
 
 	@BeforeEach
-	void setUp() {
+	void setUp()
+	{
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		section = configuration.getConfigurationSection(Section.MESSAGES.name());
@@ -51,14 +52,16 @@ class MessageSectionQueryHandlerTest {
 
 
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
 		section = null;
 		queryHandler = null;
 	}
 
 
 	@Test
-	void testConstructor_parameter_null() {
+	void testConstructor_parameter_null()
+	{
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new MessageSectionQueryHandler(null));
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
