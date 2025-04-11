@@ -24,9 +24,6 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public sealed interface MessageRecord extends SectionRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
-	RecordKey key();
-
-
 	static MessageRecord fromConfiguration(final RecordKey key, final ConfigurationSection section)
 	{
 		return section == null
@@ -35,9 +32,9 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 	}
 
 
-	static MessageRecord empty()
+	static InvalidMessageRecord empty()
 	{
-		return new InvalidMessageRecord(null, "Missing configuration section.");
+		return new InvalidMessageRecord(null, "Missing message section.");
 	}
 
 
