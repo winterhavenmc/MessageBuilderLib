@@ -48,8 +48,8 @@ public final class MessageRetriever implements Retriever
 			case ValidMessageRecord validMessageRecord -> validMessageRecord;
 			case InvalidMessageRecord ignored -> MessageRecord.empty();
 			case FinalMessageRecord ignored -> MessageRecord.empty();
-			case ValidConstantRecord ignored -> MessageRecord.empty();
-			case ValidItemRecord ignored -> MessageRecord.empty();
+			case ItemRecord ignored -> MessageRecord.empty();
+			case ConstantRecord ignored -> MessageRecord.empty();
 		};
 
 	}
