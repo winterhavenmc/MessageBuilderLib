@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 
 public class ValidationUtility
 {
-	private static final String BUNDLE_NAME = "language.errors";
+	static final String BUNDLE_NAME = "language.errors";
 
 
 	static String formatMessage(final ErrorMessageKey errorMessageKey,
