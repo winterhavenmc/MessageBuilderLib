@@ -32,13 +32,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ValidMessageRecordTest
 {
-	RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+	RecordKey recordKey;
 	ValidMessageRecord validMessageRecord;
 	ConfigurationSection section;
 
 	@BeforeEach
 	public void setUp()
 	{
+		// create record key
+		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+
+		// create configuration section for message record entry
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
 		section.set(MessageRecord.Field.MESSAGE_TEXT.toKey(), "this is a test message");
@@ -49,6 +53,7 @@ class ValidMessageRecordTest
 		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
 		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
 
+		// create valid message record from record key, message configuration section
 		validMessageRecord = ValidMessageRecord.from(recordKey, section);
 	}
 
@@ -143,4 +148,18 @@ class ValidMessageRecordTest
 		assertEquals("this is a test subtitle", subtitle);
 	}
 
+	@Test
+	void withFinalStrings()
+	{
+		// Arrange & Act
+		FinalMessageRecord finalMessageRecord = validMessageRecord.withFinalStrings(
+				"this is a final message string",
+				"this is a final title string",
+				"this is a final subtitle string");
+
+		// Assert
+		assertEquals("this is a final message string", finalMessageRecord.finalMessageString());
+		assertEquals("this is a final title string", finalMessageRecord.finalTitleString());
+		assertEquals("this is a final subtitle string", finalMessageRecord.finalSubTitleString());
+	}
 }
