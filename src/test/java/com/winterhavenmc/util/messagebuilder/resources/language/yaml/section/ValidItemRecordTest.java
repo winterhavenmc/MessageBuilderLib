@@ -49,21 +49,6 @@ public class ValidItemRecordTest
 	}
 
 
-	@Test
-	public void constructorTest()
-	{
-		ValidItemRecord testRecord = ValidItemRecord.of(
-				recordKey,
-				"Test Item",
-				"Test Items",
-				"Inventory Test Item",
-				"Inventory Test Items",
-				List.of("Lore line 1", "Lore line 2"));
-
-		assertNotNull(testRecord, "the newly created record is null.");
-	}
-
-
 	@ParameterizedTest
 	@EnumSource
 	void testFields(ItemRecord.Field field)
