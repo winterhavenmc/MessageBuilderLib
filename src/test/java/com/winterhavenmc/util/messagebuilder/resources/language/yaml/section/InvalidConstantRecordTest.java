@@ -18,9 +18,43 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public sealed interface SectionRecord permits ConstantRecord, ItemRecord, MessageRecord
+class InvalidConstantRecordTest
 {
-	RecordKey key();
+	RecordKey constantKey;
+	InvalidConstantRecord invalidConstantRecord;
+
+
+	@BeforeEach
+	void setUp()
+	{
+		constantKey = RecordKey.of("NON_EXISTENT").orElseThrow();
+
+		invalidConstantRecord = ConstantRecord.empty(constantKey);
+	}
+
+	@Test
+	void testReturnType()
+	{
+		assertInstanceOf(InvalidConstantRecord.class, invalidConstantRecord);
+	}
+
+	@Test
+	void testKey()
+	{
+		assertEquals(constantKey, invalidConstantRecord.key());
+
+	}
+
+	@Test
+	void reason()
+	{
+		assertEquals("Missing constant section.", invalidConstantRecord.reason());
+	}
+
 }

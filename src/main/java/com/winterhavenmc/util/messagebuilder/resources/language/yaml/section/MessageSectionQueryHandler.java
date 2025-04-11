@@ -57,17 +57,17 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 	/**
 	 * Retrieve a message record from the language file for the provided key
 	 *
-	 * @param key the MessageId of the message record to be retrieved
+	 * @param messageKey the MessageId of the message record to be retrieved
 	 * @return the message record for the MessageId
 	 */
 	@Override
-	public MessageRecord getRecord(final RecordKey key)
+	public MessageRecord getRecord(final RecordKey messageKey)
 	{
-		ConfigurationSection messageEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
+		ConfigurationSection messageEntry = configurationSupplier.getSection(section).getConfigurationSection(messageKey.toString());
 
 		return (messageEntry == null)
-				? MessageRecord.empty()
-				: MessageRecord.fromConfiguration(key, messageEntry);
+				? MessageRecord.empty(messageKey)
+				: MessageRecord.from(messageKey, messageEntry);
 
 	}
 

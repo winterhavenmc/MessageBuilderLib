@@ -23,7 +23,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.time.Duration;
 
 
-public final class ValidMessageRecord implements MessageRecord, SectionRecord
+public final class ValidMessageRecord implements MessageRecord
 {
 	private final RecordKey key;
 	private final boolean enabled;
@@ -73,7 +73,7 @@ public final class ValidMessageRecord implements MessageRecord, SectionRecord
 	}
 
 
-	public static ValidMessageRecord from(final RecordKey key, final ConfigurationSection section)
+	public static ValidMessageRecord create(final RecordKey key, final ConfigurationSection section)
 	{
 		return new ValidMessageRecord(key,
 				section.getBoolean(Field.ENABLED.toKey()),

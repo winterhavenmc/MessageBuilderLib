@@ -24,7 +24,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.List;
 
 
-public final class ValidItemRecord implements ItemRecord, SectionRecord, Pluralizable
+public final class ValidItemRecord implements ItemRecord, Pluralizable
 {
 	RecordKey key;
 	String nameSingular;
@@ -61,7 +61,7 @@ public final class ValidItemRecord implements ItemRecord, SectionRecord, Plurali
 	}
 
 
-	public static ValidItemRecord from(RecordKey key, ConfigurationSection itemEntry)
+	public static ValidItemRecord create(RecordKey key, ConfigurationSection itemEntry)
 	{
 		return new ValidItemRecord(key,
 				itemEntry.getString(Field.NAME_SINGULAR.getKeyPath()),

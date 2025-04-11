@@ -54,7 +54,7 @@ class ValidMessageRecordTest
 		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
 
 		// create valid message record from record key, message configuration section
-		validMessageRecord = ValidMessageRecord.from(recordKey, section);
+		validMessageRecord = ValidMessageRecord.create(recordKey, section);
 	}
 
 

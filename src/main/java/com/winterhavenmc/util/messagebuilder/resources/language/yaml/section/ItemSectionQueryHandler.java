@@ -67,8 +67,8 @@ public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 		ConfigurationSection itemEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
 
 		return (itemEntry == null)
-				? ItemRecord.empty()
-				: ItemRecord.fromConfiguration(key, itemEntry);
+				? ItemRecord.empty(key)
+				: ItemRecord.from(key, itemEntry);
 	}
 
 }
