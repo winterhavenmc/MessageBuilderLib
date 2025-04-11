@@ -21,13 +21,8 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 
-public sealed interface ConstantRecord permits ValidConstantRecord, InvalidConstantRecord
+public sealed interface ConstantRecord extends SectionRecord permits ValidConstantRecord, InvalidConstantRecord
 {
-	static ConstantRecord empty()
-	{
-		return new InvalidConstantRecord(null, "Missing constant section.");
-	}
-
 	static ConstantRecord fromConfiguration(RecordKey key, ConfigurationSection constantEntry)
 	{
 		return constantEntry == null
@@ -35,5 +30,10 @@ public sealed interface ConstantRecord permits ValidConstantRecord, InvalidConst
 				: ValidConstantRecord.of(key, constantEntry);
 	}
 
-	RecordKey key();
+
+	static InvalidConstantRecord empty()
+	{
+		return new InvalidConstantRecord(null, "Missing constant section.");
+	}
+
 }
