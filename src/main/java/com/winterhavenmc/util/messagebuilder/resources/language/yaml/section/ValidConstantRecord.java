@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import java.util.Objects;
 
 
-public final class ValidConstantRecord implements SectionRecord, ConstantRecord
+public final class ValidConstantRecord implements ConstantRecord
 {
 	private final RecordKey key;
 	private final Object value;

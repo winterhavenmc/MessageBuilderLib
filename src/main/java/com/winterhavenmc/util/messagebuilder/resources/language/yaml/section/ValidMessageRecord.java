@@ -23,7 +23,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.time.Duration;
 
 
-public final class ValidMessageRecord implements MessageRecord, SectionRecord
+public final class ValidMessageRecord implements MessageRecord
 {
 	private final RecordKey key;
 	private final boolean enabled;

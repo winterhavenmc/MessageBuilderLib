@@ -24,7 +24,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.List;
 
 
-public final class ValidItemRecord implements ItemRecord, SectionRecord, Pluralizable
+public final class ValidItemRecord implements ItemRecord, Pluralizable
 {
 	RecordKey key;
 	String nameSingular;
