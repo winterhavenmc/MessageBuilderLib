@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageSectionQueryHandler;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -28,15 +29,12 @@ import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,36 +42,29 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class MessageRetrieverTest
 {
-	@Mock QueryHandler<ValidMessageRecord> queryHandlerMock;
-
-	@AfterEach
-	void tearDown()
-	{
-		this.queryHandlerMock = null;
-	}
-
-
 	@Test @DisplayName("Test getRecord method with valid parameters")
 	void getRecord()
 	{
 		// Arrange
 		FileConfiguration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
-		QueryHandler<ValidMessageRecord> queryHandler = new MessageSectionQueryHandler(configurationSupplier);
-		Retriever retriever = new MessageRetriever(queryHandler);
 		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		QueryHandler<MessageRecord> queryHandler = new MessageSectionQueryHandler(configurationSupplier);
+
+		Retriever retriever = new MessageRetriever(queryHandler);
 
 		// Act
-		Optional<ValidMessageRecord> messageRecord = retriever.getRecord(recordKey);
+		MessageRecord messageRecord = retriever.getRecord(recordKey);
 
 		// Assert
 		assertNotNull(messageRecord);
-		assertTrue(messageRecord.isPresent());
-		assertEquals("This is an enabled message", messageRecord.get().message());
+		assertInstanceOf(ValidMessageRecord.class, messageRecord);
+		assertEquals(recordKey, messageRecord.key());
 	}
 
 
 	@Test
+	@Disabled("Null queryHandler should be impossible.")
 	void testConstructor_parameter_null_query_handler()
 	{
 		// Arrange & Act

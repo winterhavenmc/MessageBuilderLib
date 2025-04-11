@@ -24,6 +24,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -57,8 +58,8 @@ public final class MessageProcessor implements Processor
 	{
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())
 				.filter(notCooling)
-				.flatMap(cooldownKey -> messageRetriever.getRecord(cooldownKey.getMessageKey()))
-				.flatMap(messageRecord -> macroReplacer.replaceMacros(messageRecord, message.getContextMap()))
+				.map(cooldownKey -> messageRetriever.getRecord(message.getMessageKey()))
+				.map(validMessageRecord -> macroReplacer.replaceMacros((ValidMessageRecord) validMessageRecord, message.getContextMap()))
 				.ifPresent(processedMessage -> List.of(messageSender, titleSender)
 						.forEach(sender -> sender
 								.send(message.getRecipient(), processedMessage)));

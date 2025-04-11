@@ -18,6 +18,22 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import org.bukkit.configuration.ConfigurationSection;
 
 
-public record ConstantRecord(RecordKey key, Object obj) implements SectionRecord { }
+public sealed interface ConstantRecord extends SectionRecord permits ValidConstantRecord, InvalidConstantRecord
+{
+	static ConstantRecord fromConfiguration(RecordKey key, ConfigurationSection constantEntry)
+	{
+		return constantEntry == null
+				? ConstantRecord.empty()
+				: ValidConstantRecord.of(key, constantEntry);
+	}
+
+
+	static InvalidConstantRecord empty()
+	{
+		return new InvalidConstantRecord(null, "Missing constant section.");
+	}
+
+}

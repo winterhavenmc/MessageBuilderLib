@@ -19,15 +19,13 @@ package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 
-import java.util.Optional;
-
 
 /**
  * An interface that declares a query handler that is typed constrained to
  * implementations of the SectionRecord interface
  */
 @FunctionalInterface
-public interface QueryHandler<R extends SectionRecord>
+public interface QueryHandler<T extends SectionRecord>
 {
-	Optional<R> getRecord(RecordKey key);
+	T getRecord(RecordKey key);
 }

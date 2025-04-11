@@ -15,15 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
 
-@FunctionalInterface
-public interface Replacer
-{
-	FinalMessageRecord replaceMacros(ValidMessageRecord messageRecord, ContextMap contextMap);
-}
+public record InvalidConstantRecord(RecordKey key, String reason) implements ConstantRecord { }

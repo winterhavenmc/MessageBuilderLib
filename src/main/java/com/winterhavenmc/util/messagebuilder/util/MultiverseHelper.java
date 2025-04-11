@@ -23,13 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Objects;
 import java.util.Optional;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.WORLD;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -51,7 +45,7 @@ public class MultiverseHelper
 	 */
 	public static Optional<String> getAlias(final World world)
 	{
-		validate(world, Objects::isNull, throwing(PARAMETER_NULL, WORLD));
+//		validate(world, Objects::isNull, logging(LogLevel.INFO, PARAMETER_NULL, WORLD));
 
 		Plugin mvPlugin = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
 		return mvPlugin instanceof MultiverseCore multiverseCore && multiverseCore.isEnabled()

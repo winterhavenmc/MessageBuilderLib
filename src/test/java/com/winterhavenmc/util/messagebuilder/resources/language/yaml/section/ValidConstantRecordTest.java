@@ -22,47 +22,54 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ConstantRecordTest
+class ValidConstantRecordTest
 {
     @Test
     void constructorTest()
     {
         RecordKey key = RecordKey.of("testKey").orElseThrow();
         Object value = 42;
-        ConstantRecord record = new ConstantRecord(key, value);
+        ValidConstantRecord record = ValidConstantRecord.of(key, value);
 
         assertNotNull(record);
         assertEquals(key, record.key());
-        assertEquals(value, record.obj());
+        assertEquals(value, record.value());
     }
 
+
     @Test
-    void testConstantRecordWithNullValues() {
-        ConstantRecord record = new ConstantRecord(null, null);
+    void testConstantRecordWithNullValues()
+    {
+        ValidConstantRecord record = ValidConstantRecord.of(null, null);
 
         assertNull(record.key());
-        assertNull(record.obj());
+        assertNull(record.value());
     }
 
+
     @Test
-    void testConstantRecordEquality() {
+    void testConstantRecordEquality()
+    {
         RecordKey key = RecordKey.of("key").orElseThrow();
 
-        ConstantRecord record1 = new ConstantRecord(key, 123);
-        ConstantRecord record2 = new ConstantRecord(key, 123);
+        ValidConstantRecord record1 = ValidConstantRecord.of(key, 123);
+        ValidConstantRecord record2 = ValidConstantRecord.of(key, 123);
 
         assertEquals(record1, record2);
         assertEquals(record1.hashCode(), record2.hashCode());
     }
 
+
     @Test
-    void testConstantRecordInequality() {
+    void testConstantRecordInequality()
+    {
         RecordKey key1 = RecordKey.of("key").orElseThrow();
         RecordKey key2 = RecordKey.of("key").orElseThrow();
 
-        ConstantRecord record1 = new ConstantRecord(key1, 123);
-        ConstantRecord record2 = new ConstantRecord(key2, 456);
+        ValidConstantRecord record1 = ValidConstantRecord.of(key1, 123);
+        ValidConstantRecord record2 = ValidConstantRecord.of(key2, 456);
 
         assertNotEquals(record1, record2);
     }
+
 }

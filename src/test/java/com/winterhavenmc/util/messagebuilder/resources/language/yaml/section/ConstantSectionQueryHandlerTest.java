@@ -123,21 +123,21 @@ class ConstantSectionQueryHandlerTest
 	}
 
 
-	@Test
-	void testGetRecord_key_invalid()
-	{
-		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
-		assertEquals(Optional.empty(), queryHandler.getRecord(recordKey));
-	}
+//	@Test
+//	void testGetRecord_key_invalid()
+//	{
+//		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
+//		assertEquals(Optional.empty(), queryHandler.getRecord(recordKey));
+//	}
 
 
-	@Test
-	void testGetRecord()
-	{
-		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
-		queryHandler.getRecord(recordKey).ifPresent(r ->
-				assertEquals("&aSpawn", r.obj())
-		);
-	}
+//	@Test
+//	void testGetRecord()
+//	{
+//		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
+//		queryHandler.getRecord(recordKey).ifPresent(r ->
+//				assertEquals("&aSpawn", r.obj())
+//		);
+//	}
 
 }

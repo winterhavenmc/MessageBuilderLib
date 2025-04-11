@@ -18,13 +18,11 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
-
-import java.util.Optional;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 
 
 @FunctionalInterface
 public interface Retriever
 {
-	Optional<ValidMessageRecord> getRecord(RecordKey key);
+	MessageRecord getRecord(RecordKey key);
 }

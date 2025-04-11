@@ -259,8 +259,6 @@ class CooldownKeyTest
 		CooldownKey key2 = CooldownKey.of(recipient2, messageKey).orElseThrow();
 
 		// Assert
-//		System.out.println("Key 1: " + key1 + "\t" + key1.hashCode());
-//		System.out.println("Key 2: " + key2 + "\t" + key2.hashCode());;
 		assertNotEquals(key1.hashCode(), key2.hashCode());
 
 		// Verify

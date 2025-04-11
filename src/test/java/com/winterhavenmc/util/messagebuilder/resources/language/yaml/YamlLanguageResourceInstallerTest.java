@@ -63,14 +63,6 @@ public class YamlLanguageResourceInstallerTest
 		resourceInstaller.autoInstall();
 	}
 
-	@AfterEach
-	public void tearDown()
-	{
-		pluginMock = null;
-		resourceInstaller = null;
-		deleteTempFiles();
-	}
-
 
 	@Nested
 	class PatternTests
@@ -657,22 +649,14 @@ public class YamlLanguageResourceInstallerTest
 	}
 
 
-	public void deleteTempFiles() {
-		// delete language/en-US.yml file from temp dir after each test
-		try {
-			Files.deleteIfExists(Path.of(tempDataDir.getAbsolutePath(),"language", "en-US.yml"));
-		}
-		catch (IOException e) {
-			System.out.println("File exists: " + Files.exists(Path.of(tempDataDir.getAbsolutePath(),"language", "en-US.yml")));
-		}
-	}
-
-
-//	public void copyResource(final InputStream resourceStream, final Path targetFilePath) {
-//		try (resourceStream) {
-//			Files.copy(resourceStream, targetFilePath);
-//		} catch (IOException e) {
-//			System.out.println(e.getMessage());
+//	public void deleteTempFiles()
+//	{
+//		// delete language/en-US.yml file from temp dir after each test
+//		try {
+//			Files.deleteIfExists(Path.of(tempDataDir.getAbsolutePath(),"language", "en-US.yml"));
+//		}
+//		catch (IOException e) {
+//			System.out.println("File exists: " + Files.exists(Path.of(tempDataDir.getAbsolutePath(),"language", "en-US.yml")));
 //		}
 //	}
 

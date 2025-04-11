@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Objects;
@@ -98,14 +99,16 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * Stub method until implemented
 	 *
 	 * @param key the record key
-	 * @return an option of a ConstantRecord
+	 * @return a ConstantRecord
 	 */
 	@Override
-	public Optional<ConstantRecord> getRecord(final RecordKey key)
+	public ConstantRecord getRecord(final RecordKey key)
 	{
-		return Optional.ofNullable(configurationSupplier.getSection(section).getConfigurationSection(key.toString()))
-				.map(s -> s.get(key.toString()))
-				.map(value -> new ConstantRecord(key, value));
+		ConfigurationSection constantEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
+
+		return (constantEntry == null)
+				? ConstantRecord.empty()
+				: ConstantRecord.fromConfiguration(key, constantEntry);
 	}
 
 }

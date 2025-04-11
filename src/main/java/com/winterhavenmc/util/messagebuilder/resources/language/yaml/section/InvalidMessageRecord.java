@@ -20,13 +20,5 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 
-import java.time.Duration;
 
-
-public record InvalidMessageRecord(
-    RecordKey key,
-	boolean enabled,
-	String message,
-	Duration repeatDelay,
-	String reason
-) implements MessageRecord { }
+public record InvalidMessageRecord(RecordKey key, String reason) implements MessageRecord { }

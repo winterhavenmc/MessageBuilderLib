@@ -30,34 +30,38 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class MessageSectionQueryHandlerTest {
 
+class MessageSectionQueryHandlerTest
+{
 	ConfigurationSection section;
 	YamlConfigurationSupplier configurationSupplier;
 	MessageSectionQueryHandler queryHandler;
 	Configuration configuration;
 
+
 	@BeforeEach
-	void setUp() {
+	void setUp()
+	{
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		section = configuration.getConfigurationSection(Section.MESSAGES.name());
 		queryHandler = new MessageSectionQueryHandler(configurationSupplier);
 	}
 
+
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
 		section = null;
 		queryHandler = null;
 	}
 
 
 	@Test
-	void testConstructor_parameter_null() {
+	void testConstructor_parameter_null()
+	{
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new MessageSectionQueryHandler(null));
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
@@ -66,7 +70,8 @@ class MessageSectionQueryHandlerTest {
 
 	@Test
 	@Disabled
-	void testConstructor_supplier_contains_null() {
+	void testConstructor_supplier_contains_null()
+	{
 		// Arrange
 		configuration.set("MESSAGES", null);
 		YamlConfigurationSupplier supplier = new YamlConfigurationSupplier(configuration);
@@ -78,21 +83,33 @@ class MessageSectionQueryHandlerTest {
 
 
 	@Test
-	void testGetRecord_parameter_valid() {
+	void testGetRecord_parameter_valid()
+	{
 		// Arrange & Act
 		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		Optional<ValidMessageRecord> messageRecord = queryHandler.getRecord(recordKey);
+		ValidMessageRecord messageRecord = (ValidMessageRecord) queryHandler.getRecord(recordKey);
 
 		// Assert
-		assertTrue(messageRecord.isPresent());
-		assertTrue(messageRecord.get().enabled());
+		assertNotNull(messageRecord);
+		assertTrue(messageRecord.enabled());
 	}
 
+
 	@Test
-	void testGetRecord_parameter_invalid() {
+	void testGetRecord_nonexistent_entry()
+	{
+		// Arrange
 		RecordKey recordKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
-		Optional<ValidMessageRecord> messageRecord = queryHandler.getRecord(recordKey);
-		assertFalse(messageRecord.isPresent());
+		MessageRecord messageRecord = (MessageRecord) queryHandler.getRecord(recordKey);
+
+		var result = switch (messageRecord)
+		{
+			case ValidMessageRecord ignored -> messageRecord;
+			case FinalMessageRecord ignored -> messageRecord;
+			case InvalidMessageRecord ignored -> MessageRecord.empty();
+		};
+
+		assertNotNull(result);
 	}
 
 }

@@ -28,8 +28,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -39,12 +37,14 @@ class ItemSectionQueryHandlerTest {
 	ItemSectionQueryHandler queryHandler;
 	Configuration configuration;
 
+
 	@BeforeEach
 	void setUp() {
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		queryHandler = new ItemSectionQueryHandler(configurationSupplier);
 	}
+
 
 	@AfterEach
 	void tearDown() {
@@ -58,6 +58,7 @@ class ItemSectionQueryHandlerTest {
 		assertNotNull(queryHandler);
 	}
 
+
 	@Test
 	void testConstructor_parameter_null() {
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -65,22 +66,30 @@ class ItemSectionQueryHandlerTest {
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
 	}
 
+
 	@Test
 	void testGetRecord_parameter_valid() {
 		// Arrange & Act
 		RecordKey recordKey = RecordKey.of("TEST_ITEM_1").orElseThrow();
-		Optional<ItemRecord> itemRecord = queryHandler.getRecord(recordKey);
+		SectionRecord itemRecord = queryHandler.getRecord(recordKey);
+
+		if (itemRecord instanceof ValidItemRecord validItemRecord)
+		{
+			assertEquals("&aTest Item", validItemRecord.nameSingular());
+			assertEquals("&aTest Items", validItemRecord.namePlural());
+		}
 
 		// Assert
-		assertTrue(itemRecord.isPresent());
-		assertEquals(Optional.of("&aTest Item"), itemRecord.get().nameSingular());
+		assertNotNull(itemRecord);
 	}
 
 	@Test
-	void testGetRecord_parameter_invalid() {
-		RecordKey recordKey = RecordKey.of("NONEXISTENT_ITEM").orElseThrow();
-		Optional<ItemRecord> itemRecord = queryHandler.getRecord(recordKey);
-		assertFalse(itemRecord.isPresent());
+	void testGetRecord_non_existent_entry()
+	{
+		RecordKey recordKey = RecordKey.of("NON_EXISTENT_ENTRY").orElseThrow();
+		SectionRecord sectionRecord = queryHandler.getRecord(recordKey);
+
+		assertInstanceOf(InvalidItemRecord.class, sectionRecord);
 	}
 
 }

@@ -19,12 +19,48 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import org.bukkit.configuration.ConfigurationSection;
 
-import java.time.Duration;
 
-
-public sealed interface MessageRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
+public sealed interface MessageRecord extends SectionRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
-	RecordKey key();
-	Duration repeatDelay();
+	static MessageRecord fromConfiguration(final RecordKey key, final ConfigurationSection section)
+	{
+		return section == null
+				? MessageRecord.empty()
+				: ValidMessageRecord.from(key, section);
+	}
+
+
+	static InvalidMessageRecord empty()
+	{
+		return new InvalidMessageRecord(null, "Missing message section.");
+	}
+
+
+	/**
+	 * Enum of ValidMessageRecord fields and their corresponding keyPath. This enum is the source of truth for
+	 * message record field constants and their corresponding keyPaths. Other field metadata may be
+	 * encapsulated in this enum in the future.
+	 */
+	enum Field
+	{
+		ENABLED("ENABLED"),
+		REPEAT_DELAY("REPEAT_DELAY"),
+		MESSAGE_TEXT("MESSAGE_TEXT"),
+		TITLE_TEXT("TITLE_TEXT"),
+		TITLE_FADE_IN("TITLE_FADE_IN"),
+		TITLE_STAY("TITLE_STAY"),
+		TITLE_FADE_OUT("TITLE_FADE_OUT"),
+		SUBTITLE_TEXT("SUBTITLE_TEXT");
+
+		private final String key;
+		Field(final String key) {
+			this.key = key;
+		}
+		public String toKey() {
+			return this.key;
+		}
+	}
+
 }
