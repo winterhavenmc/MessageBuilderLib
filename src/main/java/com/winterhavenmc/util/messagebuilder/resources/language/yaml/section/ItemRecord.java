@@ -21,26 +21,20 @@ import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 
-public sealed interface ItemRecord permits InvalidItemRecord, ValidItemRecord
+public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {
-	RecordKey key();
+	static ItemRecord fromConfiguration(RecordKey key, ConfigurationSection itemEntry)
+	{
+		return itemEntry == null
+				? ItemRecord.empty()
+				: ValidItemRecord.from(key, itemEntry);
+	}
 
-	static ItemRecord empty()
+
+	static InvalidItemRecord empty()
 	{
 		return new InvalidItemRecord(null, "Missing item section.");
 	}
-
-		static ItemRecord fromConfiguration(RecordKey key, ConfigurationSection itemEntry)
-		{
-			return itemEntry == null
-					? ItemRecord.empty()
-					: ValidItemRecord.of(key,
-							itemEntry.getString(Field.NAME_SINGULAR.getKeyPath()),
-							itemEntry.getString(Field.NAME_PLURAL.getKeyPath()),
-							itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath()),
-							itemEntry.getString(Field.INVENTORY_NAME_PLURAL.getKeyPath()),
-							itemEntry.getStringList(Field.LORE.getKeyPath()));
-		}
 
 
 	enum Field
