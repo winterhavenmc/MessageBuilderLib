@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 
@@ -60,14 +61,14 @@ public final class ValidItemRecord implements ItemRecord, SectionRecord, Plurali
 	}
 
 
-	public static ValidItemRecord of(final RecordKey key,
-									 final String nameSingular,
-									 final String namePlural,
-									 final String inventoryItemSingular,
-									 final String inventoryItemPlural,
-									 final List<String> itemLore)
+	public static ValidItemRecord from(RecordKey key, ConfigurationSection itemEntry)
 	{
-		return new ValidItemRecord(key, nameSingular, namePlural, inventoryItemSingular, inventoryItemPlural, itemLore);
+		return new ValidItemRecord(key,
+				itemEntry.getString(Field.NAME_SINGULAR.getKeyPath()),
+				itemEntry.getString(Field.NAME_PLURAL.getKeyPath()),
+				itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath()),
+				itemEntry.getString(Field.INVENTORY_NAME_PLURAL.getKeyPath()),
+				itemEntry.getStringList(Field.LORE.getKeyPath()));
 	}
 
 
