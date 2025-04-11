@@ -42,6 +42,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -61,6 +62,12 @@ class MessageSenderTest
 	@BeforeEach
 	void setUp()
 	{
+		recipient = switch(RecipientResult.from(playerMock))
+		{
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+
 		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		section = new MemoryConfiguration();
@@ -83,22 +90,26 @@ class MessageSenderTest
 
 
 
-@Test @DisplayName("test send method with valid parameters")
+	@Test @DisplayName("test send method with valid parameters")
 	void testSend_parameters_valid()
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
-		recipient = switch (RecipientResult.from(playerMock))
-		{
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
 
-		// Act
-		new MessageSender(new CooldownMap()).send(recipient, finalMessageRecord);
+		// Act & Assert
+		assertDoesNotThrow(() -> new MessageSender(new CooldownMap()).send(recipient, finalMessageRecord));
 
 		// Verify
 		verify(playerMock, atLeastOnce()).sendMessage(anyString());
+	}
+
+
+	@Test
+	void testSendPlayer()
+	{
+		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
+		assertDoesNotThrow(() -> new MessageSender(new CooldownMap()).send(recipient, finalMessageRecord));
+
 	}
 
 }

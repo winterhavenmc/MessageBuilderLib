@@ -65,7 +65,8 @@ class TitleSenderTest
 	@BeforeEach
 	void setUp()
 	{
-		recipient = switch (RecipientResult.from(playerMock)) {
+		recipient = switch(RecipientResult.from(playerMock))
+		{
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
