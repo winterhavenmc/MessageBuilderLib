@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
@@ -37,7 +38,7 @@ class MessageSectionQueryHandlerTest
 {
 	ConfigurationSection section;
 	YamlConfigurationSupplier configurationSupplier;
-	MessageSectionQueryHandler queryHandler;
+	QueryHandler<MessageRecord> queryHandler;
 	Configuration configuration;
 
 
@@ -51,19 +52,14 @@ class MessageSectionQueryHandlerTest
 	}
 
 
-	@AfterEach
-	void tearDown()
-	{
-		section = null;
-		queryHandler = null;
-	}
-
-
 	@Test
 	void testConstructor_parameter_null()
 	{
+		// Arrange & Act
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() -> new MessageSectionQueryHandler(null));
+
+		// Assert
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
 	}
 
@@ -76,8 +72,11 @@ class MessageSectionQueryHandlerTest
 		configuration.set("MESSAGES", null);
 		YamlConfigurationSupplier supplier = new YamlConfigurationSupplier(configuration);
 
+		// Act
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
 				() ->  new MessageSectionQueryHandler(supplier));
+
+		// Assert
 		assertEquals("The configuration section returned by the configuration supplier was an invalid 'MESSAGES' section.", exception.getMessage());
 	}
 
@@ -85,13 +84,14 @@ class MessageSectionQueryHandlerTest
 	@Test
 	void testGetRecord_parameter_valid()
 	{
-		// Arrange & Act
+		// Arrange
 		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+
+		// Act
 		ValidMessageRecord messageRecord = (ValidMessageRecord) queryHandler.getRecord(recordKey);
 
 		// Assert
-		assertNotNull(messageRecord);
-		assertTrue(messageRecord.enabled());
+		assertInstanceOf(ValidMessageRecord.class, messageRecord);
 	}
 
 
@@ -99,17 +99,13 @@ class MessageSectionQueryHandlerTest
 	void testGetRecord_nonexistent_entry()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
-		MessageRecord messageRecord = (MessageRecord) queryHandler.getRecord(recordKey);
+		RecordKey messageKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
 
-		var result = switch (messageRecord)
-		{
-			case ValidMessageRecord ignored -> messageRecord;
-			case FinalMessageRecord ignored -> messageRecord;
-			case InvalidMessageRecord ignored -> MessageRecord.empty();
-		};
+		// Act
+		MessageRecord messageRecord = queryHandler.getRecord(messageKey);
 
-		assertNotNull(result);
+		// Assert
+		assertInstanceOf(InvalidMessageRecord.class, messageRecord);
 	}
 
 }

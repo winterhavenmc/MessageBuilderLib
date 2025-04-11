@@ -27,14 +27,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InvalidMessageRecordTest
 {
+	RecordKey messageKey;
 	InvalidMessageRecord invalidMessageRecord;
+
 
 	@BeforeEach
 	void setUp()
 	{
-		invalidMessageRecord = new InvalidMessageRecord(
-				RecordKey.of(ENABLED_MESSAGE).orElseThrow(),
-				"failed to pass validation");
+		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		invalidMessageRecord = MessageRecord.empty(messageKey);
+	}
+
+
+	@Test
+	void testReturnType()
+	{
+		assertInstanceOf(InvalidMessageRecord.class, invalidMessageRecord);
 	}
 
 
@@ -42,10 +50,10 @@ class InvalidMessageRecordTest
 	void testKey()
 	{
 		// Arrange & Act
-		RecordKey key = invalidMessageRecord.key();
+		RecordKey result = invalidMessageRecord.key();
 
 		// Assert
-		assertEquals(ENABLED_MESSAGE.name(), key.toString());
+		assertEquals(messageKey, result);
 	}
 
 
@@ -56,7 +64,7 @@ class InvalidMessageRecordTest
 		String reason = invalidMessageRecord.reason();
 
 		// Assert
-		assertEquals("failed to pass validation", reason);
+		assertEquals("Missing message section.", reason);
 	}
 
 }

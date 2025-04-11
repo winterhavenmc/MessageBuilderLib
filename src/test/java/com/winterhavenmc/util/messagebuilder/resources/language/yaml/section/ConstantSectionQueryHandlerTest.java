@@ -24,8 +24,8 @@ import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -51,26 +51,14 @@ class ConstantSectionQueryHandlerTest
 	}
 
 
-	@AfterEach
-	void tearDown()
-	{
-		configurationSupplier = null;
-		queryHandler = null;
-	}
-
-
-	@Test
-	void testNotNull()
-	{
-		assertNotNull(queryHandler);
-	}
-
-
 	@Test
 	void testConstructor_parameter_null()
 	{
+		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new ConstantSectionQueryHandler(null));
+
+		// Assert
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
 	}
 
@@ -78,66 +66,114 @@ class ConstantSectionQueryHandlerTest
 	@Test
 	void getString_keyPath_valid()
 	{
+		// Arrange
 		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
-		assertEquals(Optional.of("&aSpawn"), queryHandler.getString(recordKey));
+
+		// Act
+		Optional<String> result = queryHandler.getString(recordKey);
+
+		// Assert
+		assertEquals(Optional.of("&aSpawn"), result);
 	}
 
 
 	@Test
 	void getString_keyPath_invalid()
 	{
+		// Arrange
 		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
-		assertEquals(Optional.empty(), queryHandler.getString(recordKey));
+
+		// Act
+		Optional<String> result = queryHandler.getString(recordKey);
+
+		// Assert
+		assertEquals(Optional.empty(), result);
 	}
 
 
 	@Test
 	void getStringList_keyPath_valid()
 	{
+		// Arrange
 		RecordKey recordKey = RecordKey.of("TEST_LIST").orElseThrow();
-		assertEquals(List.of("item 1", "item 2", "item 3"), queryHandler.getStringList(recordKey));
+
+		// Act
+		List<String> result = queryHandler.getStringList(recordKey);
+
+		// Assert
+		assertEquals(List.of("item 1", "item 2", "item 3"), result);
 	}
 
 
 	@Test
 	void getStringList_keyPath_invalid()
 	{
+		// Arrange
 		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
-		assertEquals(Collections.emptyList(), queryHandler.getStringList(recordKey));
+
+		// Act
+		List<String> result = queryHandler.getStringList(recordKey);
+
+		// Assert
+		assertEquals(Collections.emptyList(), result);
 	}
 
 
 	@Test
 	void getInt_keyPath_valid()
 	{
+		// Arrange
 		RecordKey recordKey = RecordKey.of("TEST_INT").orElseThrow();
-		assertEquals(42, queryHandler.getInt(recordKey));
+
+		// Act
+		int result = queryHandler.getInt(recordKey);
+
+		// Assert
+		assertEquals(42, result);
 	}
 
 
 	@Test
 	void getInt_keyPath_invalid()
 	{
+		// Arrange
 		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
-		assertEquals(0, queryHandler.getInt(recordKey));
+
+		// Act
+		int result = queryHandler.getInt(recordKey);
+
+		// Assert
+		assertEquals(0, result);
 	}
 
 
-//	@Test
-//	void testGetRecord_key_invalid()
-//	{
-//		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
-//		assertEquals(Optional.empty(), queryHandler.getRecord(recordKey));
-//	}
+	@Test
+	void testGetRecord_key_invalid()
+	{
+		// Arrange
+		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
+
+		// Act
+		ConstantRecord constantRecord = queryHandler.getRecord(recordKey);
+
+		// Assert
+		assertInstanceOf(InvalidConstantRecord.class, constantRecord);
+	}
 
 
-//	@Test
-//	void testGetRecord()
-//	{
-//		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
-//		queryHandler.getRecord(recordKey).ifPresent(r ->
-//				assertEquals("&aSpawn", r.obj())
-//		);
-//	}
+	@Test
+	@Disabled("Need to create valid config section in test setUp method")
+	void testGetRecord_valid()
+	{
+		// Arrange
+		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
+
+		// Act
+		ConstantRecord constantRecord = queryHandler.getRecord(recordKey);
+
+		// Assert
+		assertInstanceOf(ValidConstantRecord.class, constantRecord);
+		assertEquals("&aSpawn", constantRecord.toString());
+	}
 
 }

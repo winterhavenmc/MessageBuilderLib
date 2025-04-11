@@ -76,7 +76,7 @@ class CooldownMapTest
 		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
 		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
 
-		validMessageRecord = ValidMessageRecord.from(recordKey, section);
+		validMessageRecord = ValidMessageRecord.create(recordKey, section);
 
 		finalMessageRecord = new FinalMessageRecord(
 				RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
@@ -218,7 +218,7 @@ class CooldownMapTest
 
 			section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), -10);
 
-			validMessageRecord = ValidMessageRecord.from(recordKey, section);
+			validMessageRecord = ValidMessageRecord.create(recordKey, section);
 
 			FinalMessageRecord expiredMessageRecord = validMessageRecord.withFinalStrings(
 					"this is a final message.",

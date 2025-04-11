@@ -51,7 +51,7 @@ public class ValidItemRecordTest
 		itemEntry.set(ItemRecord.Field.LORE.getKeyPath(), List.of("Lore line 1", "Lore line 2"));
 
 		// create valid item record from record key, item configuration section
-		testRecord = ValidItemRecord.from(recordKey, itemEntry);
+		testRecord = ValidItemRecord.create(recordKey, itemEntry);
 	}
 
 
@@ -67,10 +67,10 @@ public class ValidItemRecordTest
 	@Test
 	public void testPluralized()
 	{
-
 		assertEquals("Test Items", testRecord.nameFor(0));
 		assertEquals("Test Item", testRecord.nameFor(1));
 		assertEquals("Test Items", testRecord.nameFor(2));
+		assertEquals("Test Items", testRecord.nameFor(10));
 	}
 
 	@Test

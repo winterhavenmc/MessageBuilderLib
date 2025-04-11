@@ -84,7 +84,7 @@ class TitleSenderTest
 		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
 		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
 
-		validMessageRecord = ValidMessageRecord.from(recordKey, section);
+		validMessageRecord = ValidMessageRecord.create(recordKey, section);
 
 		finalMessageRecord = validMessageRecord.withFinalStrings(
 				"this is a final message",

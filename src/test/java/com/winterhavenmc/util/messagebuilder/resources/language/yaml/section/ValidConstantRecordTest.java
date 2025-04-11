@@ -29,7 +29,7 @@ class ValidConstantRecordTest
     {
         RecordKey key = RecordKey.of("testKey").orElseThrow();
         Object value = 42;
-        ValidConstantRecord record = ValidConstantRecord.of(key, value);
+        ValidConstantRecord record = ValidConstantRecord.create(key, value);
 
         assertNotNull(record);
         assertEquals(key, record.key());
@@ -40,7 +40,7 @@ class ValidConstantRecordTest
     @Test
     void testConstantRecordWithNullValues()
     {
-        ValidConstantRecord record = ValidConstantRecord.of(null, null);
+        ValidConstantRecord record = ValidConstantRecord.create(null, null);
 
         assertNull(record.key());
         assertNull(record.value());
@@ -52,8 +52,8 @@ class ValidConstantRecordTest
     {
         RecordKey key = RecordKey.of("key").orElseThrow();
 
-        ValidConstantRecord record1 = ValidConstantRecord.of(key, 123);
-        ValidConstantRecord record2 = ValidConstantRecord.of(key, 123);
+        ValidConstantRecord record1 = ValidConstantRecord.create(key, 123);
+        ValidConstantRecord record2 = ValidConstantRecord.create(key, 123);
 
         assertEquals(record1, record2);
         assertEquals(record1.hashCode(), record2.hashCode());
@@ -66,8 +66,8 @@ class ValidConstantRecordTest
         RecordKey key1 = RecordKey.of("key").orElseThrow();
         RecordKey key2 = RecordKey.of("key").orElseThrow();
 
-        ValidConstantRecord record1 = ValidConstantRecord.of(key1, 123);
-        ValidConstantRecord record2 = ValidConstantRecord.of(key2, 456);
+        ValidConstantRecord record1 = ValidConstantRecord.create(key1, 123);
+        ValidConstantRecord record2 = ValidConstantRecord.create(key2, 456);
 
         assertNotEquals(record1, record2);
     }

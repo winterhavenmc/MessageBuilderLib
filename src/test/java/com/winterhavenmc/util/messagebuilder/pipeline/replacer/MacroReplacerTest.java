@@ -92,7 +92,7 @@ class MacroReplacerTest
 		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
 		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
 
-		validMessageRecord = ValidMessageRecord.from(messageKey, section);
+		validMessageRecord = ValidMessageRecord.create(messageKey, section);
 
 		finalMessageRecord = validMessageRecord.withFinalStrings(
 				"this is a final message",
