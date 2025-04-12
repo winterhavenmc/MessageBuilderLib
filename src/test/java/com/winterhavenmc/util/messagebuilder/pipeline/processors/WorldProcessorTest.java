@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -51,8 +51,8 @@ class WorldProcessorTest
 	@Mock Player playerMock;
 	@Mock World worldMock;
 
-	RecordKey macroKey;
-	RecordKey messageKey;
+	ValidRecordKey macroKey;
+	ValidRecordKey messageKey;
 	ValidRecipient recipient;
 
 	static MockedStatic<MultiverseHelper> mockStatic;
@@ -71,8 +71,8 @@ class WorldProcessorTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		macroKey = RecordKey.of("KEY").orElseThrow();
-		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		macroKey = ValidRecordKey.of("KEY").orElseThrow();
+		messageKey = ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 	}
 
 	@AfterEach
@@ -89,7 +89,7 @@ class WorldProcessorTest
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
 		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.of("MV Alias"));
-		RecordKey macroKey = RecordKey.of("SOME_WORLD").orElseThrow();
+		ValidRecordKey macroKey = ValidRecordKey.of("SOME_WORLD").orElseThrow();
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		MacroProcessor macroProcessor = new WorldProcessor();
 		contextMap.put(macroKey, worldMock);
@@ -110,7 +110,7 @@ class WorldProcessorTest
 		when(worldMock.getName()).thenReturn("test_world");
 		mockStatic.when(() -> MultiverseHelper.getAlias(worldMock)).thenReturn(Optional.empty());
 
-		RecordKey recordKey = RecordKey.of("SOME_WORLD").orElseThrow();
+		ValidRecordKey recordKey = ValidRecordKey.of("SOME_WORLD").orElseThrow();
 		ContextMap contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
 		MacroProcessor macroProcessor = new WorldProcessor();
 		contextMap.put(recordKey, worldMock);

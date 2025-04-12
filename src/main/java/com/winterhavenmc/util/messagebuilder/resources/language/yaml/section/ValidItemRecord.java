@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.util.Pluralizable;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -26,7 +26,7 @@ import java.util.List;
 
 public final class ValidItemRecord implements ItemRecord, Pluralizable
 {
-	RecordKey key;
+	ValidRecordKey key;
 	String nameSingular;
 	String namePlural;
 	String inventoryItemSingular;
@@ -45,7 +45,7 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	 * @param inventoryItemPlural the plural inventory name of this item
 	 * @param itemLore a List of Strings containing the lines of lore for this item
 	 */
-	private ValidItemRecord(RecordKey key,
+	private ValidItemRecord(ValidRecordKey key,
 							String nameSingular,
 							String namePlural,
 							String inventoryItemSingular,
@@ -61,7 +61,7 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	}
 
 
-	public static ValidItemRecord create(RecordKey key, ConfigurationSection itemEntry)
+	public static ValidItemRecord create(ValidRecordKey key, ConfigurationSection itemEntry)
 	{
 		return new ValidItemRecord(key,
 				itemEntry.getString(Field.NAME_SINGULAR.getKeyPath()),
@@ -73,7 +73,7 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 
 
 	@Override
-	public RecordKey key()
+	public ValidRecordKey key()
 	{
 		return key;
 	}

@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
@@ -84,7 +84,7 @@ class MessageSectionQueryHandlerTest
 	void testGetRecord_parameter_valid()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		ValidRecordKey recordKey = ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
 		// Act
 		ValidMessageRecord messageRecord = (ValidMessageRecord) queryHandler.getRecord(recordKey);
@@ -98,7 +98,7 @@ class MessageSectionQueryHandlerTest
 	void testGetRecord_nonexistent_entry()
 	{
 		// Arrange
-		RecordKey messageKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
+		ValidRecordKey messageKey = ValidRecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
 
 		// Act
 		MessageRecord messageRecord = queryHandler.getRecord(messageKey);

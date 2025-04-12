@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ValidItemRecordTest
 {
-	RecordKey recordKey;
+	ValidRecordKey recordKey;
 	ValidItemRecord testRecord;
 
 
@@ -40,7 +40,7 @@ public class ValidItemRecordTest
 	void setUp()
 	{
 		// create record key
-		recordKey = RecordKey.of("TEST_ITEM").orElseThrow();
+		recordKey = ValidRecordKey.of("TEST_ITEM").orElseThrow();
 
 		// create configuration section for item record entry
 		ConfigurationSection itemEntry = new MemoryConfiguration();

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +27,7 @@ class ValidConstantRecordTest
     @Test
     void constructorTest()
     {
-        RecordKey key = RecordKey.of("testKey").orElseThrow();
+        ValidRecordKey key = ValidRecordKey.of("testKey").orElseThrow();
         Object value = 42;
         ValidConstantRecord record = ValidConstantRecord.create(key, value);
 
@@ -50,7 +50,7 @@ class ValidConstantRecordTest
     @Test
     void testConstantRecordEquality()
     {
-        RecordKey key = RecordKey.of("key").orElseThrow();
+        ValidRecordKey key = ValidRecordKey.of("key").orElseThrow();
 
         ValidConstantRecord record1 = ValidConstantRecord.create(key, 123);
         ValidConstantRecord record2 = ValidConstantRecord.create(key, 123);
@@ -63,8 +63,8 @@ class ValidConstantRecordTest
     @Test
     void testConstantRecordInequality()
     {
-        RecordKey key1 = RecordKey.of("key").orElseThrow();
-        RecordKey key2 = RecordKey.of("key").orElseThrow();
+        ValidRecordKey key1 = ValidRecordKey.of("key").orElseThrow();
+        ValidRecordKey key2 = ValidRecordKey.of("key").orElseThrow();
 
         ValidConstantRecord record1 = ValidConstantRecord.create(key1, 123);
         ValidConstantRecord record2 = ValidConstantRecord.create(key2, 456);

@@ -18,13 +18,13 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 
 public sealed interface MessageRecord extends SectionRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
-	static MessageRecord from(final RecordKey messageKey, final ConfigurationSection section)
+	static MessageRecord from(final ValidRecordKey messageKey, final ConfigurationSection section)
 	{
 		return (section == null)
 				? MessageRecord.empty(messageKey)
@@ -32,7 +32,7 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 	}
 
 
-	static InvalidMessageRecord empty(RecordKey messageKey)
+	static InvalidMessageRecord empty(ValidRecordKey messageKey)
 	{
 		return new InvalidMessageRecord(messageKey, "Missing message section.");
 	}

@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import org.bukkit.entity.Entity;
 
 import java.util.Objects;
@@ -40,7 +40,7 @@ public class CooldownKey
 	final static UUID DEFAULT_UUID = new UUID(0, 0);
 
 	private final UUID uuid;
-	private final RecordKey messageKey;
+	private final ValidRecordKey messageKey;
 
 
 	/**
@@ -49,7 +49,7 @@ public class CooldownKey
 	 * @param recipient the message recipient
 	 * @param messageKey the unique message id
 	 */
-	private CooldownKey(final ValidRecipient recipient, final RecordKey messageKey)
+	private CooldownKey(final ValidRecipient recipient, final ValidRecordKey messageKey)
 	{
 		this.messageKey = messageKey;
 		this.uuid = (recipient.sender() instanceof Entity entity)
@@ -58,13 +58,13 @@ public class CooldownKey
 	}
 
 
-	public static Optional<CooldownKey> of(final ValidRecipient recipient, final RecordKey messageKey)
+	public static Optional<CooldownKey> of(final ValidRecipient recipient, final ValidRecordKey messageKey)
 	{
 		return Optional.of(new CooldownKey(recipient, messageKey));
 	}
 
 
-	public RecordKey getMessageKey()
+	public ValidRecordKey getMessageKey()
 	{
 		return this.messageKey;
 	}

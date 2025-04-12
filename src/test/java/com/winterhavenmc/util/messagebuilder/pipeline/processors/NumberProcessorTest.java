@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 
@@ -52,7 +52,7 @@ class NumberProcessorTest
 	public void setUp()
 	{
 		macroProcessor = new NumberProcessor();
-		RecordKey key = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		ValidRecordKey key = ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		recipient = switch (RecipientResult.from(playerMock)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
@@ -74,7 +74,7 @@ class NumberProcessorTest
 	void resolveContext_integer()
 	{
 		// Arrange
-		RecordKey key = RecordKey.of("SOME_INTEGER").orElseThrow();
+		ValidRecordKey key = ValidRecordKey.of("SOME_INTEGER").orElseThrow();
 		Integer number = 42;
 		contextMap.put(key, number);
 
@@ -91,7 +91,7 @@ class NumberProcessorTest
 	void resolveContext_null_integer()
 	{
 		// Arrange
-		RecordKey key = RecordKey.of("KEY").orElseThrow();
+		ValidRecordKey key = ValidRecordKey.of("KEY").orElseThrow();
 		contextMap.put(key, null);
 
 		// Act
@@ -106,7 +106,7 @@ class NumberProcessorTest
 	void resolveContext_long()
 	{
 		// Arrange
-		RecordKey key = RecordKey.of("SOME_LONG").orElseThrow();
+		ValidRecordKey key = ValidRecordKey.of("SOME_LONG").orElseThrow();
 		Long number = 420L;
 		contextMap.put(key, number);
 
@@ -123,7 +123,7 @@ class NumberProcessorTest
 	void resolveContext_null_long()
 	{
 		// Arrange
-		RecordKey key = RecordKey.of("KEY").orElseThrow();
+		ValidRecordKey key = ValidRecordKey.of("KEY").orElseThrow();
 		contextMap.put(key, null);
 
 		// Act

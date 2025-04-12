@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -31,7 +31,7 @@ import org.bukkit.inventory.ItemStack;
 public class ItemStackProcessor extends MacroProcessorTemplate
 {
 	@Override
-	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
+	public ResultMap resolveContext(final ValidRecordKey key, final ContextMap contextMap)
 	{
 		ResultMap resultMap = new ResultMap();
 
@@ -43,7 +43,7 @@ public class ItemStackProcessor extends MacroProcessorTemplate
 					resultMap.put(key, itemStack.getType().toString());
 
 					// if an itemstack quantity field does not exist in the context map, use itemStack amount for quantity
-					RecordKey quantityRecordKey = RecordKey.of(key + ".QUANTITY").orElseThrow();
+					ValidRecordKey quantityRecordKey = ValidRecordKey.of(key + ".QUANTITY").orElseThrow();
 					if (!contextMap.contains(quantityRecordKey)) {
 						new QuantityAdapter().adapt(itemStack).ifPresent(quantifiable ->
 								resultMap.put(quantityRecordKey, String.valueOf(quantifiable.getQuantity()))

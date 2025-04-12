@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ class ResultMapTest
 	void put()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
+		ValidRecordKey recordKey = ValidRecordKey.of("abc").orElseThrow();
 
 		// Act
 		resultMap.put(recordKey, "123");
@@ -69,7 +69,7 @@ class ResultMapTest
 	void get()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
+		ValidRecordKey recordKey = ValidRecordKey.of("abc").orElseThrow();
 
 		// Act
 		resultMap.put(recordKey, "123");
@@ -84,9 +84,9 @@ class ResultMapTest
 	void putAll()
 	{
 		// Arrange
-		RecordKey recordKey1 = RecordKey.of("abc").orElseThrow();
-		RecordKey recordKey2 = RecordKey.of("xyz").orElseThrow();
-		RecordKey recordKey3 = RecordKey.of("jkl").orElseThrow();
+		ValidRecordKey recordKey1 = ValidRecordKey.of("abc").orElseThrow();
+		ValidRecordKey recordKey2 = ValidRecordKey.of("xyz").orElseThrow();
+		ValidRecordKey recordKey3 = ValidRecordKey.of("jkl").orElseThrow();
 		ResultMap firstMap = new ResultMap();
 
 		firstMap.put(recordKey1, "123");
@@ -104,8 +104,8 @@ class ResultMapTest
 	@Test
 	void entrySet()
 	{
-		RecordKey recordKey1 = RecordKey.of("abc").orElseThrow();
-		RecordKey recordKey2 = RecordKey.of("xyz").orElseThrow();
+		ValidRecordKey recordKey1 = ValidRecordKey.of("abc").orElseThrow();
+		ValidRecordKey recordKey2 = ValidRecordKey.of("xyz").orElseThrow();
 		resultMap.put(recordKey1, "123");
 		resultMap.put(recordKey2, "1999");
 
@@ -118,7 +118,7 @@ class ResultMapTest
 	@Test
 	void isEmpty()
 	{
-		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
+		ValidRecordKey recordKey = ValidRecordKey.of("abc").orElseThrow();
 		assertTrue(resultMap.isEmpty());
 		resultMap.put(recordKey, "123");
 		assertFalse(resultMap.isEmpty());

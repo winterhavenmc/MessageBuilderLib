@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
@@ -61,7 +61,7 @@ class ValidMessageTest
 	ItemStack itemStack;
 	ValidMessageRecord validMessageRecord;
 	ValidRecipient recipient;
-	RecordKey messageKey;
+	ValidRecordKey messageKey;
 	ConfigurationSection section;
 
 
@@ -80,11 +80,11 @@ class ValidMessageTest
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
 
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
@@ -111,7 +111,7 @@ class ValidMessageTest
 	void testGetMessageKey()
 	{
 		// Act
-		RecordKey messageKey = message.getMessageKey();
+		ValidRecordKey messageKey = message.getMessageKey();
 
 		// Assert
 		assertEquals(ENABLED_MESSAGE.name(), messageKey.toString());
@@ -133,7 +133,7 @@ class ValidMessageTest
 		{
 			// Arrange
 			Message newMessage = message.setMacro(Macro.TOOL, itemStack);
-			RecordKey macroKey = RecordKey.of(Macro.TOOL).orElseThrow();
+			ValidRecordKey macroKey = ValidRecordKey.of(Macro.TOOL).orElseThrow();
 			ContextMap contextMap = newMessage.getContextMap();
 
 			// Act
@@ -178,7 +178,7 @@ class ValidMessageTest
 		{
 			// Arrange
 			Message newMessage = message.setMacro(10, Macro.TOOL, itemStack);
-			RecordKey macroKey = RecordKey.of(Macro.TOOL).orElseThrow();
+			ValidRecordKey macroKey = ValidRecordKey.of(Macro.TOOL).orElseThrow();
 			ContextMap contextMap = newMessage.getContextMap();
 
 			// Act

@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
@@ -127,7 +127,7 @@ public final class MessageBuilder
 	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
 	{
 		// exception thrown if null enum constant passed in messageId parameter
-		RecordKey validMessageKey = RecordKey.of(messageId)
+		ValidRecordKey validMessageKey = ValidRecordKey.of(messageId)
 				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
 		// return ValidMessage on valid RecipientResult, else empty no-op message

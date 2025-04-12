@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Material;
@@ -46,7 +46,7 @@ class ItemStackProcessorTest
 	@Mock Player playerMock;
 
 	ValidRecipient recipient;
-	RecordKey messageKey;
+	ValidRecordKey messageKey;
 	ContextMap contextMap;
 	MacroProcessor macroProcessor;
 
@@ -58,7 +58,7 @@ class ItemStackProcessorTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		messageKey = ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		macroProcessor = new ItemStackProcessor();
 	}

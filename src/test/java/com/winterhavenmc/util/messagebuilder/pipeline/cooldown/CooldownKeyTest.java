@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.command.ConsoleCommandSender;
@@ -55,7 +55,7 @@ class CooldownKeyTest
 	ValidRecipient recipient;
 	ValidRecipient recipient2;
 	ValidRecipient consoleRecipient;
-	RecordKey messageKey;
+	ValidRecordKey messageKey;
 
 
 	@BeforeEach
@@ -71,7 +71,7 @@ class CooldownKeyTest
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
 	}
 
 
@@ -184,8 +184,8 @@ class CooldownKeyTest
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		RecordKey messageKey1 = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
-		RecordKey messageKey2 = RecordKey.of(DISABLED_MESSAGE).orElseThrow();
+		ValidRecordKey messageKey1 = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		ValidRecordKey messageKey2 = ValidRecordKey.of(DISABLED_MESSAGE).orElseThrow();
 
 		// Act
 		CooldownKey key1 = CooldownKey.of(recipient, messageKey1).orElseThrow();
@@ -272,8 +272,8 @@ class CooldownKeyTest
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		RecordKey messageKey1 = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
-		RecordKey messageKey2 = RecordKey.of(DISABLED_MESSAGE).orElseThrow();
+		ValidRecordKey messageKey1 = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		ValidRecordKey messageKey2 = ValidRecordKey.of(DISABLED_MESSAGE).orElseThrow();
 
 		// Act
 		CooldownKey key1 = CooldownKey.of(recipient, messageKey1).orElseThrow();
@@ -292,7 +292,7 @@ class CooldownKeyTest
 	{
 		// Arrange
 		// Act
-		RecordKey result = CooldownKey.of(recipient, messageKey).orElseThrow().getMessageKey();
+		ValidRecordKey result = CooldownKey.of(recipient, messageKey).orElseThrow().getMessageKey();
 
 		// Assert
 		assertEquals("ENABLED_MESSAGE", result.toString());

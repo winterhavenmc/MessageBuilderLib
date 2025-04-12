@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
@@ -58,12 +58,12 @@ class CooldownMapTest
 	ValidMessageRecord validMessageRecord;
 	FinalMessageRecord finalMessageRecord;
 	ConfigurationSection section;
-	RecordKey recordKey;
+	ValidRecordKey recordKey;
 
 
 	@BeforeEach
 	void setUp() {
-		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		recordKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		cooldownMap = new CooldownMap();
 
 		section = new MemoryConfiguration();
@@ -79,7 +79,7 @@ class CooldownMapTest
 		validMessageRecord = ValidMessageRecord.create(recordKey, section);
 
 		finalMessageRecord = new FinalMessageRecord(
-				RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
+				ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
 				true,
 				"this is a message.",
 				Duration.ofSeconds(3),
@@ -108,7 +108,7 @@ class CooldownMapTest
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
-			cooldownKey = RecordKey.of(MessageId.ENABLED_MESSAGE)
+			cooldownKey = ValidRecordKey.of(MessageId.ENABLED_MESSAGE)
 					.flatMap(recordKey -> CooldownKey.of(recipient, recordKey))
 					.orElseThrow();
 
@@ -139,7 +139,7 @@ class CooldownMapTest
 			cooldownMap.putExpirationTime(recipient, finalMessageRecord);
 
 			// Assert TODO: test that second put did not overwrite first entry
-			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+			ValidRecordKey recordKey = ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 			assertFalse(cooldownMap.notCooling(cooldownKey));
@@ -160,7 +160,7 @@ class CooldownMapTest
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		ValidRecordKey recordKey = ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 		// Act

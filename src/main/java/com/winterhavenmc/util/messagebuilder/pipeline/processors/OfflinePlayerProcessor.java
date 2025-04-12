@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 import org.bukkit.OfflinePlayer;
 
@@ -33,7 +33,7 @@ import org.bukkit.OfflinePlayer;
 public class OfflinePlayerProcessor extends MacroProcessorTemplate
 {
 	@Override
-	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
+	public ResultMap resolveContext(final ValidRecordKey key, final ContextMap contextMap)
 	{
 		ResultMap resultMap = new ResultMap();
 

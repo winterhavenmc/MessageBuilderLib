@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 
 /**
@@ -28,7 +28,7 @@ import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 public class StringProcessor extends MacroProcessorTemplate
 {
 	@Override
-	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
+	public ResultMap resolveContext(final ValidRecordKey key, final ContextMap contextMap)
 	{
 		ResultMap resultMap = new ResultMap();
 

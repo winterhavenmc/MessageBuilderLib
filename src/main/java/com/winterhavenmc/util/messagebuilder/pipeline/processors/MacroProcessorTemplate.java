@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import org.bukkit.Location;
 
 
@@ -38,7 +38,7 @@ public abstract class MacroProcessorTemplate implements MacroProcessor
 	 * @param location the location to extract fields
 	 * @return a {@link ResultMap} populated with the location fields
 	 */
-	static ResultMap insertLocationFields(final RecordKey key, final Location location)
+	static ResultMap insertLocationFields(final ValidRecordKey key, final Location location)
 	{
 		ResultMap resultMap = new ResultMap();
 

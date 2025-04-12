@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Material;
@@ -69,14 +69,14 @@ class ContextResolverTest
     {
 		// Arrange
 		ItemStack itemStack = new ItemStack(Material.STONE);
-		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		ValidRecordKey recordKey = ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		ValidRecipient recipient = switch (RecipientResult.from(playerMock)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		ContextMap contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
-		RecordKey numberRecordKey = RecordKey.of("NUMBER").orElseThrow();
-		RecordKey itemStackRecordKey = RecordKey.of("ITEM_STACK").orElseThrow();
+		ValidRecordKey numberRecordKey = ValidRecordKey.of("NUMBER").orElseThrow();
+		ValidRecordKey itemStackRecordKey = ValidRecordKey.of("ITEM_STACK").orElseThrow();
 		contextMap.put(numberRecordKey, 42);
 		contextMap.put(itemStackRecordKey, itemStack);
 

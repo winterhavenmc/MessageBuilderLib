@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -36,7 +36,7 @@ public class DefaultFieldExtractor<T> implements FieldExtractor<T>
 
 
 	@Override
-	public Map<String, String> extract(final T source, final RecordKey macroKey)
+	public Map<String, String> extract(final T source, final ValidRecordKey macroKey)
 	{
 		return extractionLogic.apply(source)
 				.entrySet().stream()

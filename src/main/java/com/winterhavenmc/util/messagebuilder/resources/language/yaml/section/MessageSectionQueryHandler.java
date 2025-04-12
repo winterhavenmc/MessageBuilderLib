@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -61,7 +61,7 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 	 * @return the message record for the MessageId
 	 */
 	@Override
-	public MessageRecord getRecord(final RecordKey messageKey)
+	public MessageRecord getRecord(final ValidRecordKey messageKey)
 	{
 		ConfigurationSection messageEntry = configurationSupplier.getSection(section).getConfigurationSection(messageKey.toString());
 

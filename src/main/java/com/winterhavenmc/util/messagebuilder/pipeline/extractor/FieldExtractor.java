@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 import java.util.Map;
 
@@ -25,5 +25,5 @@ import java.util.Map;
 @FunctionalInterface
 public interface FieldExtractor<T>
 {
-	Map<String, String> extract(T source, RecordKey macroKey);
+	Map<String, String> extract(T source, ValidRecordKey macroKey);
 }

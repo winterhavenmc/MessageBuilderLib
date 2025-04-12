@@ -19,14 +19,14 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 
 public sealed interface Message permits ValidMessage, InvalidMessage {
     <K extends Enum<K>, V> Message setMacro(K macro, V value);
     <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value);
     void send();
-    RecordKey getMessageKey();
+    ValidRecordKey getMessageKey();
     ValidRecipient getRecipient();
     ContextMap getContextMap();
 

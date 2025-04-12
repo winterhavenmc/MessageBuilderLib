@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +34,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 
 public class ResultMap
 {
-	private final Map<RecordKey, String> internalResultMap;
+	private final Map<ValidRecordKey, String> internalResultMap;
 	private static final Predicate<String> STRING_IS_NULL = Objects::isNull;
 	private static final Predicate<String> STRING_IS_EMPTY = String::isBlank;
 	private static final Predicate<String> INVALID = STRING_IS_NULL.or(STRING_IS_EMPTY);
@@ -48,40 +48,40 @@ public class ResultMap
 		this.internalResultMap = new HashMap<>();
 	}
 
-	public void put(final RecordKey key, final String value)
+	public void put(final ValidRecordKey key, final String value)
 	{
 		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE))
 				.ifPresent((string -> internalResultMap.put(key, string)));
 	}
 
 
-	public String get(final RecordKey key)
+	public String get(final ValidRecordKey key)
 	{
 		return internalResultMap.get(key);
 	}
 
 
-	public String getValueOrKey(final RecordKey key) {
+	public String getValueOrKey(final ValidRecordKey key) {
 		return internalResultMap.getOrDefault(key, key.toString()); // Return key itself if not found
 	}
 
 
 	public void putAll(final @NotNull ResultMap insertionMap)
 	{
-		for (Map.Entry<RecordKey, String> entry : insertionMap.entrySet()) {
+		for (Map.Entry<ValidRecordKey, String> entry : insertionMap.entrySet()) {
 			String value = entry.getValue();
 			internalResultMap.put(entry.getKey(), value);
 		}
 	}
 
 
-	public boolean containsKey(final RecordKey key)
+	public boolean containsKey(final ValidRecordKey key)
 	{
 		return internalResultMap.containsKey(key);
 	}
 
 
-	public Iterable<? extends Map.Entry<RecordKey, String>> entrySet()
+	public Iterable<? extends Map.Entry<ValidRecordKey, String>> entrySet()
 	{
 		return internalResultMap.entrySet();
 	}

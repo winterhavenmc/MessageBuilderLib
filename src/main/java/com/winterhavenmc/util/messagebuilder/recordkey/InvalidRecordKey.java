@@ -15,24 +15,6 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.recordkey;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
-
-import java.time.Duration;
-
-
-public record FinalMessageRecord(
-		ValidRecordKey key,
-		boolean enabled,
-		String message,
-		Duration repeatDelay,
-		String title,
-		int titleFadeIn,
-		int titleStay,
-		int titleFadeOut,
-		String subtitle,
-		String finalMessageString,
-		String finalTitleString,
-		String finalSubTitleString) implements MessageRecord
-{ }
+public record InvalidRecordKey() implements RecordKeyResult { }

@@ -32,10 +32,10 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 
 /**
  * A type that represents a validated key for a record. This type guarantees a valid key that has been
- * validated upon creation. The static factory methods return an Optional of the RecordKey,
+ * validated upon creation. The static factory methods return an Optional of the ValidRecordKey,
  * or an empty Optional if the parameter was invalid, as determined by regex pattern and Predicate.
  */
-public final class RecordKey
+public final class ValidRecordKey implements RecordKeyResult
 {
 	// valid key must begin with alpha only and may contain alpha, digits, underscore or period
 	private static final Pattern VALID_KEY = Pattern.compile("^[a-zA-Z][a-zA-Z\\d_.]*$");
@@ -50,7 +50,7 @@ public final class RecordKey
 	 * @param key a String representing a record key
 	 * @throws ValidationException if parameter passed from static factory method is null or invalid
 	 */
-	RecordKey(final String key)
+	ValidRecordKey(final String key)
 	{
 		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
 		validate(key, IS_INVALID_KEY, throwing(PARAMETER_INVALID, KEY));
@@ -59,11 +59,11 @@ public final class RecordKey
 	}
 
 
-	public Optional<RecordKey> append(final String subKey)
+	public Optional<ValidRecordKey> append(final String subKey)
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey))
 				? Optional.empty()
-				: Optional.of(new RecordKey(wrappedString + "." + subKey));
+				: Optional.of(new ValidRecordKey(wrappedString + "." + subKey));
 	}
 
 
@@ -71,13 +71,13 @@ public final class RecordKey
 	 * Static factory method for instantiating a record key from a string
 	 *
 	 * @param key a String to be used in the creation of a record key
-	 * @return an Optional RecordKey, or an empty Optional if the key parameter is null or invalid
+	 * @return an Optional ValidRecordKey, or an empty Optional if the key parameter is null or invalid
 	 */
-	public static Optional<RecordKey> of(final String key)
+	public static Optional<ValidRecordKey> of(final String key)
 	{
 		return Optional.ofNullable(key)
 				.filter(VALID_KEY.asMatchPredicate())
-				.map(RecordKey::new);
+				.map(ValidRecordKey::new);
 	}
 
 
@@ -85,14 +85,14 @@ public final class RecordKey
 	 * Static factory method for instantiating a record key from an enum constant
 	 *
 	 * @param key an enum constant whose name is used to create a record key
-	 * @return an Optional RecordKey, or an empty Optional if the key parameter is null or invalid
+	 * @return an Optional ValidRecordKey, or an empty Optional if the key parameter is null or invalid
 	 * @param <E> an enum constant
 	 */
-	public static <E extends Enum<E>> Optional<RecordKey> of(final E key)
+	public static <E extends Enum<E>> Optional<ValidRecordKey> of(final E key)
 	{
 		return Optional.ofNullable(key)
 				.map(Enum::name)
-				.map(RecordKey::new);
+				.map(ValidRecordKey::new);
 	}
 
 
@@ -111,7 +111,7 @@ public final class RecordKey
 	@Override
 	public boolean equals(final Object object)
 	{
-		if (!(object instanceof RecordKey recordKey)) { return false; }
+		if (!(object instanceof ValidRecordKey recordKey)) { return false; }
 
 		return wrappedString.equals(recordKey.wrappedString);
 	}

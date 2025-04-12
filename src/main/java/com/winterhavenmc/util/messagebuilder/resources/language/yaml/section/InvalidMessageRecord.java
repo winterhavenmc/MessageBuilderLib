@@ -18,7 +18,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 
 
-public record InvalidMessageRecord(RecordKey key, String reason) implements MessageRecord { }
+public record InvalidMessageRecord(ValidRecordKey key, String reason) implements MessageRecord { }

@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
@@ -50,7 +50,7 @@ public record InvalidMessage(String reason) implements Message
 	}
 
 	@Override
-	public RecordKey getMessageKey()
+	public ValidRecordKey getMessageKey()
 	{
 		return null;
 	}
