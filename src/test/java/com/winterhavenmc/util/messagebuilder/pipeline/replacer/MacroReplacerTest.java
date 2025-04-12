@@ -27,7 +27,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
@@ -165,7 +165,8 @@ class MacroReplacerTest
 		MacroReplacer localMacroReplacer = new MacroReplacer();
 
 		ResultMap resultMap = new ResultMap();
-		resultMap.put("KEY", "value");
+		RecordKey resultKey = RecordKey.of("KEY").orElseThrow();
+		resultMap.put(resultKey, "value");
 		String messageString = "this is a macro replacement string {KEY}.";
 
 		// Act
@@ -186,9 +187,11 @@ class MacroReplacerTest
 	@Test
 	void testPerformReplacements_parameter_nul_message_string() {
 		ResultMap resultMap = new ResultMap();
-		resultMap.put("KEY1", "value1");
-		resultMap.put("KEY2", "value2");
-		resultMap.put("KEY3", "value3");
+		RecordKey key1 = RecordKey.of("KEY1").orElseThrow();
+		RecordKey key2 = RecordKey.of("KEY2").orElseThrow();
+		resultMap.put(key1, "value1");
+		resultMap.put(key2, "value2");
+		resultMap.put(key1, "value3");
 
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> macroReplacer.performReplacements(resultMap, null));

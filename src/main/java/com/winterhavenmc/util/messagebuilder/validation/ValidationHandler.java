@@ -17,10 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
+import java.util.Optional;
+
 @FunctionalInterface
 public interface ValidationHandler<T>
 {
-	T handleInvalid(final T value);
+	Optional<T> handleInvalid(final T value);
 
 
 	static <T> ValidationHandler<T> throwing(final ErrorMessageKey messageKey, final Parameter parameter)

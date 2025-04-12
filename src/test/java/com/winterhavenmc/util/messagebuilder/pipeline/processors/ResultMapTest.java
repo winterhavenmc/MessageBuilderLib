@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,69 +25,89 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ResultMapTest {
-
+class ResultMapTest
+{
 	ResultMap resultMap;
 
+
 	@BeforeEach
-	void setUp() {
+	void setUp()
+	{
 		resultMap = new ResultMap();
 	}
 
+
 	@AfterEach
-	void tearDown() {
+	void tearDown()
+	{
 		resultMap = null;
 	}
 
 
 	@Test
-	void empty() {
+	void empty()
+	{
 		assertInstanceOf(ResultMap.class, resultMap);
 	}
 
+
 	@Test
-	void put() {
-		resultMap.put("abc", "123");
-		assertTrue(resultMap.containsKey("abc"));
-		assertFalse(resultMap.containsKey("123"));
+	void put()
+	{
+		// Arrange
+		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
+
+		// Act
+		resultMap.put(recordKey, "123");
+
+		// Assert
+		assertTrue(resultMap.containsKey(recordKey));
 	}
 
-	@Test
-	void get() {
-		resultMap.put("abc", "123");
 
-		String result = resultMap.get("abc");
+	@Test
+	void get()
+	{
+		// Arrange
+		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
+
+		// Act
+		resultMap.put(recordKey, "123");
+
+		String result = resultMap.get(recordKey);
 
 		assertEquals("123", result);
-		assertNotEquals("abc", result);
 	}
 
+
 	@Test
-	void putAll() {
+	void putAll()
+	{
+		// Arrange
+		RecordKey recordKey1 = RecordKey.of("abc").orElseThrow();
+		RecordKey recordKey2 = RecordKey.of("xyz").orElseThrow();
+		RecordKey recordKey3 = RecordKey.of("jkl").orElseThrow();
 		ResultMap firstMap = new ResultMap();
-		firstMap.put("abc", "123");
-		firstMap.put("xyz", "1999");
+
+		firstMap.put(recordKey1, "123");
+		firstMap.put(recordKey2, "1999");
 
 		ResultMap secondMap = new ResultMap();
 		secondMap.putAll(firstMap);
 
-		assertTrue(secondMap.containsKey("abc"));
-		assertTrue(secondMap.containsKey("xyz"));
-		assertFalse(secondMap.containsKey("jkl"));
+		assertTrue(secondMap.containsKey(recordKey1));
+		assertTrue(secondMap.containsKey(recordKey2));
+		assertFalse(secondMap.containsKey(recordKey3));
 	}
 
-	@Test
-	void containsKey() {
-		resultMap.put("abc", "123");
-
-		assertTrue(resultMap.containsKey("abc"));
-		assertFalse(resultMap.containsKey("123"));
-	}
 
 	@Test
-	void entrySet() {
-		resultMap.put("abc", "123");
-		resultMap.put("xyz", "1999");
+	void entrySet()
+	{
+		RecordKey recordKey1 = RecordKey.of("abc").orElseThrow();
+		RecordKey recordKey2 = RecordKey.of("xyz").orElseThrow();
+		resultMap.put(recordKey1, "123");
+		resultMap.put(recordKey2, "1999");
 
 		var entrySet = resultMap.entrySet();
 
@@ -96,12 +116,11 @@ class ResultMapTest {
 	}
 
 	@Test
-	void isEmpty() {
-
+	void isEmpty()
+	{
+		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
 		assertTrue(resultMap.isEmpty());
-
-		resultMap.put("abc", "123");
-
+		resultMap.put(recordKey, "123");
 		assertFalse(resultMap.isEmpty());
 	}
 

@@ -22,8 +22,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
-import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
-import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
+import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
 import java.util.List;
@@ -34,21 +33,18 @@ public final class MessageProcessor implements Processor
 {
 	private final MessageRetriever messageRetriever;
 	private final MacroReplacer macroReplacer;
-	private final MessageSender messageSender;
-	private final TitleSender titleSender;
 	private final Predicate<CooldownKey> notCooling;
+	private final List<Sender> senders;
 
 
 	public MessageProcessor(final MessageRetriever messageRetriever,
 	                        final MacroReplacer macroReplacer,
 	                        final CooldownMap cooldownMap,
-	                        final MessageSender messageSender,
-	                        final TitleSender titleSender)
+	                        final List<Sender> senders)
 	{
 		this.messageRetriever = messageRetriever;
 		this.macroReplacer = macroReplacer;
-		this.messageSender = messageSender;
-		this.titleSender = titleSender;
+		this.senders = senders;
 		this.notCooling = cooldownMap::notCooling;
 	}
 
@@ -60,7 +56,7 @@ public final class MessageProcessor implements Processor
 				.filter(notCooling)
 				.map(cooldownKey -> messageRetriever.getRecord(message.getMessageKey()))
 				.map(validMessageRecord -> macroReplacer.replaceMacros((ValidMessageRecord) validMessageRecord, message.getContextMap()))
-				.ifPresent(processedMessage -> List.of(messageSender, titleSender)
+				.ifPresent(processedMessage -> senders
 						.forEach(sender -> sender
 								.send(message.getRecipient(), processedMessage)));
 	}

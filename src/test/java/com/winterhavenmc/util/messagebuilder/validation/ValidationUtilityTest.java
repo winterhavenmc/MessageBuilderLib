@@ -21,8 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationUtility.formatMessage;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationUtility.getConfiguredLocale;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationUtility.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -43,6 +42,12 @@ class ValidationUtilityTest
 		Locale result = getConfiguredLocale();
 
 		assertEquals(Locale.getDefault(), result);
+	}
+
+	@Test
+	void testBundleName()
+	{
+		assertEquals("language.errors", BUNDLE_NAME);
 	}
 
 }

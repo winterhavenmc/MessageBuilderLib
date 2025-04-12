@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 import org.bukkit.command.CommandSender;
 
@@ -48,27 +48,23 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 							// populate name field
 							new NameAdapter().adapt(commandSender).ifPresent(nameable ->
 							{
-								resultMap.put(key.toString(), nameable.getName());
-								resultMap.put(key + ".NAME", nameable.getName());
+								resultMap.put(key, nameable.getName());
+								key.append("NAME").ifPresent(k ->
+										resultMap.put(k, nameable.getName()));
 							});
+
 
 							// populate display name field if present
 							new DisplayNameAdapter().adapt(commandSender).ifPresent(displayNameable ->
-							{
-								if (displayNameable.getDisplayName() != null)
-								{
-									resultMap.put(key + ".DISPLAY_NAME", displayNameable.getDisplayName());
-								}
-							});
+								key.append("DISPLAY_NAME").ifPresent(k ->
+										resultMap.put(k, displayNameable.getDisplayName())));
+
 
 							// populate uuid field if present
 							new UniqueIdAdapter().adapt(commandSender).ifPresent(identifiable ->
-							{
-								if (identifiable.getUniqueId() != null)
-								{
-									resultMap.put(key + ".UUID", identifiable.getUniqueId().toString());
-								}
-							});
+								key.append("UUID").ifPresent(k ->
+										resultMap.put(k, identifiable.getUniqueId().toString())));
+
 
 							// populate location field if present
 							new LocationAdapter().adapt(commandSender).ifPresent(locatable ->

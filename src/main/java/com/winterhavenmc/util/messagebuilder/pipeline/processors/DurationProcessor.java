@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.time.PrettyTimeFormatter;
 
@@ -48,7 +48,7 @@ public class DurationProcessor extends MacroProcessorTemplate
 				.filter(Duration.class::isInstance)
 				.map(Duration.class::cast)
 				.ifPresent(duration -> resultMap
-						.put(key.toString(), new PrettyTimeFormatter().getFormatted(locale, duration))
+						.put(key, new PrettyTimeFormatter().getFormatted(locale, duration))
 				);
 
 		return resultMap;

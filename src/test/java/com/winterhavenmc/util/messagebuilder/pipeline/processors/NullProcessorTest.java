@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
@@ -75,7 +75,7 @@ class NullProcessorTest {
 		ResultMap resultMap = nullProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertEquals("NULL", resultMap.get(messageKey.toString()));
+		assertEquals("NULL", resultMap.get(messageKey));
 	}
 
 
@@ -90,7 +90,7 @@ class NullProcessorTest {
 		ResultMap resultMap = nullProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertEquals("NULL", resultMap.get(messageKey.toString()));
+		assertEquals("NULL", resultMap.get(messageKey));
 	}
 
 }

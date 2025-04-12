@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 
 /**
@@ -34,7 +34,7 @@ public class ObjectProcessor extends MacroProcessorTemplate
 
 		contextMap.get(key)
 				.map(Object::toString)
-				.ifPresent(value -> resultMap.put(key.toString(), value));
+				.ifPresent(value -> resultMap.put(key, value));
 
 		return resultMap;
 	}

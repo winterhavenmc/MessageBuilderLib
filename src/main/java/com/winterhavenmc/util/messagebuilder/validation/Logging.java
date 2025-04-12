@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationUtility.formatMessage;
@@ -30,11 +31,11 @@ public record Logging<T>(LogLevel logLevel,
 
 
     @Override
-    public T handleInvalid(final T value)
+    public Optional<T> handleInvalid(final T value)
     {
         LOGGER.log(logLevel.toJavaUtilLevel(), formatMessage(messageKey, parameter));
 
-        return value; // return the value even though it failed validation
+        return Optional.ofNullable(value); // return the value even though it failed validation
     }
 
 }

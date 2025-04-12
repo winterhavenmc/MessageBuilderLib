@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
@@ -79,8 +79,8 @@ class StringProcessorTest {
 
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
-		assertTrue(resultMap.containsKey(macroKey.toString()));
-		assertEquals(stringObject, resultMap.get(macroKey.toString()));
+		assertTrue(resultMap.containsKey(macroKey));
+		assertEquals(stringObject, resultMap.get(macroKey));
 	}
 
 
@@ -95,7 +95,7 @@ class StringProcessorTest {
 
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
-		assertFalse(resultMap.containsKey(macroKey.toString()));
+		assertFalse(resultMap.containsKey(macroKey));
 	}
 
 }

@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 
 /**
@@ -30,7 +30,7 @@ public class NullProcessor extends MacroProcessorTemplate
 	@Override
 	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
-		return new ResultMap() {{ put(key.toString(), "NULL"); }};
+		return new ResultMap() {{ put(key, "NULL"); }};
 	}
 
 }

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 import org.bukkit.Location;
 
 
@@ -42,9 +42,6 @@ public abstract class MacroProcessorTemplate implements MacroProcessor
 	{
 		ResultMap resultMap = new ResultMap();
 
-		// copy of original key before appending component field suffixes
-		String resultKey = key.toString();
-
 		// Get components
 		String locationWorld;
 		if (location.getWorld() == null) {
@@ -58,17 +55,22 @@ public abstract class MacroProcessorTemplate implements MacroProcessor
 		String locationZ = String.valueOf(location.getBlockZ());
 		String locationString = locationWorld + " [" + locationX + ", " + locationY + ", " + locationZ + "]";
 
-		// if macroName does not end in _LOCATION, suffix it to the end of the key
-		if (!resultKey.endsWith(".LOCATION")) {
-			resultKey = resultKey.concat(".LOCATION");
-		}
 
+		// if macroName does not end in _LOCATION, suffix it to the end of the key
 		// Store placeholders
-		resultMap.put(resultKey, locationString);
-		resultMap.put(resultKey.concat(".WORLD"), locationWorld);
-		resultMap.put(resultKey.concat(".X"), locationX);
-		resultMap.put(resultKey.concat(".Y"), locationY);
-		resultMap.put(resultKey.concat(".Z"), locationZ);
+		key.append("LOCATION").ifPresent(k -> resultMap.put(k, locationString));
+
+		key.append("LOCATION").flatMap(k -> k.append("WORLD"))
+				.ifPresent(recordKey -> resultMap.put(recordKey, locationWorld));
+
+		key.append("LOCATION").flatMap(k -> k.append("X"))
+				.ifPresent(recordKey -> resultMap.put(recordKey, locationX));
+
+		key.append("LOCATION").flatMap(k -> k.append("Y"))
+				.ifPresent(recordKey -> resultMap.put(recordKey, locationY));
+
+		key.append("LOCATION").flatMap(k -> k.append("Z"))
+				.ifPresent(recordKey -> resultMap.put(recordKey, locationZ));
 
 		return resultMap;
 	}
