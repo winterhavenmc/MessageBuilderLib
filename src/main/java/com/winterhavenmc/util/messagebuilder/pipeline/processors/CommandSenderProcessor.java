@@ -18,12 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.location.Locatable;
 import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
-
 import org.bukkit.command.CommandSender;
 
 import java.util.Optional;
@@ -41,43 +41,38 @@ public class CommandSenderProcessor extends MacroProcessorTemplate
 		return Optional.of(new ResultMap())
 				.flatMap(resultMap ->
 						contextMap.get(key)
-						.filter(CommandSender.class::isInstance)
-						.map(CommandSender.class::cast)
-						.map(commandSender ->
-						{
-							// populate name field
-							new NameAdapter().adapt(commandSender).ifPresent(nameable ->
-							{
-								resultMap.put(key, nameable.getName());
-								key.append("NAME").ifPresent(k ->
-										resultMap.put(k, nameable.getName()));
-							});
-
-
-							// populate display name field if present
-							new DisplayNameAdapter().adapt(commandSender).ifPresent(displayNameable ->
-								key.append("DISPLAY_NAME").ifPresent(k ->
-										resultMap.put(k, displayNameable.getDisplayName())));
-
-
-							// populate uuid field if present
-							new UniqueIdAdapter().adapt(commandSender).ifPresent(identifiable ->
-								key.append("UUID").ifPresent(k ->
-										resultMap.put(k, identifiable.getUniqueId().toString())));
-
-
-							// populate location field if present
-							new LocationAdapter().adapt(commandSender).ifPresent(locatable ->
-							{
-								if (locatable.gatLocation() != null)
+								.filter(CommandSender.class::isInstance)
+								.map(CommandSender.class::cast)
+								.map(commandSender ->
 								{
-									resultMap.putAll(insertLocationFields(key, locatable.gatLocation()));
-								}
-							});
+									// populate name field, primary field
+									new NameAdapter().adapt(commandSender).ifPresent(nameable ->
+									{
+										resultMap.put(key, nameable.getName());
+										key.append("NAME").ifPresent(k ->
+												resultMap.put(k, nameable.getName()));
+									});
 
-							return resultMap;
-						}))
-				.orElseGet(ResultMap::new);
+									// populate display name field if present
+									new DisplayNameAdapter().adapt(commandSender)
+											.ifPresent(displayNameable -> key.append("DISPLAY_NAME")
+													.ifPresent(k -> resultMap
+															.put(k, displayNameable.getDisplayName())));
+
+									// populate uuid field if present
+									new UniqueIdAdapter().adapt(commandSender)
+											.ifPresent(identifiable -> key.append("UUID")
+													.ifPresent(k -> resultMap
+															.put(k, identifiable.getUniqueId().toString())));
+
+									// populate location field if present
+									new LocationAdapter().adapt(commandSender)
+											.map(Locatable::gatLocation)
+											.ifPresent(location -> resultMap
+													.putAll(insertLocationFields(key, location)));
+
+									return resultMap;
+								})).orElseGet(ResultMap::new);
 	}
 
 }

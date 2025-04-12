@@ -42,30 +42,22 @@ public class OfflinePlayerProcessor extends MacroProcessorTemplate
 				.map(OfflinePlayer.class::cast)
 				.ifPresent(offlinePlayer -> {
 
-					new NameAdapter().adapt(offlinePlayer).ifPresent(nameable ->
-					{
-						if (nameable.getName() != null) {
-							resultMap.put(key, nameable.getName());
-							key.append("NAME").ifPresent(k ->
-									resultMap.put(k, nameable.getName()));
-						}
-					});
+					new NameAdapter().adapt(offlinePlayer)
+							.ifPresent(nameable -> {
+								resultMap.put(key, nameable.getName());
+								key.append("NAME")
+										.ifPresent(k -> resultMap.put(k, nameable.getName()));
+							});
 
-					new UniqueIdAdapter().adapt(offlinePlayer).ifPresent(identifiable ->
-					{
-						if (identifiable.getUniqueId() != null) {
-							key.append("NAME").ifPresent(k ->
-									resultMap.put(k, identifiable.getUniqueId().toString()));
-						}
-					});
+					new UniqueIdAdapter().adapt(offlinePlayer)
+							.ifPresent(identifiable -> key.append("UUID")
+									.ifPresent(k ->
+											resultMap.put(k, identifiable.getUniqueId().toString())));
 
-					new LocationAdapter().adapt(offlinePlayer).ifPresent(locatable ->
-					{
-						if (locatable.gatLocation() != null) {
-							resultMap.putAll(insertLocationFields(key, locatable.gatLocation()));
-						}
+					new LocationAdapter().adapt(offlinePlayer)
+							.ifPresent(locatable ->
+							resultMap.putAll(insertLocationFields(key, locatable.gatLocation())));
 					});
-				});
 
 		return resultMap;
 	}

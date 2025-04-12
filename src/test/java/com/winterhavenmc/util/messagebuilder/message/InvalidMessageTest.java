@@ -15,10 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.message;
 
-import com.winterhavenmc.util.messagebuilder.message.InvalidMessage;
-import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 
 import org.bukkit.inventory.ItemStack;
