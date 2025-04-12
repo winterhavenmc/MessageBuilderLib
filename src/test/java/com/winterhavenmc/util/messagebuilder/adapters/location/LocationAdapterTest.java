@@ -24,116 +24,126 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
-class LocationAdapterTest {
+@ExtendWith(MockitoExtension.class)
+class LocationAdapterTest
+{
+	@Mock World worldMock;
+	Location location;
 
-	@Test
-	public void testGetLocation_withValidLocation() {
-		// Arrange
-		World worldMock = mock(World.class, "MockWorld");
-		Location location = new Location(worldMock, 1,2,3);
 
-		// Act
-		Optional<Locatable> resolver = new LocationAdapter().adapt(location);
-		if (resolver.isPresent()) {
-			location = resolver.get().gatLocation();
-		}
-
-		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the Location.");
+	@BeforeEach
+	void setUp()
+	{
+		location = new Location(worldMock, 1,2,3);
 	}
 
+
 	@Test
-	public void testGetLocation_withValidPlayer() {
+	public void testGetLocation_withValidLocation()
+	{
+		// Arrange & Act
+		Location result = new LocationAdapter()
+				.adapt(location)
+				.map(Locatable::gatLocation).orElseThrow();
+
+		// Assert
+		assertEquals(location, result, "The resolver should return the gatLocation from the Location.");
+	}
+
+
+	@Test
+	public void testGetLocation_withValidPlayer()
+	{
 		// Arrange
 		Player playerMock = mock(Player.class, "MockPlayer");
-		World worldMock = mock(World.class, "MockWorld");
-		when(playerMock.getLocation()).thenReturn(new Location(worldMock, 1,2,3));
-		Location location = null;
+		when(playerMock.getLocation()).thenReturn(location);
 
 		// Act
-		Optional<Locatable> resolver = new LocationAdapter().adapt(playerMock);
-		if (resolver.isPresent()) {
-			location = resolver.get().gatLocation();
-		}
+		Location result = new LocationAdapter()
+				.adapt(playerMock)
+				.map(Locatable::gatLocation).orElseThrow();
 
 		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the Player.");
+		assertEquals(location, result, "The resolver should return the gatLocation from the Player.");
 	}
 
+
 	@Test
-	public void testGetLocation_withValidBlock() {
+	public void testGetLocation_withValidBlock()
+	{
 		// Arrange
 		Block blockMock = mock(Block.class, "MockBlock");
-		World worldMock = mock(World.class, "MockWorld");
-		when(blockMock.getLocation()).thenReturn(new Location(worldMock, 1,2,3));
-		Location location = null;
+		when(blockMock.getLocation()).thenReturn(location);
 
 		// Act
-		Optional<Locatable> resolver = new LocationAdapter().adapt(blockMock);
-		if (resolver.isPresent()) {
-			location = resolver.get().gatLocation();
-		}
+		Location result = new LocationAdapter()
+				.adapt(blockMock)
+				.map(Locatable::gatLocation).orElseThrow();
 
 		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the Block.");
+		assertEquals(location, result, "The resolver should return the gatLocation from the Block.");
 	}
 
+
 	@Test
-	public void testGetLocation_withValidBlockState() {
+	public void testGetLocation_withValidBlockState()
+	{
 		// Arrange
 		BlockState blockStateMock = mock(BlockState.class, "MockBlockState");
-		World worldMock = mock(World.class, "MockWorld");
-		when(blockStateMock.getLocation()).thenReturn(new Location(worldMock, 1,2,3));
-		Location location = null;
+		when(blockStateMock.getLocation()).thenReturn(location);
 
 		// Act
-		Optional<Locatable> resolver = new LocationAdapter().adapt(blockStateMock);
-		if (resolver.isPresent()) {
-			location = resolver.get().gatLocation();
-		}
+		Location result = new LocationAdapter()
+				.adapt(blockStateMock)
+				.map(Locatable::gatLocation).orElseThrow();
 
 		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the BlockState.");
+		assertEquals(location, result, "The resolver should return the gatLocation from the BlockState.");
 	}
 
+
 	@Test
-	public void testGetLocation_withValidDoubleChest() {
+	public void testGetLocation_withValidDoubleChest()
+	{
 		// Arrange
 		DoubleChest doubleChestMock = mock(DoubleChest.class, "MockDoubleChest");
-		World worldMock = mock(World.class, "MockWorld");
-		when(doubleChestMock.getLocation()).thenReturn(new Location(worldMock, 1,2,3));
-		Location location = null;
+		when(doubleChestMock.getLocation()).thenReturn(location);
 
 		// Act
-		Optional<Locatable> resolver = new LocationAdapter().adapt(doubleChestMock);
-		if (resolver.isPresent()) {
-			location = resolver.get().gatLocation();
-		}
+		Location result = new LocationAdapter()
+				.adapt(doubleChestMock)
+				.map(Locatable::gatLocation).orElseThrow();
 
 		// Assert
-		assertEquals(new Location(worldMock, 1, 2, 3), location, "The resolver should return the gatLocation from the DoubleChest.");
+		assertEquals(location, result, "The resolver should return the gatLocation from the DoubleChest.");
 	}
 
+
 	@Test
-	public void testGetLocation_withNull() {
+	public void testGetLocation_withNull()
+	{
 		// Arrange
 		Location location = null;
 
-		// Act & Assert
-		Optional<Locatable> resolver = new LocationAdapter().adapt(null);
-		if (resolver.isPresent()) {
-			location = resolver.get().gatLocation();
-		}
-		assertNull(location);
+		// Assert
+		Optional<Location> result = new LocationAdapter()
+				.adapt(location)
+				.map(Locatable::gatLocation);
+
+		// Assert
+		assertTrue(result.isEmpty());
 	}
 
 }
