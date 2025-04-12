@@ -19,6 +19,8 @@ package com.winterhavenmc.util.messagebuilder.recordkey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -59,36 +61,13 @@ public final class RecordKey
 	}
 
 
-	public Optional<RecordKey> append(final String subKey)
-	{
-		return (subKey == null || IS_INVALID_KEY.test(subKey))
-				? Optional.empty()
-				: Optional.of(new RecordKey(String.join(".", wrappedString, subKey)));
-	}
-
-
 	public Optional<RecordKey> append(final String... subKeys)
 	{
-		StringBuilder sb = new StringBuilder(wrappedString);
+		List<String> stringList = new ArrayList<>(List.of(subKeys));
+		stringList.addFirst(wrappedString);
 
-		for (String subKey : subKeys)
-		{
-			sb.append(".").append(subKey);
-		}
-		String subKey = sb.toString();
-
-		return (IS_INVALID_KEY.test(subKey))
-				? Optional.empty()
-				: Optional.of(new RecordKey(subKey));
+		return RecordKey.of(String.join(".", stringList));
 	}
-
-
-//	public Optional<RecordKey> append(final String subKey, final String subKey2)
-//	{
-//		return (subKey == null || IS_INVALID_KEY.test(subKey))
-//				? Optional.empty()
-//				: Optional.of(new RecordKey(wrappedString + "." + subKey + "." + subKey2));
-//	}
 
 
 	/**
