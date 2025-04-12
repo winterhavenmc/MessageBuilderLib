@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.util.messagebuilder.*;
+import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
@@ -26,7 +26,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
@@ -71,7 +71,7 @@ class MessageProcessorTest
 	ValidMessageRecord validMessageRecord;
 	FinalMessageRecord finalMessageRecord;
 	ConfigurationSection section;
-	ValidRecordKey recordKey;
+	RecordKey recordKey;
 
 
 	@BeforeEach
@@ -89,7 +89,7 @@ class MessageProcessorTest
 				List.of(messageSenderMock, titleSenderMock)
 		);
 
-		recordKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
@@ -127,10 +127,10 @@ class MessageProcessorTest
 	@Test @DisplayName("Test process method with Valid parameter")
 	void testProcess() {
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(validMessageRecord);
-		ValidMessage message = new ValidMessage(recipient, ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
+		ValidMessage message = new ValidMessage(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
 
 		when(macroReplacerMock.replaceMacros(validMessageRecord, message.getContextMap())).thenReturn(finalMessageRecord);
 

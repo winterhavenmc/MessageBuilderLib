@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
@@ -66,7 +66,7 @@ class ConstantSectionQueryHandlerTest
 	void getString_keyPath_valid()
 	{
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
+		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
 
 		// Act
 		Optional<String> result = queryHandler.getString(recordKey);
@@ -80,7 +80,7 @@ class ConstantSectionQueryHandlerTest
 	void getString_keyPath_invalid()
 	{
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of("INVALID_PATH").orElseThrow();
+		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 
 		// Act
 		Optional<String> result = queryHandler.getString(recordKey);
@@ -94,7 +94,7 @@ class ConstantSectionQueryHandlerTest
 	void getStringList_keyPath_valid()
 	{
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of("TEST_LIST").orElseThrow();
+		RecordKey recordKey = RecordKey.of("TEST_LIST").orElseThrow();
 
 		// Act
 		List<String> result = queryHandler.getStringList(recordKey);
@@ -108,7 +108,7 @@ class ConstantSectionQueryHandlerTest
 	void getStringList_keyPath_invalid()
 	{
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of("INVALID_PATH").orElseThrow();
+		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 
 		// Act
 		List<String> result = queryHandler.getStringList(recordKey);
@@ -122,7 +122,7 @@ class ConstantSectionQueryHandlerTest
 	void getInt_keyPath_valid()
 	{
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of("TEST_INT").orElseThrow();
+		RecordKey recordKey = RecordKey.of("TEST_INT").orElseThrow();
 
 		// Act
 		int result = queryHandler.getInt(recordKey);
@@ -136,7 +136,7 @@ class ConstantSectionQueryHandlerTest
 	void getInt_keyPath_invalid()
 	{
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of("INVALID_PATH").orElseThrow();
+		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 
 		// Act
 		int result = queryHandler.getInt(recordKey);
@@ -150,7 +150,7 @@ class ConstantSectionQueryHandlerTest
 	void testGetRecord_key_invalid()
 	{
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of("INVALID_PATH").orElseThrow();
+		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 
 		// Act
 		ConstantRecord constantRecord = queryHandler.getRecord(recordKey);
@@ -164,7 +164,7 @@ class ConstantSectionQueryHandlerTest
 	void testGetRecord_valid()
 	{
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
+		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
 
 		// Act
 		ConstantRecord constantRecord = queryHandler.getRecord(recordKey);

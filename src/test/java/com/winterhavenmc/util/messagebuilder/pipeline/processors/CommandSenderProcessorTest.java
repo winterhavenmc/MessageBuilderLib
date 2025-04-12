@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.Location;
@@ -50,7 +50,7 @@ class CommandSenderProcessorTest
 	@Mock World worldMock;
 
 	ValidRecipient recipient;
-	ValidRecordKey recordKey;
+	RecordKey recordKey;
 	ContextMap contextMap;
 	MacroProcessor macroProcessor;
 
@@ -62,7 +62,7 @@ class CommandSenderProcessorTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		recordKey = ValidRecordKey.of("KEY").orElseThrow();
+		recordKey = RecordKey.of("KEY").orElseThrow();
 		contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
 		macroProcessor = new CommandSenderProcessor();
 	}
@@ -79,7 +79,7 @@ class CommandSenderProcessorTest
 		Location location = new Location(worldMock, 10, 20, 30);
 		when(playerMock.getLocation()).thenReturn(location);
 
-		ValidRecordKey macroKey = ValidRecordKey.of("SOME_KEY").orElseThrow();
+		RecordKey macroKey = RecordKey.of("SOME_KEY").orElseThrow();
 		contextMap.put(macroKey, playerMock);
 
 		// Act

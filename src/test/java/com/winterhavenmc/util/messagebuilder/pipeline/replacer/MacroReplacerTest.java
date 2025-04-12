@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.util.messagebuilder.Message;
-import com.winterhavenmc.util.messagebuilder.ValidMessage;
+import com.winterhavenmc.util.messagebuilder.message.Message;
+import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
@@ -27,7 +27,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
@@ -58,8 +58,8 @@ class MacroReplacerTest
 	@Mock MessageProcessor messageProcessorMock;
 
 	ValidRecipient recipient;
-	ValidRecordKey messageKey;
-	ValidRecordKey macroKey;
+	RecordKey messageKey;
+	RecordKey macroKey;
 	MacroReplacer macroReplacer;
 	Message message;
 	ConfigurationSection section;
@@ -74,13 +74,13 @@ class MacroReplacerTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		messageKey = ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		macroKey = ValidRecordKey.of(Macro.OWNER).orElseThrow();
+		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		macroKey = RecordKey.of(Macro.OWNER).orElseThrow();
 
 		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
 		macroReplacer = new MacroReplacer();
 
-		messageKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
@@ -120,7 +120,7 @@ class MacroReplacerTest
 		{
 			ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 			MacroReplacer macroReplacer = new MacroReplacer();
-			ValidRecordKey key = ValidRecordKey.of("ITEM_NAME").orElseThrow();
+			RecordKey key = RecordKey.of("ITEM_NAME").orElseThrow();
 			contextMap.put(key, "TEST_STRING");
 
 			String resultString = macroReplacer.replaceMacrosInString(contextMap, "Replace this: {ITEM_NAME}");
@@ -149,7 +149,7 @@ class MacroReplacerTest
 	{
 		// Arrange
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
-		ValidRecordKey recipientKey = ValidRecordKey.of("RECIPIENT").orElseThrow();
+		RecordKey recipientKey = RecordKey.of("RECIPIENT").orElseThrow();
 
 		// Act
 		macroReplacer.addRecipientContext(contextMap);
@@ -165,7 +165,7 @@ class MacroReplacerTest
 		MacroReplacer localMacroReplacer = new MacroReplacer();
 
 		ResultMap resultMap = new ResultMap();
-		ValidRecordKey resultKey = ValidRecordKey.of("KEY").orElseThrow();
+		RecordKey resultKey = RecordKey.of("KEY").orElseThrow();
 		resultMap.put(resultKey, "value");
 		String messageString = "this is a macro replacement string {KEY}.";
 
@@ -187,8 +187,8 @@ class MacroReplacerTest
 	@Test
 	void testPerformReplacements_parameter_nul_message_string() {
 		ResultMap resultMap = new ResultMap();
-		ValidRecordKey key1 = ValidRecordKey.of("KEY1").orElseThrow();
-		ValidRecordKey key2 = ValidRecordKey.of("KEY2").orElseThrow();
+		RecordKey key1 = RecordKey.of("KEY1").orElseThrow();
+		RecordKey key2 = RecordKey.of("KEY2").orElseThrow();
 		resultMap.put(key1, "value1");
 		resultMap.put(key2, "value2");
 		resultMap.put(key1, "value3");
@@ -208,7 +208,7 @@ class MacroReplacerTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		ValidRecordKey key = ValidRecordKey.of("RECIPIENT").orElseThrow();
+		RecordKey key = RecordKey.of("RECIPIENT").orElseThrow();
 		ContextMap contextMap = ContextMap.of(recipient, key).orElseThrow();
 
 		macroReplacer.addRecipientContext(contextMap);

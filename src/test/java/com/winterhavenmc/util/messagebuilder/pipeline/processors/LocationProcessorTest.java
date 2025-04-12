@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.Location;
@@ -57,7 +57,7 @@ class LocationProcessorTest
 	LocationProcessor locationProcessor;
 	ContextMap contextMap;
 	ValidRecipient recipient;
-	ValidRecordKey key;
+	RecordKey key;
 
 
 	@BeforeEach
@@ -67,7 +67,7 @@ class LocationProcessorTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		key = ValidRecordKey.of("HOME").orElseThrow();
+		key = RecordKey.of("HOME").orElseThrow();
 		contextMap = ContextMap.of(recipient, key).orElseThrow();
 		locationProcessor = new LocationProcessor();
 	}
@@ -90,11 +90,11 @@ class LocationProcessorTest
 
 		// Assert
 		assertNotNull(result);
-		assertEquals("test_world", result.get(ValidRecordKey.of("HOME.LOCATION.WORLD").orElseThrow()));
-		assertEquals("123", result.get(ValidRecordKey.of("HOME.LOCATION.X").orElseThrow()));
-		assertEquals("64", result.get(ValidRecordKey.of("HOME.LOCATION.Y").orElseThrow()));
-		assertEquals("-789", result.get(ValidRecordKey.of("HOME.LOCATION.Z").orElseThrow()));
-		assertEquals("test_world [123, 64, -789]", result.get(ValidRecordKey.of("HOME.LOCATION").orElseThrow()));
+		assertEquals("test_world", result.get(RecordKey.of("HOME.LOCATION.WORLD").orElseThrow()));
+		assertEquals("123", result.get(RecordKey.of("HOME.LOCATION.X").orElseThrow()));
+		assertEquals("64", result.get(RecordKey.of("HOME.LOCATION.Y").orElseThrow()));
+		assertEquals("-789", result.get(RecordKey.of("HOME.LOCATION.Z").orElseThrow()));
+		assertEquals("test_world [123, 64, -789]", result.get(RecordKey.of("HOME.LOCATION").orElseThrow()));
 	}
 
 
@@ -102,7 +102,7 @@ class LocationProcessorTest
 	void testResolveContext_ValidLocation2()
 	{
 		// Arrange
-		ValidRecordKey playerKey = ValidRecordKey.of("PLAYER").orElseThrow();
+		RecordKey playerKey = RecordKey.of("PLAYER").orElseThrow();
 		when(worldMock.getName()).thenReturn("test_world");
 		when(locationMock.getWorld()).thenReturn(worldMock);
 		when(locationMock.getBlockX()).thenReturn(123);
@@ -116,11 +116,11 @@ class LocationProcessorTest
 
 		// Assert
 		assertNotNull(result);
-		assertEquals("test_world", result.get(ValidRecordKey.of("PLAYER.LOCATION.WORLD").orElseThrow()));
-		assertEquals("123", result.get(ValidRecordKey.of("PLAYER.LOCATION.X").orElseThrow()));
-		assertEquals("64", result.get(ValidRecordKey.of("PLAYER.LOCATION.Y").orElseThrow()));
-		assertEquals("-789", result.get(ValidRecordKey.of("PLAYER.LOCATION.Z").orElseThrow()));
-		assertEquals("test_world [123, 64, -789]", result.get(ValidRecordKey.of("PLAYER.LOCATION").orElseThrow()));
+		assertEquals("test_world", result.get(RecordKey.of("PLAYER.LOCATION.WORLD").orElseThrow()));
+		assertEquals("123", result.get(RecordKey.of("PLAYER.LOCATION.X").orElseThrow()));
+		assertEquals("64", result.get(RecordKey.of("PLAYER.LOCATION.Y").orElseThrow()));
+		assertEquals("-789", result.get(RecordKey.of("PLAYER.LOCATION.Z").orElseThrow()));
+		assertEquals("test_world [123, 64, -789]", result.get(RecordKey.of("PLAYER.LOCATION").orElseThrow()));
 	}
 
 
@@ -139,8 +139,8 @@ class LocationProcessorTest
 		ResultMap result = locationProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertThat(result.get(ValidRecordKey.of("HOME.LOCATION.WORLD").orElseThrow()), is("???"));
-		assertThat(result.get(ValidRecordKey.of("HOME.LOCATION").orElseThrow()), is("??? [123, 64, -789]"));
+		assertThat(result.get(RecordKey.of("HOME.LOCATION.WORLD").orElseThrow()), is("???"));
+		assertThat(result.get(RecordKey.of("HOME.LOCATION").orElseThrow()), is("??? [123, 64, -789]"));
 	}
 
 
@@ -160,11 +160,11 @@ class LocationProcessorTest
 		ResultMap result = locationProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertThat(result.get(ValidRecordKey.of("HOME.LOCATION.WORLD").orElseThrow()), is("test_world"));
-		assertThat(result.get(ValidRecordKey.of("HOME.LOCATION.X").orElseThrow()), is("123"));
-		assertThat(result.get(ValidRecordKey.of("HOME.LOCATION.Y").orElseThrow()), is("64"));
-		assertThat(result.get(ValidRecordKey.of("HOME.LOCATION.Z").orElseThrow()), is("-789"));
-		assertThat(result.get(ValidRecordKey.of("HOME.LOCATION").orElseThrow()), is("test_world [123, 64, -789]"));
+		assertThat(result.get(RecordKey.of("HOME.LOCATION.WORLD").orElseThrow()), is("test_world"));
+		assertThat(result.get(RecordKey.of("HOME.LOCATION.X").orElseThrow()), is("123"));
+		assertThat(result.get(RecordKey.of("HOME.LOCATION.Y").orElseThrow()), is("64"));
+		assertThat(result.get(RecordKey.of("HOME.LOCATION.Z").orElseThrow()), is("-789"));
+		assertThat(result.get(RecordKey.of("HOME.LOCATION").orElseThrow()), is("test_world [123, 64, -789]"));
 	}
 
 

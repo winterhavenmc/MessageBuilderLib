@@ -18,8 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.*;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MessageRetrieverTest
 {
-	ValidRecordKey messageKey;
+	RecordKey messageKey;
 	FileConfiguration configuration;
 	YamlConfigurationSupplier configurationSupplier;
 	QueryHandler<MessageRecord> queryHandler;
@@ -45,7 +45,7 @@ class MessageRetrieverTest
 	@BeforeEach
 	void setUp()
 	{
-		messageKey = ValidRecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		queryHandler = new MessageSectionQueryHandler(configurationSupplier);
@@ -69,7 +69,7 @@ class MessageRetrieverTest
 	void getRecord_nonexistent()
 	{
 		// Arrange
-		ValidRecordKey recordKey = ValidRecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
+		RecordKey recordKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
 
 		// Act
 		MessageRecord messageRecord = retriever.getRecord(recordKey);

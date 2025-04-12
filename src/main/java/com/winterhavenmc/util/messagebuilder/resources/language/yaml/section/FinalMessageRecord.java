@@ -17,13 +17,13 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 import java.time.Duration;
 
 
 public record FinalMessageRecord(
-		ValidRecordKey key,
+		RecordKey key,
 		boolean enabled,
 		String message,
 		Duration repeatDelay,

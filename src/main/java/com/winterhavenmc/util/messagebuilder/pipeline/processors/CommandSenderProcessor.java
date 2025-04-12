@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 import org.bukkit.command.CommandSender;
 
@@ -36,7 +36,7 @@ import java.util.Optional;
 public class CommandSenderProcessor extends MacroProcessorTemplate
 {
 	@Override
-	public ResultMap resolveContext(final ValidRecordKey key, final ContextMap contextMap)
+	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
 		return Optional.of(new ResultMap())
 				.flatMap(resultMap ->

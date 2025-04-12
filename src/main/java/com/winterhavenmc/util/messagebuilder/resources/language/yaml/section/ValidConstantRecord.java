@@ -17,14 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 import java.util.Objects;
 
 
 public final class ValidConstantRecord implements ConstantRecord
 {
-	private final ValidRecordKey key;
+	private final RecordKey key;
 	private final Object value;
 
 	@Override
@@ -43,19 +43,19 @@ public final class ValidConstantRecord implements ConstantRecord
 		return result;
 	}
 
-	private ValidConstantRecord(final ValidRecordKey key, final Object value)
+	private ValidConstantRecord(final RecordKey key, final Object value)
 	{
 		this.key = key;
 		this.value = value;
 	}
 
-	static ValidConstantRecord create(final ValidRecordKey key, final Object value)
+	static ValidConstantRecord create(final RecordKey key, final Object value)
 	{
 		return new ValidConstantRecord(key, value);
 	}
 
 	@Override
-	public ValidRecordKey key()
+	public RecordKey key()
 	{
 		return this.key;
 	}

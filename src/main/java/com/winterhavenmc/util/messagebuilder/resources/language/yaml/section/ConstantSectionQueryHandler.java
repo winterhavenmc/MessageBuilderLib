@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -62,7 +62,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return an {@code Optional} String containing the String retrieved with keyPath, or an empty Optional if no
 	 * value was found for the keyPath
 	 */
-	public Optional<String> getString(final ValidRecordKey key)
+	public Optional<String> getString(final RecordKey key)
 	{
 		return Optional.ofNullable(configurationSupplier.getSection(section).getString(key.toString()));
 	}
@@ -75,7 +75,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return a {@code List} of String containing the values retrieved using keyPath, or an empty List if no
 	 * value was found for the keyPath
 	 */
-	public List<String> getStringList(final ValidRecordKey key)
+	public List<String> getStringList(final RecordKey key)
 	{
 		return configurationSupplier.getSection(section).getStringList(key.toString());
 	}
@@ -88,7 +88,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return {@code int} containing the values retrieved using keyPath, or zero (0) if no
 	 * value was found for the keyPath
 	 */
-	public int getInt(final ValidRecordKey key)
+	public int getInt(final RecordKey key)
 	{
 		return configurationSupplier.getSection(section).getInt(key.toString());
 	}
@@ -101,7 +101,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return a ConstantRecord
 	 */
 	@Override
-	public ConstantRecord getRecord(final ValidRecordKey key)
+	public ConstantRecord getRecord(final RecordKey key)
 	{
 		Object constantEntry = configurationSupplier.getSection(section).get(key.toString());
 

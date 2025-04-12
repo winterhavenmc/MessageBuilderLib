@@ -15,12 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder;
+package com.winterhavenmc.util.messagebuilder.message;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.Parameter;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -31,7 +31,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.P
 public final class ValidMessage implements Message
 {
 	private final ValidRecipient recipient;
-	private final ValidRecordKey messageKey;
+	private final RecordKey messageKey;
 	private final MessageProcessor messageProcessor;
 	private final ContextMap contextMap;
 
@@ -44,7 +44,7 @@ public final class ValidMessage implements Message
 	 * @param messageProcessor the message processor that will receive the message when the send method is called
 	 */
 	public ValidMessage(final ValidRecipient recipient,
-						final ValidRecordKey messageKey,
+						final RecordKey messageKey,
 						final MessageProcessor messageProcessor)
 	{
 		this.recipient = recipient;
@@ -67,7 +67,7 @@ public final class ValidMessage implements Message
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(K macro, V value)
 	{
-		ValidRecordKey macroKey = ValidRecordKey.of(macro).orElseThrow(() ->
+		RecordKey macroKey = RecordKey.of(macro).orElseThrow(() ->
 				new ValidationException(PARAMETER_NULL, Parameter.MACRO));
 
 		contextMap.put(macroKey, value);
@@ -88,10 +88,10 @@ public final class ValidMessage implements Message
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value)
 	{
-		ValidRecordKey macroKey = ValidRecordKey.of(macro)
+		RecordKey macroKey = RecordKey.of(macro)
 				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, Parameter.MACRO));
 
-		ValidRecordKey quantityKey = ValidRecordKey.of(macroKey + ".QUANTITY")
+		RecordKey quantityKey = RecordKey.of(macroKey + ".QUANTITY")
 				.orElseThrow(() -> new ValidationException(PARAMETER_INVALID, Parameter.QUANTITY));
 
 		contextMap.put(macroKey, value);
@@ -113,10 +113,10 @@ public final class ValidMessage implements Message
 	/**
 	 * Accessor method for message key
 	 *
-	 * @return {@code ValidRecordKey} the unique message identifier
+	 * @return {@code RecordKey} the unique message identifier
 	 */
 	@Override
-	public ValidRecordKey getMessageKey()
+	public RecordKey getMessageKey()
 	{
 		return messageKey;
 	}

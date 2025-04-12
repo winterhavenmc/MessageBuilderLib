@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
@@ -55,10 +55,10 @@ class TitleSenderTest
 	@Mock ConsoleCommandSender consoleMock;
 
 	ValidRecipient recipient;
-	ValidRecordKey messageKey;
+	RecordKey messageKey;
 	ValidMessageRecord validMessageRecord;
 	FinalMessageRecord finalMessageRecord;
-	ValidRecordKey recordKey;
+	RecordKey recordKey;
 	ConfigurationSection section;
 
 
@@ -71,9 +71,9 @@ class TitleSenderTest
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		messageKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
-		recordKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);

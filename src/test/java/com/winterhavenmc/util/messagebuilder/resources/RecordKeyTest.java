@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -26,41 +26,41 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ValidRecordKeyTest
+class RecordKeyTest
 {
 
     @Test
     void ofFromValidString_ShouldReturnRecordKey() {
-        Optional<ValidRecordKey> result = ValidRecordKey.of("VALID_KEY");
+        Optional<RecordKey> result = RecordKey.of("VALID_KEY");
         assertTrue(result.isPresent());
         assertEquals("VALID_KEY", result.get().toString());
     }
 
     @Test
     void ofFromInvalidString_ShouldReturnEmpty() {
-        assertTrue(ValidRecordKey.of("123INVALID").isEmpty(), "Should return empty for invalid format.");
-        assertTrue(ValidRecordKey.of("").isEmpty(), "Should return empty for empty string.");
-        assertTrue(ValidRecordKey.of(" ").isEmpty(), "Should return empty for whitespace.");
-        assertTrue(ValidRecordKey.of((String) null).isEmpty(), "Should return empty for null.");
-        assertTrue(ValidRecordKey.of((MessageId) null).isEmpty(), "Should return empty for null.");
+        assertTrue(RecordKey.of("123INVALID").isEmpty(), "Should return empty for invalid format.");
+        assertTrue(RecordKey.of("").isEmpty(), "Should return empty for empty string.");
+        assertTrue(RecordKey.of(" ").isEmpty(), "Should return empty for whitespace.");
+        assertTrue(RecordKey.of((String) null).isEmpty(), "Should return empty for null.");
+        assertTrue(RecordKey.of((MessageId) null).isEmpty(), "Should return empty for null.");
     }
 
     @Test
     void ofFromEnum_ShouldReturnRecordKey() {
-        Optional<ValidRecordKey> result = ValidRecordKey.of(MessageId.ENABLED_MESSAGE);
+        Optional<RecordKey> result = RecordKey.of(MessageId.ENABLED_MESSAGE);
         assertTrue(result.isPresent());
         assertEquals("ENABLED_MESSAGE", result.get().toString());
     }
 
     @Test
     void ofFromNullEnum_ShouldReturnEmpty() {
-        assertTrue(ValidRecordKey.of((MessageId) null).isEmpty());
+        assertTrue(RecordKey.of((MessageId) null).isEmpty());
     }
 
     @Test
     void recordKeyEquality_ShouldBeTrueForSameKey() {
-        Optional<ValidRecordKey> key1 = ValidRecordKey.of("SAME_KEY");
-        Optional<ValidRecordKey> key2 = ValidRecordKey.of("SAME_KEY");
+        Optional<RecordKey> key1 = RecordKey.of("SAME_KEY");
+        Optional<RecordKey> key2 = RecordKey.of("SAME_KEY");
 
         assertTrue(key1.isPresent() && key2.isPresent());
         assertEquals(key1.get(), key2.get());
@@ -68,8 +68,8 @@ class ValidRecordKeyTest
 
     @Test
     void recordKeyEquality_ShouldBeFalseForDifferentKeys() {
-        Optional<ValidRecordKey> key1 = ValidRecordKey.of("KEY_ONE");
-        Optional<ValidRecordKey> key2 = ValidRecordKey.of("KEY_TWO");
+        Optional<RecordKey> key1 = RecordKey.of("KEY_ONE");
+        Optional<RecordKey> key2 = RecordKey.of("KEY_TWO");
 
         assertTrue(key1.isPresent() && key2.isPresent());
         assertNotEquals(key1.get(), key2.get());
@@ -77,8 +77,8 @@ class ValidRecordKeyTest
 
     @Test
     void hashCode_ShouldBeConsistentWithEquals() {
-        Optional<ValidRecordKey> key1 = ValidRecordKey.of("HASH_TEST");
-        Optional<ValidRecordKey> key2 = ValidRecordKey.of("HASH_TEST");
+        Optional<RecordKey> key1 = RecordKey.of("HASH_TEST");
+        Optional<RecordKey> key2 = RecordKey.of("HASH_TEST");
 
         assertTrue(key1.isPresent() && key2.isPresent());
         assertEquals(key1.get().hashCode(), key2.get().hashCode());
@@ -86,7 +86,7 @@ class ValidRecordKeyTest
 
     @Test
     void toString_ShouldReturnCorrectKey() {
-        Optional<ValidRecordKey> key = ValidRecordKey.of("TO_STRING_TEST");
+        Optional<RecordKey> key = RecordKey.of("TO_STRING_TEST");
         assertTrue(key.isPresent());
         assertEquals("TO_STRING_TEST", key.get().toString());
     }

@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.*;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.Delimiter;
@@ -85,8 +85,8 @@ public class MacroReplacer implements Replacer
 	 */
     public ContextMap addRecipientContext(final ContextMap contextMap)
 	{
-		ValidRecordKey macroKey = ValidRecordKey.of("RECIPIENT").orElseThrow();
-		ValidRecordKey locationRecordKey = ValidRecordKey.of("RECIPIENT.LOCATION").orElseThrow();
+		RecordKey macroKey = RecordKey.of("RECIPIENT").orElseThrow();
+		RecordKey locationRecordKey = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
 
 		contextMap.put(macroKey, contextMap.getRecipient());
 
@@ -114,7 +114,7 @@ public class MacroReplacer implements Replacer
 		return new PlaceholderMatcher().match(messageString)
 				.reduce(messageString, (msg, placeholder) ->
 						msg.replace( Delimiter.OPEN + placeholder + Delimiter.CLOSE,
-								replacementMap.getValueOrKey(ValidRecordKey.of(placeholder).orElse(ValidRecordKey.of("KEY").orElseThrow()))));
+								replacementMap.getValueOrKey(RecordKey.of(placeholder).orElse(RecordKey.of("KEY").orElseThrow()))));
 	}
 
 }

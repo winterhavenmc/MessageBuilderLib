@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 import org.bukkit.Location;
 
@@ -88,7 +88,7 @@ public class LocationProcessor extends MacroProcessorTemplate
 	 * @throws IllegalArgumentException if any parameter is null or Invalid
 	 */
 	@Override
-	public ResultMap resolveContext(final ValidRecordKey key, final ContextMap contextMap)
+	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
 	{
 		ResultMap resultMap = new ResultMap();
 

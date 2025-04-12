@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import org.bukkit.configuration.ConfigurationSection;
@@ -62,7 +62,7 @@ public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 	 * @return an {@code Optional} ValidItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	@Override
-	public ItemRecord getRecord(final ValidRecordKey key)
+	public ItemRecord getRecord(final RecordKey key)
 	{
 		ConfigurationSection itemEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
 

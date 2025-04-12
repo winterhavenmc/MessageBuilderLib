@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -36,9 +36,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ContextMap
 {
 	private final ValidRecipient recipient;
-	private final ValidRecordKey messageKey;
+	private final RecordKey messageKey;
 
-	private final Map<ValidRecordKey, Object> internalMap = new ConcurrentHashMap<>();
+	private final Map<RecordKey, Object> internalMap = new ConcurrentHashMap<>();
 
 
 	/**
@@ -47,14 +47,14 @@ public class ContextMap
 	 * @param recipient the message protoRecipient
 	 * @param messageKey the message unique identifier as a string
 	 */
-	private ContextMap(final ValidRecipient recipient, final ValidRecordKey messageKey)
+	private ContextMap(final ValidRecipient recipient, final RecordKey messageKey)
 	{
 		this.recipient = recipient;
 		this.messageKey = messageKey;
 	}
 
 
-	public static Optional<ContextMap> of(final ValidRecipient protoRecipient, final ValidRecordKey messageKey)
+	public static Optional<ContextMap> of(final ValidRecipient protoRecipient, final RecordKey messageKey)
 	{
 		return Optional.of(new ContextMap(protoRecipient, messageKey));
 	}
@@ -77,7 +77,7 @@ public class ContextMap
 	 * @return {@code MessageId} the MessageId associated with this context map
 	 */
 
-	public ValidRecordKey getMessageKey()
+	public RecordKey getMessageKey()
 	{
 		return messageKey;
 	}
@@ -90,7 +90,7 @@ public class ContextMap
 	 * @param value         the value to store
 	 * @param <T>           the type of the value
 	 */
-	public <T> void put(final ValidRecordKey macroKey, final T value)
+	public <T> void put(final RecordKey macroKey, final T value)
 	{
         // insert value into map with key, replacing null values with string "NULL"
 		internalMap.put(macroKey, Objects.requireNonNullElse(value, "NULL"));
@@ -103,7 +103,7 @@ public class ContextMap
 	 * @param macroKey the context map key
 	 * @return the value for the key
 	 */
-	public Optional<Object> get(final ValidRecordKey macroKey)
+	public Optional<Object> get(final RecordKey macroKey)
 	{
 		return Optional.ofNullable(internalMap.get(macroKey));
 	}
@@ -115,7 +115,7 @@ public class ContextMap
 	 * @param macroKey the unique key to check
 	 * @return true if the key exists, false otherwise
 	 */
-	public boolean contains(final ValidRecordKey macroKey)
+	public boolean contains(final RecordKey macroKey)
 	{
 		return internalMap.containsKey(macroKey);
 	}
@@ -127,7 +127,7 @@ public class ContextMap
 	 * @param macroKey The enum member used as the key.
 	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
 	 */
-	public Object remove(final ValidRecordKey macroKey)
+	public Object remove(final RecordKey macroKey)
 	{
 		return internalMap.remove(macroKey);
 	}
@@ -138,7 +138,7 @@ public class ContextMap
 	 *
 	 * @return A set of entries in the map.
 	 */
-	public @NotNull Set<Map.Entry<ValidRecordKey, Object>> entrySet()
+	public @NotNull Set<Map.Entry<RecordKey, Object>> entrySet()
 	{
 		return internalMap.entrySet();
 	}

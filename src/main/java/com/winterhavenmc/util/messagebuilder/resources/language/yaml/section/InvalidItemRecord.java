@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 
 /**
@@ -26,4 +26,4 @@ import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
  *
  * @param key the keyPath in the language file for this record
  */
-public record InvalidItemRecord(ValidRecordKey key, String reason) implements ItemRecord { }
+public record InvalidItemRecord(RecordKey key, String reason) implements ItemRecord { }

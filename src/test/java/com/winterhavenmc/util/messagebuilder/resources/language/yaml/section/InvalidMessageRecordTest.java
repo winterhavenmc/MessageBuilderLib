@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.ValidRecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,14 +27,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InvalidMessageRecordTest
 {
-	ValidRecordKey messageKey;
+	RecordKey messageKey;
 	InvalidMessageRecord invalidMessageRecord;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		messageKey = ValidRecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		invalidMessageRecord = MessageRecord.empty(messageKey);
 	}
 
@@ -50,7 +50,7 @@ class InvalidMessageRecordTest
 	void testKey()
 	{
 		// Arrange & Act
-		ValidRecordKey result = invalidMessageRecord.key();
+		RecordKey result = invalidMessageRecord.key();
 
 		// Assert
 		assertEquals(messageKey, result);

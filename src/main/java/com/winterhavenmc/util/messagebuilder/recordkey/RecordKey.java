@@ -17,22 +17,91 @@
 
 package com.winterhavenmc.util.messagebuilder.recordkey;
 
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
-public sealed interface RecordKey permits ValidRecordKey, InvalidRecordKey
+/**
+ * A type that represents a validated key for a record. This type guarantees a valid key that has been
+ * validated upon creation. The static factory methods return an Optional of the RecordKey,
+ * or an empty Optional if the parameter was invalid, as determined by regex pattern and Predicate.
+ */
+public final class RecordKey
 {
+	// valid key must begin with alpha only and may contain alpha, digits, underscore or period
+	private static final Pattern VALID_KEY = Pattern.compile("^[a-zA-Z][a-zA-Z\\d_.]*$");
+	private static final Predicate<String> IS_INVALID_KEY = string -> !VALID_KEY.matcher(string).matches();
+
+	private final String wrappedString;
+
+
+	/**
+	 * Private constructor that allows instantiation only from within this class
+	 *
+	 * @param key a String representing a record key
+	 * @throws ValidationException if parameter passed from static factory method is null or invalid
+	 */
+	private RecordKey(final String key)
+	{
+		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
+		validate(key, IS_INVALID_KEY, throwing(PARAMETER_INVALID, KEY));
+
+		this.wrappedString = key;
+	}
+
+
+	public Optional<RecordKey> append(final String subKey)
+	{
+		return (subKey == null || IS_INVALID_KEY.test(subKey))
+				? Optional.empty()
+				: Optional.of(new RecordKey(String.join(".", wrappedString, subKey)));
+	}
+
+
+	public Optional<RecordKey> append(final String... subKeys)
+	{
+		StringBuilder sb = new StringBuilder(wrappedString);
+
+		for (String subKey : subKeys)
+		{
+			sb.append(".").append(subKey);
+		}
+		String subKey = sb.toString();
+
+		return (IS_INVALID_KEY.test(subKey))
+				? Optional.empty()
+				: Optional.of(new RecordKey(subKey));
+	}
+
+
+//	public Optional<RecordKey> append(final String subKey, final String subKey2)
+//	{
+//		return (subKey == null || IS_INVALID_KEY.test(subKey))
+//				? Optional.empty()
+//				: Optional.of(new RecordKey(wrappedString + "." + subKey + "." + subKey2));
+//	}
+
+
 	/**
 	 * Static factory method for instantiating a record key from a string
 	 *
 	 * @param key a String to be used in the creation of a record key
-	 * @return an Optional ValidRecordKey, or an empty Optional if the key parameter is null or invalid
+	 * @return an Optional RecordKey, or an empty Optional if the key parameter is null or invalid
 	 */
-	static RecordKey of(final String key)
+	public static Optional<RecordKey> of(final String key)
 	{
-		return (key == null || key.isBlank())
-			? new InvalidRecordKey()
-			: RecordKey.of(key);
+		return Optional.ofNullable(key)
+				.filter(VALID_KEY.asMatchPredicate())
+				.map(RecordKey::new);
 	}
 
 
@@ -40,14 +109,42 @@ public sealed interface RecordKey permits ValidRecordKey, InvalidRecordKey
 	 * Static factory method for instantiating a record key from an enum constant
 	 *
 	 * @param key an enum constant whose name is used to create a record key
-	 * @return an Optional ValidRecordKey, or an empty Optional if the key parameter is null or invalid
+	 * @return an Optional RecordKey, or an empty Optional if the key parameter is null or invalid
 	 * @param <E> an enum constant
 	 */
-	static <E extends Enum<E>> Optional<ValidRecordKey> of(final E key)
+	public static <E extends Enum<E>> Optional<RecordKey> of(final E key)
 	{
 		return Optional.ofNullable(key)
 				.map(Enum::name)
-				.map(ValidRecordKey::new);
+				.map(RecordKey::new);
+	}
+
+
+	/**
+	 * Return the record key as a String
+	 *
+	 * @return a String representation fo the record key
+	 */
+	@Override
+	public String toString()
+	{
+		return this.wrappedString;
+	}
+
+
+	@Override
+	public boolean equals(final Object object)
+	{
+		if (!(object instanceof RecordKey recordKey)) { return false; }
+
+		return wrappedString.equals(recordKey.wrappedString);
+	}
+
+
+	@Override
+	public int hashCode()
+	{
+		return wrappedString.hashCode();
 	}
 
 }
