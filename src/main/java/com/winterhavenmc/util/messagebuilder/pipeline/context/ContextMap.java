@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.util.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

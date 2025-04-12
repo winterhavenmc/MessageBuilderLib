@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.*;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
-import com.winterhavenmc.util.messagebuilder.util.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.Delimiter;

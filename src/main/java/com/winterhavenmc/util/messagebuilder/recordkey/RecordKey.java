@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.recordkey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
