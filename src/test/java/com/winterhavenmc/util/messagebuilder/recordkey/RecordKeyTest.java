@@ -15,10 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources;
+package com.winterhavenmc.util.messagebuilder.recordkey;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -28,6 +27,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RecordKeyTest
 {
+
+    @Test
+    void append()
+    {
+        // Arrange
+        RecordKey recordKey = RecordKey.of("PLAYER").orElseThrow();
+
+        // Act
+        RecordKey result = recordKey.append("LOCATION", "X").orElseThrow();
+
+        // Assert
+        assertEquals("PLAYER.LOCATION.X", result.toString());
+    }
 
     @Test
     void ofFromValidString_ShouldReturnRecordKey() {
