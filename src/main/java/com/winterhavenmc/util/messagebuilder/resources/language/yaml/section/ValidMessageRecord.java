@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.util.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.time.Duration;
@@ -51,14 +51,14 @@ public final class ValidMessageRecord implements MessageRecord
 	 * @param subtitle the subtitle for the message
 	 */
 	private ValidMessageRecord(RecordKey key,
-					   boolean enabled,
-					   String message,
-					   Duration repeatDelay,
-					   String title,
-					   int titleFadeIn,
-					   int titleStay,
-					   int titleFadeOut,
-					   String subtitle)
+							   boolean enabled,
+							   String message,
+							   Duration repeatDelay,
+							   String title,
+							   int titleFadeIn,
+							   int titleStay,
+							   int titleFadeOut,
+							   String subtitle)
 	{
 		// replace any null strings with blank strings
 		this.key = key;

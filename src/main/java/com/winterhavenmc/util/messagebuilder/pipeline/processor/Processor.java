@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.util.messagebuilder.ValidMessage;
+import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 
 
 @FunctionalInterface

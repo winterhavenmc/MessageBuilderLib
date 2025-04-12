@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
-import com.winterhavenmc.util.messagebuilder.util.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Material;

@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.recordkey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -50,7 +50,7 @@ public final class RecordKey
 	 * @param key a String representing a record key
 	 * @throws ValidationException if parameter passed from static factory method is null or invalid
 	 */
-	RecordKey(final String key)
+	private RecordKey(final String key)
 	{
 		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
 		validate(key, IS_INVALID_KEY, throwing(PARAMETER_INVALID, KEY));
@@ -63,8 +63,32 @@ public final class RecordKey
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey))
 				? Optional.empty()
-				: Optional.of(new RecordKey(wrappedString + "." + subKey));
+				: Optional.of(new RecordKey(String.join(".", wrappedString, subKey)));
 	}
+
+
+	public Optional<RecordKey> append(final String... subKeys)
+	{
+		StringBuilder sb = new StringBuilder(wrappedString);
+
+		for (String subKey : subKeys)
+		{
+			sb.append(".").append(subKey);
+		}
+		String subKey = sb.toString();
+
+		return (IS_INVALID_KEY.test(subKey))
+				? Optional.empty()
+				: Optional.of(new RecordKey(subKey));
+	}
+
+
+//	public Optional<RecordKey> append(final String subKey, final String subKey2)
+//	{
+//		return (subKey == null || IS_INVALID_KEY.test(subKey))
+//				? Optional.empty()
+//				: Optional.of(new RecordKey(wrappedString + "." + subKey + "." + subKey2));
+//	}
 
 
 	/**

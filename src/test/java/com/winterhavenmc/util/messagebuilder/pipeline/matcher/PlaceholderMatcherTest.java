@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.matcher;
 
-import com.winterhavenmc.util.messagebuilder.*;
+import com.winterhavenmc.util.messagebuilder.message.Message;
+import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
@@ -25,7 +26,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.util.RecordKey;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
