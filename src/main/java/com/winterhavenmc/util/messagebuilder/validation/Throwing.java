@@ -17,13 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 
 public record Throwing<T>(Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
 {
     @Override
-    public T handleInvalid(final T value)
+    public Optional<T> handleInvalid(final T value)
     {
         ValidationException exception = exceptionSupplier.get();
         exception.fillInStackTrace(); // Maintain call-site accuracy

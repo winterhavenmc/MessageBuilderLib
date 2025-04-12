@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
@@ -76,8 +76,8 @@ class ObjectProcessorTest {
 		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(recordKey.toString()));
-		assertEquals("42", resultMap.get(recordKey.toString()));
+		assertTrue(resultMap.containsKey(recordKey));
+		assertEquals("42", resultMap.get(recordKey));
 	}
 
 

@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Location;
@@ -91,7 +91,7 @@ class OfflinePlayerProcessorTest
 
 		// Assert
 		assertFalse(resultMap.isEmpty());
-		assertTrue(resultMap.containsKey(macroKey.toString()));
+		assertTrue(resultMap.containsKey(macroKey));
 
 		// Verify
 		verify(offlinePlayerMock, atLeastOnce()).getName();
@@ -113,7 +113,7 @@ class OfflinePlayerProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey(macroKey.toString()));
+		assertFalse(resultMap.containsKey(macroKey));
 	}
 
 }

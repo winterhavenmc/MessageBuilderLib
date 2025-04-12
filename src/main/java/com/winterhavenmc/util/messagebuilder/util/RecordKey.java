@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources;
+package com.winterhavenmc.util.messagebuilder.util;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -50,12 +50,20 @@ public final class RecordKey
 	 * @param key a String representing a record key
 	 * @throws ValidationException if parameter passed from static factory method is null or invalid
 	 */
-	private RecordKey(final String key)
+	RecordKey(final String key)
 	{
 		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
 		validate(key, IS_INVALID_KEY, throwing(PARAMETER_INVALID, KEY));
 
 		this.wrappedString = key;
+	}
+
+
+	public Optional<RecordKey> append(final String subKey)
+	{
+		return (subKey == null || IS_INVALID_KEY.test(subKey))
+				? Optional.empty()
+				: Optional.of(new RecordKey(wrappedString + "." + subKey));
 	}
 
 

@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
 
 import org.bukkit.World;
@@ -40,8 +40,9 @@ public class WorldProcessor extends MacroProcessorTemplate
 				.map(World.class::cast)
 				.map(world -> MultiverseHelper.getAlias(world).orElse(world.getName()))
 				.ifPresent(worldName -> {
-					resultMap.put(key.toString(), worldName);
-					resultMap.put(key + ".NAME", worldName);
+						resultMap.put(key, worldName);
+						key.append("NAME").ifPresent(k ->
+								resultMap.put(k, worldName));
 				});
 
 		return resultMap;

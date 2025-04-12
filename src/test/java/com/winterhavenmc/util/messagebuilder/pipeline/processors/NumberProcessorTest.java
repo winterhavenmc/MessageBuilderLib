@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.entity.Player;
 
@@ -82,8 +82,8 @@ class NumberProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(key.toString()));
-		assertEquals("42", resultMap.get(key.toString()));
+		assertTrue(resultMap.containsKey(key));
+		assertEquals("42", resultMap.get(key));
 	}
 
 
@@ -98,7 +98,7 @@ class NumberProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey(key.toString()));
+		assertFalse(resultMap.containsKey(key));
 	}
 
 
@@ -114,8 +114,8 @@ class NumberProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(key.toString()));
-		assertEquals("420", resultMap.get(key.toString()));
+		assertTrue(resultMap.containsKey(key));
+		assertEquals("420", resultMap.get(key));
 	}
 
 
@@ -130,7 +130,7 @@ class NumberProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey(key.toString()));
+		assertFalse(resultMap.containsKey(key));
 	}
 
 }

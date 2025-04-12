@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 import com.winterhavenmc.util.messagebuilder.util.MultiverseHelper;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -98,8 +98,8 @@ class WorldProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(macroKey.toString()));
-		assertEquals("MV Alias", resultMap.get(macroKey.toString()));
+		assertTrue(resultMap.containsKey(macroKey));
+		assertEquals("MV Alias", resultMap.get(macroKey));
 	}
 
 
@@ -119,8 +119,8 @@ class WorldProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(recordKey.toString()));
-		assertEquals("test_world", resultMap.get(recordKey.toString()));
+		assertTrue(resultMap.containsKey(recordKey));
+		assertEquals("test_world", resultMap.get(recordKey));
 	}
 
 
@@ -136,7 +136,7 @@ class WorldProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertNull(resultMap.get(macroKey.toString()));
+		assertNull(resultMap.get(macroKey));
 	}
 
 }

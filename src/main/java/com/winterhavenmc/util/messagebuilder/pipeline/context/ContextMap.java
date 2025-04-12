@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -38,7 +38,6 @@ public class ContextMap
 	private final ValidRecipient recipient;
 	private final RecordKey messageKey;
 
-	// Backing store map (use linked hash map to maintain insertion order)
 	private final Map<RecordKey, Object> internalMap = new ConcurrentHashMap<>();
 
 

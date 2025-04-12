@@ -22,13 +22,12 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
-
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +46,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CommandSenderProcessorTest
 {
-	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
 	@Mock World worldMock;
 
@@ -69,16 +67,9 @@ class CommandSenderProcessorTest
 		macroProcessor = new CommandSenderProcessor();
 	}
 
-	@AfterEach
-	public void tearDown()
-	{
-		pluginMock = null;
-		macroProcessor = null;
-	}
-
 
 	@Test
-	void resolveContext()
+	void resolveContext_with_player()
 	{
 		// Arrange
 		when(playerMock.getName()).thenReturn("player one");
@@ -88,15 +79,15 @@ class CommandSenderProcessorTest
 		Location location = new Location(worldMock, 10, 20, 30);
 		when(playerMock.getLocation()).thenReturn(location);
 
-		RecordKey key = RecordKey.of("SOME_KEY").orElseThrow();
-		contextMap.put(key, playerMock);
+		RecordKey macroKey = RecordKey.of("SOME_KEY").orElseThrow();
+		contextMap.put(macroKey, playerMock);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
+		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(key.toString()));
-		assertNotNull(resultMap.get(key.toString()));
+		assertTrue(resultMap.containsKey(macroKey));
+		assertNotNull(resultMap.get(macroKey));
 	}
 
 

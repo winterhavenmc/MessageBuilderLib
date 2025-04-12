@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.command.ConsoleCommandSender;
@@ -76,7 +76,7 @@ class DurationProcessorTest
 	}
 
 
-	@Test @DisplayName("resolveContext with Valid parameters")
+	@Test @DisplayName("resolveContext_with_player with Valid parameters")
 	void resolveContext()
 	{
 		// Arrange
@@ -90,12 +90,12 @@ class DurationProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(messageKey.toString()));
-		assertEquals("12 seconds", resultMap.get(messageKey.toString()));
+		assertTrue(resultMap.containsKey(messageKey));
+		assertEquals("12 seconds", resultMap.get(messageKey));
 	}
 
 
-	@Test @DisplayName("resolveContext with console as recipient")
+	@Test @DisplayName("resolveContext_with_player with console as recipient")
 	void resolveContext_console()
 	{
 		// Arrange
@@ -144,12 +144,12 @@ class DurationProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(messageKey.toString()));
-		assertEquals("12 seconds", resultMap.get(messageKey.toString()));
+		assertTrue(resultMap.containsKey(messageKey));
+		assertEquals("12 seconds", resultMap.get(messageKey));
 	}
 
 
-	@Test @DisplayName("resolveContext with wrong type for duration in map")
+	@Test @DisplayName("resolveContext_with_player with wrong type for duration in map")
 	void resolveContext_value_not_duration()
 	{
 		// Arrange
@@ -163,7 +163,7 @@ class DurationProcessorTest
 		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);
 
 		// Assert
-		assertFalse(resultMap.containsKey(messageKey.toString()));
+		assertFalse(resultMap.containsKey(messageKey));
 	}
 
 }

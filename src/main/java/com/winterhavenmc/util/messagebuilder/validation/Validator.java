@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.validation;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 
@@ -31,11 +32,11 @@ public interface Validator
 	 * @return the passed value, for use in functional chains
 	 * @param <T> the type of the passed value
 	 */
-	static <T> T validate(T value, Predicate<T> predicate, ValidationHandler<T> handler)
+	static <T> Optional<T> validate(T value, Predicate<T> predicate, ValidationHandler<T> handler)
 	{
 		return predicate.test(value)
 				? handler.handleInvalid(value)
-				: value;
+				: Optional.ofNullable(value);
 	}
 
 }

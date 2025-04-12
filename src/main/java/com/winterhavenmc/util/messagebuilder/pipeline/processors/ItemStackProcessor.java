@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -40,13 +40,13 @@ public class ItemStackProcessor extends MacroProcessorTemplate
 				.map(ItemStack.class::cast)
 				.ifPresent(itemStack -> {
 					// put item stack type as replacement string for key, in case other suitable field is not present
-					resultMap.put(key.toString(), itemStack.getType().toString());
+					resultMap.put(key, itemStack.getType().toString());
 
 					// if an itemstack quantity field does not exist in the context map, use itemStack amount for quantity
 					RecordKey quantityRecordKey = RecordKey.of(key + ".QUANTITY").orElseThrow();
 					if (!contextMap.contains(quantityRecordKey)) {
 						new QuantityAdapter().adapt(itemStack).ifPresent(quantifiable ->
-								resultMap.put(quantityRecordKey.toString(), String.valueOf(quantifiable.getQuantity()))
+								resultMap.put(quantityRecordKey, String.valueOf(quantifiable.getQuantity()))
 						);
 
 						// put item stack translation key in result map for possible use

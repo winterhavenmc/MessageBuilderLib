@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.bukkit.Material;
@@ -84,10 +84,10 @@ class ContextResolverTest
         ResultMap resultMap = contextResolver.resolve(contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey("NUMBER"));
-		assertEquals("42", resultMap.get("NUMBER"));
-		assertTrue(resultMap.containsKey("ITEM_STACK"));
-		assertEquals("STONE", resultMap.get("ITEM_STACK"));
+		assertTrue(resultMap.containsKey(numberRecordKey));
+		assertEquals("42", resultMap.get(numberRecordKey));
+		assertTrue(resultMap.containsKey(itemStackRecordKey));
+		assertEquals("STONE", resultMap.get(itemStackRecordKey));
 	}
 
 }

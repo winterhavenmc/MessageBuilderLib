@@ -20,6 +20,8 @@ package com.winterhavenmc.util.messagebuilder.validation;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 class LoggingTest
 {
@@ -28,10 +30,10 @@ class LoggingTest
 	void handleInvalid_valid(LogLevel logLevel)
 	{
 		Logging<String> logging = new Logging<>(logLevel, ErrorMessageKey.PARAMETER_NULL, Parameter.RECIPIENT);
-		String string = logging.handleInvalid("a string");
+		Optional<String> string = logging.handleInvalid("a string");
 
-		assertNotNull(string);
-		assertEquals("a string", string);
+		assertTrue(string.isPresent());
+		assertEquals("a string", string.get());
 	}
 
 
@@ -40,9 +42,9 @@ class LoggingTest
 	void handleInvalid_null(LogLevel logLevel)
 	{
 		Logging<String> logging = new Logging<>(logLevel, ErrorMessageKey.PARAMETER_NULL, Parameter.RECIPIENT);
-		String string = logging.handleInvalid(null);
+		Optional<String> string = logging.handleInvalid(null);
 
-		assertNull(string);
+		assertTrue(string.isEmpty());
 	}
 
 }

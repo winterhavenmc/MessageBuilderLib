@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.resources.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
 
 import org.bukkit.OfflinePlayer;
 
@@ -45,15 +45,17 @@ public class OfflinePlayerProcessor extends MacroProcessorTemplate
 					new NameAdapter().adapt(offlinePlayer).ifPresent(nameable ->
 					{
 						if (nameable.getName() != null) {
-							resultMap.put(key.toString(), nameable.getName());
-							resultMap.put(key + ".NAME", nameable.getName());
+							resultMap.put(key, nameable.getName());
+							key.append("NAME").ifPresent(k ->
+									resultMap.put(k, nameable.getName()));
 						}
 					});
 
 					new UniqueIdAdapter().adapt(offlinePlayer).ifPresent(identifiable ->
 					{
 						if (identifiable.getUniqueId() != null) {
-							resultMap.put(key + ".UUID", identifiable.getUniqueId().toString());
+							key.append("NAME").ifPresent(k ->
+									resultMap.put(k, identifiable.getUniqueId().toString()));
 						}
 					});
 

@@ -17,23 +17,27 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
+import com.winterhavenmc.util.messagebuilder.util.RecordKey;
+import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.VALUE;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.logging;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public class ResultMap
 {
-	private final Map<String, String> internalResultMap;
+	private final Map<RecordKey, String> internalResultMap;
+	private static final Predicate<String> STRING_IS_NULL = Objects::isNull;
+	private static final Predicate<String> STRING_IS_EMPTY = String::isBlank;
+	private static final Predicate<String> INVALID = STRING_IS_NULL.or(STRING_IS_EMPTY);
 
 
 	/**
@@ -44,53 +48,40 @@ public class ResultMap
 		this.internalResultMap = new HashMap<>();
 	}
 
-
-	public void put(final String key, final String value)
+	public void put(final RecordKey key, final String value)
 	{
-		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, throwing(PARAMETER_EMPTY, KEY));
-		validate(value, Objects::isNull, throwing(PARAMETER_NULL, VALUE));
-		// allow blank string value to be passed in. Uncomment line below to throw exception on blank string value
-		//staticValidate(value, String::isBlank, () -> new ValidationException(PARAMETER_EMPTY, VALUE));
-
-		internalResultMap.put(key, value);
+		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE))
+				.ifPresent((string -> internalResultMap.put(key, string)));
 	}
 
 
-	public String get(final String key)
+	public String get(final RecordKey key)
 	{
-		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, throwing(PARAMETER_EMPTY, KEY));
-
 		return internalResultMap.get(key);
 	}
 
 
-	public String getValueOrKey(final String key) {
-		return internalResultMap.getOrDefault(key, key); // Return key itself if not found
+	public String getValueOrKey(final RecordKey key) {
+		return internalResultMap.getOrDefault(key, key.toString()); // Return key itself if not found
 	}
 
 
 	public void putAll(final @NotNull ResultMap insertionMap)
 	{
-		for (Map.Entry<String, String> entry : insertionMap.entrySet()) {
-			String key = entry.getKey();
+		for (Map.Entry<RecordKey, String> entry : insertionMap.entrySet()) {
 			String value = entry.getValue();
-			internalResultMap.put(key, value);
+			internalResultMap.put(entry.getKey(), value);
 		}
 	}
 
 
-	public boolean containsKey(final String key)
+	public boolean containsKey(final RecordKey key)
 	{
-		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
-		validate(key, String::isBlank, throwing(PARAMETER_EMPTY, KEY));
-
 		return internalResultMap.containsKey(key);
 	}
 
 
-	public Iterable<? extends Map.Entry<String, String>> entrySet()
+	public Iterable<? extends Map.Entry<RecordKey, String>> entrySet()
 	{
 		return internalResultMap.entrySet();
 	}
