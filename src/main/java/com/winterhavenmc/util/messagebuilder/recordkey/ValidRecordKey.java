@@ -35,7 +35,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * validated upon creation. The static factory methods return an Optional of the ValidRecordKey,
  * or an empty Optional if the parameter was invalid, as determined by regex pattern and Predicate.
  */
-public final class ValidRecordKey implements RecordKeyResult
+public final class ValidRecordKey implements RecordKey
 {
 	// valid key must begin with alpha only and may contain alpha, digits, underscore or period
 	private static final Pattern VALID_KEY = Pattern.compile("^[a-zA-Z][a-zA-Z\\d_.]*$");

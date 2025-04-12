@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder.recordkey;
 import java.util.Optional;
 
 
-public sealed interface RecordKeyResult permits ValidRecordKey, InvalidRecordKey
+public sealed interface RecordKey permits ValidRecordKey, InvalidRecordKey
 {
 	/**
 	 * Static factory method for instantiating a record key from a string
@@ -28,11 +28,11 @@ public sealed interface RecordKeyResult permits ValidRecordKey, InvalidRecordKey
 	 * @param key a String to be used in the creation of a record key
 	 * @return an Optional ValidRecordKey, or an empty Optional if the key parameter is null or invalid
 	 */
-	static RecordKeyResult of(final String key)
+	static RecordKey of(final String key)
 	{
 		return (key == null || key.isBlank())
 			? new InvalidRecordKey()
-			: RecordKeyResult.of(key);
+			: RecordKey.of(key);
 	}
 
 

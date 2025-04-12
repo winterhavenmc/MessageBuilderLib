@@ -17,4 +17,5 @@
 
 package com.winterhavenmc.util.messagebuilder.recordkey;
 
-public record InvalidRecordKey() implements RecordKeyResult { }
+public record InvalidRecordKey() implements RecordKey
+{ }
