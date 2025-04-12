@@ -41,7 +41,7 @@ public class DefaultFieldExtractor<T> implements FieldExtractor<T>
 		return extractionLogic.apply(source)
 				.entrySet().stream()
 				.collect(Collectors.toMap(
-						entry -> macroKey + "." + entry.getKey(),
+						entry -> macroKey.append(entry.getKey()).toString(),
 						Map.Entry::getValue
 				));
 	}
