@@ -17,113 +17,128 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.displayname;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-public class DisplayNameAdapterTest {
+
+@ExtendWith(MockitoExtension.class)
+public class DisplayNameAdapterTest
+{
+	@Mock Player playerMock;
+	@Mock Entity entityMock;
+	@Mock World worldMock;
+
 
 	@Nested
-	class PlayerDisplayNameAdapterTests {
-		@Test
-		public void testGetDisplayName_withValidPlayer() {
+	class PlayerDisplayNameAdapterTests
+	{
+		@Test @DisplayName("Get DisplayName with valid Player.")
+		public void testGetDisplayName_withValidPlayer()
+		{
 			// Arrange
-			Player playerMock = mock(Player.class, "MockPlayer");
 			when(playerMock.getDisplayName()).thenReturn("&aPlayer One Display Name");
-			String displayName = "";
 
 			// Act
-			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(playerMock); // DisplayNameAdapter.asDisplayNameable(playerMock);
-			if (resolver.isPresent()) {
-				displayName = resolver.get().getDisplayName();
-			}
+			Optional<DisplayNameable> adapter = new DisplayNameAdapter().adapt(playerMock);
+			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
 			// Assert
-			assertEquals("&aPlayer One Display Name", displayName, "The resolver should return the displayName from the Player.");
+			assertTrue(displayName.isPresent());
+			assertEquals("&aPlayer One Display Name", displayName.get(), "The adapter should return the displayName from the Player.");
 		}
 
 		@Test
-		public void testGetDisplayName_withNullPlayer() {
-			// Arrange
-			Player nullPlayer = null;
-			String displayName = null;
-
-			// Act
-			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(nullPlayer); // DisplayNameAdapter.asDisplayNameable(nullPlayer);
-			if (resolver.isPresent()) {
-				displayName = resolver.get().getDisplayName();
-			}
+		public void testGetDisplayName_withNullPlayer()
+		{
+			// Arrange & Act
+			Optional<DisplayNameable> adapter = new DisplayNameAdapter().adapt(null);
+			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
 			// Assert
-			assertNull(displayName, "The resolver should return an empty string for a null Player.");
+			assertTrue(displayName.isEmpty(), "The adapter should return an empty string for a null Player.");
 		}
 
-		@Test
-		public void testConstructor_withNullPlayer() {
-			// Arrange
-			String displayName = null;
 
-			// Act
-			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(null); // DisplayNameAdapter.asDisplayNameable(null);
-			if (resolver.isPresent()) {
-				displayName = resolver.get().getDisplayName();
-			}
+		@Test @DisplayName("Test constructor with null player.")
+		public void testConstructor_withNullPlayer()
+		{
+			// Arrange & Act
+			Optional<DisplayNameable> adapter = new DisplayNameAdapter().adapt(null);
+			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
 			// assert
-			assertNull(displayName);
+			assertTrue(displayName.isEmpty());
 		}
 	}
 
 
-	@Nested
-	class EntityDisplayNameableTests {
-
-		@Test
-		void testGetDisplayName_withValidEntity() {
+	@Nested @DisplayName("DisplayNameable Tests for Entity")
+	class EntityDisplayNameableTests
+	{
+		@Test @DisplayName("Get DisplayName with valid Entity.")
+		void testGetDisplayName_withValidEntity()
+		{
 			// Arrange
-			Entity entityMock = mock(Entity.class, "MockEntity");
 			when(entityMock.getCustomName()).thenReturn("Custom Entity Name");
-			String displayName = "";
 
 			// Act
-			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(entityMock); // DisplayNameAdapter.asDisplayNameable(entityMock);
-			if (resolver.isPresent()) {
-				displayName = resolver.get().getDisplayName();
-			}
+			Optional<DisplayNameable> adapter = new DisplayNameAdapter().adapt(entityMock);
+			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
 			// Assert
-			assertEquals("Custom Entity Name", displayName, "The resolver should return the displayName from the Entity.");
+			assertTrue(displayName.isPresent());
+			assertEquals("Custom Entity Name", displayName.get(), "The adapter should return the displayName from the Entity.");
 		}
 	}
 
-	@Nested
-	class WorldDisplayNameableTests {
 
+	@Nested @DisplayName("DisplayNameable Tests for World.")
+	class WorldDisplayNameableTests
+	{
 		@Test
-		void testGetDisplayName_withValidWorld() {
+		void testGetDisplayName_withValidWorld()
+		{
 			// Arrange
-			World worldMock = mock(World.class, "MockWorld");
 			when(worldMock.getName()).thenReturn("World Name");
-			String displayName = "";
 
 			// Act
-			Optional<DisplayNameable> resolver = new DisplayNameAdapter().adapt(worldMock); // DisplayNameAdapter.asDisplayNameable(worldMock);
-			if (resolver.isPresent()) {
-				displayName = resolver.get().getDisplayName();
-			}
+			Optional<DisplayNameable> adapter = new DisplayNameAdapter().adapt(worldMock);
+			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
 			// Assert
-			assertEquals("World Name", displayName, "The resolver should return the displayName from the World.");
+			assertTrue(displayName.isPresent());
+			assertEquals("World Name", displayName.get(), "The adapter should return the displayName from the World.");
 		}
+	}
+
+
+	@Test
+	void testGetInterface()
+	{
+		// Arrange
+		Adapter<DisplayNameable> adapter = new DisplayNameAdapter();
+
+		// Act
+		Class<DisplayNameable> result = adapter.getInterface();
+
+		// Assert
+		assertEquals(DisplayNameable.class, result);
 	}
 
 }

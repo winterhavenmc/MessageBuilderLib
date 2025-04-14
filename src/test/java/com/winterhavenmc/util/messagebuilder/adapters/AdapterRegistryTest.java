@@ -19,93 +19,85 @@ package com.winterhavenmc.util.messagebuilder.adapters;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.UUID;
-
-import static org.mockito.Mockito.*;
+import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
 class AdapterRegistryTest
 {
-	private AdapterRegistry adapterRegistry;
+	@Mock Adapter<MockType> adapterMock;
+	private AdapterRegistry registry;
+
+	interface MockType { }
 
 
 	@BeforeEach
-	void setUp()
-    {
-		adapterRegistry = new AdapterRegistry();
+	public void setup() {
+		registry = new AdapterRegistry();
+	}
+
+
+
+	@Test
+	public void testRegisterAndRetrieveAdapter()
+	{
+		registry.registerAdapter(MockType.class, () -> adapterMock);
+
+		Adapter<?> retrieved = registry.getAdapter(MockType.class);
+		assertNotNull(retrieved);
+		assertSame(adapterMock, retrieved);
 	}
 
 
 	@Test
-	void testGetAdapter_WithBuiltInAdapter_ShouldReturnInstance()
-    {
-		// Act
-		Adapter adapter = adapterRegistry.getAdapter(DisplayNameable.class);
-
-		// Assert
-		assertNotNull(adapter);
-		assertInstanceOf(DisplayNameAdapter.class, adapter);
+	public void testNoAdaptersForNull()
+	{
+		assertEquals(0, registry.matchingAdapters(null).count());
 	}
 
 
 	@Test
-	void testGetAdapter_CachesBuiltInAdapters()
-    {
-		// Act
-		Adapter firstCall = adapterRegistry.getAdapter(DisplayNameable.class);
-		Adapter secondCall = adapterRegistry.getAdapter(DisplayNameable.class);
+	public void testAdapterIsCached() {
+		registry.registerAdapter(MockType.class, () -> adapterMock);
 
-		// Assert
-		assertSame(firstCall, secondCall, "Adapter should be cached and reused.");
+		Adapter<?> first = registry.getAdapter(MockType.class);
+		Adapter<?> second = registry.getAdapter(MockType.class);
+		assertSame(first, second);
 	}
 
 
 	@Test
-	void testGetAdapter_UnregisteredType_ShouldReturnNull()
-    {
-		// Act
-		Adapter adapter = adapterRegistry.getAdapter(UUID.class); // Arbitrary unregistered type
+	public void testMatchingAdapterByAssignableType()
+	{
+		registry.registerAdapter(MockType.class, () -> adapterMock);
 
-		// Assert
-		assertNull(adapter, "Should return null for unregistered types.");
+		class Impl implements MockType { }
+		Impl mockObj = new Impl();
+
+		List<Adapter<MockType>> matching = registry.matchingAdapters((MockType) mockObj).toList();
+
+		assertEquals(1, matching.size());
+		assertSame(adapterMock, matching.getFirst());
 	}
 
 
 	@Test
-	void testRegisterAdapter_ShouldOverrideBuiltInAdapter()
-    {
-		// Arrange
-		Adapter mockAdapter = mock(Adapter.class);
+	public void testGetAdapterReturnsNullWhenNotRegistered() {
+		class UnregisteredType {}
 
-		// Act
-		adapterRegistry.registerAdapter(DisplayNameable.class, mockAdapter);
-		Adapter retrievedAdapter = adapterRegistry.getAdapter(DisplayNameable.class);
+		Adapter<UnregisteredType> adapter = registry.getAdapter(UnregisteredType.class);
 
-		// Assert
-		assertSame(mockAdapter, retrievedAdapter, "Custom adapter should override built-in adapter.");
-	}
+		assertNull(adapter, "Adapter for unregistered type should return null");
 
+		// Optional: call again to verify it's cached (no recompute, no exception)
+		Adapter<UnregisteredType> cached = registry.getAdapter(UnregisteredType.class);
 
-	@Test
-	void testRegisterAdapter_CustomAdapter_ShouldBeRetrievable()
-    {
-		// Arrange
-		Adapter customAdapter = mock(Adapter.class);
-		Class<?> customType = String.class; // Arbitrary type
-
-		// Act
-		adapterRegistry.registerAdapter(customType, customAdapter);
-		Adapter retrievedAdapter = adapterRegistry.getAdapter(customType);
-
-		// Assert
-		assertSame(customAdapter, retrievedAdapter, "Custom adapter should be retrievable.");
+		assertNull(cached, "Cached result should also be null");
 	}
 }

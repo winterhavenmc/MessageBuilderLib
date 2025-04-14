@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,19 +32,22 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class QuantityAdapterTest {
-
+public class QuantityAdapterTest
+{
 	@Nested
-	class CollectionQuantityAdapterTests {
+	class CollectionQuantityAdapterTests
+	{
 		@Test
-		public void testGetQuantity_withValidCollection() {
+		public void testGetQuantity_withValidCollection()
+		{
 			// Arrange
 			Collection<String> collection = List.of("item1", "item2", "item3");
 
 			// Act
 			int quantity = -888;
 			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(collection);
-			if (resolver.isPresent()) {
+			if (resolver.isPresent())
+			{
 				quantity = resolver.get().getQuantity();
 			}
 
@@ -51,14 +56,16 @@ public class QuantityAdapterTest {
 		}
 
 		@Test
-		public void testGetQuantity_withEmptyCollection() {
+		public void testGetQuantity_withEmptyCollection()
+		{
 			// Arrange
 			Collection<String> collection = Collections.emptyList();
 
 			// Act
 			int quantity = -777;
 			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(collection);
-			if (resolver.isPresent()) {
+			if (resolver.isPresent())
+			{
 				quantity = resolver.get().getQuantity();
 			}
 
@@ -66,13 +73,16 @@ public class QuantityAdapterTest {
 			assertEquals(0, quantity, "The resolver should return 0 for an empty Collection.");
 		}
 
+
 		@Test
-		public void testConstructor_withNullCollection() {
+		public void testConstructor_withNullCollection()
+		{
 			// Act & Assert
 			int quantity = -999;
 			Collection<String> collection = null;
 			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(collection);
-			if (resolver.isPresent()) {
+			if (resolver.isPresent())
+			{
 				quantity = resolver.get().getQuantity();
 			}
 			assertEquals(-999, quantity);
@@ -81,10 +91,11 @@ public class QuantityAdapterTest {
 
 
 	@Nested
-	class ItemStackQuantityAdapterTest {
-
+	class ItemStackQuantityAdapterTest
+	{
 		@Test
-		public void testGetQuantity_withValidItemStack() {
+		public void testGetQuantity_withValidItemStack()
+		{
 			// Arrange
 			ItemStack itemStackMock = Mockito.mock(ItemStack.class);
 			Mockito.when(itemStackMock.getAmount()).thenReturn(64); // Simulate a stack of 64 items
@@ -92,7 +103,8 @@ public class QuantityAdapterTest {
 			// Act
 			int quantity = -888;
 			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(itemStackMock);
-			if (resolver.isPresent()) {
+			if (resolver.isPresent())
+			{
 				quantity = resolver.get().getQuantity();
 			}
 
@@ -100,8 +112,10 @@ public class QuantityAdapterTest {
 			assertEquals(64, quantity, "The adapter should return the amount from the ItemStack.");
 		}
 
+
 		@Test
-		public void testGetQuantity_withEmptyItemStack() {
+		public void testGetQuantity_withEmptyItemStack()
+		{
 			// Arrange
 			ItemStack itemStackMock = Mockito.mock(ItemStack.class);
 			Mockito.when(itemStackMock.getAmount()).thenReturn(0); // Simulate an empty stack
@@ -109,7 +123,8 @@ public class QuantityAdapterTest {
 			// Act
 			int quantity = -777;
 			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(itemStackMock);
-			if (resolver.isPresent()) {
+			if (resolver.isPresent())
+			{
 				quantity = resolver.get().getQuantity();
 			}
 
@@ -117,17 +132,33 @@ public class QuantityAdapterTest {
 			assertEquals(0, quantity, "The adapter should return 0 for an empty ItemStack.");
 		}
 
+
 		@Test
-		public void testConstructor_withNullItemStack() {
+		public void testConstructor_withNullItemStack()
+		{
 			// Act & Assert
 			int quantity = -999;
 			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(null);
-			if (resolver.isPresent()) {
+			if (resolver.isPresent())
+			{
 				quantity = resolver.get().getQuantity();
 			}
 			assertEquals(-999, quantity);
 		}
+	}
 
+
+	@Test
+	void testGetInterface()
+	{
+		// Arrange
+		Adapter<Quantifiable> adapter = new QuantityAdapter();
+
+		// Act
+		var result = adapter.getInterface();
+
+		// Assert
+		assertEquals(Quantifiable.class, result);
 	}
 
 }

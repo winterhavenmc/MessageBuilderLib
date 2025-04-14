@@ -17,32 +17,42 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.uuid;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.profile.PlayerProfile;
-
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 
-class UniqueIdAdapterTest {
+@ExtendWith(MockitoExtension.class)
+class UniqueIdAdapterTest
+{
+	@Mock Entity entityMock;
+	@Mock PlayerProfile playerProfileMock;
 
 	@Test
-	public void testGetUUID_withValidEntity() {
+	public void testGetUUID_withValidEntity()
+	{
 		// Arrange
-		Entity entityMock = mock(Entity.class, "MockEntity");
-		when(entityMock.getUniqueId()).thenReturn(new UUID(0,1));
+		when(entityMock.getUniqueId()).thenReturn(new UUID(0, 1));
 		UUID uuid = null;
 
 		// Act
 		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(entityMock);
-		if (resolver.isPresent()) {
+		if (resolver.isPresent())
+		{
 			uuid = resolver.get().getUniqueId();
 		}
 
@@ -55,15 +65,16 @@ class UniqueIdAdapterTest {
 
 
 	@Test
-	public void testGetUUID_withValidPlayerProfile() {
+	public void testGetUUID_withValidPlayerProfile()
+	{
 		// Arrange
-		PlayerProfile playerProfileMock = mock(PlayerProfile.class, "MockPlayerProfile");
-		when(playerProfileMock.getUniqueId()).thenReturn(new UUID(0,1));
+		when(playerProfileMock.getUniqueId()).thenReturn(new UUID(0, 1));
 		UUID uuid = null;
 
 		// Act
 		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(playerProfileMock);
-		if (resolver.isPresent()) {
+		if (resolver.isPresent())
+		{
 			uuid = resolver.get().getUniqueId();
 		}
 
@@ -76,15 +87,17 @@ class UniqueIdAdapterTest {
 
 
 	@Test
-	public void testGetUUID_withValidOfflinePlayer() {
+	public void testGetUUID_withValidOfflinePlayer()
+	{
 		// Arrange
 		OfflinePlayer offlinePlayerMock = mock(OfflinePlayer.class, "MockOfflinePlayer");
-		when(offlinePlayerMock.getUniqueId()).thenReturn(new UUID(0,1));
+		when(offlinePlayerMock.getUniqueId()).thenReturn(new UUID(0, 1));
 		UUID uuid = null;
 
 		// Act
 		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(offlinePlayerMock);
-		if (resolver.isPresent()) {
+		if (resolver.isPresent())
+		{
 			uuid = resolver.get().getUniqueId();
 		}
 
@@ -97,15 +110,17 @@ class UniqueIdAdapterTest {
 
 
 	@Test
-	public void testGetUUID_withValidWorld() {
+	public void testGetUUID_withValidWorld()
+	{
 		// Arrange
 		World worldMock = mock(World.class, "MockWorld");
-		when(worldMock.getUID()).thenReturn(new UUID(1,1));
+		when(worldMock.getUID()).thenReturn(new UUID(1, 1));
 		UUID uuid = null;
 
 		// Act
 		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(worldMock);
-		if (resolver.isPresent()) {
+		if (resolver.isPresent())
+		{
 			uuid = resolver.get().getUniqueId();
 		}
 
@@ -118,18 +133,34 @@ class UniqueIdAdapterTest {
 
 
 	@Test
-	public void testGetUUID_withNull() {
+	public void testGetUUID_withNull()
+	{
 		// Arrange
 		UUID uuid = null;
 
 		// Act
 		Optional<Identifiable> resolver = new UniqueIdAdapter().adapt(null);
-		if (resolver.isPresent()) {
+		if (resolver.isPresent())
+		{
 			uuid = resolver.get().getUniqueId();
 		}
 
 		// Assert
 		assertNull(uuid, "The resolver should return a null when passed a null.");
+	}
+
+
+	@Test
+	void testGetInterface()
+	{
+		// Arrange
+		Adapter<Identifiable> adapter = new UniqueIdAdapter();
+
+		// Act
+		var result = adapter.getInterface();
+
+		// Assert
+		assertEquals(Identifiable.class, result);
 	}
 
 }
