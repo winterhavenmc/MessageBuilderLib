@@ -32,17 +32,25 @@ import java.util.Optional;
  * {@code String} display name, regardless of its actual method name. Any object that is not known to have a
  * display name will result in an empty {@code Optional} being returned from the static {@code asDisplayNameable} method.
  */
-public class DisplayNameAdapter implements Adapter
+public class DisplayNameAdapter implements Adapter<DisplayNameable>
 {
 	@Override
 	public Optional<DisplayNameable> adapt(final Object obj)
 	{
-		return switch (obj) {
+		return switch (obj)
+		{
 			case Player player -> Optional.of(player::getDisplayName);
 			case Nameable nameable -> Optional.of(nameable::getCustomName);
-			case World world -> Optional.of(world::getName); //TODO: get Multiverse alias for world DisplayName, else use regular name
+			case World world -> Optional.of(world::getName);
 			case null, default -> Optional.empty();
 		};
+	}
+
+
+	@Override
+	public Class<DisplayNameable> getInterface()
+	{
+		return DisplayNameable.class;
 	}
 
 }

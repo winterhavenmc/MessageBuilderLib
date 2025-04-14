@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 
 import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable;
 import org.bukkit.inventory.ItemStack;
 import java.util.Collection;
 import java.util.Optional;
@@ -31,7 +32,7 @@ import java.util.Optional;
  * is not known to have a quantity will result in an empty {@code Optional} being returned from the
  * static {@code asQuantifiable} method.
  */
-public class QuantityAdapter implements Adapter
+public class QuantityAdapter implements Adapter<Quantifiable>
 {
 	/**
 	 * Static method that returns an {@link Optional} of {@code Quantifiable}, or an empty {@code Optional} if the passed
@@ -45,12 +46,18 @@ public class QuantityAdapter implements Adapter
 	@Override
 	public Optional<Quantifiable> adapt(final Object obj)
 	{
-		// no null check necessary, the switch will return an empty optional
-		return switch (obj) {
+		return switch (obj)
+		{
 			case ItemStack itemStack -> Optional.of(itemStack::getAmount);
 			case Collection<?> collection -> Optional.of(collection::size);
 			case null, default -> Optional.empty();
 		};
+	}
+
+	@Override
+	public Class<Quantifiable> getInterface()
+	{
+		return Quantifiable.class;
 	}
 
 }
