@@ -92,8 +92,22 @@ public class ContextMap
 	 */
 	public <T> void put(final RecordKey macroKey, final T value)
 	{
-        // insert value into map with key, replacing null values with string "NULL"
+		// insert value into map with key, replacing null values with string "NULL"
 		internalMap.put(macroKey, Objects.requireNonNullElse(value, "NULL"));
+	}
+
+
+	/**
+	 * Create and puts a new value with its associated ProcessorType into the context map.
+	 *
+	 * @param macroKey      the unique key for the value
+	 * @param value         the value to store
+	 * @param <T>           the type of the value
+	 */
+	public <T> void putIfAbsent(final RecordKey macroKey, final T value)
+	{
+        // insert value into map with key, replacing null values with string "NULL"
+		internalMap.putIfAbsent(macroKey, Objects.requireNonNullElse(value, "NULL"));
 	}
 
 
