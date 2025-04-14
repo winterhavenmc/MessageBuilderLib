@@ -58,7 +58,7 @@ class AdapterRegistryTest
 	@Test
 	public void testNoAdaptersForNull()
 	{
-		assertEquals(0, registry.matchingAdapters(null).count());
+		assertEquals(0, registry.getMatchingAdapters(null).count());
 	}
 
 
@@ -80,7 +80,7 @@ class AdapterRegistryTest
 		class Impl implements MockType { }
 		Impl mockObj = new Impl();
 
-		List<Adapter<MockType>> matching = registry.matchingAdapters((MockType) mockObj).toList();
+		List<Adapter<MockType>> matching = registry.getMatchingAdapters((MockType) mockObj).toList();
 
 		assertEquals(1, matching.size());
 		assertSame(adapterMock, matching.getFirst());

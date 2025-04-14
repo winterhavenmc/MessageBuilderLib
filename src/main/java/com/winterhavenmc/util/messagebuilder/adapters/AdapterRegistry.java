@@ -109,7 +109,7 @@ public class AdapterRegistry
 	 * @param <T> the class type of the value
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> Stream<Adapter<T>> matchingAdapters(T value)
+	public <T> Stream<Adapter<T>> getMatchingAdapters(T value)
 	{
 		return (value == null)
 				? Stream.empty()
