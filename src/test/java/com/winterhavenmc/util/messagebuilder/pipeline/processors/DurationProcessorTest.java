@@ -83,7 +83,7 @@ class DurationProcessorTest
 		when(playerMock.getLocale()).thenReturn("en-US");
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		Duration durationObject = Duration.ofMillis(12300);
-		contextMap.put(messageKey, durationObject);
+		contextMap.putIfAbsent(messageKey, durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act
@@ -102,7 +102,7 @@ class DurationProcessorTest
 		when(playerMock.getLocale()).thenReturn("en-US");
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		Duration durationObject = Duration.ofMillis(12300);
-		contextMap.put(messageKey, durationObject);
+		contextMap.putIfAbsent(messageKey, durationObject);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Mock the static method Locale.forLanguageTag
@@ -156,7 +156,7 @@ class DurationProcessorTest
 		when(playerMock.getLocale()).thenReturn("en-US");
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		Object object = "a string";
-		contextMap.put(messageKey, object);
+		contextMap.putIfAbsent(messageKey, object);
 		MacroProcessor macroProcessor = new DurationProcessor();
 
 		// Act

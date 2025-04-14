@@ -84,7 +84,7 @@ class OfflinePlayerProcessorTest
 
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 		ContextMap contextMap = ContextMap.of(recipient, macroKey).orElseThrow();
-		contextMap.put(macroKey, offlinePlayerMock);
+		contextMap.putIfAbsent(macroKey, offlinePlayerMock);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
@@ -106,7 +106,7 @@ class OfflinePlayerProcessorTest
 		// Arrange
 		Duration duration  = Duration.ofMillis(2000);
 		ContextMap contextMap = ContextMap.of(recipient, macroKey).orElseThrow();
-		contextMap.put(macroKey, duration);
+		contextMap.putIfAbsent(macroKey, duration);
 		MacroProcessor macroProcessor = new OfflinePlayerProcessor();
 
 		// Act

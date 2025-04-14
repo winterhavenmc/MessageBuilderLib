@@ -81,7 +81,7 @@ class ContextMapTest
 		macroKey = RecordKey.of(Macro.PAGE_NUMBER).orElseThrow();
 
 		// Act
-		contextMap.put(macroKey, number);
+		contextMap.putIfAbsent(macroKey, number);
 
 		// Assert
 		assertEquals(Optional.of(42), contextMap.get(macroKey), "Retrieved value should match the original");
@@ -93,7 +93,7 @@ class ContextMapTest
 	{
 		// Arrange
 		macroKey = RecordKey.of("NUMBER").orElseThrow();
-		contextMap.put(macroKey, null);
+		contextMap.putIfAbsent(macroKey, null);
 
 		// Act
 		Optional<Object> retrievedValue = contextMap.get(macroKey);
@@ -109,7 +109,7 @@ class ContextMapTest
 		// Arrange
 		macroKey = RecordKey.of("PLAYER.LOCATION").orElseThrow();
 		Location location = new Location(worldMock, 10, 20, 30);
-		contextMap.put(macroKey, location);
+		contextMap.putIfAbsent(macroKey, location);
 
 		// Act
 		Optional<Object> retrievedValue = contextMap.get(macroKey);
@@ -126,7 +126,7 @@ class ContextMapTest
 		// Arrange
 		macroKey = RecordKey.of("SWORD").orElseThrow();
 		ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
-		contextMap.put(macroKey, itemStack);
+		contextMap.putIfAbsent(macroKey, itemStack);
 
 		// Act
 		Optional<Object> retrievedValue = contextMap.get(macroKey);
@@ -145,7 +145,7 @@ class ContextMapTest
 		RecordKey nonExistentKey = RecordKey.of("NON_EXISTENT_KEY").orElseThrow();
 		World world = mock(World.class, "MockWorld");
 		Location location = new Location(world, 10, 20, 30);
-		contextMap.put(macroKey, location);
+		contextMap.putIfAbsent(macroKey, location);
 
 		// Act & Assert
 		assertTrue(contextMap.contains(macroKey), "Key should be present in the map");
@@ -169,11 +169,11 @@ class ContextMapTest
 		// Arrange
 		RecordKey key1 = RecordKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
-		contextMap.put(key1, value1);
+		contextMap.putIfAbsent(key1, value1);
 
 		RecordKey key2 = RecordKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
-		contextMap.put(key2, value2);
+		contextMap.putIfAbsent(key2, value2);
 
 		// Act
 		Set<Map.Entry<RecordKey, Object>> entrySet = contextMap.entrySet();
@@ -189,11 +189,11 @@ class ContextMapTest
 		// Arrange
 		RecordKey key1 = RecordKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
-		contextMap.put(key1, value1);
+		contextMap.putIfAbsent(key1, value1);
 
 		RecordKey key2 = RecordKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
-		contextMap.put(key2, value2);
+		contextMap.putIfAbsent(key2, value2);
 
 		assertFalse(contextMap.isEmpty());
 		assertEquals(2, contextMap.size());
@@ -213,7 +213,7 @@ class ContextMapTest
 //		// Arrange
 //		RecordKey key = RecordKey.create("NUMBER1").orElseThrow();
 //		Integer value = 41;
-//		contextMap.put(key, value);
+//		contextMap.putIfAbsent(key, value);
 //
 //		// Act
 //		Object removedObject = contextMap.remove(key);
@@ -228,12 +228,12 @@ class ContextMapTest
 		// Arrange
 		RecordKey macroKey1 = RecordKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
-		contextMap.put(macroKey1, value1);
+		contextMap.putIfAbsent(macroKey1, value1);
 
 		RecordKey macroKey2 = RecordKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 
-		contextMap.put(macroKey2, value2);
+		contextMap.putIfAbsent(macroKey2, value2);
 		assertFalse(contextMap.isEmpty());
 		assertEquals(2, contextMap.size());
 
@@ -247,7 +247,7 @@ class ContextMapTest
 	@Test
 	void testSize_empty() {
 		assertEquals(0, contextMap.size());
-		contextMap.put(macroKey, 42);
+		contextMap.putIfAbsent(macroKey, 42);
 		assertNotEquals(0, contextMap.size());
 	}
 
@@ -258,7 +258,7 @@ class ContextMapTest
 		Integer value = 42;
 
 		// Act
-		contextMap.put(macroKey, value);
+		contextMap.putIfAbsent(macroKey, value);
 
 		// Assert
 		assertEquals(1, contextMap.size());
@@ -276,7 +276,7 @@ class ContextMapTest
 		Integer value = 42;
 
 		// Act
-		contextMap.put(macroKey, value);
+		contextMap.putIfAbsent(macroKey, value);
 
 		// Assert
 		assertFalse(contextMap.isEmpty());

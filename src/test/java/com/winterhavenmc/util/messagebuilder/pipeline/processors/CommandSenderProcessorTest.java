@@ -80,7 +80,7 @@ class CommandSenderProcessorTest
 		when(playerMock.getLocation()).thenReturn(location);
 
 		RecordKey macroKey = RecordKey.of("SOME_KEY").orElseThrow();
-		contextMap.put(macroKey, playerMock);
+		contextMap.putIfAbsent(macroKey, playerMock);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
@@ -95,7 +95,7 @@ class CommandSenderProcessorTest
 	void resolveContext_not_command_sender()
 	{
 		// Arrange
-		contextMap.put(recordKey, 42);
+		contextMap.putIfAbsent(recordKey, 42);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);

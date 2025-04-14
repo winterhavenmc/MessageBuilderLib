@@ -121,7 +121,7 @@ class MacroReplacerTest
 			ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 			MacroReplacer macroReplacer = new MacroReplacer();
 			RecordKey key = RecordKey.of("ITEM_NAME").orElseThrow();
-			contextMap.put(key, "TEST_STRING");
+			contextMap.putIfAbsent(key, "TEST_STRING");
 
 			String resultString = macroReplacer.replaceMacrosInString(contextMap, "Replace this: {ITEM_NAME}");
 			assertEquals("Replace this: TEST_STRING", resultString);

@@ -83,7 +83,7 @@ class LocationProcessorTest
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put(key, locationMock);
+		contextMap.putIfAbsent(key, locationMock);
 
 		// Act
 		ResultMap result = locationProcessor.resolveContext(key, contextMap);
@@ -109,7 +109,7 @@ class LocationProcessorTest
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put(playerKey, locationMock);
+		contextMap.putIfAbsent(playerKey, locationMock);
 
 		// Act
 		ResultMap result = locationProcessor.resolveContext(playerKey, contextMap);
@@ -133,7 +133,7 @@ class LocationProcessorTest
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put(key, locationMock);
+		contextMap.putIfAbsent(key, locationMock);
 
 		// Act
 		ResultMap result = locationProcessor.resolveContext(key, contextMap);
@@ -154,7 +154,7 @@ class LocationProcessorTest
 		when(locationMock.getBlockY()).thenReturn(64);
 		when(locationMock.getBlockZ()).thenReturn(-789);
 
-		contextMap.put(key, locationMock);
+		contextMap.putIfAbsent(key, locationMock);
 
 		// Act
 		ResultMap result = locationProcessor.resolveContext(key, contextMap);
@@ -174,7 +174,7 @@ class LocationProcessorTest
 		// Arrange
 		Duration duration  = Duration.ofMillis(2000);
 		ContextMap contextMap = ContextMap.of(recipient, key).orElseThrow();
-		contextMap.put(key, duration);
+		contextMap.putIfAbsent(key, duration);
 		MacroProcessor macroProcessor = new LocationProcessor();
 
 		// Act

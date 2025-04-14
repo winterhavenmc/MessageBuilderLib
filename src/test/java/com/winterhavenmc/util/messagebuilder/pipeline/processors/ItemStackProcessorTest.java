@@ -69,7 +69,7 @@ class ItemStackProcessorTest
 	{
 		// Arrange
 		ItemStack itemStack = new ItemStack(Material.GOLDEN_AXE);
-		contextMap.put(messageKey, itemStack);
+		contextMap.putIfAbsent(messageKey, itemStack);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);
@@ -85,7 +85,7 @@ class ItemStackProcessorTest
 	{
 		// Arrange
 		int value = 42;
-		contextMap.put(messageKey, value);
+		contextMap.putIfAbsent(messageKey, value);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(messageKey, contextMap);

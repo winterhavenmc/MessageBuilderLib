@@ -88,11 +88,11 @@ public class MacroReplacer implements Replacer
 		RecordKey macroKey = RecordKey.of("RECIPIENT").orElseThrow();
 		RecordKey locationRecordKey = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
 
-		contextMap.put(macroKey, contextMap.getRecipient());
+		contextMap.putIfAbsent(macroKey, contextMap.getRecipient());
 
 		if (contextMap.getRecipient().sender() instanceof Player player)
 		{
-			contextMap.put(locationRecordKey, player.getLocation());
+			contextMap.putIfAbsent(locationRecordKey, player.getLocation());
 		}
 
 		return contextMap;

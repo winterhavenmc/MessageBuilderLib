@@ -76,7 +76,7 @@ class NumberProcessorTest
 		// Arrange
 		RecordKey key = RecordKey.of("SOME_INTEGER").orElseThrow();
 		Integer number = 42;
-		contextMap.put(key, number);
+		contextMap.putIfAbsent(key, number);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
@@ -92,7 +92,7 @@ class NumberProcessorTest
 	{
 		// Arrange
 		RecordKey key = RecordKey.of("KEY").orElseThrow();
-		contextMap.put(key, null);
+		contextMap.putIfAbsent(key, null);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
@@ -108,7 +108,7 @@ class NumberProcessorTest
 		// Arrange
 		RecordKey key = RecordKey.of("SOME_LONG").orElseThrow();
 		Long number = 420L;
-		contextMap.put(key, number);
+		contextMap.putIfAbsent(key, number);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);
@@ -124,7 +124,7 @@ class NumberProcessorTest
 	{
 		// Arrange
 		RecordKey key = RecordKey.of("KEY").orElseThrow();
-		contextMap.put(key, null);
+		contextMap.putIfAbsent(key, null);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(key, contextMap);

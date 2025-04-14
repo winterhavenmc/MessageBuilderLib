@@ -73,7 +73,7 @@ class StringProcessorTest {
 	{
 		String stringObject = "some name";
 
-		contextMap.put(macroKey, stringObject);
+		contextMap.putIfAbsent(macroKey, stringObject);
 
 		MacroProcessor macroProcessor = new StringProcessor();
 
@@ -89,7 +89,7 @@ class StringProcessorTest {
 	{
 		Duration duration  = Duration.ofMillis(2000);
 
-		contextMap.put(macroKey, duration);
+		contextMap.putIfAbsent(macroKey, duration);
 
 		MacroProcessor macroProcessor = new StringProcessor();
 

@@ -77,8 +77,8 @@ class ContextResolverTest
 		ContextMap contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
 		RecordKey numberRecordKey = RecordKey.of("NUMBER").orElseThrow();
 		RecordKey itemStackRecordKey = RecordKey.of("ITEM_STACK").orElseThrow();
-		contextMap.put(numberRecordKey, 42);
-		contextMap.put(itemStackRecordKey, itemStack);
+		contextMap.putIfAbsent(numberRecordKey, 42);
+		contextMap.putIfAbsent(itemStackRecordKey, itemStack);
 
 		// Act
         ResultMap resultMap = contextResolver.resolve(contextMap);

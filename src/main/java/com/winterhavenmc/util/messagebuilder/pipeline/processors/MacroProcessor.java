@@ -58,7 +58,7 @@ import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
  *     @Override
  *     public <T> ResultMap resolveContext(String key, ContextMap contextMap, T value) {
  *         if (value instanceof Number number) {
- *             contextMap.put(key, number.toString());
+ *             contextMap.putIfAbsent(key, number.toString());
  *             return ResultMap.success(key);
  *         }
  *         return ResultMap.failure(key, "Value is not a number.");

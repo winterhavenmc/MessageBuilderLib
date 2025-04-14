@@ -70,7 +70,7 @@ public final class ValidMessage implements Message
 		RecordKey macroKey = RecordKey.of(macro).orElseThrow(() ->
 				new ValidationException(PARAMETER_NULL, Parameter.MACRO));
 
-		contextMap.put(macroKey, value);
+		contextMap.putIfAbsent(macroKey, value);
 		return this;
 	}
 
@@ -94,8 +94,8 @@ public final class ValidMessage implements Message
 		RecordKey quantityKey = RecordKey.of(macroKey + ".QUANTITY")
 				.orElseThrow(() -> new ValidationException(PARAMETER_INVALID, Parameter.QUANTITY));
 
-		contextMap.put(macroKey, value);
-		contextMap.put(quantityKey, quantity);
+		contextMap.putIfAbsent(macroKey, value);
+		contextMap.putIfAbsent(quantityKey, quantity);
 		return this;
 	}
 

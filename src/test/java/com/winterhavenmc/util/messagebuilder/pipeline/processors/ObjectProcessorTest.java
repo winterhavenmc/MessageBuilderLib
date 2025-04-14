@@ -70,7 +70,7 @@ class ObjectProcessorTest {
 	void resolveContext_integer() {
 		// Arrange
 		Integer value = 42;
-		contextMap.put(recordKey, value);
+		contextMap.putIfAbsent(recordKey, value);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);

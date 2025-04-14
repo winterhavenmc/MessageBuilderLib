@@ -74,8 +74,10 @@ class DefaultFieldExtractorTest
 
 		CustomType custom = new CustomType("Alice", 30);
 		RecordKey macroKey = RecordKey.of("CUSTOM").orElseThrow();
+
 		Map<String, String> result = extractor.extract(custom, macroKey);
 
+		System.out.println(result);
 		assertEquals(2, result.size());
 		assertEquals("Alice", result.get("CUSTOM.NAME"));
 		assertEquals("30", result.get("CUSTOM.AGE"));

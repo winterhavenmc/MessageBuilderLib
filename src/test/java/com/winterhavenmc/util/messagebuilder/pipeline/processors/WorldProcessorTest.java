@@ -92,7 +92,7 @@ class WorldProcessorTest
 		RecordKey macroKey = RecordKey.of("SOME_WORLD").orElseThrow();
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(macroKey, worldMock);
+		contextMap.putIfAbsent(macroKey, worldMock);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);
@@ -113,7 +113,7 @@ class WorldProcessorTest
 		RecordKey recordKey = RecordKey.of("SOME_WORLD").orElseThrow();
 		ContextMap contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(recordKey, worldMock);
+		contextMap.putIfAbsent(recordKey, worldMock);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
@@ -130,7 +130,7 @@ class WorldProcessorTest
 		// Arrange
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 		MacroProcessor macroProcessor = new WorldProcessor();
-		contextMap.put(macroKey, null);
+		contextMap.putIfAbsent(macroKey, null);
 
 		// Act
 		ResultMap resultMap = macroProcessor.resolveContext(macroKey, contextMap);

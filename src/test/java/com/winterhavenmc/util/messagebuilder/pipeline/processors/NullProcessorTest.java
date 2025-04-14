@@ -69,7 +69,7 @@ class NullProcessorTest {
 		// Arrange
 		NullProcessor nullProcessor = new NullProcessor();
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
-		contextMap.put(messageKey, null);
+		contextMap.putIfAbsent(messageKey, null);
 
 		// Act
 		ResultMap resultMap = nullProcessor.resolveContext(messageKey, contextMap);
@@ -84,7 +84,7 @@ class NullProcessorTest {
 		// Arrange
 		NullProcessor nullProcessor = new NullProcessor();
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
-		contextMap.put(messageKey, 42);
+		contextMap.putIfAbsent(messageKey, 42);
 
 		// Act
 		ResultMap resultMap = nullProcessor.resolveContext(messageKey, contextMap);
