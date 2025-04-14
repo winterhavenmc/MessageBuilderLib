@@ -54,7 +54,8 @@ public enum Parameter
 	UNKNOWN("«UNKNOWN»"),
 	VALUE("value"),
 	WORLD("world"),
-	;
+	ADAPTER("adapter"),
+	TYPE("type");
 
 	private final String displayName;
 
