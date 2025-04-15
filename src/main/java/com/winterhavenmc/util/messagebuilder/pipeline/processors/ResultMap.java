@@ -48,10 +48,32 @@ public class ResultMap
 		this.internalResultMap = new HashMap<>();
 	}
 
+
 	public void put(final RecordKey key, final String value)
+	{
+		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
+		internalResultMap.put(key, value);
+	}
+
+
+	public void putIfAbsent(final RecordKey key, final String value)
+	{
+		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
+		internalResultMap.putIfAbsent(key, value);
+	}
+
+
+	public void putIfValid(final RecordKey key, final String value)
 	{
 		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE))
 				.ifPresent((string -> internalResultMap.put(key, string)));
+	}
+
+
+	public void putIfAbsentAndValid(final RecordKey key, final String value)
+	{
+		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE))
+				.ifPresent((string -> internalResultMap.putIfAbsent(key, string)));
 	}
 
 
