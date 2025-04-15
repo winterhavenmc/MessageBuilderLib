@@ -17,19 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.ItemStack;
 
-import java.time.Duration;
 import java.util.function.Function;
 
 
 public enum ProcessorType
 {
-	LOCATION(ctx -> new LocationProcessor()),
 	NUMBER(ctx -> new NumberProcessor()),
 	OFFLINE_PLAYER(ctx -> new OfflinePlayerProcessor()),
 	WORLD(ctx -> new WorldProcessor()),
@@ -75,7 +70,6 @@ public enum ProcessorType
 	{
 		return switch (object) {
 			case OfflinePlayer ignored -> OFFLINE_PLAYER;
-			case Location ignored -> LOCATION;
 			case World ignored -> WORLD;
 			case Number ignored -> NUMBER;
 			case String ignored -> STRING;
