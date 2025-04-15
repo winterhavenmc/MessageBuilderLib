@@ -28,7 +28,6 @@ public enum ProcessorType
 	OFFLINE_PLAYER(ctx -> new OfflinePlayerProcessor()),
 	WORLD(ctx -> new WorldProcessor()),
 	STRING(ctx -> new StringProcessor()),
-	OBJECT(ctx -> new ObjectProcessor()),
 	;
 
 	private final Function<DependencyContext, MacroProcessor> creator;
@@ -70,7 +69,7 @@ public enum ProcessorType
 			case OfflinePlayer ignored -> OFFLINE_PLAYER;
 			case World ignored -> WORLD;
 			case String ignored -> STRING;
-			default -> OBJECT;
+			default -> null;
 		};
 	}
 
