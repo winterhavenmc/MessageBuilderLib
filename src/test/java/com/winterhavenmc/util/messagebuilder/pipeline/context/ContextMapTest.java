@@ -81,6 +81,21 @@ class ContextMapTest
 		macroKey = RecordKey.of(Macro.PAGE_NUMBER).orElseThrow();
 
 		// Act
+		contextMap.put(macroKey, number);
+
+		// Assert
+		assertEquals(Optional.of(42), contextMap.get(macroKey), "Retrieved value should match the original");
+	}
+
+
+	@Test
+	void testPutIfAbsent()
+	{
+		// Arrange
+		Integer number = 42;
+		macroKey = RecordKey.of(Macro.PAGE_NUMBER).orElseThrow();
+
+		// Act
 		contextMap.putIfAbsent(macroKey, number);
 
 		// Assert

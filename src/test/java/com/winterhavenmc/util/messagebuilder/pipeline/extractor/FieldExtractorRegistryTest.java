@@ -17,81 +17,78 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.name.Nameable;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
-import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 class FieldExtractorRegistryTest
 {
 	private FieldExtractorRegistry registry;
+	private RecordKey baseKey;
+
+
+	private <T> Map<RecordKey, Object> invokeExtractor(Adapter<T> adapter, T value, String baseKeyString)
+	{
+		RecordKey baseKey = RecordKey.of(baseKeyString).orElseThrow();
+		return registry.extractFields(adapter, value, baseKey);
+	}
+
 
 	@BeforeEach
-	void setUp()
-    {
+	void setup()
+	{
 		registry = new FieldExtractorRegistry();
+		baseKey = RecordKey.of("PLAYER").orElseThrow();
 	}
 
 
 	@Test
-	void testRegisterAndExtractFields()
-    {
-		registry.registerExtractor(String.class, str -> Map.of("VALUE", str.toUpperCase()));
+	void testNameableFieldExtraction()
+	{
+		NameAdapter adapter = new NameAdapter();
+		Nameable nameable = mock(Nameable.class);
+		when(nameable.getName()).thenReturn("Alex");
 
-		Optional<Map<String, Object>> result = registry.extractFields("hello");
+		Map<RecordKey, Object> result = invokeExtractor(adapter, nameable, "PLAYER");
 
-		assertTrue(result.isPresent());
-		assertEquals(1, result.get().size());
-		assertEquals("HELLO", result.get().get("VALUE"));
+		assertEquals(2, result.size());
+		assertEquals("Alex", result.get(RecordKey.of("PLAYER").orElseThrow()));
+		assertEquals("Alex", result.get(RecordKey.of("PLAYER.NAME").orElseThrow()));
 	}
 
 
 	@Test
-	void testExtractFields_NoExtractorRegistered()
-    {
-		Optional<Map<String, Object>> result = registry.extractFields(42);
-
-		assertFalse(result.isPresent());
+	void testNullAdapterReturnsEmptyMap()
+	{
+		Map<RecordKey, Object> result = registry.extractFields(null, "value", baseKey);
+		assertTrue(result.isEmpty());
 	}
 
-	@Test
-	void testExtractFields_NullInput() {
-		Optional<Map<String, Object>> result = registry.extractFields(null);
 
-		assertFalse(result.isPresent());
+	@Test
+	void testNullValueThrowsException()
+	{
+		NameAdapter adapter = new NameAdapter();
+		assertThrows(NullPointerException.class, () -> registry.extractFields(adapter, null, baseKey));
 	}
 
-	@Test
-	void testExtractorForCustomType() {
-		class CustomType {
-			final String name;
-			CustomType(String name) { this.name = name; }
-		}
-
-		registry.registerExtractor(CustomType.class, obj -> Map.of("NAME", obj.name));
-
-		CustomType custom = new CustomType("CustomName");
-		Optional<Map<String, Object>> result = registry.extractFields(custom);
-
-		assertTrue(result.isPresent());
-		assertEquals(1, result.get().size());
-		assertEquals("CustomName", result.get().get("NAME"));
-	}
 
 	@Test
-	void testOverwritingExtractor() {
-		registry.registerExtractor(Integer.class, num -> Map.of("NUMBER", num * 2));
-		registry.registerExtractor(Integer.class, num -> Map.of("NUMBER", num * 3));
-
-		Optional<Map<String, Object>> result = registry.extractFields(10);
-
-		assertTrue(result.isPresent());
-		assertEquals(1, result.get().size());
-		assertEquals(30, result.get().get("NUMBER")); // Last registered extractor should take precedence
+	void testNullBaseKeyThrowsException()
+	{
+		NameAdapter adapter = new NameAdapter();
+		Nameable nameable = mock(Nameable.class);
+		assertThrows(NullPointerException.class, () -> registry.extractFields(adapter, nameable, null));
 	}
 
 }

@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
@@ -62,7 +63,7 @@ class PlaceholderMatcherTest
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
-		macroReplacer = new MacroReplacer();
+		macroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
 	}
 
 	@AfterEach

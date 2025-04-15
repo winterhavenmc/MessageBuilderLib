@@ -22,7 +22,9 @@ import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
@@ -78,7 +80,7 @@ class MacroReplacerTest
 		macroKey = RecordKey.of(Macro.OWNER).orElseThrow();
 
 		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
-		macroReplacer = new MacroReplacer();
+		macroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
 
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
@@ -119,7 +121,7 @@ class MacroReplacerTest
 		void testReplaceMacrosInString()
 		{
 			ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
-			MacroReplacer macroReplacer = new MacroReplacer();
+			MacroReplacer macroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
 			RecordKey key = RecordKey.of("ITEM_NAME").orElseThrow();
 			contextMap.putIfAbsent(key, "TEST_STRING");
 
@@ -162,7 +164,7 @@ class MacroReplacerTest
 	@Test
 	void testPerformReplacements() {
 		// Arrange
-		MacroReplacer localMacroReplacer = new MacroReplacer();
+		MacroReplacer localMacroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
 
 		ResultMap resultMap = new ResultMap();
 		RecordKey resultKey = RecordKey.of("KEY").orElseThrow();
