@@ -25,7 +25,6 @@ import java.util.function.Function;
 
 public enum ProcessorType
 {
-	NUMBER(ctx -> new NumberProcessor()),
 	OFFLINE_PLAYER(ctx -> new OfflinePlayerProcessor()),
 	WORLD(ctx -> new WorldProcessor()),
 	STRING(ctx -> new StringProcessor()),
@@ -70,7 +69,6 @@ public enum ProcessorType
 		return switch (object) {
 			case OfflinePlayer ignored -> OFFLINE_PLAYER;
 			case World ignored -> WORLD;
-			case Number ignored -> NUMBER;
 			case String ignored -> STRING;
 			default -> OBJECT;
 		};
