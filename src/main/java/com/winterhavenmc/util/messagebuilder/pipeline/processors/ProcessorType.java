@@ -32,7 +32,6 @@ public enum ProcessorType
 	COMMAND_SENDER(ctx -> new CommandSenderProcessor()),
 	ITEM_STACK(ctx -> new ItemStackProcessor()),
 	LOCATION(ctx -> new LocationProcessor()),
-	DURATION(ctx -> new DurationProcessor()),
 	NUMBER(ctx -> new NumberProcessor()),
 	OFFLINE_PLAYER(ctx -> new OfflinePlayerProcessor()),
 	WORLD(ctx -> new WorldProcessor()),
@@ -82,7 +81,6 @@ public enum ProcessorType
 			case ItemStack ignored -> ITEM_STACK;
 			case Location ignored -> LOCATION;
 			case World ignored -> WORLD;
-			case Duration ignored -> DURATION;
 			case Number ignored -> NUMBER;
 			case String ignored -> STRING;
 			case null -> NULL;
