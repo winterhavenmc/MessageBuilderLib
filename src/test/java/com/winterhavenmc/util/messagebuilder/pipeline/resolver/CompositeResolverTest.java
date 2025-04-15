@@ -44,23 +44,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ContextResolverTest
+class CompositeResolverTest
 {
 	@Mock Player playerMock;
-    ContextResolver contextResolver;
+    CompositeResolver compositeResolver;
 
 
 	@BeforeEach
 	void setUp()
 	{
-        contextResolver = new ContextResolver();
+        compositeResolver = new CompositeResolver();
 	}
 
 	@AfterEach
 	void tearDown()
 	{
         playerMock = null;
-        contextResolver = null;
+        compositeResolver = null;
 	}
 
 
@@ -81,7 +81,7 @@ class ContextResolverTest
 		contextMap.putIfAbsent(itemStackRecordKey, itemStack);
 
 		// Act
-        ResultMap resultMap = contextResolver.resolve(contextMap);
+        ResultMap resultMap = compositeResolver.resolve(contextMap);
 
 		// Assert
 		assertTrue(resultMap.containsKey(numberRecordKey));

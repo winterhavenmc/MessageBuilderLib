@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.CompositeResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
@@ -71,7 +71,7 @@ public class MacroReplacer implements Replacer
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
 
 		return Optional.of(messageString)
-				.map(msg -> performReplacements(new ContextResolver().resolve(addRecipientContext(contextMap)), msg))
+				.map(msg -> performReplacements(new CompositeResolver().resolve(addRecipientContext(contextMap)), msg))
 				.orElse(messageString);
 	}
 
