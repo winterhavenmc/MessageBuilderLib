@@ -28,7 +28,7 @@ import java.util.UUID;
 
 public class AtomicResolver implements Resolver
 {
-	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
+	public ResultMap resolve(final RecordKey key, final ContextMap contextMap)
 	{
 		ResultMap result = new ResultMap();
 
