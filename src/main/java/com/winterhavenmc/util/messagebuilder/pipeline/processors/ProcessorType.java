@@ -29,7 +29,6 @@ import java.util.function.Function;
 
 public enum ProcessorType
 {
-	COMMAND_SENDER(ctx -> new CommandSenderProcessor()),
 	ITEM_STACK(ctx -> new ItemStackProcessor()),
 	LOCATION(ctx -> new LocationProcessor()),
 	NUMBER(ctx -> new NumberProcessor()),
@@ -76,7 +75,6 @@ public enum ProcessorType
 	public static ProcessorType matchType(final Object object)
 	{
 		return switch (object) {
-			case CommandSender ignored -> COMMAND_SENDER;
 			case OfflinePlayer ignored -> OFFLINE_PLAYER;
 			case ItemStack ignored -> ITEM_STACK;
 			case Location ignored -> LOCATION;
