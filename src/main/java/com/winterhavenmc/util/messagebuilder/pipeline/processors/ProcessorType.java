@@ -30,7 +30,6 @@ public enum ProcessorType
 	WORLD(ctx -> new WorldProcessor()),
 	STRING(ctx -> new StringProcessor()),
 	OBJECT(ctx -> new ObjectProcessor()),
-	NULL(ctx -> new NullProcessor()),
 	;
 
 	private final Function<DependencyContext, MacroProcessor> creator;
@@ -73,7 +72,6 @@ public enum ProcessorType
 			case World ignored -> WORLD;
 			case Number ignored -> NUMBER;
 			case String ignored -> STRING;
-			case null -> NULL;
 			default -> OBJECT;
 		};
 	}
