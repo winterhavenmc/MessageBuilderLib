@@ -17,33 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
-public class PrototypeDefaultFieldExtractor<T> implements FieldExtractor<T>
+@FunctionalInterface
+public interface Extractor
 {
-	private final Function<T, Map<String, String>> extractionLogic;
-
-
-	public PrototypeDefaultFieldExtractor(final Function<T, Map<String, String>> extractionLogic)
-	{
-		this.extractionLogic = extractionLogic;
-	}
-
-
-	@Override
-	public Map<String, String> extract(final T source, final RecordKey macroKey)
-	{
-		return extractionLogic.apply(source)
-				.entrySet().stream()
-				.collect(Collectors.toMap(
-						entry -> macroKey.append(entry.getKey()).toString(),
-						Map.Entry::getValue
-				));
-	}
-
+	<T> Map<RecordKey, Object> extract(Adapter<T> adapter, T adapted, RecordKey baseKey);
 }
