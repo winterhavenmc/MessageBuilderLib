@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import org.bukkit.Location;
 

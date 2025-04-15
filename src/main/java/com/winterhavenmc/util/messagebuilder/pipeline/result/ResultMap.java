@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.processors;
+package com.winterhavenmc.util.messagebuilder.pipeline.result;
 
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
