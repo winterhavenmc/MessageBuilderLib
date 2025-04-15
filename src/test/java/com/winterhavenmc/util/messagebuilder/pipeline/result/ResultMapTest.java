@@ -63,7 +63,7 @@ class ResultMapTest
 		resultMap.put(recordKey, "second value");
 
 		// Assert
-		assertEquals("first second", resultMap.get(recordKey));
+		assertEquals("second value", resultMap.get(recordKey));
 	}
 
 
@@ -93,7 +93,7 @@ class ResultMapTest
 		resultMap.put(recordKey, "second value");
 
 		// Assert
-		assertEquals("first second", resultMap.get(recordKey));
+		assertEquals("second value", resultMap.get(recordKey));
 	}
 
 
@@ -108,7 +108,7 @@ class ResultMapTest
 		resultMap.put(recordKey, "second value");
 
 		// Assert
-		assertEquals("first second", resultMap.get(recordKey));
+		assertEquals("second value", resultMap.get(recordKey));
 	}
 
 
