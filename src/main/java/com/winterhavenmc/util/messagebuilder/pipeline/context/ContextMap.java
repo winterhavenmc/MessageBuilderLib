@@ -44,7 +44,7 @@ public class ContextMap
 	/**
 	 * Class constructor
 	 *
-	 * @param recipient the message protoRecipient
+	 * @param recipient the message recipient
 	 * @param messageKey the message unique identifier as a string
 	 */
 	private ContextMap(final ValidRecipient recipient, final RecordKey messageKey)
@@ -54,16 +54,23 @@ public class ContextMap
 	}
 
 
-	public static Optional<ContextMap> of(final ValidRecipient protoRecipient, final RecordKey messageKey)
+	/**
+	 * Static factory method returns optional of context map
+	 *
+	 * @param recipient the message recipient
+	 * @param messageKey the message key
+	 * @return an Optional of a new instance of {@code ContextMap}
+	 */
+	public static Optional<ContextMap> of(final ValidRecipient recipient, final RecordKey messageKey)
 	{
-		return Optional.of(new ContextMap(protoRecipient, messageKey));
+		return Optional.of(new ContextMap(recipient, messageKey));
 	}
 
 
 	/**
-	 * Retrieve Optional protoRecipient
+	 * Retrieve Optional recipient
 	 *
-	 * @return the protoRecipient that was used to create the context map
+	 * @return the recipient that was used to create the context map
 	 */
 	public ValidRecipient getRecipient()
 	{
