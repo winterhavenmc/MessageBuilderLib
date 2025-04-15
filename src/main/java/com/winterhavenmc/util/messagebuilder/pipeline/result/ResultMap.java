@@ -63,34 +63,22 @@ public class ResultMap
 	}
 
 
-	public void putIfValid(final RecordKey key, final String value)
-	{
-		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE))
-				.ifPresent((string -> internalResultMap.put(key, string)));
-	}
-
-
-	public void putIfAbsentAndValid(final RecordKey key, final String value)
-	{
-		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE))
-				.ifPresent((string -> internalResultMap.putIfAbsent(key, string)));
-	}
-
-
 	public String get(final RecordKey key)
 	{
 		return internalResultMap.get(key);
 	}
 
 
-	public String getValueOrKey(final RecordKey key) {
+	public String getValueOrKey(final RecordKey key)
+	{
 		return internalResultMap.getOrDefault(key, key.toString()); // Return key itself if not found
 	}
 
 
 	public void putAll(final @NotNull ResultMap insertionMap)
 	{
-		for (Map.Entry<RecordKey, String> entry : insertionMap.entrySet()) {
+		for (Map.Entry<RecordKey, String> entry : insertionMap.entrySet())
+		{
 			String value = entry.getValue();
 			internalResultMap.put(entry.getKey(), value);
 		}
