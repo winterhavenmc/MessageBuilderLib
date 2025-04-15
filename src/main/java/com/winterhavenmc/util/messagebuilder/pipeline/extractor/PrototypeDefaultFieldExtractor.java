@@ -24,12 +24,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public class DefaultFieldExtractor<T> implements FieldExtractor<T>
+public class PrototypeDefaultFieldExtractor<T> implements FieldExtractor<T>
 {
 	private final Function<T, Map<String, String>> extractionLogic;
 
 
-	public DefaultFieldExtractor(final Function<T, Map<String, String>> extractionLogic)
+	public PrototypeDefaultFieldExtractor(final Function<T, Map<String, String>> extractionLogic)
 	{
 		this.extractionLogic = extractionLogic;
 	}

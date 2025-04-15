@@ -26,13 +26,13 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class DefaultFieldExtractorTest
+class PrototypeDefaultFieldExtractorTest
 {
 	@Test
 	void testExtractWithSimpleMapping()
     {
 		Function<String, Map<String, String>> logic = str -> Map.of("LENGTH", String.valueOf(str.length()), "UPPER", str.toUpperCase());
-		DefaultFieldExtractor<String> extractor = new DefaultFieldExtractor<>(logic);
+		PrototypeDefaultFieldExtractor<String> extractor = new PrototypeDefaultFieldExtractor<>(logic);
 
 		RecordKey macroKey = RecordKey.of("STRING").orElseThrow();
 		Map<String, String> result = extractor.extract("test", macroKey);
@@ -47,7 +47,7 @@ class DefaultFieldExtractorTest
 	void testExtractWithEmptyMap()
     {
 		Function<Integer, Map<String, String>> logic = num -> Map.of();
-		DefaultFieldExtractor<Integer> extractor = new DefaultFieldExtractor<>(logic);
+		PrototypeDefaultFieldExtractor<Integer> extractor = new PrototypeDefaultFieldExtractor<>(logic);
 
 		RecordKey macroKey = RecordKey.of("NUMBER").orElseThrow();
 		Map<String, String> result = extractor.extract(123, macroKey);
@@ -70,7 +70,7 @@ class DefaultFieldExtractorTest
 				"AGE", String.valueOf(obj.age)
 		);
 
-		DefaultFieldExtractor<CustomType> extractor = new DefaultFieldExtractor<>(logic);
+		PrototypeDefaultFieldExtractor<CustomType> extractor = new PrototypeDefaultFieldExtractor<>(logic);
 
 		CustomType custom = new CustomType("Alice", 30);
 		RecordKey macroKey = RecordKey.of("CUSTOM").orElseThrow();
@@ -88,7 +88,7 @@ class DefaultFieldExtractorTest
 	void testExtractWithSingleField()
     {
 		Function<Double, Map<String, String>> logic = num -> Map.of("VALUE", String.format("%.2f", num));
-		DefaultFieldExtractor<Double> extractor = new DefaultFieldExtractor<>(logic);
+		PrototypeDefaultFieldExtractor<Double> extractor = new PrototypeDefaultFieldExtractor<>(logic);
 
 		RecordKey macroKey = RecordKey.of("PI").orElseThrow();
 		Map<String, String> result = extractor.extract(3.14159, macroKey);
@@ -102,7 +102,7 @@ class DefaultFieldExtractorTest
 	void testExtractWithSpecialCharactersInKey()
     {
 		Function<String, Map<String, String>> logic = str -> Map.of("SPECIAL-KEY", str);
-		DefaultFieldExtractor<String> extractor = new DefaultFieldExtractor<>(logic);
+		PrototypeDefaultFieldExtractor<String> extractor = new PrototypeDefaultFieldExtractor<>(logic);
 
 		RecordKey macroKey = RecordKey.of("TEST").orElseThrow();
 		Map<String, String> result = extractor.extract("Hello", macroKey);
