@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
@@ -56,7 +56,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MessageProcessorTest
+class MessagePipelineTest
 {
 
 	@Mock MessageRetriever messageRetrieverMock;
@@ -67,7 +67,7 @@ class MessageProcessorTest
 
 	ValidRecipient recipient;
 	CooldownMap cooldownMap;
-	MessageProcessor messageProcessor;
+	MessagePipeline messagePipeline;
 	ValidMessageRecord validMessageRecord;
 	FinalMessageRecord finalMessageRecord;
 	ConfigurationSection section;
@@ -82,7 +82,7 @@ class MessageProcessorTest
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		cooldownMap = new CooldownMap();
-		messageProcessor = new MessageProcessor(
+		messagePipeline = new MessagePipeline(
 				messageRetrieverMock,
 				macroReplacerMock,
 				cooldownMap,
@@ -119,7 +119,7 @@ class MessageProcessorTest
 		messageSenderMock = null;
 		titleSenderMock = null;
 		cooldownMap = null;
-		messageProcessor = null;
+		messagePipeline = null;
 		validMessageRecord = null;
 	}
 
@@ -130,12 +130,12 @@ class MessageProcessorTest
 		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(validMessageRecord);
-		ValidMessage message = new ValidMessage(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messageProcessor);
+		ValidMessage message = new ValidMessage(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messagePipeline);
 
 		when(macroReplacerMock.replaceMacros(validMessageRecord, message.getContextMap())).thenReturn(finalMessageRecord);
 
 		// Act & Assert
-		assertDoesNotThrow(() -> messageProcessor.process(message));
+		assertDoesNotThrow(() -> messagePipeline.process(message));
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();

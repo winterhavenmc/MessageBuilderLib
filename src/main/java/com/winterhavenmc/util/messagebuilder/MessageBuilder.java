@@ -27,7 +27,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
@@ -96,7 +96,7 @@ public final class MessageBuilder
 
 	private final Plugin plugin;
 	private final LanguageResourceManager languageResourceManager;
-	private final MessageProcessor messageProcessor;
+	private final MessagePipeline messagePipeline;
 
 
 	/**
@@ -108,11 +108,11 @@ public final class MessageBuilder
 	 */
 	private MessageBuilder(final Plugin plugin,
 	                       final LanguageResourceManager languageResourceManager,
-	                       final MessageProcessor messageProcessor)
+	                       final MessagePipeline messagePipeline)
 	{
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
-		this.messageProcessor = messageProcessor;
+		this.messagePipeline = messagePipeline;
 	}
 
 
@@ -137,7 +137,7 @@ public final class MessageBuilder
 		// return ValidMessage on valid RecipientResult, else empty no-op message
 		return switch (RecipientResult.from(recipient))
 		{
-			case ValidRecipient validRecipient -> new ValidMessage(validRecipient, validMessageKey, messageProcessor);
+			case ValidRecipient validRecipient -> new ValidMessage(validRecipient, validMessageKey, messagePipeline);
 			case InvalidRecipient ignored -> Message.empty();
 		};
 	}
@@ -177,11 +177,11 @@ public final class MessageBuilder
 		CooldownMap cooldownMap = new CooldownMap();
 		List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
 		MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
-		MessageProcessor messageProcessor = new MessageProcessor(messageRetriever, macroReplacer, cooldownMap, senders);
+		MessagePipeline messagePipeline = new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, senders);
 
 
 
-		return new MessageBuilder(plugin, languageResourceManager, messageProcessor);
+		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
 	}
 
 
@@ -197,13 +197,13 @@ public final class MessageBuilder
 	 */
 	static MessageBuilder test(final Plugin plugin,
 							   final YamlLanguageResourceManager languageResourceManager,
-							   final MessageProcessor messageProcessor)
+							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
-		validate(messageProcessor, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
+		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, messageProcessor);
+		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
 	}
 
 }

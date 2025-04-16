@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -53,7 +53,8 @@ class ValidMessageTest
 {
 	// declare mocks
 	@Mock Player playerMock;
-	@Mock MessageProcessor messageProcessorMock;
+	@Mock
+	MessagePipeline messagePipelineMock;
 
 	// declare real objects
 	FileConfiguration pluginConfiguration;
@@ -82,7 +83,7 @@ class ValidMessageTest
 
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
-		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
+		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 

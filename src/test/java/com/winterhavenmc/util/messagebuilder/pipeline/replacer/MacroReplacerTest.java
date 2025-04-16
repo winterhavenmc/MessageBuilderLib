@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
-import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
@@ -57,7 +57,8 @@ import static org.mockito.Mockito.mock;
 class MacroReplacerTest
 {
 	@Mock Player playerMock;
-	@Mock MessageProcessor messageProcessorMock;
+	@Mock
+	MessagePipeline messagePipelineMock;
 
 	ValidRecipient recipient;
 	RecordKey messageKey;
@@ -79,7 +80,7 @@ class MacroReplacerTest
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		macroKey = RecordKey.of(Macro.OWNER).orElseThrow();
 
-		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
+		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 		macroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
 
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();

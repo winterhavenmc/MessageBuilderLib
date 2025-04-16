@@ -15,13 +15,13 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 
 
 @FunctionalInterface
-public interface Processor
+public interface Pipeline
 {
 	void process(ValidMessage message);
 }

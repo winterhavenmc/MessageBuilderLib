@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownKey;
@@ -33,7 +33,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 
-public final class MessageProcessor implements Processor
+public final class MessagePipeline implements Pipeline
 {
 	private final MessageRetriever messageRetriever;
 	private final MacroReplacer macroReplacer;
@@ -41,10 +41,10 @@ public final class MessageProcessor implements Processor
 	private final List<Sender> senders;
 
 
-	public MessageProcessor(final MessageRetriever messageRetriever,
-	                        final MacroReplacer macroReplacer,
-	                        final CooldownMap cooldownMap,
-	                        final List<Sender> senders)
+	public MessagePipeline(final MessageRetriever messageRetriever,
+						   final MacroReplacer macroReplacer,
+						   final CooldownMap cooldownMap,
+						   final List<Sender> senders)
 	{
 		this.messageRetriever = messageRetriever;
 		this.macroReplacer = macroReplacer;

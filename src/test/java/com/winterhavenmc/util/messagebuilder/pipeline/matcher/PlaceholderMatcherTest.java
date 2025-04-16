@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
@@ -48,7 +48,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlaceholderMatcherTest
 {
 	@Mock Player playerMock;
-	@Mock MessageProcessor messageProcessorMock;
+	@Mock
+	MessagePipeline messagePipelineMock;
 
 	ValidRecipient recipient;
 	MacroReplacer macroReplacer;
@@ -62,7 +63,7 @@ class PlaceholderMatcherTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		message = new ValidMessage(recipient, messageKey, messageProcessorMock);
+		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 		macroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
 	}
 
