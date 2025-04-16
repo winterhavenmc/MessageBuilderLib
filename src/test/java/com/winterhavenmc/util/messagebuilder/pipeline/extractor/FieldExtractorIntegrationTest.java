@@ -66,6 +66,11 @@ class FieldExtractorIntegrationTest
 		assertEquals(expectedValue, result.get(sub), "Expected value for sub key " + sub);
 	}
 
+
+	/**
+	 * Invokes the extractor with unchecked casting to match parameterized test inputs.
+	 * The adapter and value are expected to be type-compatible.
+	 */
 	@SuppressWarnings("unchecked")
 	private Map<RecordKey, Object> invokeExtractorUntyped(Adapter<?> adapter, Object value, String baseKeyString) {
 		RecordKey baseKey = RecordKey.of(baseKeyString).orElseThrow();
