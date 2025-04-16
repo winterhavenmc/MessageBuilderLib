@@ -58,14 +58,14 @@ public final class MessageProcessor implements Processor
 	{
 		Function<CooldownKey, Optional<ValidMessageRecord>> retrieveMessage =key ->
 				{
-					MessageRecord record = messageRetriever.getRecord(message.getMessageKey());
-					return (record instanceof ValidMessageRecord valid)
+					MessageRecord messageRecord = messageRetriever.getRecord(message.getMessageKey());
+					return (messageRecord instanceof ValidMessageRecord valid)
 							? Optional.of(valid)
 							: Optional.empty();
 				};
 
-		Function<ValidMessageRecord, FinalMessageRecord> resolveMacros = record -> macroReplacer
-				.replaceMacros(record, message.getContextMap());
+		Function<ValidMessageRecord, FinalMessageRecord> resolveMacros = messageRecord -> macroReplacer
+				.replaceMacros(messageRecord, message.getContextMap());
 
 		Consumer<FinalMessageRecord> sendMessage = processed -> senders
 				.forEach(sender -> sender.send(message.getRecipient(), processed));
