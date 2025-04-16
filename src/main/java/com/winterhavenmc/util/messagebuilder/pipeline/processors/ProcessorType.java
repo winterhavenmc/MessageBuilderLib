@@ -22,7 +22,6 @@ import java.util.function.Function;
 
 public enum ProcessorType
 {
-	STRING(ctx -> new StringProcessor()),
 	;
 
 	private final Function<DependencyContext, MacroProcessor> creator;
@@ -61,7 +60,6 @@ public enum ProcessorType
 	public static ProcessorType matchType(final Object object)
 	{
 		return switch (object) {
-			case String ignored -> STRING;
 			default -> null;
 		};
 	}
