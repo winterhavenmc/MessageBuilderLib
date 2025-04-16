@@ -25,7 +25,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
@@ -173,13 +173,13 @@ public final class MessageBuilder
 		YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
 		LanguageResourceManager languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
 		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
-		MacroReplacer macroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
+		ContextResolver contextResolver = new ContextResolver();
+		PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
+		MacroReplacer macroReplacer = new MacroReplacer(contextResolver, placeholderMatcher);
 		CooldownMap cooldownMap = new CooldownMap();
 		List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
 		MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
 		MessagePipeline messagePipeline = new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, senders);
-
-
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
 	}

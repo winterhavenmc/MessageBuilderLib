@@ -28,17 +28,18 @@ import com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable;
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class FieldExtractor implements Extractor
 {
 	@Override
-	public <T> Map<RecordKey, Object> extract(Adapter<T> adapter, T adapted, RecordKey baseKey)
+	public <T> Map<MacroKey, Object> extract(Adapter<T> adapter, T adapted, MacroKey baseKey)
 	{
-		Map<RecordKey, Object> fields = new HashMap<>();
+		Map<MacroKey, Object> fields = new HashMap<>();
 
 		switch (adapter)
 		{

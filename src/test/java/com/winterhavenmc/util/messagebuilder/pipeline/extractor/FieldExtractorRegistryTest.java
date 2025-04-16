@@ -20,7 +20,8 @@ package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.name.Nameable;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,12 +35,12 @@ import static org.mockito.Mockito.when;
 class FieldExtractorRegistryTest
 {
 	private FieldExtractorRegistry registry;
-	private RecordKey baseKey;
+	private MacroKey baseKey;
 
 
-	private <T> Map<RecordKey, Object> invokeExtractor(Adapter<T> adapter, T value, String baseKeyString)
+	private <T> Map<MacroKey, Object> invokeExtractor(Adapter<T> adapter, T value, String baseKeyString)
 	{
-		RecordKey baseKey = RecordKey.of(baseKeyString).orElseThrow();
+		MacroKey baseKey = MacroKey.of(baseKeyString).orElseThrow();
 		return registry.extractFields(adapter, value, baseKey);
 	}
 
@@ -48,7 +49,7 @@ class FieldExtractorRegistryTest
 	void setup()
 	{
 		registry = new FieldExtractorRegistry();
-		baseKey = RecordKey.of("PLAYER").orElseThrow();
+		baseKey = MacroKey.of("PLAYER").orElseThrow();
 	}
 
 
@@ -59,18 +60,18 @@ class FieldExtractorRegistryTest
 		Nameable nameable = mock(Nameable.class);
 		when(nameable.getName()).thenReturn("Alex");
 
-		Map<RecordKey, Object> result = invokeExtractor(adapter, nameable, "PLAYER");
+		Map<MacroKey, Object> result = invokeExtractor(adapter, nameable, "PLAYER");
 
 		assertEquals(2, result.size());
-		assertEquals("Alex", result.get(RecordKey.of("PLAYER").orElseThrow()));
-		assertEquals("Alex", result.get(RecordKey.of("PLAYER.NAME").orElseThrow()));
+		assertEquals("Alex", result.get(MacroKey.of("PLAYER").orElseThrow()));
+		assertEquals("Alex", result.get(MacroKey.of("PLAYER.NAME").orElseThrow()));
 	}
 
 
 	@Test
 	void testNullAdapterReturnsEmptyMap()
 	{
-		Map<RecordKey, Object> result = registry.extractFields(null, "value", baseKey);
+		Map<MacroKey, Object> result = registry.extractFields(null, "value", baseKey);
 		assertTrue(result.isEmpty());
 	}
 

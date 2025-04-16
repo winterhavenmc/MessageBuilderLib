@@ -28,7 +28,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 
 import org.bukkit.Location;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -48,6 +48,7 @@ class FieldExtractorIntegrationTest
 {
 	private final FieldExtractorRegistry registry = new FieldExtractorRegistry();
 
+
 	@ParameterizedTest(name = "{index}: {0}")
 	@MethodSource("adapterProvider")
 	void testFieldExtractionWithAdapter(
@@ -58,9 +59,9 @@ class FieldExtractorIntegrationTest
 			String subKey,
 			Object expectedValue)
 	{
-		Map<RecordKey, Object> result = invokeExtractorUntyped(adapter, value, baseKey);
-		RecordKey base = RecordKey.of(baseKey).orElseThrow();
-		RecordKey sub = base.append(subKey).orElseThrow();
+		Map<MacroKey, Object> result = invokeExtractorUntyped(adapter, value, baseKey);
+		MacroKey base = MacroKey.of(baseKey).orElseThrow();
+		MacroKey sub = base.append(subKey).orElseThrow();
 
 		assertEquals(expectedValue, result.get(base), "Expected value for base key " + base);
 		assertEquals(expectedValue, result.get(sub), "Expected value for sub key " + sub);
@@ -72,8 +73,8 @@ class FieldExtractorIntegrationTest
 	 * The adapter and value are expected to be type-compatible.
 	 */
 	@SuppressWarnings("unchecked")
-	private Map<RecordKey, Object> invokeExtractorUntyped(Adapter<?> adapter, Object value, String baseKeyString) {
-		RecordKey baseKey = RecordKey.of(baseKeyString).orElseThrow();
+	private Map<MacroKey, Object> invokeExtractorUntyped(Adapter<?> adapter, Object value, String baseKeyString) {
+		MacroKey baseKey = MacroKey.of(baseKeyString).orElseThrow();
 		return registry.extractFields((Adapter<Object>) adapter, value, baseKey);
 	}
 

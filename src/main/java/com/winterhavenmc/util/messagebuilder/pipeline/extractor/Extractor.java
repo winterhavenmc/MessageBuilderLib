@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
 import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 
 import java.util.Map;
 
@@ -26,5 +26,5 @@ import java.util.Map;
 @FunctionalInterface
 public interface Extractor
 {
-	<T> Map<RecordKey, Object> extract(Adapter<T> adapter, T adapted, RecordKey baseKey);
+	<T> Map<MacroKey, Object> extract(Adapter<T> adapter, T adapted, MacroKey baseKey);
 }

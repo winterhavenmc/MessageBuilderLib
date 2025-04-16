@@ -17,10 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.message;
 
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.Parameter;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -67,7 +68,7 @@ public final class ValidMessage implements Message
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(K macro, V value)
 	{
-		RecordKey macroKey = RecordKey.of(macro).orElseThrow(() ->
+		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() ->
 				new ValidationException(PARAMETER_NULL, Parameter.MACRO));
 
 		contextMap.putIfAbsent(macroKey, value);
@@ -88,10 +89,10 @@ public final class ValidMessage implements Message
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value)
 	{
-		RecordKey macroKey = RecordKey.of(macro)
+		MacroKey macroKey = MacroKey.of(macro)
 				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, Parameter.MACRO));
 
-		RecordKey quantityKey = RecordKey.of(macroKey + ".QUANTITY")
+		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY")
 				.orElseThrow(() -> new ValidationException(PARAMETER_INVALID, Parameter.QUANTITY));
 
 		contextMap.putIfAbsent(macroKey, value);

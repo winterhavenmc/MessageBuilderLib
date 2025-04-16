@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.message;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;

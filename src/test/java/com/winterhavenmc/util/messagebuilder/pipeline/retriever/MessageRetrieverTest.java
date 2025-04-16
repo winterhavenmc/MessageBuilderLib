@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.*;

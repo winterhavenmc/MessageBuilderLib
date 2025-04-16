@@ -23,7 +23,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import org.bukkit.Location;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,14 +50,14 @@ class FieldExtractorTest
 	@Mock QuantityAdapter quantityAdapter;
 
 	private FieldExtractor extractor;
-	private RecordKey baseKey;
+	private MacroKey baseKey;
 
 
 	@BeforeEach
 	void setup()
 	{
 		extractor = new FieldExtractor();
-		baseKey = RecordKey.of("TEST").orElseThrow();
+		baseKey = MacroKey.of("TEST").orElseThrow();
 	}
 
 
@@ -67,7 +67,7 @@ class FieldExtractorTest
 		var nameable = mock(com.winterhavenmc.util.messagebuilder.adapters.name.Nameable.class);
 		when(nameable.getName()).thenReturn("TestName");
 
-		Map<RecordKey, Object> result = extractor.extract(nameAdapterMock, nameable, baseKey);
+		Map<MacroKey, Object> result = extractor.extract(nameAdapterMock, nameable, baseKey);
 
 		assertEquals(2, result.size());
 		assertTrue(result.containsKey(baseKey));
@@ -82,7 +82,7 @@ class FieldExtractorTest
 		var displayNameable = mock(com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable.class);
 		when(displayNameable.getDisplayName()).thenReturn("FancyName");
 
-		Map<RecordKey, Object> result = extractor.extract(displayNameAdapterMock, displayNameable, baseKey);
+		Map<MacroKey, Object> result = extractor.extract(displayNameAdapterMock, displayNameable, baseKey);
 
 		assertEquals(2, result.size());
 		assertEquals("FancyName", result.get(baseKey));
@@ -97,7 +97,7 @@ class FieldExtractorTest
 		UUID uuid = UUID.randomUUID();
 		when(identifiable.getUniqueId()).thenReturn(uuid);
 
-		Map<RecordKey, Object> result = extractor.extract(uniqueIdAdapterMock, identifiable, baseKey);
+		Map<MacroKey, Object> result = extractor.extract(uniqueIdAdapterMock, identifiable, baseKey);
 
 		assertEquals(2, result.size());
 		assertEquals(uuid, result.get(baseKey));
@@ -112,7 +112,7 @@ class FieldExtractorTest
 		Location location = mock(Location.class);
 		when(locatable.gatLocation()).thenReturn(location);
 
-		Map<RecordKey, Object> result = extractor.extract(locationAdapterMock, locatable, baseKey);
+		Map<MacroKey, Object> result = extractor.extract(locationAdapterMock, locatable, baseKey);
 
 		assertEquals(2, result.size());
 		assertEquals(location, result.get(baseKey));
@@ -126,7 +126,7 @@ class FieldExtractorTest
 		var quantifiable = mock(com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable.class);
 		when(quantifiable.getQuantity()).thenReturn(42);
 
-		Map<RecordKey, Object> result = extractor.extract(quantityAdapter, quantifiable, baseKey);
+		Map<MacroKey, Object> result = extractor.extract(quantityAdapter, quantifiable, baseKey);
 
 		assertEquals(2, result.size());
 		assertEquals(42, result.get(baseKey));
@@ -141,7 +141,7 @@ class FieldExtractorTest
 		Adapter<Object> unknownAdapter = mock(Adapter.class);
 
 		Object randomObject = new Object();
-		Map<RecordKey, Object> result = extractor.extract(unknownAdapter, randomObject, baseKey);
+		Map<MacroKey, Object> result = extractor.extract(unknownAdapter, randomObject, baseKey);
 
 		assertTrue(result.isEmpty(), "Expected result to be empty for unmatched adapter type");
 	}

@@ -71,6 +71,7 @@ public final class MessagePipeline implements Pipeline
 				.forEach(sender -> sender.send(message.getRecipient(), processed));
 
 
+
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())
 				.filter(cooldownMap::notCooling)
 				.flatMap(retrieveMessage)

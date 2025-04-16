@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
@@ -29,7 +30,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
@@ -62,7 +63,7 @@ class MacroReplacerTest
 
 	ValidRecipient recipient;
 	RecordKey messageKey;
-	RecordKey macroKey;
+	MacroKey macroKey;
 	MacroReplacer macroReplacer;
 	Message message;
 	ConfigurationSection section;
@@ -78,7 +79,7 @@ class MacroReplacerTest
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		macroKey = RecordKey.of(Macro.OWNER).orElseThrow();
+		macroKey = MacroKey.of(Macro.OWNER).orElseThrow();
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 		macroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
@@ -123,8 +124,8 @@ class MacroReplacerTest
 		{
 			ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 			MacroReplacer macroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
-			RecordKey key = RecordKey.of("ITEM_NAME").orElseThrow();
-			contextMap.putIfAbsent(key, "TEST_STRING");
+			MacroKey macroKey = MacroKey.of("ITEM_NAME").orElseThrow();
+			contextMap.putIfAbsent(macroKey, "TEST_STRING");
 
 			String resultString = macroReplacer.replaceMacrosInString(contextMap, "Replace this: {ITEM_NAME}");
 			assertEquals("Replace this: TEST_STRING", resultString);
@@ -152,13 +153,13 @@ class MacroReplacerTest
 	{
 		// Arrange
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
-		RecordKey recipientKey = RecordKey.of("RECIPIENT").orElseThrow();
+		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
 
 		// Act
 		macroReplacer.addRecipientContext(contextMap);
 
 		// Assert
-		assertTrue(contextMap.contains(recipientKey));
+		assertTrue(contextMap.contains(recipientMacroKey));
 	}
 
 
@@ -168,8 +169,8 @@ class MacroReplacerTest
 		MacroReplacer localMacroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
 
 		ResultMap resultMap = new ResultMap();
-		RecordKey resultKey = RecordKey.of("KEY").orElseThrow();
-		resultMap.put(resultKey, "value");
+		MacroKey resultMacroKey = MacroKey.of("KEY").orElseThrow();
+		resultMap.put(resultMacroKey, "value");
 		String messageString = "this is a macro replacement string {KEY}.";
 
 		// Act
@@ -190,8 +191,8 @@ class MacroReplacerTest
 	@Test
 	void testPerformReplacements_parameter_nul_message_string() {
 		ResultMap resultMap = new ResultMap();
-		RecordKey key1 = RecordKey.of("KEY1").orElseThrow();
-		RecordKey key2 = RecordKey.of("KEY2").orElseThrow();
+		MacroKey key1 = MacroKey.of("KEY1").orElseThrow();
+		MacroKey key2 = MacroKey.of("KEY2").orElseThrow();
 		resultMap.put(key1, "value1");
 		resultMap.put(key2, "value2");
 		resultMap.put(key1, "value3");
@@ -211,8 +212,8 @@ class MacroReplacerTest
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		RecordKey key = RecordKey.of("RECIPIENT").orElseThrow();
-		ContextMap contextMap = ContextMap.of(recipient, key).orElseThrow();
+		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 
 		macroReplacer.addRecipientContext(contextMap);
 		assertTrue(contextMap.contains(key));
