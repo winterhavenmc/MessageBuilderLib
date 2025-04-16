@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,22 +15,16 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.processors;
+package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
+import java.util.Map;
 
-/**
- * A macro processor that resolves a string value of "NULL" for values stored in the context map that are
- * referenced by the given key and contain a null value.
- */
-public class NullProcessor extends MacroProcessorTemplate
+
+@FunctionalInterface
+public interface Extractor
 {
-	@Override
-	public ResultMap resolveContext(final RecordKey key, final ContextMap contextMap)
-	{
-		return new ResultMap() {{ put(key, "NULL"); }};
-	}
-
+	<T> Map<RecordKey, Object> extract(Adapter<T> adapter, T adapted, RecordKey baseKey);
 }

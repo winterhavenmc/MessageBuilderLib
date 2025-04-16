@@ -15,11 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.processors;
+package com.winterhavenmc.util.messagebuilder.pipeline.result;
 
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,17 +52,63 @@ class ResultMapTest
 	}
 
 
-	@Test
-	void put()
+	@Test @DisplayName("Put method overwrites existing value in result map.")
+	void testPut_does_overwrite()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
 
 		// Act
-		resultMap.put(recordKey, "123");
+		resultMap.put(recordKey, "first value");
+		resultMap.put(recordKey, "second value");
 
 		// Assert
-		assertTrue(resultMap.containsKey(recordKey));
+		assertEquals("second value", resultMap.get(recordKey));
+	}
+
+
+	@Test @DisplayName("PutIfAbsent method does not overwrite existing value in result map.")
+	void putIfAbsent_does_not_overwrite()
+	{
+		// Arrange
+		RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+
+		// Act
+		resultMap.putIfAbsent(recordKey, "first value");
+		resultMap.putIfAbsent(recordKey, "second value");
+
+		// Assert
+		assertEquals("first value", resultMap.get(recordKey));
+	}
+
+
+	@Test
+	void putIfValid()
+	{
+		// Arrange
+		RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+
+		// Act
+		resultMap.put(recordKey, "first value");
+		resultMap.put(recordKey, "second value");
+
+		// Assert
+		assertEquals("second value", resultMap.get(recordKey));
+	}
+
+
+	@Test
+	void putIfIfAndAbsentAndValid()
+	{
+		// Arrange
+		RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+
+		// Act
+		resultMap.put(recordKey, "first value");
+		resultMap.put(recordKey, "second value");
+
+		// Assert
+		assertEquals("second value", resultMap.get(recordKey));
 	}
 
 

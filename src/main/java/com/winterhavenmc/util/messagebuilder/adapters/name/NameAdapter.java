@@ -23,6 +23,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.profile.PlayerProfile;
 
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ import java.util.Optional;
  * {@code String} name, regardless of its real method name. Any object that is not known to have a
  * name will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
  */
-public class NameAdapter implements Adapter
+public class NameAdapter implements Adapter<Nameable>
 {
 	/**
 	 * Return an {@link Optional} of {@code Nameable}, or an empty Optional if the passed
@@ -49,14 +50,22 @@ public class NameAdapter implements Adapter
 	@Override
 	public Optional<Nameable> adapt(final Object obj)
 	{
-		return switch (obj) {
+		return switch (obj)
+		{
 			case CommandSender commandSender -> Optional.of(commandSender::getName);
 			case OfflinePlayer offlinePlayer -> Optional.of(offlinePlayer::getName);
+			case PlayerProfile playerProfile -> Optional.of(playerProfile::getName);
 			case World world -> Optional.of(world::getName);
 			case Server server -> Optional.of(server::getName);
 			case Plugin plugin -> Optional.of(plugin::getName);
 			case null, default -> Optional.empty();
 		};
+	}
+
+	@Override
+	public Class<Nameable> getInterface()
+	{
+		return Nameable.class;
 	}
 
 }

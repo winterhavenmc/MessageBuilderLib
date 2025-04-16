@@ -20,7 +20,8 @@ package com.winterhavenmc.util.messagebuilder.adapters;
 import java.util.Optional;
 
 
-public interface Adapter
+public interface Adapter<T>
 {
     Optional<?> adapt(Object obj);
+    Class<T> getInterface();
 }

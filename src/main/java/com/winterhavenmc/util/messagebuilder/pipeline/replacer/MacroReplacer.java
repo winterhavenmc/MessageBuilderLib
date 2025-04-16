@@ -18,9 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.*;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.Resolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
@@ -42,6 +43,16 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class MacroReplacer implements Replacer
 {
+	private final Resolver resolver;
+	private final Matcher matcher;
+
+	public MacroReplacer(Resolver resolver, Matcher matcher)
+	{
+		this.resolver = resolver;
+		this.matcher = matcher;
+	}
+
+
 	/**
 	 * Replace macros in a message to be sent
 	 *
@@ -70,9 +81,14 @@ public class MacroReplacer implements Replacer
 	{
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
 
-		return Optional.of(messageString)
-				.map(msg -> performReplacements(new ContextResolver().resolve(addRecipientContext(contextMap)), msg))
-				.orElse(messageString);
+		ResultMap resultMap = new ResultMap();
+
+		matcher.match(messageString)
+				.map(RecordKey::of)
+				.flatMap(Optional::stream)
+				.forEach(key -> resultMap.putAll(resolver.resolve(key, contextMap)));
+
+		return performReplacements(resultMap, messageString);
 	}
 
 
@@ -88,11 +104,11 @@ public class MacroReplacer implements Replacer
 		RecordKey macroKey = RecordKey.of("RECIPIENT").orElseThrow();
 		RecordKey locationRecordKey = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
 
-		contextMap.put(macroKey, contextMap.getRecipient());
+		contextMap.putIfAbsent(macroKey, contextMap.getRecipient());
 
 		if (contextMap.getRecipient().sender() instanceof Player player)
 		{
-			contextMap.put(locationRecordKey, player.getLocation());
+			contextMap.putIfAbsent(locationRecordKey, player.getLocation());
 		}
 
 		return contextMap;

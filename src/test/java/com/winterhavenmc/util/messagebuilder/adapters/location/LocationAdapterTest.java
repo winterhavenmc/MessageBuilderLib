@@ -17,7 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.location;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -39,6 +42,11 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LocationAdapterTest
 {
+	@Mock Player playerMock;
+	@Mock OfflinePlayer offlinePlayerMock;
+	@Mock Block blockMock;
+	@Mock BlockState blockStateMock;
+	@Mock DoubleChest doubleChestMock;
 	@Mock World worldMock;
 	Location location;
 
@@ -67,7 +75,6 @@ class LocationAdapterTest
 	public void testGetLocation_withValidPlayer()
 	{
 		// Arrange
-		Player playerMock = mock(Player.class, "MockPlayer");
 		when(playerMock.getLocation()).thenReturn(location);
 
 		// Act
@@ -81,10 +88,25 @@ class LocationAdapterTest
 
 
 	@Test
+	public void testGetLocation_withValidOfflinePlayer()
+	{
+		// Arrange
+		when(offlinePlayerMock.getLocation()).thenReturn(location);
+
+		// Act
+		Location result = new LocationAdapter()
+				.adapt(offlinePlayerMock)
+				.map(Locatable::gatLocation).orElseThrow();
+
+		// Assert
+		assertEquals(location, result, "The resolver should return the gatLocation from the OfflinePlayer.");
+	}
+
+
+	@Test
 	public void testGetLocation_withValidBlock()
 	{
 		// Arrange
-		Block blockMock = mock(Block.class, "MockBlock");
 		when(blockMock.getLocation()).thenReturn(location);
 
 		// Act
@@ -101,7 +123,6 @@ class LocationAdapterTest
 	public void testGetLocation_withValidBlockState()
 	{
 		// Arrange
-		BlockState blockStateMock = mock(BlockState.class, "MockBlockState");
 		when(blockStateMock.getLocation()).thenReturn(location);
 
 		// Act
@@ -118,7 +139,6 @@ class LocationAdapterTest
 	public void testGetLocation_withValidDoubleChest()
 	{
 		// Arrange
-		DoubleChest doubleChestMock = mock(DoubleChest.class, "MockDoubleChest");
 		when(doubleChestMock.getLocation()).thenReturn(location);
 
 		// Act
@@ -129,7 +149,6 @@ class LocationAdapterTest
 		// Assert
 		assertEquals(location, result, "The resolver should return the gatLocation from the DoubleChest.");
 	}
-
 
 	@Test
 	public void testGetLocation_withNull()
@@ -144,6 +163,20 @@ class LocationAdapterTest
 
 		// Assert
 		assertTrue(result.isEmpty());
+	}
+
+
+	@Test
+	void testGetInterface()
+	{
+		// Arrange
+		Adapter<Locatable> adapter = new LocationAdapter();
+
+		// Act
+		var result = adapter.getInterface();
+
+		// Assert
+		assertEquals(Locatable.class, result);
 	}
 
 }

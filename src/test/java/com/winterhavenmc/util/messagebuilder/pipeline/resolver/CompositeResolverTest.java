@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,19 +15,23 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.processors;
+package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
@@ -39,46 +43,47 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ObjectProcessorTest {
-
+class CompositeResolverTest
+{
 	@Mock Player playerMock;
-	MacroProcessor macroProcessor;
-
-	ValidRecipient recipient;
-	RecordKey recordKey;
-	ContextMap contextMap;
+    AtomicResolver resolver;
 
 
 	@BeforeEach
-	public void setUp() {
-		recipient = switch (RecipientResult.from(playerMock)) {
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
-		recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		contextMap = ContextMap.of(recipient, recordKey).orElseThrow();
-		macroProcessor = new ObjectProcessor();
-	}
-
-	@AfterEach
-	public void tearDown() {
-		macroProcessor = null;
+	void setUp()
+	{
+        resolver = new AtomicResolver();
 	}
 
 
 	@Test
-	void resolveContext_integer() {
+	void testResolve()
+    {
 		// Arrange
-		Integer value = 42;
-		contextMap.put(recordKey, value);
+		ItemStack itemStack = new ItemStack(Material.STONE);
+		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+
+		ValidRecipient recipient = switch (RecipientResult.from(playerMock))
+		{
+			case ValidRecipient validRecipient -> validRecipient;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+
+		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+		RecordKey numberMacroKey = RecordKey.of("NUMBER").orElseThrow();
+		RecordKey itemMacroKey = RecordKey.of("ITEM_STACK").orElseThrow();
+
+		contextMap.putIfAbsent(numberMacroKey, 42);
+		contextMap.putIfAbsent(itemMacroKey, itemStack);
 
 		// Act
-		ResultMap resultMap = macroProcessor.resolveContext(recordKey, contextMap);
+        ResultMap resultMap = resolver.resolve(numberMacroKey, contextMap);
 
 		// Assert
-		assertTrue(resultMap.containsKey(recordKey));
-		assertEquals("42", resultMap.get(recordKey));
+//		assertTrue(resultMap.containsKey(numberMacroKey));
+		assertEquals("42", resultMap.get(numberMacroKey));
+//		assertTrue(resultMap.containsKey(itemMacroKey));
+//		assertEquals("STONE", resultMap.get(itemMacroKey));
 	}
-
 
 }

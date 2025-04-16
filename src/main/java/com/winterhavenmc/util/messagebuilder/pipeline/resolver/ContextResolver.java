@@ -18,40 +18,30 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.DependencyContext;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ProcessorRegistry;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ProcessorType;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 
 public class ContextResolver implements Resolver
 {
-	private final ProcessorRegistry processorRegistry;
+	private final AtomicResolver atomicResolver;
+	private final CompositeResolver compositeResolver;
 
 
-	/**
-	 * Class constructor
-	 */
 	public ContextResolver()
 	{
-		processorRegistry = new ProcessorRegistry(new DependencyContext());
+		atomicResolver = new AtomicResolver();
+		compositeResolver = new CompositeResolver();
 	}
 
 
-	/**
-	 * Convert the value objects contained in the context map into their string representations in a
-	 * new result map.
-	 *
-	 * @param contextMap a map containing key/value pairs of placeholder strings and their corresponding value object
-	 * @return {@code ResultMap} a map containing the placeholder strings and the string representations of the values
-	 */
 	@Override
-	public ResultMap resolve(final ContextMap contextMap)
+	public ResultMap resolve(final RecordKey key, final ContextMap contextMap)
 	{
-		return contextMap.entrySet().stream()
-				.map(entry -> processorRegistry.get(ProcessorType.matchType(entry.getValue()))
-						.resolveContext(entry.getKey(), contextMap))
-				.collect(ResultMap::new, ResultMap::putAll, ResultMap::putAll);
+		ResultMap resultMap = new ResultMap();
+		resultMap.putAll(compositeResolver.resolve(key, contextMap));
+		resultMap.putAll(atomicResolver.resolve(key, contextMap));
+		return resultMap;
 	}
 
 }

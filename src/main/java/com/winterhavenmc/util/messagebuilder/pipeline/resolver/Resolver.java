@@ -18,11 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processors.ResultMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 
 @FunctionalInterface
 public interface Resolver
 {
-	ResultMap resolve(ContextMap contextMap);
+	ResultMap resolve(RecordKey key, ContextMap contextMap);
 }

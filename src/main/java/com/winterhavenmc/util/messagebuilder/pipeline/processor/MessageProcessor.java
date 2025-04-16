@@ -23,17 +23,21 @@ import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 public final class MessageProcessor implements Processor
 {
 	private final MessageRetriever messageRetriever;
 	private final MacroReplacer macroReplacer;
-	private final Predicate<CooldownKey> notCooling;
+	private final CooldownMap cooldownMap;
 	private final List<Sender> senders;
 
 
@@ -44,23 +48,34 @@ public final class MessageProcessor implements Processor
 	{
 		this.messageRetriever = messageRetriever;
 		this.macroReplacer = macroReplacer;
+		this.cooldownMap = cooldownMap;
 		this.senders = senders;
-		this.notCooling = cooldownMap::notCooling;
 	}
 
 
 	@Override
 	public void process(final ValidMessage message)
 	{
+		Function<CooldownKey, Optional<ValidMessageRecord>> retrieveMessage =key ->
+				{
+					MessageRecord record = messageRetriever.getRecord(message.getMessageKey());
+					return (record instanceof ValidMessageRecord valid)
+							? Optional.of(valid)
+							: Optional.empty();
+				};
+
+		Function<ValidMessageRecord, FinalMessageRecord> resolveMacros = record -> macroReplacer
+				.replaceMacros(record, message.getContextMap());
+
+		Consumer<FinalMessageRecord> sendMessage = processed -> senders
+				.forEach(sender -> sender.send(message.getRecipient(), processed));
+
+
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())
-				.filter(notCooling)
-				.map(cooldownKey -> messageRetriever
-						.getRecord(message.getMessageKey()))
-				.map(validMessageRecord -> macroReplacer
-						.replaceMacros((ValidMessageRecord) validMessageRecord, message.getContextMap()))
-				.ifPresent(processedMessage -> senders
-						.forEach(sender -> sender
-								.send(message.getRecipient(), processedMessage)));
+				.filter(cooldownMap::notCooling)
+				.flatMap(retrieveMessage)
+				.map(resolveMacros)
+				.ifPresent(sendMessage);
 	}
 
 }

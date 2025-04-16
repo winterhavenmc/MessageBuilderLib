@@ -49,7 +49,6 @@ public final class MessageRetriever implements Retriever
 			case InvalidMessageRecord ignored -> MessageRecord.empty(messageKey);
 			case FinalMessageRecord ignored -> MessageRecord.empty(messageKey); // unreachable; provides exhaustive case for sealed interface
 		};
-
 	}
 
 }

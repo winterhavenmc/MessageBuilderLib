@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.processors;
+package com.winterhavenmc.util.messagebuilder.pipeline.result;
 
 import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
@@ -48,10 +48,18 @@ public class ResultMap
 		this.internalResultMap = new HashMap<>();
 	}
 
+
 	public void put(final RecordKey key, final String value)
 	{
-		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE))
-				.ifPresent((string -> internalResultMap.put(key, string)));
+		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
+		internalResultMap.put(key, value);
+	}
+
+
+	public void putIfAbsent(final RecordKey key, final String value)
+	{
+		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
+		internalResultMap.putIfAbsent(key, value);
 	}
 
 
@@ -61,14 +69,16 @@ public class ResultMap
 	}
 
 
-	public String getValueOrKey(final RecordKey key) {
+	public String getValueOrKey(final RecordKey key)
+	{
 		return internalResultMap.getOrDefault(key, key.toString()); // Return key itself if not found
 	}
 
 
 	public void putAll(final @NotNull ResultMap insertionMap)
 	{
-		for (Map.Entry<RecordKey, String> entry : insertionMap.entrySet()) {
+		for (Map.Entry<RecordKey, String> entry : insertionMap.entrySet())
+		{
 			String value = entry.getValue();
 			internalResultMap.put(entry.getKey(), value);
 		}

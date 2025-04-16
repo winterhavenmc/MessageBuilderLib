@@ -17,13 +17,21 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.name;
 
+import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import org.bukkit.profile.PlayerProfile;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -32,20 +40,31 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 
-public class NameAdapterTest {
+@ExtendWith(MockitoExtension.class)
+public class NameAdapterTest
+{
+	@Mock CommandSender commandSenderMock;
+	@Mock PlayerProfile playerProfileMock;
+	@Mock OfflinePlayer offlinePlayerMock;
+	@Mock Server serverMock;
+	@Mock World worldMock;
+	@Mock Plugin pluginMock;
+
 
 	@Nested
-	class CommandSenderNameAdapterTests {
+	class CommandSenderNameAdapterTests
+	{
 		@Test
-		public void testGetDisplayName_withValidCommandSender() {
+		public void testGetDisplayName_withValidCommandSender()
+		{
 			// Arrange
-			CommandSender commandSenderMock = mock(CommandSender.class, "MockCommandSender");
 			when(commandSenderMock.getName()).thenReturn("Command Sender Name");
 			String name = "";
 
 			// Act
 			Optional<Nameable> adapter = new NameAdapter().adapt(commandSenderMock);
-			if (adapter.isPresent()) {
+			if (adapter.isPresent())
+			{
 				name = adapter.get().getName();
 			}
 
@@ -56,36 +75,79 @@ public class NameAdapterTest {
 		}
 
 		@Test
-		public void testGetName_withNull() {
+		public void testGetName_withNull()
+		{
 			// Arrange
-			Player nullPlayer = null;
 			String name = null;
 
 			// Act
-			Optional<Nameable> adapter = new NameAdapter().adapt(nullPlayer);
-			if (adapter.isPresent()) {
+			Optional<Nameable> adapter = new NameAdapter().adapt(null);
+			if (adapter.isPresent())
+			{
 				name = adapter.get().getName();
 			}
-
 			// Assert
 			assertNull(name, "The adapter should return an empty string for a null Player.");
 		}
 	}
 
 
-	@Nested
-	class EntityNameableTests {
+	@Test
+	public void testGetDisplayName_withValidOfflinePlayer()
+	{
+		// Arrange
+		when(offlinePlayerMock.getName()).thenReturn("Offline Player Name");
+		String name = "";
 
+		// Act
+		Optional<Nameable> adapter = new NameAdapter().adapt(offlinePlayerMock);
+		if (adapter.isPresent())
+		{
+			name = adapter.get().getName();
+		}
+
+		// Assert
+		assertEquals("Offline Player Name", name, "The adapter should return the name from the OfflinePlayer.");
+
+		verify(offlinePlayerMock, atLeastOnce()).getName();
+	}
+
+
+	@Test
+	public void testGetDisplayName_with_playerProfile()
+	{
+		// Arrange
+		when(playerProfileMock.getName()).thenReturn("Player Profile Name");
+		String name = "";
+
+		// Act
+		Optional<Nameable> adapter = new NameAdapter().adapt(playerProfileMock);
+		if (adapter.isPresent())
+		{
+			name = adapter.get().getName();
+		}
+
+		// Assert
+		assertEquals("Player Profile Name", name, "The adapter should return the name from the PlayerProfile.");
+
+		verify(playerProfileMock, atLeastOnce()).getName();
+	}
+
+
+	@Nested
+	class EntityNameableTests
+	{
 		@Test
-		void testGetName_withValidWorld() {
+		void testGetName_withValidWorld()
+		{
 			// Arrange
-			World worldMock = mock(World.class, "MockWorld");
 			when(worldMock.getName()).thenReturn("world_name");
 			String name = "";
 
 			// Act
 			Optional<Nameable> adapter = new NameAdapter().adapt(worldMock);
-			if (adapter.isPresent()) {
+			if (adapter.isPresent())
+			{
 				name = adapter.get().getName();
 			}
 
@@ -94,19 +156,21 @@ public class NameAdapterTest {
 		}
 	}
 
-	@Nested
-	class ServerNameableTests {
 
+	@Nested
+	class ServerNameableTests
+	{
 		@Test
-		void testGetDisplayName_withValidServer() {
+		void testGetDisplayName_withValidServer()
+		{
 			// Arrange
-			Server serverMock = mock(Server.class, "MockServer");
 			when(serverMock.getName()).thenReturn("Server Name");
 			String name = "";
 
 			// Act
 			Optional<Nameable> adapter = new NameAdapter().adapt(serverMock);
-			if (adapter.isPresent()) {
+			if (adapter.isPresent())
+			{
 				name = adapter.get().getName();
 			}
 
@@ -115,25 +179,42 @@ public class NameAdapterTest {
 		}
 	}
 
-	@Nested
-	class PluginNameableTests {
 
+	@Nested
+	class PluginNameableTests
+	{
 		@Test
-		void testGetDisplayName_withValidPlugin() {
+		void testGetDisplayName_withValidPlugin()
+		{
 			// Arrange
-			Plugin pluginMock = mock(Plugin.class, "MockPlugin");
 			when(pluginMock.getName()).thenReturn("Plugin Name");
 			String name = "";
 
 			// Act
 			Optional<Nameable> adapter = new NameAdapter().adapt(pluginMock);
-			if (adapter.isPresent()) {
+			if (adapter.isPresent())
+			{
 				name = adapter.get().getName();
 			}
 
 			// Assert
 			assertEquals("Plugin Name", name, "The adapter should return the name from the Plugin.");
 		}
+
+	}
+
+
+	@Test
+	void testGetInterface()
+	{
+		// Arrange
+		Adapter<Nameable> adapter = new NameAdapter();
+
+		// Act
+		var result = adapter.getInterface();
+
+		// Assert
+		assertEquals(Nameable.class, result);
 	}
 
 }
