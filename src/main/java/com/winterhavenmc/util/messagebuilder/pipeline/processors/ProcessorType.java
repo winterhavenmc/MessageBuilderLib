@@ -17,15 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.processors;
 
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-
 import java.util.function.Function;
 
 
 public enum ProcessorType
 {
-	WORLD(ctx -> new WorldProcessor()),
 	STRING(ctx -> new StringProcessor()),
 	;
 
@@ -65,7 +61,6 @@ public enum ProcessorType
 	public static ProcessorType matchType(final Object object)
 	{
 		return switch (object) {
-			case World ignored -> WORLD;
 			case String ignored -> STRING;
 			default -> null;
 		};
