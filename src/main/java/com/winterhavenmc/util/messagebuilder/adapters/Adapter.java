@@ -17,11 +17,54 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters;
 
+import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable;
+import com.winterhavenmc.util.messagebuilder.adapters.location.Locatable;
+import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.name.Nameable;
+import com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable;
+import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
+import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
+
 import java.util.Optional;
+import java.util.function.Supplier;
 
 
 public interface Adapter<T>
 {
     Optional<?> adapt(Object obj);
     Class<T> getInterface();
+
+
+    enum BuiltIn
+    {
+        NAME(Nameable.class, NameAdapter::new),
+        DISPLAY_NAME(DisplayNameable.class, DisplayNameAdapter::new),
+        UUID(Identifiable.class, UniqueIdAdapter::new),
+        LOCATION(Locatable.class, LocationAdapter::new),
+        QUANTITY(Quantifiable.class, QuantityAdapter::new);
+
+        private final Class<?> type;
+        private final Supplier<? extends Adapter<?>> supplier;
+
+
+        <T> BuiltIn(Class<T> type, Supplier<? extends Adapter<T>> supplier)
+        {
+            this.type = type;
+            this.supplier = supplier;
+        }
+
+        Class<?> getType()
+        {
+            return this.type;
+        }
+
+        Adapter<?> create()
+        {
+            return supplier.get();
+        }
+    }
+
 }
