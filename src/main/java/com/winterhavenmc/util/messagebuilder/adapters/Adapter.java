@@ -32,39 +32,38 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 
-public interface Adapter<T>
+public interface Adapter
 {
-    Optional<?> adapt(Object obj);
-    Class<T> getInterface();
+	Optional<?> adapt(Object obj);
 
 
-    enum BuiltIn
-    {
-        NAME(Nameable.class, NameAdapter::new),
-        DISPLAY_NAME(DisplayNameable.class, DisplayNameAdapter::new),
-        UUID(Identifiable.class, UniqueIdAdapter::new),
-        LOCATION(Locatable.class, LocationAdapter::new),
-        QUANTITY(Quantifiable.class, QuantityAdapter::new);
+	enum BuiltIn
+	{
+		NAME(Nameable.class, NameAdapter::new),
+		DISPLAY_NAME(DisplayNameable.class, DisplayNameAdapter::new),
+		UUID(Identifiable.class, UniqueIdAdapter::new),
+		LOCATION(Locatable.class, LocationAdapter::new),
+		QUANTITY(Quantifiable.class, QuantityAdapter::new);
 
-        private final Class<?> type;
-        private final Supplier<? extends Adapter<?>> supplier;
+		private final Class<?> type;
+		private final Supplier<? extends Adapter> supplier;
 
 
-        <T> BuiltIn(Class<T> type, Supplier<? extends Adapter<T>> supplier)
-        {
-            this.type = type;
-            this.supplier = supplier;
-        }
+		<T> BuiltIn(Class<T> type, Supplier<? extends Adapter> supplier)
+		{
+			this.type = type;
+			this.supplier = supplier;
+		}
 
-        Class<?> getType()
-        {
-            return this.type;
-        }
+		Class<?> getType()
+		{
+			return this.type;
+		}
 
-        Adapter<?> create()
-        {
-            return supplier.get();
-        }
-    }
+		Adapter create()
+		{
+			return supplier.get();
+		}
+	}
 
 }

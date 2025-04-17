@@ -26,5 +26,5 @@ import java.util.Map;
 @FunctionalInterface
 public interface Extractor
 {
-	<T> Map<MacroKey, Object> extract(Adapter<T> adapter, T adapted, MacroKey baseKey);
+	<T> Map<MacroKey, Object> extract(Adapter adapter, T adapted, MacroKey baseKey);
 }

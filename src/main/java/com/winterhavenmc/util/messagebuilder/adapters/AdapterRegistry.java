@@ -35,8 +35,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class AdapterRegistry
 {
-	private final Map<Class<?>, Adapter<?>> ADAPTER_MAP = new LinkedHashMap<>();
-    private final Map<Class<?>, Adapter<?>> ADAPTER_CACHE = new ConcurrentHashMap<>();
+	private final Map<Class<?>, Adapter> ADAPTER_MAP = new LinkedHashMap<>();
+    private final Map<Class<?>, Adapter> ADAPTER_CACHE = new ConcurrentHashMap<>();
 
 
 	/**
@@ -47,7 +47,7 @@ public class AdapterRegistry
 	{
 		for (Adapter.BuiltIn builtIn : Adapter.BuiltIn.values())
 		{
-			register((Class<Object>) builtIn.getType(), (Adapter<Object>) builtIn.create());
+			register((Class<Object>) builtIn.getType(), builtIn.create());
 		}
 	}
 
@@ -59,7 +59,7 @@ public class AdapterRegistry
 	 * @param adapter a supplier containing the constructor for the adapter
 	 * @param <T> the adapter type
 	 */
-	public <T> void register(final Class<T> type, final Adapter<T> adapter)
+	public <T> void register(final Class<T> type, final Adapter adapter)
 	{
 		validate(type, Objects::isNull, throwing(PARAMETER_NULL, TYPE));
 		validate(adapter, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
@@ -75,12 +75,11 @@ public class AdapterRegistry
 	 * @return the adapter retrieved from the map, or null if no adapter present for type
 	 * @param <T> the type of the adapter
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> Adapter<T> getAdapter(Class<T> type)
+	public <T> Adapter getAdapter(Class<T> type)
 	{
 		validate(type, Objects::isNull, throwing(PARAMETER_NULL, TYPE));
 
-		return (Adapter<T>) ADAPTER_CACHE.computeIfAbsent(type, ADAPTER_MAP::get);
+		return ADAPTER_CACHE.computeIfAbsent(type, ADAPTER_MAP::get);
 	}
 
 
@@ -91,16 +90,14 @@ public class AdapterRegistry
 	 * @return stream of matching adapters
 	 * @param <T> the class type of the value
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> Stream<Adapter<T>> getMatchingAdapters(T value)
+	public <T> Stream<Adapter> getMatchingAdapters(T value)
 	{
 		return (value == null)
 				? Stream.empty()
 				: ADAPTER_MAP.keySet().stream()
 						.filter(supplier -> supplier.isAssignableFrom(value.getClass()))
-						.map(supplier -> (Adapter<T>) getAdapter(supplier))
+						.map(this::getAdapter)
 						.filter(Objects::nonNull);
 	}
-
 
 }

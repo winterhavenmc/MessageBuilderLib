@@ -24,7 +24,7 @@ public class FieldExtractorRegistry
 	 * @param baseKey the base macro key (e.g. PLAYER, ITEM)
 	 * @return extracted field values
 	 */
-	public <T> Map<MacroKey, Object> extractFields(Adapter<T> adapter, T value, MacroKey baseKey)
+	public <T> Map<MacroKey, Object> extractFields(Adapter adapter, T value, MacroKey baseKey)
 	{
 		Objects.requireNonNull(value, "Value to extract must not be null");
 		Objects.requireNonNull(baseKey, "Base key must not be null");

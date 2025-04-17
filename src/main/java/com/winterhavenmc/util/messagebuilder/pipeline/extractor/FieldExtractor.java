@@ -33,11 +33,13 @@ import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.winterhavenmc.util.messagebuilder.adapters.Adapter.BuiltIn.*;
+
 
 public class FieldExtractor implements Extractor
 {
 	@Override
-	public <T> Map<MacroKey, Object> extract(Adapter<T> adapter, T adapted, MacroKey baseKey)
+	public <T> Map<MacroKey, Object> extract(Adapter adapter, T adapted, MacroKey baseKey)
 	{
 		Map<MacroKey, Object> fields = new HashMap<>();
 
@@ -45,39 +47,33 @@ public class FieldExtractor implements Extractor
 		{
 			case NameAdapter ignored when adapted instanceof Nameable nameable ->
 			{
-				baseKey.append("NAME")
-						.ifPresent(subKey -> fields.put(subKey, nameable.getName()));
+				baseKey.append(NAME).ifPresent(macroKey -> fields.put(macroKey, nameable.getName()));
 				fields.putIfAbsent(baseKey, nameable.getName());
 			}
 
 			case DisplayNameAdapter ignored when adapted instanceof DisplayNameable displayNameable ->
 			{
-				baseKey.append("DISPLAY_NAME")
-						.ifPresent(subKey -> fields.put(subKey, displayNameable.getDisplayName()));
+				baseKey.append(DISPLAY_NAME).ifPresent(macroKey -> fields.put(macroKey, displayNameable.getDisplayName()));
 				fields.putIfAbsent(baseKey, displayNameable.getDisplayName());
 			}
 
 			case UniqueIdAdapter ignored when adapted instanceof Identifiable identifiable ->
 			{
-				baseKey.append("UUID")
-						.ifPresent(subKey -> fields.put(subKey, identifiable.getUniqueId()));
+				baseKey.append(UUID).ifPresent(macroKey -> fields.put(macroKey, identifiable.getUniqueId()));
 				fields.putIfAbsent(baseKey, identifiable.getUniqueId());
 			}
 
 			case LocationAdapter ignored when adapted instanceof Locatable locatable ->
 			{
-				baseKey.append("LOCATION")
-						.ifPresent(subKey -> fields.put(subKey, locatable.gatLocation()));
-				fields.putIfAbsent(baseKey, locatable.gatLocation());
+				baseKey.append(LOCATION).ifPresent(macroKey -> fields.put(macroKey, locatable.getLocation()));
+				fields.putIfAbsent(baseKey, locatable.getLocation());
 			}
 
 			case QuantityAdapter ignored when adapted instanceof Quantifiable quantifiable ->
 			{
-				baseKey.append("QUANTITY")
-						.ifPresent(subKey -> fields.put(subKey, quantifiable.getQuantity()));
-				fields.putIfAbsent(baseKey, quantifiable.getQuantity());
+				baseKey.append(QUANTITY).ifPresent(macroKey -> fields.put(macroKey, quantifiable.getField()));
+				fields.putIfAbsent(baseKey, quantifiable.getField());
 			}
-
 			default -> {} // no-op
 		}
 

@@ -25,5 +25,5 @@ package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 @FunctionalInterface
 public interface Quantifiable
 {
-	int getQuantity();
+	int getField();
 }

@@ -32,7 +32,7 @@ import java.util.Optional;
  * to the actual method of the object that returns a UUID, regardless of its method name. Any object that is not
  * known to have a UUID will result in an empty {@code Optional} being returned from the asIdentifiable method.
  */
-public class UniqueIdAdapter implements Adapter<Identifiable>
+public class UniqueIdAdapter implements Adapter
 {
 	/**
 	 * Static method that returns an object of type Identifiable, or null if the passed object is not known to have
@@ -53,13 +53,6 @@ public class UniqueIdAdapter implements Adapter<Identifiable>
 			case World world -> Optional.of(world::getUID);
 			case null, default -> Optional.empty();
 		};
-	}
-
-
-	@Override
-	public Class<Identifiable> getInterface()
-	{
-		return Identifiable.class;
 	}
 
 }
