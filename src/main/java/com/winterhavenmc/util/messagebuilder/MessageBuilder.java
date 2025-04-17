@@ -177,12 +177,13 @@ public final class MessageBuilder
 		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
 		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
 		final LanguageResourceManager languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
+
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
+		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
 
 		final MacroReplacer macroReplacer = getMacroReplacer();
 		final CooldownMap cooldownMap = new CooldownMap();
 		final List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
-		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
 		final MessagePipeline messagePipeline = new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, senders);
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
