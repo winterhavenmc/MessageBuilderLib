@@ -59,12 +59,17 @@ public abstract class AbstractKey
 	}
 
 
+	/**
+	 * Test for equality. Keys must be of same type and have matching string value.
+	 * @param object the object to test for equality against this instance
+	 * @return true if the object is equal to this instance, false if not
+	 */
 	public boolean equals(final Object object)
 	{
 		return object instanceof StandardKey standardKey && switch (standardKey)
 		{
-			case MacroKey macroKey -> this.wrappedString.equals(macroKey.wrappedString);
-			case RecordKey recordKey -> this.wrappedString.equals(recordKey.wrappedString);
+			case MacroKey macroKey -> this instanceof MacroKey && this.wrappedString.equals(macroKey.wrappedString);
+			case RecordKey recordKey -> this instanceof RecordKey && this.wrappedString.equals(recordKey.wrappedString);
 		};
 	}
 
