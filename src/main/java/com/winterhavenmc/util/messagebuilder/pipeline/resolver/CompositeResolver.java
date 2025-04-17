@@ -29,14 +29,17 @@ import java.util.function.BiConsumer;
 public class CompositeResolver implements Resolver
 {
 	private final AdapterRegistry adapterRegistry;
+	private final FieldExtractor fieldExtractor;
 
 
 	/**
 	 * Class constructor
 	 */
-	public CompositeResolver()
+	public CompositeResolver(final AdapterRegistry adapterRegistry,
+							 final FieldExtractor fieldExtractor)
 	{
-		this.adapterRegistry = new AdapterRegistry();
+		this.adapterRegistry = adapterRegistry;
+		this.fieldExtractor = fieldExtractor;
 	}
 
 	/**
@@ -50,7 +53,6 @@ public class CompositeResolver implements Resolver
 	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
 	{
 		ResultMap resultMap = new ResultMap();
-		FieldExtractor extractor = new FieldExtractor();
 		BiConsumer<MacroKey, Object> resolveAndMerge = (subKey, subValue) ->
 		{
 			ResultMap subResult = resolve(subKey, contextMap);
@@ -61,7 +63,7 @@ public class CompositeResolver implements Resolver
 		contextMap.get(macroKey).ifPresent(value -> adapterRegistry
 				.getMatchingAdapters(value)
 				.forEach(adapter -> adapter.adapt(value)
-						.ifPresent(adapted -> extractor
+						.ifPresent(adapted -> fieldExtractor
 								.extract(adapter, adapted, macroKey)
 								.forEach(resolveAndMerge))));
 		return resultMap;
