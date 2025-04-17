@@ -46,7 +46,13 @@ public abstract class AbstractKey
 	}
 
 
-	protected String dotJoin(AbstractKey baseKey, String subKey)
+	protected String dotJoin(String subKey)
+	{
+		return dotJoin(this, subKey);
+	}
+
+
+	static protected String dotJoin(AbstractKey baseKey, String subKey)
 	{
 		return String.join(".", baseKey.toString(), subKey);
 	}
@@ -64,6 +70,7 @@ public abstract class AbstractKey
 	 * @param object the object to test for equality against this instance
 	 * @return true if the object is equal to this instance, false if not
 	 */
+	@Override
 	public boolean equals(final Object object)
 	{
 		return object instanceof StandardKey standardKey && switch (standardKey)
