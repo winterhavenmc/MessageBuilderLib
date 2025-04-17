@@ -17,19 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.keys;
 
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.messagebuilder.validation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.KEY;
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.*;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -37,15 +27,8 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * validated upon creation. The static factory methods return an Optional of the RecordKey,
  * or an empty Optional if the parameter was invalid, as determined by regex pattern and Predicate.
  */
-public final class RecordKey
+public final class RecordKey extends AbstractKey implements StandardKey
 {
-	// valid key must begin with alpha only and may contain alpha, digits, underscore or period
-	private static final Pattern VALID_KEY = Pattern.compile("^[a-zA-Z][a-zA-Z\\d_.]*$");
-	private static final Predicate<String> IS_INVALID_KEY = string -> !VALID_KEY.matcher(string).matches();
-
-	private final String wrappedString;
-
-
 	/**
 	 * Private constructor that allows instantiation only from within this class
 	 *
@@ -54,19 +37,7 @@ public final class RecordKey
 	 */
 	private RecordKey(final String key)
 	{
-		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
-		validate(key, IS_INVALID_KEY, throwing(PARAMETER_INVALID, KEY));
-
-		this.wrappedString = key;
-	}
-
-
-	public Optional<RecordKey> append(final String... subKeys)
-	{
-		List<String> stringList = new ArrayList<>(List.of(subKeys));
-		stringList.addFirst(wrappedString);
-
-		return RecordKey.of(String.join(".", stringList));
+		super(key);
 	}
 
 
@@ -78,9 +49,11 @@ public final class RecordKey
 	 */
 	public static Optional<RecordKey> of(final String key)
 	{
-		return Optional.ofNullable(key)
-				.filter(VALID_KEY.asMatchPredicate())
-				.map(RecordKey::new);
+		return (key == null || IS_INVALID_KEY.test(key))
+				? Optional.empty()
+				: Optional.of(key)
+						.filter(VALID_KEY.asMatchPredicate())
+						.map(RecordKey::new);
 	}
 
 
@@ -93,37 +66,19 @@ public final class RecordKey
 	 */
 	public static <E extends Enum<E>> Optional<RecordKey> of(final E key)
 	{
-		return Optional.ofNullable(key)
-				.map(Enum::name)
-				.map(RecordKey::new);
+		return (key == null || IS_INVALID_KEY.test(key.name()))
+				? Optional.empty()
+				: Optional.of(key)
+						.map(Enum::name)
+						.map(RecordKey::new);
 	}
 
 
-	/**
-	 * Return the record key as a String
-	 *
-	 * @return a String representation fo the record key
-	 */
-	@Override
-	public String toString()
+	public Optional<RecordKey> append(final String subKey)
 	{
-		return this.wrappedString;
-	}
-
-
-	@Override
-	public boolean equals(final Object object)
-	{
-		if (!(object instanceof RecordKey recordKey)) { return false; }
-
-		return wrappedString.equals(recordKey.wrappedString);
-	}
-
-
-	@Override
-	public int hashCode()
-	{
-		return wrappedString.hashCode();
+		return (subKey == null || IS_INVALID_KEY.test(subKey))
+				? Optional.empty()
+				: RecordKey.of(dotJoin(this, subKey));
 	}
 
 }
