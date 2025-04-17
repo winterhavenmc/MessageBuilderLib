@@ -20,7 +20,7 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
-import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
@@ -53,7 +53,8 @@ class MessageBuilderTest
 
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock MacroReplacer macroReplacerMock;
-	@Mock MessageProcessor messageProcessorMock;
+	@Mock
+	MessagePipeline messagePipelineMock;
 
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;
@@ -72,7 +73,7 @@ class MessageBuilderTest
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		messageBuilder = MessageBuilder.test(pluginMock,
 				languageResourceManagerMock,
-				messageProcessorMock);
+				messagePipelineMock);
 	}
 
 	@AfterEach
@@ -84,7 +85,7 @@ class MessageBuilderTest
 		languageConfiguration = null;
 		languageResourceManagerMock = null;
 		macroReplacerMock = null;
-		messageProcessorMock = null;
+		messagePipelineMock = null;
 	}
 
 
@@ -193,7 +194,7 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(null,
 						languageResourceManagerMock,
-						messageProcessorMock));
+						messagePipelineMock));
 
 		// Assert
 		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
@@ -207,7 +208,7 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(pluginMock,
 						null,
-						messageProcessorMock));
+						messagePipelineMock));
 
 		// Assert
 		assertEquals("The parameter 'languageResourceManager' cannot be null.", exception.getMessage());

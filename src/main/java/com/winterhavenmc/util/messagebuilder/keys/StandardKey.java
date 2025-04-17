@@ -15,12 +15,6 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.keys;
 
-import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-
-
-public sealed interface SectionRecord permits ConstantRecord, ItemRecord, MessageRecord
-{
-	RecordKey key();
-}
+public sealed interface StandardKey permits MacroKey, RecordKey { }

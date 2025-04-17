@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 
 public interface LanguageResourceManager
 {

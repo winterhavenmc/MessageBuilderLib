@@ -1,7 +1,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
 import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 
 import java.util.Collections;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class FieldExtractorRegistry
 	 * @param baseKey the base macro key (e.g. PLAYER, ITEM)
 	 * @return extracted field values
 	 */
-	public <T> Map<RecordKey, Object> extractFields(Adapter<T> adapter, T value, RecordKey baseKey)
+	public <T> Map<MacroKey, Object> extractFields(Adapter adapter, T value, MacroKey baseKey)
 	{
 		Objects.requireNonNull(value, "Value to extract must not be null");
 		Objects.requireNonNull(baseKey, "Base key must not be null");

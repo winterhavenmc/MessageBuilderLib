@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.Test;

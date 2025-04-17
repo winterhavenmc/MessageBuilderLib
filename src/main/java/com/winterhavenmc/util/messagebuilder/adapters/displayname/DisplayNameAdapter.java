@@ -32,7 +32,7 @@ import java.util.Optional;
  * {@code String} display name, regardless of its actual method name. Any object that is not known to have a
  * display name will result in an empty {@code Optional} being returned from the static {@code asDisplayNameable} method.
  */
-public class DisplayNameAdapter implements Adapter<DisplayNameable>
+public class DisplayNameAdapter implements Adapter
 {
 	@Override
 	public Optional<DisplayNameable> adapt(final Object obj)
@@ -44,13 +44,6 @@ public class DisplayNameAdapter implements Adapter<DisplayNameable>
 			case World world -> Optional.of(world::getName);
 			case null, default -> Optional.empty();
 		};
-	}
-
-
-	@Override
-	public Class<DisplayNameable> getInterface()
-	{
-		return DisplayNameable.class;
 	}
 
 }

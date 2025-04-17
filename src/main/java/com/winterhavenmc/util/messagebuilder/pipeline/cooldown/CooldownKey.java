@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import org.bukkit.entity.Entity;
 
 import java.util.Objects;

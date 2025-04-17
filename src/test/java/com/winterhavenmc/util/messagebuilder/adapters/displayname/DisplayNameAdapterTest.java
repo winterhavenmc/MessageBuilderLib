@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.displayname;
 
-import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -125,20 +123,6 @@ public class DisplayNameAdapterTest
 			assertTrue(displayName.isPresent());
 			assertEquals("World Name", displayName.get(), "The adapter should return the displayName from the World.");
 		}
-	}
-
-
-	@Test
-	void testGetInterface()
-	{
-		// Arrange
-		Adapter<DisplayNameable> adapter = new DisplayNameAdapter();
-
-		// Act
-		Class<DisplayNameable> result = adapter.getInterface();
-
-		// Assert
-		assertEquals(DisplayNameable.class, result);
 	}
 
 }

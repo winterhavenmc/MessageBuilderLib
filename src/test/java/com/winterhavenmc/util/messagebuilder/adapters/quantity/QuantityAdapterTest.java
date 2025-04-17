@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 
-import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -145,20 +143,6 @@ public class QuantityAdapterTest
 			}
 			assertEquals(-999, quantity);
 		}
-	}
-
-
-	@Test
-	void testGetInterface()
-	{
-		// Arrange
-		Adapter<Quantifiable> adapter = new QuantityAdapter();
-
-		// Act
-		var result = adapter.getInterface();
-
-		// Assert
-		assertEquals(Quantifiable.class, result);
 	}
 
 }

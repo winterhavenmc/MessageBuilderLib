@@ -18,10 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
 import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 import java.util.*;
 
@@ -48,17 +48,17 @@ public class CompositeResolver implements Resolver
 	 * @return {@code ResultMap} a map containing the placeholder strings and the string representations of the values
 	 */
 	@Override
-	public ResultMap resolve(final RecordKey key, final ContextMap contextMap)
+	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
 	{
 		ResultMap resultMap = new ResultMap();
 
 		// get the value from the context map for the given key
-		contextMap.get(key).ifPresent(value ->
+		contextMap.get(macroKey).ifPresent(value ->
 				adapterRegistry.getMatchingAdapters(value)
 						.forEach(adapter -> adapter.adapt(value)
 								.ifPresent(adapted -> {
 									// extract subfields from this adapter (e.g. NAME, UUID, LOCATION)
-									Map<RecordKey, Object> extracted = new FieldExtractor().extract(adapter, adapted, key);
+									Map<MacroKey, Object> extracted = new FieldExtractor().extract(adapter, adapted, macroKey);
 
 									// recursively resolve each subfield
 									extracted.forEach((subKey, subValue) -> {

@@ -17,12 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.Resolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.Delimiter;
@@ -84,7 +84,7 @@ public class MacroReplacer implements Replacer
 		ResultMap resultMap = new ResultMap();
 
 		matcher.match(messageString)
-				.map(RecordKey::of)
+				.map(MacroKey::of)
 				.flatMap(Optional::stream)
 				.forEach(key -> resultMap.putAll(resolver.resolve(key, contextMap)));
 
@@ -101,14 +101,14 @@ public class MacroReplacer implements Replacer
 	 */
     public ContextMap addRecipientContext(final ContextMap contextMap)
 	{
-		RecordKey macroKey = RecordKey.of("RECIPIENT").orElseThrow();
-		RecordKey locationRecordKey = RecordKey.of("RECIPIENT.LOCATION").orElseThrow();
+		MacroKey macroKey = MacroKey.of("RECIPIENT").orElseThrow();
+		MacroKey locationMacroKey = MacroKey.of("RECIPIENT.LOCATION").orElseThrow();
 
 		contextMap.putIfAbsent(macroKey, contextMap.getRecipient());
 
 		if (contextMap.getRecipient().sender() instanceof Player player)
 		{
-			contextMap.putIfAbsent(locationRecordKey, player.getLocation());
+			contextMap.putIfAbsent(locationMacroKey, player.getLocation());
 		}
 
 		return contextMap;
@@ -130,7 +130,7 @@ public class MacroReplacer implements Replacer
 		return new PlaceholderMatcher().match(messageString)
 				.reduce(messageString, (msg, placeholder) ->
 						msg.replace( Delimiter.OPEN + placeholder + Delimiter.CLOSE,
-								replacementMap.getValueOrKey(RecordKey.of(placeholder).orElse(RecordKey.of("KEY").orElseThrow()))));
+								replacementMap.getValueOrKey(MacroKey.of(placeholder).orElse(MacroKey.of("KEY").orElseThrow()))));
 	}
 
 }

@@ -17,17 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters;
 
-import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable;
-import com.winterhavenmc.util.messagebuilder.adapters.location.Locatable;
-import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.name.Nameable;
-import com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable;
-import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
-import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -47,20 +36,22 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class AdapterRegistry
 {
-	private final Map<Class<?>, Supplier<? extends Adapter<?>>> ADAPTER_MAP = new LinkedHashMap<>();
-    private final Map<Class<?>, Adapter<?>> ADAPTER_CACHE = new ConcurrentHashMap<>();
+	private final Map<Class<?>, Supplier<? extends Adapter>> ADAPTER_MAP = new LinkedHashMap<>();
+    private final Map<Class<?>, Adapter> ADAPTER_CACHE = new ConcurrentHashMap<>();
 
 
 	/**
 	 * Class constructor registers all built-in adapters
 	 */
+	@SuppressWarnings("unchecked")
 	public AdapterRegistry()
 	{
-		registerAdapter(DisplayNameable.class, DisplayNameAdapter::new);
-		registerAdapter(Nameable.class, NameAdapter::new);
-		registerAdapter(Locatable.class, LocationAdapter::new);
-		registerAdapter(Identifiable.class, UniqueIdAdapter::new);
-		registerAdapter(Quantifiable.class, QuantityAdapter::new);
+		for (Adapter.BuiltIn builtin : Adapter.BuiltIn.values()) {
+			register(
+					(Class<Object>) builtin.getType(),
+					(Supplier<Adapter>) builtin.getSupplier()
+			);
+		}
 	}
 
 
@@ -71,7 +62,7 @@ public class AdapterRegistry
 	 * @param supplier a supplier containing the constructor for the adapter
 	 * @param <T> the adapter type
 	 */
-	public <T> void registerAdapter(final Class<T> type, final Supplier<Adapter<T>> supplier)
+	public <T> void register(final Class<T> type, final Supplier<Adapter> supplier)
 	{
 		validate(type, Objects::isNull, throwing(PARAMETER_NULL, TYPE));
 		validate(supplier, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
@@ -87,13 +78,12 @@ public class AdapterRegistry
 	 * @return the adapter retrieved from the map, or null if no adapter present for type
 	 * @param <T> the type of the adapter
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> Adapter<T> getAdapter(Class<T> type)
+	public <T> Adapter getAdapter(Class<T> type)
 	{
 		validate(type, Objects::isNull, throwing(PARAMETER_NULL, TYPE));
 
-		return (Adapter<T>) ADAPTER_CACHE.computeIfAbsent(type, t -> {
-			Supplier<? extends Adapter<?>> supplier = ADAPTER_MAP.get(t);
+		return ADAPTER_CACHE.computeIfAbsent(type, t -> {
+			Supplier<? extends Adapter> supplier = ADAPTER_MAP.get(t);
 			return (supplier != null)
 					? supplier.get()
 					: null;
@@ -108,14 +98,13 @@ public class AdapterRegistry
 	 * @return stream of matching adapters
 	 * @param <T> the class type of the value
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> Stream<Adapter<T>> getMatchingAdapters(T value)
+	public <T> Stream<Adapter> getMatchingAdapters(T value)
 	{
 		return (value == null)
 				? Stream.empty()
 				: ADAPTER_MAP.keySet().stream()
 						.filter(supplier -> supplier.isAssignableFrom(value.getClass()))
-						.map(supplier -> (Adapter<T>) getAdapter(supplier))
+						.map(this::getAdapter)
 						.filter(Objects::nonNull);
 	}
 

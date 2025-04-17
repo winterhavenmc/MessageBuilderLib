@@ -17,10 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.message;
 
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.Parameter;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -32,7 +33,7 @@ public final class ValidMessage implements Message
 {
 	private final ValidRecipient recipient;
 	private final RecordKey messageKey;
-	private final MessageProcessor messageProcessor;
+	private final MessagePipeline messagePipeline;
 	private final ContextMap contextMap;
 
 
@@ -41,15 +42,15 @@ public final class ValidMessage implements Message
 	 *
 	 * @param recipient message recipient
 	 * @param messageKey message identifier
-	 * @param messageProcessor the message processor that will receive the message when the send method is called
+	 * @param messagePipeline the message processor that will receive the message when the send method is called
 	 */
 	public ValidMessage(final ValidRecipient recipient,
 						final RecordKey messageKey,
-						final MessageProcessor messageProcessor)
+						final MessagePipeline messagePipeline)
 	{
 		this.recipient = recipient;
 		this.messageKey = messageKey;
-		this.messageProcessor = messageProcessor;
+		this.messagePipeline = messagePipeline;
 		this.contextMap = ContextMap.of(this.recipient, this.messageKey)
 				.orElseThrow(() -> new ValidationException(PARAMETER_INVALID, Parameter.CONTEXT_MAP));
 	}
@@ -67,7 +68,7 @@ public final class ValidMessage implements Message
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(K macro, V value)
 	{
-		RecordKey macroKey = RecordKey.of(macro).orElseThrow(() ->
+		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() ->
 				new ValidationException(PARAMETER_NULL, Parameter.MACRO));
 
 		contextMap.putIfAbsent(macroKey, value);
@@ -88,10 +89,10 @@ public final class ValidMessage implements Message
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value)
 	{
-		RecordKey macroKey = RecordKey.of(macro)
+		MacroKey macroKey = MacroKey.of(macro)
 				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, Parameter.MACRO));
 
-		RecordKey quantityKey = RecordKey.of(macroKey + ".QUANTITY")
+		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY")
 				.orElseThrow(() -> new ValidationException(PARAMETER_INVALID, Parameter.QUANTITY));
 
 		contextMap.putIfAbsent(macroKey, value);
@@ -106,7 +107,7 @@ public final class ValidMessage implements Message
 	@Override
 	public void send()
 	{
-		messageProcessor.process(this);
+		messagePipeline.process(this);
 	}
 
 

@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 
 
 public class ContextResolver implements Resolver
@@ -36,11 +36,11 @@ public class ContextResolver implements Resolver
 
 
 	@Override
-	public ResultMap resolve(final RecordKey key, final ContextMap contextMap)
+	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
 	{
 		ResultMap resultMap = new ResultMap();
-		resultMap.putAll(compositeResolver.resolve(key, contextMap));
-		resultMap.putAll(atomicResolver.resolve(key, contextMap));
+		resultMap.putAll(compositeResolver.resolve(macroKey, contextMap));
+		resultMap.putAll(atomicResolver.resolve(macroKey, contextMap));
 		return resultMap;
 	}
 

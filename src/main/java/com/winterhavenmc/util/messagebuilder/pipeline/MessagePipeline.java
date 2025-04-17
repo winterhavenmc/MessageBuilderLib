@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.processor;
+package com.winterhavenmc.util.messagebuilder.pipeline;
 
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownKey;
@@ -33,7 +33,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 
-public final class MessageProcessor implements Processor
+public final class MessagePipeline implements Pipeline
 {
 	private final MessageRetriever messageRetriever;
 	private final MacroReplacer macroReplacer;
@@ -41,10 +41,10 @@ public final class MessageProcessor implements Processor
 	private final List<Sender> senders;
 
 
-	public MessageProcessor(final MessageRetriever messageRetriever,
-	                        final MacroReplacer macroReplacer,
-	                        final CooldownMap cooldownMap,
-	                        final List<Sender> senders)
+	public MessagePipeline(final MessageRetriever messageRetriever,
+						   final MacroReplacer macroReplacer,
+						   final CooldownMap cooldownMap,
+						   final List<Sender> senders)
 	{
 		this.messageRetriever = messageRetriever;
 		this.macroReplacer = macroReplacer;
@@ -58,17 +58,18 @@ public final class MessageProcessor implements Processor
 	{
 		Function<CooldownKey, Optional<ValidMessageRecord>> retrieveMessage =key ->
 				{
-					MessageRecord record = messageRetriever.getRecord(message.getMessageKey());
-					return (record instanceof ValidMessageRecord valid)
+					MessageRecord messageRecord = messageRetriever.getRecord(message.getMessageKey());
+					return (messageRecord instanceof ValidMessageRecord valid)
 							? Optional.of(valid)
 							: Optional.empty();
 				};
 
-		Function<ValidMessageRecord, FinalMessageRecord> resolveMacros = record -> macroReplacer
-				.replaceMacros(record, message.getContextMap());
+		Function<ValidMessageRecord, FinalMessageRecord> resolveMacros = messageRecord -> macroReplacer
+				.replaceMacros(messageRecord, message.getContextMap());
 
 		Consumer<FinalMessageRecord> sendMessage = processed -> senders
 				.forEach(sender -> sender.send(message.getRecipient(), processed));
+
 
 
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())

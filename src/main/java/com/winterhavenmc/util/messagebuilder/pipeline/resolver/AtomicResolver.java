@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
 import com.winterhavenmc.util.time.PrettyTimeFormatter;
 
 import java.time.Duration;
@@ -28,7 +28,7 @@ import java.util.UUID;
 
 public class AtomicResolver implements Resolver
 {
-	public ResultMap resolve(final RecordKey macroKey, final ContextMap contextMap)
+	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
 	{
 		ResultMap result = new ResultMap();
 

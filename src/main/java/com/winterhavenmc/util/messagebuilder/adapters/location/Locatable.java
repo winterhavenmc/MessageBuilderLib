@@ -26,5 +26,5 @@ import org.bukkit.Location;
 @FunctionalInterface
 public interface Locatable
 {
-	Location gatLocation();
+	Location getLocation();
 }

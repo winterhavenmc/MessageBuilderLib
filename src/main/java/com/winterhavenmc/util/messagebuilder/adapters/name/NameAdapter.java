@@ -35,7 +35,7 @@ import java.util.Optional;
  * {@code String} name, regardless of its real method name. Any object that is not known to have a
  * name will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
  */
-public class NameAdapter implements Adapter<Nameable>
+public class NameAdapter implements Adapter
 {
 	/**
 	 * Return an {@link Optional} of {@code Nameable}, or an empty Optional if the passed
@@ -60,12 +60,6 @@ public class NameAdapter implements Adapter<Nameable>
 			case Plugin plugin -> Optional.of(plugin::getName);
 			case null, default -> Optional.empty();
 		};
-	}
-
-	@Override
-	public Class<Nameable> getInterface()
-	{
-		return Nameable.class;
 	}
 
 }

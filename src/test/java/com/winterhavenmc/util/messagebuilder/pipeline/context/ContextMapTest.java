@@ -17,10 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -56,7 +57,7 @@ class ContextMapTest
 
 	ValidRecipient recipient;
 	RecordKey messageKey;
-	RecordKey macroKey;
+	MacroKey macroKey;
 	ContextMap contextMap;
 
 
@@ -64,7 +65,7 @@ class ContextMapTest
 	void setUp()
 	{
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		macroKey = RecordKey.of(Macro.TOOL).orElseThrow();
+		macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
 		recipient = switch (RecipientResult.from(commandSenderMock)) {
 			case ValidRecipient vr -> vr;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
@@ -78,7 +79,7 @@ class ContextMapTest
 	{
 		// Arrange
 		Integer number = 42;
-		macroKey = RecordKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
 
 		// Act
 		contextMap.put(macroKey, number);
@@ -93,7 +94,7 @@ class ContextMapTest
 	{
 		// Arrange
 		Integer number = 42;
-		macroKey = RecordKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
 
 		// Act
 		contextMap.putIfAbsent(macroKey, number);
@@ -107,7 +108,7 @@ class ContextMapTest
 	void testPut_parameter_null_value()
 	{
 		// Arrange
-		macroKey = RecordKey.of("NUMBER").orElseThrow();
+		macroKey = MacroKey.of("NUMBER").orElseThrow();
 		contextMap.putIfAbsent(macroKey, null);
 
 		// Act
@@ -122,7 +123,7 @@ class ContextMapTest
 	void testGetValueWithCorrectType()
 	{
 		// Arrange
-		macroKey = RecordKey.of("PLAYER.LOCATION").orElseThrow();
+		macroKey = MacroKey.of("PLAYER.LOCATION").orElseThrow();
 		Location location = new Location(worldMock, 10, 20, 30);
 		contextMap.putIfAbsent(macroKey, location);
 
@@ -139,7 +140,7 @@ class ContextMapTest
 	void testGetValueWithIncorrectType()
 	{
 		// Arrange
-		macroKey = RecordKey.of("SWORD").orElseThrow();
+		macroKey = MacroKey.of("SWORD").orElseThrow();
 		ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
 		contextMap.putIfAbsent(macroKey, itemStack);
 
@@ -156,8 +157,8 @@ class ContextMapTest
 	void testContains()
 	{
 		// Arrange
-		macroKey = RecordKey.of("LOCATION").orElseThrow();
-		RecordKey nonExistentKey = RecordKey.of("NON_EXISTENT_KEY").orElseThrow();
+		macroKey = MacroKey.of("LOCATION").orElseThrow();
+		MacroKey nonExistentKey = MacroKey.of("NON_EXISTENT_KEY").orElseThrow();
 		World world = mock(World.class, "MockWorld");
 		Location location = new Location(world, 10, 20, 30);
 		contextMap.putIfAbsent(macroKey, location);
@@ -182,16 +183,16 @@ class ContextMapTest
 	void testEntrySet()
 	{
 		// Arrange
-		RecordKey key1 = RecordKey.of("NUMBER1").orElseThrow();
+		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
 		contextMap.putIfAbsent(key1, value1);
 
-		RecordKey key2 = RecordKey.of("NUMBER2").orElseThrow();
+		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 		contextMap.putIfAbsent(key2, value2);
 
 		// Act
-		Set<Map.Entry<RecordKey, Object>> entrySet = contextMap.entrySet();
+		Set<Map.Entry<MacroKey, Object>> entrySet = contextMap.entrySet();
 
 		// Assert
 		assertEquals(2, entrySet.size());
@@ -202,11 +203,11 @@ class ContextMapTest
 	void testRemove()
 	{
 		// Arrange
-		RecordKey key1 = RecordKey.of("NUMBER1").orElseThrow();
+		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
 		contextMap.putIfAbsent(key1, value1);
 
-		RecordKey key2 = RecordKey.of("NUMBER2").orElseThrow();
+		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 		contextMap.putIfAbsent(key2, value2);
 
@@ -226,7 +227,7 @@ class ContextMapTest
 //	@Test
 //	void testRemove_nonexistent() {
 //		// Arrange
-//		RecordKey key = RecordKey.create("NUMBER1").orElseThrow();
+//		MacroKey key = MacroKey.create("NUMBER1").orElseThrow();
 //		Integer value = 41;
 //		contextMap.putIfAbsent(key, value);
 //
@@ -241,11 +242,11 @@ class ContextMapTest
 	void testClear()
 	{
 		// Arrange
-		RecordKey macroKey1 = RecordKey.of("NUMBER1").orElseThrow();
+		MacroKey macroKey1 = MacroKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
 		contextMap.putIfAbsent(macroKey1, value1);
 
-		RecordKey macroKey2 = RecordKey.of("NUMBER2").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
 
 		contextMap.putIfAbsent(macroKey2, value2);
@@ -269,7 +270,7 @@ class ContextMapTest
 	@Test
 	void testSize_not_empty() {
 		// Arrange
-		RecordKey macroKey = RecordKey.of("NUMBER").orElseThrow();
+		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
 		Integer value = 42;
 
 		// Act
@@ -287,7 +288,7 @@ class ContextMapTest
 	@Test
 	void testIsEmpty_not_empty() {
 		// Arrange
-		RecordKey macroKey = RecordKey.of("NUMBER").orElseThrow();
+		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
 		Integer value = 42;
 
 		// Act

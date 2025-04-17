@@ -17,8 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.result;
 
-import com.winterhavenmc.util.messagebuilder.recordkey.RecordKey;
-import org.junit.jupiter.api.AfterEach;
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,32 +37,18 @@ class ResultMapTest
 	}
 
 
-	@AfterEach
-	void tearDown()
-	{
-		resultMap = null;
-	}
-
-
-	@Test
-	void empty()
-	{
-		assertInstanceOf(ResultMap.class, resultMap);
-	}
-
-
 	@Test @DisplayName("Put method overwrites existing value in result map.")
 	void testPut_does_overwrite()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
+		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
 
 		// Act
-		resultMap.put(recordKey, "first value");
-		resultMap.put(recordKey, "second value");
+		resultMap.put(macroKey, "first value");
+		resultMap.put(macroKey, "second value");
 
 		// Assert
-		assertEquals("second value", resultMap.get(recordKey));
+		assertEquals("second value", resultMap.get(macroKey));
 	}
 
 
@@ -71,14 +56,14 @@ class ResultMapTest
 	void putIfAbsent_does_not_overwrite()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
 
 		// Act
-		resultMap.putIfAbsent(recordKey, "first value");
-		resultMap.putIfAbsent(recordKey, "second value");
+		resultMap.putIfAbsent(macroKey, "first value");
+		resultMap.putIfAbsent(macroKey, "second value");
 
 		// Assert
-		assertEquals("first value", resultMap.get(recordKey));
+		assertEquals("first value", resultMap.get(macroKey));
 	}
 
 
@@ -86,14 +71,14 @@ class ResultMapTest
 	void putIfValid()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
 
 		// Act
-		resultMap.put(recordKey, "first value");
-		resultMap.put(recordKey, "second value");
+		resultMap.put(macroKey, "first value");
+		resultMap.put(macroKey, "second value");
 
 		// Assert
-		assertEquals("second value", resultMap.get(recordKey));
+		assertEquals("second value", resultMap.get(macroKey));
 	}
 
 
@@ -101,14 +86,14 @@ class ResultMapTest
 	void putIfIfAndAbsentAndValid()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
 
 		// Act
-		resultMap.put(recordKey, "first value");
-		resultMap.put(recordKey, "second value");
+		resultMap.put(macroKey, "first value");
+		resultMap.put(macroKey, "second value");
 
 		// Assert
-		assertEquals("second value", resultMap.get(recordKey));
+		assertEquals("second value", resultMap.get(macroKey));
 	}
 
 
@@ -116,12 +101,12 @@ class ResultMapTest
 	void get()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
+		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
 
 		// Act
-		resultMap.put(recordKey, "123");
+		resultMap.put(macroKey, "123");
 
-		String result = resultMap.get(recordKey);
+		String result = resultMap.get(macroKey);
 
 		assertEquals("123", result);
 	}
@@ -131,30 +116,30 @@ class ResultMapTest
 	void putAll()
 	{
 		// Arrange
-		RecordKey recordKey1 = RecordKey.of("abc").orElseThrow();
-		RecordKey recordKey2 = RecordKey.of("xyz").orElseThrow();
-		RecordKey recordKey3 = RecordKey.of("jkl").orElseThrow();
+		MacroKey macroKey1 = MacroKey.of("abc").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("xyz").orElseThrow();
+		MacroKey macroKey3 = MacroKey.of("jkl").orElseThrow();
 		ResultMap firstMap = new ResultMap();
 
-		firstMap.put(recordKey1, "123");
-		firstMap.put(recordKey2, "1999");
+		firstMap.put(macroKey1, "123");
+		firstMap.put(macroKey2, "1999");
 
 		ResultMap secondMap = new ResultMap();
 		secondMap.putAll(firstMap);
 
-		assertTrue(secondMap.containsKey(recordKey1));
-		assertTrue(secondMap.containsKey(recordKey2));
-		assertFalse(secondMap.containsKey(recordKey3));
+		assertTrue(secondMap.containsKey(macroKey1));
+		assertTrue(secondMap.containsKey(macroKey2));
+		assertFalse(secondMap.containsKey(macroKey3));
 	}
 
 
 	@Test
 	void entrySet()
 	{
-		RecordKey recordKey1 = RecordKey.of("abc").orElseThrow();
-		RecordKey recordKey2 = RecordKey.of("xyz").orElseThrow();
-		resultMap.put(recordKey1, "123");
-		resultMap.put(recordKey2, "1999");
+		MacroKey macroKey1 = MacroKey.of("abc").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("xyz").orElseThrow();
+		resultMap.put(macroKey1, "123");
+		resultMap.put(macroKey2, "1999");
 
 		var entrySet = resultMap.entrySet();
 
@@ -165,9 +150,9 @@ class ResultMapTest
 	@Test
 	void isEmpty()
 	{
-		RecordKey recordKey = RecordKey.of("abc").orElseThrow();
+		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
 		assertTrue(resultMap.isEmpty());
-		resultMap.put(recordKey, "123");
+		resultMap.put(macroKey, "123");
 		assertFalse(resultMap.isEmpty());
 	}
 

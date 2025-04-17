@@ -31,7 +31,7 @@ import java.util.List;
 @ExtendWith(MockitoExtension.class)
 class AdapterRegistryTest
 {
-	@Mock Adapter<MockType> adapterMock;
+	@Mock Adapter adapterMock;
 	private AdapterRegistry registry;
 
 	interface MockType { }
@@ -47,9 +47,9 @@ class AdapterRegistryTest
 	@Test
 	public void testRegisterAndRetrieveAdapter()
 	{
-		registry.registerAdapter(MockType.class, () -> adapterMock);
+		registry.register(MockType.class, () -> adapterMock);
 
-		Adapter<?> retrieved = registry.getAdapter(MockType.class);
+		Adapter retrieved = registry.getAdapter(MockType.class);
 		assertNotNull(retrieved);
 		assertSame(adapterMock, retrieved);
 	}
@@ -64,10 +64,10 @@ class AdapterRegistryTest
 
 	@Test
 	public void testAdapterIsCached() {
-		registry.registerAdapter(MockType.class, () -> adapterMock);
+		registry.register(MockType.class, () -> adapterMock);
 
-		Adapter<?> first = registry.getAdapter(MockType.class);
-		Adapter<?> second = registry.getAdapter(MockType.class);
+		Adapter first = registry.getAdapter(MockType.class);
+		Adapter second = registry.getAdapter(MockType.class);
 		assertSame(first, second);
 	}
 
@@ -75,12 +75,12 @@ class AdapterRegistryTest
 	@Test
 	public void testMatchingAdapterByAssignableType()
 	{
-		registry.registerAdapter(MockType.class, () -> adapterMock);
+		registry.register(MockType.class, () -> adapterMock);
 
 		class Impl implements MockType { }
 		Impl mockObj = new Impl();
 
-		List<Adapter<MockType>> matching = registry.getMatchingAdapters((MockType) mockObj).toList();
+		List<Adapter> matching = registry.getMatchingAdapters((MockType) mockObj).toList();
 
 		assertEquals(1, matching.size());
 		assertSame(adapterMock, matching.getFirst());
@@ -91,12 +91,12 @@ class AdapterRegistryTest
 	public void testGetAdapterReturnsNullWhenNotRegistered() {
 		class UnregisteredType {}
 
-		Adapter<UnregisteredType> adapter = registry.getAdapter(UnregisteredType.class);
+		Adapter adapter = registry.getAdapter(UnregisteredType.class);
 
 		assertNull(adapter, "Adapter for unregistered type should return null");
 
 		// Optional: call again to verify it's cached (no recompute, no exception)
-		Adapter<UnregisteredType> cached = registry.getAdapter(UnregisteredType.class);
+		Adapter cached = registry.getAdapter(UnregisteredType.class);
 
 		assertNull(cached, "Cached result should also be null");
 	}
