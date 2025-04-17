@@ -78,7 +78,13 @@ public final class MacroKey extends AbstractKey implements StandardKey
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey.name()))
 				? Optional.empty()
-				: MacroKey.of(dotJoin(this, subKey.name()));
+				: MacroKey.of(dotJoin(subKey.name()));
 	}
 
+	public Optional<MacroKey> append(final String subKey)
+	{
+		return (subKey == null || IS_INVALID_KEY.test(subKey))
+				? Optional.empty()
+				: MacroKey.of(dotJoin(subKey));
+	}
 }

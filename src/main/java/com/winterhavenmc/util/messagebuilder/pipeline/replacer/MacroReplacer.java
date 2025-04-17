@@ -26,14 +26,16 @@ import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.Delimiter;
-
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MESSAGE_STRING;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.REPLACEMENT_MAP;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -81,14 +83,18 @@ public class MacroReplacer implements Replacer
 	{
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
 
-		ResultMap resultMap = new ResultMap();
+		Function<String, Optional<MacroKey>> toMacroKey = MacroKey::of;
+		Function<MacroKey, ResultMap> resolveKey = key -> resolver.resolve(key, contextMap);
+		BinaryOperator<ResultMap> mergeMaps = (r1, r2) -> {
+			r1.putAll(r2);
+			return r1;
+		};
 
-		matcher.match(messageString)
-				.map(MacroKey::of)
+		return replacements(matcher.match(messageString)
+				.map(toMacroKey)
 				.flatMap(Optional::stream)
-				.forEach(key -> resultMap.putAll(resolver.resolve(key, contextMap)));
-
-		return performReplacements(resultMap, messageString);
+				.map(resolveKey)
+				.reduce(new ResultMap(), mergeMaps), messageString);
 	}
 
 
@@ -99,7 +105,7 @@ public class MacroReplacer implements Replacer
 	 *                   their replacement strings will be derived
 	 * @return the updated context map, to allow use in functional pipelines
 	 */
-    public ContextMap addRecipientContext(final ContextMap contextMap)
+	public ContextMap addRecipientContext(final ContextMap contextMap)
 	{
 		MacroKey macroKey = MacroKey.of("RECIPIENT").orElseThrow();
 		MacroKey locationMacroKey = MacroKey.of("RECIPIENT.LOCATION").orElseThrow();
@@ -119,17 +125,17 @@ public class MacroReplacer implements Replacer
 	 * Replace values in the message string with macro string values in replacementMap
 	 *
 	 * @param replacementMap a collection of key/value pairs representing the placeholders and their replacement values
-	 * @param messageString the message string containing placeholders to be replaced
+	 * @param messageString  the message string containing placeholders to be replaced
 	 * @return {@code String} the final string with all replacements performed
 	 */
-    public String performReplacements(final ResultMap replacementMap, final String messageString)
+	public String replacements(final ResultMap replacementMap, final String messageString)
 	{
 		validate(replacementMap, Objects::isNull, throwing(PARAMETER_NULL, REPLACEMENT_MAP));
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
 
 		return new PlaceholderMatcher().match(messageString)
 				.reduce(messageString, (msg, placeholder) ->
-						msg.replace( Delimiter.OPEN + placeholder + Delimiter.CLOSE,
+						msg.replace(Delimiter.OPEN + placeholder + Delimiter.CLOSE,
 								replacementMap.getValueOrKey(MacroKey.of(placeholder).orElse(MacroKey.of("KEY").orElseThrow()))));
 	}
 

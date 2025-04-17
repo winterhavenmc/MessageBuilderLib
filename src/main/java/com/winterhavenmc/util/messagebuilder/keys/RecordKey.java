@@ -78,7 +78,7 @@ public final class RecordKey extends AbstractKey implements StandardKey
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey))
 				? Optional.empty()
-				: RecordKey.of(dotJoin(this, subKey));
+				: RecordKey.of(dotJoin(subKey));
 	}
 
 }

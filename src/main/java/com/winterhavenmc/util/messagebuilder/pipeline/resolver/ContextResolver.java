@@ -21,27 +21,26 @@ import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 
+import java.util.List;
+
 
 public class ContextResolver implements Resolver
 {
-	private final AtomicResolver atomicResolver;
-	private final CompositeResolver compositeResolver;
+	private final List<Resolver> resolvers;
 
 
-	public ContextResolver()
+	public ContextResolver(List<Resolver> resolvers)
 	{
-		atomicResolver = new AtomicResolver();
-		compositeResolver = new CompositeResolver();
+		this.resolvers = resolvers;
 	}
 
 
 	@Override
 	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
 	{
-		ResultMap resultMap = new ResultMap();
-		resultMap.putAll(compositeResolver.resolve(macroKey, contextMap));
-		resultMap.putAll(atomicResolver.resolve(macroKey, contextMap));
-		return resultMap;
+		return resolvers.stream()
+				.map(resolver -> resolver.resolve(macroKey, contextMap))
+				.collect(ResultMap::new, ResultMap::putAll, ResultMap::putAll);
 	}
 
 }

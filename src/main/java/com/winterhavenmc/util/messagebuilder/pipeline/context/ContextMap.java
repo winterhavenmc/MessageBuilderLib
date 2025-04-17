@@ -144,18 +144,6 @@ public class ContextMap
 
 
 	/**
-	 * Remove an entry from the map by key.
-	 *
-	 * @param macroKey The enum member used as the key.
-	 * @return The object that was removed, or {@code null} if no mapping existed for the key.
-	 */
-	public Object remove(final MacroKey macroKey)
-	{
-		return internalMap.remove(macroKey);
-	}
-
-
-	/**
 	 * Returns a set view of the mappings in the map.
 	 *
 	 * @return A set of entries in the map.
@@ -167,29 +155,11 @@ public class ContextMap
 
 
 	/**
-	 * Clears all entries in the map.
-	 */
-	public void clear()
-	{
-		this.internalMap.clear();
-	}
-
-	/**
-	 * Returns the number of entries in the map.
-	 *
-	 * @return The size of the map.
-	 */
-	public int size()
-	{
-		return this.internalMap.size();
-	}
-
-	/**
-	 * Checks if the map is empty.
+	 * Checks if the map is empty. Only used for testing.
 	 *
 	 * @return {@code true} if the map contains no entries, {@code false} otherwise.
 	 */
-	public boolean isEmpty()
+	boolean isEmpty()
 	{
 		return this.internalMap.isEmpty();
 	}

@@ -17,13 +17,18 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.matcher;
 
+import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
+import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.AtomicResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.CompositeResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.Resolver;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
@@ -35,6 +40,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,12 +65,23 @@ class PlaceholderMatcherTest
 	public void setUp()
 	{
 		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+
+		AdapterRegistry adapterRegistry = new AdapterRegistry();
+		FieldExtractor fieldExtractor = new FieldExtractor();
+
+		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
+		AtomicResolver atomicResolver = new AtomicResolver();
+		List<Resolver> resolvers = List.of(compositeResolver, atomicResolver);
+
+		PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
+
 		recipient = switch (RecipientResult.from(playerMock)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
+
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
-		macroReplacer = new MacroReplacer(new ContextResolver(), new PlaceholderMatcher());
+		macroReplacer = new MacroReplacer(new ContextResolver(resolvers), placeholderMatcher);
 	}
 
 	@AfterEach
