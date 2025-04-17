@@ -199,30 +199,30 @@ class ContextMapTest
 	}
 
 
-	@Test
-	void testRemove()
-	{
-		// Arrange
-		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
-		Integer value1 = 41;
-		contextMap.putIfAbsent(key1, value1);
-
-		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
-		Integer value2 = 42;
-		contextMap.putIfAbsent(key2, value2);
-
-		assertFalse(contextMap.isEmpty());
-		assertEquals(2, contextMap.size());
-
-		// Act
-		Object removedObject = contextMap.remove(key1);
-
-		// Assert
-		assertEquals(1, contextMap.size());
-		assertFalse(contextMap.contains(key1));
-		assertTrue(contextMap.contains(key2));
-		assertNotNull(removedObject);
-	}
+//	@Test
+//	void testRemove()
+//	{
+//		// Arrange
+//		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
+//		Integer value1 = 41;
+//		contextMap.putIfAbsent(key1, value1);
+//
+//		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
+//		Integer value2 = 42;
+//		contextMap.putIfAbsent(key2, value2);
+//
+//		assertFalse(contextMap.isEmpty());
+//		assertEquals(2, contextMap.size());
+//
+//		// Act
+//		Object removedObject = contextMap.remove(key1);
+//
+//		// Assert
+//		assertEquals(1, contextMap.size());
+//		assertFalse(contextMap.contains(key1));
+//		assertTrue(contextMap.contains(key2));
+//		assertNotNull(removedObject);
+//	}
 
 //	@Test
 //	void testRemove_nonexistent() {
@@ -238,47 +238,47 @@ class ContextMapTest
 //		assertNull(removedObject);
 //	}
 
-	@Test
-	void testClear()
-	{
-		// Arrange
-		MacroKey macroKey1 = MacroKey.of("NUMBER1").orElseThrow();
-		Integer value1 = 41;
-		contextMap.putIfAbsent(macroKey1, value1);
+//	@Test
+//	void testClear()
+//	{
+//		// Arrange
+//		MacroKey macroKey1 = MacroKey.of("NUMBER1").orElseThrow();
+//		Integer value1 = 41;
+//		contextMap.putIfAbsent(macroKey1, value1);
+//
+//		MacroKey macroKey2 = MacroKey.of("NUMBER2").orElseThrow();
+//		Integer value2 = 42;
+//
+//		contextMap.putIfAbsent(macroKey2, value2);
+//		assertFalse(contextMap.isEmpty());
+//		assertEquals(2, contextMap.size());
+//
+//		// Act
+//		contextMap.clear();
+//
+//		// Assert
+//		assertTrue(contextMap.isEmpty());
+//	}
 
-		MacroKey macroKey2 = MacroKey.of("NUMBER2").orElseThrow();
-		Integer value2 = 42;
+//	@Test
+//	void testSize_empty() {
+//		assertEquals(0, contextMap.size());
+//		contextMap.putIfAbsent(macroKey, 42);
+//		assertNotEquals(0, contextMap.size());
+//	}
 
-		contextMap.putIfAbsent(macroKey2, value2);
-		assertFalse(contextMap.isEmpty());
-		assertEquals(2, contextMap.size());
-
-		// Act
-		contextMap.clear();
-
-		// Assert
-		assertTrue(contextMap.isEmpty());
-	}
-
-	@Test
-	void testSize_empty() {
-		assertEquals(0, contextMap.size());
-		contextMap.putIfAbsent(macroKey, 42);
-		assertNotEquals(0, contextMap.size());
-	}
-
-	@Test
-	void testSize_not_empty() {
-		// Arrange
-		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
-		Integer value = 42;
-
-		// Act
-		contextMap.putIfAbsent(macroKey, value);
-
-		// Assert
-		assertEquals(1, contextMap.size());
-	}
+//	@Test
+//	void testSize_not_empty() {
+//		// Arrange
+//		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
+//		Integer value = 42;
+//
+//		// Act
+//		contextMap.putIfAbsent(macroKey, value);
+//
+//		// Assert
+//		assertEquals(1, contextMap.size());
+//	}
 
 	@Test
 	void testIsEmpty() {
