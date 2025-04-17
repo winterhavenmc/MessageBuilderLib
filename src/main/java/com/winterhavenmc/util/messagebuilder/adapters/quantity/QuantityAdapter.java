@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 
 import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable;
+
 import org.bukkit.inventory.ItemStack;
 import java.util.Collection;
 import java.util.Optional;
