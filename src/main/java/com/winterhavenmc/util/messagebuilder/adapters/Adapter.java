@@ -55,14 +55,16 @@ public interface Adapter
 			this.supplier = supplier;
 		}
 
+
 		Class<?> getType()
 		{
 			return this.type;
 		}
 
-		Adapter create()
+
+		Supplier<? extends Adapter> getSupplier()
 		{
-			return supplier.get();
+			return supplier;
 		}
 	}
 

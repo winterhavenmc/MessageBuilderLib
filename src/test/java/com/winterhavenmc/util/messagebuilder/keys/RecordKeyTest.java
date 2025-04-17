@@ -35,7 +35,7 @@ class RecordKeyTest
         RecordKey recordKey = RecordKey.of("PLAYER").orElseThrow();
 
         // Act
-        RecordKey result = recordKey.append("LOCATION", "X").orElseThrow();
+        RecordKey result = recordKey.append("LOCATION").orElseThrow().append("X").orElseThrow();
 
         // Assert
         assertEquals("PLAYER.LOCATION.X", result.toString());

@@ -71,7 +71,7 @@ class FieldExtractorTest
 
 		assertEquals(2, result.size());
 		assertTrue(result.containsKey(baseKey));
-		assertTrue(result.containsKey(baseKey.append("NAME").orElseThrow()));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow()));
 		assertEquals("TestName", result.get(baseKey));
 	}
 
@@ -86,7 +86,7 @@ class FieldExtractorTest
 
 		assertEquals(2, result.size());
 		assertEquals("FancyName", result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append("DISPLAY_NAME").orElseThrow()));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.DISPLAY_NAME).orElseThrow()));
 	}
 
 
@@ -101,7 +101,7 @@ class FieldExtractorTest
 
 		assertEquals(2, result.size());
 		assertEquals(uuid, result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append("UUID").orElseThrow()));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.UUID).orElseThrow()));
 	}
 
 
@@ -110,13 +110,13 @@ class FieldExtractorTest
 	{
 		var locatable = mock(com.winterhavenmc.util.messagebuilder.adapters.location.Locatable.class);
 		Location location = mock(Location.class);
-		when(locatable.gatLocation()).thenReturn(location);
+		when(locatable.getLocation()).thenReturn(location);
 
 		Map<MacroKey, Object> result = extractor.extract(locationAdapterMock, locatable, baseKey);
 
 		assertEquals(2, result.size());
 		assertEquals(location, result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append("LOCATION").orElseThrow()));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.LOCATION).orElseThrow()));
 	}
 
 
@@ -130,15 +130,14 @@ class FieldExtractorTest
 
 		assertEquals(2, result.size());
 		assertEquals(42, result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append("QUANTITY").orElseThrow()));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.QUANTITY).orElseThrow()));
 	}
 
 
 	@Test
 	void testNoOpAdapter()
 	{
-		@SuppressWarnings("unchecked")
-		Adapter<Object> unknownAdapter = mock(Adapter.class);
+		Adapter unknownAdapter = mock(Adapter.class);
 
 		Object randomObject = new Object();
 		Map<MacroKey, Object> result = extractor.extract(unknownAdapter, randomObject, baseKey);

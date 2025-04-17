@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.name;
 
-import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -201,20 +199,6 @@ public class NameAdapterTest
 			assertEquals("Plugin Name", name, "The adapter should return the name from the Plugin.");
 		}
 
-	}
-
-
-	@Test
-	void testGetInterface()
-	{
-		// Arrange
-		Adapter<Nameable> adapter = new NameAdapter();
-
-		// Act
-		var result = adapter.getInterface();
-
-		// Assert
-		assertEquals(Nameable.class, result);
 	}
 
 }

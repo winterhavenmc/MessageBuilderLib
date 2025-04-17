@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.uuid;
 
-import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -147,20 +145,6 @@ class UniqueIdAdapterTest
 
 		// Assert
 		assertNull(uuid, "The resolver should return a null when passed a null.");
-	}
-
-
-	@Test
-	void testGetInterface()
-	{
-		// Arrange
-		Adapter<Identifiable> adapter = new UniqueIdAdapter();
-
-		// Act
-		var result = adapter.getInterface();
-
-		// Assert
-		assertEquals(Identifiable.class, result);
 	}
 
 }

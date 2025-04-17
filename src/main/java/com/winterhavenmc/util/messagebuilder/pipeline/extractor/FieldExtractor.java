@@ -71,8 +71,8 @@ public class FieldExtractor implements Extractor
 
 			case QuantityAdapter ignored when adapted instanceof Quantifiable quantifiable ->
 			{
-				baseKey.append(QUANTITY).ifPresent(macroKey -> fields.put(macroKey, quantifiable.getField()));
-				fields.putIfAbsent(baseKey, quantifiable.getField());
+				baseKey.append(QUANTITY).ifPresent(macroKey -> fields.put(macroKey, quantifiable.getQuantity()));
+				fields.putIfAbsent(baseKey, quantifiable.getQuantity());
 			}
 			default -> {} // no-op
 		}

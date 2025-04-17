@@ -38,7 +38,7 @@ class FieldExtractorRegistryTest
 	private MacroKey baseKey;
 
 
-	private <T> Map<MacroKey, Object> invokeExtractor(Adapter<T> adapter, T value, String baseKeyString)
+	private <T> Map<MacroKey, Object> invokeExtractor(Adapter adapter, T value, String baseKeyString)
 	{
 		MacroKey baseKey = MacroKey.of(baseKeyString).orElseThrow();
 		return registry.extractFields(adapter, value, baseKey);

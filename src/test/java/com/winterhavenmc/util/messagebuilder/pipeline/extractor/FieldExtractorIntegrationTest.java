@@ -53,10 +53,10 @@ class FieldExtractorIntegrationTest
 	@MethodSource("adapterProvider")
 	void testFieldExtractionWithAdapter(
 			String label,
-			Adapter<?> adapter,
+			Adapter adapter,
 			Object value,
 			String baseKey,
-			String subKey,
+			Adapter.BuiltIn subKey,
 			Object expectedValue)
 	{
 		Map<MacroKey, Object> result = invokeExtractorUntyped(adapter, value, baseKey);
@@ -72,10 +72,9 @@ class FieldExtractorIntegrationTest
 	 * Invokes the extractor with unchecked casting to match parameterized test inputs.
 	 * The adapter and value are expected to be type-compatible.
 	 */
-	@SuppressWarnings("unchecked")
-	private Map<MacroKey, Object> invokeExtractorUntyped(Adapter<?> adapter, Object value, String baseKeyString) {
+	private Map<MacroKey, Object> invokeExtractorUntyped(Adapter adapter, Object value, String baseKeyString) {
 		MacroKey baseKey = MacroKey.of(baseKeyString).orElseThrow();
-		return registry.extractFields((Adapter<Object>) adapter, value, baseKey);
+		return registry.extractFields(adapter, value, baseKey);
 	}
 
 
@@ -85,11 +84,11 @@ class FieldExtractorIntegrationTest
 		Location location = mock(Location.class);
 
 		return Stream.of(
-				Arguments.of("NameAdapter", new NameAdapter(), nameableMock("Steve"), "PLAYER", "NAME", "Steve"),
-				Arguments.of("DisplayNameAdapter", new DisplayNameAdapter(), displayNameableMock("Captain Steve"), "PLAYER", "DISPLAY_NAME", "Captain Steve"),
-				Arguments.of("UniqueIdAdapter", new UniqueIdAdapter(), identifiableMock(uuid), "PLAYER", "UUID", uuid),
-				Arguments.of("QuantityAdapter", new QuantityAdapter(), quantifiableMock(42), "ITEM", "QUANTITY", 42),
-				Arguments.of("LocationAdapter", new LocationAdapter(), locatableMock(location), "LOCATION", "LOCATION", location)
+				Arguments.of("NameAdapter", new NameAdapter(), nameableMock("Steve"), "PLAYER", Adapter.BuiltIn.NAME, "Steve"),
+				Arguments.of("DisplayNameAdapter", new DisplayNameAdapter(), displayNameableMock("Captain Steve"), "PLAYER", Adapter.BuiltIn.DISPLAY_NAME, "Captain Steve"),
+				Arguments.of("UniqueIdAdapter", new UniqueIdAdapter(), identifiableMock(uuid), "PLAYER", Adapter.BuiltIn.UUID, uuid),
+				Arguments.of("QuantityAdapter", new QuantityAdapter(), quantifiableMock(42), "ITEM", Adapter.BuiltIn.QUANTITY, 42),
+				Arguments.of("LocationAdapter", new LocationAdapter(), locatableMock(location), "LOCATION", Adapter.BuiltIn.LOCATION, location)
 		);
 	}
 
@@ -133,7 +132,7 @@ class FieldExtractorIntegrationTest
 	private static Locatable locatableMock(Location location)
 	{
 		Locatable mock = mock(Locatable.class);
-		when(mock.gatLocation()).thenReturn(location);
+		when(mock.getLocation()).thenReturn(location);
 		return mock;
 	}
 

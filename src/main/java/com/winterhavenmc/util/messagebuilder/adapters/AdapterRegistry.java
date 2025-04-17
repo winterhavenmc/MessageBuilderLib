@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
@@ -35,7 +36,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class AdapterRegistry
 {
-	private final Map<Class<?>, Adapter> ADAPTER_MAP = new LinkedHashMap<>();
+	private final Map<Class<?>, Supplier<? extends Adapter>> ADAPTER_MAP = new LinkedHashMap<>();
     private final Map<Class<?>, Adapter> ADAPTER_CACHE = new ConcurrentHashMap<>();
 
 
@@ -45,9 +46,11 @@ public class AdapterRegistry
 	@SuppressWarnings("unchecked")
 	public AdapterRegistry()
 	{
-		for (Adapter.BuiltIn builtIn : Adapter.BuiltIn.values())
-		{
-			register((Class<Object>) builtIn.getType(), builtIn.create());
+		for (Adapter.BuiltIn builtin : Adapter.BuiltIn.values()) {
+			register(
+					(Class<Object>) builtin.getType(),
+					(Supplier<Adapter>) builtin.getSupplier()
+			);
 		}
 	}
 
@@ -56,15 +59,15 @@ public class AdapterRegistry
 	 * Register an adapter and store in the backing map
 	 *
 	 * @param type the class of the adaptable interface
-	 * @param adapter a supplier containing the constructor for the adapter
+	 * @param supplier a supplier containing the constructor for the adapter
 	 * @param <T> the adapter type
 	 */
-	public <T> void register(final Class<T> type, final Adapter adapter)
+	public <T> void register(final Class<T> type, final Supplier<Adapter> supplier)
 	{
 		validate(type, Objects::isNull, throwing(PARAMETER_NULL, TYPE));
-		validate(adapter, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
+		validate(supplier, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
 
-		ADAPTER_MAP.put(type, adapter);
+		ADAPTER_MAP.put(type, supplier);
 	}
 
 
@@ -79,7 +82,12 @@ public class AdapterRegistry
 	{
 		validate(type, Objects::isNull, throwing(PARAMETER_NULL, TYPE));
 
-		return ADAPTER_CACHE.computeIfAbsent(type, ADAPTER_MAP::get);
+		return ADAPTER_CACHE.computeIfAbsent(type, t -> {
+			Supplier<? extends Adapter> supplier = ADAPTER_MAP.get(t);
+			return (supplier != null)
+					? supplier.get()
+					: null;
+		});
 	}
 
 

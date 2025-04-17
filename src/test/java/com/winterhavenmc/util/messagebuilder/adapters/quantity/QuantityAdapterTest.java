@@ -147,18 +147,4 @@ public class QuantityAdapterTest
 		}
 	}
 
-
-	@Test
-	void testGetInterface()
-	{
-		// Arrange
-		Adapter<Quantifiable> adapter = new QuantityAdapter();
-
-		// Act
-		var result = adapter.getInterface();
-
-		// Assert
-		assertEquals(Quantifiable.class, result);
-	}
-
 }

@@ -64,10 +64,10 @@ class LocationAdapterTest
 		// Arrange & Act
 		Location result = new LocationAdapter()
 				.adapt(location)
-				.map(Locatable::gatLocation).orElseThrow();
+				.map(Locatable::getLocation).orElseThrow();
 
 		// Assert
-		assertEquals(location, result, "The resolver should return the gatLocation from the Location.");
+		assertEquals(location, result, "The resolver should return the getLocation from the Location.");
 	}
 
 
@@ -80,10 +80,10 @@ class LocationAdapterTest
 		// Act
 		Location result = new LocationAdapter()
 				.adapt(playerMock)
-				.map(Locatable::gatLocation).orElseThrow();
+				.map(Locatable::getLocation).orElseThrow();
 
 		// Assert
-		assertEquals(location, result, "The resolver should return the gatLocation from the Player.");
+		assertEquals(location, result, "The resolver should return the getLocation from the Player.");
 	}
 
 
@@ -96,10 +96,10 @@ class LocationAdapterTest
 		// Act
 		Location result = new LocationAdapter()
 				.adapt(offlinePlayerMock)
-				.map(Locatable::gatLocation).orElseThrow();
+				.map(Locatable::getLocation).orElseThrow();
 
 		// Assert
-		assertEquals(location, result, "The resolver should return the gatLocation from the OfflinePlayer.");
+		assertEquals(location, result, "The resolver should return the getLocation from the OfflinePlayer.");
 	}
 
 
@@ -112,10 +112,10 @@ class LocationAdapterTest
 		// Act
 		Location result = new LocationAdapter()
 				.adapt(blockMock)
-				.map(Locatable::gatLocation).orElseThrow();
+				.map(Locatable::getLocation).orElseThrow();
 
 		// Assert
-		assertEquals(location, result, "The resolver should return the gatLocation from the Block.");
+		assertEquals(location, result, "The resolver should return the getLocation from the Block.");
 	}
 
 
@@ -128,10 +128,10 @@ class LocationAdapterTest
 		// Act
 		Location result = new LocationAdapter()
 				.adapt(blockStateMock)
-				.map(Locatable::gatLocation).orElseThrow();
+				.map(Locatable::getLocation).orElseThrow();
 
 		// Assert
-		assertEquals(location, result, "The resolver should return the gatLocation from the BlockState.");
+		assertEquals(location, result, "The resolver should return the getLocation from the BlockState.");
 	}
 
 
@@ -144,10 +144,10 @@ class LocationAdapterTest
 		// Act
 		Location result = new LocationAdapter()
 				.adapt(doubleChestMock)
-				.map(Locatable::gatLocation).orElseThrow();
+				.map(Locatable::getLocation).orElseThrow();
 
 		// Assert
-		assertEquals(location, result, "The resolver should return the gatLocation from the DoubleChest.");
+		assertEquals(location, result, "The resolver should return the getLocation from the DoubleChest.");
 	}
 
 	@Test
@@ -159,24 +159,10 @@ class LocationAdapterTest
 		// Assert
 		Optional<Location> result = new LocationAdapter()
 				.adapt(location)
-				.map(Locatable::gatLocation);
+				.map(Locatable::getLocation);
 
 		// Assert
 		assertTrue(result.isEmpty());
-	}
-
-
-	@Test
-	void testGetInterface()
-	{
-		// Arrange
-		Adapter<Locatable> adapter = new LocationAdapter();
-
-		// Act
-		var result = adapter.getInterface();
-
-		// Assert
-		assertEquals(Locatable.class, result);
 	}
 
 }
