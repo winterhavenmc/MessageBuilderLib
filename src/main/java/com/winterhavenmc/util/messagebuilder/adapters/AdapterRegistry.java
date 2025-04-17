@@ -17,22 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters;
 
-import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable;
-import com.winterhavenmc.util.messagebuilder.adapters.location.Locatable;
-import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.name.Nameable;
-import com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable;
-import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
-import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
@@ -47,20 +35,20 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class AdapterRegistry
 {
-	private final Map<Class<?>, Supplier<? extends Adapter<?>>> ADAPTER_MAP = new LinkedHashMap<>();
+	private final Map<Class<?>, Adapter<?>> ADAPTER_MAP = new LinkedHashMap<>();
     private final Map<Class<?>, Adapter<?>> ADAPTER_CACHE = new ConcurrentHashMap<>();
 
 
 	/**
 	 * Class constructor registers all built-in adapters
 	 */
+	@SuppressWarnings("unchecked")
 	public AdapterRegistry()
 	{
-		registerAdapter(DisplayNameable.class, DisplayNameAdapter::new);
-		registerAdapter(Nameable.class, NameAdapter::new);
-		registerAdapter(Locatable.class, LocationAdapter::new);
-		registerAdapter(Identifiable.class, UniqueIdAdapter::new);
-		registerAdapter(Quantifiable.class, QuantityAdapter::new);
+		for (Adapter.BuiltIn builtIn : Adapter.BuiltIn.values())
+		{
+			register((Class<Object>) builtIn.getType(), (Adapter<Object>) builtIn.create());
+		}
 	}
 
 
@@ -68,15 +56,15 @@ public class AdapterRegistry
 	 * Register an adapter and store in the backing map
 	 *
 	 * @param type the class of the adaptable interface
-	 * @param supplier a supplier containing the constructor for the adapter
+	 * @param adapter a supplier containing the constructor for the adapter
 	 * @param <T> the adapter type
 	 */
-	public <T> void registerAdapter(final Class<T> type, final Supplier<Adapter<T>> supplier)
+	public <T> void register(final Class<T> type, final Adapter<T> adapter)
 	{
 		validate(type, Objects::isNull, throwing(PARAMETER_NULL, TYPE));
-		validate(supplier, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
+		validate(adapter, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
 
-		ADAPTER_MAP.put(type, supplier);
+		ADAPTER_MAP.put(type, adapter);
 	}
 
 
@@ -92,12 +80,7 @@ public class AdapterRegistry
 	{
 		validate(type, Objects::isNull, throwing(PARAMETER_NULL, TYPE));
 
-		return (Adapter<T>) ADAPTER_CACHE.computeIfAbsent(type, t -> {
-			Supplier<? extends Adapter<?>> supplier = ADAPTER_MAP.get(t);
-			return (supplier != null)
-					? supplier.get()
-					: null;
-		});
+		return (Adapter<T>) ADAPTER_CACHE.computeIfAbsent(type, ADAPTER_MAP::get);
 	}
 
 
@@ -118,5 +101,6 @@ public class AdapterRegistry
 						.map(supplier -> (Adapter<T>) getAdapter(supplier))
 						.filter(Objects::nonNull);
 	}
+
 
 }
