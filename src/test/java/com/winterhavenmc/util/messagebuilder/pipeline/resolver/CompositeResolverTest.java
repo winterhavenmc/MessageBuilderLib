@@ -17,76 +17,104 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
+import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
-import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import com.winterhavenmc.util.time.PrettyTimeFormatter;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class CompositeResolverTest
 {
-	@Mock Player playerMock;
-    AtomicResolver resolver;
+	@Mock NameAdapter adapterMock;
 
+
+	private AdapterRegistry adapterRegistry;
+	private FieldExtractor fieldExtractor;
+	private CompositeResolver resolver;
+	private ContextMap contextMap;
+
+	private final MacroKey rootKey = MacroKey.of("ROOT").orElseThrow();
+	private final MacroKey childKey = MacroKey.of("CHILD").orElseThrow();
 
 	@BeforeEach
-	void setUp()
-	{
-		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
-        resolver = new AtomicResolver(prettyTimeFormatter);
+	void setUp() {
+		adapterRegistry = mock(AdapterRegistry.class);
+		fieldExtractor = mock(FieldExtractor.class);
+		contextMap = mock(ContextMap.class);
+		resolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 	}
-
 
 	@Test
-	void testResolve()
-    {
-		// Arrange
-		ItemStack itemStack = new ItemStack(Material.STONE);
-		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+	void resolve_withNestedKey_mergesSubResults()
+	{
+		MacroKey macroKey = MacroKey.of("RESOLVED.CHILD").orElseThrow();
 
-		ValidRecipient recipient = switch (RecipientResult.from(playerMock))
-		{
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
+		Object rootValue = new Object();
+		Object adaptedValue = new Object();
 
-		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
-		MacroKey numberMacroKey = MacroKey.of("NUMBER").orElseThrow();
-		MacroKey itemMacroKey = MacroKey.of("ITEM_STACK").orElseThrow();
+		ResultMap childMap = new ResultMap();
+		childMap.put(macroKey, "value");
 
-		contextMap.putIfAbsent(numberMacroKey, 42);
-		contextMap.putIfAbsent(itemMacroKey, itemStack);
+		// Recursive stub: resolve(childKey) returns a known map
+		CompositeResolver spyResolver = spy(resolver);
+		doReturn(childMap).when(spyResolver).resolve(childKey, contextMap);
 
-		// Act
-        ResultMap resultMap = resolver.resolve(numberMacroKey, contextMap);
+		when(contextMap.get(rootKey)).thenReturn(Optional.of(rootValue));
+		when(adapterRegistry.getMatchingAdapters(rootValue)).thenReturn(Stream.of(adapterMock));
 
-		// Assert
-//		assertTrue(resultMap.containsKey(numberMacroKey));
-		assertEquals("42", resultMap.get(numberMacroKey));
-//		assertTrue(resultMap.containsKey(itemMacroKey));
-//		assertEquals("STONE", resultMap.get(itemMacroKey));
+		when(adapterMock.adapt(rootValue)).thenReturn((Optional) Optional.of(adaptedValue));
+
+		when(fieldExtractor.extract(adapterMock, adaptedValue, rootKey)).thenReturn(Map.of(childKey, new Object()));
+
+		ResultMap result = spyResolver.resolve(rootKey, contextMap);
+
+		assertFalse(result.isEmpty());
+		assertEquals("value", result.get(macroKey));
 	}
 
+	@Test
+	void resolve_withMissingContextKey_returnsEmptyMap() {
+		when(contextMap.get(rootKey)).thenReturn(Optional.empty());
+
+		ResultMap result = resolver.resolve(rootKey, contextMap);
+
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	void resolve_withNoAdapters_returnsEmptyMap() {
+		when(contextMap.get(rootKey)).thenReturn(Optional.of("test"));
+		when(adapterRegistry.getMatchingAdapters("test")).thenReturn(Stream.empty());
+
+		ResultMap result = resolver.resolve(rootKey, contextMap);
+
+		assertTrue(result.isEmpty());
+	}
+
+	@Test
+	void resolve_withUnadaptableValue_returnsEmptyMap()
+	{
+		when(contextMap.get(rootKey)).thenReturn(Optional.of("test"));
+		when(adapterRegistry.getMatchingAdapters("test")).thenReturn(Stream.of(adapterMock));
+		when(adapterMock.adapt("test")).thenReturn(Optional.empty());
+
+		ResultMap result = resolver.resolve(rootKey, contextMap);
+
+		assertTrue(result.isEmpty());
+	}
 }
