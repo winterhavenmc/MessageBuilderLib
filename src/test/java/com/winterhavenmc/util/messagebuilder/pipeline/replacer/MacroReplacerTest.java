@@ -39,6 +39,7 @@ import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import com.winterhavenmc.util.time.PrettyTimeFormatter;
@@ -54,20 +55,22 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Locale;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class MacroReplacerTest
 {
 	@Mock Player playerMock;
-	@Mock
-	MessagePipeline messagePipelineMock;
+	@Mock LocaleSupplier localeSupplier;
+	@Mock MessagePipeline messagePipelineMock;
 
 	ValidRecipient recipient;
 	RecordKey messageKey;
@@ -97,7 +100,7 @@ class MacroReplacerTest
 		AdapterRegistry adapterRegistry = new AdapterRegistry();
 		FieldExtractor fieldExtractor = new FieldExtractor();
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
+		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter(localeSupplier);
 		AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
 		resolvers = List.of(compositeResolver, atomicResolver);
 		contextResolver = new ContextResolver(resolvers);

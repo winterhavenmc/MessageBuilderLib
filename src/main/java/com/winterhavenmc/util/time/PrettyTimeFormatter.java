@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.time;
 
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import net.time4j.CalendarUnit;
 import net.time4j.ClockUnit;
 import net.time4j.Duration;
@@ -39,6 +40,47 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public final class PrettyTimeFormatter implements TimeFormatter
 {
+	private final LocaleSupplier localeSupplier;
+
+
+	public PrettyTimeFormatter(LocaleSupplier localeSupplier)
+	{
+		this.localeSupplier = localeSupplier;
+	}
+
+
+	/**
+	 * Return a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale
+	 * set in the config.yml file, or Locale.getDefault() if a valid config setting is not found.<br>
+	 * <b><i>Note:</i></b> Duration type used in this method are of the net.time4j.Duration type, except for
+	 * the java.time.Duration type that is passed in as a parameter
+	 *
+	 * @param duration a time duration
+	 * @return the {@code PrettyTime} formatted string
+	 */
+	public String getFormatted(final java.time.Duration duration)
+	{
+		Locale locale = localeSupplier.get();
+
+		validate(locale, Objects::isNull, throwing(PARAMETER_NULL, LOCALE));
+		validate(duration, Objects::isNull, throwing(PARAMETER_NULL, DURATION));
+
+		// get instance of PrettyTime
+		PrettyTime prettyTime = PrettyTime.of(locale);
+
+		// convert java.time.Duration to net.time4j.Duration
+		Duration<?> t4jDuration = Duration.from(duration).toClockPeriod();
+
+		Duration<CalendarUnit> calendarPart = t4jDuration.toCalendarPeriod();
+		Duration<ClockUnit> clockPart = t4jDuration.toClockPeriod();
+
+		clockPart = clockPart.with(ClockUnit.SECONDS.rounded());
+
+		// time unit is less than one day and more than one hour, display hours, minutes
+		return prettyTime.print(Duration.compose(calendarPart, clockPart), TextWidth.WIDE);
+	}
+
+
 	/**
 	 * Return a {@link PrettyTime} string for the given amount of milliseconds, translated for the locale provided.<br>
 	 * <b><i>Note:</i></b> Duration type used in this method are of the net.time4j.Duration type, except for
