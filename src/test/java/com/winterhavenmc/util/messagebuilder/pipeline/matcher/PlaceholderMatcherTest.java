@@ -34,6 +34,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,7 +71,8 @@ class PlaceholderMatcherTest
 		FieldExtractor fieldExtractor = new FieldExtractor();
 
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		AtomicResolver atomicResolver = new AtomicResolver();
+		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
+		AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
 		List<Resolver> resolvers = List.of(compositeResolver, atomicResolver);
 
 		PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();

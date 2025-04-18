@@ -27,6 +27,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -53,7 +54,8 @@ class CompositeResolverTest
 	@BeforeEach
 	void setUp()
 	{
-        resolver = new AtomicResolver();
+		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
+        resolver = new AtomicResolver(prettyTimeFormatter);
 	}
 
 

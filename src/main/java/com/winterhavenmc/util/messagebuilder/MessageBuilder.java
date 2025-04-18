@@ -43,6 +43,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import com.winterhavenmc.util.time.Tick;
 
 import org.bukkit.command.CommandSender;
@@ -196,8 +197,9 @@ public final class MessageBuilder
 		final FieldExtractor fieldExtractor = new FieldExtractor();
 
 		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		final AtomicResolver atomicResolver = new AtomicResolver();
-		final ContextResolver contextResolver = new ContextResolver(List.of(compositeResolver, atomicResolver));
+		final PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
+		final AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
+		final ContextResolver contextResolver = new ContextResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
 
 		final PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
 
