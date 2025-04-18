@@ -23,8 +23,6 @@ import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 
-import java.util.function.BiConsumer;
-
 
 public class CompositeResolver implements Resolver
 {
@@ -42,6 +40,7 @@ public class CompositeResolver implements Resolver
 		this.fieldExtractor = fieldExtractor;
 	}
 
+
 	/**
 	 * Convert the value objects contained in the context map into their string representations in a
 	 * new result map.
@@ -52,21 +51,14 @@ public class CompositeResolver implements Resolver
 	@Override
 	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
 	{
-		ResultMap resultMap = new ResultMap();
-		BiConsumer<MacroKey, Object> resolveAndMerge = (subKey, subValue) ->
-		{
-			ResultMap subResult = resolve(subKey, contextMap);
-			resultMap.putAll(subResult);
-		};
-
-		// get the value from the context map for the given key
-		contextMap.get(macroKey).ifPresent(value -> adapterRegistry
-				.getMatchingAdapters(value)
-				.forEach(adapter -> adapter.adapt(value)
-						.ifPresent(adapted -> fieldExtractor
-								.extract(adapter, adapted, macroKey)
-								.forEach(resolveAndMerge))));
-		return resultMap;
+		return contextMap.get(macroKey)
+				.map(value -> adapterRegistry
+						.getMatchingAdapters(value)
+						.map(adapter -> ResolverUtility
+								.resolveAdapter(adapter, value, macroKey, contextMap, fieldExtractor, this))
+						.reduce(new ResultMap(), ResolverUtility::mergeResults))
+				.orElseGet(ResultMap::new);
 	}
+
 
 }
