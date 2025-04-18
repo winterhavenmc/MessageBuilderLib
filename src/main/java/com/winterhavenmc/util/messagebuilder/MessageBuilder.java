@@ -26,6 +26,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.LanguageTag;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -122,7 +123,11 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final LocaleSupplier localeSupplier = new LocaleSupplier(() -> plugin.getConfig().getString("language"));
+		LanguageTag languageTag = LanguageTag.of(plugin.getConfig().getString("locale"))
+				.orElse(LanguageTag.of(plugin.getConfig().getString("language"))
+				.orElse(LanguageTag.getDefault()));
+
+		final LocaleSupplier localeSupplier = new LocaleSupplier(() -> languageTag);
 
 		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());

@@ -17,9 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.LanguageTag;
+
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -28,14 +29,14 @@ import java.util.function.Supplier;
  */
 public class LocaleSupplier implements Supplier<Locale>
 {
-	private final Supplier<String> languageTagSupplier;
+	private final Supplier<LanguageTag> languageTagSupplier;
 
 	/**
 	 * Constructs a LocaleSupplier from a supplier of IETF language tags (e.g., "en-US", "de", etc.).
 	 *
 	 * @param languageTagSupplier A supplier that returns the current language tag string
 	 */
-	public LocaleSupplier(Supplier<String> languageTagSupplier)
+	public LocaleSupplier(Supplier<LanguageTag> languageTagSupplier)
 	{
 		this.languageTagSupplier = Objects.requireNonNull(languageTagSupplier, "languageTagSupplier");
 	}
@@ -43,19 +44,15 @@ public class LocaleSupplier implements Supplier<Locale>
 	@Override
 	public Locale get()
 	{
-		String tag = Optional.ofNullable(languageTagSupplier.get())
-				.map(String::trim)
-				.filter(s -> !s.isEmpty())
-				.orElse(null);
+		Locale locale = languageTagSupplier.get().getLocale();
 
-		if (tag == null)
+		if (locale == null)
 		{
 			return Locale.getDefault();
 		}
 
 		try
 		{
-			Locale locale = Locale.forLanguageTag(tag);
 			if (locale.getLanguage().isEmpty())
 			{
 				return Locale.getDefault(); // invalid tag
