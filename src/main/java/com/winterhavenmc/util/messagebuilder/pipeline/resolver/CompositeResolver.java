@@ -51,13 +51,25 @@ public class CompositeResolver implements Resolver
 	@Override
 	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
 	{
-		return contextMap.get(macroKey)
-				.map(value -> adapterRegistry
-						.getMatchingAdapters(value)
-						.map(adapter -> ResolverUtility
-								.resolveAdapter(adapter, value, macroKey, contextMap, fieldExtractor, this))
-						.reduce(new ResultMap(), ResolverUtility::mergeResults))
-				.orElseGet(ResultMap::new);
+		ResultMap resultMap = new ResultMap();
+
+		contextMap.get(macroKey).ifPresent(value ->
+				resolveSubkeysInto(resultMap, value, macroKey, contextMap));
+
+		return resultMap;
 	}
 
+
+	/**
+	 * Resolver static helper method
+	 */
+	private void resolveSubkeysInto(ResultMap resultMap, Object value, MacroKey macroKey, ContextMap contextMap)
+	{
+		adapterRegistry.getMatchingAdapters(value).forEach(adapter ->
+				adapter.adapt(value).ifPresent(adapted ->
+						fieldExtractor.extract(adapter, adapted, macroKey).keySet()
+								.forEach(subKey -> resultMap.putAll(resolve(subKey, contextMap)))
+				)
+		);
+	}
 }
