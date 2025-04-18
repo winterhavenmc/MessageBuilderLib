@@ -23,25 +23,10 @@ import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 
-import java.util.function.BiConsumer;
-
 
 public class ResolverUtility
 {
 	private ResolverUtility() { /* private constructor prevents instantiation */ }
-
-	@FunctionalInterface
-	public interface TriConsumer<T, U, V> {
-		void accept(T t, U u, V v);
-	}
-
-
-	public static BiConsumer<MacroKey, Object> resolveAndMerge(final ResultMap resultMap,
-															   final ContextMap contextMap,
-															   final Resolver resolver)
-	{
-		return (subKey, ignored) -> resultMap.putAll(resolver.resolve(subKey, contextMap));
-	}
 
 
 	public static ResultMap mergeResults(ResultMap r1, ResultMap r2)
@@ -78,7 +63,4 @@ public class ResolverUtility
 				.orElseGet(ResultMap::new);
 	}
 
-
-
 }
-
