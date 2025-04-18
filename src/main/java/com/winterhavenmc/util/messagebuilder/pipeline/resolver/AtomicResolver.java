@@ -62,7 +62,6 @@ public class AtomicResolver implements Resolver
 
 	private String formatDuration(final Duration duration)
 	{
-		//TODO: provide PrettyTimeFormatter through injection rather than instantiating new instance every time
 		return prettyTimeFormatter.getFormatted(Locale.getDefault(), duration);
 	}
 
