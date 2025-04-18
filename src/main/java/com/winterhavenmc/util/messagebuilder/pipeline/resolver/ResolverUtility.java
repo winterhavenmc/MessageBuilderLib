@@ -24,6 +24,10 @@ import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 
 
+/**
+ * Static utility method containing methods used in the functional chain of CompositeResolver.
+ * These methods exist only for promoting readability in the resolver functional chain declaration.
+ */
 public class ResolverUtility
 {
 	private ResolverUtility() { /* private constructor prevents instantiation */ }
