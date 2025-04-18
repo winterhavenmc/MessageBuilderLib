@@ -17,5 +17,4 @@
 
 package com.winterhavenmc.util.messagebuilder.recipient;
 
-public record InvalidRecipient() implements Recipient
-{ }
+public record InvalidRecipient() implements Recipient { }

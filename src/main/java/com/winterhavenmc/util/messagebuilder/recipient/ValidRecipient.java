@@ -19,5 +19,4 @@ package com.winterhavenmc.util.messagebuilder.recipient;
 
 import org.bukkit.command.CommandSender;
 
-public record ValidRecipient(CommandSender sender) implements Recipient
-{ }
+public record ValidRecipient(CommandSender sender) implements Recipient { }

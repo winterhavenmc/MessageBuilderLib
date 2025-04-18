@@ -31,6 +31,7 @@ public class LocaleSupplier implements Supplier<Locale>
 {
 	private final Supplier<LanguageTag> languageTagSupplier;
 
+
 	/**
 	 * Constructs a LocaleSupplier from a supplier of IETF language tags (e.g., "en-US", "de", etc.).
 	 *
@@ -40,6 +41,7 @@ public class LocaleSupplier implements Supplier<Locale>
 	{
 		this.languageTagSupplier = Objects.requireNonNull(languageTagSupplier, "languageTagSupplier");
 	}
+
 
 	@Override
 	public Locale get()
