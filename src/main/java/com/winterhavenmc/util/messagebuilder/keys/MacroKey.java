@@ -87,4 +87,5 @@ public final class MacroKey extends AbstractKey implements StandardKey
 				? Optional.empty()
 				: MacroKey.of(dotJoin(subKey));
 	}
+
 }
