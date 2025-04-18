@@ -25,41 +25,95 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PrettyTimeFormatterTest {
+
+class PrettyTimeFormatterTest
+{
+	private final PrettyTimeFormatter formatter = new PrettyTimeFormatter();
+
 
 	@Test
-	void testGetFormatted() {
+	void testGetFormatted()
+	{
 		// Arrange
 		long millis = 1000 * 2 * 60 * 60 - 1001; // 2 hours - (1 second + 1 millisecond)
 		Duration duration = Duration.ofMillis(millis);
 
 		// Act & Assert
-		assertEquals("1 hour, 59 minutes, and 59 seconds", new PrettyTimeFormatter().getFormatted(Locale.US, duration));
-		assertEquals("1 hour, 59 minutes and 59 seconds", new PrettyTimeFormatter().getFormatted(Locale.UK, duration));
-		assertEquals("1 ora, 59 minuti e 59 secondi", new PrettyTimeFormatter().getFormatted(Locale.ITALIAN, duration));
+		assertEquals("1 hour, 59 minutes, and 59 seconds", formatter.getFormatted(Locale.US, duration));
+		assertEquals("1 hour, 59 minutes and 59 seconds", formatter.getFormatted(Locale.UK, duration));
+		assertEquals("1 ora, 59 minuti e 59 secondi", formatter.getFormatted(Locale.ITALIAN, duration));
 	}
 
 	@Test
-	void testGetFormatted_parameter_null_locale() {
+	void testGetFormatted_parameter_null_locale()
+	{
 		// Arrange
 		long millis = 1000 * 2 * 60 * 60 - 1001; // 2 hours - (1 second + 1 millisecond)
 		Duration duration = Duration.ofMillis(millis);
 
 		// Act
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new PrettyTimeFormatter().getFormatted(null, duration));
+				() -> formatter.getFormatted(null, duration));
 
 		// Assert
 		assertEquals("The parameter 'locale' cannot be null.", exception.getMessage());
 	}
 
 	@Test
-	void testGetFormatted_parameter_null_duration() {
+	void testGetFormatted_parameter_null_duration()
+	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new PrettyTimeFormatter().getFormatted(Locale.US, null));
+				() -> formatter.getFormatted(Locale.US, null));
 
 		// Assert
+		assertEquals("The parameter 'duration' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testEnglishFormatting()
+	{
+		String formatted = formatter.getFormatted(Locale.ENGLISH, Duration.ofMinutes(10));
+		assertTrue(formatted.contains("10 minutes"), "Expected '10 minutes' in: " + formatted);
+	}
+
+	@Test
+	void testGermanFormatting()
+	{
+		String formatted = formatter.getFormatted(Locale.GERMAN, Duration.ofMinutes(1));
+		assertTrue(formatted.toLowerCase(Locale.ROOT).contains("minute"), "Expected German word for 'minute'");
+	}
+
+	@Test
+	void testFrenchFormatting()
+	{
+		String formatted = formatter.getFormatted(Locale.FRENCH, Duration.ofHours(2));
+		assertTrue(formatted.toLowerCase(Locale.ROOT).contains("heures"), "Expected French word for 'hours'");
+	}
+
+	@Test
+	void testEmptyDuration()
+	{
+		String formatted = formatter.getFormatted(Locale.ENGLISH, Duration.ZERO);
+		assertNotNull(formatted);
+		assertFalse(formatted.isBlank(), "Expected non-empty result for zero duration");
+	}
+
+	@Test
+	void testValidation_nullLocale_throws()
+	{
+		ValidationException exception = assertThrows(ValidationException.class, () ->
+				formatter.getFormatted(null, Duration.ofMinutes(5)));
+
+		assertEquals("The parameter 'locale' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testValidation_nullDuration_throws()
+	{
+		ValidationException exception = assertThrows(ValidationException.class, () ->
+				formatter.getFormatted(Locale.ENGLISH, null));
 		assertEquals("The parameter 'duration' cannot be null.", exception.getMessage());
 	}
 
