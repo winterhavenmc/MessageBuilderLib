@@ -26,8 +26,18 @@ import java.time.Duration;
 import java.util.Locale;
 import java.util.UUID;
 
+
 public class AtomicResolver implements Resolver
 {
+	private final PrettyTimeFormatter prettyTimeFormatter;
+
+
+	public AtomicResolver(final PrettyTimeFormatter prettyTimeFormatter)
+	{
+		this.prettyTimeFormatter = prettyTimeFormatter;
+	}
+
+
 	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
 	{
 		ResultMap result = new ResultMap();
@@ -52,8 +62,7 @@ public class AtomicResolver implements Resolver
 
 	private String formatDuration(final Duration duration)
 	{
-		//TODO: provide PrettyTimeFormatter through injection rather than instantiating new instance every time
-		return new PrettyTimeFormatter().getFormatted(Locale.getDefault(), duration);
+		return prettyTimeFormatter.getFormatted(Locale.getDefault(), duration);
 	}
 
 }

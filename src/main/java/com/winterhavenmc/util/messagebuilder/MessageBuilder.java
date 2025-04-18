@@ -43,6 +43,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import com.winterhavenmc.util.time.Tick;
 
 import org.bukkit.command.CommandSender;
@@ -174,19 +175,20 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
-		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
-		final LanguageResourceManager languageResourceManager = YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
-
+		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
-		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
-
-		final MacroReplacer macroReplacer = getMacroReplacer();
-		final CooldownMap cooldownMap = new CooldownMap();
-		final List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
-		final MessagePipeline messagePipeline = new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, senders);
+		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory);
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
+	}
+
+
+	private static LanguageResourceManager getLanguageResourceManager(Plugin plugin)
+	{
+		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
+		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
+
+		return YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
 	}
 
 
@@ -196,12 +198,23 @@ public final class MessageBuilder
 		final FieldExtractor fieldExtractor = new FieldExtractor();
 
 		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		final AtomicResolver atomicResolver = new AtomicResolver();
-		final ContextResolver contextResolver = new ContextResolver(List.of(compositeResolver, atomicResolver));
-
+		final PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
+		final AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
+		final ContextResolver contextResolver = new ContextResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
 		final PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
 
 		return new MacroReplacer(contextResolver, placeholderMatcher);
+	}
+
+
+	private static @NotNull MessagePipeline getMessagePipeline(QueryHandlerFactory queryHandlerFactory)
+	{
+		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
+		final MacroReplacer macroReplacer = getMacroReplacer();
+		final CooldownMap cooldownMap = new CooldownMap();
+		final List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
+
+		return new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, senders);
 	}
 
 

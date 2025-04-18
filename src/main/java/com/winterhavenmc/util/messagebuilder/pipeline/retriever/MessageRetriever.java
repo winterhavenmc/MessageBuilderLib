@@ -41,9 +41,7 @@ public final class MessageRetriever implements Retriever
 	@Override
 	public MessageRecord getRecord(final RecordKey messageKey)
 	{
-		MessageRecord result = queryHandler.getRecord(messageKey);
-
-		return switch (result)
+		return switch (queryHandler.getRecord(messageKey))
 		{
 			case ValidMessageRecord validMessageRecord -> validMessageRecord;
 			case InvalidMessageRecord ignored -> MessageRecord.empty(messageKey);

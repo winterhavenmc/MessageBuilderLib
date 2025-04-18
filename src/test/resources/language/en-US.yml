@@ -22,6 +22,10 @@ CONSTANTS:
     DISPLAY_NAME: '&aSpawn'
   HOME:
     DISPLAY_NAME: '&aHome'
+  DEFAULTS:
+    WORLD.NAME: "unknown world"
+    PLAYER.NAME: "a player"
+
   TEST_LIST:
     - item 1
     - item 2
@@ -32,9 +36,6 @@ CONSTANTS:
 ################
 # Macro Defaults
 ################
-DEFAULTS:
-  WORLD.NAME: "unknown world"
-  PLAYER.NAME: "a player"
 
 
 ##############

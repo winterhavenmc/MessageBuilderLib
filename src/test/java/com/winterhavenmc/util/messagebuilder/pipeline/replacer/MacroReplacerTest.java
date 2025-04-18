@@ -41,6 +41,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Mes
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
+import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -96,7 +97,8 @@ class MacroReplacerTest
 		AdapterRegistry adapterRegistry = new AdapterRegistry();
 		FieldExtractor fieldExtractor = new FieldExtractor();
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		AtomicResolver atomicResolver = new AtomicResolver();
+		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
+		AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
 		resolvers = List.of(compositeResolver, atomicResolver);
 		contextResolver = new ContextResolver(resolvers);
 		placeholderMatcher = new PlaceholderMatcher();
