@@ -17,46 +17,32 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
-import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
-import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.AtomicResolver;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.CompositeResolver;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
-import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
+import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
-import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
-import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import com.winterhavenmc.util.time.Tick;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.temporal.TemporalUnit;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.Orchestrator.getLanguageResourceManager;
+import static com.winterhavenmc.util.messagebuilder.Orchestrator.getMessagePipeline;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
@@ -123,6 +109,30 @@ public final class MessageBuilder
 
 
 	/**
+	 * A static factory method for instantiating this class. Due to the necessity of performing file I/O operations
+	 * to instantiate this class, this static method has been provided to perform the potentially blocking operations
+	 * before instantiation.The I/O dependencies are then injected into the constructor of the class, which is declared
+	 * package-private to prevent instantiation from outside this class except by use of this static factory method.
+	 * Finally, if successfully instantiated, an instance of the class will be returned. If file operations fail,
+	 * the object will not be left in a partially instantiated state.
+	 *
+	 * @return an instance of this class
+	 */
+	public static MessageBuilder create(final Plugin plugin)
+	{
+		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
+
+		final LocaleSupplier localeSupplier = new LocaleSupplier(() -> plugin.getConfig().getString("language"));
+
+		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
+		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
+		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, localeSupplier);
+
+		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
+	}
+
+
+	/**
 	 * Initiate the message building sequence. Parameters of this method are passed into this library domain
 	 * from the plugin, so robust validation is employed and type-safety is enforced by converting to domain specific
 	 * types and validating on creation. If a null {@code CommandSender} is passed as the recipient parameter, an
@@ -158,63 +168,6 @@ public final class MessageBuilder
 		{
 			plugin.getLogger().warning(BUNDLE.getString(RELOAD_FAILED.name()));
 		}
-	}
-
-
-	/**
-	 * A static factory method for instantiating this class. Due to the necessity of performing file I/O operations
-	 * to instantiate this class, this static method has been provided to perform the potentially blocking operations
-	 * before instantiation.The I/O dependencies are then injected into the constructor of the class, which is declared
-	 * package-private to prevent instantiation from outside this class except by use of this static factory method.
-	 * Finally, if successfully instantiated, an instance of the class will be returned. If file operations fail,
-	 * the object will not be left in a partially instantiated state.
-	 *
-	 * @return an instance of this class
-	 */
-	public static MessageBuilder create(final Plugin plugin)
-	{
-		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
-
-		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
-		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
-		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory);
-
-		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
-	}
-
-
-	private static LanguageResourceManager getLanguageResourceManager(Plugin plugin)
-	{
-		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
-		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
-
-		return YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
-	}
-
-
-	private static @NotNull MacroReplacer getMacroReplacer()
-	{
-		final AdapterRegistry adapterRegistry = new AdapterRegistry();
-		final FieldExtractor fieldExtractor = new FieldExtractor();
-
-		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		final PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
-		final AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
-		final ContextResolver contextResolver = new ContextResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
-		final PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
-
-		return new MacroReplacer(contextResolver, placeholderMatcher);
-	}
-
-
-	private static @NotNull MessagePipeline getMessagePipeline(QueryHandlerFactory queryHandlerFactory)
-	{
-		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
-		final MacroReplacer macroReplacer = getMacroReplacer();
-		final CooldownMap cooldownMap = new CooldownMap();
-		final List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
-
-		return new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, senders);
 	}
 
 
