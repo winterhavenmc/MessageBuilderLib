@@ -60,5 +60,4 @@ public class CompositeResolver implements Resolver
 				.orElseGet(ResultMap::new);
 	}
 
-
 }
