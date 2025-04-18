@@ -33,7 +33,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.Resolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
@@ -85,7 +85,7 @@ class MacroReplacerTest
 	@BeforeEach
 	public void setUp()
 	{
-		recipient = switch (RecipientResult.from(playerMock)) {
+		recipient = switch (Recipient.from(playerMock)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
@@ -228,7 +228,7 @@ class MacroReplacerTest
 	void addRecipientContext()
 	{
 		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
-		recipient = switch (RecipientResult.from(console)) {
+		recipient = switch (Recipient.from(console)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};

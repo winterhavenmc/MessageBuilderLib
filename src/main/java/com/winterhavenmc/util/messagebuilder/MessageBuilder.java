@@ -27,7 +27,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolver.CompositeResolver
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
@@ -140,8 +140,8 @@ public final class MessageBuilder
 		RecordKey validMessageKey = RecordKey.of(messageId)
 				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
-		// return ValidMessage on valid RecipientResult, else empty no-op message
-		return switch (RecipientResult.from(recipient))
+		// return ValidMessage on valid Recipient, else empty no-op message
+		return switch (Recipient.from(recipient))
 		{
 			case ValidRecipient validRecipient -> new ValidMessage(validRecipient, validMessageKey, messagePipeline);
 			case InvalidRecipient ignored -> Message.empty();

@@ -20,9 +20,9 @@ package com.winterhavenmc.util.messagebuilder.recipient;
 import org.bukkit.command.CommandSender;
 
 
-public sealed interface RecipientResult permits ValidRecipient, InvalidRecipient
+public sealed interface Recipient permits ValidRecipient, InvalidRecipient
 {
-	static RecipientResult from(CommandSender sender)
+	static Recipient from(CommandSender sender)
 	{
 		return sender == null
 			? new InvalidRecipient()

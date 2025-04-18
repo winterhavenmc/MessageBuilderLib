@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -61,12 +61,12 @@ class CooldownKeyTest
 	@BeforeEach
 	void setUp()
 	{
-		recipient = switch (RecipientResult.from(playerMock)) {
+		recipient = switch (Recipient.from(playerMock)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		recipient2 = switch (RecipientResult.from(player2Mock)) {
+		recipient2 = switch (Recipient.from(player2Mock)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
@@ -91,7 +91,7 @@ class CooldownKeyTest
 	void testConstructor_non_entity()
 	{
 		// Arrange
-		consoleRecipient = switch (RecipientResult.from(consoleMock))
+		consoleRecipient = switch (Recipient.from(consoleMock))
 		{
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
