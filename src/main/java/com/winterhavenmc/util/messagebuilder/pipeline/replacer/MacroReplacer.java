@@ -26,7 +26,6 @@ import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.Delimiter;
-import org.bukkit.entity.Player;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -95,29 +94,6 @@ public class MacroReplacer implements Replacer
 				.flatMap(Optional::stream)
 				.map(resolveKey)
 				.reduce(new ResultMap(), mergeMaps), messageString);
-	}
-
-
-	/**
-	 * Add the recipient fields to the context map, including location fields if the recipient is a player
-	 *
-	 * @param contextMap a map containing key/value pairs of placeholder names and the value objects from which
-	 *                   their replacement strings will be derived
-	 * @return the updated context map, to allow use in functional pipelines
-	 */
-	public ContextMap addRecipientContext(final ContextMap contextMap)
-	{
-		MacroKey macroKey = MacroKey.of("RECIPIENT").orElseThrow();
-		MacroKey locationMacroKey = MacroKey.of("RECIPIENT.LOCATION").orElseThrow();
-
-		contextMap.putIfAbsent(macroKey, contextMap.getRecipient());
-
-		if (contextMap.getRecipient().sender() instanceof Player player)
-		{
-			contextMap.putIfAbsent(locationMacroKey, player.getLocation());
-		}
-
-		return contextMap;
 	}
 
 

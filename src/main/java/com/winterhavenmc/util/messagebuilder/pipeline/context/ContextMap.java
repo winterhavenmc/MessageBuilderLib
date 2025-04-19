@@ -20,6 +20,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.context;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -41,6 +42,12 @@ public class ContextMap
 
 	private final Map<MacroKey, Object> internalMap = new ConcurrentHashMap<>();
 
+	private enum InitialField
+	{
+		RECIPIENT,
+		LOCATION
+	}
+
 
 	/**
 	 * Class constructor
@@ -52,6 +59,24 @@ public class ContextMap
 	{
 		this.recipient = recipient;
 		this.messageKey = messageKey;
+
+		addRecipientContext();
+	}
+
+	/**
+	 * Add the recipient fields to the context map, including location field if the recipient is a player
+	 */
+	public void addRecipientContext()
+	{
+		MacroKey macroKey = MacroKey.of(InitialField.RECIPIENT).orElseThrow();
+		MacroKey locationMacroKey = macroKey.append(InitialField.LOCATION).orElseThrow();
+
+		this.putIfAbsent(macroKey, this.getRecipient());
+
+		if (this.getRecipient().sender() instanceof Entity entity)
+		{
+			this.putIfAbsent(locationMacroKey, entity.getLocation());
+		}
 	}
 
 
@@ -151,17 +176,6 @@ public class ContextMap
 	public @NotNull Set<Map.Entry<MacroKey, Object>> entrySet()
 	{
 		return internalMap.entrySet();
-	}
-
-
-	/**
-	 * Checks if the map is empty. Only used for testing.
-	 *
-	 * @return {@code true} if the map contains no entries, {@code false} otherwise.
-	 */
-	boolean isEmpty()
-	{
-		return this.internalMap.isEmpty();
 	}
 
 }
