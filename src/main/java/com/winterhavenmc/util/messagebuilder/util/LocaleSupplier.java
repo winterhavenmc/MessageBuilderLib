@@ -18,10 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.util;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.LanguageTag;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Supplier;
+
 
 /**
  * A supplier of {@link Locale} that converts a language tag string into a {@link Locale} instance.
@@ -37,9 +39,19 @@ public class LocaleSupplier implements Supplier<Locale>
 	 *
 	 * @param languageTagSupplier A supplier that returns the current language tag string
 	 */
-	public LocaleSupplier(Supplier<LanguageTag> languageTagSupplier)
+	private LocaleSupplier(Supplier<LanguageTag> languageTagSupplier)
 	{
 		this.languageTagSupplier = Objects.requireNonNull(languageTagSupplier, "languageTagSupplier");
+	}
+
+
+	public static LocaleSupplier getLocaleSupplier(final Plugin plugin)
+	{
+		LanguageTag languageTag = LanguageTag.of(plugin.getConfig().getString(LocaleField.LOCALE.toString()))
+				.orElse(LanguageTag.of(plugin.getConfig().getString(LocaleField.LANGUAGE.toString()))
+						.orElse(LanguageTag.getDefault()));
+
+		return new LocaleSupplier(() -> languageTag);
 	}
 
 
