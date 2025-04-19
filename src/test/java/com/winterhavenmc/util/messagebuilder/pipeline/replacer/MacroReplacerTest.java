@@ -55,14 +55,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Locale;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -172,21 +170,6 @@ class MacroReplacerTest
 
 
 	@Test
-	void testAddRecipientContext()
-	{
-		// Arrange
-		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
-		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
-
-		// Act
-		macroReplacer.addRecipientContext(contextMap);
-
-		// Assert
-		assertTrue(contextMap.contains(recipientMacroKey));
-	}
-
-
-	@Test
 	void testReplacements() {
 		// Arrange
 		MacroReplacer localMacroReplacer = new MacroReplacer(contextResolver, placeholderMatcher);
@@ -238,7 +221,6 @@ class MacroReplacerTest
 		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 
-		macroReplacer.addRecipientContext(contextMap);
 		assertTrue(contextMap.contains(key));
 	}
 
