@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 
 import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import java.util.Collection;
 import java.util.Optional;
@@ -49,6 +50,7 @@ public class QuantityAdapter implements Adapter
 		return switch (obj)
 		{
 			case ItemStack itemStack -> Optional.of(itemStack::getAmount);
+			case Inventory inventory -> Optional.of(inventory::getSize);
 			case Collection<?> collection -> Optional.of(collection::size);
 			case null, default -> Optional.empty();
 		};

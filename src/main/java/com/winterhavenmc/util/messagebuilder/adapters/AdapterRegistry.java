@@ -17,6 +17,18 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters;
 
+import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable;
+import com.winterhavenmc.util.messagebuilder.adapters.location.Locatable;
+import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.name.Nameable;
+import com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable;
+import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
+import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -39,19 +51,16 @@ public class AdapterRegistry
 	private final Map<Class<?>, Supplier<? extends Adapter>> ADAPTER_MAP = new LinkedHashMap<>();
     private final Map<Class<?>, Adapter> ADAPTER_CACHE = new ConcurrentHashMap<>();
 
-
 	/**
 	 * Class constructor registers all built-in adapters
 	 */
-	@SuppressWarnings("unchecked")
-	public AdapterRegistry()
+	public AdapterRegistry(final AdapterContext adapterContext)
 	{
-		for (Adapter.BuiltIn builtin : Adapter.BuiltIn.values()) {
-			register(
-					(Class<Object>) builtin.getType(),
-					(Supplier<Adapter>) builtin.getSupplier()
-			);
-		}
+		register(DisplayNameable.class, () -> new DisplayNameAdapter(adapterContext));
+		register(Locatable.class, LocationAdapter::new);
+		register(Nameable.class, NameAdapter::new);
+		register(Quantifiable.class, QuantityAdapter::new);
+		register(Identifiable.class, UniqueIdAdapter::new);
 	}
 
 

@@ -39,7 +39,7 @@ public class NameAdapter implements Adapter
 {
 	/**
 	 * Return an {@link Optional} of {@code Nameable}, or an empty Optional if the passed
-	 * object is not known to have an associated gatName method. The Optional value, if present,
+	 * object is not known to have an associated getName method. The Optional value, if present,
 	 * implements the {@code Nameable} Interface, and is guaranteed to have a {@code getName()} method
 	 * that maps to the adapted type's underlying {@code getName()} method.
 	 *

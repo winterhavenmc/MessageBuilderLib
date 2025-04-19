@@ -15,21 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters;
+package com.winterhavenmc.util.messagebuilder.util;
 
-import java.util.Optional;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 
 
-public interface Adapter
-{
-	Optional<?> adapt(Object obj);
-
-	enum BuiltIn
-	{
-		NAME,
-		DISPLAY_NAME,
-		UUID,
-		LOCATION,
-		QUANTITY,
-	}
-}
+public record AdapterContext(WorldNameResolver worldNameResolver) { }

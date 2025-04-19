@@ -21,10 +21,12 @@ import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Raid;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Entity;
+import org.bukkit.inventory.Inventory;
 
 import java.util.Optional;
 
@@ -57,6 +59,8 @@ public class LocationAdapter implements Adapter
 			case Block block -> Optional.of(block::getLocation);
 			case BlockState blockState -> Optional.of(blockState::getLocation);
 			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
+			case Inventory inventory -> Optional.of(inventory::getLocation);
+			case Raid raid -> Optional.of(raid::getLocation);
 			case Location location -> Optional.of(location::clone);
 			case null, default -> Optional.empty();
 		};

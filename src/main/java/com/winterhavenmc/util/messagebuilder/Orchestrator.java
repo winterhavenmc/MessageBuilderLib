@@ -36,7 +36,9 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -58,13 +60,12 @@ class Orchestrator
 	}
 
 
-	private static @NotNull MacroReplacer getMacroReplacer(final LocaleSupplier localeSupplier)
+	private static @NotNull MacroReplacer getMacroReplacer(final ResolverContext resolverContext, final AdapterContext adapterContext)
 	{
-		final PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter(localeSupplier);
-		final AdapterRegistry adapterRegistry = new AdapterRegistry();
+		final AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContext);
 		final FieldExtractor fieldExtractor = new FieldExtractor();
 		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		final AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
+		final AtomicResolver atomicResolver = new AtomicResolver(resolverContext);
 		final ContextResolver contextResolver = new ContextResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
 		final PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
 
@@ -73,10 +74,11 @@ class Orchestrator
 
 
 	static @NotNull MessagePipeline getMessagePipeline(final QueryHandlerFactory queryHandlerFactory,
-													   final LocaleSupplier localeSupplier)
+													   final ResolverContext resolverContext,
+													   final AdapterContext adapterContext)
 	{
 		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
-		final MacroReplacer macroReplacer = getMacroReplacer(localeSupplier);
+		final MacroReplacer macroReplacer = getMacroReplacer(resolverContext, adapterContext);
 		final CooldownMap cooldownMap = new CooldownMap();
 		final List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
 

@@ -33,8 +33,11 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
@@ -43,7 +46,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,7 +53,6 @@ import java.util.stream.Stream;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -59,6 +60,7 @@ class PlaceholderMatcherTest
 {
 	@Mock Player playerMock;
 	@Mock LocaleSupplier localeSupplierMock;
+	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
 
 	ValidRecipient recipient;
@@ -71,12 +73,16 @@ class PlaceholderMatcherTest
 	{
 		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
-		AdapterRegistry adapterRegistry = new AdapterRegistry();
+		AdapterContext adapterContext = new AdapterContext(worldNameResolverMock);
+
+		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContext);
 		FieldExtractor fieldExtractor = new FieldExtractor();
 
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter(localeSupplierMock);
-		AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
+		ResolverContext resolverContext = new ResolverContext(localeSupplierMock, prettyTimeFormatter);
+
+		AtomicResolver atomicResolver = new AtomicResolver(resolverContext);
 		List<Resolver> resolvers = List.of(compositeResolver, atomicResolver);
 
 		PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();

@@ -14,6 +14,8 @@ SETTINGS:
 # { in the future, placeholders }
 #################################
 CONSTANTS:
+  TRUE: 'true'
+  FALSE: 'false'
   TIME:
     UNLIMITED: "unlimited"
     LESS_THAN: "less than {NUMBER}"

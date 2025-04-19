@@ -39,9 +39,12 @@ import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -67,7 +70,8 @@ import static org.mockito.Mockito.mock;
 class MacroReplacerTest
 {
 	@Mock Player playerMock;
-	@Mock LocaleSupplier localeSupplier;
+	@Mock LocaleSupplier localeSupplierMock;
+	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
 
 	ValidRecipient recipient;
@@ -95,11 +99,18 @@ class MacroReplacerTest
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 
-		AdapterRegistry adapterRegistry = new AdapterRegistry();
+		AdapterContext adapterContext = new AdapterContext(worldNameResolverMock);
+
+		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContext);
 		FieldExtractor fieldExtractor = new FieldExtractor();
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter(localeSupplier);
-		AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
+		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter(localeSupplierMock);
+
+		ResolverContext resolverContext = new ResolverContext(localeSupplierMock, prettyTimeFormatter);
+
+		AtomicResolver atomicResolver = new AtomicResolver(resolverContext);
+
+
 		resolvers = List.of(compositeResolver, atomicResolver);
 		contextResolver = new ContextResolver(resolvers);
 		placeholderMatcher = new PlaceholderMatcher();

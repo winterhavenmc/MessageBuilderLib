@@ -20,21 +20,25 @@ package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.time.PrettyTimeFormatter;
 
+import java.text.NumberFormat;
 import java.time.Duration;
-import java.util.Locale;
 import java.util.UUID;
 
 
 public class AtomicResolver implements Resolver
 {
+	private final LocaleSupplier localeSupplier;
 	private final PrettyTimeFormatter prettyTimeFormatter;
 
 
-	public AtomicResolver(final PrettyTimeFormatter prettyTimeFormatter)
+	public AtomicResolver(final ResolverContext resolverContext)
 	{
-		this.prettyTimeFormatter = prettyTimeFormatter;
+		this.localeSupplier = resolverContext.localeSupplier();
+		this.prettyTimeFormatter = resolverContext.prettyTimeFormatter();
 	}
 
 
@@ -47,7 +51,7 @@ public class AtomicResolver implements Resolver
 			switch (value)
 			{
 				case Duration duration -> result.putIfAbsent(macroKey, formatDuration(duration));
-				case Number number -> result.putIfAbsent(macroKey, number.toString()); // localized number formatter to come
+				case Number number -> result.putIfAbsent(macroKey, formatNumber(number));
 				case Enum<?> constant -> result.putIfAbsent(macroKey, constant.toString());
 				case UUID uuid -> result.putIfAbsent(macroKey, uuid.toString());
 				case Boolean bool -> result.putIfAbsent(macroKey, bool.toString());
@@ -62,7 +66,14 @@ public class AtomicResolver implements Resolver
 
 	private String formatDuration(final Duration duration)
 	{
-		return prettyTimeFormatter.getFormatted(Locale.getDefault(), duration);
+		return prettyTimeFormatter.getFormatted(localeSupplier.get(), duration);
+	}
+
+
+	private String formatNumber(final Number number)
+	{
+		NumberFormat numberFormat = NumberFormat.getInstance(localeSupplier.get());
+		return numberFormat.format(number);
 	}
 
 }

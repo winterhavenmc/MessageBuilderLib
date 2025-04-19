@@ -15,21 +15,16 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters;
+package com.winterhavenmc.util.messagebuilder.worldname;
 
-import java.util.Optional;
+import org.bukkit.World;
 
 
-public interface Adapter
+public class DefaultWorldNameResolver implements WorldNameResolver
 {
-	Optional<?> adapt(Object obj);
-
-	enum BuiltIn
+	@Override
+	public String resolveWorldName(final World world)
 	{
-		NAME,
-		DISPLAY_NAME,
-		UUID,
-		LOCATION,
-		QUANTITY,
+		return world.getName();
 	}
 }

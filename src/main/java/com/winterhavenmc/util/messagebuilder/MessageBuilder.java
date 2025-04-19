@@ -27,13 +27,18 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
+import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import com.winterhavenmc.util.time.Tick;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+import javax.swing.text.NumberFormatter;
 import java.time.temporal.TemporalUnit;
 import java.util.Locale;
 import java.util.Objects;
@@ -123,9 +128,14 @@ public final class MessageBuilder
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
 		final LocaleSupplier localeSupplier = LocaleSupplier.getLocaleSupplier(plugin);
+		final WorldNameResolver worldNameResolver = WorldNameResolver.getResolver(plugin.getServer().getPluginManager());
+		final AdapterContext adapterContext = new AdapterContext(worldNameResolver);
+		final PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter(localeSupplier);
+		final ResolverContext resolverContext = new ResolverContext(localeSupplier, prettyTimeFormatter);
+
 		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
-		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, localeSupplier);
+		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, resolverContext, adapterContext);
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
 	}

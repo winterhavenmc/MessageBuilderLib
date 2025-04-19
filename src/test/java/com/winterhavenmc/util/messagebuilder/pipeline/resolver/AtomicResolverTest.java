@@ -20,11 +20,17 @@ package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,9 +39,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 
+@ExtendWith(MockitoExtension.class)
 class AtomicResolverTest
 {
-	private ContextMap contextMap;
+	@Mock LocaleSupplier localeSupplierMock;
+	@Mock ContextMap contextMap;
+
 	private PrettyTimeFormatter timeFormatter;
 	private AtomicResolver resolver;
 
@@ -45,9 +54,9 @@ class AtomicResolverTest
 	@BeforeEach
 	void setUp()
 	{
-		contextMap = mock(ContextMap.class);
 		timeFormatter = mock(PrettyTimeFormatter.class);
-		resolver = new AtomicResolver(timeFormatter);
+		ResolverContext resolverContext = new ResolverContext(localeSupplierMock, timeFormatter);
+		resolver = new AtomicResolver(resolverContext);
 	}
 
 
@@ -79,10 +88,35 @@ class AtomicResolverTest
 	void testResolve_numberToString()
 	{
 		when(contextMap.get(key)).thenReturn(Optional.of(42));
+		when(localeSupplierMock.get()).thenReturn(Locale.US);
 
 		ResultMap result = resolver.resolve(key, contextMap);
 
 		assertEquals("42", result.get(key));
+	}
+
+
+	@Test
+	void testResolve_numberToString_large_english()
+	{
+		when(contextMap.get(key)).thenReturn(Optional.of(420000));
+		when(localeSupplierMock.get()).thenReturn(Locale.US);
+
+		ResultMap result = resolver.resolve(key, contextMap);
+
+		assertEquals("420,000", result.get(key));
+	}
+
+
+	@Test
+	void testResolve_numberToString_large_german()
+	{
+		when(contextMap.get(key)).thenReturn(Optional.of(420000));
+		when(localeSupplierMock.get()).thenReturn(Locale.GERMAN);
+
+		ResultMap result = resolver.resolve(key, contextMap);
+
+		assertEquals("420.000", result.get(key));
 	}
 
 
@@ -151,4 +185,5 @@ class AtomicResolverTest
 		// Assert
 		assertTrue(result.isEmpty());
 	}
+
 }

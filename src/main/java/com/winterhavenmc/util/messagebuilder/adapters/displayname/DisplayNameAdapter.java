@@ -18,6 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.adapters.displayname;
 
 import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.worldname.MultiverseWorldNameResolver;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 import org.bukkit.Nameable;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -34,6 +37,14 @@ import java.util.Optional;
  */
 public class DisplayNameAdapter implements Adapter
 {
+	private final WorldNameResolver worldNameResolver;
+
+	public DisplayNameAdapter(final AdapterContext ctx)
+	{
+		this.worldNameResolver = ctx.worldNameResolver();
+	}
+
+
 	@Override
 	public Optional<DisplayNameable> adapt(final Object obj)
 	{
@@ -41,7 +52,7 @@ public class DisplayNameAdapter implements Adapter
 		{
 			case Player player -> Optional.of(player::getDisplayName);
 			case Nameable nameable -> Optional.of(nameable::getCustomName);
-			case World world -> Optional.of(world::getName);
+			case World world -> Optional.of(() -> worldNameResolver.resolveWorldName(world));
 			case null, default -> Optional.empty();
 		};
 	}

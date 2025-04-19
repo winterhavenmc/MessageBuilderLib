@@ -15,21 +15,26 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters;
+package com.winterhavenmc.util.messagebuilder.worldname;
 
-import java.util.Optional;
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
 
-public interface Adapter
+public interface WorldNameResolver
 {
-	Optional<?> adapt(Object obj);
+	String resolveWorldName(World world);
 
-	enum BuiltIn
+
+	static WorldNameResolver getResolver(final PluginManager pluginManager)
 	{
-		NAME,
-		DISPLAY_NAME,
-		UUID,
-		LOCATION,
-		QUANTITY,
+		Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
+
+		return (plugin instanceof MultiverseCore multiverseCore && plugin.isEnabled())
+				? new MultiverseWorldNameResolver(multiverseCore)
+				: new DefaultWorldNameResolver();
 	}
+
 }
