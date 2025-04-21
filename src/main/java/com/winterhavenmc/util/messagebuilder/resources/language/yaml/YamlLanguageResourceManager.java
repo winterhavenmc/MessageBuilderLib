@@ -21,8 +21,10 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResource
 
 import org.bukkit.configuration.Configuration;
 
+import java.io.File;
 import java.util.Objects;
 
+import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_SUBDIRECTORY;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_INSTALLER;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_LOADER;
@@ -127,6 +129,28 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	public YamlConfigurationSupplier getConfigurationSupplier()
 	{
 		return configurationSupplier;
+	}
+
+
+	/**
+	 * Retrieve the name of the potential language resource associated with this language tag, as a String
+	 *
+	 * @return {@code String} representation of the potential language resource associated with this language tag
+	 */
+	public static String getResourceName(final LanguageTag languageTag)
+	{
+		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()).concat(".yml");
+	}
+
+
+	/**
+	 * Retrieve the name of the potential language resource file as installed in the plugin data directory, as a String.
+	 *
+	 * @return {@code String} representation of the potential language resource file installed in the plugin data directory
+	 */
+	public static String getFileName(final LanguageTag languageTag)
+	{
+		return String.join(File.separator, RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()).concat(".yml");
 	}
 
 }

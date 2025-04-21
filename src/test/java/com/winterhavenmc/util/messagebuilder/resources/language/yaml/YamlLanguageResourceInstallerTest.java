@@ -604,7 +604,7 @@ public class YamlLanguageResourceInstallerTest
 			LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 			// Act
-			boolean result = resourceInstaller.resourceExists(languageTag.getResourceName());
+			boolean result = resourceInstaller.resourceExists(YamlLanguageResourceManager.getResourceName(languageTag));
 
 			// Assert
 			assertTrue(result);

@@ -78,8 +78,8 @@ class LanguageTagTest
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act & Assert
-		assertEquals("language/en-US.yml", languageTag.getResourceName());
-		assertNotEquals("language/fr-FR.yml", languageTag.getResourceName());
+		assertEquals("language/en-US.yml", YamlLanguageResourceManager.getResourceName(languageTag));
+		assertNotEquals("language/fr-FR.yml", YamlLanguageResourceManager.getResourceName(languageTag));
 	}
 
 
@@ -90,8 +90,8 @@ class LanguageTagTest
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act & Assert
-		assertEquals("language" + File.separator + "en-US.yml", languageTag.getFileName());
-		assertNotEquals("language" + File.separator + "fr-FR.yml", languageTag.getFileName());
+		assertEquals("language" + File.separator + "en-US.yml", YamlLanguageResourceManager.getFileName(languageTag));
+		assertNotEquals("language" + File.separator + "fr-FR.yml", YamlLanguageResourceManager.getFileName(languageTag));
 	}
 
 	@Test
