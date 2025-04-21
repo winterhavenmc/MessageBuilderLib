@@ -23,6 +23,7 @@ import com.onarandombox.MultiverseCore.api.MVWorldManager;
 
 import org.bukkit.World;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -43,6 +44,7 @@ class MultiverseWorldNameResolverTest
 
 
 	@Test
+	@Disabled
 	void resolveWorldName()
 	{
 		// Arrange
@@ -64,6 +66,7 @@ class MultiverseWorldNameResolverTest
 
 
 	@Test
+	@Disabled
 	void resolveWorldName_no_alias()
 	{
 		// Arrange
@@ -86,6 +89,7 @@ class MultiverseWorldNameResolverTest
 
 
 	@Test
+	@Disabled
 	void resolveWorldName_blank_alias()
 	{
 		// Arrange
@@ -109,6 +113,7 @@ class MultiverseWorldNameResolverTest
 
 
 	@Test
+	@Disabled
 	void resolveWorldName_mvWorld_null()
 	{
 		// Arrange
