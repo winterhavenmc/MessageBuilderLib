@@ -56,9 +56,9 @@ public class AdapterRegistry
 	 */
 	public AdapterRegistry(final AdapterContext adapterContext)
 	{
+		register(Nameable.class, NameAdapter::new);
 		register(DisplayNameable.class, () -> new DisplayNameAdapter(adapterContext));
 		register(Locatable.class, LocationAdapter::new);
-		register(Nameable.class, NameAdapter::new);
 		register(Quantifiable.class, QuantityAdapter::new);
 		register(Identifiable.class, UniqueIdAdapter::new);
 	}
