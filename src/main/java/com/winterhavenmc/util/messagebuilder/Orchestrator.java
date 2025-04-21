@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
@@ -39,7 +40,9 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Sec
 import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
-import com.winterhavenmc.util.time.PrettyTimeFormatter;
+import com.winterhavenmc.util.time.DurationFormatter;
+import com.winterhavenmc.util.time.LocalizedDurationFormatter;
+import com.winterhavenmc.util.time.Time4jDurationFormatter;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -83,6 +86,16 @@ class Orchestrator
 		final List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
 
 		return new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, senders);
+	}
+
+
+	static ResolverContext getResolverContext(LocaleSupplier localeSupplier, QueryHandlerFactory queryHandlerFactory)
+	{
+		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeSupplier);
+		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeSupplier);
+		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, queryHandlerFactory);
+
+		return new ResolverContext(durationFormatter, localeNumberFormatter);
 	}
 
 }

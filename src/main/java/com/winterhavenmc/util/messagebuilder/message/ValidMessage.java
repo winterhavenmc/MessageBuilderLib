@@ -24,6 +24,10 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.Parameter;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.util.time.DurationWithPrecision;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
@@ -66,7 +70,8 @@ public final class ValidMessage implements Message
 	 * @return this message object with macro value set in map
 	 */
 	@Override
-	public <K extends Enum<K>, V> Message setMacro(K macro, V value)
+	public <K extends Enum<K>, V> Message setMacro(final K macro,
+												   final V value)
 	{
 		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() ->
 				new ValidationException(PARAMETER_NULL, Parameter.MACRO));
@@ -87,7 +92,9 @@ public final class ValidMessage implements Message
 	 * @return this message object with macro value set in map
 	 */
 	@Override
-	public <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value)
+	public <K extends Enum<K>, V> Message setMacro(final int quantity,
+												   final K macro,
+												   final V value)
 	{
 		MacroKey macroKey = MacroKey.of(macro)
 				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, Parameter.MACRO));
@@ -98,6 +105,14 @@ public final class ValidMessage implements Message
 		contextMap.putIfAbsent(macroKey, value);
 		contextMap.putIfAbsent(quantityKey, quantity);
 		return this;
+	}
+
+
+	public <K extends Enum<K>> Message setMacro(final K macro,
+												final Duration duration,
+												final ChronoUnit precision)
+	{
+		return setMacro(macro, new DurationWithPrecision(duration, precision));
 	}
 
 

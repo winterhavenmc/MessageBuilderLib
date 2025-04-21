@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
@@ -45,7 +46,7 @@ import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
-import com.winterhavenmc.util.time.PrettyTimeFormatter;
+import com.winterhavenmc.util.time.Time4jDurationFormatter;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -104,10 +105,9 @@ class MacroReplacerTest
 		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContext);
 		FieldExtractor fieldExtractor = new FieldExtractor();
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter(localeSupplierMock);
-
-		ResolverContext resolverContext = new ResolverContext(localeSupplierMock, prettyTimeFormatter);
-
+		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeSupplierMock);
+		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeSupplierMock);
+		ResolverContext resolverContext = new ResolverContext(time4jDurationFormatter, localeNumberFormatter);
 		AtomicResolver atomicResolver = new AtomicResolver(resolverContext);
 
 

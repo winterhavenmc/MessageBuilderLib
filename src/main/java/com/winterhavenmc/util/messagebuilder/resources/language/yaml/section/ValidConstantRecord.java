@@ -27,6 +27,12 @@ public final class ValidConstantRecord implements ConstantRecord
 	private final RecordKey key;
 	private final Object value;
 
+	public Object getValue()
+	{
+		return value;
+	}
+
+
 	@Override
 	public boolean equals(Object object)
 	{
@@ -34,6 +40,7 @@ public final class ValidConstantRecord implements ConstantRecord
 
 		return key.equals(that.key) && Objects.equals(value, that.value);
 	}
+
 
 	@Override
 	public int hashCode()
@@ -43,22 +50,26 @@ public final class ValidConstantRecord implements ConstantRecord
 		return result;
 	}
 
+
 	private ValidConstantRecord(final RecordKey key, final Object value)
 	{
 		this.key = key;
 		this.value = value;
 	}
 
+
 	static ValidConstantRecord create(final RecordKey key, final Object value)
 	{
 		return new ValidConstantRecord(key, value);
 	}
+
 
 	@Override
 	public RecordKey key()
 	{
 		return this.key;
 	}
+
 
 	public Object value()
 	{

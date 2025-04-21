@@ -55,7 +55,9 @@ public enum Parameter
 	VALUE("value"),
 	WORLD("world"),
 	ADAPTER("adapter"),
-	TYPE("type");
+	TYPE("type"),
+	PRECISION("precision"),
+	DELEGATE("delegate");
 
 	private final String displayName;
 

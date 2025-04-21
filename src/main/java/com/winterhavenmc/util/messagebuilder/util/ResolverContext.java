@@ -17,34 +17,35 @@
 
 package com.winterhavenmc.util.messagebuilder.util;
 
-import com.winterhavenmc.util.time.PrettyTimeFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
+import com.winterhavenmc.util.time.DurationFormatter;
 import java.util.Objects;
 
 
 public final class ResolverContext
 {
 
-	private final LocaleSupplier localeSupplier;
-	private final PrettyTimeFormatter prettyTimeFormatter;
+	private final DurationFormatter durationFormatter;
+	private final LocaleNumberFormatter localeNumberFormatter;
 
 
-	public ResolverContext(final LocaleSupplier localeSupplier,
-						   final PrettyTimeFormatter prettyTimeFormatter)
+	public ResolverContext(final DurationFormatter durationFormatter,
+						   final LocaleNumberFormatter localeNumberFormatter)
 	{
-		this.localeSupplier = Objects.requireNonNull(localeSupplier);
-		this.prettyTimeFormatter = Objects.requireNonNull(prettyTimeFormatter);
+		this.durationFormatter = Objects.requireNonNull(durationFormatter);
+		this.localeNumberFormatter = localeNumberFormatter;
 	}
 
 
-	public LocaleSupplier localeSupplier()
+	public DurationFormatter durationFormatter()
 	{
-		return localeSupplier;
+		return durationFormatter;
 	}
 
 
-	public PrettyTimeFormatter prettyTimeFormatter()
+	public LocaleNumberFormatter localeNumberFormatter()
 	{
-		return prettyTimeFormatter;
+		return localeNumberFormatter;
 	}
 
 }

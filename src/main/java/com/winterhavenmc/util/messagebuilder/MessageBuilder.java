@@ -32,7 +32,6 @@ import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
-import com.winterhavenmc.util.time.PrettyTimeFormatter;
 import com.winterhavenmc.util.time.Tick;
 
 import org.bukkit.command.CommandSender;
@@ -43,8 +42,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static com.winterhavenmc.util.messagebuilder.Orchestrator.getLanguageResourceManager;
-import static com.winterhavenmc.util.messagebuilder.Orchestrator.getMessagePipeline;
+import static com.winterhavenmc.util.messagebuilder.Orchestrator.*;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
@@ -126,13 +124,15 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final LocaleSupplier localeSupplier = LocaleSupplier.getLocaleSupplier(plugin);
+
+		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final WorldNameResolver worldNameResolver = WorldNameResolver.getResolver(plugin.getServer().getPluginManager());
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
-		final PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter(localeSupplier);
-		final ResolverContext resolverContext = new ResolverContext(localeSupplier, prettyTimeFormatter);
+
+		final ResolverContext resolverContext = getResolverContext(localeSupplier, queryHandlerFactory);
 		final AdapterContext adapterContext = new AdapterContext(worldNameResolver);
+
 		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, resolverContext, adapterContext);
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);

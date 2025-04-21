@@ -17,28 +17,30 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
+import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
-import com.winterhavenmc.util.time.PrettyTimeFormatter;
+import com.winterhavenmc.util.time.DurationFormatter;
+import com.winterhavenmc.util.time.DurationWithPrecision;
+import com.winterhavenmc.util.time.LocalizedDurationFormatter;
 
-import java.text.NumberFormat;
 import java.time.Duration;
-import java.util.UUID;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 
 public class AtomicResolver implements Resolver
 {
-	private final LocaleSupplier localeSupplier;
-	private final PrettyTimeFormatter prettyTimeFormatter;
+	private final DurationFormatter durationFormatter;
+	private final LocaleNumberFormatter localeNumberFormatter;
 
 
 	public AtomicResolver(final ResolverContext resolverContext)
 	{
-		this.localeSupplier = resolverContext.localeSupplier();
-		this.prettyTimeFormatter = resolverContext.prettyTimeFormatter();
+		this.durationFormatter = resolverContext.durationFormatter();
+		localeNumberFormatter = resolverContext.localeNumberFormatter();
 	}
 
 
@@ -46,34 +48,25 @@ public class AtomicResolver implements Resolver
 	{
 		ResultMap result = new ResultMap();
 
-		contextMap.get(macroKey).ifPresent(value ->
-		{
-			switch (value)
-			{
-				case Duration duration -> result.putIfAbsent(macroKey, formatDuration(duration));
-				case Number number -> result.putIfAbsent(macroKey, formatNumber(number));
-				case Enum<?> constant -> result.putIfAbsent(macroKey, constant.toString());
-				case UUID uuid -> result.putIfAbsent(macroKey, uuid.toString());
-				case Boolean bool -> result.putIfAbsent(macroKey, bool.toString());
-				case String string -> result.putIfAbsent(macroKey, string);
-				default -> result.putIfAbsent(macroKey, value.toString());
-			}
-		});
+		contextMap.get(macroKey)
+				.flatMap(this::resolveAtomic)
+				.ifPresent(formatted -> result.putIfAbsent(macroKey, formatted));
 
 		return result;
 	}
 
 
-	private String formatDuration(final Duration duration)
-	{
-		return prettyTimeFormatter.getFormatted(localeSupplier.get(), duration);
-	}
-
-
-	private String formatNumber(final Number number)
-	{
-		NumberFormat numberFormat = NumberFormat.getInstance(localeSupplier.get());
-		return numberFormat.format(number);
+	private Optional<String> resolveAtomic(final Object value) {
+		return switch (value) {
+			// TODO: Replace with record pattern match when Java 22+ is standard in Bukkit
+			case DurationWithPrecision durationWithPrecision -> Optional.of(durationFormatter
+					.format(durationWithPrecision.duration(), durationWithPrecision.precision()));
+			case Duration duration -> Optional.of(durationFormatter.format(duration, ChronoUnit.SECONDS));
+			case Number number -> Optional.of(localeNumberFormatter.getFormatted(number));
+//			case Boolean bool -> result.putIfAbsent(macroKey, bool.toString());
+			case String string -> Optional.of(string);
+			default -> Optional.of(value.toString());
+		};
 	}
 
 }
