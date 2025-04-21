@@ -45,7 +45,7 @@ public class LocaleSupplier implements Supplier<Locale>
 	}
 
 
-	public static LocaleSupplier getLocaleSupplier(final Plugin plugin)
+	public static LocaleSupplier create(final Plugin plugin)
 	{
 		LanguageTag languageTag = LanguageTag.of(plugin.getConfig().getString(LocaleField.LOCALE.toString()))
 				.orElse(LanguageTag.of(plugin.getConfig().getString(LocaleField.LANGUAGE.toString()))
@@ -60,22 +60,9 @@ public class LocaleSupplier implements Supplier<Locale>
 	{
 		Locale locale = languageTagSupplier.get().getLocale();
 
-		if (locale == null)
-		{
-			return Locale.getDefault();
-		}
-
-		try
-		{
-			if (locale.getLanguage().isEmpty())
-			{
-				return Locale.getDefault(); // invalid tag
-			}
-			return locale;
-		} catch (Exception e)
-		{
-			return Locale.getDefault(); // fallback on error
-		}
+		return (locale == null)
+				? Locale.getDefault()
+				: locale;
 	}
 
 }
