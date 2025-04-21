@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
@@ -62,7 +62,7 @@ class MessageSenderTest
 	@BeforeEach
 	void setUp()
 	{
-		recipient = switch(RecipientResult.from(playerMock))
+		recipient = switch(Recipient.from(playerMock))
 		{
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);

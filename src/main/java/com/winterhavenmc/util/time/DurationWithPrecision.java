@@ -15,8 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.time;
 
-import org.bukkit.command.CommandSender;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
-public record ValidRecipient(CommandSender sender) implements Recipient { }
+
+public record DurationWithPrecision(Duration duration, ChronoUnit precision) { }

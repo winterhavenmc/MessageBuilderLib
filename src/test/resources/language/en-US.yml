@@ -11,17 +11,21 @@ SETTINGS:
 
 #################################
 # Constant Strings
-# { in the future, placeholders }
 #################################
 CONSTANTS:
+  BOOLEAN:
+    TRUE: 'true'
+    FALSE: 'false'
+
   TIME:
+    LESS_THAN: "less than {DURATION}"
     UNLIMITED: "unlimited"
-    LESS_THAN: "less than {NUMBER}"
-    LESS_THAN_ONE: "less than one"
+
   SPAWN:
     DISPLAY_NAME: '&aSpawn'
   HOME:
     DISPLAY_NAME: '&aHome'
+
   DEFAULTS:
     WORLD.NAME: "unknown world"
     PLAYER.NAME: "a player"
@@ -30,6 +34,7 @@ CONSTANTS:
     - item 1
     - item 2
     - item 3
+
   TEST_INT: 42
 
 

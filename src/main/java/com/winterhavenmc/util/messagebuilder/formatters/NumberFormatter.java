@@ -15,8 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.messagebuilder.formatters;
 
-import org.bukkit.command.CommandSender;
-
-public record ValidRecipient(CommandSender sender) implements Recipient { }
+@FunctionalInterface
+public interface NumberFormatter
+{
+	String getFormatted(Number number);
+}

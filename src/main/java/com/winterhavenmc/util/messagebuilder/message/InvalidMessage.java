@@ -22,6 +22,9 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.logging;
@@ -39,6 +42,12 @@ public record InvalidMessage(String reason) implements Message
 
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value)
+	{
+		return this;
+	}
+
+	@Override
+	public <K extends Enum<K>> Message setMacro(K macro, Duration duration, ChronoUnit precision)
 	{
 		return this;
 	}

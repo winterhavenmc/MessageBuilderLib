@@ -18,10 +18,11 @@
 package com.winterhavenmc.util.time;
 
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 @FunctionalInterface
-public interface TimeFormatter
+public interface DurationFormatter
 {
-	String getFormatted(Locale locale, Duration duration);
+	String format(Duration duration, ChronoUnit precision);
 }

@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
@@ -33,15 +34,19 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.Resolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
-import com.winterhavenmc.util.time.PrettyTimeFormatter;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
+import com.winterhavenmc.util.time.Time4jDurationFormatter;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -66,8 +71,9 @@ import static org.mockito.Mockito.mock;
 class MacroReplacerTest
 {
 	@Mock Player playerMock;
-	@Mock
-	MessagePipeline messagePipelineMock;
+	@Mock LocaleSupplier localeSupplierMock;
+	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock MessagePipeline messagePipelineMock;
 
 	ValidRecipient recipient;
 	RecordKey messageKey;
@@ -85,7 +91,7 @@ class MacroReplacerTest
 	@BeforeEach
 	public void setUp()
 	{
-		recipient = switch (RecipientResult.from(playerMock)) {
+		recipient = switch (Recipient.from(playerMock)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
@@ -94,11 +100,17 @@ class MacroReplacerTest
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 
-		AdapterRegistry adapterRegistry = new AdapterRegistry();
+		AdapterContext adapterContext = new AdapterContext(worldNameResolverMock);
+
+		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContext);
 		FieldExtractor fieldExtractor = new FieldExtractor();
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
-		AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
+		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeSupplierMock);
+		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeSupplierMock);
+		ResolverContext resolverContext = new ResolverContext(time4jDurationFormatter, localeNumberFormatter);
+		AtomicResolver atomicResolver = new AtomicResolver(resolverContext);
+
+
 		resolvers = List.of(compositeResolver, atomicResolver);
 		contextResolver = new ContextResolver(resolvers);
 		placeholderMatcher = new PlaceholderMatcher();
@@ -169,21 +181,6 @@ class MacroReplacerTest
 
 
 	@Test
-	void testAddRecipientContext()
-	{
-		// Arrange
-		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
-		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
-
-		// Act
-		macroReplacer.addRecipientContext(contextMap);
-
-		// Assert
-		assertTrue(contextMap.contains(recipientMacroKey));
-	}
-
-
-	@Test
 	void testReplacements() {
 		// Arrange
 		MacroReplacer localMacroReplacer = new MacroReplacer(contextResolver, placeholderMatcher);
@@ -228,14 +225,13 @@ class MacroReplacerTest
 	void addRecipientContext()
 	{
 		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
-		recipient = switch (RecipientResult.from(console)) {
+		recipient = switch (Recipient.from(console)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
 
-		macroReplacer.addRecipientContext(contextMap);
 		assertTrue(contextMap.contains(key));
 	}
 

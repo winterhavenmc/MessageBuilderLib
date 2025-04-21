@@ -19,6 +19,8 @@ package com.winterhavenmc.util.messagebuilder.adapters;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +34,7 @@ import java.util.List;
 class AdapterRegistryTest
 {
 	@Mock Adapter adapterMock;
+	@Mock WorldNameResolver worldNameResolverMock;
 	private AdapterRegistry registry;
 
 	interface MockType { }
@@ -39,7 +42,8 @@ class AdapterRegistryTest
 
 	@BeforeEach
 	public void setup() {
-		registry = new AdapterRegistry();
+		AdapterContext adapterContext = new AdapterContext(worldNameResolverMock);
+		registry = new AdapterRegistry(adapterContext);
 	}
 
 

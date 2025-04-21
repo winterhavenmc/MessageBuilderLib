@@ -51,7 +51,7 @@ class LanguageTagTest
 		void testConstructor_null_parameter_locale()
 		{
 			// Arrange & Act
-			Optional<LanguageTag> result = LanguageTag.of(null);
+			Optional<LanguageTag> result = LanguageTag.of((Locale) null);
 
 			// Assert
 			assertTrue(result.isEmpty());

@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
@@ -103,7 +103,7 @@ class CooldownMapTest
 		{
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			recipient = switch (RecipientResult.from(playerMock)) {
+			recipient = switch (Recipient.from(playerMock)) {
 				case ValidRecipient validRecipient -> validRecipient;
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
@@ -128,7 +128,7 @@ class CooldownMapTest
 		void testPutExpirationTime_already_cooling() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(new UUID(42, 17));
-			recipient = switch (RecipientResult.from(playerMock)) {
+			recipient = switch (Recipient.from(playerMock)) {
 				case ValidRecipient validRecipient -> validRecipient;
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
@@ -155,7 +155,7 @@ class CooldownMapTest
 	void testIsCooling() {
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		recipient = switch (RecipientResult.from(playerMock)) {
+		recipient = switch (Recipient.from(playerMock)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
@@ -192,7 +192,7 @@ class CooldownMapTest
 		void testRemoveExpired() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			recipient = switch (RecipientResult.from(playerMock)) {
+			recipient = switch (Recipient.from(playerMock)) {
 				case ValidRecipient validRecipient -> validRecipient;
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
@@ -211,7 +211,7 @@ class CooldownMapTest
 		void testRemoveExpired_expired() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			recipient = switch (RecipientResult.from(playerMock)) {
+			recipient = switch (Recipient.from(playerMock)) {
 				case ValidRecipient validRecipient -> validRecipient;
 				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};

@@ -15,8 +15,27 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.messagebuilder.formatters;
 
-import org.bukkit.command.CommandSender;
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import java.text.NumberFormat;
 
-public record ValidRecipient(CommandSender sender) implements Recipient { }
+
+public class LocaleNumberFormatter implements NumberFormatter
+{
+	private final LocaleSupplier localeSupplier;
+
+
+	public LocaleNumberFormatter(final LocaleSupplier localeSupplier)
+	{
+		this.localeSupplier = localeSupplier;
+	}
+
+
+	@Override
+	public String getFormatted(final Number number)
+	{
+		return NumberFormat.getInstance(localeSupplier.get()).format(number);
+	}
+
+}

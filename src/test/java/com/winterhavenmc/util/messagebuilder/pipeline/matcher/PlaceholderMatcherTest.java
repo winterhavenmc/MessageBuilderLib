@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.matcher;
 
 import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
@@ -30,11 +31,15 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolver.CompositeResolver
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.Resolver;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import com.winterhavenmc.util.time.PrettyTimeFormatter;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
+import com.winterhavenmc.util.time.Time4jDurationFormatter;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,42 +60,42 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlaceholderMatcherTest
 {
 	@Mock Player playerMock;
-	@Mock
-	MessagePipeline messagePipelineMock;
+	@Mock LocaleSupplier localeSupplierMock;
+	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock MessagePipeline messagePipelineMock;
 
 	ValidRecipient recipient;
 	MacroReplacer macroReplacer;
 	Message message;
+
 
 	@BeforeEach
 	public void setUp()
 	{
 		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
-		AdapterRegistry adapterRegistry = new AdapterRegistry();
+		AdapterContext adapterContext = new AdapterContext(worldNameResolverMock);
+
+		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContext);
 		FieldExtractor fieldExtractor = new FieldExtractor();
 
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		PrettyTimeFormatter prettyTimeFormatter = new PrettyTimeFormatter();
-		AtomicResolver atomicResolver = new AtomicResolver(prettyTimeFormatter);
+		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeSupplierMock);
+		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeSupplierMock);
+		ResolverContext resolverContext = new ResolverContext(time4jDurationFormatter, localeNumberFormatter);
+
+		AtomicResolver atomicResolver = new AtomicResolver(resolverContext);
 		List<Resolver> resolvers = List.of(compositeResolver, atomicResolver);
 
 		PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
 
-		recipient = switch (RecipientResult.from(playerMock)) {
+		recipient = switch (Recipient.from(playerMock)) {
 			case ValidRecipient validRecipient -> validRecipient;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 		macroReplacer = new MacroReplacer(new ContextResolver(resolvers), placeholderMatcher);
-	}
-
-	@AfterEach
-	public void tearDown()
-	{
-		playerMock = null;
-		macroReplacer = null;
 	}
 
 

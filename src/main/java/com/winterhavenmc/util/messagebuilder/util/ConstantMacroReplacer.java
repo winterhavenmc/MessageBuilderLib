@@ -15,8 +15,25 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.messagebuilder.util;
 
-import org.bukkit.command.CommandSender;
+import java.util.Map;
 
-public record ValidRecipient(CommandSender sender) implements Recipient { }
+
+public class ConstantMacroReplacer
+{
+	private ConstantMacroReplacer() { /* private constructor prevents instantiation */ }
+
+
+	public static String replace(String template, Map<String, String> replacements)
+	{
+		String result = template;
+		for (Map.Entry<String, String> entry : replacements.entrySet())
+		{
+			result = result.replace("{" + entry.getKey() + "}", entry.getValue());
+		}
+
+		return result;
+	}
+
+}

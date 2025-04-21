@@ -86,7 +86,7 @@ class FieldExtractorTest
 
 		assertEquals(2, result.size());
 		assertEquals("FancyName", result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.DISPLAY_NAME).orElseThrow()));
+		assertTrue(result.containsKey(baseKey.append("DISPLAY_NAME").orElseThrow()));
 	}
 
 

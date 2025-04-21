@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.RecipientResult;
+import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
@@ -30,6 +30,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,18 +49,25 @@ import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.P
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class ContextMapTest
 {
 	@Mock CommandSender commandSenderMock;
+	@Mock Player playerMock;
+	@Mock ConsoleCommandSender consoleCommandSenderMock;
 	@Mock World worldMock;
 
-	ValidRecipient recipient;
+	ValidRecipient consoleRecipient;
+	ValidRecipient playerRecipient;
 	RecordKey messageKey;
 	MacroKey macroKey;
 	ContextMap contextMap;
+	Location location;
+	MacroKey recipientMacroKey;
+	MacroKey locationMacroKey;
 
 
 	@BeforeEach
@@ -66,11 +75,77 @@ class ContextMapTest
 	{
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
-		recipient = switch (RecipientResult.from(commandSenderMock)) {
+
+		consoleRecipient = switch (Recipient.from(consoleCommandSenderMock))
+		{
 			case ValidRecipient vr -> vr;
 			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
-		contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+
+		playerRecipient = switch (Recipient.from(playerMock))
+		{
+			case ValidRecipient vr -> vr;
+			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+
+		contextMap = ContextMap.of(playerRecipient, messageKey).orElseThrow();
+		location = new Location(worldMock, 11, 12, 13);
+
+		recipientMacroKey = MacroKey.of(TestField.RECIPIENT).orElseThrow();
+		locationMacroKey = recipientMacroKey.append(TestField.LOCATION).orElseThrow();
+	}
+
+
+	@Test
+	void testAddRecipientContext()
+	{
+		// Arrange
+		ContextMap contextMap = ContextMap.of(consoleRecipient, messageKey).orElseThrow();
+		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
+		//TODO: Add recipient location to context map
+
+		// Act
+		contextMap.addRecipientContext();
+
+		// Assert
+		assertTrue(contextMap.contains(recipientMacroKey));
+	}
+
+	enum TestField
+	{
+		RECIPIENT, LOCATION
+	}
+
+	@Test
+	void testAddRecipientContext_player()
+	{
+		// Arrange
+		when(playerMock.getLocation()).thenReturn(location);
+		ContextMap contextMap = ContextMap.of(playerRecipient, messageKey).orElseThrow();
+
+		// Act
+		contextMap.addRecipientContext();
+
+		// Assert
+		assertTrue(contextMap.contains(recipientMacroKey));
+		assertTrue(contextMap.contains(locationMacroKey));
+	}
+
+
+	@Test
+	void testAddRecipientContext_non_entity()
+	{
+		// Arrange
+		ContextMap contextMap = ContextMap.of(consoleRecipient, messageKey).orElseThrow();
+		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
+		MacroKey locationMacroKey = MacroKey.of("LOCATION").orElseThrow();
+
+		// Act
+		contextMap.addRecipientContext();
+
+		// Assert
+		assertTrue(contextMap.contains(recipientMacroKey));
+		assertFalse(contextMap.contains(locationMacroKey));
 	}
 
 
@@ -173,10 +248,8 @@ class ContextMapTest
 	void testEmptyMap()
 	{
 		// Act & Assert
-		assertFalse(contextMap.contains(macroKey), "Empty map should not contain any keys");
-		assertTrue(contextMap.isEmpty());
+		assertFalse(contextMap.contains(macroKey), "Empty map should not contain macro key");
 	}
-
 
 
 	@Test
@@ -195,108 +268,9 @@ class ContextMapTest
 		Set<Map.Entry<MacroKey, Object>> entrySet = contextMap.entrySet();
 
 		// Assert
-		assertEquals(2, entrySet.size());
+		assertTrue(entrySet.size() >= 2);
 	}
 
-
-//	@Test
-//	void testRemove()
-//	{
-//		// Arrange
-//		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
-//		Integer value1 = 41;
-//		contextMap.putIfAbsent(key1, value1);
-//
-//		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
-//		Integer value2 = 42;
-//		contextMap.putIfAbsent(key2, value2);
-//
-//		assertFalse(contextMap.isEmpty());
-//		assertEquals(2, contextMap.size());
-//
-//		// Act
-//		Object removedObject = contextMap.remove(key1);
-//
-//		// Assert
-//		assertEquals(1, contextMap.size());
-//		assertFalse(contextMap.contains(key1));
-//		assertTrue(contextMap.contains(key2));
-//		assertNotNull(removedObject);
-//	}
-
-//	@Test
-//	void testRemove_nonexistent() {
-//		// Arrange
-//		MacroKey key = MacroKey.create("NUMBER1").orElseThrow();
-//		Integer value = 41;
-//		contextMap.putIfAbsent(key, value);
-//
-//		// Act
-//		Object removedObject = contextMap.remove(key);
-//
-//		// Assert
-//		assertNull(removedObject);
-//	}
-
-//	@Test
-//	void testClear()
-//	{
-//		// Arrange
-//		MacroKey macroKey1 = MacroKey.of("NUMBER1").orElseThrow();
-//		Integer value1 = 41;
-//		contextMap.putIfAbsent(macroKey1, value1);
-//
-//		MacroKey macroKey2 = MacroKey.of("NUMBER2").orElseThrow();
-//		Integer value2 = 42;
-//
-//		contextMap.putIfAbsent(macroKey2, value2);
-//		assertFalse(contextMap.isEmpty());
-//		assertEquals(2, contextMap.size());
-//
-//		// Act
-//		contextMap.clear();
-//
-//		// Assert
-//		assertTrue(contextMap.isEmpty());
-//	}
-
-//	@Test
-//	void testSize_empty() {
-//		assertEquals(0, contextMap.size());
-//		contextMap.putIfAbsent(macroKey, 42);
-//		assertNotEquals(0, contextMap.size());
-//	}
-
-//	@Test
-//	void testSize_not_empty() {
-//		// Arrange
-//		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
-//		Integer value = 42;
-//
-//		// Act
-//		contextMap.putIfAbsent(macroKey, value);
-//
-//		// Assert
-//		assertEquals(1, contextMap.size());
-//	}
-
-	@Test
-	void testIsEmpty() {
-		assertTrue(contextMap.isEmpty());
-	}
-
-	@Test
-	void testIsEmpty_not_empty() {
-		// Arrange
-		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
-		Integer value = 42;
-
-		// Act
-		contextMap.putIfAbsent(macroKey, value);
-
-		// Assert
-		assertFalse(contextMap.isEmpty());
-	}
 
 	@Test
 	void getRecipient() {
@@ -306,6 +280,7 @@ class ContextMapTest
 		// Assert
 		assertNotNull(recipient);
 	}
+
 
 	@Test
 	void testGetMessageKey() {

@@ -25,12 +25,14 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
+import org.bukkit.Server;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -50,11 +52,12 @@ class MessageBuilderTest
 {
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
+	@Mock Server serverMock;
+	@Mock PluginManager pluginManagerMock;
 
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock MacroReplacer macroReplacerMock;
-	@Mock
-	MessagePipeline messagePipelineMock;
+	@Mock MessagePipeline messagePipelineMock;
 
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;
@@ -166,6 +169,8 @@ class MessageBuilderTest
 		// Arrange
 		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+		when(pluginMock.getServer()).thenReturn(serverMock);
+		when(serverMock.getPluginManager()).thenReturn(pluginManagerMock);
 
 		// Act
 		MessageBuilder messageBuilder1 = MessageBuilder.create(pluginMock);

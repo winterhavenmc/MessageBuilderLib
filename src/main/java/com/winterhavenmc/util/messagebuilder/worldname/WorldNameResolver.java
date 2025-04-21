@@ -15,8 +15,26 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.messagebuilder.worldname;
 
-import org.bukkit.command.CommandSender;
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
-public record ValidRecipient(CommandSender sender) implements Recipient { }
+
+public interface WorldNameResolver
+{
+	String resolveWorldName(World world);
+
+
+	static WorldNameResolver getResolver(final PluginManager pluginManager)
+	{
+		Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
+
+		return (plugin instanceof MultiverseCore multiverseCore && plugin.isEnabled())
+				? new MultiverseWorldNameResolver(multiverseCore)
+				: new DefaultWorldNameResolver();
+	}
+
+}

@@ -74,6 +74,13 @@ public final class MacroKey extends AbstractKey implements StandardKey
 	}
 
 
+	/**
+	 * Create a new key by suffixing a dot-separated subkey to this existing key
+	 *
+	 * @param subKey an enu constant whose name() is to be used for the appended subkey
+	 * @return a new key with the subkey appended, or an empty Optional if the string was not a valid key
+	 * @param <E> an enum constant
+	 */
 	public <E extends Enum<E>> Optional<MacroKey> append(final E subKey)
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey.name()))
@@ -81,10 +88,18 @@ public final class MacroKey extends AbstractKey implements StandardKey
 				: MacroKey.of(dotJoin(subKey.name()));
 	}
 
+
+	/**
+	 * Create a new key by suffixing a dot-separated subkey to this existing key
+	 *
+	 * @param subKey a string to be used for the appended subkey
+	 * @return a new key with the subkey appended, or an empty Optional if the string was not a valid key
+	 */
 	public Optional<MacroKey> append(final String subKey)
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey))
 				? Optional.empty()
 				: MacroKey.of(dotJoin(subKey));
 	}
+
 }

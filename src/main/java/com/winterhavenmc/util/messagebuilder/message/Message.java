@@ -21,10 +21,14 @@ import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+
 
 public sealed interface Message permits ValidMessage, InvalidMessage {
     <K extends Enum<K>, V> Message setMacro(K macro, V value);
     <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value);
+    <K extends Enum<K>> Message setMacro(K macro, Duration duration, ChronoUnit precision);
     void send();
     RecordKey getMessageKey();
     ValidRecipient getRecipient();

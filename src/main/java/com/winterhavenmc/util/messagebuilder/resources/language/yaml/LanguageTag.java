@@ -52,11 +52,25 @@ public class LanguageTag
 	}
 
 
+	public static Optional<LanguageTag> of(final String string)
+	{
+		return (string == null || string.isBlank())
+				? Optional.empty()
+				: Optional.of(new LanguageTag(string));
+	}
+
+
 	public static Optional<LanguageTag> of(final Locale locale)
 	{
 		return locale == null
 				? Optional.empty()
 				: Optional.of(new LanguageTag(locale.toLanguageTag()));
+	}
+
+
+	public static LanguageTag getDefault()
+	{
+		return new LanguageTag("en-US");
 	}
 
 

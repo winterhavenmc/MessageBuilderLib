@@ -30,10 +30,15 @@ import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 
+import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 import org.bukkit.Location;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
 import java.util.UUID;
@@ -44,8 +49,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
+@ExtendWith(MockitoExtension.class)
 class FieldExtractorIntegrationTest
 {
+	@Mock static WorldNameResolver worldNameResolverMock;
+
 	private final FieldExtractorRegistry registry = new FieldExtractorRegistry();
 
 
@@ -82,10 +90,11 @@ class FieldExtractorIntegrationTest
 	{
 		UUID uuid = UUID.randomUUID();
 		Location location = mock(Location.class);
+		AdapterContext adapterContext = new AdapterContext(worldNameResolverMock);
 
 		return Stream.of(
 				Arguments.of("NameAdapter", new NameAdapter(), nameableMock("Steve"), "PLAYER", Adapter.BuiltIn.NAME, "Steve"),
-				Arguments.of("DisplayNameAdapter", new DisplayNameAdapter(), displayNameableMock("Captain Steve"), "PLAYER", Adapter.BuiltIn.DISPLAY_NAME, "Captain Steve"),
+				Arguments.of("DisplayNameAdapter", new DisplayNameAdapter(adapterContext), displayNameableMock("Captain Steve"), "PLAYER", "DISPLAY_NAME", "Captain Steve"),
 				Arguments.of("UniqueIdAdapter", new UniqueIdAdapter(), identifiableMock(uuid), "PLAYER", Adapter.BuiltIn.UUID, uuid),
 				Arguments.of("QuantityAdapter", new QuantityAdapter(), quantifiableMock(42), "ITEM", Adapter.BuiltIn.QUANTITY, 42),
 				Arguments.of("LocationAdapter", new LocationAdapter(), locatableMock(location), "LOCATION", Adapter.BuiltIn.LOCATION, location)

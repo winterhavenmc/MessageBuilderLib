@@ -15,8 +15,16 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.messagebuilder.worldname;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.World;
 
-public record ValidRecipient(CommandSender sender) implements Recipient { }
+
+public class DefaultWorldNameResolver implements WorldNameResolver
+{
+	@Override
+	public String resolveWorldName(final World world)
+	{
+		return world.getName();
+	}
+}
