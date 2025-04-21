@@ -127,12 +127,10 @@ public final class MessageBuilder
 		final LocaleSupplier localeSupplier = LocaleSupplier.getLocaleSupplier(plugin);
 
 		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
-		final WorldNameResolver worldNameResolver = WorldNameResolver.getResolver(plugin.getServer().getPluginManager());
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
-
+		final WorldNameResolver worldNameResolver = WorldNameResolver.getResolver(plugin.getServer().getPluginManager());
 		final ResolverContext resolverContext = getResolverContext(localeSupplier, queryHandlerFactory);
 		final AdapterContext adapterContext = new AdapterContext(worldNameResolver);
-
 		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, resolverContext, adapterContext);
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
