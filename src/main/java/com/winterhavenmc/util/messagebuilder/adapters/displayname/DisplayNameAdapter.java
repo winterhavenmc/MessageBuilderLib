@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.adapters.displayname;
 
 import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
 import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
-import com.winterhavenmc.util.messagebuilder.worldname.MultiverseWorldNameResolver;
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 import org.bukkit.Nameable;
 import org.bukkit.World;
