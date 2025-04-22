@@ -15,9 +15,25 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 
 
-public record InvalidConstantRecord(RecordKey key, String reason) implements ConstantRecord { }
+public sealed interface ConstantRecord extends SectionRecord permits ValidConstantRecord, InvalidConstantRecord
+{
+	static ConstantRecord from(RecordKey constantKey, Object constantEntry)
+	{
+		return (constantEntry == null)
+				? ConstantRecord.empty(constantKey)
+				: ValidConstantRecord.create(constantKey, constantEntry);
+	}
+
+
+	static InvalidConstantRecord empty(final RecordKey constantKey)
+	{
+		return new InvalidConstantRecord(constantKey, "Missing constant section.");
+	}
+
+}

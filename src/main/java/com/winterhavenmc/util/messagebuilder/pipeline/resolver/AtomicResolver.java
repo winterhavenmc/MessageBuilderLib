@@ -23,8 +23,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
 import com.winterhavenmc.util.time.DurationFormatter;
-import com.winterhavenmc.util.time.DurationWithPrecision;
-import com.winterhavenmc.util.time.LocalizedDurationFormatter;
+import com.winterhavenmc.util.time.BoundedDuration;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -59,8 +58,8 @@ public class AtomicResolver implements Resolver
 	private Optional<String> resolveAtomic(final Object value) {
 		return switch (value) {
 			// TODO: Replace with record pattern match when Java 22+ is standard in Bukkit
-			case DurationWithPrecision durationWithPrecision -> Optional.of(durationFormatter
-					.format(durationWithPrecision.duration(), durationWithPrecision.precision()));
+			case BoundedDuration boundedDuration -> Optional.of(durationFormatter
+					.format(boundedDuration.duration(), boundedDuration.precision()));
 			case Duration duration -> Optional.of(durationFormatter.format(duration, ChronoUnit.SECONDS));
 			case Number number -> Optional.of(localeNumberFormatter.getFormatted(number));
 //			case Boolean bool -> result.putIfAbsent(macroKey, bool.toString());

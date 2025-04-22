@@ -15,10 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.time;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
+import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 
 
-public record DurationWithPrecision(Duration duration, ChronoUnit precision) { }
+public record InvalidConstantRecord(RecordKey key, String reason) implements ConstantRecord
+{ }

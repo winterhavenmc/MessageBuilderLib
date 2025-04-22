@@ -20,6 +20,7 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Objects;

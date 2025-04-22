@@ -25,13 +25,13 @@ import java.time.temporal.ChronoUnit;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class DurationWithPrecisionTest
+class BoundedDurationTest
 {
 	@Test
 	void duration()
 	{
 		// Arrange
-		DurationWithPrecision dp = new DurationWithPrecision(Duration.ofSeconds(10), ChronoUnit.SECONDS);
+		BoundedDuration dp = new BoundedDuration(Duration.ofSeconds(10), ChronoUnit.SECONDS);
 
 		// Act
 		Duration result = dp.duration();
@@ -44,7 +44,7 @@ class DurationWithPrecisionTest
 	void precision()
 	{
 		// Arrange
-		DurationWithPrecision dp = new DurationWithPrecision(Duration.ofSeconds(10), ChronoUnit.SECONDS);
+		BoundedDuration dp = new BoundedDuration(Duration.ofSeconds(10), ChronoUnit.SECONDS);
 
 		// Act
 		ChronoUnit result = dp.precision();

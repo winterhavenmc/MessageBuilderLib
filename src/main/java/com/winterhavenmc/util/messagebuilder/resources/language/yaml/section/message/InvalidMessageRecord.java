@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2025 Tim Savage.
  *
@@ -15,24 +16,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 
-import java.time.Duration;
 
-
-public record FinalMessageRecord(
-		RecordKey key,
-		boolean enabled,
-		String message,
-		Duration repeatDelay,
-		String title,
-		int titleFadeIn,
-		int titleStay,
-		int titleFadeOut,
-		String subtitle,
-		String finalMessageString,
-		String finalTitleString,
-		String finalSubTitleString) implements MessageRecord
-{ }
+public record InvalidMessageRecord(RecordKey key, String reason) implements MessageRecord { }

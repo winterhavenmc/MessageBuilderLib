@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.FinalMessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.FinalMessageRecord;
 
 
 @FunctionalInterface

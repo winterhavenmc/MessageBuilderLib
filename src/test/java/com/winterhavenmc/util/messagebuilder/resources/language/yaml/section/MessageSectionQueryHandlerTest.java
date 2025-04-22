@@ -21,6 +21,9 @@ import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.InvalidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;

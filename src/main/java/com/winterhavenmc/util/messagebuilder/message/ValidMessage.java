@@ -24,7 +24,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.Parameter;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import com.winterhavenmc.util.time.DurationWithPrecision;
+import com.winterhavenmc.util.time.BoundedDuration;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -112,7 +112,7 @@ public final class ValidMessage implements Message
 												final Duration duration,
 												final ChronoUnit precision)
 	{
-		return setMacro(macro, new DurationWithPrecision(duration, precision));
+		return setMacro(macro, new BoundedDuration(duration, precision));
 	}
 
 
