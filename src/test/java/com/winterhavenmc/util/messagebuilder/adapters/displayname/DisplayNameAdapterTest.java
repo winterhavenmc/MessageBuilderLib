@@ -48,8 +48,6 @@ public class DisplayNameAdapterTest
 	@Mock Entity entityMock;
 	@Mock World worldMock;
 
-//	AdapterContext adapterContext = new AdapterContext(worldNameResolverMock);
-
 
 	@Nested
 	class PlayerDisplayNameAdapterTests

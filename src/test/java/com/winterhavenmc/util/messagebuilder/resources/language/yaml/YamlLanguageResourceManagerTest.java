@@ -29,6 +29,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.File;
+import java.util.Locale;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -140,5 +143,30 @@ class YamlLanguageResourceManagerTest {
 			assertEquals("The parameter 'resourceLoader' cannot be null.", exception.getMessage());
 		}
 	}
+
+
+	@Test
+	void testGetResourceName()
+	{
+		// Arrange
+		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
+
+		// Act & Assert
+		assertEquals("language/en-US.yml", YamlLanguageResourceManager.getResourceName(languageTag));
+		assertNotEquals("language/fr-FR.yml", YamlLanguageResourceManager.getResourceName(languageTag));
+	}
+
+
+	@Test
+	void testGetFileName()
+	{
+		// Arrange
+		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
+
+		// Act & Assert
+		assertEquals("language" + File.separator + "en-US.yml", YamlLanguageResourceManager.getFileName(languageTag));
+		assertNotEquals("language" + File.separator + "fr-FR.yml", YamlLanguageResourceManager.getFileName(languageTag));
+	}
+
 
 }

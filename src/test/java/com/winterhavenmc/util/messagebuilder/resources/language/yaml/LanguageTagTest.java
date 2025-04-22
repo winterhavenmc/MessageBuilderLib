@@ -21,7 +21,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -70,29 +69,6 @@ class LanguageTagTest
 		assertNotEquals("fr-FR", languageTag.toString());
 	}
 
-
-	@Test
-	void testGetResourceName()
-	{
-		// Arrange
-		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
-
-		// Act & Assert
-		assertEquals("language/en-US.yml", languageTag.getResourceName());
-		assertNotEquals("language/fr-FR.yml", languageTag.getResourceName());
-	}
-
-
-	@Test
-	void testGetFileName()
-	{
-		// Arrange
-		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
-
-		// Act & Assert
-		assertEquals("language" + File.separator + "en-US.yml", languageTag.getFileName());
-		assertNotEquals("language" + File.separator + "fr-FR.yml", languageTag.getFileName());
-	}
 
 	@Test
 	void testGetLocale() {

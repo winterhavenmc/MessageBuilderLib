@@ -15,33 +15,42 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.time;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
-import java.util.Locale;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-class LocaleTest
+
+class DurationWithPrecisionTest
 {
 	@Test
-	void testMockLocaleForLanguageTag()
+	void duration()
 	{
-		try (MockedStatic<Locale> mockedLocale = mockStatic(Locale.class))
-		{
-			// Define the behavior for the static method
-			mockedLocale.when(() -> Locale.forLanguageTag("en-US"))
-					.thenReturn(Locale.US);
+		// Arrange
+		DurationWithPrecision dp = new DurationWithPrecision(Duration.ofSeconds(10), ChronoUnit.SECONDS);
 
-			// Test the mocked behavior
-			Locale result = Locale.forLanguageTag("en-US");
-			assertEquals(Locale.US, result);
+		// Act
+		Duration result = dp.duration();
 
-			// Verify that the static method was called
-			mockedLocale.verify(() -> Locale.forLanguageTag("en-US"));
-		}
+		// Assert
+		assertEquals(Duration.ofSeconds(10), result);
 	}
+
+	@Test
+	void precision()
+	{
+		// Arrange
+		DurationWithPrecision dp = new DurationWithPrecision(Duration.ofSeconds(10), ChronoUnit.SECONDS);
+
+		// Act
+		ChronoUnit result = dp.precision();
+
+		// Assert
+		assertEquals(ChronoUnit.SECONDS, result);
+	}
+
 }

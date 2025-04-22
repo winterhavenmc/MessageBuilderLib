@@ -124,7 +124,7 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final LocaleSupplier localeSupplier = LocaleSupplier.getLocaleSupplier(plugin);
+		final LocaleSupplier localeSupplier = LocaleSupplier.create(plugin);
 
 		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());

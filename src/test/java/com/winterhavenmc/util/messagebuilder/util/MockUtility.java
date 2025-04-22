@@ -23,7 +23,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
@@ -34,13 +35,17 @@ import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
-public final class MockUtility {
-
+public final class MockUtility
+{
 	/**
 	 * Private constructor to prevent instantiation
+	 *
 	 * @throws InstantiationException if instantiated from within this class
 	 */
-	private MockUtility() throws InstantiationException { throw new InstantiationException(); }
+	private MockUtility() throws InstantiationException
+	{
+		throw new InstantiationException();
+	}
 
 
 	/**
@@ -52,10 +57,12 @@ public final class MockUtility {
 	 * @return a {@link FileConfiguration} object containing the parsed YAML data
 	 * @throws IllegalArgumentException if the resource cannot be found or read
 	 */
-	public static FileConfiguration loadConfigurationFromResource(String resourcePath) {
+	public static FileConfiguration loadConfigurationFromResource(String resourcePath)
+	{
 		InputStream resourceStream = getResourceStream(resourcePath);
 
-		if (resourceStream == null) {
+		if (resourceStream == null)
+		{
 			throw new IllegalArgumentException("ResourceType not found: " + resourcePath);
 		}
 
@@ -70,7 +77,8 @@ public final class MockUtility {
 	 * @param resourceName the name of the resource file
 	 * @return an InputStream for the resource, or {@code null} if the resource cannot be found
 	 */
-	public static InputStream getResourceStream(final String resourceName) {
+	public static InputStream getResourceStream(final String resourceName)
+	{
 		return MockUtility.class.getClassLoader().getResourceAsStream(resourceName);
 	}
 
@@ -83,7 +91,8 @@ public final class MockUtility {
 	 * @return {@code true} if the resource was successfully copied, {@code false} otherwise
 	 * @throws IOException if an error occurs during the file operation or if the resource cannot be found
 	 */
-	public static long installResource(final String resourceName, final Path targetDirPath) throws IOException {
+	public static long installResource(final String resourceName, final Path targetDirPath) throws IOException
+	{
 		validate(resourceName, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_NAME));
 		validate(resourceName, String::isBlank, throwing(PARAMETER_EMPTY, RESOURCE_NAME));
 		validate(targetDirPath, Objects::isNull, throwing(PARAMETER_NULL, TARGET_DIR_PATH));
@@ -94,7 +103,8 @@ public final class MockUtility {
 		// Get the resource as an InputStream
 		try (var inputStream = getResourceStream(resourceName))
 		{
-			if (inputStream == null) {
+			if (inputStream == null)
+			{
 				throw new IOException("ResourceType '" + resourceName + "' not found in the classpath.");
 			}
 

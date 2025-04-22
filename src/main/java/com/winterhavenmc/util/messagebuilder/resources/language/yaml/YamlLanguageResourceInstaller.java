@@ -150,7 +150,7 @@ public final class YamlLanguageResourceInstaller
 	{
 		if (!isInstalledForTag(languageTag))
 		{
-			return installByName(languageTag.getResourceName());
+			return installByName(YamlLanguageResourceManager.getResourceName(languageTag));
 		}
 		return InstallerStatus.FILE_EXISTS;
 	}
@@ -211,7 +211,7 @@ public final class YamlLanguageResourceInstaller
 	 */
 	InstallerStatus install(final LanguageTag languageTag)
 	{
-		return installByName(languageTag.getResourceName());
+		return installByName(YamlLanguageResourceManager.getResourceName(languageTag));
 	}
 
 
@@ -235,7 +235,7 @@ public final class YamlLanguageResourceInstaller
 	 */
 	boolean resourceExists(final LanguageTag languageTag)
 	{
-		return plugin.getResource(languageTag.getResourceName()) != null;
+		return plugin.getResource(YamlLanguageResourceManager.getResourceName(languageTag)) != null;
 	}
 
 
@@ -258,7 +258,7 @@ public final class YamlLanguageResourceInstaller
 	 */
 	boolean isInstalledForTag(final LanguageTag languageTag)
 	{
-		return new File(plugin.getDataFolder(), languageTag.getFileName()).exists();
+		return new File(plugin.getDataFolder(), YamlLanguageResourceManager.getFileName(languageTag)).exists();
 	}
 
 	enum InstallerStatus

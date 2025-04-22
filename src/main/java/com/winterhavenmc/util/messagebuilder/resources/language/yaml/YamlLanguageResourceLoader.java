@@ -105,7 +105,7 @@ public final class YamlLanguageResourceLoader
 	Configuration load(final LanguageTag languageTag)
 	{
 		YamlConfiguration configuration = new YamlConfiguration();
-		File languageFile = new File(plugin.getDataFolder(), languageTag.getFileName());
+		File languageFile = new File(plugin.getDataFolder(), YamlLanguageResourceManager.getFileName(languageTag));
 
 		try
 		{

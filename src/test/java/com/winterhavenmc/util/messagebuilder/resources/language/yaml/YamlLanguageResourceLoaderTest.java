@@ -69,12 +69,14 @@ public class YamlLanguageResourceLoaderTest
 
 		// Install resource to temp directory
 		languageTag = LanguageTag.of(Locale.US).orElseThrow();
-		Path filePath = tempDataDir.toPath().resolve(languageTag.getFileName());
+		Path filePath = tempDataDir.toPath().resolve(YamlLanguageResourceManager.getFileName(languageTag));
 		long bytes = MockUtility.installResource("language/en-US.yml", filePath);
 		File file = filePath.toFile();
 
 		assertTrue(bytes > 0, "Zero bytes written copying resource to temp directory.");
-		assertTrue(file.exists(), "The file '" + languageTag.getFileName() + "' in the temporary directory does not exist.");
+		assertTrue(file.exists(), "The file '"
+				+ YamlLanguageResourceManager.getFileName(languageTag)
+				+ "' in the temporary directory does not exist.");
 
 		// Create loader
 		yamlLanguageResourceLoader = new YamlLanguageResourceLoader(pluginMock);

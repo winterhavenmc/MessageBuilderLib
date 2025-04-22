@@ -19,12 +19,10 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
-import java.io.File;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_SUBDIRECTORY;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_TAG;
@@ -94,28 +92,6 @@ public class LanguageTag
 	public String toString()
 	{
 		return this.wrappedLanguageTag;
-	}
-
-
-	/**
-	 * Retrieve the name of the potential language resource associated with this language tag, as a String
-	 *
- 	 * @return {@code String} representation of the potential language resource associated with this language tag
-	 */
-	public String getResourceName()
-	{
-		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), wrappedLanguageTag).concat(".yml");
-	}
-
-
-	/**
-	 * Retrieve the name of the potential language resource file as installed in the plugin data directory, as a String.
-	 *
-	 * @return {@code String} representation of the potential language resource file installed in the plugin data directory
-	 */
-	public String getFileName()
-	{
-		return String.join(File.separator, RESOURCE_SUBDIRECTORY.toString(), wrappedLanguageTag).concat(".yml");
 	}
 
 }

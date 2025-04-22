@@ -15,33 +15,40 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.worldname;
 
+import org.bukkit.World;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Locale;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class LocaleTest
+
+@ExtendWith(MockitoExtension.class)
+class DefaultWorldNameResolverTest
 {
+	@Mock World worldMock;
+
+
 	@Test
-	void testMockLocaleForLanguageTag()
+	void resolveWorldName()
 	{
-		try (MockedStatic<Locale> mockedLocale = mockStatic(Locale.class))
-		{
-			// Define the behavior for the static method
-			mockedLocale.when(() -> Locale.forLanguageTag("en-US"))
-					.thenReturn(Locale.US);
+		// Arrange
+		when(worldMock.getName()).thenReturn("test_world");
+		WorldNameResolver resolver = new DefaultWorldNameResolver();
 
-			// Test the mocked behavior
-			Locale result = Locale.forLanguageTag("en-US");
-			assertEquals(Locale.US, result);
+		// Act
+		String result = resolver.resolveWorldName(worldMock);
 
-			// Verify that the static method was called
-			mockedLocale.verify(() -> Locale.forLanguageTag("en-US"));
-		}
+		// Assert
+		assertEquals("test_world", result);
+
+		// Verify
+		verify(worldMock, atLeastOnce()).getName();
 	}
+
 }
