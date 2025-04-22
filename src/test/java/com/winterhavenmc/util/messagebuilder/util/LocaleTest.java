@@ -25,11 +25,13 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class LocaleTest {
-
+class LocaleTest
+{
 	@Test
-	void testMockLocaleForLanguageTag() {
-		try (MockedStatic<Locale> mockedLocale = mockStatic(Locale.class)) {
+	void testMockLocaleForLanguageTag()
+	{
+		try (MockedStatic<Locale> mockedLocale = mockStatic(Locale.class))
+		{
 			// Define the behavior for the static method
 			mockedLocale.when(() -> Locale.forLanguageTag("en-US"))
 					.thenReturn(Locale.US);
