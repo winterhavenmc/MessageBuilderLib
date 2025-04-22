@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 
@@ -58,7 +58,7 @@ public final class ValidConstantRecord implements ConstantRecord
 	}
 
 
-	static ValidConstantRecord create(final RecordKey key, final Object value)
+	public static ValidConstantRecord create(final RecordKey key, final Object value)
 	{
 		return new ValidConstantRecord(key, value);
 	}

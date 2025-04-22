@@ -19,10 +19,9 @@ package com.winterhavenmc.util.time;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.Locale;
 
 @FunctionalInterface
 public interface DurationFormatter
 {
-	String format(Duration duration, ChronoUnit precision);
+	String format(Duration duration, ChronoUnit lowerBound);
 }

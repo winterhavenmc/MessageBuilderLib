@@ -15,9 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.item;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
 import org.bukkit.configuration.ConfigurationSection;
 
 
@@ -51,7 +52,7 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 		Field(String keyPath) { this.keyPath = keyPath; }
 
 		// getter for keyPath field
-		String getKeyPath() { return this.keyPath; }
+		public String getKeyPath() { return this.keyPath; }
 	}
 
 }

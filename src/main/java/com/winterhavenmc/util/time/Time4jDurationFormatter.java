@@ -55,16 +55,16 @@ public final class Time4jDurationFormatter implements DurationFormatter
 
 
 	@Override
-	public String format(final Duration duration, final ChronoUnit precision)
+	public String format(final Duration duration, final ChronoUnit lowerBound)
 	{
 		Duration validDuration = validate(duration, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, DURATION)).orElse(Duration.ZERO);
-		ChronoUnit validPrecision = validate(precision, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, PRECISION)).orElse(ChronoUnit.MINUTES);
+		ChronoUnit validLowerBound = validate(lowerBound, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, PRECISION)).orElse(ChronoUnit.MINUTES);
 
 		Locale locale = localeSupplier.get();
 
-		// Optional logic: clamp duration to threshold for formatting if needed
-		Duration toFormat = validDuration.compareTo(Duration.of(1, validPrecision)) < 0
-				? Duration.of(1, validPrecision)
+		// clamp duration to lowerBound threshold for formatting if needed
+		Duration toFormat = validDuration.compareTo(Duration.of(1, validLowerBound)) < 0
+				? Duration.of(1, validLowerBound)
 				: validDuration;
 
 		PrettyTime prettyTime = PrettyTime.of(locale);

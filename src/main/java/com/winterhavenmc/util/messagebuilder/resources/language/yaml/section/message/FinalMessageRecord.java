@@ -15,24 +15,24 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 
-
-public sealed interface ConstantRecord extends SectionRecord permits ValidConstantRecord, InvalidConstantRecord
-{
-	static ConstantRecord from(RecordKey constantKey, Object constantEntry)
-	{
-		return (constantEntry == null)
-				? ConstantRecord.empty(constantKey)
-				: ValidConstantRecord.create(constantKey, constantEntry);
-	}
+import java.time.Duration;
 
 
-	static InvalidConstantRecord empty(final RecordKey constantKey)
-	{
-		return new InvalidConstantRecord(constantKey, "Missing constant section.");
-	}
-
-}
+public record FinalMessageRecord(
+		RecordKey key,
+		boolean enabled,
+		String message,
+		Duration repeatDelay,
+		String title,
+		int titleFadeIn,
+		int titleStay,
+		int titleFadeOut,
+		String subtitle,
+		String finalMessageString,
+		String finalTitleString,
+		String finalSubTitleString) implements MessageRecord
+{ }

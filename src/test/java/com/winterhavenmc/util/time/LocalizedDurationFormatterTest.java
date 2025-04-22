@@ -20,7 +20,7 @@ package com.winterhavenmc.util.time;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ConstantRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant.ConstantRecord;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;

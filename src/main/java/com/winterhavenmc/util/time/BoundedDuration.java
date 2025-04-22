@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2025 Tim Savage.
  *
@@ -16,9 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.time;
 
-import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 
-public record InvalidMessageRecord(RecordKey key, String reason) implements MessageRecord { }
+public record BoundedDuration(Duration duration, ChronoUnit precision) { }

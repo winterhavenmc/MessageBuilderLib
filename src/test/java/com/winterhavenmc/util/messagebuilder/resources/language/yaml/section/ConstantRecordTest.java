@@ -18,6 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant.ConstantRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant.InvalidConstantRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant.ValidConstantRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.Test;

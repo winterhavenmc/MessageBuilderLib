@@ -243,10 +243,10 @@ MESSAGES:
     MESSAGE_TEXT: "This entry has all fields present - message"
     REPEAT_DELAY: 14
     TITLE_TEXT: "This entry has all fields present - title"
-    title_fade_in: 24
-    title_stay: 34
-    title_fade_out: 44
-    subTITLE_TEXT: "This entry has all fields present - subtitle"
+    TITLE_FADE_IN: 24
+    TITLE_STAY: 34
+    TITLE_FADE_OUT: 44
+    SUBTITLE_TEXT: "This entry has all fields present - subtitle"
 
 
   UNDEFINED_FIELD_ENABLED:

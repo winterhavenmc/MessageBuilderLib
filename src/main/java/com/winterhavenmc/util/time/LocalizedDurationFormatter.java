@@ -20,9 +20,9 @@ package com.winterhavenmc.util.time;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ConstantRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant.ConstantRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.ValidConstantRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant.ValidConstantRecord;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -45,15 +45,15 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 
 
 	@Override
-	public String format(final Duration duration, final ChronoUnit precision)
+	public String format(final Duration duration, final ChronoUnit lowerBound)
 	{
-		DurationType type = DurationType.classify(duration, precision);
+		DurationType type = DurationType.classify(duration, lowerBound);
 
 		return switch (type)
 		{
 			case UNLIMITED -> formatUnlimited();
-			case LESS_THAN -> formatLessThan(precision);
-			case NORMAL    -> formatNormal(duration, precision);
+			case LESS_THAN -> formatLessThan(lowerBound);
+			case NORMAL    -> formatNormal(duration, lowerBound);
 		};
 	}
 
