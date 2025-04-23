@@ -17,21 +17,18 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
-import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
-import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
-import com.winterhavenmc.util.time.Time4jDurationFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.duration.Time4jDurationFormatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
@@ -58,8 +55,8 @@ class AtomicResolverTest
 	void setUp()
 	{
 		LocaleNumberFormatter localeNumberFormatterMock = new LocaleNumberFormatter(localeSupplierMock);
-		ResolverContext resolverContext = new ResolverContext(durationFormatter, localeNumberFormatterMock);
-		resolver = new AtomicResolver(resolverContext);
+		ResolverContextContainer resolverContextContainer = new ResolverContextContainer(durationFormatter, localeNumberFormatterMock);
+		resolver = new AtomicResolver(resolverContextContainer);
 	}
 
 

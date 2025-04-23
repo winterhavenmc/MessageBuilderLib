@@ -17,13 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
-import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
-import com.winterhavenmc.util.time.DurationFormatter;
-import com.winterhavenmc.util.time.BoundedDuration;
+import com.winterhavenmc.util.messagebuilder.formatters.duration.DurationFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.duration.BoundedDuration;
+import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -36,10 +35,10 @@ public class AtomicResolver implements Resolver
 	private final LocaleNumberFormatter localeNumberFormatter;
 
 
-	public AtomicResolver(final ResolverContext resolverContext)
+	public AtomicResolver(final ResolverContextContainer resolverContextContainer)
 	{
-		this.durationFormatter = resolverContext.durationFormatter();
-		localeNumberFormatter = resolverContext.localeNumberFormatter();
+		this.durationFormatter = resolverContextContainer.durationFormatter();
+		localeNumberFormatter = resolverContextContainer.localeNumberFormatter();
 	}
 
 

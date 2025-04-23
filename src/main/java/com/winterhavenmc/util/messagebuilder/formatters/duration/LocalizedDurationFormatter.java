@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.time;
+package com.winterhavenmc.util.messagebuilder.formatters.duration;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
@@ -64,7 +64,7 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 	}
 
 
-	String formatLessThan(ChronoUnit precision)
+	String formatLessThan(final ChronoUnit precision)
 	{
 		Duration duration = Duration.of(1, precision);
 		String formattedDuration = delegate.format(duration, precision);
@@ -74,13 +74,13 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 	}
 
 
-	String formatNormal(Duration duration, ChronoUnit precision)
+	String formatNormal(final Duration duration, final ChronoUnit precision)
 	{
 		return delegate.format(duration, precision);
 	}
 
 
-	private String getTimeConstant(RecordKey constantKey, DurationType durationType)
+	private String getTimeConstant(final RecordKey constantKey, final DurationType durationType)
 	{
 		QueryHandler<ConstantRecord> constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
 		ConstantRecord timeConstant = constantQueryHandler.getRecord(constantKey);

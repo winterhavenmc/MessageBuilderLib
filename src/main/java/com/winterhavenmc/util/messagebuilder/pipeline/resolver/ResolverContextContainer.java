@@ -15,10 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.formatters;
+package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
-@FunctionalInterface
-public interface NumberFormatter
-{
-	String getFormatted(Number number);
-}
+import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.duration.DurationFormatter;
+
+
+public record ResolverContextContainer(DurationFormatter durationFormatter, LocaleNumberFormatter localeNumberFormatter) { }

@@ -15,10 +15,27 @@
  *
  */
 
-package com.winterhavenmc.util.time;
+package com.winterhavenmc.util.messagebuilder.formatters.number;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import java.text.NumberFormat;
 
 
-public record BoundedDuration(Duration duration, ChronoUnit precision) { }
+public class LocaleNumberFormatter implements NumberFormatter
+{
+	private final LocaleSupplier localeSupplier;
+
+
+	public LocaleNumberFormatter(final LocaleSupplier localeSupplier)
+	{
+		this.localeSupplier = localeSupplier;
+	}
+
+
+	@Override
+	public String getFormatted(final Number number)
+	{
+		return NumberFormat.getInstance(localeSupplier.get()).format(number);
+	}
+
+}

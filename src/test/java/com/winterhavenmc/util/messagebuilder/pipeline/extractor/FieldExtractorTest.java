@@ -25,6 +25,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,7 @@ class FieldExtractorTest
 	@Mock UniqueIdAdapter uniqueIdAdapterMock;
 	@Mock LocationAdapter locationAdapterMock;
 	@Mock QuantityAdapter quantityAdapter;
+	@Mock World worldMock;
 
 	private FieldExtractor extractor;
 	private MacroKey baseKey;
@@ -109,14 +111,27 @@ class FieldExtractorTest
 	void testLocationAdapter()
 	{
 		var locatable = mock(com.winterhavenmc.util.messagebuilder.adapters.location.Locatable.class);
-		Location location = mock(Location.class);
+
+		MacroKey locationKey = baseKey;
+
+		if (!locationKey.toString().endsWith("LOCATION"))
+		{
+			locationKey = locationKey.append("LOCATION").orElseThrow();
+		}
+
+		when(worldMock.getName()).thenReturn("test-world");
+		Location location = new Location(worldMock, 11, 12,13);
 		when(locatable.getLocation()).thenReturn(location);
 
 		Map<MacroKey, Object> result = extractor.extract(locationAdapterMock, locatable, baseKey);
 
-		assertEquals(2, result.size());
-		assertEquals(location, result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.LOCATION).orElseThrow()));
+		assertEquals(6, result.size());
+		assertEquals("test-world [11, 12, 13]", result.get(locationKey));
+		assertEquals(location.getWorld().getName(), result.get(locationKey.append("WORLD").orElseThrow()));
+		assertEquals(location.getBlockX(), result.get(locationKey.append("X").orElseThrow()));
+		assertEquals(location.getBlockY(), result.get(locationKey.append("Y").orElseThrow()));
+		assertEquals(location.getBlockZ(), result.get(locationKey.append("Z").orElseThrow()));
+		assertTrue(result.containsKey(locationKey));
 	}
 
 

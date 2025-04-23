@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.time;
+package com.winterhavenmc.util.messagebuilder.formatters.duration;
 
 import org.junit.jupiter.api.Test;
 

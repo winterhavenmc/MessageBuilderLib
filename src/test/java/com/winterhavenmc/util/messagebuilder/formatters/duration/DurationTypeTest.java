@@ -15,8 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.time;
+package com.winterhavenmc.util.messagebuilder.formatters.duration;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.Arguments;
@@ -93,5 +94,13 @@ class DurationTypeTest
 				Arguments.of(Duration.ofMinutes(1), ChronoUnit.MINUTES, false),
 				Arguments.of(Duration.ofSeconds(59), ChronoUnit.MINUTES, true)
 		);
+	}
+
+	@Test
+	void testFallBack()
+	{
+		assertEquals("", DurationType.NORMAL.getFallback());
+		assertEquals("< {DURATION}", DurationType.LESS_THAN.getFallback());
+		assertEquals("unlimited", DurationType.UNLIMITED.getFallback());
 	}
 }

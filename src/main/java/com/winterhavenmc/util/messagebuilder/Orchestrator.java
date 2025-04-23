@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
-import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
@@ -26,7 +26,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.AtomicResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.CompositeResolver;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.FieldResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
@@ -37,13 +37,16 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguag
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
-import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
-import com.winterhavenmc.util.time.DurationFormatter;
-import com.winterhavenmc.util.time.LocalizedDurationFormatter;
-import com.winterhavenmc.util.time.Time4jDurationFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ResolverContextContainer;
+import com.winterhavenmc.util.messagebuilder.formatters.duration.DurationFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.duration.LocalizedDurationFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.duration.Time4jDurationFormatter;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
+
 import org.bukkit.plugin.Plugin;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -63,25 +66,25 @@ class Orchestrator
 	}
 
 
-	private static @NotNull MacroReplacer getMacroReplacer(final ResolverContext resolverContext, final AdapterContext adapterContext)
+	private static @NotNull MacroReplacer getMacroReplacer(final ResolverContextContainer resolverContextContainer, final AdapterContextContainer adapterContextContainer)
 	{
-		final AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContext);
+		final AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
 		final FieldExtractor fieldExtractor = new FieldExtractor();
 		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		final AtomicResolver atomicResolver = new AtomicResolver(resolverContext);
-		final ContextResolver contextResolver = new ContextResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
+		final AtomicResolver atomicResolver = new AtomicResolver(resolverContextContainer);
+		final FieldResolver fieldResolver = new FieldResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
 		final PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
 
-		return new MacroReplacer(contextResolver, placeholderMatcher);
+		return new MacroReplacer(fieldResolver, placeholderMatcher);
 	}
 
 
 	static @NotNull MessagePipeline getMessagePipeline(final QueryHandlerFactory queryHandlerFactory,
-													   final ResolverContext resolverContext,
-													   final AdapterContext adapterContext)
+													   final ResolverContextContainer resolverContextContainer,
+													   final AdapterContextContainer adapterContextContainer)
 	{
 		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
-		final MacroReplacer macroReplacer = getMacroReplacer(resolverContext, adapterContext);
+		final MacroReplacer macroReplacer = getMacroReplacer(resolverContextContainer, adapterContextContainer);
 		final CooldownMap cooldownMap = new CooldownMap();
 		final List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
 
@@ -89,13 +92,20 @@ class Orchestrator
 	}
 
 
-	static ResolverContext getResolverContext(LocaleSupplier localeSupplier, QueryHandlerFactory queryHandlerFactory)
+	static ResolverContextContainer getResolverContextContainer(Plugin plugin, QueryHandlerFactory queryHandlerFactory)
 	{
+		final LocaleSupplier localeSupplier = LocaleSupplier.create(plugin);
 		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeSupplier);
 		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeSupplier);
 		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, queryHandlerFactory);
 
-		return new ResolverContext(durationFormatter, localeNumberFormatter);
+		return new ResolverContextContainer(durationFormatter, localeNumberFormatter);
+	}
+
+
+	static AdapterContextContainer getAdapterContext(final Plugin plugin)
+	{
+		return new AdapterContextContainer(WorldNameResolver.getResolver(plugin.getServer().getPluginManager()));
 	}
 
 }

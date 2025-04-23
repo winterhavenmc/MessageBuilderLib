@@ -27,7 +27,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable;
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -54,10 +54,10 @@ public class AdapterRegistry
 	/**
 	 * Class constructor registers all built-in adapters
 	 */
-	public AdapterRegistry(final AdapterContext adapterContext)
+	public AdapterRegistry(final AdapterContextContainer adapterContextContainer)
 	{
 		register(Nameable.class, NameAdapter::new);
-		register(DisplayNameable.class, () -> new DisplayNameAdapter(adapterContext));
+		register(DisplayNameable.class, () -> new DisplayNameAdapter(adapterContextContainer));
 		register(Locatable.class, LocationAdapter::new);
 		register(Quantifiable.class, QuantityAdapter::new);
 		register(Identifiable.class, UniqueIdAdapter::new);

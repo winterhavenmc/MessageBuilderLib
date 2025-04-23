@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.time;
+package com.winterhavenmc.util.messagebuilder.formatters.duration;
 
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import org.junit.jupiter.api.BeforeEach;

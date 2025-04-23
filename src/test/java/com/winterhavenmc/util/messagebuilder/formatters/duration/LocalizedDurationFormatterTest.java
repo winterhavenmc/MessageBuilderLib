@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.time;
+package com.winterhavenmc.util.messagebuilder.formatters.duration;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
@@ -41,7 +41,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LocalizedDurationFormatterTest
 {
-	@Mock Time4jDurationFormatter delegateMock;
+	@Mock
+	Time4jDurationFormatter delegateMock;
 	@Mock QueryHandler<ConstantRecord> constantQueryHandlerMock;
 	@Mock QueryHandlerFactory queryHandlerFactoryMock;
 

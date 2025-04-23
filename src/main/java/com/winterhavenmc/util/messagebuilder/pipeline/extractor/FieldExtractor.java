@@ -29,6 +29,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
+import org.bukkit.Location;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,8 +66,22 @@ public class FieldExtractor implements Extractor
 
 			case LocationAdapter ignored when adapted instanceof Locatable locatable ->
 			{
-				baseKey.append(LOCATION).ifPresent(macroKey -> fields.put(macroKey, locatable.getLocation()));
-				fields.putIfAbsent(baseKey, locatable.getLocation());
+				if (!baseKey.toString().endsWith(LOCATION.name()))
+				{
+					baseKey = baseKey.append(LOCATION).orElse(baseKey);
+				}
+
+				fields.putIfAbsent(baseKey, getLocationString(locatable.getLocation()));
+				baseKey.append(LocationField.STRING).ifPresent(macroKey ->
+						fields.putIfAbsent(macroKey, getLocationString(locatable.getLocation())));
+				baseKey.append(LocationField.WORLD).ifPresent(macroKey ->
+						fields.putIfAbsent(macroKey, getLocationWorldName(locatable.getLocation())));
+				baseKey.append(LocationField.X).ifPresent(macroKey ->
+						fields.putIfAbsent(macroKey, locatable.getLocation().getBlockX()));
+				baseKey.append(LocationField.Y).ifPresent(macroKey ->
+						fields.putIfAbsent(macroKey, locatable.getLocation().getBlockY()));
+				baseKey.append(LocationField.Z).ifPresent(macroKey ->
+						fields.putIfAbsent(macroKey, locatable.getLocation().getBlockZ()));
 			}
 
 			case QuantityAdapter ignored when adapted instanceof Quantifiable quantifiable ->
@@ -78,6 +93,29 @@ public class FieldExtractor implements Extractor
 		}
 
 		return fields;
+	}
+
+
+	private String getLocationWorldName(final Location location)
+	{
+		return (location != null && location.getWorld() != null)
+				? location.getWorld().getName()
+				: "???";
+	}
+
+
+	private String getLocationString(final Location location)
+	{
+		String worldName = (location.getWorld() != null)
+				? location.getWorld().getName()
+				: "???";
+
+		return worldName + " [" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + "]";
+	}
+
+	enum LocationField
+	{
+		STRING, WORLD, X, Y, Z
 	}
 
 }

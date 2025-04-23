@@ -25,7 +25,7 @@ import com.winterhavenmc.util.messagebuilder.adapters.name.Nameable;
 import com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
 import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,14 +42,15 @@ import static org.mockito.Mockito.mock;
 class AdapterRegistryTest
 {
 
-	@Mock AdapterContext adapterContextMock;
+	@Mock
+	AdapterContextContainer adapterContextContainerMock;
 	private AdapterRegistry registry;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		registry = new AdapterRegistry(adapterContextMock);
+		registry = new AdapterRegistry(adapterContextContainerMock);
 	}
 
 	@Test

@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.adapters.displayname;
 
 import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 import org.bukkit.Nameable;
 import org.bukkit.World;
@@ -38,7 +38,7 @@ public class DisplayNameAdapter implements Adapter
 {
 	private final WorldNameResolver worldNameResolver;
 
-	public DisplayNameAdapter(final AdapterContext ctx)
+	public DisplayNameAdapter(final AdapterContextContainer ctx)
 	{
 		this.worldNameResolver = ctx.worldNameResolver();
 	}

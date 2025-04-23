@@ -15,13 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.time;
+package com.winterhavenmc.util.messagebuilder.util;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 
-@FunctionalInterface
-public interface DurationFormatter
-{
-	String format(Duration duration, ChronoUnit lowerBound);
-}
+
+public record AdapterContextContainer(WorldNameResolver worldNameResolver) { }

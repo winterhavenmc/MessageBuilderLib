@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.matcher;
 
 import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
-import com.winterhavenmc.util.messagebuilder.formatters.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
@@ -28,18 +28,18 @@ import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.AtomicResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.CompositeResolver;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ContextResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.FieldResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.Resolver;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
-import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ResolverContextContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
-import com.winterhavenmc.util.time.Time4jDurationFormatter;
+import com.winterhavenmc.util.messagebuilder.formatters.duration.Time4jDurationFormatter;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,17 +74,17 @@ class PlaceholderMatcherTest
 	{
 		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 
-		AdapterContext adapterContext = new AdapterContext(worldNameResolverMock);
+		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock);
 
-		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContext);
+		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
 		FieldExtractor fieldExtractor = new FieldExtractor();
 
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeSupplierMock);
 		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeSupplierMock);
-		ResolverContext resolverContext = new ResolverContext(time4jDurationFormatter, localeNumberFormatter);
+		ResolverContextContainer resolverContextContainer = new ResolverContextContainer(time4jDurationFormatter, localeNumberFormatter);
 
-		AtomicResolver atomicResolver = new AtomicResolver(resolverContext);
+		AtomicResolver atomicResolver = new AtomicResolver(resolverContextContainer);
 		List<Resolver> resolvers = List.of(compositeResolver, atomicResolver);
 
 		PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
@@ -95,7 +95,7 @@ class PlaceholderMatcherTest
 		};
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
-		macroReplacer = new MacroReplacer(new ContextResolver(resolvers), placeholderMatcher);
+		macroReplacer = new MacroReplacer(new FieldResolver(resolvers), placeholderMatcher);
 	}
 
 

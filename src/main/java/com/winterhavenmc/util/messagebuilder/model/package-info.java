@@ -15,9 +15,4 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
-
-import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
-
-
-public record AdapterContext(WorldNameResolver worldNameResolver) { }
+package com.winterhavenmc.util.messagebuilder.model;

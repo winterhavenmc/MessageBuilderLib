@@ -44,6 +44,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class MacroReplacer implements Replacer
 {
+	private final static MacroKey MACRO_KEY = MacroKey.of("KEY").orElseThrow();
 	private final Resolver resolver;
 	private final Matcher matcher;
 
@@ -112,7 +113,7 @@ public class MacroReplacer implements Replacer
 		return new PlaceholderMatcher().match(messageString)
 				.reduce(messageString, (msg, placeholder) ->
 						msg.replace(Delimiter.OPEN + placeholder + Delimiter.CLOSE,
-								replacementMap.getValueOrKey(MacroKey.of(placeholder).orElse(MacroKey.of("KEY").orElseThrow()))));
+								replacementMap.getValueOrKey(MacroKey.of(placeholder).orElse(MACRO_KEY))));
 	}
 
 }

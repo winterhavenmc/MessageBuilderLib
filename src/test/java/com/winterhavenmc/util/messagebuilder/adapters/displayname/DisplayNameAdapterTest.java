@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.displayname;
 
-import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
+import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 
 import org.bukkit.World;
@@ -42,7 +42,8 @@ import static org.mockito.Mockito.when;
 public class DisplayNameAdapterTest
 {
 	@Mock WorldNameResolver worldNameResolverMock;
-	@Mock AdapterContext adapterContextMock;
+	@Mock
+	AdapterContextContainer adapterContextContainerMock;
 
 	@Mock Player playerMock;
 	@Mock Entity entityMock;
@@ -59,7 +60,7 @@ public class DisplayNameAdapterTest
 			when(playerMock.getDisplayName()).thenReturn("&aPlayer One Display Name");
 
 			// Act
-			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextMock).adapt(playerMock);
+			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(playerMock);
 			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
 			// Assert
@@ -72,7 +73,7 @@ public class DisplayNameAdapterTest
 		public void testGetDisplayName_withNullPlayer()
 		{
 			// Arrange & Act
-			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextMock).adapt(null);
+			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(null);
 			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
 			// Assert
@@ -84,7 +85,7 @@ public class DisplayNameAdapterTest
 		public void testConstructor_withNullPlayer()
 		{
 			// Arrange & Act
-			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextMock).adapt(null);
+			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(null);
 			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
 			// assert
@@ -103,7 +104,7 @@ public class DisplayNameAdapterTest
 			when(entityMock.getCustomName()).thenReturn("Custom Entity Name");
 
 			// Act
-			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextMock).adapt(entityMock);
+			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(entityMock);
 			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
 			// Assert
@@ -120,9 +121,9 @@ public class DisplayNameAdapterTest
 		void testGetDisplayName_withValidWorld()
 		{
 			when(worldNameResolverMock.resolveWorldName(worldMock)).thenReturn("Resolved World Name");
-			when(adapterContextMock.worldNameResolver()).thenReturn(worldNameResolverMock);
+			when(adapterContextContainerMock.worldNameResolver()).thenReturn(worldNameResolverMock);
 
-			DisplayNameAdapter adapter = new DisplayNameAdapter(adapterContextMock);
+			DisplayNameAdapter adapter = new DisplayNameAdapter(adapterContextContainerMock);
 			Optional<DisplayNameable> adapted = adapter.adapt(worldMock);
 
 			assertTrue(adapted.isPresent());

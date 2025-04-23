@@ -24,12 +24,12 @@ import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import java.util.List;
 
 
-public class ContextResolver implements Resolver
+public class FieldResolver implements Resolver
 {
 	private final List<Resolver> resolvers;
 
 
-	public ContextResolver(List<Resolver> resolvers)
+	public FieldResolver(List<Resolver> resolvers)
 	{
 		this.resolvers = resolvers;
 	}
