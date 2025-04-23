@@ -17,91 +17,145 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable;
+import com.winterhavenmc.util.messagebuilder.adapters.location.Locatable;
+import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
+import com.winterhavenmc.util.messagebuilder.adapters.name.Nameable;
+import com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable;
+import com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable;
+import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
-import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
+
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)
 class AdapterRegistryTest
 {
-	@Mock Adapter adapterMock;
-	@Mock WorldNameResolver worldNameResolverMock;
-	private AdapterRegistry registry;
 
-	interface MockType { }
+	@Mock AdapterContext adapterContextMock;
+	private AdapterRegistry registry;
 
 
 	@BeforeEach
-	public void setup() {
-		AdapterContext adapterContext = new AdapterContext(worldNameResolverMock);
-		registry = new AdapterRegistry(adapterContext);
-	}
-
-
-
-	@Test
-	public void testRegisterAndRetrieveAdapter()
+	void setUp()
 	{
-		registry.register(MockType.class, () -> adapterMock);
-
-		Adapter retrieved = registry.getAdapter(MockType.class);
-		assertNotNull(retrieved);
-		assertSame(adapterMock, retrieved);
+		registry = new AdapterRegistry(adapterContextMock);
 	}
 
-
 	@Test
-	public void testNoAdaptersForNull()
+	void testBuiltInAdaptersAreRegistered()
 	{
-		assertEquals(0, registry.getMatchingAdapters(null).count());
+		assertInstanceOf(NameAdapter.class, registry.getAdapter(Nameable.class));
+		assertInstanceOf(DisplayNameAdapter.class, registry.getAdapter(DisplayNameable.class));
+		assertNotNull(registry.getAdapter(Locatable.class));
+		assertNotNull(registry.getAdapter(Quantifiable.class));
+		assertInstanceOf(UniqueIdAdapter.class, registry.getAdapter(Identifiable.class));
 	}
 
-
 	@Test
-	public void testAdapterIsCached() {
-		registry.register(MockType.class, () -> adapterMock);
-
-		Adapter first = registry.getAdapter(MockType.class);
-		Adapter second = registry.getAdapter(MockType.class);
-		assertSame(first, second);
-	}
-
-
-	@Test
-	public void testMatchingAdapterByAssignableType()
+	void testGetAdapterReturnsSameInstance()
 	{
-		registry.register(MockType.class, () -> adapterMock);
-
-		class Impl implements MockType { }
-		Impl mockObj = new Impl();
-
-		List<Adapter> matching = registry.getMatchingAdapters((MockType) mockObj).toList();
-
-		assertEquals(1, matching.size());
-		assertSame(adapterMock, matching.getFirst());
+		Adapter first = registry.getAdapter(Nameable.class);
+		Adapter second = registry.getAdapter(Nameable.class);
+		assertSame(first, second, "Adapters should be cached and return the same instance");
 	}
 
+	@Test
+	void testGetAdapterReturnsNullForUnknownType()
+	{
+		class UnknownType
+		{
+		}
+		assertNull(registry.getAdapter(UnknownType.class));
+	}
 
 	@Test
-	public void testGetAdapterReturnsNullWhenNotRegistered() {
-		class UnregisteredType {}
+	void testRegisterAndGetCustomAdapter()
+	{
+		class CustomType implements Nameable
+		{
+			@Override
+			public String getName()
+			{
+				return "custom test type";
+			}
+		}
+		Adapter customAdapter = mock(Adapter.class);
+		registry.register(CustomType.class, () -> customAdapter);
 
-		Adapter adapter = registry.getAdapter(UnregisteredType.class);
+		Adapter retrieved = registry.getAdapter(CustomType.class);
+		assertSame(customAdapter, retrieved);
+	}
 
-		assertNull(adapter, "Adapter for unregistered type should return null");
+	@Test
+	void testGetMatchingAdaptersReturnsCorrectAdapters()
+	{
+		class SampleEntity implements Nameable, DisplayNameable
+		{
 
-		// Optional: call again to verify it's cached (no recompute, no exception)
-		Adapter cached = registry.getAdapter(UnregisteredType.class);
+			@Override
+			public String getDisplayName()
+			{
+				return "test display name";
+			}
 
-		assertNull(cached, "Cached result should also be null");
+			@Override
+			public String getName()
+			{
+				return "test name";
+			}
+		}
+
+		SampleEntity entity = new SampleEntity();
+		assertEquals(2, registry.getMatchingAdapters(entity).count(), "Should return 2 matching adapters");
+	}
+
+	@Test
+	void testGetMatchingAdaptersReturnsEmptyStreamForNull()
+	{
+		assertTrue(registry.getMatchingAdapters(null).findAny().isEmpty());
+	}
+
+	@Test
+	void testRegisterThrowsOnNullTypeParameter()
+	{
+		// Act
+		ValidationException exception = assertThrows(ValidationException.class,
+				() -> registry.register(null, () -> mock(Adapter.class)));
+
+		// Assert
+		assertEquals("The parameter 'type' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testRegisterThrowsOnNullParameter()
+	{
+		// Act
+		ValidationException exception = assertThrows(ValidationException.class,
+				() -> registry.register(Nameable.class, null));
+
+		// Assert
+		assertEquals("The parameter 'adapter' cannot be null.", exception.getMessage());
+	}
+
+	@Test
+	void testGetAdapterThrowsOnNullParameter()
+	{
+		// Act
+		ValidationException exception = assertThrows(ValidationException.class,
+				() -> registry.getAdapter(null));
+
+		// Assert
+		assertEquals("The parameter 'type' cannot be null.", exception.getMessage());
 	}
 }
