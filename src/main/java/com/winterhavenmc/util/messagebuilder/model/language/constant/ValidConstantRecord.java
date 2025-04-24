@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant;
+package com.winterhavenmc.util.messagebuilder.model.language.constant;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 

@@ -19,8 +19,8 @@ package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.item.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.item.ValidItemRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.item.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.item.ValidItemRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.*;

@@ -18,8 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.Section;
+import com.winterhavenmc.util.messagebuilder.model.language.SectionRecord;
 
 
 public class QueryHandlerFactory

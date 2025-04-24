@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.item;
+package com.winterhavenmc.util.messagebuilder.model.language.item;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 

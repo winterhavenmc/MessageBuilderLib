@@ -18,16 +18,14 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;
-import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant.ConstantRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.constant.ConstantRecord;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

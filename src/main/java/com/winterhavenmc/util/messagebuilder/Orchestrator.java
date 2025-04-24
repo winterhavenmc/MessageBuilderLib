@@ -36,7 +36,7 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResource
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Section;
+import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ResolverContextContainer;

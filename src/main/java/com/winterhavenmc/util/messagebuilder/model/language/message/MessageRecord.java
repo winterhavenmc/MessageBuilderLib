@@ -16,10 +16,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message;
+package com.winterhavenmc.util.messagebuilder.model.language.message;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.SectionRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.SectionRecord;
 import org.bukkit.configuration.ConfigurationSection;
 
 

@@ -15,15 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.model.language.constant;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.constant.ConstantRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.item.ItemRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.MessageRecord;
 
 
-public sealed interface SectionRecord permits ConstantRecord, ItemRecord, MessageRecord
-{
-	RecordKey key();
-}
+public record InvalidConstantRecord(RecordKey key, String reason) implements ConstantRecord
+{ }

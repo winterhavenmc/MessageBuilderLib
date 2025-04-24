@@ -15,39 +15,39 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.model.language;
 
-import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.item.ItemRecord;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.*;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
- * Handles queries for message records from the current language file. The constructor takes the 'MESSAGES' configuration
+ * Handles queries for item records from the current language file. The constructor takes the ITEMS configuration
  * section as a parameter, and throws an exception if the provided configuration section is not the language file
- * message section.
+ * item section.
  */
-public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
+public class ItemSectionQueryHandler implements QueryHandler<ItemRecord>
 {
-	private final static Section section = Section.MESSAGES;
+	private final static Section section = Section.ITEMS;
 	private final YamlConfigurationSupplier configurationSupplier;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param configurationSupplier the configuration supplier that provides access to the configuration object for the language file.
+	 * @param configurationSupplier the supplier for the configuration object of the language file.
 	 */
-	public MessageSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier)
+	public ItemSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier)
 	{
 		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 
@@ -56,20 +56,20 @@ public class MessageSectionQueryHandler implements QueryHandler<MessageRecord>
 
 
 	/**
-	 * Retrieve a message record from the language file for the provided key
+	 * Retrieve an item record from the language file for the currently configured language. If a record cannot be
+	 * found for the keyPath, an empty Optional will be returned.
 	 *
-	 * @param messageKey the MessageId of the message record to be retrieved
-	 * @return the message record for the MessageId
+	 * @param key the keyPath for the item record in the language file
+	 * @return an {@code Optional} ValidItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	@Override
-	public MessageRecord getRecord(final RecordKey messageKey)
+	public ItemRecord getRecord(final RecordKey key)
 	{
-		ConfigurationSection messageEntry = configurationSupplier.getSection(section).getConfigurationSection(messageKey.toString());
+		ConfigurationSection itemEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
 
-		return (messageEntry == null)
-				? MessageRecord.empty(messageKey)
-				: MessageRecord.from(messageKey, messageEntry);
-
+		return (itemEntry == null)
+				? ItemRecord.empty(key)
+				: ItemRecord.from(key, itemEntry);
 	}
 
 }
