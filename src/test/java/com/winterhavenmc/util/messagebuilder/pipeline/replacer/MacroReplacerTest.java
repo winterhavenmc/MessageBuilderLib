@@ -33,9 +33,9 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.CompositeResolve
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.Resolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;

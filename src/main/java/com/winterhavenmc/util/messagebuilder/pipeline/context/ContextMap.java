@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;

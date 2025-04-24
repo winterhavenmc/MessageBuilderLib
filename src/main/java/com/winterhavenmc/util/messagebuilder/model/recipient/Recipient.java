@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.messagebuilder.model.recipient;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;

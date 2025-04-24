@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
-import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
 
 

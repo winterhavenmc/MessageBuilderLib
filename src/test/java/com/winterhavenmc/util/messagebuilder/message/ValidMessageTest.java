@@ -19,9 +19,9 @@ package com.winterhavenmc.util.messagebuilder.message;
 
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.BoundedDuration;
-import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
-import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;

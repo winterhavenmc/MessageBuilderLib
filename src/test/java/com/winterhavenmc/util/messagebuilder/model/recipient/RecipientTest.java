@@ -15,8 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.messagebuilder.model.recipient;
 
+import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
