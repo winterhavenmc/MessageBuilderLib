@@ -35,9 +35,9 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public enum Section
 {
-	CONSTANTS(ConstantSectionQueryHandler::new),
-	ITEMS(ItemSectionQueryHandler::new),
-	MESSAGES(MessageSectionQueryHandler::new),
+	CONSTANTS(ConstantQueryHandler::new),
+	ITEMS(ItemQueryHandler::new),
+	MESSAGES(MessageQueryHandler::new),
 	;
 
 	private static final EnumMap<Section, QueryHandler<?>> HANDLER_MAP = new EnumMap<>(Section.class);

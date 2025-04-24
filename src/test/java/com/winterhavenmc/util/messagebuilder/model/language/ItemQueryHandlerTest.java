@@ -32,10 +32,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ItemSectionQueryHandlerTest
+class ItemQueryHandlerTest
 {
 	YamlConfigurationSupplier configurationSupplier;
-	ItemSectionQueryHandler queryHandler;
+	ItemQueryHandler queryHandler;
 	Configuration configuration;
 
 
@@ -44,7 +44,7 @@ class ItemSectionQueryHandlerTest
 	{
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
-		queryHandler = new ItemSectionQueryHandler(configurationSupplier);
+		queryHandler = new ItemQueryHandler(configurationSupplier);
 	}
 
 
@@ -53,7 +53,7 @@ class ItemSectionQueryHandlerTest
 	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new ItemSectionQueryHandler(null));
+				() -> new ItemQueryHandler(null));
 
 		// Assert
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());

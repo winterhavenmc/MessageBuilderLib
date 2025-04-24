@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class MessageSectionQueryHandlerTest
+class MessageQueryHandlerTest
 {
 	ConfigurationSection section;
 	YamlConfigurationSupplier configurationSupplier;
@@ -50,7 +50,7 @@ class MessageSectionQueryHandlerTest
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
 		section = configuration.getConfigurationSection(Section.MESSAGES.name());
-		queryHandler = new MessageSectionQueryHandler(configurationSupplier);
+		queryHandler = new MessageQueryHandler(configurationSupplier);
 	}
 
 
@@ -59,7 +59,7 @@ class MessageSectionQueryHandlerTest
 	{
 		// Arrange & Act
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() -> new MessageSectionQueryHandler(null));
+				() -> new MessageQueryHandler(null));
 
 		// Assert
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
@@ -76,7 +76,7 @@ class MessageSectionQueryHandlerTest
 
 		// Act
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-				() ->  new MessageSectionQueryHandler(supplier));
+				() ->  new MessageQueryHandler(supplier));
 
 		// Assert
 		assertEquals("The configuration section returned by the configuration supplier was an invalid 'MESSAGES' section.", exception.getMessage());

@@ -36,7 +36,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 /**
  * Query handler for the 'CONSTANTS' section of the language file.
  */
-public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
+public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 {
 	private final static Section section = Section.CONSTANTS;
 	private final YamlConfigurationSupplier configurationSupplier;
@@ -48,7 +48,7 @@ public class ConstantSectionQueryHandler implements QueryHandler<ConstantRecord>
 	 * @param configurationSupplier the provider of the current language configuration object
 	 * @throws ValidationException if the {@code yamlConfigurationSupplier} parameter is null or invalid
 	 */
-	public ConstantSectionQueryHandler(final YamlConfigurationSupplier configurationSupplier)
+	public ConstantQueryHandler(final YamlConfigurationSupplier configurationSupplier)
 	{
 		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
 

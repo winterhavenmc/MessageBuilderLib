@@ -37,11 +37,11 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ConstantSectionQueryHandlerTest
+class ConstantQueryHandlerTest
 {
 	Configuration configuration;
 	YamlConfigurationSupplier configurationSupplier;
-	ConstantSectionQueryHandler queryHandler;
+	ConstantQueryHandler queryHandler;
 
 
 	@BeforeEach
@@ -49,7 +49,7 @@ class ConstantSectionQueryHandlerTest
 	{
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
-		queryHandler = new ConstantSectionQueryHandler(configurationSupplier);
+		queryHandler = new ConstantQueryHandler(configurationSupplier);
 	}
 
 
@@ -58,7 +58,7 @@ class ConstantSectionQueryHandlerTest
 	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> new ConstantSectionQueryHandler(null));
+				() -> new ConstantQueryHandler(null));
 
 		// Assert
 		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
