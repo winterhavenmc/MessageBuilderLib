@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.uuid;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid.Identifiable;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;

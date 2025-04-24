@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.name;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters.name;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.name.NameAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.name.Nameable;

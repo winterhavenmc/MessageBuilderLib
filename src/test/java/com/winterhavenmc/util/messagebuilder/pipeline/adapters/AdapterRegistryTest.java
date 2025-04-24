@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterRegistry;

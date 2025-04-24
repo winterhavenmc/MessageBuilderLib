@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.quantity;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.Quantifiable;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;

@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.location;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters.location;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.location.Locatable;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.location.LocationAdapter;
