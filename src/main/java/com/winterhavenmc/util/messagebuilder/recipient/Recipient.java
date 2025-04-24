@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.recipient;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -31,7 +30,6 @@ public sealed interface Recipient permits ValidRecipient, InvalidRecipient
 		{
 			case Player ignored -> new ValidRecipient(sender);
 			case ConsoleCommandSender ignored -> new ValidRecipient(sender);
-			case OfflinePlayer ignored -> new InvalidRecipient(sender, InvalidReason.OFFLINE_PLAYER);
 			case null -> new InvalidRecipient(sender, InvalidReason.NULL);
 			default -> new InvalidRecipient(sender, InvalidReason.OTHER);
 		};
