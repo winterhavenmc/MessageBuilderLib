@@ -57,11 +57,7 @@ public class LocaleSupplier implements Supplier<Locale>
 	@Override
 	public Locale get()
 	{
-		Locale locale = languageTagSupplier.get().getLocale();
-
-		return (locale == null)
-				? Locale.getDefault()
-				: locale;
+		return languageTagSupplier.get().getLocale();
 	}
 
 }
