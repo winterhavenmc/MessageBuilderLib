@@ -15,10 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
+package com.winterhavenmc.util.messagebuilder.pipeline.resolvers;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 
 
-public record ResolverContextContainer(DurationFormatter durationFormatter, LocaleNumberFormatter localeNumberFormatter) { }
+@FunctionalInterface
+public interface Resolver
+{
+	ResultMap resolve(MacroKey key, ContextMap contextMap);
+}

@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
+package com.winterhavenmc.util.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;

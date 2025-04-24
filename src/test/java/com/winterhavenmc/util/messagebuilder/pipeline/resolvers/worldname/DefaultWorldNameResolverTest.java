@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.worldname;
+package com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname;
 
 import org.bukkit.World;
 import org.junit.jupiter.api.Test;

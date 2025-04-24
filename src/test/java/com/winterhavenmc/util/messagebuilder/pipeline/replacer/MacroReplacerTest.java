@@ -28,10 +28,10 @@ import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.AtomicResolver;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.CompositeResolver;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.FieldResolver;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.Resolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.AtomicResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.CompositeResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FieldResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.Resolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
@@ -42,10 +42,10 @@ import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecor
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ResolverContextContainer;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
-import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.adapters;
 
-import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 
 
 public record AdapterContextContainer(WorldNameResolver worldNameResolver) { }

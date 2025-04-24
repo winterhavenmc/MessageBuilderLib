@@ -15,15 +15,16 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
+package com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname;
 
-import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
+import org.bukkit.World;
 
 
-@FunctionalInterface
-public interface Resolver
+public class DefaultWorldNameResolver implements WorldNameResolver
 {
-	ResultMap resolve(MacroKey key, ContextMap contextMap);
+	@Override
+	public String resolveWorldName(final World world)
+	{
+		return world.getName();
+	}
 }

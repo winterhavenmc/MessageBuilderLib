@@ -15,16 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.worldname;
+package com.winterhavenmc.util.messagebuilder.pipeline.resolvers;
 
-import org.bukkit.World;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.DurationFormatter;
 
 
-public class DefaultWorldNameResolver implements WorldNameResolver
-{
-	@Override
-	public String resolveWorldName(final World world)
-	{
-		return world.getName();
-	}
-}
+public record ResolverContextContainer(DurationFormatter durationFormatter, LocaleNumberFormatter localeNumberFormatter) { }
