@@ -17,20 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.recipient;
 
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-
-
-public sealed interface Recipient permits ValidRecipient, InvalidRecipient
+public enum Reason
 {
-	static Recipient from(final CommandSender sender)
-	{
-		return switch (sender)
-		{
-			case OfflinePlayer ignored -> new InvalidRecipient(sender, Reason.OFFLINE_PLAYER);
-			case null -> new InvalidRecipient(sender, Reason.NULL);
-			default -> new ValidRecipient(sender);
-		};
-	}
-
+	OFFLINE_PLAYER,
+	NULL,
 }
