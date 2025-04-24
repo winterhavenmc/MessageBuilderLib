@@ -15,24 +15,23 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.messagebuilder.model.locale;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
-
-
-public sealed interface Recipient permits ValidRecipient, InvalidRecipient
+enum LocaleField
 {
-	static Recipient from(final CommandSender sender)
+	LOCALE("locale"),
+	LANGUAGE("language");
+
+	private final String string;
+
+	LocaleField(String string)
 	{
-		return switch (sender)
-		{
-			case Player ignored -> new ValidRecipient(sender);
-			case ConsoleCommandSender ignored -> new ValidRecipient(sender);
-			case null -> new InvalidRecipient(sender, InvalidReason.NULL);
-			default -> new InvalidRecipient(sender, InvalidReason.OTHER);
-		};
+		this.string = string;
 	}
 
+	@Override
+	public String toString()
+	{
+		return this.string;
+	}
 }

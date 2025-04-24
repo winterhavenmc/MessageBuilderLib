@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.model.locale.LanguageTag;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;

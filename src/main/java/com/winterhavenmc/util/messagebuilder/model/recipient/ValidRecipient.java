@@ -15,11 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.recipient;
+package com.winterhavenmc.util.messagebuilder.model.recipient;
 
-public enum InvalidReason
-{
-	OFFLINE_PLAYER,
-	NULL,
-	OTHER
-}
+import org.bukkit.command.CommandSender;
+
+
+public record ValidRecipient(CommandSender sender) implements Recipient { }

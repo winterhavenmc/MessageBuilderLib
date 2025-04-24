@@ -15,23 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.model.recipient;
 
-enum LocaleField
-{
-	LOCALE("locale"),
-	LANGUAGE("language");
+import org.bukkit.command.CommandSender;
 
-	private final String string;
 
-	LocaleField(String string)
-	{
-		this.string = string;
-	}
-
-	@Override
-	public String toString()
-	{
-		return this.string;
-	}
-}
+public record InvalidRecipient(CommandSender sender, InvalidReason invalidReason) implements Recipient { }

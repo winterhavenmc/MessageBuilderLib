@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.model.locale;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;

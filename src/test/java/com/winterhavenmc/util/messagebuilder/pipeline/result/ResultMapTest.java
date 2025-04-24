@@ -156,4 +156,17 @@ class ResultMapTest
 		assertFalse(resultMap.isEmpty());
 	}
 
+	@Test
+	void getValueOrKey()
+	{
+		// Arrange
+		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
+
+		// Act
+		String result = resultMap.getValueOrKey(macroKey);
+
+		// Assert
+		assertEquals("KEY", result);
+	}
+
 }

@@ -15,10 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.message;
+package com.winterhavenmc.util.messagebuilder.model.message;
 
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 
+import com.winterhavenmc.util.messagebuilder.model.message.InvalidMessage;
+import com.winterhavenmc.util.messagebuilder.model.message.Message;
 import org.bukkit.inventory.ItemStack;
 
 import org.junit.jupiter.api.BeforeEach;
