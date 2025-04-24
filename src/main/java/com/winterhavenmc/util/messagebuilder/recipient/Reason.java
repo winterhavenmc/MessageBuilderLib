@@ -21,4 +21,5 @@ public enum Reason
 {
 	OFFLINE_PLAYER,
 	NULL,
+	OTHER
 }
