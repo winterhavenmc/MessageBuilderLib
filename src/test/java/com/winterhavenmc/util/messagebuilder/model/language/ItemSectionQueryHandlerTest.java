@@ -15,11 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.model.language;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.model.language.ItemSectionQueryHandler;
-import com.winterhavenmc.util.messagebuilder.model.language.SectionRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.model.language.item.InvalidItemRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.item.ValidItemRecord;

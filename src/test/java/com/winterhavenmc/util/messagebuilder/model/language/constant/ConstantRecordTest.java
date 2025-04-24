@@ -15,12 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml.section;
+package com.winterhavenmc.util.messagebuilder.model.language.constant;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.model.language.constant.ConstantRecord;
-import com.winterhavenmc.util.messagebuilder.model.language.constant.InvalidConstantRecord;
-import com.winterhavenmc.util.messagebuilder.model.language.constant.ValidConstantRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.Test;
