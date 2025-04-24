@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
-import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
@@ -46,7 +46,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ResolverContextCo
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
-import com.winterhavenmc.util.messagebuilder.formatters.duration.Time4jDurationFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;

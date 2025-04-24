@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
-import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.extractor.FieldExtractor;
@@ -40,9 +40,9 @@ import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.Sec
 import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ResolverContextContainer;
-import com.winterhavenmc.util.messagebuilder.formatters.duration.DurationFormatter;
-import com.winterhavenmc.util.messagebuilder.formatters.duration.LocalizedDurationFormatter;
-import com.winterhavenmc.util.messagebuilder.formatters.duration.Time4jDurationFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 
 import org.bukkit.plugin.Plugin;

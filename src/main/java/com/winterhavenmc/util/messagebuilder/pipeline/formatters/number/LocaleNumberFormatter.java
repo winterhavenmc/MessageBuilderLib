@@ -15,10 +15,27 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.formatters.number;
+package com.winterhavenmc.util.messagebuilder.pipeline.formatters.number;
 
-@FunctionalInterface
-public interface NumberFormatter
+import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import java.text.NumberFormat;
+
+
+public class LocaleNumberFormatter implements NumberFormatter
 {
-	String getFormatted(Number number);
+	private final LocaleSupplier localeSupplier;
+
+
+	public LocaleNumberFormatter(final LocaleSupplier localeSupplier)
+	{
+		this.localeSupplier = localeSupplier;
+	}
+
+
+	@Override
+	public String getFormatted(final Number number)
+	{
+		return NumberFormat.getInstance(localeSupplier.get()).format(number);
+	}
+
 }

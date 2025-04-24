@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.displayname;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.displayname.DisplayNameable;
 import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 

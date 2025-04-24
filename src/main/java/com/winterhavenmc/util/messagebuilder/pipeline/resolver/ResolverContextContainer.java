@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 
-import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.util.messagebuilder.formatters.duration.DurationFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.DurationFormatter;
 
 
 public record ResolverContextContainer(DurationFormatter durationFormatter, LocaleNumberFormatter localeNumberFormatter) { }

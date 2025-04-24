@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.quantity;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.Quantifiable;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

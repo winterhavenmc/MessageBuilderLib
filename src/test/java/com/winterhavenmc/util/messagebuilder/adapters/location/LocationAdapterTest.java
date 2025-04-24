@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.adapters.location;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.location.Locatable;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.location.LocationAdapter;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;

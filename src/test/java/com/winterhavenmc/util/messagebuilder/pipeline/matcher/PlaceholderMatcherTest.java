@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.matcher;
 
-import com.winterhavenmc.util.messagebuilder.adapters.AdapterRegistry;
-import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterRegistry;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.util.messagebuilder.message.Message;
 import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
@@ -39,7 +39,7 @@ import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ResolverContextContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
-import com.winterhavenmc.util.messagebuilder.formatters.duration.Time4jDurationFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

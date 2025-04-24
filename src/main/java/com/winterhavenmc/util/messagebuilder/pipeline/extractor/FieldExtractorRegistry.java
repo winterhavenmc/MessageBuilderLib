@@ -1,6 +1,6 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
-import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 
 import java.util.Collections;

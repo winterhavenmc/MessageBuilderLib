@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.formatters.duration;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.DurationType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

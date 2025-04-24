@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.formatters.duration;
 
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

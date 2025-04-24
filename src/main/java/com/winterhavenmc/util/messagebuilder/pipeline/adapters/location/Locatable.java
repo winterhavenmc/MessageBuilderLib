@@ -15,16 +15,16 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters.location;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.adapters.Adapter;
-import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
+import org.bukkit.Location;
 
-import java.util.Map;
-
-
+/**
+ * An interface that describes objects that have a {@code getLocation()} method
+ * that returns a {@link Location}.
+ */
 @FunctionalInterface
-public interface Extractor
+public interface Locatable
 {
-	<T> Map<MacroKey, Object> extract(Adapter adapter, T adapted, MacroKey baseKey);
+	Location getLocation();
 }

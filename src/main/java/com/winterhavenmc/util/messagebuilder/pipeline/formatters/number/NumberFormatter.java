@@ -15,13 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.formatters.duration;
-
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
+package com.winterhavenmc.util.messagebuilder.pipeline.formatters.number;
 
 @FunctionalInterface
-public interface DurationFormatter
+public interface NumberFormatter
 {
-	String format(final Duration duration, final ChronoUnit lowerBound);
+	String getFormatted(Number number);
 }

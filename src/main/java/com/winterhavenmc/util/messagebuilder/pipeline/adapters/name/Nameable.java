@@ -15,16 +15,15 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.location;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters.name;
 
-import org.bukkit.Location;
 
 /**
- * An interface that describes objects that have a {@code getLocation()} method
- * that returns a {@link Location}.
+ * An interface that describes objects that have a {@code getName()}
+ * method that returns a valid name as a {@code String}.
  */
 @FunctionalInterface
-public interface Locatable
+public interface Nameable
 {
-	Location getLocation();
+	String getName();
 }

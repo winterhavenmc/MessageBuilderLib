@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.quantity;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity;
 
-import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.Adapter;
 
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;

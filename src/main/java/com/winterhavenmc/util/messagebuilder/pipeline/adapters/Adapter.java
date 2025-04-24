@@ -15,15 +15,21 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.quantity;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters;
+
+import java.util.Optional;
 
 
-/**
- * An interface that describes objects that have a {@code getQuantity()}
- * method that returns a quantity as an {@code int}.
- */
-@FunctionalInterface
-public interface Quantifiable
+public interface Adapter
 {
-	int getQuantity();
+	Optional<?> adapt(Object obj);
+
+	enum BuiltIn
+	{
+		NAME,
+		DISPLAY_NAME,
+		UUID,
+		LOCATION,
+		QUANTITY,
+	}
 }

@@ -20,9 +20,9 @@ package com.winterhavenmc.util.messagebuilder.pipeline.resolver;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.formatters.duration.DurationFormatter;
-import com.winterhavenmc.util.messagebuilder.formatters.duration.BoundedDuration;
-import com.winterhavenmc.util.messagebuilder.formatters.number.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.BoundedDuration;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;

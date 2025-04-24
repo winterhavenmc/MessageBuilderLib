@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.formatters.duration;
+package com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration;
 
 import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;

@@ -15,10 +15,18 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.formatters.duration;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 
-public record BoundedDuration(Duration duration, ChronoUnit precision) { }
+/**
+ * An interface that describes objects
+ * that have a {@code getUniqueId()}
+ * method that returns a valid UUID.
+ */
+@FunctionalInterface
+public interface Identifiable
+{
+	UUID getUniqueId();
+}

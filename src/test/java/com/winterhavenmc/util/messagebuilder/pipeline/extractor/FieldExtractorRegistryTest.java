@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
-import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.name.Nameable;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.Adapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.name.NameAdapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.name.Nameable;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 
 import org.junit.jupiter.api.BeforeEach;

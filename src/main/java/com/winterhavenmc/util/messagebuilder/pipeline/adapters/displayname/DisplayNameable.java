@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.displayname;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters.displayname;
 
 
 /**

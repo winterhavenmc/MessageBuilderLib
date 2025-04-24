@@ -15,15 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.adapters.name;
-
-
 /**
- * An interface that describes objects that have a {@code getName()}
- * method that returns a valid name as a {@code String}.
- */
-@FunctionalInterface
-public interface Nameable
-{
-	String getName();
-}
+ * Provides the core processing components of the message pipeline.
+ * <p>
+ * This package contains all functional units responsible for message transformation,
+ * formatting, resolution, delivery, and support logic. These components work together
+ * as part of a loosely coupled processing chain that forms the message pipeline.
+ **/
+ package com.winterhavenmc.util.messagebuilder.pipeline;
