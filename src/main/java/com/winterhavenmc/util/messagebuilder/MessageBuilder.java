@@ -27,7 +27,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolver.ResolverContextContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.time.Tick;

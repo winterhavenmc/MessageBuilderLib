@@ -27,7 +27,6 @@ import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.Quantifi
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid.Identifiable;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.adapters;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.adapters.Adapter;
-import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.displayname.DisplayNameAdapter;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.displayname.DisplayNameable;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.location.Locatable;
@@ -27,7 +25,6 @@ import com.winterhavenmc.util.messagebuilder.pipeline.adapters.name.Nameable;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.Quantifiable;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid.Identifiable;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.util.messagebuilder.util.AdapterContextContainer;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.junit.jupiter.api.BeforeEach;

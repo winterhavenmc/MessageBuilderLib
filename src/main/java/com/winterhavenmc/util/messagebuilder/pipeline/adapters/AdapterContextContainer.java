@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.util;
+package com.winterhavenmc.util.messagebuilder.pipeline.adapters;
 
 import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 
