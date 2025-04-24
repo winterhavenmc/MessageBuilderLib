@@ -47,7 +47,7 @@ public record InvalidMessage(String reason) implements Message
 	}
 
 	@Override
-	public <K extends Enum<K>> Message setMacro(K macro, Duration duration, ChronoUnit precision)
+	public <K extends Enum<K>> Message setMacro(K macro, Duration duration, ChronoUnit lowerBound)
 	{
 		return this;
 	}

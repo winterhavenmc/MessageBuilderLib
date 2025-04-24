@@ -19,12 +19,12 @@ package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.util.messagebuilder.model.language.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.*;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.InvalidMessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.InvalidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -51,7 +51,7 @@ class MessageRetrieverTest
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		configurationSupplier = new YamlConfigurationSupplier(configuration);
-		queryHandler = new MessageSectionQueryHandler(configurationSupplier);
+		queryHandler = new MessageQueryHandler(configurationSupplier);
 		retriever = new MessageRetriever(queryHandler);
 
 	}

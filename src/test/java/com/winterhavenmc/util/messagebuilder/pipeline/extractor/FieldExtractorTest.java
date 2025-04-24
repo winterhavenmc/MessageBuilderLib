@@ -17,14 +17,20 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.extractor;
 
-import com.winterhavenmc.util.messagebuilder.adapters.Adapter;
-import com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.location.LocationAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.name.NameAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.quantity.QuantityAdapter;
-import com.winterhavenmc.util.messagebuilder.adapters.uuid.UniqueIdAdapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.Adapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.location.Locatable;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.location.LocationAdapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.name.NameAdapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.name.Nameable;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.Quantifiable;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid.Identifiable;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.displayname.DisplayNameable;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +54,7 @@ class FieldExtractorTest
 	@Mock UniqueIdAdapter uniqueIdAdapterMock;
 	@Mock LocationAdapter locationAdapterMock;
 	@Mock QuantityAdapter quantityAdapter;
+	@Mock World worldMock;
 
 	private FieldExtractor extractor;
 	private MacroKey baseKey;
@@ -64,7 +71,7 @@ class FieldExtractorTest
 	@Test
 	void testNameAdapter()
 	{
-		var nameable = mock(com.winterhavenmc.util.messagebuilder.adapters.name.Nameable.class);
+		var nameable = mock(Nameable.class);
 		when(nameable.getName()).thenReturn("TestName");
 
 		Map<MacroKey, Object> result = extractor.extract(nameAdapterMock, nameable, baseKey);
@@ -79,7 +86,7 @@ class FieldExtractorTest
 	@Test
 	void testDisplayNameAdapter()
 	{
-		var displayNameable = mock(com.winterhavenmc.util.messagebuilder.adapters.displayname.DisplayNameable.class);
+		var displayNameable = mock(DisplayNameable.class);
 		when(displayNameable.getDisplayName()).thenReturn("FancyName");
 
 		Map<MacroKey, Object> result = extractor.extract(displayNameAdapterMock, displayNameable, baseKey);
@@ -93,7 +100,7 @@ class FieldExtractorTest
 	@Test
 	void testUniqueIdAdapter()
 	{
-		var identifiable = mock(com.winterhavenmc.util.messagebuilder.adapters.uuid.Identifiable.class);
+		var identifiable = mock(Identifiable.class);
 		UUID uuid = UUID.randomUUID();
 		when(identifiable.getUniqueId()).thenReturn(uuid);
 
@@ -108,22 +115,35 @@ class FieldExtractorTest
 	@Test
 	void testLocationAdapter()
 	{
-		var locatable = mock(com.winterhavenmc.util.messagebuilder.adapters.location.Locatable.class);
-		Location location = mock(Location.class);
+		var locatable = mock(Locatable.class);
+
+		MacroKey locationKey = baseKey;
+
+		if (!locationKey.toString().endsWith("LOCATION"))
+		{
+			locationKey = locationKey.append("LOCATION").orElseThrow();
+		}
+
+		when(worldMock.getName()).thenReturn("test-world");
+		Location location = new Location(worldMock, 11, 12,13);
 		when(locatable.getLocation()).thenReturn(location);
 
 		Map<MacroKey, Object> result = extractor.extract(locationAdapterMock, locatable, baseKey);
 
-		assertEquals(2, result.size());
-		assertEquals(location, result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.LOCATION).orElseThrow()));
+		assertEquals(6, result.size());
+		assertEquals("test-world [11, 12, 13]", result.get(locationKey));
+		assertEquals(location.getWorld().getName(), result.get(locationKey.append("WORLD").orElseThrow()));
+		assertEquals(location.getBlockX(), result.get(locationKey.append("X").orElseThrow()));
+		assertEquals(location.getBlockY(), result.get(locationKey.append("Y").orElseThrow()));
+		assertEquals(location.getBlockZ(), result.get(locationKey.append("Z").orElseThrow()));
+		assertTrue(result.containsKey(locationKey));
 	}
 
 
 	@Test
 	void testQuantityAdapter()
 	{
-		var quantifiable = mock(com.winterhavenmc.util.messagebuilder.adapters.quantity.Quantifiable.class);
+		var quantifiable = mock(Quantifiable.class);
 		when(quantifiable.getQuantity()).thenReturn(42);
 
 		Map<MacroKey, Object> result = extractor.extract(quantityAdapter, quantifiable, baseKey);

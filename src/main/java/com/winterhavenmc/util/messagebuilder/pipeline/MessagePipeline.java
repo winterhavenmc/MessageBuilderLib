@@ -23,9 +23,9 @@ import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.FinalMessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 
 import java.util.List;
 import java.util.Optional;

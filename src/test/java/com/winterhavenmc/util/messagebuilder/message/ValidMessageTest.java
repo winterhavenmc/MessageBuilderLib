@@ -18,6 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.message;
 
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
@@ -25,8 +26,8 @@ import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.Material;
@@ -42,6 +43,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
@@ -212,6 +216,27 @@ class ValidMessageTest
 			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
 		}
 	}
+
+
+	@Test @DisplayName("test setMacro (duration) method with valid parameters")
+	void testSetMacro3()
+	{
+		// Arrange
+		Message newMessage = message.setMacro(Macro.DURATION, Duration.ofMinutes(5), ChronoUnit.MINUTES);
+		MacroKey macroKey = MacroKey.of(Macro.DURATION).orElseThrow();
+		ContextMap contextMap = newMessage.getContextMap();
+
+		// Act
+		BoundedDuration boundedDuration = (BoundedDuration) contextMap.get(macroKey).orElseThrow();
+
+		// Assert
+		assertInstanceOf(BoundedDuration.class, boundedDuration);
+		assertEquals(Duration.ofMinutes(5), boundedDuration.duration());
+		assertEquals(ChronoUnit.MINUTES, boundedDuration.precision());
+	}
+
+
+
 
 
 	@Test

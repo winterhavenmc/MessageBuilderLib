@@ -21,9 +21,9 @@ import com.winterhavenmc.util.messagebuilder.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.FinalMessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 

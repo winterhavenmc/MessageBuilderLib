@@ -26,6 +26,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.bukkit.Material.GOLDEN_PICKAXE;
 
@@ -52,6 +55,13 @@ class InvalidMessageTest
 	void testSetMacro2()
 	{
 		Message newMessage = invalidMessage.setMacro(2, Macro.TOOL, new ItemStack(GOLDEN_PICKAXE));
+		assertNotNull(newMessage);
+	}
+
+	@Test
+	void testSetMacro3()
+	{
+		Message newMessage = invalidMessage.setMacro(Macro.DURATION, Duration.ofMinutes(5), ChronoUnit.MINUTES);
 		assertNotNull(newMessage);
 	}
 

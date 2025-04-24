@@ -27,11 +27,9 @@ import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.util.AdapterContext;
-import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
-import com.winterhavenmc.util.messagebuilder.util.ResolverContext;
+import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 import com.winterhavenmc.util.time.Tick;
 
 import org.bukkit.command.CommandSender;
@@ -124,18 +122,14 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final LocaleSupplier localeSupplier = LocaleSupplier.create(plugin);
-
 		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
-		final WorldNameResolver worldNameResolver = WorldNameResolver.getResolver(plugin.getServer().getPluginManager());
-		final ResolverContext resolverContext = getResolverContext(localeSupplier, queryHandlerFactory);
-		final AdapterContext adapterContext = new AdapterContext(worldNameResolver);
-		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, resolverContext, adapterContext);
+		final ResolverContextContainer resolverContextContainer = getResolverContextContainer(plugin, queryHandlerFactory);
+		final AdapterContextContainer adapterContextContainer = getAdapterContext(plugin);
+		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, resolverContextContainer, adapterContextContainer);
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
 	}
-
 
 	/**
 	 * Initiate the message building sequence. Parameters of this method are passed into this library domain

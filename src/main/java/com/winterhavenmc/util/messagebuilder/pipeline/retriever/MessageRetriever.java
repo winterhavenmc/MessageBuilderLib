@@ -19,10 +19,10 @@ package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.FinalMessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.InvalidMessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.InvalidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 
 
 public final class MessageRetriever implements Retriever

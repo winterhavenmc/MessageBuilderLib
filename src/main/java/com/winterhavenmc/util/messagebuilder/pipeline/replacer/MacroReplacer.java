@@ -21,10 +21,10 @@ import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.util.messagebuilder.pipeline.matcher.PlaceholderMatcher;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolver.Resolver;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.Resolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.FinalMessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.section.message.ValidMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
+import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.util.Delimiter;
 
 import java.util.Objects;
@@ -44,6 +44,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class MacroReplacer implements Replacer
 {
+	private final static MacroKey MACRO_KEY = MacroKey.of("KEY").orElseThrow();
 	private final Resolver resolver;
 	private final Matcher matcher;
 
@@ -112,7 +113,7 @@ public class MacroReplacer implements Replacer
 		return new PlaceholderMatcher().match(messageString)
 				.reduce(messageString, (msg, placeholder) ->
 						msg.replace(Delimiter.OPEN + placeholder + Delimiter.CLOSE,
-								replacementMap.getValueOrKey(MacroKey.of(placeholder).orElse(MacroKey.of("KEY").orElseThrow()))));
+								replacementMap.getValueOrKey(MacroKey.of(placeholder).orElse(MACRO_KEY))));
 	}
 
 }
