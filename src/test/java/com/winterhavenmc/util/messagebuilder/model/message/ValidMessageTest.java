@@ -15,9 +15,11 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.message;
+package com.winterhavenmc.util.messagebuilder.model.message;
 
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.util.messagebuilder.model.message.Message;
+import com.winterhavenmc.util.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;

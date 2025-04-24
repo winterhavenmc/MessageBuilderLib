@@ -19,8 +19,8 @@ package com.winterhavenmc.util.messagebuilder.pipeline.matcher;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.util.messagebuilder.message.Message;
-import com.winterhavenmc.util.messagebuilder.message.ValidMessage;
+import com.winterhavenmc.util.messagebuilder.model.message.Message;
+import com.winterhavenmc.util.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
