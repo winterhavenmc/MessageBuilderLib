@@ -27,11 +27,6 @@ public final class ValidConstantRecord implements ConstantRecord
 	private final RecordKey key;
 	private final Object value;
 
-	public Object getValue()
-	{
-		return value;
-	}
-
 
 	@Override
 	public boolean equals(Object object)

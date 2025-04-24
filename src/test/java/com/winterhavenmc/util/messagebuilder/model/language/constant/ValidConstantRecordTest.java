@@ -72,4 +72,15 @@ class ValidConstantRecordTest
         assertNotEquals(record1, record2);
     }
 
+
+    @Test
+    void testGetValue()
+    {
+        RecordKey key = RecordKey.of("testKey").orElseThrow();
+        Object value = 42;
+        ValidConstantRecord record = ValidConstantRecord.create(key, value);
+
+        assertEquals(value, record.value());
+    }
+
 }
