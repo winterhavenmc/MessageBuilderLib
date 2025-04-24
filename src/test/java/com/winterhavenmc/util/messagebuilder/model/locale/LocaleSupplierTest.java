@@ -85,7 +85,7 @@ class LocaleSupplierTest
 
 
 	@Test
-	void testGet_null_locale()
+	void testGet_empty_config()
 	{
 		// Arrange
 		configuration = new YamlConfiguration();
@@ -97,7 +97,6 @@ class LocaleSupplierTest
 
 		// Assert
 		assertNotNull(locale);
-//		assertEquals(Locale.getDefault(), locale);
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getConfig();
