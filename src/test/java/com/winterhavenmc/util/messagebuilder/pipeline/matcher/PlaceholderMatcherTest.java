@@ -35,7 +35,7 @@ import com.winterhavenmc.util.messagebuilder.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;

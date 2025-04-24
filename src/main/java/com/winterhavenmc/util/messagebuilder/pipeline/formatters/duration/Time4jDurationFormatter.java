@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration;
 
-import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 import net.time4j.CalendarUnit;
 import net.time4j.ClockUnit;

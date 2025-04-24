@@ -41,7 +41,7 @@ import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessage
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 

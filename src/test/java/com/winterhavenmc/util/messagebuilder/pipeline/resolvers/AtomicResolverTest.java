@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNu
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.util.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
