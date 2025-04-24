@@ -20,4 +20,4 @@ package com.winterhavenmc.util.messagebuilder.recipient;
 import org.bukkit.command.CommandSender;
 
 
-public record InvalidRecipient(CommandSender sender, Reason reason) implements Recipient { }
+public record InvalidRecipient(CommandSender sender, InvalidReason invalidReason) implements Recipient { }

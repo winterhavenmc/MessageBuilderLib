@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.recipient;
 
-public enum Reason
+public enum InvalidReason
 {
 	OFFLINE_PLAYER,
 	NULL,

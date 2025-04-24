@@ -31,9 +31,9 @@ public sealed interface Recipient permits ValidRecipient, InvalidRecipient
 		{
 			case Player ignored -> new ValidRecipient(sender);
 			case ConsoleCommandSender ignored -> new ValidRecipient(sender);
-			case OfflinePlayer ignored -> new InvalidRecipient(sender, Reason.OFFLINE_PLAYER);
-			case null -> new InvalidRecipient(sender, Reason.NULL);
-			default -> new InvalidRecipient(sender, Reason.OTHER);
+			case OfflinePlayer ignored -> new InvalidRecipient(sender, InvalidReason.OFFLINE_PLAYER);
+			case null -> new InvalidRecipient(sender, InvalidReason.NULL);
+			default -> new InvalidRecipient(sender, InvalidReason.OTHER);
 		};
 	}
 
