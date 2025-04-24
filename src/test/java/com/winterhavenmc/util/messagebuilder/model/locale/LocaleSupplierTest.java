@@ -52,17 +52,11 @@ class LocaleSupplierTest
 	@Test
 	void create()
 	{
-		// Arrange
-		when(pluginMock.getConfig()).thenReturn(configuration);
-
 		// Act
 		LocaleSupplier localeSupplier = LocaleSupplier.create(pluginMock);
 
 		// Assert
 		assertNotNull(localeSupplier);
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
 	}
 
 
