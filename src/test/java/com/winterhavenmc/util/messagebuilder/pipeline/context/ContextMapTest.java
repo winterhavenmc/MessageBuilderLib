@@ -18,9 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
@@ -60,8 +58,8 @@ class ContextMapTest
 	@Mock ConsoleCommandSender consoleCommandSenderMock;
 	@Mock World worldMock;
 
-	ValidRecipient consoleRecipient;
-	ValidRecipient playerRecipient;
+	Recipient.Valid consoleRecipient;
+	Recipient.Valid playerRecipient;
 	RecordKey messageKey;
 	MacroKey macroKey;
 	ContextMap contextMap;
@@ -76,16 +74,16 @@ class ContextMapTest
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
 
-		consoleRecipient = switch (Recipient.from(consoleCommandSenderMock))
+		consoleRecipient = switch (Recipient.of(consoleCommandSenderMock))
 		{
-			case ValidRecipient vr -> vr;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			case Recipient.Valid vr -> vr;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		playerRecipient = switch (Recipient.from(playerMock))
+		playerRecipient = switch (Recipient.of(playerMock))
 		{
-			case ValidRecipient vr -> vr;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			case Recipient.Valid vr -> vr;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		contextMap = ContextMap.of(playerRecipient, messageKey).orElseThrow();
@@ -275,7 +273,7 @@ class ContextMapTest
 	@Test
 	void getRecipient() {
 		// Arrange & Act
-		ValidRecipient recipient = contextMap.getRecipient();
+		Recipient.Valid recipient = contextMap.getRecipient();
 
 		// Assert
 		assertNotNull(recipient);

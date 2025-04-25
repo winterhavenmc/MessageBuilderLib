@@ -22,17 +22,20 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 
-public sealed interface Recipient permits ValidRecipient, InvalidRecipient
+public sealed interface Recipient permits Recipient.Valid, Recipient.Invalid
 {
-	static Recipient from(final CommandSender sender)
+	enum InvalidReason { NULL, OTHER }
+	record Valid(CommandSender sender) implements Recipient { }
+	record Invalid(CommandSender sender, InvalidReason invalidReason) implements Recipient { }
+
+	static Recipient of(final CommandSender sender)
 	{
 		return switch (sender)
 		{
-			case Player ignored -> new ValidRecipient(sender);
-			case ConsoleCommandSender ignored -> new ValidRecipient(sender);
-			case null -> new InvalidRecipient(sender, InvalidReason.NULL);
-			default -> new InvalidRecipient(sender, InvalidReason.OTHER);
+			case Player ignored -> new Valid(sender);
+			case ConsoleCommandSender ignored -> new Valid(sender);
+			case null -> new Invalid(sender, InvalidReason.NULL);
+			default -> new Invalid(sender, InvalidReason.OTHER);
 		};
 	}
-
 }

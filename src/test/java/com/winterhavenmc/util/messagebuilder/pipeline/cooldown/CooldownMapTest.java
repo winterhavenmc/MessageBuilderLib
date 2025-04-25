@@ -17,9 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
-import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
@@ -52,7 +50,7 @@ class CooldownMapTest
 {
 	@Mock Player playerMock;
 
-	ValidRecipient recipient;
+	Recipient.Valid recipient;
 	CooldownKey cooldownKey;
 	CooldownMap cooldownMap;
 	ValidMessageRecord validMessageRecord;
@@ -103,9 +101,9 @@ class CooldownMapTest
 		{
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			recipient = switch (Recipient.from(playerMock)) {
-				case ValidRecipient validRecipient -> validRecipient;
-				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			recipient = switch (Recipient.of(playerMock)) {
+				case Recipient.Valid valid -> valid;
+				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
 			cooldownKey = RecordKey.of(MessageId.ENABLED_MESSAGE)
@@ -128,9 +126,9 @@ class CooldownMapTest
 		void testPutExpirationTime_already_cooling() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(new UUID(42, 17));
-			recipient = switch (Recipient.from(playerMock)) {
-				case ValidRecipient validRecipient -> validRecipient;
-				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			recipient = switch (Recipient.of(playerMock)) {
+				case Recipient.Valid valid -> valid;
+				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
 			// Act
@@ -155,9 +153,9 @@ class CooldownMapTest
 	void testIsCooling() {
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		recipient = switch (Recipient.from(playerMock)) {
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		recipient = switch (Recipient.of(playerMock)) {
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
@@ -192,9 +190,9 @@ class CooldownMapTest
 		void testRemoveExpired() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			recipient = switch (Recipient.from(playerMock)) {
-				case ValidRecipient validRecipient -> validRecipient;
-				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			recipient = switch (Recipient.of(playerMock)) {
+				case Recipient.Valid valid -> valid;
+				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
 			cooldownMap.putExpirationTime(recipient, finalMessageRecord);
@@ -211,9 +209,9 @@ class CooldownMapTest
 		void testRemoveExpired_expired() {
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			recipient = switch (Recipient.from(playerMock)) {
-				case ValidRecipient validRecipient -> validRecipient;
-				case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			recipient = switch (Recipient.of(playerMock)) {
+				case Recipient.Valid valid -> valid;
+				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
 			section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), -10);

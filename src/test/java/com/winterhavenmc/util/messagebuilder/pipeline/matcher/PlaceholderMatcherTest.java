@@ -30,9 +30,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.AtomicResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.CompositeResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.Resolver;
-import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
@@ -64,7 +62,7 @@ class PlaceholderMatcherTest
 	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
 
-	ValidRecipient recipient;
+	Recipient.Valid recipient;
 	MacroReplacer macroReplacer;
 	Message message;
 
@@ -89,9 +87,9 @@ class PlaceholderMatcherTest
 
 		PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
 
-		recipient = switch (Recipient.from(playerMock)) {
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		recipient = switch (Recipient.of(playerMock)) {
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);

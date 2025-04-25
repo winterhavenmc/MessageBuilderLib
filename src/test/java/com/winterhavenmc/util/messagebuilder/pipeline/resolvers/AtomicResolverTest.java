@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,8 +44,7 @@ class AtomicResolverTest
 {
 	@Mock LocaleSupplier localeSupplierMock;
 	@Mock ContextMap contextMapMock;
-	@Mock
-	Time4jDurationFormatter durationFormatter;
+	@Mock Time4jDurationFormatter durationFormatter;
 
 	private AtomicResolver resolver;
 

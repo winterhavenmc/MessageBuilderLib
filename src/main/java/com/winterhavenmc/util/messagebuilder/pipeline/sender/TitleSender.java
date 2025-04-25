@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
 
@@ -51,7 +51,7 @@ public final class TitleSender implements Sender
 	 * @param messageRecord a message record containing the fields necessary for sending a title to a player
 	 */
 	@Override
-	public void send(final ValidRecipient recipient, final FinalMessageRecord messageRecord)
+	public void send(final Recipient.Valid recipient, final FinalMessageRecord messageRecord)
 	{
 		if (recipient.sender() instanceof Player player)
 		{
