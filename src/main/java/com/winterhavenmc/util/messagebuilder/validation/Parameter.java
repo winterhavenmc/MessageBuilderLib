@@ -50,6 +50,7 @@ public enum Parameter
 	RESOURCE_NAME("resourceName"),
 	RESOURCE_TYPE("resourceType"),
 	SECTION("section"),
+	SECTION_SUPPLIER("sectionSupplier"),
 	TARGET_DIR_PATH("targetDirPath"),
 	UNKNOWN("«UNKNOWN»"),
 	VALUE("value"),

@@ -36,11 +36,11 @@ class ItemRecordTest
 		RecordKey itemKey = RecordKey.of("TEST_ITEM_1").orElseThrow();
 
 		ConfigurationSection itemEntrySection = new MemoryConfiguration();
-		itemEntrySection.set(ItemRecord.Field.NAME_SINGULAR.getKeyPath(), "Item Name");
-		itemEntrySection.set(ItemRecord.Field.NAME_PLURAL.getKeyPath(), "Item Names");
-		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME_SINGULAR.getKeyPath(), "Inventory Item Name");
-		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME_PLURAL.getKeyPath(), "Inventory Item Names");
-		itemEntrySection.set(ItemRecord.Field.LORE.getKeyPath(), List.of("Lore Line 1", "Lore Line 2"));
+		itemEntrySection.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Item Name");
+		itemEntrySection.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Item Names");
+		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME_SINGULAR.toKey(), "Inventory Item Name");
+		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME_PLURAL.toKey(), "Inventory Item Names");
+		itemEntrySection.set(ItemRecord.Field.LORE.toKey(), List.of("Lore Line 1", "Lore Line 2"));
 
 		// Act
 		ItemRecord testRecord = ItemRecord.from(itemKey, itemEntrySection);

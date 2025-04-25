@@ -44,11 +44,11 @@ public class ValidItemRecordTest
 
 		// create configuration section for item record entry
 		ConfigurationSection itemEntry = new MemoryConfiguration();
-		itemEntry.set(ItemRecord.Field.NAME_SINGULAR.getKeyPath(), "Test Item");
-		itemEntry.set(ItemRecord.Field.NAME_PLURAL.getKeyPath(), "Test Items");
-		itemEntry.set(ItemRecord.Field.INVENTORY_NAME_SINGULAR.getKeyPath(), "Inventory Test Item");
-		itemEntry.set(ItemRecord.Field.INVENTORY_NAME_PLURAL.getKeyPath(), "Inventory Test Items");
-		itemEntry.set(ItemRecord.Field.LORE.getKeyPath(), List.of("Lore line 1", "Lore line 2"));
+		itemEntry.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Test Item");
+		itemEntry.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Test Items");
+		itemEntry.set(ItemRecord.Field.INVENTORY_NAME_SINGULAR.toKey(), "Inventory Test Item");
+		itemEntry.set(ItemRecord.Field.INVENTORY_NAME_PLURAL.toKey(), "Inventory Test Items");
+		itemEntry.set(ItemRecord.Field.LORE.toKey(), List.of("Lore line 1", "Lore line 2"));
 
 		// create valid item record from record key, item configuration section
 		testRecord = ValidItemRecord.create(recordKey, itemEntry);
@@ -59,7 +59,7 @@ public class ValidItemRecordTest
 	@EnumSource
 	void testFields(ItemRecord.Field field)
 	{
-		String keyPath = field.getKeyPath();
+		String keyPath = field.toKey();
 		assertTrue(keyPath.matches("[A-Za-z][A-Za-z\\d_.]*"));
 	}
 

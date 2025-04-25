@@ -64,11 +64,11 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	public static ValidItemRecord create(RecordKey key, ConfigurationSection itemEntry)
 	{
 		return new ValidItemRecord(key,
-				itemEntry.getString(Field.NAME_SINGULAR.getKeyPath()),
-				itemEntry.getString(Field.NAME_PLURAL.getKeyPath()),
-				itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.getKeyPath()),
-				itemEntry.getString(Field.INVENTORY_NAME_PLURAL.getKeyPath()),
-				itemEntry.getStringList(Field.LORE.getKeyPath()));
+				itemEntry.getString(Field.NAME_SINGULAR.toKey()),
+				itemEntry.getString(Field.NAME_PLURAL.toKey()),
+				itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.toKey()),
+				itemEntry.getString(Field.INVENTORY_NAME_PLURAL.toKey()),
+				itemEntry.getStringList(Field.LORE.toKey()));
 	}
 
 

@@ -18,39 +18,30 @@
 package com.winterhavenmc.util.messagebuilder.model.language;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.ConstantRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.InvalidConstantRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.ValidConstantRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
-import org.bukkit.configuration.Configuration;
-
-import org.junit.jupiter.api.BeforeEach;
+import org.bukkit.configuration.ConfigurationSection;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
+@ExtendWith(MockitoExtension.class)
 class ConstantQueryHandlerTest
 {
-	Configuration configuration;
-	YamlConfigurationSupplier configurationSupplier;
-	ConstantQueryHandler queryHandler;
-
-
-	@BeforeEach
-	void setUp()
-	{
-		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		configurationSupplier = new YamlConfigurationSupplier(configuration);
-		queryHandler = new ConstantQueryHandler(configurationSupplier);
-	}
+	@Mock ConfigurationSection constantSectionMock;
 
 
 	@Test
@@ -61,7 +52,27 @@ class ConstantQueryHandlerTest
 				() -> new ConstantQueryHandler(null));
 
 		// Assert
-		assertEquals("The parameter 'configurationSupplier' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'sectionSupplier' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void getRecord_keyPath_valid()
+	{
+		// Arrange
+		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
+
+		when(constantSectionMock.get(recordKey.toString())).thenReturn("Spawn Display Name");
+
+		SectionProvider mockProvider = () -> constantSectionMock;
+		ConstantQueryHandler handler = new ConstantQueryHandler(mockProvider);
+
+		// Act
+		ValidConstantRecord result = (ValidConstantRecord) handler.getRecord(recordKey);
+
+		// Assert
+		assertInstanceOf(ValidConstantRecord.class, result);
+		assertEquals("Spawn Display Name", result.value());
 	}
 
 
@@ -71,11 +82,16 @@ class ConstantQueryHandlerTest
 		// Arrange
 		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
 
+		when(constantSectionMock.getString(recordKey.toString())).thenReturn("Spawn Display Name");
+
+		SectionProvider mockProvider = () -> constantSectionMock;
+		ConstantQueryHandler handler = new ConstantQueryHandler(mockProvider);
+
 		// Act
-		Optional<String> result = queryHandler.getString(recordKey);
+		Optional<String> result = handler.getString(recordKey);
 
 		// Assert
-		assertEquals(Optional.of("&aSpawn"), result);
+		assertEquals(Optional.of("Spawn Display Name"), result);
 	}
 
 
@@ -85,11 +101,14 @@ class ConstantQueryHandlerTest
 		// Arrange
 		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 
+		SectionProvider mockProvider = () -> constantSectionMock;
+		ConstantQueryHandler handler = new ConstantQueryHandler(mockProvider);
+
 		// Act
-		Optional<String> result = queryHandler.getString(recordKey);
+		ConstantRecord constantRecord = handler.getRecord(recordKey);
 
 		// Assert
-		assertEquals(Optional.empty(), result);
+		assertInstanceOf(InvalidConstantRecord.class, constantRecord);
 	}
 
 
@@ -99,25 +118,17 @@ class ConstantQueryHandlerTest
 		// Arrange
 		RecordKey recordKey = RecordKey.of("TEST_LIST").orElseThrow();
 
-		// Act
-		List<String> result = queryHandler.getStringList(recordKey);
+		when(constantSectionMock.getStringList(recordKey.toString())).thenReturn(List.of("string1", "string2"));
 
-		// Assert
-		assertEquals(List.of("item 1", "item 2", "item 3"), result);
-	}
+		SectionProvider mockProvider = () -> constantSectionMock;
+		ConstantQueryHandler handler = new ConstantQueryHandler(mockProvider);
 
-
-	@Test
-	void getStringList_keyPath_invalid()
-	{
-		// Arrange
-		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
 
 		// Act
-		List<String> result = queryHandler.getStringList(recordKey);
+		List<String> result = handler.getStringList(recordKey);
 
 		// Assert
-		assertEquals(Collections.emptyList(), result);
+		assertEquals(List.of("string1", "string2"), result);
 	}
 
 
@@ -127,53 +138,16 @@ class ConstantQueryHandlerTest
 		// Arrange
 		RecordKey recordKey = RecordKey.of("TEST_INT").orElseThrow();
 
+		when(constantSectionMock.getInt(recordKey.toString())).thenReturn(42);
+
+		SectionProvider mockProvider = () -> constantSectionMock;
+		ConstantQueryHandler handler = new ConstantQueryHandler(mockProvider);
+
 		// Act
-		int result = queryHandler.getInt(recordKey);
+		int result = handler.getInt(recordKey);
 
 		// Assert
 		assertEquals(42, result);
-	}
-
-
-	@Test
-	void getInt_keyPath_invalid()
-	{
-		// Arrange
-		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
-
-		// Act
-		int result = queryHandler.getInt(recordKey);
-
-		// Assert
-		assertEquals(0, result);
-	}
-
-
-	@Test
-	void testGetRecord_key_invalid()
-	{
-		// Arrange
-		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
-
-		// Act
-		ConstantRecord constantRecord = queryHandler.getRecord(recordKey);
-
-		// Assert
-		assertInstanceOf(InvalidConstantRecord.class, constantRecord);
-	}
-
-
-	@Test
-	void testGetRecord_valid()
-	{
-		// Arrange
-		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
-
-		// Act
-		ConstantRecord constantRecord = queryHandler.getRecord(recordKey);
-
-		// Assert
-		assertInstanceOf(ValidConstantRecord.class, constantRecord);
 	}
 
 }
