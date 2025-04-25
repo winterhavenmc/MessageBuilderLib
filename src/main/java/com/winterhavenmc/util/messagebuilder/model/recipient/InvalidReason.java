@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.model.recipient;
 
 public enum InvalidReason
 {
-	OFFLINE_PLAYER,
 	NULL,
 	OTHER
 }
