@@ -53,7 +53,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ContextMapTest
 {
-	@Mock CommandSender commandSenderMock;
 	@Mock Player playerMock;
 	@Mock ConsoleCommandSender consoleCommandSenderMock;
 	@Mock World worldMock;
