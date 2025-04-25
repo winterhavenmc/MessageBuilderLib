@@ -19,9 +19,11 @@ package com.winterhavenmc.util.messagebuilder.validation;
 
 public enum Parameter
 {
+	ADAPTER("adapter"),
 	CONTEXT_MAP("contextMap"),
 	COMMAND_SENDER("commandSender"),
 	CONFIGURATION_SUPPLIER("configurationSupplier"),
+	DELEGATE("delegate"),
 	DEPENDENCY_CONTEXT("dependencyContext"),
 	DURATION("duration"),
 	ENTITY("entity"),
@@ -40,11 +42,13 @@ public enum Parameter
 	MESSAGE_RECORD("messageRecord"),
 	MESSAGE_STRING("messageString"),
 	PLUGIN("plugin"),
+	PRECISION("precision"),
 	QUANTITY("quantity"),
 	QUERY_HANDLER("queryHandler"),
 	RECIPIENT("recipient"),
 	RECORD_TYPE("recordType"),
 	REPLACEMENT_MAP("replacementMap"),
+	RESOLVER_CONTEXT_CONTAINER("resolverContextContainer"),
 	RESOURCE_INSTALLER("resourceInstaller"),
 	RESOURCE_LOADER("resourceLoader"),
 	RESOURCE_NAME("resourceName"),
@@ -52,13 +56,11 @@ public enum Parameter
 	SECTION("section"),
 	SECTION_SUPPLIER("sectionSupplier"),
 	TARGET_DIR_PATH("targetDirPath"),
+	TYPE("type"),
 	UNKNOWN("«UNKNOWN»"),
 	VALUE("value"),
 	WORLD("world"),
-	ADAPTER("adapter"),
-	TYPE("type"),
-	PRECISION("precision"),
-	DELEGATE("delegate");
+	;
 
 	private final String displayName;
 
