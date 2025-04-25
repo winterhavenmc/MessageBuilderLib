@@ -26,6 +26,9 @@ public class ValidationUtility
 	static final String BUNDLE_NAME = "language.errors";
 
 
+	private ValidationUtility() { /* private constructor to prevent instantiation */ }
+
+
 	static String formatMessage(final ErrorMessageKey errorMessageKey,
 								final Parameter parameter)
 	{
