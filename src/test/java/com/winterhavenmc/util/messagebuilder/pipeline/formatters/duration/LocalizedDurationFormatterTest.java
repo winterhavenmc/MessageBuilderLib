@@ -60,6 +60,7 @@ class LocalizedDurationFormatterTest
 
 	@Test
 	@DisplayName("Should use language file constant for UNLIMITED")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testFormatUnlimited()
 	{
 		// Arrange
@@ -80,6 +81,7 @@ class LocalizedDurationFormatterTest
 
 	@Test
 	@DisplayName("Should use constant and inject {DURATION} for LESS_THAN")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testFormatLessThan()
 	{
 		// Arrange
@@ -157,6 +159,7 @@ class LocalizedDurationFormatterTest
 
 
 	@Test
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void format_less_than()
 	{
 		// Arrange
@@ -179,6 +182,7 @@ class LocalizedDurationFormatterTest
 
 
 	@Test
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void format_unlimited()
 	{
 		// Arrange
@@ -199,6 +203,7 @@ class LocalizedDurationFormatterTest
 
 
 	@Test
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testGetTimeConstant_unlimited()
 	{
 		// Arrange
@@ -216,6 +221,7 @@ class LocalizedDurationFormatterTest
 
 
 	@Test
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testGetTimeConstant_less_than()
 	{
 		// Arrange
