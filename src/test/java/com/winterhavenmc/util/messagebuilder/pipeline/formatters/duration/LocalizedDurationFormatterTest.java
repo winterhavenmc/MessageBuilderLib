@@ -52,13 +52,15 @@ class LocalizedDurationFormatterTest
 
 
 	@BeforeEach
-	void setUp() {
+	void setUp()
+	{
 		formatter = new LocalizedDurationFormatter(delegateMock, queryHandlerFactoryMock);
 	}
 
 
 	@Test
 	@DisplayName("Should use language file constant for UNLIMITED")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testFormatUnlimited()
 	{
 		// Arrange
@@ -79,12 +81,12 @@ class LocalizedDurationFormatterTest
 
 	@Test
 	@DisplayName("Should use constant and inject {DURATION} for LESS_THAN")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testFormatLessThan()
 	{
 		// Arrange
 		ConstantRecord constantRecord = ConstantRecord.from(timeLessThanKey, "less than {DURATION} (TESTING)");
 		when(delegateMock.format(Duration.of(1, ChronoUnit.SECONDS), ChronoUnit.SECONDS)).thenReturn("1 second");
-
 		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
 		when(constantQueryHandlerMock.getRecord(timeLessThanKey)).thenReturn(constantRecord);
 
@@ -96,18 +98,29 @@ class LocalizedDurationFormatterTest
 
 		// Verify
 		verify(delegateMock, atLeastOnce()).format(Duration.of(1, ChronoUnit.SECONDS), ChronoUnit.SECONDS);
+		verify(queryHandlerFactoryMock, atLeastOnce()).getQueryHandler(Section.CONSTANTS);
+		verify(constantQueryHandlerMock, atLeastOnce()).getRecord(timeLessThanKey);
 	}
 
 
 	@Test
-	@DisplayName("Should use constant and inject {DURATION} for NORMAL")
-	void testFormatNormal() {
+	@DisplayName("format normal duration above lower bound threshold.")
+	void testFormatNormal()
+	{
+		// Arrange
 		Duration input = Duration.ofMinutes(5);
 		when(delegateMock.format(input, ChronoUnit.MINUTES)).thenReturn("5 minutes");
 
+		// Act
 		String result = formatter.formatNormal(input, ChronoUnit.MINUTES);
+
+		// Assert
 		assertEquals("5 minutes", result);
+
+		// Verify
+		verify(delegateMock, atLeastOnce()).format(input, ChronoUnit.MINUTES);
 	}
+
 
 	@Test
 	@DisplayName("Should fallback to default if constant is missing or blank")
@@ -117,13 +130,11 @@ class LocalizedDurationFormatterTest
 		Duration input = Duration.ofMinutes(3);
 		when(delegateMock.format(input, ChronoUnit.MINUTES)).thenReturn("3 minutes");
 
-		// Act - Simulate null or blank constant
-		String result1 = formatter.formatNormal(input, ChronoUnit.MINUTES);
-		String result2 = formatter.formatNormal(input, ChronoUnit.MINUTES);
+		// Act
+		String result = formatter.formatNormal(input, ChronoUnit.MINUTES);
 
 		// Assert
-		assertEquals("3 minutes", result1);
-		assertEquals("3 minutes", result2);
+		assertEquals("3 minutes", result);
 
 		// verify
 		verify(delegateMock, atLeastOnce()).format(input, ChronoUnit.MINUTES);
@@ -148,6 +159,7 @@ class LocalizedDurationFormatterTest
 
 
 	@Test
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void format_less_than()
 	{
 		// Arrange
@@ -170,6 +182,7 @@ class LocalizedDurationFormatterTest
 
 
 	@Test
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void format_unlimited()
 	{
 		// Arrange
@@ -190,6 +203,7 @@ class LocalizedDurationFormatterTest
 
 
 	@Test
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testGetTimeConstant_unlimited()
 	{
 		// Arrange
@@ -207,6 +221,7 @@ class LocalizedDurationFormatterTest
 
 
 	@Test
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testGetTimeConstant_less_than()
 	{
 		// Arrange

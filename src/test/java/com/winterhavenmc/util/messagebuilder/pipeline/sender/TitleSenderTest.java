@@ -17,9 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
-import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
@@ -54,7 +52,7 @@ class TitleSenderTest
 	@Mock Player playerMock;
 	@Mock ConsoleCommandSender consoleMock;
 
-	ValidRecipient recipient;
+	Recipient.Valid recipient;
 	RecordKey messageKey;
 	ValidMessageRecord validMessageRecord;
 	FinalMessageRecord finalMessageRecord;
@@ -65,10 +63,10 @@ class TitleSenderTest
 	@BeforeEach
 	void setUp()
 	{
-		recipient = switch(Recipient.from(playerMock))
+		recipient = switch(Recipient.of(playerMock))
 		{
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
@@ -106,10 +104,10 @@ class TitleSenderTest
 	void testSend_console()
 	{
 		// Arrange
-		ValidRecipient consoleRecipient = switch (Recipient.from(consoleMock))
+		Recipient.Valid consoleRecipient = switch (Recipient.of(consoleMock))
 		{
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			case Recipient.Valid validRecipient -> validRecipient;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		// Act & Assert

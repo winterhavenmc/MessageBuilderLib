@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.context;
 
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ContextMap
 {
-	private final ValidRecipient recipient;
+	private final Recipient.Valid recipient;
 	private final RecordKey messageKey;
 
 	private final Map<MacroKey, Object> internalMap = new ConcurrentHashMap<>();
@@ -55,7 +55,7 @@ public class ContextMap
 	 * @param recipient the message recipient
 	 * @param messageKey the message unique identifier as a string
 	 */
-	private ContextMap(final ValidRecipient recipient, final RecordKey messageKey)
+	private ContextMap(final Recipient.Valid recipient, final RecordKey messageKey)
 	{
 		this.recipient = recipient;
 		this.messageKey = messageKey;
@@ -87,7 +87,7 @@ public class ContextMap
 	 * @param messageKey the message key
 	 * @return an Optional of a new instance of {@code ContextMap}
 	 */
-	public static Optional<ContextMap> of(final ValidRecipient recipient, final RecordKey messageKey)
+	public static Optional<ContextMap> of(final Recipient.Valid recipient, final RecordKey messageKey)
 	{
 		return Optional.of(new ContextMap(recipient, messageKey));
 	}
@@ -98,7 +98,7 @@ public class ContextMap
 	 *
 	 * @return the recipient that was used to create the context map
 	 */
-	public ValidRecipient getRecipient()
+	public Recipient.Valid getRecipient()
 	{
 		return recipient;
 	}

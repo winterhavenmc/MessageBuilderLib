@@ -23,9 +23,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
-import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
@@ -65,7 +63,7 @@ class MessagePipelineTest
 	@Mock MessageSender messageSenderMock;
 	@Mock TitleSender titleSenderMock;
 
-	ValidRecipient recipient;
+	Recipient.Valid recipient;
 	CooldownMap cooldownMap;
 	MessagePipeline messagePipeline;
 	ValidMessageRecord validMessageRecord;
@@ -77,9 +75,9 @@ class MessagePipelineTest
 	@BeforeEach
 	void setUp()
 	{
-		recipient = switch (Recipient.from(playerMock)) {
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		recipient = switch (Recipient.of(playerMock)) {
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		cooldownMap = new CooldownMap();
 		messagePipeline = new MessagePipeline(

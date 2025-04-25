@@ -17,12 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.sender;
 
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
+import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
 
 
 @FunctionalInterface
 public interface Sender
 {
-	void send(ValidRecipient recipient, FinalMessageRecord messageRecord);
+	void send(Recipient.Valid recipient, FinalMessageRecord messageRecord);
 }

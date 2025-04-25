@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.model.message;
 
+import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 
@@ -65,7 +65,7 @@ public record InvalidMessage(String reason) implements Message
 	}
 
 	@Override
-	public ValidRecipient getRecipient()
+	public Recipient.Valid getRecipient()
 	{
 		return null;
 	}

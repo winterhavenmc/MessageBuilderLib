@@ -21,9 +21,7 @@ import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.model.message.Message;
 import com.winterhavenmc.util.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
@@ -150,10 +148,10 @@ public final class MessageBuilder
 				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
 		// return ValidMessage on valid Recipient, else empty no-op message
-		return switch (Recipient.from(recipient))
+		return switch (Recipient.of(recipient))
 		{
-			case ValidRecipient validRecipient -> new ValidMessage(validRecipient, validMessageKey, messagePipeline);
-			case InvalidRecipient ignored -> Message.empty();
+			case Recipient.Valid valid -> new ValidMessage(valid, validMessageKey, messagePipeline);
+			case Recipient.Invalid ignored -> Message.empty();
 		};
 	}
 

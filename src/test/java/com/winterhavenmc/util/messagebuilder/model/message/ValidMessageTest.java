@@ -18,12 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.model.message;
 
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.util.messagebuilder.model.message.Message;
-import com.winterhavenmc.util.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.BoundedDuration;
-import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
@@ -68,7 +64,7 @@ class ValidMessageTest
 	Message message;
 	ItemStack itemStack;
 	ValidMessageRecord validMessageRecord;
-	ValidRecipient recipient;
+	Recipient.Valid recipient;
 	RecordKey messageKey;
 	ConfigurationSection section;
 
@@ -83,9 +79,9 @@ class ValidMessageTest
 
 		itemStack = new ItemStack(Material.DIAMOND_SWORD);
 
-		recipient = switch (Recipient.from(playerMock)) {
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		recipient = switch (Recipient.of(playerMock)) {
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();

@@ -17,9 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.cooldown;
 
-import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -52,23 +50,23 @@ class CooldownKeyTest
 	@Mock Player player2Mock;
 	@Mock ConsoleCommandSender consoleMock;
 
-	ValidRecipient recipient;
-	ValidRecipient recipient2;
-	ValidRecipient consoleRecipient;
+	Recipient.Valid recipient;
+	Recipient.Valid recipient2;
+	Recipient.Valid consoleRecipient;
 	RecordKey messageKey;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		recipient = switch (Recipient.from(playerMock)) {
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		recipient = switch (Recipient.of(playerMock)) {
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		recipient2 = switch (Recipient.from(player2Mock)) {
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		recipient2 = switch (Recipient.of(player2Mock)) {
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
@@ -91,10 +89,10 @@ class CooldownKeyTest
 	void testConstructor_non_entity()
 	{
 		// Arrange
-		consoleRecipient = switch (Recipient.from(consoleMock))
+		consoleRecipient = switch (Recipient.of(consoleMock))
 		{
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		//  Act

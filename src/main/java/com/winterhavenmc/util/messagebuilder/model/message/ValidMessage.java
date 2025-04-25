@@ -18,9 +18,9 @@
 package com.winterhavenmc.util.messagebuilder.model.message;
 
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.Parameter;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -35,7 +35,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.P
 
 public final class ValidMessage implements Message
 {
-	private final ValidRecipient recipient;
+	private final Recipient.Valid recipient;
 	private final RecordKey messageKey;
 	private final MessagePipeline messagePipeline;
 	private final ContextMap contextMap;
@@ -48,7 +48,7 @@ public final class ValidMessage implements Message
 	 * @param messageKey message identifier
 	 * @param messagePipeline the message processor that will receive the message when the send method is called
 	 */
-	public ValidMessage(final ValidRecipient recipient,
+	public ValidMessage(final Recipient.Valid recipient,
 						final RecordKey messageKey,
 						final MessagePipeline messagePipeline)
 	{
@@ -141,10 +141,10 @@ public final class ValidMessage implements Message
 	/**
 	 * Accessor method for recipient
 	 *
-	 * @return {@code ValidRecipient} the message recipient
+	 * @return {@code Valid} the message recipient
 	 */
 	@Override
-	public ValidRecipient getRecipient()
+	public Recipient.Valid getRecipient()
 	{
 		return recipient;
 	}

@@ -33,9 +33,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.CompositeResolve
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.Resolver;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.model.recipient.InvalidRecipient;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.model.recipient.ValidRecipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
@@ -75,7 +73,7 @@ class MacroReplacerTest
 	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
 
-	ValidRecipient recipient;
+	Recipient.Valid recipient;
 	RecordKey messageKey;
 	MacroKey macroKey;
 	MacroReplacer macroReplacer;
@@ -91,9 +89,9 @@ class MacroReplacerTest
 	@BeforeEach
 	public void setUp()
 	{
-		recipient = switch (Recipient.from(playerMock)) {
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		recipient = switch (Recipient.of(playerMock)) {
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		macroKey = MacroKey.of(Macro.OWNER).orElseThrow();
@@ -225,9 +223,9 @@ class MacroReplacerTest
 	void addRecipientContext()
 	{
 		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
-		recipient = switch (Recipient.from(console)) {
-			case ValidRecipient validRecipient -> validRecipient;
-			case InvalidRecipient ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		recipient = switch (Recipient.of(console)) {
+			case Recipient.Valid valid -> valid;
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();
 		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
