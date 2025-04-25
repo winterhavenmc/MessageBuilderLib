@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ValidationUtilityTest
 {
-
 	@Test
 	void testFormatMessage()
 	{
@@ -36,6 +35,7 @@ class ValidationUtilityTest
 		assertEquals("The parameter 'recipient' cannot be null.", result);
 	}
 
+
 	@Test
 	void testGetConfiguredLocale()
 	{
@@ -43,6 +43,7 @@ class ValidationUtilityTest
 
 		assertEquals(Locale.getDefault(), result);
 	}
+
 
 	@Test
 	void testBundleName()
