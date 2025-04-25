@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.model.recipient;
 
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
@@ -35,6 +36,7 @@ class RecipientTest
 {
 	@Mock Player playerMock;
 	@Mock ConsoleCommandSender consoleCommandSender;
+	@Mock BlockCommandSender blockCommandSender;
 	@Mock ZombieVillager zombieVillager;
 
 	@BeforeEach
@@ -67,6 +69,16 @@ class RecipientTest
 	{
 		// Act
 		Recipient recipient = Recipient.of(consoleCommandSender);
+
+		// Assert
+		assertInstanceOf(Recipient.Valid.class, recipient);
+	}
+
+	@Test
+	void testOf_commandBlock()
+	{
+		// Act
+		Recipient recipient = Recipient.of(blockCommandSender);
 
 		// Assert
 		assertInstanceOf(Recipient.Valid.class, recipient);

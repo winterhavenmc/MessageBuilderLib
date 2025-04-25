@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.model.recipient;
 
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -34,8 +35,10 @@ public sealed interface Recipient permits Recipient.Valid, Recipient.Invalid
 		{
 			case Player ignored -> new Valid(sender);
 			case ConsoleCommandSender ignored -> new Valid(sender);
+			case BlockCommandSender ignored -> new Valid(sender);
 			case null -> new Invalid(sender, InvalidReason.NULL);
 			default -> new Invalid(sender, InvalidReason.OTHER);
 		};
 	}
+
 }
