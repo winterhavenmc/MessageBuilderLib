@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.Quantifiable;
-import com.winterhavenmc.util.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
+import org.bukkit.block.Chest;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 
 public class QuantityAdapterTest
@@ -98,7 +99,7 @@ public class QuantityAdapterTest
 		{
 			// Arrange
 			ItemStack itemStackMock = Mockito.mock(ItemStack.class);
-			Mockito.when(itemStackMock.getAmount()).thenReturn(64); // Simulate a stack of 64 items
+			when(itemStackMock.getAmount()).thenReturn(64); // Simulate a stack of 64 items
 
 			// Act
 			int quantity = -888;
@@ -118,7 +119,7 @@ public class QuantityAdapterTest
 		{
 			// Arrange
 			ItemStack itemStackMock = Mockito.mock(ItemStack.class);
-			Mockito.when(itemStackMock.getAmount()).thenReturn(0); // Simulate an empty stack
+			when(itemStackMock.getAmount()).thenReturn(0); // Simulate an empty stack
 
 			// Act
 			int quantity = -777;
@@ -145,6 +146,48 @@ public class QuantityAdapterTest
 			}
 			assertEquals(-999, quantity);
 		}
+	}
+
+
+	@Test
+	public void testGetQuantity_with_chest()
+	{
+		// Arrange
+		Chest chest = Mockito.mock(Chest.class);
+		Inventory inventory = Mockito.mock(Inventory.class);
+		when(chest.getInventory()).thenReturn(inventory);
+		when(inventory.getSize()).thenReturn(10);
+
+		// Act
+		int quantity = -888;
+		Optional<Quantifiable> resolver = new QuantityAdapter().adapt(chest);
+		if (resolver.isPresent())
+		{
+			quantity = resolver.get().getQuantity();
+		}
+
+		// Assert
+		assertEquals(10, quantity, "The adapter should return the amount from the ItemStack.");
+	}
+
+
+	@Test
+	public void testGetQuantity_with_inventory()
+	{
+		// Arrange
+		Inventory inventory = Mockito.mock(Inventory.class);
+		when(inventory.getSize()).thenReturn(27);
+
+		// Act
+		int quantity = -888;
+		Optional<Quantifiable> resolver = new QuantityAdapter().adapt(inventory);
+		if (resolver.isPresent())
+		{
+			quantity = resolver.get().getQuantity();
+		}
+
+		// Assert
+		assertEquals(27, quantity, "The adapter should return the amount from the ItemStack.");
 	}
 
 }

@@ -80,7 +80,7 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 	}
 
 
-	private String getTimeConstant(final RecordKey constantKey, final DurationType durationType)
+	String getTimeConstant(final RecordKey constantKey, final DurationType durationType)
 	{
 		QueryHandler<ConstantRecord> constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
 		ConstantRecord timeConstant = constantQueryHandler.getRecord(constantKey);

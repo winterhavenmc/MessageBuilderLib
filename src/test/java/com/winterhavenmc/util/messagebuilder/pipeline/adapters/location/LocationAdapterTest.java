@@ -17,16 +17,16 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.adapters.location;
 
-import com.winterhavenmc.util.messagebuilder.pipeline.adapters.location.Locatable;
-import com.winterhavenmc.util.messagebuilder.pipeline.adapters.location.LocationAdapter;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Raid;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 
+import org.bukkit.inventory.Inventory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +48,9 @@ class LocationAdapterTest
 	@Mock BlockState blockStateMock;
 	@Mock DoubleChest doubleChestMock;
 	@Mock World worldMock;
+	@Mock Inventory inventoryMock;
+	@Mock Raid raidMock;
+
 	Location location;
 
 
@@ -150,6 +153,7 @@ class LocationAdapterTest
 		assertEquals(location, result, "The resolver should return the getLocation from the DoubleChest.");
 	}
 
+
 	@Test
 	public void testGetLocation_withNull()
 	{
@@ -163,6 +167,38 @@ class LocationAdapterTest
 
 		// Assert
 		assertTrue(result.isEmpty());
+	}
+
+
+	@Test
+	public void testGetLocation_with_inventory()
+	{
+		// Arrange
+		when(inventoryMock.getLocation()).thenReturn(location);
+
+		// Act
+		Location result = new LocationAdapter()
+				.adapt(inventoryMock)
+				.map(Locatable::getLocation).orElseThrow();
+
+		// Assert
+		assertEquals(location, result, "The resolver should return the getLocation from the DoubleChest.");
+	}
+
+
+	@Test
+	public void testGetLocation_with_raid()
+	{
+		// Arrange
+		when(raidMock.getLocation()).thenReturn(location);
+
+		// Act
+		Location result = new LocationAdapter()
+				.adapt(raidMock)
+				.map(Locatable::getLocation).orElseThrow();
+
+		// Assert
+		assertEquals(location, result, "The resolver should return the getLocation from the DoubleChest.");
 	}
 
 }

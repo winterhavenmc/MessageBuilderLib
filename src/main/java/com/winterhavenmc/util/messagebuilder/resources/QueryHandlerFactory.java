@@ -21,6 +21,13 @@ import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResource
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.language.SectionRecord;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;
+
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_RESOURCE_MANAGER;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public class QueryHandlerFactory
@@ -34,6 +41,8 @@ public class QueryHandlerFactory
 	 */
 	public QueryHandlerFactory(final LanguageResourceManager languageResourceManager)
 	{
+		validate(languageResourceManager, Objects::isNull, ValidationHandler.throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
+
 		this.languageResourceManager = languageResourceManager;
 	}
 
