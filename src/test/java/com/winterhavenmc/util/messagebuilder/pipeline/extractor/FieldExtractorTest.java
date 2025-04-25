@@ -141,6 +141,32 @@ class FieldExtractorTest
 
 
 	@Test
+	void testLocationAdapter_null_world()
+	{
+		var locatable = mock(Locatable.class);
+
+		MacroKey locationKey = baseKey;
+
+		if (!locationKey.toString().endsWith("LOCATION"))
+		{
+			locationKey = locationKey.append("LOCATION").orElseThrow();
+		}
+
+		Location location = new Location(null, 11, 12,13);
+		when(locatable.getLocation()).thenReturn(location);
+
+		Map<MacroKey, Object> result = extractor.extract(locationAdapterMock, locatable, baseKey);
+
+		assertEquals(6, result.size());
+		assertEquals("??? [11, 12, 13]", result.get(locationKey));
+		assertEquals(location.getBlockX(), result.get(locationKey.append("X").orElseThrow()));
+		assertEquals(location.getBlockY(), result.get(locationKey.append("Y").orElseThrow()));
+		assertEquals(location.getBlockZ(), result.get(locationKey.append("Z").orElseThrow()));
+		assertTrue(result.containsKey(locationKey));
+	}
+
+
+	@Test
 	void testQuantityAdapter()
 	{
 		var quantifiable = mock(Quantifiable.class);

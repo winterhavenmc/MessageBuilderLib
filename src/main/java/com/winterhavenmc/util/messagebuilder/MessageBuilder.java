@@ -123,7 +123,7 @@ public final class MessageBuilder
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
 		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
-		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager.getConfigurationSupplier());
+		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
 		final ResolverContextContainer resolverContextContainer = getResolverContextContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = getAdapterContext(plugin);
 		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, resolverContextContainer, adapterContextContainer);

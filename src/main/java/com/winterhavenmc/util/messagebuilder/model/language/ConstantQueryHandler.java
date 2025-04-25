@@ -19,9 +19,11 @@ package com.winterhavenmc.util.messagebuilder.model.language;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.ConstantRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,21 +40,19 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 {
-	private final static Section section = Section.CONSTANTS;
-	private final YamlConfigurationSupplier configurationSupplier;
+	private final SectionProvider sectionProvider;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param configurationSupplier the provider of the current language configuration object
 	 * @throws ValidationException if the {@code yamlConfigurationSupplier} parameter is null or invalid
 	 */
-	public ConstantQueryHandler(final YamlConfigurationSupplier configurationSupplier)
+	public ConstantQueryHandler(final SectionProvider sectionProvider)
 	{
-		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+		validate(sectionProvider, Objects::isNull, throwing(PARAMETER_NULL, SECTION_SUPPLIER));
 
-		this.configurationSupplier = configurationSupplier;
+		this.sectionProvider = sectionProvider;
 	}
 
 
@@ -65,7 +65,7 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 	 */
 	public Optional<String> getString(final RecordKey key)
 	{
-		return Optional.ofNullable(configurationSupplier.getSection(section).getString(key.toString()));
+		return Optional.ofNullable(sectionProvider.getSection().getString(key.toString()));
 	}
 
 
@@ -78,7 +78,7 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 	 */
 	public List<String> getStringList(final RecordKey key)
 	{
-		return configurationSupplier.getSection(section).getStringList(key.toString());
+		return sectionProvider.getSection().getStringList(key.toString());
 	}
 
 
@@ -91,7 +91,7 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 	 */
 	public int getInt(final RecordKey key)
 	{
-		return configurationSupplier.getSection(section).getInt(key.toString());
+		return sectionProvider.getSection().getInt(key.toString());
 	}
 
 
@@ -104,7 +104,8 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 	@Override
 	public ConstantRecord getRecord(final RecordKey key)
 	{
-		Object constantEntry = configurationSupplier.getSection(section).get(key.toString());
+		ConfigurationSection section = sectionProvider.getSection();
+		Object constantEntry = section.get(key.toString());
 
 		return (constantEntry == null)
 				? ConstantRecord.empty(key)

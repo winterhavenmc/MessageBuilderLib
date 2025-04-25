@@ -18,16 +18,10 @@
 package com.winterhavenmc.util.messagebuilder.model.language;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 
 import java.util.EnumMap;
-import java.util.Objects;
 import java.util.function.Function;
-
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.*;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -41,7 +35,8 @@ public enum Section
 	;
 
 	private static final EnumMap<Section, QueryHandler<?>> HANDLER_MAP = new EnumMap<>(Section.class);
-	private final Function<YamlConfigurationSupplier, ? extends QueryHandler<? extends SectionRecord>> handlerFactory;
+	private final Function<SectionProvider, ? extends QueryHandler<? extends SectionRecord>> handlerFactory;
+
 
 
 	/**
@@ -49,8 +44,7 @@ public enum Section
 	 *
 	 * @param handlerFactory the Class of {@link QueryHandler} that is immutably bound to this enum constant
 	 */
-	<R extends SectionRecord> Section(final Function<YamlConfigurationSupplier, QueryHandler<R>> handlerFactory)
-	{
+	<R extends SectionRecord> Section(Function<SectionProvider, QueryHandler<R>> handlerFactory) {
 		this.handlerFactory = handlerFactory;
 	}
 
@@ -61,16 +55,12 @@ public enum Section
 	 * reflection to call the constructor and pass the {@code ConfigurationSupplier} parameter to the constructor,
 	 * which is then placed in the map for future retrievals, and returned to the caller for this use.
 	 *
-	 * @param configurationSupplier the Configuration supplier for the language resource
 	 * @return an instance of the section query handler that is bound to the enum constant
 	 * @param <R> the specific type of the section query handler being returned
 	 */
 	@SuppressWarnings("unchecked")
-	public <R extends SectionRecord> QueryHandler<R> createHandler(final YamlConfigurationSupplier configurationSupplier)
-	{
-		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
-
-		return (QueryHandler<R>) HANDLER_MAP.computeIfAbsent(this, section -> handlerFactory.apply(configurationSupplier));
+	public <R extends SectionRecord> QueryHandler<R> createHandler(SectionProvider provider) {
+		return (QueryHandler<R>) HANDLER_MAP.computeIfAbsent(this, __ -> handlerFactory.apply(provider));
 	}
 
 }

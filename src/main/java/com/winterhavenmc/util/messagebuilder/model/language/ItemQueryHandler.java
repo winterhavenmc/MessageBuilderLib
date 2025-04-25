@@ -19,8 +19,9 @@ package com.winterhavenmc.util.messagebuilder.model.language;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.model.language.item.ItemRecord;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Objects;
@@ -38,20 +39,18 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class ItemQueryHandler implements QueryHandler<ItemRecord>
 {
-	private final static Section section = Section.ITEMS;
-	private final YamlConfigurationSupplier configurationSupplier;
+	private final SectionProvider sectionProvider;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param configurationSupplier the supplier for the configuration object of the language file.
 	 */
-	public ItemQueryHandler(final YamlConfigurationSupplier configurationSupplier)
+	public ItemQueryHandler(final SectionProvider sectionProvider)
 	{
-		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+		validate(sectionProvider, Objects::isNull, throwing(PARAMETER_NULL, SECTION_SUPPLIER));
 
-		this.configurationSupplier = configurationSupplier;
+		this.sectionProvider = sectionProvider;
 	}
 
 
@@ -65,7 +64,8 @@ public class ItemQueryHandler implements QueryHandler<ItemRecord>
 	@Override
 	public ItemRecord getRecord(final RecordKey key)
 	{
-		ConfigurationSection itemEntry = configurationSupplier.getSection(section).getConfigurationSection(key.toString());
+		ConfigurationSection section = sectionProvider.getSection();
+		ConfigurationSection itemEntry = section.getConfigurationSection(key.toString());
 
 		return (itemEntry == null)
 				? ItemRecord.empty(key)

@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.locale.LanguageTag;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 
@@ -54,7 +55,6 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	private final YamlLanguageResourceLoader languageResourceLoader;
 	private final YamlLanguageResourceInstaller languageResourceInstaller;
 	private Configuration languageConfiguration;
-	private YamlConfigurationSupplier configurationSupplier;
 
 
 	/**
@@ -71,9 +71,6 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 
 		// get newly loaded configuration from loader
 		this.languageConfiguration = languageResourceLoader.load();
-
-		// instantiate supplier with language configuration from resource loader, and assign to field
-		this.configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
 	}
 
 
@@ -116,20 +113,18 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 		// Reload the configuration and get the new configuration from the loader
 		this.languageConfiguration = languageResourceLoader.load();
 
-		// create a new configuration supplier with the new configuration
-		this.configurationSupplier = new YamlConfigurationSupplier(languageConfiguration);
 		return true;
 	}
 
 
 	/**
-	 * Retrieve the configuration supplier, a container that carries the current configuration
+	 * Retrieve the configuration provider, a container that carries the current configuration
 	 *
-	 * @return the configuration supplier
+	 * @return the configuration provider
 	 */
-	public YamlConfigurationSupplier getConfigurationSupplier()
+	public SectionProvider getSectionProvider(Section section)
 	{
-		return configurationSupplier;
+		return new LanguageSectionProvider(() -> languageConfiguration, section);
 	}
 
 

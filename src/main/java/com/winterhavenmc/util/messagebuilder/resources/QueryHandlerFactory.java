@@ -17,24 +17,24 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.language.SectionRecord;
 
 
 public class QueryHandlerFactory
 {
-	private final YamlConfigurationSupplier configurationSupplier;
+	private final LanguageResourceManager languageResourceManager;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param configurationSupplier yaml configuration supplier
 	 */
-	public QueryHandlerFactory(final YamlConfigurationSupplier configurationSupplier)
+	public QueryHandlerFactory(final LanguageResourceManager languageResourceManager)
 	{
-		this.configurationSupplier = configurationSupplier;
+		this.languageResourceManager = languageResourceManager;
 	}
 
 
@@ -46,7 +46,8 @@ public class QueryHandlerFactory
 	 */
 	public <R extends SectionRecord> QueryHandler<R> getQueryHandler(final Section section)
 	{
-		return section.createHandler(configurationSupplier);
+		SectionProvider provider = languageResourceManager.getSectionProvider(section);
+		return section.createHandler(provider);
 	}
 
 }

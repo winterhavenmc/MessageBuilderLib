@@ -19,14 +19,14 @@ package com.winterhavenmc.util.messagebuilder.model.language;
 
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Objects;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.CONFIGURATION_SUPPLIER;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.SECTION_SUPPLIER;
 import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
@@ -38,20 +38,18 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public class MessageQueryHandler implements QueryHandler<MessageRecord>
 {
-	private final static Section section = Section.MESSAGES;
-	private final YamlConfigurationSupplier configurationSupplier;
+	private final SectionProvider sectionProvider;
 
 
 	/**
 	 * Class constructor
 	 *
-	 * @param configurationSupplier the configuration supplier that provides access to the configuration object for the language file.
 	 */
-	public MessageQueryHandler(final YamlConfigurationSupplier configurationSupplier)
+	public MessageQueryHandler(final SectionProvider sectionProvider)
 	{
-		validate(configurationSupplier, Objects::isNull, throwing(PARAMETER_NULL, CONFIGURATION_SUPPLIER));
+		validate(sectionProvider, Objects::isNull, throwing(PARAMETER_NULL, SECTION_SUPPLIER));
 
-		this.configurationSupplier = configurationSupplier;
+		this.sectionProvider = sectionProvider;
 	}
 
 
@@ -64,7 +62,8 @@ public class MessageQueryHandler implements QueryHandler<MessageRecord>
 	@Override
 	public MessageRecord getRecord(final RecordKey messageKey)
 	{
-		ConfigurationSection messageEntry = configurationSupplier.getSection(section).getConfigurationSection(messageKey.toString());
+		ConfigurationSection section = sectionProvider.getSection();
+		ConfigurationSection messageEntry = section.getConfigurationSection(messageKey.toString());
 
 		return (messageEntry == null)
 				? MessageRecord.empty(messageKey)

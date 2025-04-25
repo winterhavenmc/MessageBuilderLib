@@ -19,48 +19,47 @@ package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.model.language.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
 import com.winterhavenmc.util.messagebuilder.model.language.message.InvalidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
-import com.winterhavenmc.util.messagebuilder.util.MockUtility;
-
-import org.bukkit.configuration.file.FileConfiguration;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
+@ExtendWith(MockitoExtension.class)
 class MessageRetrieverTest
 {
-	RecordKey messageKey;
-	FileConfiguration configuration;
-	YamlConfigurationSupplier configurationSupplier;
-	QueryHandler<MessageRecord> queryHandler;
+	@Mock QueryHandler<MessageRecord> queryHandlerMock;
+	@Mock ValidMessageRecord validMessageRecordMock;
+	@Mock InvalidMessageRecord invalidMessageRecord;
+
 	Retriever retriever;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-		configurationSupplier = new YamlConfigurationSupplier(configuration);
-		queryHandler = new MessageQueryHandler(configurationSupplier);
-		retriever = new MessageRetriever(queryHandler);
-
+		retriever = new MessageRetriever(queryHandlerMock);
 	}
 
 
 	@Test @DisplayName("Test getRecord method with valid parameters")
 	void getRecord()
 	{
-		// Arrange & Act
+		// Arrange
+		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		when(queryHandlerMock.getRecord(messageKey)).thenReturn(validMessageRecordMock);
+
+		// Act
 		MessageRecord messageRecord = retriever.getRecord(messageKey);
 
 		// Assert
@@ -72,10 +71,11 @@ class MessageRetrieverTest
 	void getRecord_nonexistent()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
+		RecordKey messageKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
+		when(queryHandlerMock.getRecord(messageKey)).thenReturn(invalidMessageRecord);
 
 		// Act
-		MessageRecord messageRecord = retriever.getRecord(recordKey);
+		MessageRecord messageRecord = retriever.getRecord(messageKey);
 
 		// Assert
 		assertInstanceOf(InvalidMessageRecord.class, messageRecord);

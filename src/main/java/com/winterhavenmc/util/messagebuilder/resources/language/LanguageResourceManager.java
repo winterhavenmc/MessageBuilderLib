@@ -18,7 +18,8 @@
 package com.winterhavenmc.util.messagebuilder.resources.language;
 
 
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlConfigurationSupplier;
+import com.winterhavenmc.util.messagebuilder.model.language.Section;
+import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 
 public interface LanguageResourceManager
 {
@@ -27,8 +28,9 @@ public interface LanguageResourceManager
 	 *
 	 * @return {@code YamlConfigurationSupplier}
 	 */
-	YamlConfigurationSupplier getConfigurationSupplier();
+//	YamlConfigurationSupplier getConfigurationSupplier();
 
+	SectionProvider getSectionProvider(Section section);
 
 	/**
 	 * Reload messages into Configuration object
