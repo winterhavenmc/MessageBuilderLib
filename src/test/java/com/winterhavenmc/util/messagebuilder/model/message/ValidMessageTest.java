@@ -87,8 +87,6 @@ class ValidMessageTest
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
-
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
 		section.set(MessageRecord.Field.MESSAGE_TEXT.toKey(), "this is a test message");
@@ -128,7 +126,7 @@ class ValidMessageTest
 	}
 
 
-	@Nested
+	@Nested @DisplayName("Set Macro Tests (2 parameter)")
 	class SetMacroTests
 	{
 		@Test @DisplayName("test setMacro (two parameter) method with valid parameters")
@@ -161,7 +159,7 @@ class ValidMessageTest
 	}
 
 
-	@Nested
+	@Nested @DisplayName("Set Macro Tests (3 parameter)")
 	class SetMacro2Tests
 	{
 		@Test @DisplayName("test setMacro (three parameter) method with valid parameters")
@@ -207,6 +205,27 @@ class ValidMessageTest
 		assertInstanceOf(BoundedDuration.class, boundedDuration);
 		assertEquals(Duration.ofMinutes(5), boundedDuration.duration());
 		assertEquals(ChronoUnit.MINUTES, boundedDuration.precision());
+	}
+
+
+	@Test
+	void testSetMacro4_null_duration()
+	{
+		ValidationException exception = assertThrows(ValidationException.class,
+				() ->  message.setMacro(Macro.DURATION, null, ChronoUnit.SECONDS));
+
+		assertEquals("The parameter 'duration' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testSetMacro4_null_lower_bound()
+	{
+		Duration duration = Duration.ofSeconds(15);
+		ValidationException exception = assertThrows(ValidationException.class,
+				() ->  message.setMacro(Macro.DURATION, duration, null));
+
+		assertEquals("The parameter 'lowerBound' cannot be null.", exception.getMessage());
 	}
 
 
