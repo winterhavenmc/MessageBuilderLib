@@ -81,7 +81,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 public final class MessageBuilder
 {
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
-	public final ResourceBundle BUNDLE;
+	private final ResourceBundle BUNDLE;
 	public final static TemporalUnit TICKS = new Tick();
 
 	private final Plugin plugin;
