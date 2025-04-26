@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
-import com.winterhavenmc.util.messagebuilder.model.locale.LanguageTag;
+import com.winterhavenmc.util.messagebuilder.resources.configuration.LanguageTag;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;

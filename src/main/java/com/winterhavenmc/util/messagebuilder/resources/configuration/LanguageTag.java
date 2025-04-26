@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.model.locale;
+package com.winterhavenmc.util.messagebuilder.resources.configuration;
 
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
