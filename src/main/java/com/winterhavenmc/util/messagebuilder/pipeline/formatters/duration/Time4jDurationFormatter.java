@@ -26,7 +26,6 @@ import net.time4j.format.TextWidth;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.Locale;
 import java.util.Objects;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
@@ -57,24 +56,19 @@ public final class Time4jDurationFormatter implements DurationFormatter
 	@Override
 	public String format(final Duration duration, final ChronoUnit lowerBound)
 	{
-		Duration validDuration = validate(duration, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, DURATION)).orElse(Duration.ZERO);
-		ChronoUnit validLowerBound = validate(lowerBound, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, PRECISION)).orElse(ChronoUnit.MINUTES);
-
-		Locale locale = localeProvider.getLocale();
+		final Duration validDuration = validate(duration, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, DURATION)).orElse(Duration.ZERO);
+		final ChronoUnit validLowerBound = validate(lowerBound, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, PRECISION)).orElse(ChronoUnit.MINUTES);
 
 		// clamp duration to lowerBound threshold for formatting if needed
-		Duration toFormat = validDuration.compareTo(Duration.of(1, validLowerBound)) < 0
+		final Duration toFormat = validDuration.compareTo(Duration.of(1, validLowerBound)) < 0
 				? Duration.of(1, validLowerBound)
 				: validDuration;
 
-		PrettyTime prettyTime = PrettyTime.of(locale);
+		final net.time4j.Duration<?> t4jDuration = net.time4j.Duration.from(toFormat).toClockPeriod();
+		final net.time4j.Duration<CalendarUnit> calendarPart = t4jDuration.toCalendarPeriod();
+		final net.time4j.Duration<ClockUnit> clockPart = t4jDuration.toClockPeriod().with(ClockUnit.SECONDS.rounded());
 
-		net.time4j.Duration<?> t4jDuration = net.time4j.Duration.from(toFormat).toClockPeriod();
-
-		net.time4j.Duration<CalendarUnit> calendarPart = t4jDuration.toCalendarPeriod();
-		net.time4j.Duration<ClockUnit> clockPart = t4jDuration.toClockPeriod().with(ClockUnit.SECONDS.rounded());
-
-		return prettyTime.print(net.time4j.Duration.compose(calendarPart, clockPart), TextWidth.WIDE);
+		return PrettyTime.of(localeProvider.getLocale()).print(net.time4j.Duration.compose(calendarPart, clockPart), TextWidth.WIDE);
 	}
 
 }
