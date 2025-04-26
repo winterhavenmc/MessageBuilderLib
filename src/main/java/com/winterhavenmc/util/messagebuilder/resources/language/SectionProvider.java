@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language;
 
+import org.bukkit.configuration.ConfigurationSection;
 
-import com.winterhavenmc.util.messagebuilder.model.language.Section;
-
-public interface LanguageResourceManager
+@FunctionalInterface
+public interface SectionProvider
 {
-	/**
-	 * Retrieve the configuration supplier
-	 *
-	 * @return {@code YamlConfigurationSupplier}
-	 */
-//	YamlConfigurationSupplier getConfigurationSupplier();
-
-	SectionProvider getSectionProvider(Section section);
-
-	/**
-	 * Reload messages into Configuration object
-	 *
-	 * @return true if successful, false if not
-	 */
-	boolean reload();
-
+	ConfigurationSection getSection();
 }

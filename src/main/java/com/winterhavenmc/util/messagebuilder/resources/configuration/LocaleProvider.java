@@ -15,11 +15,25 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.configuration;
 
-import org.bukkit.configuration.ConfigurationSection;
+import java.util.Locale;
+import java.util.function.Supplier;
 
-public interface SectionProvider
+
+public class LocaleProvider
 {
-	ConfigurationSection getSection();
+	private final Supplier<Locale> localeSupplier;
+
+	public LocaleProvider(Supplier<Locale> localeSupplier)
+	{
+		this.localeSupplier = localeSupplier;
+	}
+
+
+	public Locale getLocale()
+	{
+		return localeSupplier.get();
+	}
+
 }

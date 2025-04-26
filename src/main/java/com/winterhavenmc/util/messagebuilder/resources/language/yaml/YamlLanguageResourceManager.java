@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.locale.LanguageTag;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 import org.bukkit.configuration.Configuration;
 
 import java.io.File;
