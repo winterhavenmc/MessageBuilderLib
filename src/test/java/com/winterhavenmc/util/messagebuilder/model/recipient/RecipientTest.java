@@ -17,8 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.model.recipient;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Player;
 
 import org.bukkit.entity.ZombieVillager;
@@ -35,9 +37,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class RecipientTest
 {
 	@Mock Player playerMock;
-	@Mock ConsoleCommandSender consoleCommandSender;
-	@Mock BlockCommandSender blockCommandSender;
-	@Mock ZombieVillager zombieVillager;
+	@Mock ConsoleCommandSender consoleCommandSenderMock;
+	@Mock ProxiedCommandSender proxiedCommandSenderMock;
+	@Mock BlockCommandSender blockCommandSenderMock;
+	@Mock ZombieVillager zombieVillagerMock;
 
 	@BeforeEach
 	void setUp()
@@ -68,7 +71,7 @@ class RecipientTest
 	void testOf_console()
 	{
 		// Act
-		Recipient recipient = Recipient.of(consoleCommandSender);
+		Recipient recipient = Recipient.of(consoleCommandSenderMock);
 
 		// Assert
 		assertInstanceOf(Recipient.Valid.class, recipient);
@@ -78,17 +81,27 @@ class RecipientTest
 	void testOf_commandBlock()
 	{
 		// Act
-		Recipient recipient = Recipient.of(blockCommandSender);
+		Recipient recipient = Recipient.of(blockCommandSenderMock);
 
 		// Assert
 		assertInstanceOf(Recipient.Valid.class, recipient);
 	}
 
 	@Test
+	void testOf_proxiedCommandSender()
+	{
+		// Act
+		Recipient recipient = Recipient.of(proxiedCommandSenderMock);
+
+		// Assert
+		assertInstanceOf(Recipient.Proxied.class, recipient);
+	}
+
+	@Test
 	void testOf_other()
 	{
 		// Act
-		Recipient recipient = Recipient.of(zombieVillager);
+		Recipient recipient = Recipient.of(zombieVillagerMock);
 
 		// Assert
 		assertInstanceOf(Recipient.Invalid.class, recipient);
