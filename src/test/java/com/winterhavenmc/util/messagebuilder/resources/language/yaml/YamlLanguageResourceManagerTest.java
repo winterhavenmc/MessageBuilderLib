@@ -17,16 +17,21 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
 
+import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.locale.LanguageTag;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
+
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.bukkit.plugin.Plugin;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -37,11 +42,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class YamlLanguageResourceManagerTest {
-
-	@Mock Plugin pluginMock;
-	@Mock YamlLanguageResourceInstaller languageResourceInstallerMock;
-	@Mock YamlLanguageResourceLoader languageResourceLoaderMock;
+class YamlLanguageResourceManagerTest
+{
+	@Mock
+	YamlLanguageResourceInstaller languageResourceInstallerMock;
+	@Mock
+	YamlLanguageResourceLoader languageResourceLoaderMock;
 
 	// real language handler
 	YamlLanguageResourceManager resourceManager;
@@ -50,7 +56,8 @@ class YamlLanguageResourceManagerTest {
 
 
 	@BeforeEach
-	void setUp() {
+	void setUp()
+	{
 		// create real plugin config
 		pluginConfiguration = new YamlConfiguration();
 		pluginConfiguration.set("language", "en-US");
@@ -61,52 +68,46 @@ class YamlLanguageResourceManagerTest {
 
 		// instantiate real language handler with mocked parameters
 		resourceManager = YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock);
-
-	}
-
-
-	@AfterEach
-	void tearDown() {
-		pluginConfiguration = null;
-		pluginMock = null;
-		languageResourceLoaderMock = null;
-		resourceManager = null;
-		languageConfiguration = null;
 	}
 
 
 	@Test
-	void testLanguageConfiguration_not_null() {
+	void testLanguageConfiguration_not_null()
+	{
 		assertNotNull(languageConfiguration);
 	}
 
 
 	@Test
-	void testGetConfigurationSupplier() {
+	void getSectionProvider()
+	{
 		// Arrange & Act
-		resourceManager.reload();
-//		YamlConfigurationSupplier configurationSupplier = resourceManager.getConfigurationSupplier();
+		SectionProvider sectionProvider = resourceManager.getSectionProvider(Section.CONSTANTS);
+		ConfigurationSection section = sectionProvider.getSection();
 
 		// Assert
-//		assertNotNull(configurationSupplier);
+		assertInstanceOf(SectionProvider.class, sectionProvider);
+		assertInstanceOf(ConfigurationSection.class, section);
 	}
 
 
 	@Nested
-	class ReloadTests {
+	class ReloadTests
+	{
 		@Test
-		void testReload() {
+		void testReload()
+		{
 			// Arrange & Act
 			boolean success = resourceManager.reload();
 
 			// Assert
 			assertTrue(success);
-//			assertNotNull(resourceManager.getConfigurationSupplier());
 		}
 
 
 		@Test
-		void testReload_new_config() {
+		void testReload_new_config()
+		{
 			// Arrange
 			FileConfiguration newLanguageConfiguration = new YamlConfiguration();
 			newLanguageConfiguration.set("test_key", "test_value");
@@ -116,20 +117,22 @@ class YamlLanguageResourceManagerTest {
 
 			// Assert
 			assertTrue(success);
-//			assertNotNull(resourceManager.getConfigurationSupplier());
 		}
 	}
 
 
 	@Nested
-	class GetInstanceTests {
+	class GetInstanceTests
+	{
 		@Test
-		void testGetInstance_parameters_valid () {
+		void testGetInstance_parameters_valid()
+		{
 			assertNotNull(YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock));
 		}
 
 		@Test
-		void testGetInstance_parameter_null_resourceInstaller () {
+		void testGetInstance_parameter_null_resourceInstaller()
+		{
 			ValidationException exception = assertThrows(ValidationException.class,
 					() -> YamlLanguageResourceManager.getInstance(null, languageResourceLoaderMock));
 
@@ -137,7 +140,8 @@ class YamlLanguageResourceManagerTest {
 		}
 
 		@Test
-		void testGetInstance_parameter_null_resourceLoader () {
+		void testGetInstance_parameter_null_resourceLoader()
+		{
 			ValidationException exception = assertThrows(ValidationException.class,
 					() -> YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, null));
 
@@ -168,6 +172,5 @@ class YamlLanguageResourceManagerTest {
 		assertEquals("language" + File.separator + "en-US.yml", YamlLanguageResourceManager.getFileName(languageTag));
 		assertNotEquals("language" + File.separator + "fr-FR.yml", YamlLanguageResourceManager.getFileName(languageTag));
 	}
-
 
 }
