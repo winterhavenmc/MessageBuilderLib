@@ -72,6 +72,7 @@ class MessageBuilderTest
 		pluginConfiguration = new YamlConfiguration();
 		pluginConfiguration.set("language", "en-US");
 		pluginConfiguration.set("locale", "en-US");
+		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		messageBuilder = MessageBuilder.test(pluginMock,
