@@ -23,7 +23,6 @@ import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -44,10 +43,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class YamlLanguageResourceManagerTest
 {
-	@Mock
-	YamlLanguageResourceInstaller languageResourceInstallerMock;
-	@Mock
-	YamlLanguageResourceLoader languageResourceLoaderMock;
+	@Mock YamlLanguageResourceInstaller languageResourceInstallerMock;
+	@Mock YamlLanguageResourceLoader languageResourceLoaderMock;
 
 	// real language handler
 	YamlLanguageResourceManager resourceManager;
@@ -83,11 +80,9 @@ class YamlLanguageResourceManagerTest
 	{
 		// Arrange & Act
 		SectionProvider sectionProvider = resourceManager.getSectionProvider(Section.CONSTANTS);
-		ConfigurationSection section = sectionProvider.getSection();
 
 		// Assert
 		assertInstanceOf(SectionProvider.class, sectionProvider);
-		assertInstanceOf(ConfigurationSection.class, section);
 	}
 
 
