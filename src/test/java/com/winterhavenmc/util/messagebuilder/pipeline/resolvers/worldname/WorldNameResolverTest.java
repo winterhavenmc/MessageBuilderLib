@@ -18,10 +18,12 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
+
 import org.bukkit.plugin.PluginManager;
-import org.junit.jupiter.api.Disabled;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -38,7 +40,6 @@ class WorldNameResolverTest
 
 
 	@Test
-	@Disabled
 	void getResolver()
 	{
 		// Arrange
@@ -53,7 +54,6 @@ class WorldNameResolverTest
 
 
 	@Test
-	@Disabled
 	void getResolver_multiverse()
 	{
 		// Arrange
