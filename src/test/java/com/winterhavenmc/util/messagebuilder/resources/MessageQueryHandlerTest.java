@@ -15,13 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.model.language;
+package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.model.language.message.InvalidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 
 import org.bukkit.configuration.ConfigurationSection;
