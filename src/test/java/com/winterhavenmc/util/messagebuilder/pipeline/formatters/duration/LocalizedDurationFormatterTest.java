@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.model.language.ConstantQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.ConstantQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.ConstantRecord;

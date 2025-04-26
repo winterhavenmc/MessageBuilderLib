@@ -21,6 +21,7 @@ import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.model.language.item.InvalidItemRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.item.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.item.ValidItemRecord;
+import com.winterhavenmc.util.messagebuilder.resources.ItemQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 

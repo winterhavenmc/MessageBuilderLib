@@ -17,9 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-import com.winterhavenmc.util.messagebuilder.model.language.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.model.language.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.model.language.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.ConstantRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.item.ItemRecord;
