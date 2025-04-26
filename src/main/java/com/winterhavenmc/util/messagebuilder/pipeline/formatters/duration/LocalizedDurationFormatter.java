@@ -51,35 +51,60 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 
 		return switch (type)
 		{
+			case NORMAL    -> formatNormal(duration, lowerBound);
 			case UNLIMITED -> formatUnlimited();
 			case LESS_THAN -> formatLessThan(lowerBound);
-			case NORMAL    -> formatNormal(duration, lowerBound);
 		};
 	}
 
 
+	/**
+	 * Transform a duration into a formatted string.
+	 *
+	 * @param duration the duration to be formatted
+	 * @param lowerBound the lowest time unit to use in the formatted string
+	 * @return a localized String representing a normal duration.
+	 */
+	String formatNormal(final Duration duration, final ChronoUnit lowerBound)
+	{
+		return delegate.format(duration, lowerBound);
+	}
+
+
+	/**
+	 * Format duration string as configured UNLIMITED constant string in language file
+	 *
+	 * @return a localized String representing unlimited time.
+	 */
 	String formatUnlimited()
 	{
 		return getTimeConstant(UNLIMITED_KEY, DurationType.UNLIMITED);
 	}
 
 
-	String formatLessThan(final ChronoUnit precision)
+	/**
+	 * Format a duration into a string using the configured LESS_THAN String constant in the language file.
+	 *
+	 * @param lowerBound the time unit to use in the formatted string
+	 * @return a localized String representing less than a unit of time.
+	 */
+	String formatLessThan(final ChronoUnit lowerBound)
 	{
-		Duration duration = Duration.of(1, precision);
-		String formattedDuration = delegate.format(duration, precision);
+		Duration duration = Duration.of(1, lowerBound);
+		String formattedDuration = delegate.format(duration, lowerBound);
 		String lessThanTemplate = getTimeConstant(LESS_THAN_KEY, DurationType.LESS_THAN);
 
 		return lessThanTemplate.replace("{DURATION}", formattedDuration);
 	}
 
 
-	String formatNormal(final Duration duration, final ChronoUnit precision)
-	{
-		return delegate.format(duration, precision);
-	}
-
-
+	/**
+	 * Retrieve the time string constant for a language file constant key
+	 *
+	 * @param constantKey the key in the language file CONSTANTS section
+	 * @param durationType the duration type (NORMAL, UNLIMITED, LESS_THAN)
+	 * @return a String value from the language file for the key
+	 */
 	String getTimeConstant(final RecordKey constantKey, final DurationType durationType)
 	{
 		QueryHandler<ConstantRecord> constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
