@@ -17,6 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.configuration;
 
+import com.winterhavenmc.util.messagebuilder.model.locale.LanguageTag;
+import org.bukkit.plugin.Plugin;
+
 import java.util.Locale;
 import java.util.function.Supplier;
 
@@ -28,6 +31,15 @@ public class LocaleProvider
 	public LocaleProvider(Supplier<Locale> localeSupplier)
 	{
 		this.localeSupplier = localeSupplier;
+	}
+
+
+	public static LocaleProvider create(final Plugin plugin)
+	{
+		return new LocaleProvider(() ->
+				LanguageTag.of(plugin.getConfig().getString("locale"))
+						.orElse(LanguageTag.of(plugin.getConfig().getString("language"))
+								.orElse(LanguageTag.getDefault())).getLocale());
 	}
 
 

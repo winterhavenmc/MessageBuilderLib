@@ -32,13 +32,13 @@ import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;
@@ -94,9 +94,9 @@ class Orchestrator
 
 	static ResolverContextContainer getResolverContextContainer(Plugin plugin, QueryHandlerFactory queryHandlerFactory)
 	{
-		final LocaleSupplier localeSupplier = LocaleSupplier.create(plugin);
-		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeSupplier);
-		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeSupplier);
+		final LocaleProvider localeProvider = LocaleProvider.create(plugin);
+		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProvider);
+		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProvider);
 		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, queryHandlerFactory);
 
 		return new ResolverContextContainer(durationFormatter, localeNumberFormatter);
