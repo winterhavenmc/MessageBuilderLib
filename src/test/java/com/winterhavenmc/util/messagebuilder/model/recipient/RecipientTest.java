@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.model.recipient;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.ProxiedCommandSender;
