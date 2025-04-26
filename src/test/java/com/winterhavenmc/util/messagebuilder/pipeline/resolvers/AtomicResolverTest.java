@@ -23,8 +23,8 @@ import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNu
 import com.winterhavenmc.util.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
 
+import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +45,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AtomicResolverTest
 {
-	@Mock LocaleSupplier localeSupplierMock;
+	@Mock LocaleProvider localeProviderMock;
 	@Mock ContextMap contextMapMock;
 	@Mock LocalizedDurationFormatter durationFormatter;
 
@@ -57,7 +57,7 @@ class AtomicResolverTest
 	@BeforeEach
 	void setUp()
 	{
-		LocaleNumberFormatter localeNumberFormatterMock = new LocaleNumberFormatter(localeSupplierMock);
+		LocaleNumberFormatter localeNumberFormatterMock = new LocaleNumberFormatter(localeProviderMock);
 		ResolverContextContainer resolverContextContainer = new ResolverContextContainer(durationFormatter, localeNumberFormatterMock);
 		resolver = new AtomicResolver(resolverContextContainer);
 	}
@@ -125,7 +125,7 @@ class AtomicResolverTest
 	{
 		// Arrange
 		when(contextMapMock.get(key)).thenReturn(Optional.of(42));
-		when(localeSupplierMock.get()).thenReturn(Locale.US);
+		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
 
 		// Act
 		ResultMap result = resolver.resolve(key, contextMapMock);
@@ -135,7 +135,7 @@ class AtomicResolverTest
 
 		// Verify
 		verify(contextMapMock, atLeastOnce()).get(key);
-		verify(localeSupplierMock, atLeastOnce()).get();
+		verify(localeProviderMock, atLeastOnce()).getLocale();
 	}
 
 
@@ -182,7 +182,7 @@ class AtomicResolverTest
 	{
 		// Arrange
 		when(contextMapMock.get(key)).thenReturn(Optional.of(420000));
-		when(localeSupplierMock.get()).thenReturn(Locale.US);
+		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
 
 		// Act
 		ResultMap result = resolver.resolve(key, contextMapMock);
@@ -192,7 +192,7 @@ class AtomicResolverTest
 
 		// Verify
 		verify(contextMapMock, atLeastOnce()).get(key);
-		verify(localeSupplierMock, atLeastOnce()).get();
+		verify(localeProviderMock, atLeastOnce()).getLocale();
 	}
 
 
@@ -201,7 +201,7 @@ class AtomicResolverTest
 	{
 		// Arrange
 		when(contextMapMock.get(key)).thenReturn(Optional.of(420000));
-		when(localeSupplierMock.get()).thenReturn(Locale.GERMAN);
+		when(localeProviderMock.getLocale()).thenReturn(Locale.GERMAN);
 
 		// Act
 		ResultMap result = resolver.resolve(key, contextMapMock);
@@ -211,7 +211,7 @@ class AtomicResolverTest
 
 		// Verify
 		verify(contextMapMock, atLeastOnce()).get(key);
-		verify(localeSupplierMock, atLeastOnce()).get();
+		verify(localeProviderMock, atLeastOnce()).getLocale();
 	}
 
 

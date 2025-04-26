@@ -15,27 +15,26 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.model.locale;
+package com.winterhavenmc.util.messagebuilder.resources.configuration;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class LocaleSupplierTest
+class LocaleProviderTest
 {
 	@Mock Plugin pluginMock;
 	FileConfiguration configuration;
@@ -53,10 +52,10 @@ class LocaleSupplierTest
 	void create()
 	{
 		// Act
-		LocaleSupplier localeSupplier = LocaleSupplier.create(pluginMock);
+		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
 
 		// Assert
-		assertNotNull(localeSupplier);
+		assertNotNull(localeProvider);
 	}
 
 
@@ -65,10 +64,10 @@ class LocaleSupplierTest
 	{
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleSupplier localeSupplier = LocaleSupplier.create(pluginMock);
+		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
 
 		// Act
-		Locale locale = localeSupplier.get();
+		Locale locale = localeProvider.getLocale();
 
 		// Assert
 		assertEquals(Locale.FRANCE, locale);
@@ -84,10 +83,10 @@ class LocaleSupplierTest
 		// Arrange
 		configuration = new YamlConfiguration();
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleSupplier localeSupplier = LocaleSupplier.create(pluginMock);
+		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
 
 		// Act
-		Locale locale = localeSupplier.get();
+		Locale locale = localeProvider.getLocale();
 
 		// Assert
 		assertNotNull(locale);

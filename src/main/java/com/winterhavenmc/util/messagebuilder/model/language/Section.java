@@ -17,8 +17,11 @@
 
 package com.winterhavenmc.util.messagebuilder.model.language;
 
+import com.winterhavenmc.util.messagebuilder.resources.ConstantQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.resources.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 
 import java.util.EnumMap;
 import java.util.function.Function;

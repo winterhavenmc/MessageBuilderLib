@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration;
 
-import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.util.messagebuilder.validation.LogLevel;
 import net.time4j.CalendarUnit;
 import net.time4j.ClockUnit;
@@ -45,12 +45,12 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public final class Time4jDurationFormatter implements DurationFormatter
 {
-	private final LocaleSupplier localeSupplier;
+	private final LocaleProvider localeProvider;
 
 
-	public Time4jDurationFormatter(final LocaleSupplier localeSupplier)
+	public Time4jDurationFormatter(final LocaleProvider localeProvider)
 	{
-		this.localeSupplier = localeSupplier;
+		this.localeProvider = localeProvider;
 	}
 
 
@@ -60,7 +60,7 @@ public final class Time4jDurationFormatter implements DurationFormatter
 		Duration validDuration = validate(duration, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, DURATION)).orElse(Duration.ZERO);
 		ChronoUnit validLowerBound = validate(lowerBound, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, PRECISION)).orElse(ChronoUnit.MINUTES);
 
-		Locale locale = localeSupplier.get();
+		Locale locale = localeProvider.getLocale();
 
 		// clamp duration to lowerBound threshold for formatting if needed
 		Duration toFormat = validDuration.compareTo(Duration.of(1, validLowerBound)) < 0

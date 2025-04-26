@@ -81,7 +81,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 public final class MessageBuilder
 {
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
-	public final static ResourceBundle BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, Locale.getDefault());
+	public final static ResourceBundle BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, Locale.getDefault()); //TODO: use plugin config locale
 	public final static TemporalUnit TICKS = new Tick();
 
 	private final Plugin plugin;

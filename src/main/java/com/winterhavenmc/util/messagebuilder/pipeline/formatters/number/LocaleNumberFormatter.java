@@ -17,25 +17,26 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.formatters.number;
 
-import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
+
 import java.text.NumberFormat;
 
 
 public class LocaleNumberFormatter implements NumberFormatter
 {
-	private final LocaleSupplier localeSupplier;
+	private final LocaleProvider localeProvider;
 
 
-	public LocaleNumberFormatter(final LocaleSupplier localeSupplier)
+	public LocaleNumberFormatter(final LocaleProvider localeProvider)
 	{
-		this.localeSupplier = localeSupplier;
+		this.localeProvider = localeProvider;
 	}
 
 
 	@Override
 	public String getFormatted(final Number number)
 	{
-		return NumberFormat.getInstance(localeSupplier.get()).format(number);
+		return NumberFormat.getInstance(localeProvider.getLocale()).format(number);
 	}
 
 }

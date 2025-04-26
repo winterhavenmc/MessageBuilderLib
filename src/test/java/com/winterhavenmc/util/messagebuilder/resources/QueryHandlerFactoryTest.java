@@ -17,15 +17,12 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-import com.winterhavenmc.util.messagebuilder.model.language.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.model.language.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.model.language.MessageQueryHandler;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.ConstantRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.item.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

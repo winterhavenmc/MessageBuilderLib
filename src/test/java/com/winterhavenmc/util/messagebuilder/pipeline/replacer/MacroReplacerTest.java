@@ -39,8 +39,8 @@ import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessage
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
+import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
@@ -69,7 +69,7 @@ import static org.mockito.Mockito.mock;
 class MacroReplacerTest
 {
 	@Mock Player playerMock;
-	@Mock LocaleSupplier localeSupplierMock;
+	@Mock LocaleProvider localeProviderMock;
 	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
 
@@ -103,8 +103,8 @@ class MacroReplacerTest
 		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
 		FieldExtractor fieldExtractor = new FieldExtractor();
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeSupplierMock);
-		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeSupplierMock);
+		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
+		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
 		ResolverContextContainer resolverContextContainer = new ResolverContextContainer(time4jDurationFormatter, localeNumberFormatter);
 		AtomicResolver atomicResolver = new AtomicResolver(resolverContextContainer);
 

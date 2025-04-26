@@ -19,7 +19,6 @@ package com.winterhavenmc.util.messagebuilder.resources.language;
 
 
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
 
 public interface LanguageResourceManager
 {

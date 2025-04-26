@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration;
 
-import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
+import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ import static org.mockito.Mockito.when;
 class Time4jDurationFormatterTest
 {
 	@Mock
-	LocaleSupplier localeSupplierMock;
+	LocaleProvider localeProviderMock;
 
 	private Time4jDurationFormatter formatter;
 
@@ -46,8 +46,8 @@ class Time4jDurationFormatterTest
 	void setUp()
 	{
 		MockitoAnnotations.openMocks(this);
-		when(localeSupplierMock.get()).thenReturn(Locale.ENGLISH);
-		formatter = new Time4jDurationFormatter(localeSupplierMock);
+		when(localeProviderMock.getLocale()).thenReturn(Locale.ENGLISH);
+		formatter = new Time4jDurationFormatter(localeProviderMock);
 	}
 
 

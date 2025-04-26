@@ -15,13 +15,13 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.model.language;
+package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.ConstantRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.InvalidConstantRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.ValidConstantRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -32,7 +32,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;

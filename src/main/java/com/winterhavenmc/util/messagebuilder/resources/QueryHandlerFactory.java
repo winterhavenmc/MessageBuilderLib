@@ -18,7 +18,7 @@
 package com.winterhavenmc.util.messagebuilder.resources;
 
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.SectionProvider;
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.language.SectionRecord;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;

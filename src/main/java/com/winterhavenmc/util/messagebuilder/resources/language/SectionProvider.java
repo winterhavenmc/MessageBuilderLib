@@ -15,31 +15,12 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
-import com.winterhavenmc.util.messagebuilder.model.language.Section;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.function.Supplier;
-
-
-public class LanguageSectionProvider implements SectionProvider
+@FunctionalInterface
+public interface SectionProvider
 {
-	private final Supplier<Configuration> configSupplier;
-	private final Section section;
-
-	public LanguageSectionProvider(Supplier<Configuration> configSupplier, Section section)
-	{
-		this.configSupplier = configSupplier;
-		this.section = section;
-	}
-
-
-	@Override
-	public ConfigurationSection getSection()
-	{
-		return configSupplier.get().getConfigurationSection(section.name());
-	}
-
+	ConfigurationSection getSection();
 }
