@@ -37,8 +37,8 @@ public class LocaleProvider
 	public static LocaleProvider create(final Plugin plugin)
 	{
 		return new LocaleProvider(() ->
-				LanguageTag.of(plugin.getConfig().getString("locale"))
-						.orElse(LanguageTag.of(plugin.getConfig().getString("language"))
+				LanguageTag.of(plugin.getConfig().getString(LocaleField.LOCALE.toString()))
+						.orElse(LanguageTag.of(plugin.getConfig().getString(LocaleField.LANGUAGE.toString()))
 								.orElse(LanguageTag.getDefault())).getLocale());
 	}
 

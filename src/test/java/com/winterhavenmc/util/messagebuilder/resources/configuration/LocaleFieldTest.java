@@ -15,23 +15,19 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.model.locale;
+package com.winterhavenmc.util.messagebuilder.resources.configuration;
 
-enum LocaleField
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
+class LocaleFieldTest
 {
-	LOCALE("locale"),
-	LANGUAGE("language");
-
-	private final String string;
-
-	LocaleField(String string)
+	@Test
+	void testToString()
 	{
-		this.string = string;
-	}
-
-	@Override
-	public String toString()
-	{
-		return this.string;
+		assertEquals("locale", LocaleField.LOCALE.toString());
+		assertEquals("language", LocaleField.LANGUAGE.toString());
 	}
 }

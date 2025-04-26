@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
@@ -34,7 +35,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import java.time.temporal.TemporalUnit;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -81,7 +81,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 public final class MessageBuilder
 {
 	private static final String ERROR_BUNDLE_NAME = "language.errors";
-	public final static ResourceBundle BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, Locale.getDefault()); //TODO: use plugin config locale
+	public final ResourceBundle BUNDLE;
 	public final static TemporalUnit TICKS = new Tick();
 
 	private final Plugin plugin;
@@ -103,6 +103,7 @@ public final class MessageBuilder
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
 		this.messagePipeline = messagePipeline;
+		BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, LocaleProvider.create(plugin).getLocale());
 	}
 
 
