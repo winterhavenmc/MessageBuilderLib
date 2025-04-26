@@ -25,12 +25,18 @@ import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.validation.Parameter;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.BoundedDuration;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.DURATION;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.MACRO;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public final class ValidMessage implements Message
@@ -55,8 +61,7 @@ public final class ValidMessage implements Message
 		this.recipient = recipient;
 		this.messageKey = messageKey;
 		this.messagePipeline = messagePipeline;
-		this.contextMap = ContextMap.of(this.recipient, this.messageKey)
-				.orElseThrow(() -> new ValidationException(PARAMETER_INVALID, Parameter.CONTEXT_MAP));
+		this.contextMap = ContextMap.of(this.recipient, this.messageKey).orElseThrow();
 	}
 
 
@@ -73,8 +78,9 @@ public final class ValidMessage implements Message
 	public <K extends Enum<K>, V> Message setMacro(final K macro,
 												   final V value)
 	{
-		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() ->
-				new ValidationException(PARAMETER_NULL, Parameter.MACRO));
+		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
+
+		MacroKey macroKey = MacroKey.of(macro).orElseThrow();
 
 		contextMap.putIfAbsent(macroKey, value);
 		return this;
@@ -96,11 +102,10 @@ public final class ValidMessage implements Message
 												   final K macro,
 												   final V value)
 	{
-		MacroKey macroKey = MacroKey.of(macro)
-				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, Parameter.MACRO));
+		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
 
-		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY")
-				.orElseThrow(() -> new ValidationException(PARAMETER_INVALID, Parameter.QUANTITY));
+		MacroKey macroKey = MacroKey.of(macro).orElseThrow();
+		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY").orElseThrow();
 
 		contextMap.putIfAbsent(macroKey, value);
 		contextMap.putIfAbsent(quantityKey, quantity);
@@ -110,9 +115,13 @@ public final class ValidMessage implements Message
 
 	public <K extends Enum<K>> Message setMacro(final K macro,
 												final Duration duration,
-												final ChronoUnit precision)
+												final ChronoUnit lowerBound)
 	{
-		return setMacro(macro, new BoundedDuration(duration, precision));
+		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
+		validate(duration, Objects::isNull, throwing(PARAMETER_NULL, DURATION));
+		validate(lowerBound, Objects::isNull, throwing(PARAMETER_NULL, Parameter.LOWER_BOUND));
+
+		return setMacro(macro, new BoundedDuration(duration, lowerBound));
 	}
 
 
