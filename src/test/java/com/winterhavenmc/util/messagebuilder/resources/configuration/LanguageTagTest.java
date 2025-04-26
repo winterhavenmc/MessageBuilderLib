@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.model.locale;
+package com.winterhavenmc.util.messagebuilder.resources.configuration;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

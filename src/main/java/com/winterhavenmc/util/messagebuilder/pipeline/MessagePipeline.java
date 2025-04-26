@@ -24,7 +24,6 @@ import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
-import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 
 import java.util.List;
@@ -56,13 +55,10 @@ public final class MessagePipeline implements Pipeline
 	@Override
 	public void process(final ValidMessage message)
 	{
-		Function<CooldownKey, Optional<ValidMessageRecord>> retrieveMessage =key ->
-				{
-					MessageRecord messageRecord = messageRetriever.getRecord(message.getMessageKey());
-					return (messageRecord instanceof ValidMessageRecord valid)
-							? Optional.of(valid)
-							: Optional.empty();
-				};
+		Function<CooldownKey, Optional<ValidMessageRecord>> retrieveMessage = key ->
+				(messageRetriever.getRecord(message.getMessageKey()) instanceof ValidMessageRecord valid)
+						? Optional.of(valid)
+						: Optional.empty();
 
 		Function<ValidMessageRecord, FinalMessageRecord> resolveMacros = messageRecord -> macroReplacer
 				.replaceMacros(messageRecord, message.getContextMap());
