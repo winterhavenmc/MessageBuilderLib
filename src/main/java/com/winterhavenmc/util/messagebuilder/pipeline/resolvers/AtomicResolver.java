@@ -23,10 +23,19 @@ import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
+import com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey;
+import com.winterhavenmc.util.messagebuilder.validation.Parameter;
+import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.Optional;
+
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOLVER_CONTEXT_CONTAINER;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 public class AtomicResolver implements Resolver
@@ -37,8 +46,10 @@ public class AtomicResolver implements Resolver
 
 	public AtomicResolver(final ResolverContextContainer resolverContextContainer)
 	{
+		validate(resolverContextContainer, Objects::isNull, throwing(PARAMETER_NULL, RESOLVER_CONTEXT_CONTAINER));
+
 		this.durationFormatter = resolverContextContainer.durationFormatter();
-		localeNumberFormatter = resolverContextContainer.localeNumberFormatter();
+		this.localeNumberFormatter = resolverContextContainer.localeNumberFormatter();
 	}
 
 

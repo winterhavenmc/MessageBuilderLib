@@ -17,28 +17,25 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.plugin.PluginManager;
-import org.junit.jupiter.api.Disabled;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class WorldNameResolverTest
 {
 	@Mock PluginManager pluginManagerMock;
-	@Mock MultiverseCore multiverseCore;
 
 
 	@Test
-	@Disabled
 	void getResolver()
 	{
 		// Arrange
@@ -52,23 +49,23 @@ class WorldNameResolverTest
 	}
 
 
-	@Test
-	@Disabled
-	void getResolver_multiverse()
-	{
-		// Arrange
-		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCore);
-		when(multiverseCore.isEnabled()).thenReturn(true);
-
-		// Act
-		WorldNameResolver resolver = WorldNameResolver.getResolver(pluginManagerMock);
-
-		// Assert
-		assertInstanceOf(MultiverseWorldNameResolver.class, resolver);
-
-		// Verify
-		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
-		verify(multiverseCore, atLeastOnce()).isEnabled();
-	}
+//	@Test
+//	@Disabled
+//	void getResolver_multiverse()
+//	{
+//		// Arrange
+//		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCore);
+//		when(multiverseCore.isEnabled()).thenReturn(true);
+//
+//		// Act
+//		WorldNameResolver resolver = WorldNameResolver.getResolver(pluginManagerMock);
+//
+//		// Assert
+//		assertInstanceOf(MultiverseWorldNameResolver.class, resolver);
+//
+//		// Verify
+//		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
+//		verify(multiverseCore, atLeastOnce()).isEnabled();
+//	}
 
 }

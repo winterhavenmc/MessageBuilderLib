@@ -26,7 +26,6 @@ import com.winterhavenmc.util.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.util.messagebuilder.model.locale.LocaleSupplier;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -141,23 +140,40 @@ class AtomicResolverTest
 
 
 	@Test
-	@Disabled
 	void testResolve_boundedDuration()
 	{
 		// Arrange
 		BoundedDuration boundedDuration = new BoundedDuration(Duration.ofSeconds(12), ChronoUnit.SECONDS);
 		when(contextMapMock.get(key)).thenReturn(Optional.of(boundedDuration));
-		when(localeSupplierMock.get()).thenReturn(Locale.US);
+		when(durationFormatter.format(boundedDuration.duration(), boundedDuration.precision())).thenReturn("12 seconds");
 
 		// Act
 		ResultMap result = resolver.resolve(key, contextMapMock);
 
 		// Assert
-		assertEquals("", result.get(key));
+		assertEquals("12 seconds", result.get(key));
 
 		// Verify
 		verify(contextMapMock, atLeastOnce()).get(key);
-		verify(localeSupplierMock, atLeastOnce()).get();
+	}
+
+
+	@Test
+	void testResolve_duration()
+	{
+		// Arrange
+		Duration duration = Duration.ofSeconds(15);
+		when(contextMapMock.get(key)).thenReturn(Optional.of(duration));
+		when(durationFormatter.format(duration, ChronoUnit.SECONDS)).thenReturn("15 minutes");
+
+		// Act
+		ResultMap result = resolver.resolve(key, contextMapMock);
+
+		// Assert
+		assertEquals("15 minutes", result.get(key));
+
+		// Verify
+		verify(contextMapMock, atLeastOnce()).get(key);
 	}
 
 
