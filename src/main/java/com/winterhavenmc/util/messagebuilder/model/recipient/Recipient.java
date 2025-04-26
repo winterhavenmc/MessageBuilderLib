@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.model.recipient;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -25,11 +24,10 @@ import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Player;
 
 
-public sealed interface Recipient permits Recipient.Invalid, Recipient.Offline, Recipient.Proxied, Recipient.Valid
+public sealed interface Recipient permits Recipient.Invalid, Recipient.Proxied, Recipient.Valid
 {
 	enum InvalidReason { NULL, OTHER }
 	record Valid(CommandSender sender) implements Recipient { }
-	record Offline(CommandSender sender, OfflinePlayer offlinePlayer) implements Recipient { }
 	record Proxied(CommandSender sender, ProxiedCommandSender proxy) implements Recipient { }
 	record Invalid(CommandSender sender, InvalidReason invalidReason) implements Recipient { }
 
@@ -41,7 +39,6 @@ public sealed interface Recipient permits Recipient.Invalid, Recipient.Offline, 
 			case Player ignored -> new Valid(sender);
 			case ConsoleCommandSender ignored -> new Valid(sender);
 			case BlockCommandSender ignored -> new Valid(sender);
-			case OfflinePlayer offlinePlayer -> new Offline(sender, offlinePlayer);
 			case ProxiedCommandSender proxy -> new Proxied(sender, proxy);
 			case null -> new Invalid(sender, InvalidReason.NULL);
 			default -> new Invalid(sender, InvalidReason.OTHER);
