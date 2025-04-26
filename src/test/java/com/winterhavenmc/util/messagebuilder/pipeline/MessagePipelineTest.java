@@ -37,7 +37,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -105,20 +104,6 @@ class MessagePipelineTest
 				"this is a final message",
 				"this is a final title",
 				"this is a final subtitle");
-	}
-
-
-	@AfterEach
-	void tearDown()
-	{
-		messageRetrieverMock = null;
-		macroReplacerMock = null;
-		playerMock = null;
-		messageSenderMock = null;
-		titleSenderMock = null;
-		cooldownMap = null;
-		messagePipeline = null;
-		validMessageRecord = null;
 	}
 
 
