@@ -56,8 +56,7 @@ class ValidMessageTest
 {
 	// declare mocks
 	@Mock Player playerMock;
-	@Mock
-	MessagePipeline messagePipelineMock;
+	@Mock MessagePipeline messagePipelineMock;
 
 	// declare real objects
 	FileConfiguration pluginConfiguration;
@@ -87,8 +86,6 @@ class ValidMessageTest
 		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
-
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
@@ -129,7 +126,7 @@ class ValidMessageTest
 	}
 
 
-	@Nested
+	@Nested @DisplayName("Set Macro Tests (2 parameter)")
 	class SetMacroTests
 	{
 		@Test @DisplayName("test setMacro (two parameter) method with valid parameters")
@@ -146,7 +143,6 @@ class ValidMessageTest
 			// Assert
 			assertInstanceOf(ItemStack.class, object);
 			assertEquals(itemStack, object);
-
 		}
 
 
@@ -160,21 +156,10 @@ class ValidMessageTest
 			// Assert
 			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
 		}
-
-
-		@Test @DisplayName("test setMacro method with null value")
-		@Disabled("null values allowed")
-		void testSetMacro_parameter_null_value()
-		{
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> message.setMacro(Macro.OWNER, null));
-
-			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
-		}
 	}
 
 
-	@Nested
+	@Nested @DisplayName("Set Macro Tests (3 parameter)")
 	class SetMacro2Tests
 	{
 		@Test @DisplayName("test setMacro (three parameter) method with valid parameters")
@@ -202,17 +187,6 @@ class ValidMessageTest
 
 			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
 		}
-
-
-		@Test
-		@Disabled("null values allowed")
-		void testSetMacro2_parameter_null_object()
-		{
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> message.setMacro(6, Macro.OWNER, null));
-
-			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
-		}
 	}
 
 
@@ -234,7 +208,25 @@ class ValidMessageTest
 	}
 
 
+	@Test
+	void testSetMacro4_null_duration()
+	{
+		ValidationException exception = assertThrows(ValidationException.class,
+				() ->  message.setMacro(Macro.DURATION, null, ChronoUnit.SECONDS));
 
+		assertEquals("The parameter 'duration' cannot be null.", exception.getMessage());
+	}
+
+
+	@Test
+	void testSetMacro4_null_lower_bound()
+	{
+		Duration duration = Duration.ofSeconds(15);
+		ValidationException exception = assertThrows(ValidationException.class,
+				() ->  message.setMacro(Macro.DURATION, duration, null));
+
+		assertEquals("The parameter 'lowerBound' cannot be null.", exception.getMessage());
+	}
 
 
 	@Test
@@ -251,12 +243,14 @@ class ValidMessageTest
 		assertNotNull(empty, "empty() should not return null");
 	}
 
+
 	@Test
 	void emptyMessage_shouldBeInstanceOfMessage()
 	{
 		Message empty = Message.empty();
 		assertInstanceOf(Message.class, empty, "empty() should return a Message instance");
 	}
+
 
 	@Test
 	void emptyMessage_setMacroShouldReturnSameInstance()
@@ -265,6 +259,7 @@ class ValidMessageTest
 		Message result = empty.setMacro(DummyMacro.TEST, "value");
 		assertSame(empty, result, "setMacro() on empty message should return the same instance");
 	}
+
 
 	@Test
 	void testEmptyMessage_send()
@@ -275,6 +270,7 @@ class ValidMessageTest
 		// Act & Assert
 		assertDoesNotThrow(emptyMessage::send);
 	}
+
 
 	/**
 	 * Dummy enum for macro test – replace with your actual Macro enum if available.
