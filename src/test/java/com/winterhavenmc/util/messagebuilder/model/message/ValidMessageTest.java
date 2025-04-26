@@ -56,8 +56,7 @@ class ValidMessageTest
 {
 	// declare mocks
 	@Mock Player playerMock;
-	@Mock
-	MessagePipeline messagePipelineMock;
+	@Mock MessagePipeline messagePipelineMock;
 
 	// declare real objects
 	FileConfiguration pluginConfiguration;
@@ -146,7 +145,6 @@ class ValidMessageTest
 			// Assert
 			assertInstanceOf(ItemStack.class, object);
 			assertEquals(itemStack, object);
-
 		}
 
 
@@ -159,17 +157,6 @@ class ValidMessageTest
 
 			// Assert
 			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
-		}
-
-
-		@Test @DisplayName("test setMacro method with null value")
-		@Disabled("null values allowed")
-		void testSetMacro_parameter_null_value()
-		{
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> message.setMacro(Macro.OWNER, null));
-
-			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
 		}
 	}
 
@@ -202,17 +189,6 @@ class ValidMessageTest
 
 			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
 		}
-
-
-		@Test
-		@Disabled("null values allowed")
-		void testSetMacro2_parameter_null_object()
-		{
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> message.setMacro(6, Macro.OWNER, null));
-
-			assertEquals("The parameter 'value' cannot be null.", exception.getMessage());
-		}
 	}
 
 
@@ -234,9 +210,6 @@ class ValidMessageTest
 	}
 
 
-
-
-
 	@Test
 	void testSend()
 	{
@@ -251,12 +224,14 @@ class ValidMessageTest
 		assertNotNull(empty, "empty() should not return null");
 	}
 
+
 	@Test
 	void emptyMessage_shouldBeInstanceOfMessage()
 	{
 		Message empty = Message.empty();
 		assertInstanceOf(Message.class, empty, "empty() should return a Message instance");
 	}
+
 
 	@Test
 	void emptyMessage_setMacroShouldReturnSameInstance()
@@ -265,6 +240,7 @@ class ValidMessageTest
 		Message result = empty.setMacro(DummyMacro.TEST, "value");
 		assertSame(empty, result, "setMacro() on empty message should return the same instance");
 	}
+
 
 	@Test
 	void testEmptyMessage_send()
@@ -275,6 +251,7 @@ class ValidMessageTest
 		// Act & Assert
 		assertDoesNotThrow(emptyMessage::send);
 	}
+
 
 	/**
 	 * Dummy enum for macro test – replace with your actual Macro enum if available.
