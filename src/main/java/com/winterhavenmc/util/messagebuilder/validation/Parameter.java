@@ -34,6 +34,7 @@ public enum Parameter
 	LANGUAGE_TAG("languageTag"),
 	LOCALE("locale"),
 	LOCATION("location"),
+	LOWER_BOUND("lowerBound"),
 	MACRO("macro"),
 	MESSAGE("message"),
 	MESSAGE_ID("messageId"),
