@@ -26,6 +26,7 @@ import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.Server;
+import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -54,6 +55,8 @@ class MessageBuilderTest
 	@Mock Player playerMock;
 	@Mock Server serverMock;
 	@Mock PluginManager pluginManagerMock;
+	@Mock ProxiedCommandSender proxiedCommandSenderMock;
+
 
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock MacroReplacer macroReplacerMock;
@@ -114,11 +117,18 @@ class MessageBuilderTest
 	@Test
 	void compose_parameter_null_player()
 	{
-		// Arrange
-//		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-
 		// Act & Assert
 		assertDoesNotThrow(() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
+	}
+
+
+	@Test
+	void compose_parameter_proxied_command_sender()
+	{
+		// Act & Assert
+		var result = messageBuilder.compose(proxiedCommandSenderMock, MessageId.ENABLED_MESSAGE);
+
+		assertEquals(Message.empty(), result);
 	}
 
 
