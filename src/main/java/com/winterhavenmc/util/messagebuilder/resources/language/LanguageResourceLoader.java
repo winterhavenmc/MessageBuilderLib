@@ -37,7 +37,7 @@ import java.util.Optional;
  * result in a new configuration object loaded from the currently configured language file, or the us-EN language
  * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
-public final class LanguageResourceLoader
+public final class LanguageResourceLoader implements com.winterhavenmc.util.messagebuilder.resources.ResourceLoader
 {
 	private final Plugin plugin;
 
@@ -65,7 +65,8 @@ public final class LanguageResourceLoader
 	 *
 	 * @return Optional {@code LanguageTag} or an empty Optional if config setting is null or empty
 	 */
-	Optional<LanguageTag> getConfiguredLanguageTag()
+	@Override
+	public Optional<LanguageTag> getConfiguredLanguageTag()
 	{
 		String configLanguageTag = plugin.getConfig().getString(LanguageSetting.CONFIG_LANGUAGE_KEY.toString());
 
@@ -75,7 +76,8 @@ public final class LanguageResourceLoader
 	}
 
 
-	Locale getConfiguredLocale()
+	@Override
+	public Locale getConfiguredLocale()
 	{
 		return getConfiguredLanguageTag()
 				.map(tag -> Locale.forLanguageTag(tag.toString()))
@@ -89,6 +91,7 @@ public final class LanguageResourceLoader
 	 *
 	 * @return Configuration - message configuration object
 	 */
+	@Override
 	public Configuration load()
 	{
         return LanguageTag.of(getConfiguredLocale())
@@ -103,7 +106,8 @@ public final class LanguageResourceLoader
 	 *
 	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
-	Configuration load(final LanguageTag languageTag)
+	@Override
+	public Configuration load(final LanguageTag languageTag)
 	{
 		YamlConfiguration configuration = new YamlConfiguration();
 		File languageFile = new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(languageTag));
