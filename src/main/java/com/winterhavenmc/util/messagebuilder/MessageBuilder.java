@@ -27,7 +27,7 @@ import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvi
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FormatterContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.time.Tick;
 
@@ -123,9 +123,9 @@ public final class MessageBuilder
 
 		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
-		final ResolverContextContainer resolverContextContainer = getResolverContextContainer(plugin, queryHandlerFactory);
+		final FormatterContainer formatterContainer = getResolverContextContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = getAdapterContext(plugin);
-		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, resolverContextContainer, adapterContextContainer);
+		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer);
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
 	}

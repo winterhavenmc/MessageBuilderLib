@@ -39,7 +39,7 @@ import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessage
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FormatterContainer;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -105,8 +105,8 @@ class MacroReplacerTest
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
 		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
-		ResolverContextContainer resolverContextContainer = new ResolverContextContainer(time4jDurationFormatter, localeNumberFormatter);
-		AtomicResolver atomicResolver = new AtomicResolver(resolverContextContainer);
+		FormatterContainer formatterContainer = new FormatterContainer(time4jDurationFormatter, localeNumberFormatter);
+		AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
 
 
 		resolvers = List.of(compositeResolver, atomicResolver);
