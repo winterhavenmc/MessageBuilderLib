@@ -17,4 +17,8 @@
 
 package com.winterhavenmc.util.messagebuilder.keys;
 
+
+/**
+ * An interface that defines a standard key type.
+ */
 public sealed interface StandardKey permits MacroKey, RecordKey { }
