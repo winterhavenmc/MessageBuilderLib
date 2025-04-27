@@ -20,32 +20,25 @@ package com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 
-
-public class MultiverseWorldNameResolver implements WorldNameResolver
+public class MultiverseWorldNameRetriever implements WorldNameRetriever
 {
 	private final MultiverseCore multiverseCore;
 
 
-	/**
-	 * Class constructor
-	 *
-	 * @param multiverseCore an instance of the MultiverseCore plugin
-	 */
-	public MultiverseWorldNameResolver(MultiverseCore multiverseCore)
+	public MultiverseWorldNameRetriever(MultiverseCore multiverseCore)
 	{
 		this.multiverseCore = multiverseCore;
 	}
 
 
 	@Override
-	public String resolveWorldName(final World world)
+	public String getWorldName(World world)
 	{
-		if (world == null) { return "NULL WORLD"; }
-
-		String mvAlias = new MultiverseWorldNameRetriever(multiverseCore).getWorldName(world);
-		return (mvAlias == null || mvAlias.isBlank())
-				? world.getName()
-				: mvAlias;
+		if (world == null || multiverseCore == null || multiverseCore.getMVWorldManager() == null)
+		{
+			return null;
+		}
+		return multiverseCore.getMVWorldManager().getMVWorld(world).getAlias();
 	}
 
 }

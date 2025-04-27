@@ -66,6 +66,7 @@ class TitleSenderTest
 		recipient = switch(Recipient.of(playerMock))
 		{
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
@@ -107,6 +108,7 @@ class TitleSenderTest
 		Recipient.Valid consoleRecipient = switch (Recipient.of(consoleMock))
 		{
 			case Recipient.Valid validRecipient -> validRecipient;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 

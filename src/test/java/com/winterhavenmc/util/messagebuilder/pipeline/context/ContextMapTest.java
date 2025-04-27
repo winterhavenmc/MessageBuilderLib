@@ -76,12 +76,14 @@ class ContextMapTest
 		consoleRecipient = switch (Recipient.of(consoleCommandSenderMock))
 		{
 			case Recipient.Valid vr -> vr;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		playerRecipient = switch (Recipient.of(playerMock))
 		{
 			case Recipient.Valid vr -> vr;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 

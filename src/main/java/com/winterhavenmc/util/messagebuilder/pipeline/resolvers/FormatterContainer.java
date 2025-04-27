@@ -21,4 +21,4 @@ import com.winterhavenmc.util.messagebuilder.pipeline.formatters.number.LocaleNu
 import com.winterhavenmc.util.messagebuilder.pipeline.formatters.duration.DurationFormatter;
 
 
-public record ResolverContextContainer(DurationFormatter durationFormatter, LocaleNumberFormatter localeNumberFormatter) { }
+public record FormatterContainer(DurationFormatter durationFormatter, LocaleNumberFormatter localeNumberFormatter) { }

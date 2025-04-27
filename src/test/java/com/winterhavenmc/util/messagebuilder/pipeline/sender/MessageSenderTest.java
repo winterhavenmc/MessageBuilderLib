@@ -63,6 +63,7 @@ class MessageSenderTest
 		recipient = switch(Recipient.of(playerMock))
 		{
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 

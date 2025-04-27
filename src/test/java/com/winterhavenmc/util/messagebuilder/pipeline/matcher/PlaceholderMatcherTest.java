@@ -33,7 +33,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.Resolver;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FormatterContainer;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
@@ -80,15 +80,16 @@ class PlaceholderMatcherTest
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
 		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
-		ResolverContextContainer resolverContextContainer = new ResolverContextContainer(time4jDurationFormatter, localeNumberFormatter);
+		FormatterContainer formatterContainer = new FormatterContainer(time4jDurationFormatter, localeNumberFormatter);
 
-		AtomicResolver atomicResolver = new AtomicResolver(resolverContextContainer);
+		AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
 		List<Resolver> resolvers = List.of(compositeResolver, atomicResolver);
 
 		PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
 
 		recipient = switch (Recipient.of(playerMock)) {
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored-> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 

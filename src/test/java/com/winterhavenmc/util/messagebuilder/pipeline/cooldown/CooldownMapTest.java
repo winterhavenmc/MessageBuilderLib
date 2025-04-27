@@ -103,6 +103,7 @@ class CooldownMapTest
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 			recipient = switch (Recipient.of(playerMock)) {
 				case Recipient.Valid valid -> valid;
+				case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
@@ -128,6 +129,7 @@ class CooldownMapTest
 			when(playerMock.getUniqueId()).thenReturn(new UUID(42, 17));
 			recipient = switch (Recipient.of(playerMock)) {
 				case Recipient.Valid valid -> valid;
+				case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
@@ -155,6 +157,7 @@ class CooldownMapTest
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 		recipient = switch (Recipient.of(playerMock)) {
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
@@ -192,6 +195,7 @@ class CooldownMapTest
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 			recipient = switch (Recipient.of(playerMock)) {
 				case Recipient.Valid valid -> valid;
+				case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
@@ -211,6 +215,7 @@ class CooldownMapTest
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 			recipient = switch (Recipient.of(playerMock)) {
 				case Recipient.Valid valid -> valid;
+				case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 

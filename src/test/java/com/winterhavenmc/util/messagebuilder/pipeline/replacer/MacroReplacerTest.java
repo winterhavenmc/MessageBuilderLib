@@ -39,7 +39,7 @@ import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessage
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.ResolverContextContainer;
+import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FormatterContainer;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -91,8 +91,10 @@ class MacroReplacerTest
 	{
 		recipient = switch (Recipient.of(playerMock)) {
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
+
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		macroKey = MacroKey.of(Macro.OWNER).orElseThrow();
 
@@ -105,8 +107,8 @@ class MacroReplacerTest
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
 		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
-		ResolverContextContainer resolverContextContainer = new ResolverContextContainer(time4jDurationFormatter, localeNumberFormatter);
-		AtomicResolver atomicResolver = new AtomicResolver(resolverContextContainer);
+		FormatterContainer formatterContainer = new FormatterContainer(time4jDurationFormatter, localeNumberFormatter);
+		AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
 
 
 		resolvers = List.of(compositeResolver, atomicResolver);
@@ -225,6 +227,7 @@ class MacroReplacerTest
 		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
 		recipient = switch (Recipient.of(console)) {
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();

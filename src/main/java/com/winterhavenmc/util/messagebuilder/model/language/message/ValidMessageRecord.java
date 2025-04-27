@@ -63,13 +63,13 @@ public final class ValidMessageRecord implements MessageRecord
 		// replace any null strings with blank strings
 		this.key = key;
 		this.enabled = enabled;
-		this.message = message != null ? message : "";
+		this.message = (message != null) ? message : "";
 		this.repeatDelay = repeatDelay;
-		this.title = title != null ? title : "";
+		this.title = (title != null) ? title : "";
 		this.titleFadeIn = titleFadeIn;
 		this.titleStay = titleStay;
 		this.titleFadeOut = titleFadeOut;
-		this.subtitle = subtitle != null ? subtitle : "";
+		this.subtitle = (subtitle != null) ? subtitle : "";
 	}
 
 
