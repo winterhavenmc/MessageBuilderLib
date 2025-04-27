@@ -48,7 +48,7 @@ class ValidationUtilityTest
 	@Test
 	void testBundleName()
 	{
-		assertEquals("language.errors", BUNDLE_NAME);
+		assertEquals("exception.messages", BUNDLE_NAME);
 	}
 
 }

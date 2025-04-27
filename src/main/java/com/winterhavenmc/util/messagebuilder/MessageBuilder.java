@@ -80,9 +80,9 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public final class MessageBuilder
 {
-	private static final String ERROR_BUNDLE_NAME = "language.errors";
-	private final ResourceBundle BUNDLE;
 	public final static TemporalUnit TICKS = new Tick();
+	private final static String EXCEPTION_MESSAGES = "exception.messages";
+	private final ResourceBundle BUNDLE;
 
 	private final Plugin plugin;
 	private final LanguageSectionResourceManager languageResourceManager;
@@ -103,7 +103,7 @@ public final class MessageBuilder
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
 		this.messagePipeline = messagePipeline;
-		BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, LocaleProvider.create(plugin).getLocale());
+		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, LocaleProvider.create(plugin).getLocale());
 	}
 
 

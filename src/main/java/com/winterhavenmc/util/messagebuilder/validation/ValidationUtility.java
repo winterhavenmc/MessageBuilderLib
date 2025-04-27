@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 
 public class ValidationUtility
 {
-	static final String BUNDLE_NAME = "language.errors";
+	static final String BUNDLE_NAME = "exception.messages";
 
 
 	private ValidationUtility() { /* private constructor to prevent instantiation */ }
