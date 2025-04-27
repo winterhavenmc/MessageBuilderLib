@@ -17,33 +17,9 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline.resolvers.worldname;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 
-
-public class MultiverseWorldNameResolver implements WorldNameResolver
+public interface WorldNameRetriever
 {
-	private final MultiverseCore multiverseCore;
-
-
-	/**
-	 * Class constructor
-	 *
-	 * @param multiverseCore an instance of the MultiverseCore plugin
-	 */
-	public MultiverseWorldNameResolver(MultiverseCore multiverseCore)
-	{
-		this.multiverseCore = multiverseCore;
-	}
-
-
-	@Override
-	public String resolveWorldName(final World world)
-	{
-		String mvAlias = new MultiverseWorldNameRetriever(multiverseCore).getWorldName(world);
-		return (mvAlias == null || mvAlias.isBlank())
-				? mvAlias
-				: world.getName();
-	}
-
+	String getWorldName(World world);
 }

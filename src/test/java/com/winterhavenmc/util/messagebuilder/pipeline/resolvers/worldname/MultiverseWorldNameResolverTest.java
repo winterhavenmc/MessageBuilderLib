@@ -45,7 +45,7 @@ class MultiverseWorldNameResolverTest
 
 	@Test
 	@Disabled
-	void resolveWorldName()
+	void getWorldName()
 	{
 		// Arrange
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
@@ -67,7 +67,7 @@ class MultiverseWorldNameResolverTest
 
 	@Test
 	@Disabled
-	void resolveWorldName_no_alias()
+	void getWorldName_no_alias()
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test-world");
@@ -90,7 +90,7 @@ class MultiverseWorldNameResolverTest
 
 	@Test
 	@Disabled
-	void resolveWorldName_blank_alias()
+	void getWorldName_blank_alias()
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test-world");
@@ -114,7 +114,7 @@ class MultiverseWorldNameResolverTest
 
 	@Test
 	@Disabled
-	void resolveWorldName_mvWorld_null()
+	void getWorldName_mvWorld_null()
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test-world");
