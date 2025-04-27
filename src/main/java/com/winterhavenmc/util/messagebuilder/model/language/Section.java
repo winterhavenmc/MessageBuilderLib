@@ -41,7 +41,6 @@ public enum Section
 	private final Function<SectionProvider, ? extends QueryHandler<? extends SectionRecord>> handlerFactory;
 
 
-
 	/**
 	 * Constructor for enum constant instances
 	 *
