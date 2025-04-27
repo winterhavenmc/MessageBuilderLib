@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.model.message.Message;
 import com.winterhavenmc.util.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.util.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;

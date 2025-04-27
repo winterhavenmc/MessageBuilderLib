@@ -19,7 +19,7 @@ package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.model.language.message.InvalidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;

@@ -31,7 +31,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.retriever.MessageRetriever
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
-import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.util.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceInstaller;
