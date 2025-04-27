@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.language.constant.ConstantRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.item.ItemRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageSectionResourceManager;
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ import static org.mockito.Mockito.*;
 class QueryHandlerFactoryTest
 {
 	@Mock
-	LanguageSectionResourceManager languageResourceManagerMock;
+	SectionResourceManager languageResourceManagerMock;
 	@Mock SectionProvider sectionProviderMock;
 
 

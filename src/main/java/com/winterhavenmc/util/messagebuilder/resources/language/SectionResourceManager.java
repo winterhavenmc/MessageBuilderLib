@@ -22,7 +22,7 @@ import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.resources.ResourceManager;
 
 
-public interface LanguageSectionResourceManager extends ResourceManager
+public interface SectionResourceManager extends ResourceManager
 {
 	SectionProvider getSectionProvider(Section section);
 }

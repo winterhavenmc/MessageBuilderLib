@@ -47,7 +47,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * globally, anywhere within this library using this static method.
  * 
  */
-public final class LanguageResourceManager implements LanguageSectionResourceManager
+public final class LanguageResourceManager implements SectionResourceManager
 {
 	private static volatile LanguageResourceManager instance;
 

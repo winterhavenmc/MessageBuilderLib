@@ -24,7 +24,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageSectionResourceManager;
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FormatterContainer;
@@ -85,7 +85,7 @@ public final class MessageBuilder
 	private final ResourceBundle BUNDLE;
 
 	private final Plugin plugin;
-	private final LanguageSectionResourceManager languageResourceManager;
+	private final SectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
 
 
@@ -97,7 +97,7 @@ public final class MessageBuilder
 	 * @param languageResourceManager an instance of the language resource manager
 	 */
 	private MessageBuilder(final Plugin plugin,
-	                       final LanguageSectionResourceManager languageResourceManager,
+	                       final SectionResourceManager languageResourceManager,
 	                       final MessagePipeline messagePipeline)
 	{
 		this.plugin = plugin;
@@ -121,7 +121,7 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final LanguageSectionResourceManager languageResourceManager = getLanguageResourceManager(plugin);
+		final SectionResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
 		final FormatterContainer formatterContainer = getResolverContextContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = getAdapterContext(plugin);

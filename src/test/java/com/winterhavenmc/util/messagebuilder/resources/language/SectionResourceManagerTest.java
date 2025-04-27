@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class LanguageSectionResourceManagerTest
+class SectionResourceManagerTest
 {
 	@Mock
 	LanguageResourceInstaller languageResourceInstallerMock;

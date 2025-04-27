@@ -33,7 +33,7 @@ import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageSectionResourceManager;
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceInstaller;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
@@ -57,7 +57,7 @@ class Orchestrator
 	private Orchestrator() { /* Private constructor to prevent instantiation of utility class */ }
 
 
-	static LanguageSectionResourceManager getLanguageResourceManager(Plugin plugin)
+	static SectionResourceManager getLanguageResourceManager(Plugin plugin)
 	{
 		final LanguageResourceInstaller resourceInstaller = new LanguageResourceInstaller(plugin);
 		final LanguageResourceLoader resourceLoader = new LanguageResourceLoader(plugin);

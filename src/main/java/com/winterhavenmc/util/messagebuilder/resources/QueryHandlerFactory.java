@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.resources;
 
-import com.winterhavenmc.util.messagebuilder.resources.language.LanguageSectionResourceManager;
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.language.SectionRecord;
@@ -32,14 +32,14 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 
 public class QueryHandlerFactory
 {
-	private final LanguageSectionResourceManager languageResourceManager;
+	private final SectionResourceManager languageResourceManager;
 
 
 	/**
 	 * Class constructor
 	 *
 	 */
-	public QueryHandlerFactory(final LanguageSectionResourceManager languageResourceManager)
+	public QueryHandlerFactory(final SectionResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, ValidationHandler.throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
 
