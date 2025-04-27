@@ -32,6 +32,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -76,11 +78,12 @@ class YamlLanguageResourceManagerTest
 	}
 
 
-	@Test
-	void getSectionProvider()
+	@ParameterizedTest
+	@EnumSource(Section.class)
+	void getSectionProvider(Section section)
 	{
 		// Arrange & Act
-		SectionProvider sectionProvider = resourceManager.getSectionProvider(Section.CONSTANTS);
+		SectionProvider sectionProvider = resourceManager.getSectionProvider(section);
 
 		// Assert
 		assertInstanceOf(SectionProvider.class, sectionProvider);
