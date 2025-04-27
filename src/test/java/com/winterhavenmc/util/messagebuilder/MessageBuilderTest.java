@@ -56,8 +56,6 @@ class MessageBuilderTest
 	@Mock Server serverMock;
 	@Mock PluginManager pluginManagerMock;
 	@Mock ProxiedCommandSender proxiedCommandSenderMock;
-
-
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock MacroReplacer macroReplacerMock;
 	@Mock MessagePipeline messagePipelineMock;
