@@ -40,10 +40,12 @@ public class MultiverseWorldNameResolver implements WorldNameResolver
 	@Override
 	public String resolveWorldName(final World world)
 	{
+		if (world == null) { return "NULL WORLD"; }
+
 		String mvAlias = new MultiverseWorldNameRetriever(multiverseCore).getWorldName(world);
 		return (mvAlias == null || mvAlias.isBlank())
-				? mvAlias
-				: world.getName();
+				? world.getName()
+				: mvAlias;
 	}
 
 }
