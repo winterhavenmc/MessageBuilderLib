@@ -15,11 +15,10 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LanguageTag;
-import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
@@ -44,13 +43,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class YamlLanguageResourceManagerTest
+class LanguageSectionResourceManagerTest
 {
-	@Mock YamlLanguageResourceInstaller languageResourceInstallerMock;
-	@Mock YamlLanguageResourceLoader languageResourceLoaderMock;
+	@Mock
+	LanguageResourceInstaller languageResourceInstallerMock;
+	@Mock
+	LanguageResourceLoader languageResourceLoaderMock;
 
 	// real language handler
-	YamlLanguageResourceManager resourceManager;
+	LanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
 	FileConfiguration pluginConfiguration;
 
@@ -64,10 +65,10 @@ class YamlLanguageResourceManagerTest
 		pluginConfiguration.set("locale", "en-US");
 
 		// create real language configuration
-		languageConfiguration = MockUtility.loadConfigurationFromResource(YamlLanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
+		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// instantiate real language handler with mocked parameters
-		resourceManager = YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock);
+		resourceManager = LanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock);
 	}
 
 
@@ -126,14 +127,14 @@ class YamlLanguageResourceManagerTest
 		@Test
 		void testGetInstance_parameters_valid()
 		{
-			assertNotNull(YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock));
+			assertNotNull(LanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock));
 		}
 
 		@Test
 		void testGetInstance_parameter_null_resourceInstaller()
 		{
 			ValidationException exception = assertThrows(ValidationException.class,
-					() -> YamlLanguageResourceManager.getInstance(null, languageResourceLoaderMock));
+					() -> LanguageResourceManager.getInstance(null, languageResourceLoaderMock));
 
 			assertEquals("The parameter 'resourceInstaller' cannot be null.", exception.getMessage());
 		}
@@ -142,7 +143,7 @@ class YamlLanguageResourceManagerTest
 		void testGetInstance_parameter_null_resourceLoader()
 		{
 			ValidationException exception = assertThrows(ValidationException.class,
-					() -> YamlLanguageResourceManager.getInstance(languageResourceInstallerMock, null));
+					() -> LanguageResourceManager.getInstance(languageResourceInstallerMock, null));
 
 			assertEquals("The parameter 'resourceLoader' cannot be null.", exception.getMessage());
 		}
@@ -156,8 +157,8 @@ class YamlLanguageResourceManagerTest
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act & Assert
-		assertEquals("language/en-US.yml", YamlLanguageResourceManager.getResourceName(languageTag));
-		assertNotEquals("language/fr-FR.yml", YamlLanguageResourceManager.getResourceName(languageTag));
+		assertEquals("language/en-US.yml", LanguageResourceManager.getResourceName(languageTag));
+		assertNotEquals("language/fr-FR.yml", LanguageResourceManager.getResourceName(languageTag));
 	}
 
 
@@ -168,8 +169,8 @@ class YamlLanguageResourceManagerTest
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act & Assert
-		assertEquals("language" + File.separator + "en-US.yml", YamlLanguageResourceManager.getFileName(languageTag));
-		assertNotEquals("language" + File.separator + "fr-FR.yml", YamlLanguageResourceManager.getFileName(languageTag));
+		assertEquals("language" + File.separator + "en-US.yml", LanguageResourceManager.getFileName(languageTag));
+		assertNotEquals("language" + File.separator + "fr-FR.yml", LanguageResourceManager.getFileName(languageTag));
 	}
 
 }

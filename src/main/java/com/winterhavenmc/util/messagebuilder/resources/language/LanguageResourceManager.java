@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,135 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.language;
 
-
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
+import com.winterhavenmc.util.messagebuilder.resources.configuration.LanguageTag;
 
-public interface LanguageResourceManager
+import org.bukkit.configuration.Configuration;
+
+import java.io.File;
+import java.util.Objects;
+
+import static com.winterhavenmc.util.messagebuilder.resources.language.LanguageSetting.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_INSTALLER;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_LOADER;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
+
+
+/**
+ * This class is responsible for the management and lifecycle of the language resource. It is implemented
+ * as a singleton, so that only one instance is involved in any loading or reloading of the resource to
+ * prevent access contention. The language resource is made available as a Bukkit {@link Configuration} object,
+ * which is loaded into a {@code Supplier} that is provided to classes that have a need to access the
+ * language configuration object. This supplier will return an up-to-date version of the language configuration
+ * object to any consumers, even if the language resource has been reloaded since the creation of the supplier.
+ * A convenience method is provided to query the current language setting in the plugin configuration so that
+ * changes to this setting may result in a different language resource being used for any subsequent reload operations.
+ * <p>
+ * The static {@code getInstance} method should be used to acquire an instance of this singleton class. It can be accessed
+ * globally, anywhere within this library using this static method.
+ * 
+ */
+public final class LanguageResourceManager implements LanguageSectionResourceManager
 {
-	/**
-	 * Retrieve the configuration supplier
-	 *
-	 * @return {@code YamlConfigurationSupplier}
-	 */
-//	YamlConfigurationSupplier getConfigurationSupplier();
+	private static volatile LanguageResourceManager instance;
 
-	SectionProvider getSectionProvider(Section section);
+	private final LanguageResourceLoader languageResourceLoader;
+	private final LanguageResourceInstaller languageResourceInstaller;
+	private Configuration languageConfiguration;
+
 
 	/**
-	 * Reload messages into Configuration object
-	 *
-	 * @return true if successful, false if not
+	 * Private constructor prevents instantiation except from within this class
 	 */
-	boolean reload();
+	private LanguageResourceManager(final LanguageResourceInstaller resourceInstaller,
+									final LanguageResourceLoader resourceLoader)
+	{
+		this.languageResourceLoader = resourceLoader;
+		this.languageResourceInstaller = resourceInstaller;
+
+		// install any auto install files if necessary
+		languageResourceInstaller.autoInstall();
+
+		// get newly loaded configuration from loader
+		this.languageConfiguration = languageResourceLoader.load();
+	}
+
+
+	/**
+	 * Static method to retrieve an instance of this singleton
+	 *
+	 * @return a new or cached instance of this singleton
+	 */
+	public static LanguageResourceManager getInstance(final LanguageResourceInstaller resourceInstaller,
+													  final LanguageResourceLoader resourceLoader)
+	{
+		validate(resourceInstaller, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_INSTALLER));
+		validate(resourceLoader, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_LOADER));
+
+		if (instance == null) {
+			synchronized (LanguageResourceManager.class) {
+				if (instance == null) {
+					instance = new LanguageResourceManager(resourceInstaller, resourceLoader);
+				}
+			}
+		}
+		return instance;
+	}
+
+
+	/**
+	 * Reload the language resource. This method first calls the reload method in the resource loader,
+	 * and receives the new configuration object as the return value. If the new configuration object
+	 * is null, the old configuration object is not replace, and the method returns {@code false}.
+	 * If the new configuration exists, a new configuration supplier is created with the
+	 * new configuration, and the method returns {@code true}.
+	 *
+	 * @return {@code true} if the configuration was successfully reloaded, {@code false} if it failed
+	 */
+	public boolean reload()
+	{
+		// install any resources whose corresponding files are absent
+		languageResourceInstaller.autoInstall();
+
+		// Reload the configuration and get the new configuration from the loader
+		this.languageConfiguration = languageResourceLoader.load();
+
+		return true;
+	}
+
+
+	/**
+	 * Retrieve the configuration provider, a container that carries the current configuration
+	 *
+	 * @return the configuration provider
+	 */
+	public SectionProvider getSectionProvider(Section section)
+	{
+		return new LanguageSectionProvider(() -> languageConfiguration, section);
+	}
+
+
+	/**
+	 * Retrieve the name of the potential language resource associated with this language tag, as a String
+	 *
+	 * @return {@code String} representation of the potential language resource associated with this language tag
+	 */
+	public static String getResourceName(final LanguageTag languageTag)
+	{
+		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()).concat(".yml");
+	}
+
+
+	/**
+	 * Retrieve the name of the potential language resource file as installed in the plugin data directory, as a String.
+	 *
+	 * @return {@code String} representation of the potential language resource file installed in the plugin data directory
+	 */
+	public static String getFileName(final LanguageTag languageTag)
+	{
+		return String.join(File.separator, RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()).concat(".yml");
+	}
 
 }

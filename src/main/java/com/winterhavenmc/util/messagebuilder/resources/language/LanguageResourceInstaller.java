@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LanguageTag;
 import org.bukkit.plugin.Plugin;
@@ -25,8 +25,8 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_AUTO_INSTALL;
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.util.messagebuilder.resources.language.LanguageSetting.RESOURCE_AUTO_INSTALL;
+import static com.winterhavenmc.util.messagebuilder.resources.language.LanguageSetting.RESOURCE_SUBDIRECTORY;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_NAME;
@@ -40,7 +40,7 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  * Any files listed in auto_install.txt file with a .yml suffix that are stored as a resource within a /language
  * subdirectory in the plugin jar archive will be copied to the /language subdirectory of the plugin data directory.
  */
-public final class YamlLanguageResourceInstaller
+public final class LanguageResourceInstaller
 {
 	final static Pattern WHITESPACE = Pattern.compile("\\s", Pattern.UNICODE_CHARACTER_CLASS); // match Unicode whitespace
 	final static Pattern TWO_OR_MORE_DOTS = Pattern.compile("[.]{2,}");
@@ -55,7 +55,7 @@ public final class YamlLanguageResourceInstaller
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public YamlLanguageResourceInstaller(final Plugin plugin)
+	public LanguageResourceInstaller(final Plugin plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -63,7 +63,7 @@ public final class YamlLanguageResourceInstaller
 
 	/**
 	 * Retrieve {@link Set} of resource filenames from a plain text resource in the language directory of the plugin jar.
-	 * The plain text resource name elements are currently set in the YamlLanguageSetting enum. The valid pathname for the resource
+	 * The plain text resource name elements are currently set in the LanguageSetting enum. The valid pathname for the resource
 	 * can be retrieved using the getAutoInstallResourcePath method of this class
 	 *
 	 * @param autoInstallPathName a {@code String} containing the resource path of the auto install plain text resource
@@ -151,7 +151,7 @@ public final class YamlLanguageResourceInstaller
 	{
 		if (!isInstalledForTag(languageTag))
 		{
-			return installByName(YamlLanguageResourceManager.getResourceName(languageTag));
+			return installByName(LanguageResourceManager.getResourceName(languageTag));
 		}
 		return InstallerStatus.FILE_EXISTS;
 	}
@@ -212,7 +212,7 @@ public final class YamlLanguageResourceInstaller
 	 */
 	InstallerStatus install(final LanguageTag languageTag)
 	{
-		return installByName(YamlLanguageResourceManager.getResourceName(languageTag));
+		return installByName(LanguageResourceManager.getResourceName(languageTag));
 	}
 
 
@@ -236,7 +236,7 @@ public final class YamlLanguageResourceInstaller
 	 */
 	boolean resourceExists(final LanguageTag languageTag)
 	{
-		return plugin.getResource(YamlLanguageResourceManager.getResourceName(languageTag)) != null;
+		return plugin.getResource(LanguageResourceManager.getResourceName(languageTag)) != null;
 	}
 
 
@@ -259,7 +259,7 @@ public final class YamlLanguageResourceInstaller
 	 */
 	boolean isInstalledForTag(final LanguageTag languageTag)
 	{
-		return new File(plugin.getDataFolder(), YamlLanguageResourceManager.getFileName(languageTag)).exists();
+		return new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(languageTag)).exists();
 	}
 
 	enum InstallerStatus
@@ -269,4 +269,5 @@ public final class YamlLanguageResourceInstaller
 		SUCCESS,
 		FAIL,
 	}
+
 }

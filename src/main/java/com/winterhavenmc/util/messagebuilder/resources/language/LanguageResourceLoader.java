@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LanguageTag;
 import org.bukkit.configuration.Configuration;
@@ -37,7 +37,7 @@ import java.util.Optional;
  * result in a new configuration object loaded from the currently configured language file, or the us-EN language
  * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
-public final class YamlLanguageResourceLoader
+public final class LanguageResourceLoader
 {
 	private final Plugin plugin;
 
@@ -47,7 +47,7 @@ public final class YamlLanguageResourceLoader
 	 *
 	 * @param plugin an instance of the plugin main class
 	 */
-	public YamlLanguageResourceLoader(final Plugin plugin)
+	public LanguageResourceLoader(final Plugin plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -67,7 +67,7 @@ public final class YamlLanguageResourceLoader
 	 */
 	Optional<LanguageTag> getConfiguredLanguageTag()
 	{
-		String configLanguageTag = plugin.getConfig().getString(YamlLanguageSetting.CONFIG_LANGUAGE_KEY.toString());
+		String configLanguageTag = plugin.getConfig().getString(LanguageSetting.CONFIG_LANGUAGE_KEY.toString());
 
 		return configLanguageTag == null || configLanguageTag.isBlank()
 				? Optional.empty()
@@ -89,7 +89,7 @@ public final class YamlLanguageResourceLoader
 	 *
 	 * @return Configuration - message configuration object
 	 */
-	Configuration load()
+	public Configuration load()
 	{
         return LanguageTag.of(getConfiguredLocale())
 				.map(this::load)
@@ -106,7 +106,7 @@ public final class YamlLanguageResourceLoader
 	Configuration load(final LanguageTag languageTag)
 	{
 		YamlConfiguration configuration = new YamlConfiguration();
-		File languageFile = new File(plugin.getDataFolder(), YamlLanguageResourceManager.getFileName(languageTag));
+		File languageFile = new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(languageTag));
 
 		try
 		{

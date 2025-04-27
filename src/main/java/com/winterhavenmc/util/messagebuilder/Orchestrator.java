@@ -33,10 +33,10 @@ import com.winterhavenmc.util.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.util.messagebuilder.pipeline.sender.TitleSender;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageSectionResourceManager;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceInstaller;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceLoader;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceInstaller;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceLoader;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FormatterContainer;
@@ -57,12 +57,12 @@ class Orchestrator
 	private Orchestrator() { /* Private constructor to prevent instantiation of utility class */ }
 
 
-	static LanguageResourceManager getLanguageResourceManager(Plugin plugin)
+	static LanguageSectionResourceManager getLanguageResourceManager(Plugin plugin)
 	{
-		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin);
-		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin);
+		final LanguageResourceInstaller resourceInstaller = new LanguageResourceInstaller(plugin);
+		final LanguageResourceLoader resourceLoader = new LanguageResourceLoader(plugin);
 
-		return YamlLanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
+		return LanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
 	}
 
 

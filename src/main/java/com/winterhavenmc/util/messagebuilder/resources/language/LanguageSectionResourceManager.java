@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,35 +15,14 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
 
-/**
- * Enum containing constants for various yaml parameters
- */
-enum YamlLanguageSetting
+import com.winterhavenmc.util.messagebuilder.model.language.Section;
+import com.winterhavenmc.util.messagebuilder.resources.ResourceManager;
+
+
+public interface LanguageSectionResourceManager extends ResourceManager
 {
-	CONFIG_LANGUAGE_KEY("language"),
-	CONFIG_LOCALE_KEY("locale"),
-	DEFAULT_LANGUAGE_TAG("en-US"),
-	RESOURCE_AUTO_INSTALL("auto_install.txt"),
-	RESOURCE_SUBDIRECTORY("language"),
-	RESOURCE_LANGUAGE_EN_US_YML("language/en-US.yml"),
-	;
-
-	private final String value;
-
-
-	YamlLanguageSetting(final String value)
-	{
-		this.value = value;
-	}
-
-
-	@Override
-	public String toString()
-	{
-		return value;
-	}
-
+	SectionProvider getSectionProvider(Section section);
 }

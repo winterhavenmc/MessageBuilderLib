@@ -24,8 +24,8 @@ import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageSectionResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FormatterContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -85,7 +85,7 @@ public final class MessageBuilder
 	public final static TemporalUnit TICKS = new Tick();
 
 	private final Plugin plugin;
-	private final LanguageResourceManager languageResourceManager;
+	private final LanguageSectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
 
 
@@ -97,7 +97,7 @@ public final class MessageBuilder
 	 * @param languageResourceManager an instance of the language resource manager
 	 */
 	private MessageBuilder(final Plugin plugin,
-	                       final LanguageResourceManager languageResourceManager,
+	                       final LanguageSectionResourceManager languageResourceManager,
 	                       final MessagePipeline messagePipeline)
 	{
 		this.plugin = plugin;
@@ -121,7 +121,7 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
+		final LanguageSectionResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
 		final FormatterContainer formatterContainer = getResolverContextContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = getAdapterContext(plugin);
@@ -181,7 +181,7 @@ public final class MessageBuilder
 	 * @return an instance of this class, instantiated with the mock objects
 	 */
 	static MessageBuilder test(final Plugin plugin,
-							   final YamlLanguageResourceManager languageResourceManager,
+							   final LanguageResourceManager languageResourceManager,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
