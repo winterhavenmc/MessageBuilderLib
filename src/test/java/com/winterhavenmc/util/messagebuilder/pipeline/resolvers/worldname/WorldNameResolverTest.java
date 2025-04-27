@@ -28,8 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -100,23 +99,22 @@ class WorldNameResolverTest
 
 
 
-//	@Test
-//	@Disabled
-//	void getResolver_multiverse()
-//	{
-//		// Arrange
-//		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCore);
-//		when(multiverseCore.isEnabled()).thenReturn(true);
-//
-//		// Act
-//		WorldNameResolver resolver = WorldNameResolver.getResolver(pluginManagerMock);
-//
-//		// Assert
-//		assertInstanceOf(MultiverseWorldNameResolver.class, resolver);
-//
-//		// Verify
-//		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
-//		verify(multiverseCore, atLeastOnce()).isEnabled();
-//	}
+	@Test
+	void getResolver_multiverse()
+	{
+		// Arrange
+		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreMock);
+		when(multiverseCoreMock.isEnabled()).thenReturn(true);
+
+		// Act
+		WorldNameResolver resolver = WorldNameResolver.getResolver(pluginManagerMock);
+
+		// Assert
+		assertInstanceOf(MultiverseWorldNameResolver.class, resolver);
+
+		// Verify
+		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
+		verify(multiverseCoreMock, atLeastOnce()).isEnabled();
+	}
 
 }
