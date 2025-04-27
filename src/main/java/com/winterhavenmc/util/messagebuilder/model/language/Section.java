@@ -46,7 +46,8 @@ public enum Section
 	 *
 	 * @param handlerFactory the Class of {@link QueryHandler} that is immutably bound to this enum constant
 	 */
-	<R extends SectionRecord> Section(Function<SectionProvider, QueryHandler<R>> handlerFactory) {
+	<R extends SectionRecord> Section(Function<SectionProvider, QueryHandler<R>> handlerFactory)
+	{
 		this.handlerFactory = handlerFactory;
 	}
 
@@ -61,7 +62,8 @@ public enum Section
 	 * @param <R> the specific type of the section query handler being returned
 	 */
 	@SuppressWarnings("unchecked")
-	public <R extends SectionRecord> QueryHandler<R> createHandler(SectionProvider provider) {
+	public <R extends SectionRecord> QueryHandler<R> createHandler(SectionProvider provider)
+	{
 		return (QueryHandler<R>) HANDLER_MAP.computeIfAbsent(this, __ -> handlerFactory.apply(provider));
 	}
 
