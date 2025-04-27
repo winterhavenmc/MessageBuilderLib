@@ -27,6 +27,8 @@ import java.util.Objects;
 
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.LANGUAGE_RESOURCE_MANAGER;
+import static com.winterhavenmc.util.messagebuilder.validation.Parameter.SECTION;
+import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
@@ -41,7 +43,7 @@ public class QueryHandlerFactory
 	 */
 	public QueryHandlerFactory(final SectionResourceManager languageResourceManager)
 	{
-		validate(languageResourceManager, Objects::isNull, ValidationHandler.throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
+		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
 
 		this.languageResourceManager = languageResourceManager;
 	}
@@ -55,6 +57,8 @@ public class QueryHandlerFactory
 	 */
 	public <R extends SectionRecord> QueryHandler<R> getQueryHandler(final Section section)
 	{
+		validate(section, Objects::isNull, throwing(PARAMETER_NULL, SECTION));
+
 		SectionProvider provider = languageResourceManager.getSectionProvider(section);
 		return section.createHandler(provider);
 	}
