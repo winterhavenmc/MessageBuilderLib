@@ -91,8 +91,10 @@ class MacroReplacerTest
 	{
 		recipient = switch (Recipient.of(playerMock)) {
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
+
 		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
 		macroKey = MacroKey.of(Macro.OWNER).orElseThrow();
 
@@ -225,6 +227,7 @@ class MacroReplacerTest
 		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
 		recipient = switch (Recipient.of(console)) {
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();

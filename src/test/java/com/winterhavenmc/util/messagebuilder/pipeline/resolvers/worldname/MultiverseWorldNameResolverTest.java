@@ -45,7 +45,7 @@ class MultiverseWorldNameResolverTest
 
 	@Test
 	@Disabled
-	void getWorldName()
+	void testResolveWorldName()
 	{
 		// Arrange
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
@@ -114,7 +114,7 @@ class MultiverseWorldNameResolverTest
 
 	@Test
 	@Disabled
-	void getWorldName_mvWorld_null()
+	void testResolveWorldName_mvWorld_null()
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test-world");
