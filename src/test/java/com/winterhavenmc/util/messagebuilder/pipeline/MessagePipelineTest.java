@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.pipeline;
 
+import com.winterhavenmc.util.messagebuilder.model.language.message.InvalidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
@@ -46,6 +47,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.winterhavenmc.util.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
+import static com.winterhavenmc.util.messagebuilder.messages.MessageId.NONEXISTENT_ENTRY;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,6 +68,7 @@ class MessagePipelineTest
 	CooldownMap cooldownMap;
 	MessagePipeline messagePipeline;
 	ValidMessageRecord validMessageRecord;
+	InvalidMessageRecord invalidMessageRecord;
 	FinalMessageRecord finalMessageRecord;
 	ConfigurationSection section;
 	RecordKey recordKey;
@@ -109,7 +112,8 @@ class MessagePipelineTest
 
 
 	@Test @DisplayName("Test process method with Valid parameter")
-	void testProcess() {
+	void testProcess()
+	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
@@ -120,6 +124,23 @@ class MessagePipelineTest
 
 		// Act & Assert
 		assertDoesNotThrow(() -> messagePipeline.process(message));
+
+		// Verify
+		verify(playerMock, atLeastOnce()).getUniqueId();
+		verify(messageRetrieverMock, atLeastOnce()).getRecord(recordKey);
+	}
+
+	@Test
+	void testProcess_non_existent_message()
+	{
+		// Arrange
+		RecordKey recordKey = RecordKey.of(NONEXISTENT_ENTRY).orElseThrow();
+		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
+		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(invalidMessageRecord);
+		ValidMessage message = new ValidMessage(recipient, RecordKey.of(NONEXISTENT_ENTRY).orElseThrow(), messagePipeline);
+
+		// Act & Assert
+		messagePipeline.process(message);
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();
