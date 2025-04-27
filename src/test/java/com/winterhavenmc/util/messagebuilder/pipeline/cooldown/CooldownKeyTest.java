@@ -61,11 +61,13 @@ class CooldownKeyTest
 	{
 		recipient = switch (Recipient.of(playerMock)) {
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
 		recipient2 = switch (Recipient.of(player2Mock)) {
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
@@ -92,6 +94,7 @@ class CooldownKeyTest
 		consoleRecipient = switch (Recipient.of(consoleMock))
 		{
 			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
@@ -220,7 +223,7 @@ class CooldownKeyTest
 		CooldownKey key = CooldownKey.of(recipient, messageKey).orElseThrow();
 
 		// Assert
-		assertNotEquals("some string", key);
+		assertNotEquals("some string", key.toString());
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();
