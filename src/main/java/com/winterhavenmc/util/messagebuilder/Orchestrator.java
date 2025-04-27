@@ -52,6 +52,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 
+/**
+ * A companion utility class to facilitate arranging components necessary to initialize the MessageBuilder library.
+ */
 class Orchestrator
 {
 	private Orchestrator() { /* Private constructor to prevent instantiation of utility class */ }
