@@ -20,9 +20,5 @@
  * {@code SectionResourceManager} and {@code LanguageQueryHandler} declare the methods necessary
  * for an implementation of language resource and query handlers, respectively.
  * At this time, there is only one implementation of a language resource package, the yaml package.
- *
- *
- *  * This package provides an implementation of a language resource package, including
- *  * implementations of {@code SectionResourceManager} and {@code LanguageQueryHandler}.
  */
 package com.winterhavenmc.util.messagebuilder.resources.language;
