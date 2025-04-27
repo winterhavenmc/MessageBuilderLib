@@ -1,0 +1,37 @@
+# Project Structure
+
+- `src/main/java`
+    - `module-info.java`
+    - `com.winterhavenmc.util`
+        - `messagebuilder`
+            - `keys/` – MacroKey, RecordKey, etc.
+            - `model/`
+                - `language/`
+                    - `constant/`
+                    - `item/`
+                    - `message/`
+                - `message/`
+                - `recipient/`
+            - `pipeline/`
+                - `adapters/`
+                - `context/`
+                - `cooldown/`
+                - `extractor/`
+                - `formatters/`
+                - `matcher/`
+                - `replacer/`
+                - `resolvers/`
+                - `result/`
+                - `retriever/`
+                - `sender/`
+            - `resources/`
+                - `configuration/`
+                - `language/`
+            - `util/` – Delimiter, Pluralizable
+            - `validation/`
+        - `time/`
+- `src/main/resources`
+    - `language/`
+        - `errors_en.properties`
+        - `errors_de.properties`
+        - `...`

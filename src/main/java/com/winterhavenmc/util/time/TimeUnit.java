@@ -117,15 +117,15 @@ public enum TimeUnit
 	}
 
 
-	public final boolean isGreaterThan(final long millis)
-	{
-		return this.millis > millis;
-	}
-
-
 	public final boolean isLessThan(final TimeUnit timeUnit)
 	{
 		return this.millis < timeUnit.millis;
+	}
+
+
+	public final boolean isGreaterThan(final long millis)
+	{
+		return this.millis > millis;
 	}
 
 

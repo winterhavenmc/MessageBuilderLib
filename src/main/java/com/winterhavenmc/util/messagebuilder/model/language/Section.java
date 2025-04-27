@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.util.messagebuilder.model.language;
 
-import com.winterhavenmc.util.messagebuilder.resources.ConstantQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.ItemQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.MessageQueryHandler;
-import com.winterhavenmc.util.messagebuilder.resources.QueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.ConstantQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.ItemQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.MessageQueryHandler;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 
 import java.util.EnumMap;
@@ -41,13 +41,13 @@ public enum Section
 	private final Function<SectionProvider, ? extends QueryHandler<? extends SectionRecord>> handlerFactory;
 
 
-
 	/**
 	 * Constructor for enum constant instances
 	 *
 	 * @param handlerFactory the Class of {@link QueryHandler} that is immutably bound to this enum constant
 	 */
-	<R extends SectionRecord> Section(Function<SectionProvider, QueryHandler<R>> handlerFactory) {
+	<R extends SectionRecord> Section(Function<SectionProvider, QueryHandler<R>> handlerFactory)
+	{
 		this.handlerFactory = handlerFactory;
 	}
 
@@ -62,7 +62,8 @@ public enum Section
 	 * @param <R> the specific type of the section query handler being returned
 	 */
 	@SuppressWarnings("unchecked")
-	public <R extends SectionRecord> QueryHandler<R> createHandler(SectionProvider provider) {
+	public <R extends SectionRecord> QueryHandler<R> createHandler(SectionProvider provider)
+	{
 		return (QueryHandler<R>) HANDLER_MAP.computeIfAbsent(this, __ -> handlerFactory.apply(provider));
 	}
 

@@ -15,35 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
-
 
 /**
- * Enum containing constants for various yaml parameters
+ * This package contains the StandardKey interface and implementations
  */
-enum YamlLanguageSetting
-{
-	CONFIG_LANGUAGE_KEY("language"),
-	CONFIG_LOCALE_KEY("locale"),
-	DEFAULT_LANGUAGE_TAG("en-US"),
-	RESOURCE_AUTO_INSTALL("auto_install.txt"),
-	RESOURCE_SUBDIRECTORY("language"),
-	RESOURCE_LANGUAGE_EN_US_YML("language/en-US.yml"),
-	;
-
-	private final String value;
-
-
-	YamlLanguageSetting(final String value)
-	{
-		this.value = value;
-	}
-
-
-	@Override
-	public String toString()
-	{
-		return value;
-	}
-
-}
+package com.winterhavenmc.util.messagebuilder.keys;

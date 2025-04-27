@@ -28,6 +28,9 @@ import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler
 import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
+/**
+ * An abstract class that provides common methods for implementations of the StandardKey interface
+ */
 public abstract class AbstractKey
 {
 	// valid key must begin with alpha only and may contain alpha, digits, underscore or period

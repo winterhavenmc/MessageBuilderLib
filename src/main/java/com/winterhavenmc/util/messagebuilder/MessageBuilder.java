@@ -22,10 +22,10 @@ import com.winterhavenmc.util.messagebuilder.model.message.Message;
 import com.winterhavenmc.util.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.util.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.util.messagebuilder.resources.QueryHandlerFactory;
+import com.winterhavenmc.util.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LocaleProvider;
+import com.winterhavenmc.util.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.util.messagebuilder.pipeline.resolvers.FormatterContainer;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -80,12 +80,12 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public final class MessageBuilder
 {
-	private static final String ERROR_BUNDLE_NAME = "language.errors";
-	private final ResourceBundle BUNDLE;
 	public final static TemporalUnit TICKS = new Tick();
+	private final static String EXCEPTION_MESSAGES = "exception.messages";
+	private final ResourceBundle BUNDLE;
 
 	private final Plugin plugin;
-	private final LanguageResourceManager languageResourceManager;
+	private final SectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
 
 
@@ -97,13 +97,13 @@ public final class MessageBuilder
 	 * @param languageResourceManager an instance of the language resource manager
 	 */
 	private MessageBuilder(final Plugin plugin,
-	                       final LanguageResourceManager languageResourceManager,
+	                       final SectionResourceManager languageResourceManager,
 	                       final MessagePipeline messagePipeline)
 	{
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
 		this.messagePipeline = messagePipeline;
-		BUNDLE = ResourceBundle.getBundle(ERROR_BUNDLE_NAME, LocaleProvider.create(plugin).getLocale());
+		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, LocaleProvider.create(plugin).getLocale());
 	}
 
 
@@ -121,7 +121,7 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final LanguageResourceManager languageResourceManager = getLanguageResourceManager(plugin);
+		final SectionResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
 		final FormatterContainer formatterContainer = getResolverContextContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = getAdapterContext(plugin);
@@ -181,7 +181,7 @@ public final class MessageBuilder
 	 * @return an instance of this class, instantiated with the mock objects
 	 */
 	static MessageBuilder test(final Plugin plugin,
-							   final YamlLanguageResourceManager languageResourceManager,
+							   final LanguageResourceManager languageResourceManager,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));

@@ -15,8 +15,7 @@
  *
  */
 
-
 /**
- * This package contains data structure models used in the library.
+ * This package contains the QueryHandler interface and implementations for the language file sections.
  */
-package com.winterhavenmc.util.messagebuilder.model;
+package com.winterhavenmc.util.messagebuilder.query;

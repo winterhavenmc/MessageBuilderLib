@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LanguageTag;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
@@ -41,14 +41,14 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.DEFAULT_LANGUAGE_TAG;
+import static com.winterhavenmc.util.messagebuilder.resources.language.LanguageSetting.DEFAULT_LANGUAGE_TAG;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class YamlLanguageResourceLoaderTest
+public class LanguageResourceLoaderTest
 {
 	@TempDir File tempDataDir;
 	@Mock Plugin pluginMock;
@@ -57,7 +57,7 @@ public class YamlLanguageResourceLoaderTest
 	Configuration languageConfiguration;
 	LanguageTag languageTag;
 
-	YamlLanguageResourceLoader yamlLanguageResourceLoader;
+	LanguageResourceLoader languageResourceLoader;
 
 
 	@BeforeEach
@@ -70,17 +70,17 @@ public class YamlLanguageResourceLoaderTest
 
 		// Install resource to temp directory
 		languageTag = LanguageTag.of(Locale.US).orElseThrow();
-		Path filePath = tempDataDir.toPath().resolve(YamlLanguageResourceManager.getFileName(languageTag));
+		Path filePath = tempDataDir.toPath().resolve(LanguageResourceManager.getFileName(languageTag));
 		long bytes = MockUtility.installResource("language/en-US.yml", filePath);
 		File file = filePath.toFile();
 
 		assertTrue(bytes > 0, "Zero bytes written copying resource to temp directory.");
 		assertTrue(file.exists(), "The file '"
-				+ YamlLanguageResourceManager.getFileName(languageTag)
+				+ LanguageResourceManager.getFileName(languageTag)
 				+ "' in the temporary directory does not exist.");
 
 		// Create loader
-		yamlLanguageResourceLoader = new YamlLanguageResourceLoader(pluginMock);
+		languageResourceLoader = new LanguageResourceLoader(pluginMock);
 	}
 
 	@AfterEach
@@ -89,7 +89,7 @@ public class YamlLanguageResourceLoaderTest
 		pluginMock = null;
 		pluginConfiguration = null;
 		languageConfiguration = null;
-		yamlLanguageResourceLoader = null;
+		languageResourceLoader = null;
 	}
 
 
@@ -98,7 +98,7 @@ public class YamlLanguageResourceLoaderTest
 	void testConstructor_parameter_null() {
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
-				()-> new YamlLanguageResourceLoader(null));
+				()-> new LanguageResourceLoader(null));
 
 		// Assert
 		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
@@ -118,7 +118,7 @@ public class YamlLanguageResourceLoaderTest
 					assertTrue(path.toFile().exists());
 					System.out.println("File in tempDataDir: " + path);
 				});
-		Configuration configuration = yamlLanguageResourceLoader.load(languageTag);
+		Configuration configuration = languageResourceLoader.load(languageTag);
 
 		// Assert
 		assertNotNull(configuration);
@@ -137,7 +137,7 @@ public class YamlLanguageResourceLoaderTest
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
 		// Act
-		Configuration configuration = yamlLanguageResourceLoader.load();
+		Configuration configuration = languageResourceLoader.load();
 
 		// Assert
 		assertNotNull(configuration);
@@ -155,7 +155,7 @@ public class YamlLanguageResourceLoaderTest
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		// Act
-		LanguageTag languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag().orElseThrow();
+		LanguageTag languageTag = languageResourceLoader.getConfiguredLanguageTag().orElseThrow();
 
 		// Assert
 		assertEquals("en-US", languageTag.toString());
@@ -173,7 +173,7 @@ public class YamlLanguageResourceLoaderTest
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		// Act
-		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag();
+		Optional<LanguageTag> languageTag = languageResourceLoader.getConfiguredLanguageTag();
 
 		// Assert
 		assertTrue(languageTag.isEmpty());
@@ -191,7 +191,7 @@ public class YamlLanguageResourceLoaderTest
 		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		// Act
-		Optional<LanguageTag> languageTag = yamlLanguageResourceLoader.getConfiguredLanguageTag();
+		Optional<LanguageTag> languageTag = languageResourceLoader.getConfiguredLanguageTag();
 
 		// Assert
 		assertTrue(languageTag.isEmpty());
@@ -205,7 +205,7 @@ public class YamlLanguageResourceLoaderTest
 //	void getConfiguredLanguageTag_parameter_null_plugin()
 //	{
 //		ValidationException exception = assertThrows(ValidationException.class,
-//				() -> yamlLanguageResourceLoader.getConfiguredLanguageTag());
+//				() -> languageResourceLoader.getConfiguredLanguageTag());
 //
 //		assertEquals("The parameter 'plugin' cannot be null.", exception.getMessage());
 //	}

@@ -15,8 +15,9 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
+import com.winterhavenmc.util.messagebuilder.resources.ResourceInstaller;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LanguageTag;
 import org.bukkit.plugin.Plugin;
 
@@ -25,8 +26,8 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_AUTO_INSTALL;
-import static com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageSetting.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.util.messagebuilder.resources.language.LanguageSetting.RESOURCE_AUTO_INSTALL;
+import static com.winterhavenmc.util.messagebuilder.resources.language.LanguageSetting.RESOURCE_SUBDIRECTORY;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_NAME;
@@ -36,11 +37,11 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
 
 /**
  * This class is responsible for installing localization resources from the language directory of the jar archive,
- * to language subdirectory of the plugin data directory.
+ * to the language subdirectory of the plugin data directory.
  * Any files listed in auto_install.txt file with a .yml suffix that are stored as a resource within a /language
  * subdirectory in the plugin jar archive will be copied to the /language subdirectory of the plugin data directory.
  */
-public final class YamlLanguageResourceInstaller
+public final class LanguageResourceInstaller implements ResourceInstaller
 {
 	final static Pattern WHITESPACE = Pattern.compile("\\s", Pattern.UNICODE_CHARACTER_CLASS); // match Unicode whitespace
 	final static Pattern TWO_OR_MORE_DOTS = Pattern.compile("[.]{2,}");
@@ -55,7 +56,7 @@ public final class YamlLanguageResourceInstaller
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public YamlLanguageResourceInstaller(final Plugin plugin)
+	public LanguageResourceInstaller(final Plugin plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -63,13 +64,14 @@ public final class YamlLanguageResourceInstaller
 
 	/**
 	 * Retrieve {@link Set} of resource filenames from a plain text resource in the language directory of the plugin jar.
-	 * The plain text resource name elements are currently set in the YamlLanguageSetting enum. The valid pathname for the resource
+	 * The plain text resource name elements are currently set in the LanguageSetting enum. The valid pathname for the resource
 	 * can be retrieved using the getAutoInstallResourcePath method of this class
 	 *
 	 * @param autoInstallPathName a {@code String} containing the resource path of the auto install plain text resource
 	 * @return Set of filename strings
 	 */
-	Set<String> getAutoInstallResourceNames(final String autoInstallPathName)
+	@Override
+	public Set<String> getAutoInstallResourceNames(final String autoInstallPathName)
 	{
 		// get input stream for resource
 		InputStream resourceInputStream = plugin.getResource(autoInstallPathName);
@@ -116,7 +118,8 @@ public final class YamlLanguageResourceInstaller
 	 *
 	 * @param resourcePath the {@code String} path name to be sanitized.
 	 */
-	String sanitizeResourcePath(final String resourcePath)
+	@Override
+	public String sanitizeResourcePath(final String resourcePath)
 	{
 		// strip leading/trailing spaces; strip 2 or more consecutive dots; strip one or more leading slashes
 		return resourcePath
@@ -130,13 +133,15 @@ public final class YamlLanguageResourceInstaller
 	/**
 	 * Install resources listed in auto_install.txt to the plugin data directory
 	 */
-	void autoInstall()
+	@Override
+	public void autoInstall()
 	{
 		getAutoInstallResourceNames(getAutoInstallResourcePath()).forEach(this::installByName);
 	}
 
 
-	String getAutoInstallResourcePath()
+	@Override
+	public String getAutoInstallResourcePath()
 	{
 		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), RESOURCE_AUTO_INSTALL.toString());
 	}
@@ -147,11 +152,12 @@ public final class YamlLanguageResourceInstaller
 	 *
 	 * @param languageTag the language tag for the resource to be installed
 	 */
-	InstallerStatus installIfMissing(final LanguageTag languageTag)
+	@Override
+	public InstallerStatus installIfMissing(final LanguageTag languageTag)
 	{
 		if (!isInstalledForTag(languageTag))
 		{
-			return installByName(YamlLanguageResourceManager.getResourceName(languageTag));
+			return installByName(LanguageResourceManager.getResourceName(languageTag));
 		}
 		return InstallerStatus.FILE_EXISTS;
 	}
@@ -163,7 +169,8 @@ public final class YamlLanguageResourceInstaller
 	 * @param resourceName {@code String} the path name of the resource to be installed
 	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
 	 */
-	InstallerStatus installByName(final String resourceName)
+	@Override
+	public InstallerStatus installByName(final String resourceName)
 	{
 		validate(resourceName, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_NAME));
 		validate(resourceName, String::isBlank, throwing(PARAMETER_EMPTY, RESOURCE_NAME));
@@ -210,9 +217,10 @@ public final class YamlLanguageResourceInstaller
 	 * @param languageTag {@code String} the path name of the resource to be installed
 	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
 	 */
-	InstallerStatus install(final LanguageTag languageTag)
+	@Override
+	public InstallerStatus install(final LanguageTag languageTag)
 	{
-		return installByName(YamlLanguageResourceManager.getResourceName(languageTag));
+		return installByName(LanguageResourceManager.getResourceName(languageTag));
 	}
 
 
@@ -222,7 +230,8 @@ public final class YamlLanguageResourceInstaller
 	 * @param resourceName the name of the resource
 	 * @return {@code true} if the resource exists, {@code false} if it does not
 	 */
-	boolean resourceExists(final String resourceName)
+	@Override
+	public boolean resourceExists(final String resourceName)
 	{
 		return plugin.getResource(resourceName) != null;
 	}
@@ -234,9 +243,10 @@ public final class YamlLanguageResourceInstaller
 	 * @param languageTag the tag of the resource being checked for existence in the classpath
 	 * @return {@code true} if the resource exists, {@code false} if it does not
 	 */
-	boolean resourceExists(final LanguageTag languageTag)
+	@Override
+	public boolean resourceExists(final LanguageTag languageTag)
 	{
-		return plugin.getResource(YamlLanguageResourceManager.getResourceName(languageTag)) != null;
+		return plugin.getResource(LanguageResourceManager.getResourceName(languageTag)) != null;
 	}
 
 
@@ -246,7 +256,8 @@ public final class YamlLanguageResourceInstaller
 	 * @param filename the name of the file being verified
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
-	boolean isInstalled(final String filename)
+	@Override
+	public boolean isInstalled(final String filename)
 	{
 		return new File(plugin.getDataFolder(), filename).exists();
 	}
@@ -257,16 +268,10 @@ public final class YamlLanguageResourceInstaller
 	 * @param languageTag the language tag of the file being verified as installed in the plugin data directory
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
-	boolean isInstalledForTag(final LanguageTag languageTag)
+	@Override
+	public boolean isInstalledForTag(final LanguageTag languageTag)
 	{
-		return new File(plugin.getDataFolder(), YamlLanguageResourceManager.getFileName(languageTag)).exists();
+		return new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(languageTag)).exists();
 	}
 
-	enum InstallerStatus
-	{
-		UNAVAILABLE,
-		FILE_EXISTS,
-		SUCCESS,
-		FAIL,
-	}
 }

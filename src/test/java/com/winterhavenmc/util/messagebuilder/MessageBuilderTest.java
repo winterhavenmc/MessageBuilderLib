@@ -21,7 +21,7 @@ import com.winterhavenmc.util.messagebuilder.model.message.Message;
 import com.winterhavenmc.util.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import com.winterhavenmc.util.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.util.messagebuilder.resources.language.yaml.YamlLanguageResourceManager;
+import com.winterhavenmc.util.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
@@ -56,9 +56,8 @@ class MessageBuilderTest
 	@Mock Server serverMock;
 	@Mock PluginManager pluginManagerMock;
 	@Mock ProxiedCommandSender proxiedCommandSenderMock;
-
-
-	@Mock YamlLanguageResourceManager languageResourceManagerMock;
+	@Mock
+	LanguageResourceManager languageResourceManagerMock;
 	@Mock MacroReplacer macroReplacerMock;
 	@Mock MessagePipeline messagePipelineMock;
 

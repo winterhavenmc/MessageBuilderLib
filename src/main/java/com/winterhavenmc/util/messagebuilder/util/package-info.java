@@ -15,18 +15,8 @@
  *
  */
 
-package com.winterhavenmc.util.messagebuilder.resources;
-
-import com.winterhavenmc.util.messagebuilder.model.language.SectionRecord;
-import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
-
 
 /**
- * An interface that declares a query handler that is typed constrained to
- * implementations of the SectionRecord interface
+ * This package contains utility classes, interfaces and enums used by the library.
  */
-@FunctionalInterface
-public interface QueryHandler<T extends SectionRecord>
-{
-	T getRecord(RecordKey key);
-}
+package com.winterhavenmc.util.messagebuilder.util;

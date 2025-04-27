@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,14 @@
  *
  */
 
+package com.winterhavenmc.util.messagebuilder.resources.language;
 
-/**
- * This package contains data structure models used in the library.
- */
-package com.winterhavenmc.util.messagebuilder.model;
+
+import com.winterhavenmc.util.messagebuilder.model.language.Section;
+import com.winterhavenmc.util.messagebuilder.resources.ResourceManager;
+
+
+public interface SectionResourceManager extends ResourceManager
+{
+	SectionProvider getSectionProvider(Section section);
+}

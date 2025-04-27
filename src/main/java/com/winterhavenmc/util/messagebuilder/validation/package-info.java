@@ -15,8 +15,8 @@
  *
  */
 
+
 /**
- * This package provides an implementation of a language resource package, including
- * implementations of {@code LanguageResourceManager} and {@code LanguageQueryHandler}.
+ * This package contains classes used for parameter validation and localized exceptions.
  */
-package com.winterhavenmc.util.messagebuilder.resources.language.yaml;
+package com.winterhavenmc.util.messagebuilder.validation;

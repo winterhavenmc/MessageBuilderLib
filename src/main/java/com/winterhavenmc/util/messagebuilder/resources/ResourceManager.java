@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Tim Savage.
+ * Copyright (c) 2022-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,15 @@
  *
  */
 
+package com.winterhavenmc.util.messagebuilder.resources;
 
-/**
- * This package contains data structure models used in the library.
- */
-package com.winterhavenmc.util.messagebuilder.model;
+
+public interface ResourceManager
+{
+	/**
+	 * Reload resource into a bukkit Configuration object
+	 *
+	 * @return true if successful, false if not
+	 */
+	boolean reload();
+}
