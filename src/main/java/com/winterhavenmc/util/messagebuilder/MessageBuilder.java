@@ -152,6 +152,7 @@ public final class MessageBuilder
 		return switch (Recipient.of(recipient))
 		{
 			case Recipient.Valid valid -> new ValidMessage(valid, validMessageKey, messagePipeline);
+			case Recipient.Proxied ignored -> Message.empty();
 			case Recipient.Invalid ignored -> Message.empty();
 		};
 	}
