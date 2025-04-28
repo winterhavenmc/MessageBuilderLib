@@ -100,62 +100,6 @@ public class LanguageResourceInstallerTest
 	}
 
 
-//	@Test
-//	public void isInstalledForTag_parameter_null() {
-//		ValidationException exception = assertThrows(ValidationException.class,
-//				() -> resourceInstaller.isInstalledForTag(null));
-//
-//		assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
-//	}
-
-//	@Test
-//	public void testInstallIfMissing_parameter_null() {
-//		ValidationException exception = assertThrows(ValidationException.class,
-//				() -> resourceInstaller.installIfMissing(null));
-//
-//		assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
-//	}
-
-
-//	@Nested
-//	public class MockingSetupTests {
-
-//		@Test
-//		public void testResourceStream() throws IOException {
-//			// Arrange & Act
-//			InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
-//
-//			// Assert
-//			assertNotNull(resourceStream, "Resource stream should not be null.");
-//
-//			// Clean up
-//			resourceStream.close();
-//		}
-
-
-//		@Test
-//		public void testSaveResource_MocksCorrectly() throws IOException {
-//			// Arrange
-//			Path targetFilePath = tempDataDir.toPath().resolve(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
-//
-//			// Ensure parent directories exist
-//			Files.createDirectories(targetFilePath.getParent());
-//
-//			// Simulate saving the resource by copying it from the test resources
-//			InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
-//			copyResource(resourceStream, targetFilePath);
-//			// when(pluginMock.saveResource(LANGUAGE_EN_US_YML, false)).thenReturn(copyResource(LANGUAGE_EN_US_YML, targetFilePath));
-//
-//			// Act
-//			pluginMock.saveResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString(), false);
-//
-//			// Assert
-//			File savedFile = new File(tempDataDir, LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
-//			assertTrue(savedFile.exists(), "The resource file should be saved to the data directory.");
-//		}
-//	}
-
-
 	@Test
 	public void testGetAutoInstall_name_constant()
 	{
@@ -361,18 +305,6 @@ public class LanguageResourceInstallerTest
 	}
 
 
-//	@Test
-//	public void testInstallByNameForTag_parameter_null()
-//	{
-//		// Arrange
-//		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-//				() -> resourceInstaller.install(null));
-//
-//		// Assert
-//		assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
-//	}
-
-
 	@Test
 	public void verifyLanguageDirectoryTest_exists() throws IOException
 	{
@@ -431,19 +363,6 @@ public class LanguageResourceInstallerTest
 			// Verify
 			verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourcePath());
 		}
-
-//		@Test
-//		public void autoInstallResourceExistsTest_null_parameter() {
-//			// Act
-//			ValidationException exception = assertThrowsExactly(ValidationException.class,
-//					() -> resourceInstaller.resourceExists((LanguageTag) null));
-//
-//			// Assert
-//			assertEquals("The parameter 'languageTag' cannot be null.", exception.getMessage());
-//
-//			// Verify
-//			verify(pluginMock, atLeastOnce()).getResource(anyString());
-//		}
 	}
 
 
@@ -648,17 +567,5 @@ public class LanguageResourceInstallerTest
 			assertFalse(resourceInstaller.isInstalled("nonexistent_file"));
 		}
 	}
-
-
-//	public void deleteTempFiles()
-//	{
-//		// delete language/en-US.yml file from temp dir after each test
-//		try {
-//			Files.deleteIfExists(Path.of(tempDataDir.getAbsolutePath(),"language", "en-US.yml"));
-//		}
-//		catch (IOException e) {
-//			System.out.println("File exists: " + Files.exists(Path.of(tempDataDir.getAbsolutePath(),"language", "en-US.yml")));
-//		}
-//	}
 
 }
