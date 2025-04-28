@@ -8,4 +8,5 @@ module com.winterhavenmc.library.messagebuilder.api
 	// Public API exports: accessible to the plugin users
 	exports com.winterhavenmc.library.messagebuilder; // for MessageBuilder and related utilities
 	exports com.winterhavenmc.library.messagebuilder.model.message; // for Message and its implementations
+	exports com.winterhavenmc.library.time;
 }
