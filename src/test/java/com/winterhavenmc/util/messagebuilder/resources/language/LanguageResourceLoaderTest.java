@@ -136,7 +136,7 @@ class LanguageResourceLoaderTest
 	}
 
 	@Test
-	void load_WithLanguageTag_LogsFileNotFound(@TempDir File tempDir) throws IOException
+	void load_WithLanguageTag_LogsFileNotFound(@TempDir File tempDir)
 	{
 		when(plugin.getLogger()).thenReturn(logger);
 		when(plugin.getDataFolder()).thenReturn(tempDir);
@@ -180,10 +180,7 @@ class LanguageResourceLoaderTest
 			try
 			{
 				doThrow(new IOException("Simulated IOException")).when(spyYaml).load(languageFile);
-			} catch (IOException e)
-			{
-				throw new RuntimeException(e);
-			} catch (InvalidConfigurationException e)
+			} catch (IOException | InvalidConfigurationException e)
 			{
 				throw new RuntimeException(e);
 			}
@@ -211,10 +208,7 @@ class LanguageResourceLoaderTest
 			try
 			{
 				doThrow(new InvalidConfigurationException("Simulated invalid YAML")).when(spyYaml).load(languageFile);
-			} catch (IOException e)
-			{
-				throw new RuntimeException(e);
-			} catch (InvalidConfigurationException e)
+			} catch (IOException | InvalidConfigurationException e)
 			{
 				throw new RuntimeException(e);
 			}
