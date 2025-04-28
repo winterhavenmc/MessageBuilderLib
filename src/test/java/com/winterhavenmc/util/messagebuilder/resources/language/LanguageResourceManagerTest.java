@@ -48,7 +48,6 @@ class LanguageResourceManagerTest
 	@Mock LanguageResourceInstaller languageResourceInstallerMock;
 	@Mock LanguageResourceLoader languageResourceLoaderMock;
 
-	// real language handler
 	LanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
 	FileConfiguration pluginConfiguration;
@@ -65,15 +64,8 @@ class LanguageResourceManagerTest
 		// create real language configuration
 		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
-		// instantiate real language handler with mocked parameters
+		// instantiate real language resource manager
 		resourceManager = LanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock);
-	}
-
-
-	@Test
-	void testLanguageConfiguration_not_null()
-	{
-		assertNotNull(languageConfiguration);
 	}
 
 
@@ -85,6 +77,7 @@ class LanguageResourceManagerTest
 		SectionProvider sectionProvider = resourceManager.getSectionProvider(section);
 
 		// Assert
+		assertNotNull(sectionProvider);
 		assertInstanceOf(SectionProvider.class, sectionProvider);
 	}
 
