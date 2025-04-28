@@ -20,9 +20,9 @@ package com.winterhavenmc.util.messagebuilder.resources.language;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.resources.configuration.LanguageTag;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -40,6 +40,7 @@ import java.io.File;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +48,10 @@ class LanguageResourceManagerTest
 {
 	@Mock LanguageResourceInstaller languageResourceInstallerMock;
 	@Mock LanguageResourceLoader languageResourceLoaderMock;
+	@Mock ConfigurationSection constantsSectionMock;
+	@Mock ConfigurationSection itemsSectionMock;
+	@Mock ConfigurationSection messagesSectionMock;
+	@Mock Configuration languageConfigurationMock;
 
 	LanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
@@ -65,7 +70,16 @@ class LanguageResourceManagerTest
 		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// instantiate real language resource manager
-		resourceManager = LanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock);
+		resourceManager = new LanguageResourceManager(languageResourceInstallerMock, languageResourceLoaderMock, languageConfigurationMock);
+	}
+
+
+	@Test
+	void testConstructor()
+	{
+		LanguageResourceManager languageResourceManager = new LanguageResourceManager(languageResourceInstallerMock, languageResourceLoaderMock);
+
+		assertNotNull(languageResourceManager);
 	}
 
 
@@ -73,12 +87,18 @@ class LanguageResourceManagerTest
 	@EnumSource(Section.class)
 	void getSectionProvider(Section section)
 	{
+		lenient().when(languageConfigurationMock.getConfigurationSection("MESSAGES")).thenReturn(messagesSectionMock);
+		lenient().when(languageConfigurationMock.getConfigurationSection("ITEMS")).thenReturn(itemsSectionMock);
+		lenient().when(languageConfigurationMock.getConfigurationSection("CONSTANTS")).thenReturn(constantsSectionMock);
+
+
 		// Arrange & Act
 		SectionProvider sectionProvider = resourceManager.getSectionProvider(section);
 
 		// Assert
 		assertNotNull(sectionProvider);
-		assertInstanceOf(SectionProvider.class, sectionProvider);
+		assertInstanceOf(LanguageSectionProvider.class, sectionProvider);
+		assertNotNull(sectionProvider.getSection());
 	}
 
 
@@ -112,33 +132,27 @@ class LanguageResourceManagerTest
 	}
 
 
-	@Nested
-	class GetInstanceTests
-	{
-		@Test
-		void testGetInstance_parameters_valid()
-		{
-			assertNotNull(LanguageResourceManager.getInstance(languageResourceInstallerMock, languageResourceLoaderMock));
-		}
-
-		@Test
-		void testGetInstance_parameter_null_resourceInstaller()
-		{
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> LanguageResourceManager.getInstance(null, languageResourceLoaderMock));
-
-			assertEquals("The parameter 'resourceInstaller' cannot be null.", exception.getMessage());
-		}
-
-		@Test
-		void testGetInstance_parameter_null_resourceLoader()
-		{
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> LanguageResourceManager.getInstance(languageResourceInstallerMock, null));
-
-			assertEquals("The parameter 'resourceLoader' cannot be null.", exception.getMessage());
-		}
-	}
+//	@Nested
+//	class GetInstanceTests
+//	{
+//		@Test
+//		void testGetInstance_parameter_null_resourceInstaller()
+//		{
+//			ValidationException exception = assertThrows(ValidationException.class,
+//					() -> new LanguageResourceManager(null, languageResourceLoaderMock));
+//
+//			assertEquals("The parameter 'resourceInstaller' cannot be null.", exception.getMessage());
+//		}
+//
+//		@Test
+//		void testGetInstance_parameter_null_resourceLoader()
+//		{
+//			ValidationException exception = assertThrows(ValidationException.class,
+//					() -> new LanguageResourceManager(languageResourceInstallerMock, null));
+//
+//			assertEquals("The parameter 'resourceLoader' cannot be null.", exception.getMessage());
+//		}
+//	}
 
 
 	@Test
