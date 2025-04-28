@@ -89,9 +89,9 @@ class Orchestrator
 		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
 		final MacroReplacer macroReplacer = getMacroReplacer(formatterContainer, adapterContextContainer);
 		final CooldownMap cooldownMap = new CooldownMap();
-		final List<Sender> senders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
+		final List<Sender> messageSenders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
 
-		return new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, senders);
+		return new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, messageSenders);
 	}
 
 
