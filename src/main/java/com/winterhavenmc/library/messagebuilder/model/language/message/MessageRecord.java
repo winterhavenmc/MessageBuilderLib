@@ -55,12 +55,12 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 		TITLE_FADE_OUT("TITLE_FADE_OUT"),
 		SUBTITLE_TEXT("SUBTITLE_TEXT");
 
-		private final String key;
-		Field(final String key) {
-			this.key = key;
+		private final String keyString;
+		Field(final String keyString) {
+			this.keyString = keyString;
 		}
 		public String toKey() {
-			return this.key;
+			return this.keyString;
 		}
 	}
 
