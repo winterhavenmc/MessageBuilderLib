@@ -106,7 +106,7 @@ class Orchestrator
 	}
 
 
-	static AdapterContextContainer getAdapterContext(final Plugin plugin)
+	static AdapterContextContainer getAdapterContextContainer(final Plugin plugin)
 	{
 		return new AdapterContextContainer(WorldNameResolver.getResolver(plugin.getServer().getPluginManager()));
 	}

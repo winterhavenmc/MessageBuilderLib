@@ -124,7 +124,7 @@ public final class MessageBuilder
 		final SectionResourceManager languageResourceManager = getLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
 		final FormatterContainer formatterContainer = getResolverContextContainer(plugin, queryHandlerFactory);
-		final AdapterContextContainer adapterContextContainer = getAdapterContext(plugin);
+		final AdapterContextContainer adapterContextContainer = getAdapterContextContainer(plugin);
 		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer);
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
