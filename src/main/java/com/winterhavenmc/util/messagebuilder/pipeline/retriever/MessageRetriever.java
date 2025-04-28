@@ -19,8 +19,6 @@ package com.winterhavenmc.util.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.util.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.util.messagebuilder.model.language.message.FinalMessageRecord;
-import com.winterhavenmc.util.messagebuilder.model.language.message.InvalidMessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.MessageRecord;
 import com.winterhavenmc.util.messagebuilder.model.language.message.ValidMessageRecord;
 
@@ -44,12 +42,9 @@ public final class MessageRetriever implements Retriever
 	@Override
 	public MessageRecord getRecord(final RecordKey messageKey)
 	{
-		return switch (queryHandler.getRecord(messageKey))
-		{
-			case ValidMessageRecord validMessageRecord -> validMessageRecord;
-			case InvalidMessageRecord ignored -> MessageRecord.empty(messageKey);
-			case FinalMessageRecord ignored -> MessageRecord.empty(messageKey); // unreachable; provides exhaustive case for sealed interface
-		};
+		return (queryHandler.getRecord(messageKey) instanceof ValidMessageRecord validMessageRecord)
+				? validMessageRecord
+				: MessageRecord.empty(messageKey);
 	}
 
 }
