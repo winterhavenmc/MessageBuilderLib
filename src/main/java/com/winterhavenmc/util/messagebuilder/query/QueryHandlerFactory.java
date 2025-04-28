@@ -21,7 +21,6 @@ import com.winterhavenmc.util.messagebuilder.resources.language.SectionResourceM
 import com.winterhavenmc.util.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.util.messagebuilder.model.language.Section;
 import com.winterhavenmc.util.messagebuilder.model.language.SectionRecord;
-import com.winterhavenmc.util.messagebuilder.validation.ValidationHandler;
 
 import java.util.Objects;
 

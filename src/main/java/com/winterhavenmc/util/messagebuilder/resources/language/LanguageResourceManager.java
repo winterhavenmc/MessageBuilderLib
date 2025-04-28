@@ -23,14 +23,8 @@ import com.winterhavenmc.util.messagebuilder.resources.configuration.LanguageTag
 import org.bukkit.configuration.Configuration;
 
 import java.io.File;
-import java.util.Objects;
 
 import static com.winterhavenmc.util.messagebuilder.resources.language.LanguageSetting.RESOURCE_SUBDIRECTORY;
-import static com.winterhavenmc.util.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_INSTALLER;
-import static com.winterhavenmc.util.messagebuilder.validation.Parameter.RESOURCE_LOADER;
-import static com.winterhavenmc.util.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.util.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -49,18 +43,16 @@ import static com.winterhavenmc.util.messagebuilder.validation.Validator.validat
  */
 public final class LanguageResourceManager implements SectionResourceManager
 {
-	private static volatile LanguageResourceManager instance;
-
 	private final LanguageResourceLoader languageResourceLoader;
 	private final LanguageResourceInstaller languageResourceInstaller;
 	private Configuration languageConfiguration;
 
 
 	/**
-	 * Private constructor prevents instantiation except from within this class
+	 * Class constructor
 	 */
-	private LanguageResourceManager(final LanguageResourceInstaller resourceInstaller,
-									final LanguageResourceLoader resourceLoader)
+	public LanguageResourceManager(final LanguageResourceInstaller resourceInstaller,
+								   final LanguageResourceLoader resourceLoader)
 	{
 		this.languageResourceLoader = resourceLoader;
 		this.languageResourceInstaller = resourceInstaller;
@@ -74,24 +66,15 @@ public final class LanguageResourceManager implements SectionResourceManager
 
 
 	/**
-	 * Static method to retrieve an instance of this singleton
-	 *
-	 * @return a new or cached instance of this singleton
+	 * package-private constructor for testing
 	 */
-	public static LanguageResourceManager getInstance(final LanguageResourceInstaller resourceInstaller,
-													  final LanguageResourceLoader resourceLoader)
+	LanguageResourceManager(final LanguageResourceInstaller resourceInstaller,
+								   final LanguageResourceLoader resourceLoader,
+								   final Configuration languageConfiguration)
 	{
-		validate(resourceInstaller, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_INSTALLER));
-		validate(resourceLoader, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_LOADER));
-
-		if (instance == null) {
-			synchronized (LanguageResourceManager.class) {
-				if (instance == null) {
-					instance = new LanguageResourceManager(resourceInstaller, resourceLoader);
-				}
-			}
-		}
-		return instance;
+		this.languageResourceInstaller = resourceInstaller;
+		this.languageResourceLoader = resourceLoader;
+		this.languageConfiguration = languageConfiguration;
 	}
 
 
@@ -104,6 +87,7 @@ public final class LanguageResourceManager implements SectionResourceManager
 	 *
 	 * @return {@code true} if the configuration was successfully reloaded, {@code false} if it failed
 	 */
+	@Override
 	public boolean reload()
 	{
 		// install any resources whose corresponding files are absent

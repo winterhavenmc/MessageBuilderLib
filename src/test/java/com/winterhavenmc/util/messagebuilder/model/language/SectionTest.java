@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.util.messagebuilder.model.language;
 
+import com.winterhavenmc.util.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 
 import org.bukkit.configuration.Configuration;
@@ -36,13 +37,12 @@ class SectionTest {
 	{
 		// Arrange
 		Configuration configuration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
-	//	YamlConfigurationSupplier configurationSupplier = new YamlConfigurationSupplier(configuration);
 
 		// Act
-//		QueryHandler<SectionRecord> queryHandler = section.createHandler(configurationSupplier);
+		QueryHandler<SectionRecord> queryHandler = section.createHandler(() -> configuration);
 
 		// Assert
-//		assertNotNull(queryHandler);
+		assertNotNull(queryHandler);
 	}
 
 

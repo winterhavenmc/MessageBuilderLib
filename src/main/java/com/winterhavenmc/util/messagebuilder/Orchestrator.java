@@ -65,7 +65,7 @@ class Orchestrator
 		final LanguageResourceInstaller resourceInstaller = new LanguageResourceInstaller(plugin);
 		final LanguageResourceLoader resourceLoader = new LanguageResourceLoader(plugin);
 
-		return LanguageResourceManager.getInstance(resourceInstaller, resourceLoader);
+		return new LanguageResourceManager(resourceInstaller, resourceLoader);
 	}
 
 

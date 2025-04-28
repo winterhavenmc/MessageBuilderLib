@@ -5,8 +5,8 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
@@ -28,18 +28,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 
 /**
  * This class is responsible for the loading of the language file from the plugin data directory into
- * a configuration object. The configuration object is loaded from file when ever the getConfiguration method
+ * a configuration object. The configuration object is loaded from file whenever the getConfiguration method
  * is called. The class does not store the configuration; each invocation of the getConfiguration method will
- * result in a new configuration object loaded from the currently configured language file, or the us-EN language
+ * result in a new configuration object loaded from the currently configured language file, or the en-US language
  * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
 public final class LanguageResourceLoader implements com.winterhavenmc.util.messagebuilder.resources.ResourceLoader
 {
 	private final Plugin plugin;
+	private final Supplier<YamlConfiguration> yamlFactory;
 
 
 	/**
@@ -49,19 +51,24 @@ public final class LanguageResourceLoader implements com.winterhavenmc.util.mess
 	 */
 	public LanguageResourceLoader(final Plugin plugin)
 	{
-		this.plugin = plugin;
+		this(plugin, YamlConfiguration::new); // Default behavior: normal YAML factory
 	}
 
 
 	/**
+	 * Testable constructor allowing custom YamlConfiguration supplier.
+	 *
+	 * @param plugin      an instance of the plugin main class
+	 * @param yamlFactory factory for creating YamlConfiguration instances
+	 */
+	public LanguageResourceLoader(final Plugin plugin, Supplier<YamlConfiguration> yamlFactory)
+	{
+		this.plugin = plugin;
+		this.yamlFactory = yamlFactory;
+	}
+
+	/**
 	 * Gets language tag specified in config.yml.
-	 * <p>
-	 * it is recommended, but not required, that languages should be specified by their ISO-639 codes,
-	 * with two letter lowercase language code and two letter uppercase country code separated by a hyphen.
-	 * <p>
-	 * <i>example:</i> en-US
-	 * <p>
-	 * The language yaml file must match the specified tag, with a .yml extension appended.
 	 *
 	 * @return Optional {@code LanguageTag} or an empty Optional if config setting is null or empty
 	 */
@@ -70,11 +77,10 @@ public final class LanguageResourceLoader implements com.winterhavenmc.util.mess
 	{
 		String configLanguageTag = plugin.getConfig().getString(LanguageSetting.CONFIG_LANGUAGE_KEY.toString());
 
-		return configLanguageTag == null || configLanguageTag.isBlank()
+		return (configLanguageTag == null || configLanguageTag.isBlank())
 				? Optional.empty()
 				: LanguageTag.of(Locale.forLanguageTag(configLanguageTag));
 	}
-
 
 	@Override
 	public Locale getConfiguredLocale()
@@ -86,30 +92,31 @@ public final class LanguageResourceLoader implements com.winterhavenmc.util.mess
 
 
 	/**
-	 * Load the language configuration object for the configured language from file and return it. The returned
-	 * configuration object contains no default values loaded, by design
+	 * Load the language configuration object for the configured language from file and return it.
+	 * The returned configuration object contains no default values loaded, by design.
 	 *
 	 * @return Configuration - message configuration object
 	 */
 	@Override
 	public Configuration load()
 	{
-        return LanguageTag.of(getConfiguredLocale())
+		return getConfiguredLanguageTag()
 				.map(this::load)
 				.orElse(null);
-    }
+	}
 
 
 	/**
-	 * Load the language configuration object for the configured language from file and return it. The returned
-	 * configuration object contains no default values loaded, by design
+	 * Load the language configuration object for the given language tag from file and return it.
+	 * The returned configuration object contains no default values loaded, by design.
 	 *
+	 * @param languageTag the language tag to load configuration for
 	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
 	@Override
 	public Configuration load(final LanguageTag languageTag)
 	{
-		YamlConfiguration configuration = new YamlConfiguration();
+		YamlConfiguration configuration = yamlFactory.get();
 		File languageFile = new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(languageTag));
 
 		try
@@ -117,17 +124,14 @@ public final class LanguageResourceLoader implements com.winterhavenmc.util.mess
 			configuration.load(languageFile);
 			plugin.getLogger().info("Language file " + languageFile + " successfully loaded.");
 		}
-
 		catch (FileNotFoundException e)
 		{
 			plugin.getLogger().severe("Language file " + languageFile + " does not exist.");
 		}
-
 		catch (IOException e)
 		{
 			plugin.getLogger().severe("Language file " + languageFile + " could not be read.");
 		}
-
 		catch (InvalidConfigurationException e)
 		{
 			plugin.getLogger().severe("Language file " + languageFile + " is not valid yaml.");
