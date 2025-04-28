@@ -22,12 +22,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class LocaleFieldTest
+class LocaleSettingTest
 {
 	@Test
 	void testToString()
 	{
-		assertEquals("locale", LocaleField.LOCALE.toString());
-		assertEquals("language", LocaleField.LANGUAGE.toString());
+		assertEquals("locale", LocaleSetting.LOCALE.toString());
+		assertEquals("language", LocaleSetting.LANGUAGE.toString());
 	}
 }

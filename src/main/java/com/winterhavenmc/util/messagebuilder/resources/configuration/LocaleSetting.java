@@ -17,14 +17,14 @@
 
 package com.winterhavenmc.util.messagebuilder.resources.configuration;
 
-enum LocaleField
+enum LocaleSetting
 {
 	LOCALE("locale"),
 	LANGUAGE("language");
 
 	private final String string;
 
-	LocaleField(String string)
+	LocaleSetting(String string)
 	{
 		this.string = string;
 	}
