@@ -23,6 +23,7 @@ import com.winterhavenmc.util.messagebuilder.util.MockUtility;
 import com.winterhavenmc.util.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -40,15 +41,14 @@ import java.io.File;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class LanguageResourceManagerTest
 {
-	@Mock
-	LanguageResourceInstaller languageResourceInstallerMock;
-	@Mock
-	LanguageResourceLoader languageResourceLoaderMock;
+	@Mock LanguageResourceInstaller languageResourceInstallerMock;
+	@Mock LanguageResourceLoader languageResourceLoaderMock;
 
 	// real language handler
 	LanguageResourceManager resourceManager;
