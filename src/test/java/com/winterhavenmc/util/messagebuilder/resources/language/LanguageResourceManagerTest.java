@@ -132,29 +132,6 @@ class LanguageResourceManagerTest
 	}
 
 
-//	@Nested
-//	class GetInstanceTests
-//	{
-//		@Test
-//		void testGetInstance_parameter_null_resourceInstaller()
-//		{
-//			ValidationException exception = assertThrows(ValidationException.class,
-//					() -> new LanguageResourceManager(null, languageResourceLoaderMock));
-//
-//			assertEquals("The parameter 'resourceInstaller' cannot be null.", exception.getMessage());
-//		}
-//
-//		@Test
-//		void testGetInstance_parameter_null_resourceLoader()
-//		{
-//			ValidationException exception = assertThrows(ValidationException.class,
-//					() -> new LanguageResourceManager(languageResourceInstallerMock, null));
-//
-//			assertEquals("The parameter 'resourceLoader' cannot be null.", exception.getMessage());
-//		}
-//	}
-
-
 	@Test
 	void testGetResourceName()
 	{
