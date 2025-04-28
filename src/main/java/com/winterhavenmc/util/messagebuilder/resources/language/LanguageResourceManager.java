@@ -104,6 +104,7 @@ public final class LanguageResourceManager implements SectionResourceManager
 	 *
 	 * @return {@code true} if the configuration was successfully reloaded, {@code false} if it failed
 	 */
+	@Override
 	public boolean reload()
 	{
 		// install any resources whose corresponding files are absent
