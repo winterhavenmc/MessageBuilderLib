@@ -56,10 +56,19 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 		SUBTITLE_TEXT("SUBTITLE_TEXT");
 
 		private final String keyString;
+
+
 		Field(final String keyString) {
 			this.keyString = keyString;
 		}
+
 		public String toKey() {
+			return this.keyString;
+		}
+
+		@Override
+		public String toString()
+		{
 			return this.keyString;
 		}
 	}

@@ -53,6 +53,9 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 
 		// getter for keyPath field
 		public String toKey() { return this.keyString; }
+
+		@Override
+		public String toString() { return this.keyString; }
 	}
 
 }
