@@ -46,13 +46,13 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 		INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL"),
 		LORE("LORE");
 
-		private final String keyPath; // keyPath field
+		private final String keyString; // keyPath field
 
 		// constructor for enum constants
-		Field(String keyPath) { this.keyPath = keyPath; }
+		Field(String keyString) { this.keyString = keyString; }
 
 		// getter for keyPath field
-		public String toKey() { return this.keyPath; }
+		public String toKey() { return this.keyString; }
 	}
 
 }
