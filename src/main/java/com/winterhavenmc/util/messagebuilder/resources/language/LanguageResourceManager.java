@@ -50,6 +50,9 @@ public final class LanguageResourceManager implements SectionResourceManager
 
 	/**
 	 * Class constructor
+	 *
+	 * @param resourceInstaller a LanguageResourceInstaller instance
+	 * @param resourceLoader  a LanguageResourceLoader instance
 	 */
 	public LanguageResourceManager(final LanguageResourceInstaller resourceInstaller,
 								   final LanguageResourceLoader resourceLoader)
@@ -66,7 +69,11 @@ public final class LanguageResourceManager implements SectionResourceManager
 
 
 	/**
-	 * package-private constructor for testing
+	 * package-private constructor for testing purposes
+	 *
+	 * @param resourceInstaller a LanguageResourceInstaller instance
+	 * @param resourceLoader  a LanguageResourceLoader instance
+	 * @param languageConfiguration a bukkit Configuration representing the language resource
 	 */
 	LanguageResourceManager(final LanguageResourceInstaller resourceInstaller,
 								   final LanguageResourceLoader resourceLoader,
