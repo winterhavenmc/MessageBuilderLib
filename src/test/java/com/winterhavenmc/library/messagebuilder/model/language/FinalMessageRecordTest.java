@@ -15,10 +15,9 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.model.language.message;
+package com.winterhavenmc.library.messagebuilder.model.language;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

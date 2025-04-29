@@ -15,10 +15,9 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.model.language.constant;
+package com.winterhavenmc.library.messagebuilder.model.language;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
