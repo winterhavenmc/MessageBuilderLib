@@ -1,6 +1,5 @@
-
 /*
- * Copyright (c) 2025 Tim Savage.
+ * Copyright (c) 2024-2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +15,15 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.model.language.message;
+package com.winterhavenmc.library.messagebuilder.model.language;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 
-public record InvalidMessageRecord(RecordKey key, String reason) implements MessageRecord { }
+/**
+ * A data object record for item information contained in the language file. This class also contains
+ * an enum of fields with their corresponding path key, and a static method for retrieving a record.
+ *
+ * @param key the keyPath in the language file for this record
+ */
+public record InvalidItemRecord(RecordKey key, String reason) implements ItemRecord { }

@@ -20,9 +20,9 @@ package com.winterhavenmc.library.messagebuilder.pipeline.retriever;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.library.messagebuilder.model.language.message.InvalidMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -19,6 +19,9 @@ package com.winterhavenmc.library.messagebuilder.model.language.message;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
+import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.BeforeEach;
@@ -160,6 +163,6 @@ class ValidMessageRecordTest
 		// Assert
 		assertEquals("this is a final message string", finalMessageRecord.finalMessageString());
 		assertEquals("this is a final title string", finalMessageRecord.finalTitleString());
-		assertEquals("this is a final subtitle string", finalMessageRecord.finalSubTitleString());
+		assertEquals("this is a final subtitle string", finalMessageRecord.finalSubtitleString());
 	}
 }

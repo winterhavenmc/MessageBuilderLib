@@ -18,9 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.model.language;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.constant.ConstantRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.item.ItemRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.MessageRecord;
 
 
 public sealed interface SectionRecord permits ConstantRecord, ItemRecord, MessageRecord

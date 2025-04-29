@@ -17,9 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.sender;
 
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.library.messagebuilder.model.language.message.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -53,14 +54,37 @@ public final class TitleSender implements Sender
 	@Override
 	public void send(final Recipient.Valid recipient, final FinalMessageRecord messageRecord)
 	{
+		if (messageRecord.title() == null && messageRecord.subtitle() == null) { return; }
+
+		String titleString = (messageRecord.finalTitleString() == null)
+				? ""
+				: messageRecord.finalTitleString();
+
+		String subtitleString = (messageRecord.finalSubtitleString() == null)
+				? ""
+				: messageRecord.finalSubtitleString();
+
+		int fadeIn = (messageRecord.titleFadeIn() == 0)
+				? 10
+				: messageRecord.titleFadeIn();
+
+		int stay = (messageRecord.titleStay() == 0)
+				? 70
+				: messageRecord.titleStay();
+
+		int fadeOut = (messageRecord.titleFadeOut() == 0)
+				? 20
+				: messageRecord.titleFadeOut();
+
+
 		if (recipient.sender() instanceof Player player)
 		{
 			player.sendTitle(
-					ChatColor.translateAlternateColorCodes('&', messageRecord.title()),
-					ChatColor.translateAlternateColorCodes('&', messageRecord.subtitle()),
-					messageRecord.titleFadeIn(),
-					messageRecord.titleStay(),
-					messageRecord.titleFadeOut());
+					ChatColor.translateAlternateColorCodes('&', titleString),
+					ChatColor.translateAlternateColorCodes('&', subtitleString),
+					fadeIn,
+					stay,
+					fadeOut);
 
 			cooldownMap.putExpirationTime(recipient, messageRecord);
 		}

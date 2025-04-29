@@ -21,7 +21,6 @@ import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Objects;
@@ -173,7 +172,7 @@ public class ContextMap
 	 *
 	 * @return A set of entries in the map.
 	 */
-	public @NotNull Set<Map.Entry<MacroKey, Object>> entrySet()
+	public Set<Map.Entry<MacroKey, Object>> entrySet()
 	{
 		return internalMap.entrySet();
 	}

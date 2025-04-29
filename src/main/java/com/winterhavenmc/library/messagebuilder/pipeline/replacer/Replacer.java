@@ -18,8 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
-import com.winterhavenmc.library.messagebuilder.model.language.message.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 
 
 @FunctionalInterface

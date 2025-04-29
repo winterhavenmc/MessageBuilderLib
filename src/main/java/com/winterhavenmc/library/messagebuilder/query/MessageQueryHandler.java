@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
-import com.winterhavenmc.library.messagebuilder.model.language.message.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Objects;

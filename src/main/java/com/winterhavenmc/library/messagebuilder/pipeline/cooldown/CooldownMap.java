@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.cooldown;
 
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.model.language.message.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
 import java.time.Instant;

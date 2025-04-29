@@ -20,9 +20,9 @@ package com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
-import com.winterhavenmc.library.messagebuilder.model.language.constant.ConstantRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.Section;
-import com.winterhavenmc.library.messagebuilder.model.language.constant.ValidConstantRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;

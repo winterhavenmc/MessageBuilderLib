@@ -72,7 +72,7 @@ class MultiverseWorldNameResolverTest
 		when(worldMock.getName()).thenReturn("world-name");
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
-		when(mvWorldMock.getAlias()).thenReturn("");
+		when(mvWorldMock.getColoredWorldString()).thenReturn("");
 
 		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
 
@@ -83,7 +83,7 @@ class MultiverseWorldNameResolverTest
 		assertEquals("world-name", result);
 
 		// Verify
-		verify(mvWorldMock, atLeastOnce()).getAlias();
+		verify(mvWorldMock, atLeastOnce()).getColoredWorldString();
 	}
 
 
@@ -91,7 +91,7 @@ class MultiverseWorldNameResolverTest
 	void getWorldName_no_alias()
 	{
 		// Arrange
-		when(mvWorldMock.getAlias()).thenReturn("World Alias");
+		when(mvWorldMock.getColoredWorldString()).thenReturn("World Alias");
 		lenient().when(multiverseCoreMock.isEnabled()).thenReturn(true);
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
@@ -105,7 +105,7 @@ class MultiverseWorldNameResolverTest
 		assertEquals("World Alias", result);
 
 		// Verify
-		verify(mvWorldMock, atLeastOnce()).getAlias();
+		verify(mvWorldMock, atLeastOnce()).getColoredWorldString();
 	}
 
 }

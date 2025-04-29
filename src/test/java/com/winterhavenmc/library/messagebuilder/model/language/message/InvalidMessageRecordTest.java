@@ -18,6 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.model.language.message;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

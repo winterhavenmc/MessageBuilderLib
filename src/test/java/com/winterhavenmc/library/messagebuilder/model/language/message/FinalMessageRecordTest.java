@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.model.language.message;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -165,7 +166,7 @@ class FinalMessageRecordTest
 	void testFinalSubtitleString()
 	{
 		// Arrange & Act
-		String result = validMessageRecord.finalSubTitleString();
+		String result = validMessageRecord.finalSubtitleString();
 
 		// Assert
 		assertEquals("this is a final subtitle string", result);

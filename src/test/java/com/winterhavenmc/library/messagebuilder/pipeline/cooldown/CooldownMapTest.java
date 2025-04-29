@@ -20,9 +20,9 @@ package com.winterhavenmc.library.messagebuilder.pipeline.cooldown;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.message.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;

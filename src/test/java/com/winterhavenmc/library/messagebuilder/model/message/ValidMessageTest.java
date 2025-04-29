@@ -24,8 +24,8 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.messages.Macro;
 import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.model.language.message.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
 import org.bukkit.Material;

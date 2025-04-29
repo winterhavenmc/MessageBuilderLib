@@ -18,9 +18,9 @@
 package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.message.InvalidMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 
 import org.bukkit.configuration.ConfigurationSection;

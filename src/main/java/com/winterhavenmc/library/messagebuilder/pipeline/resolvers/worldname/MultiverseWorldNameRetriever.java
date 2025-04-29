@@ -38,7 +38,7 @@ public class MultiverseWorldNameRetriever implements WorldNameRetriever
 		{
 			return null;
 		}
-		return multiverseCore.getMVWorldManager().getMVWorld(world).getAlias();
+		return multiverseCore.getMVWorldManager().getMVWorld(world).getColoredWorldString();
 	}
 
 }

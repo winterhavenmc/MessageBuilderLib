@@ -83,9 +83,10 @@
 					<id>spigot-repo</id>
 					<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 				</repository>
+
 				<repository>
-					<id>glaremasters-repo</id>
-					<url>https://repo.glaremasters.me/repository/public/</url>
+					<id>multiverse-repo</id>
+					<url>https://repo.onarandombox.com/content/groups/public/</url>
 				</repository>
 			</repositories>
 		</profile>
@@ -103,20 +104,23 @@
 		<!-- Multiverse-Core -->
 		<dependency>
 			<groupId>com.onarandombox.multiversecore</groupId>
-			<artifactId>Multiverse-Core</artifactId>
-			<version>4.3.1</version>
+			<artifactId>multiverse-core</artifactId>
+			<version>4.3.14</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.time4j</groupId>
 			<artifactId>time4j-base</artifactId>
 			<version>5.9.4</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.time4j</groupId>
 			<artifactId>time4j-tzdata</artifactId>
 			<version>5.0-2024a</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- Unit Testing Dependencies -->
@@ -224,6 +228,29 @@
 								</bannedDependencies>
 							</rules>
 							<fail>true</fail>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Maven shade plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.6.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<relocations>
+								<relocation>
+									<pattern>net.time4j</pattern>
+									<shadedPattern>com.winterhavenmc.library.messagebuilder.shaded</shadedPattern>
+								</relocation>
+							</relocations>
 						</configuration>
 					</execution>
 				</executions>

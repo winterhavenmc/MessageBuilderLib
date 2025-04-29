@@ -18,9 +18,9 @@
 package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.model.language.Section;
-import com.winterhavenmc.library.messagebuilder.model.language.constant.ConstantRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.item.ItemRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;

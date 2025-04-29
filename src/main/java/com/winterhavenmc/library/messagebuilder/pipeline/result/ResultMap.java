@@ -19,7 +19,6 @@ package com.winterhavenmc.library.messagebuilder.pipeline.result;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,7 +74,7 @@ public class ResultMap
 	}
 
 
-	public void putAll(final @NotNull ResultMap insertionMap)
+	public void putAll(final ResultMap insertionMap)
 	{
 		for (Map.Entry<MacroKey, String> entry : insertionMap.entrySet())
 		{

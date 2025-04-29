@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.message.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 
 
 @FunctionalInterface

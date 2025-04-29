@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.item.ItemRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 
 import org.bukkit.configuration.ConfigurationSection;

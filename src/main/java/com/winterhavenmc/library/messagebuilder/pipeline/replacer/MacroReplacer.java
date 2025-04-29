@@ -23,8 +23,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
-import com.winterhavenmc.library.messagebuilder.model.language.message.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.message.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.util.Delimiter;
 
 import java.util.Objects;
