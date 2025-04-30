@@ -114,6 +114,7 @@ public final class ValidMessage implements Message
 	}
 
 
+	@Override
 	public <K extends Enum<K>> Message setMacro(final K macro,
 												final Duration duration,
 												final ChronoUnit lowerBound)
