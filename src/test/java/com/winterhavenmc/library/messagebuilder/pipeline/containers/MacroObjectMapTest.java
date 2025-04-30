@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.pipeline.context;
+package com.winterhavenmc.library.messagebuilder.pipeline.containers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;

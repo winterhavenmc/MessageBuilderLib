@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
 import org.junit.jupiter.api.BeforeEach;

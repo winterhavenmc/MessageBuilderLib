@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 
