@@ -33,7 +33,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
 
 public class MacroStringMap
 {
-	private final Map<MacroKey, String> internalResultMap;
+	private final Map<MacroKey, String> INTERNAL_MAP;
 	private static final Predicate<String> STRING_IS_NULL = Objects::isNull;
 	private static final Predicate<String> STRING_IS_EMPTY = String::isBlank;
 	private static final Predicate<String> INVALID = STRING_IS_NULL.or(STRING_IS_EMPTY);
@@ -44,33 +44,33 @@ public class MacroStringMap
 	 */
 	public MacroStringMap()
 	{
-		this.internalResultMap = new HashMap<>();
+		this.INTERNAL_MAP = new HashMap<>();
 	}
 
 
 	public void put(final MacroKey macroKey, final String value)
 	{
 		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
-		internalResultMap.put(macroKey, value);
+		INTERNAL_MAP.put(macroKey, value);
 	}
 
 
 	public void putIfAbsent(final MacroKey macroKey, final String value)
 	{
 		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
-		internalResultMap.putIfAbsent(macroKey, value);
+		INTERNAL_MAP.putIfAbsent(macroKey, value);
 	}
 
 
 	public String get(final MacroKey key)
 	{
-		return internalResultMap.get(key);
+		return INTERNAL_MAP.get(key);
 	}
 
 
 	public String getValueOrKey(final MacroKey key)
 	{
-		return internalResultMap.getOrDefault(key, key.toString()); // Return key itself if not found
+		return INTERNAL_MAP.getOrDefault(key, key.toString()); // Return key itself if not found
 	}
 
 
@@ -79,26 +79,26 @@ public class MacroStringMap
 		for (Map.Entry<MacroKey, String> entry : insertionMap.entrySet())
 		{
 			String value = entry.getValue();
-			internalResultMap.put(entry.getKey(), value);
+			INTERNAL_MAP.put(entry.getKey(), value);
 		}
 	}
 
 
 	public boolean containsKey(final MacroKey key)
 	{
-		return internalResultMap.containsKey(key);
+		return INTERNAL_MAP.containsKey(key);
 	}
 
 
 	public Iterable<? extends Map.Entry<MacroKey, String>> entrySet()
 	{
-		return internalResultMap.entrySet();
+		return INTERNAL_MAP.entrySet();
 	}
 
 
 	public boolean isEmpty()
 	{
-		return internalResultMap.isEmpty();
+		return INTERNAL_MAP.isEmpty();
 	}
 
 }
