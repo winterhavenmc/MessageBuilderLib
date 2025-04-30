@@ -59,7 +59,7 @@ public final class ValidMessage implements Message
 		this.messageKey = messageKey;
 		this.messagePipeline = messagePipeline;
 
-		// create context map and add recipient field
+		// create macro object map and add recipient field
 		this.macroObjectMap = new MacroObjectMap();
 		MacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).orElseThrow();
 		this.macroObjectMap.put(recipientKey, recipient);
