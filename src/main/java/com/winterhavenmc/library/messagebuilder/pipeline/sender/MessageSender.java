@@ -43,8 +43,11 @@ public final class MessageSender implements Sender
 	@Override
 	public void send(final Recipient.Valid recipient, final FinalMessageRecord messageRecord)
 	{
-		recipient.sender().sendMessage(ChatColor.translateAlternateColorCodes('&', messageRecord.finalMessageString()));
-		cooldownMap.putExpirationTime(recipient, messageRecord);
+		if (messageRecord.enabled() && messageRecord.finalMessageString() != null && !messageRecord.finalMessageString().isBlank())
+		{
+			recipient.sender().sendMessage(ChatColor.translateAlternateColorCodes('&', messageRecord.finalMessageString()));
+			cooldownMap.putExpirationTime(recipient, messageRecord);
+		}
 	}
 
 }
