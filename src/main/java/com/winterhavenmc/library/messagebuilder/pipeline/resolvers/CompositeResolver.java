@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistr
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 
 
 public class CompositeResolver implements Resolver

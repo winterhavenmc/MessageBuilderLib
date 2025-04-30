@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.pipeline.result;
+package com.winterhavenmc.library.messagebuilder.pipeline.containers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import org.junit.jupiter.api.BeforeEach;

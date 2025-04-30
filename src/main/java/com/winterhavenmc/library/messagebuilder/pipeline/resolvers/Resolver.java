@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 
 
 @FunctionalInterface

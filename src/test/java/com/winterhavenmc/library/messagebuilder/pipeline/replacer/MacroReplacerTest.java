@@ -32,7 +32,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.AtomicResolve
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;

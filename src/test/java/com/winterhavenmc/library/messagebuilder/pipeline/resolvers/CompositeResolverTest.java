@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapt
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
