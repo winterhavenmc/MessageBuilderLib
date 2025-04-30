@@ -64,12 +64,6 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 		public String toKey() {
 			return this.keyString;
 		}
-
-		@Override
-		public String toString()
-		{
-			return this.keyString;
-		}
 	}
 
 }
