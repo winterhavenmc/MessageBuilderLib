@@ -96,7 +96,7 @@ public final class ValidMessage implements Message
 	 * @param value object that contains value that will be substituted in message
 	 * @param <K> type parameter for key
 	 * @param <V> type parameter for value
-	 * @return this message object with macro value set in map
+	 * @return this message object with macro value set in object map
 	 */
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(final int quantity,
@@ -114,6 +114,15 @@ public final class ValidMessage implements Message
 	}
 
 
+	/**
+	 * set macro for message replacements, with a duration and lower bound
+	 *
+	 * @param macro token for placeholder
+	 * @param duration a duration
+	 * @param lowerBound a lower bound, represented by a ChronoUnit
+	 * @param <K> type parameter for enum derived macro key
+	 * @return this message object with macro value set in object map
+	 */
 	@Override
 	public <K extends Enum<K>> Message setMacro(final K macro,
 												final Duration duration,
