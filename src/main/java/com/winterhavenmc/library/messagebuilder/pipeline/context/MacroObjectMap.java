@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * to be processed for replacement strings. The map key is an enum member, and the corresponding value
  * is the object to be processed. It is backed by a HashMap.
  */
-public class ContextMap
+public class MacroObjectMap
 {
 	private final Map<MacroKey, Object> internalMap = new ConcurrentHashMap<>();
 

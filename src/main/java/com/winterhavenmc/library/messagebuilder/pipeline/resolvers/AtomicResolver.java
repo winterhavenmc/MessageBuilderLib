@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
@@ -50,11 +50,11 @@ public class AtomicResolver implements Resolver
 	}
 
 
-	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
+	public ResultMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
 		ResultMap result = new ResultMap();
 
-		contextMap.get(macroKey)
+		macroObjectMap.get(macroKey)
 				.flatMap(this::resolveAtomic)
 				.ifPresent(formatted -> result.putIfAbsent(macroKey, formatted));
 

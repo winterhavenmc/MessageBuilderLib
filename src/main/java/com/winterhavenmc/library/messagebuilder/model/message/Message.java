@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.model.message;
 
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 import java.time.Duration;
@@ -32,7 +32,7 @@ public sealed interface Message permits ValidMessage, InvalidMessage {
     void send();
     RecordKey getMessageKey();
     Recipient.Valid getRecipient();
-    ContextMap getContextMap();
+    MacroObjectMap getContextMap();
 
     static Message empty()
     {

@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
 
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
@@ -46,7 +46,8 @@ import static org.mockito.Mockito.*;
 class AtomicResolverTest
 {
 	@Mock LocaleProvider localeProviderMock;
-	@Mock ContextMap contextMapMock;
+	@Mock
+	MacroObjectMap macroObjectMapMock;
 	@Mock LocalizedDurationFormatter durationFormatter;
 
 	private AtomicResolver resolver;
@@ -68,17 +69,17 @@ class AtomicResolverTest
 	{
 		// Arrange
 		Duration duration = Duration.ofMinutes(5);
-		when(contextMapMock.get(key)).thenReturn(Optional.of(duration));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(duration));
 		when(durationFormatter.format(any(Duration.class), any(ChronoUnit.class))).thenReturn("5 minutes");
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("5 minutes", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 		verify(durationFormatter, atLeastOnce()).format(any(Duration.class), any(ChronoUnit.class));
 	}
 
@@ -88,17 +89,17 @@ class AtomicResolverTest
 	{
 		// Arrange
 		Duration duration = Duration.ofMinutes(5);
-		when(contextMapMock.get(key)).thenReturn(Optional.of(duration));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(duration));
 		when(durationFormatter.format(eq(duration), any(ChronoUnit.class))).thenReturn("5 minutes");
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("5 minutes", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 		verify(durationFormatter, atLeastOnce()).format(eq(duration), any(ChronoUnit.class));
 	}
 
@@ -107,16 +108,16 @@ class AtomicResolverTest
 	void testResolve_stringIsStoredDirectly()
 	{
 		// Arrange
-		when(contextMapMock.get(key)).thenReturn(Optional.of("Hello world"));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of("Hello world"));
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("Hello world", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 	}
 
 
@@ -124,17 +125,17 @@ class AtomicResolverTest
 	void testResolve_numberToString()
 	{
 		// Arrange
-		when(contextMapMock.get(key)).thenReturn(Optional.of(42));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(42));
 		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("42", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 		verify(localeProviderMock, atLeastOnce()).getLocale();
 	}
 
@@ -144,17 +145,17 @@ class AtomicResolverTest
 	{
 		// Arrange
 		BoundedDuration boundedDuration = new BoundedDuration(Duration.ofSeconds(12), ChronoUnit.SECONDS);
-		when(contextMapMock.get(key)).thenReturn(Optional.of(boundedDuration));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(boundedDuration));
 		when(durationFormatter.format(boundedDuration.duration(), boundedDuration.precision())).thenReturn("12 seconds");
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("12 seconds", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 	}
 
 
@@ -163,17 +164,17 @@ class AtomicResolverTest
 	{
 		// Arrange
 		Duration duration = Duration.ofSeconds(15);
-		when(contextMapMock.get(key)).thenReturn(Optional.of(duration));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(duration));
 		when(durationFormatter.format(duration, ChronoUnit.SECONDS)).thenReturn("15 minutes");
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("15 minutes", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 	}
 
 
@@ -181,17 +182,17 @@ class AtomicResolverTest
 	void testResolve_numberToString_large_english()
 	{
 		// Arrange
-		when(contextMapMock.get(key)).thenReturn(Optional.of(420000));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(420000));
 		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("420,000", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 		verify(localeProviderMock, atLeastOnce()).getLocale();
 	}
 
@@ -200,17 +201,17 @@ class AtomicResolverTest
 	void testResolve_numberToString_large_german()
 	{
 		// Arrange
-		when(contextMapMock.get(key)).thenReturn(Optional.of(420000));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(420000));
 		when(localeProviderMock.getLocale()).thenReturn(Locale.GERMAN);
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("420.000", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 		verify(localeProviderMock, atLeastOnce()).getLocale();
 	}
 
@@ -219,16 +220,16 @@ class AtomicResolverTest
 	void testResolve_enumToString()
 	{
 		// Arrange
-		when(contextMapMock.get(key)).thenReturn(Optional.of(Thread.State.RUNNABLE));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(Thread.State.RUNNABLE));
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("RUNNABLE", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 	}
 
 
@@ -237,16 +238,16 @@ class AtomicResolverTest
 	{
 		// Arrange
 		UUID uuid = UUID.randomUUID();
-		when(contextMapMock.get(key)).thenReturn(Optional.of(uuid));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(uuid));
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals(uuid.toString(), result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 	}
 
 
@@ -254,16 +255,16 @@ class AtomicResolverTest
 	void testResolve_booleanToString()
 	{
 		// Arrange
-		when(contextMapMock.get(key)).thenReturn(Optional.of(true));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(true));
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("true", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 	}
 
 
@@ -279,16 +280,16 @@ class AtomicResolverTest
 				return "custom-toString";
 			}
 		};
-		when(contextMapMock.get(key)).thenReturn(Optional.of(custom));
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(custom));
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("custom-toString", result.get(key));
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 	}
 
 
@@ -296,16 +297,16 @@ class AtomicResolverTest
 	void testResolve_keyNotPresent_returnsEmptyMap()
 	{
 		// Arrange
-		when(contextMapMock.get(key)).thenReturn(Optional.empty());
+		when(macroObjectMapMock.get(key)).thenReturn(Optional.empty());
 
 		// Act
-		ResultMap result = resolver.resolve(key, contextMapMock);
+		ResultMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertTrue(result.isEmpty());
 
 		// Verify
-		verify(contextMapMock, atLeastOnce()).get(key);
+		verify(macroObjectMapMock, atLeastOnce()).get(key);
 	}
 
 }

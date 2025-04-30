@@ -50,7 +50,7 @@ import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)
-class ContextMapTest
+class MacroObjectMapTest
 {
 	@Mock Player playerMock;
 	@Mock ConsoleCommandSender consoleCommandSenderMock;
@@ -60,7 +60,7 @@ class ContextMapTest
 	Recipient.Valid playerRecipient;
 	RecordKey messageKey;
 	MacroKey macroKey;
-	ContextMap contextMap;
+	MacroObjectMap macroObjectMap;
 	Location location;
 	MacroKey recipientMacroKey;
 	MacroKey locationMacroKey;
@@ -86,7 +86,7 @@ class ContextMapTest
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		contextMap = new ContextMap();
+		macroObjectMap = new MacroObjectMap();
 		location = new Location(worldMock, 11, 12, 13);
 
 		recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
@@ -98,15 +98,15 @@ class ContextMapTest
 //	void testAddRecipientContext()
 //	{
 //		// Arrange
-//		ContextMap contextMap = ContextMap.of(consoleRecipient, messageKey).orElseThrow();
+//		MacroObjectMap macroObjectMap = MacroObjectMap.of(consoleRecipient, messageKey).orElseThrow();
 //		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
 //		//TODO: Add recipient location to context map
 //
 //		// Act
-//		contextMap.addRecipientContext();
+//		macroObjectMap.addRecipientContext();
 //
 //		// Assert
-//		assertTrue(contextMap.contains(recipientMacroKey));
+//		assertTrue(macroObjectMap.contains(recipientMacroKey));
 //	}
 
 //	enum TestField
@@ -119,14 +119,14 @@ class ContextMapTest
 //	{
 //		// Arrange
 //		when(playerMock.getLocation()).thenReturn(location);
-//		ContextMap contextMap = ContextMap.of(playerRecipient, messageKey).orElseThrow();
+//		MacroObjectMap macroObjectMap = MacroObjectMap.of(playerRecipient, messageKey).orElseThrow();
 //
 //		// Act
-//		contextMap.addRecipientContext();
+//		macroObjectMap.addRecipientContext();
 //
 //		// Assert
-//		assertTrue(contextMap.contains(recipientMacroKey));
-//		assertTrue(contextMap.contains(locationMacroKey));
+//		assertTrue(macroObjectMap.contains(recipientMacroKey));
+//		assertTrue(macroObjectMap.contains(locationMacroKey));
 //	}
 
 
@@ -134,16 +134,16 @@ class ContextMapTest
 //	void testAddRecipientContext_non_entity()
 //	{
 //		// Arrange
-//		ContextMap contextMap = ContextMap.of(consoleRecipient, messageKey).orElseThrow();
+//		MacroObjectMap macroObjectMap = MacroObjectMap.of(consoleRecipient, messageKey).orElseThrow();
 //		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
 //		MacroKey locationMacroKey = MacroKey.of("LOCATION").orElseThrow();
 //
 //		// Act
-//		contextMap.addRecipientContext();
+//		macroObjectMap.addRecipientContext();
 //
 //		// Assert
-//		assertTrue(contextMap.contains(recipientMacroKey));
-//		assertFalse(contextMap.contains(locationMacroKey));
+//		assertTrue(macroObjectMap.contains(recipientMacroKey));
+//		assertFalse(macroObjectMap.contains(locationMacroKey));
 //	}
 
 
@@ -155,10 +155,10 @@ class ContextMapTest
 		macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
 
 		// Act
-		contextMap.put(macroKey, number);
+		macroObjectMap.put(macroKey, number);
 
 		// Assert
-		assertEquals(Optional.of(42), contextMap.get(macroKey), "Retrieved value should match the original");
+		assertEquals(Optional.of(42), macroObjectMap.get(macroKey), "Retrieved value should match the original");
 	}
 
 
@@ -170,10 +170,10 @@ class ContextMapTest
 		macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
 
 		// Act
-		contextMap.putIfAbsent(macroKey, number);
+		macroObjectMap.putIfAbsent(macroKey, number);
 
 		// Assert
-		assertEquals(Optional.of(42), contextMap.get(macroKey), "Retrieved value should match the original");
+		assertEquals(Optional.of(42), macroObjectMap.get(macroKey), "Retrieved value should match the original");
 	}
 
 
@@ -182,10 +182,10 @@ class ContextMapTest
 	{
 		// Arrange
 		macroKey = MacroKey.of("NUMBER").orElseThrow();
-		contextMap.putIfAbsent(macroKey, null);
+		macroObjectMap.putIfAbsent(macroKey, null);
 
 		// Act
-		Optional<Object> retrievedValue = contextMap.get(macroKey);
+		Optional<Object> retrievedValue = macroObjectMap.get(macroKey);
 
 		// Assert
 		assertEquals(Optional.of("NULL"), retrievedValue);
@@ -198,10 +198,10 @@ class ContextMapTest
 		// Arrange
 		macroKey = MacroKey.of("PLAYER.LOCATION").orElseThrow();
 		Location location = new Location(worldMock, 10, 20, 30);
-		contextMap.putIfAbsent(macroKey, location);
+		macroObjectMap.putIfAbsent(macroKey, location);
 
 		// Act
-		Optional<Object> retrievedValue = contextMap.get(macroKey);
+		Optional<Object> retrievedValue = macroObjectMap.get(macroKey);
 
 		// Assert
 		assertNotNull(retrievedValue, "Value should be non-null");
@@ -215,10 +215,10 @@ class ContextMapTest
 		// Arrange
 		macroKey = MacroKey.of("SWORD").orElseThrow();
 		ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
-		contextMap.putIfAbsent(macroKey, itemStack);
+		macroObjectMap.putIfAbsent(macroKey, itemStack);
 
 		// Act
-		Optional<Object> retrievedValue = contextMap.get(macroKey);
+		Optional<Object> retrievedValue = macroObjectMap.get(macroKey);
 
 		// Assert
 		assertTrue(retrievedValue.isPresent());
@@ -234,11 +234,11 @@ class ContextMapTest
 		MacroKey nonExistentKey = MacroKey.of("NON_EXISTENT_KEY").orElseThrow();
 		World world = mock(World.class, "MockWorld");
 		Location location = new Location(world, 10, 20, 30);
-		contextMap.putIfAbsent(macroKey, location);
+		macroObjectMap.putIfAbsent(macroKey, location);
 
 		// Act & Assert
-		assertTrue(contextMap.contains(macroKey), "Key should be present in the map");
-		assertFalse(contextMap.contains(nonExistentKey), "Key should not be present in the map");
+		assertTrue(macroObjectMap.contains(macroKey), "Key should be present in the map");
+		assertFalse(macroObjectMap.contains(nonExistentKey), "Key should not be present in the map");
 	}
 
 
@@ -246,7 +246,7 @@ class ContextMapTest
 	void testEmptyMap()
 	{
 		// Act & Assert
-		assertFalse(contextMap.contains(macroKey), "Empty map should not contain macro key");
+		assertFalse(macroObjectMap.contains(macroKey), "Empty map should not contain macro key");
 	}
 
 
@@ -256,14 +256,14 @@ class ContextMapTest
 		// Arrange
 		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
 		Integer value1 = 41;
-		contextMap.putIfAbsent(key1, value1);
+		macroObjectMap.putIfAbsent(key1, value1);
 
 		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
 		Integer value2 = 42;
-		contextMap.putIfAbsent(key2, value2);
+		macroObjectMap.putIfAbsent(key2, value2);
 
 		// Act
-		Set<Map.Entry<MacroKey, Object>> entrySet = contextMap.entrySet();
+		Set<Map.Entry<MacroKey, Object>> entrySet = macroObjectMap.entrySet();
 
 		// Assert
 		assertTrue(entrySet.size() >= 2);
@@ -273,7 +273,7 @@ class ContextMapTest
 //	@Test
 //	void getRecipient() {
 //		// Arrange & Act
-//		Recipient.Valid recipient = contextMap.getRecipient();
+//		Recipient.Valid recipient = macroObjectMap.getRecipient();
 //
 //		// Assert
 //		assertNotNull(recipient);

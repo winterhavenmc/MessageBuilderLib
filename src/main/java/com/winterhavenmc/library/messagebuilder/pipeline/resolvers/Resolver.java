@@ -18,12 +18,12 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
 
 
 @FunctionalInterface
 public interface Resolver
 {
-	ResultMap resolve(MacroKey key, ContextMap contextMap);
+	ResultMap resolve(MacroKey key, MacroObjectMap macroObjectMap);
 }

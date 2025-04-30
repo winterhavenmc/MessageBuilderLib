@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.model.message;
 
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 
@@ -71,7 +71,7 @@ public record InvalidMessage(String reason) implements Message
 	}
 
 	@Override
-	public ContextMap getContextMap()
+	public MacroObjectMap getContextMap()
 	{
 		return null;
 	}

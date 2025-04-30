@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
 
@@ -45,16 +45,16 @@ public class CompositeResolver implements Resolver
 	 * Convert the value objects contained in the context map into their string representations in a
 	 * new result map.
 	 *
-	 * @param contextMap a map containing key/value pairs of placeholder strings and their corresponding value object
+	 * @param macroObjectMap a map containing key/value pairs of placeholder strings and their corresponding value object
 	 * @return {@code ResultMap} a map containing the placeholder strings and the string representations of the values
 	 */
 	@Override
-	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
+	public ResultMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
 		ResultMap resultMap = new ResultMap();
 
-		contextMap.get(macroKey).ifPresent(value ->
-				resolveSubkeysInto(resultMap, value, macroKey, contextMap));
+		macroObjectMap.get(macroKey).ifPresent(value ->
+				resolveSubkeysInto(resultMap, value, macroKey, macroObjectMap));
 
 		return resultMap;
 	}
@@ -63,12 +63,12 @@ public class CompositeResolver implements Resolver
 	/**
 	 * Resolver static helper method
 	 */
-	private void resolveSubkeysInto(ResultMap resultMap, Object value, MacroKey macroKey, ContextMap contextMap)
+	private void resolveSubkeysInto(ResultMap resultMap, Object value, MacroKey macroKey, MacroObjectMap macroObjectMap)
 	{
 		adapterRegistry.getMatchingAdapters(value).forEach(adapter ->
 				adapter.adapt(value).ifPresent(adapted ->
 						fieldExtractor.extract(adapter, adapted, macroKey).keySet()
-								.forEach(subKey -> resultMap.putAll(resolve(subKey, contextMap)))
+								.forEach(subKey -> resultMap.putAll(resolve(subKey, macroObjectMap)))
 				)
 		);
 	}

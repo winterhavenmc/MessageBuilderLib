@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 
@@ -25,5 +25,5 @@ import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecor
 @FunctionalInterface
 public interface Replacer
 {
-	FinalMessageRecord replaceMacros(ValidMessageRecord messageRecord, ContextMap contextMap);
+	FinalMessageRecord replaceMacros(ValidMessageRecord messageRecord, MacroObjectMap macroObjectMap);
 }

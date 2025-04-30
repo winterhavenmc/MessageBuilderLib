@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
@@ -62,29 +62,29 @@ public class MacroReplacer implements Replacer
 	 * @return a new {@code FinalMessageRecord} with all macro replacements performed and placed into the final string fields
 	 */
 	@Override
-	public FinalMessageRecord replaceMacros(final ValidMessageRecord messageRecord, final ContextMap contextMap)
+	public FinalMessageRecord replaceMacros(final ValidMessageRecord messageRecord, final MacroObjectMap macroObjectMap)
 	{
 		// return new message record with final string fields added with macro replacements performed
 		return messageRecord.withFinalStrings(
-				replaceMacrosInString(contextMap, messageRecord.message()),
-				replaceMacrosInString(contextMap, messageRecord.title()),
-				replaceMacrosInString(contextMap, messageRecord.subtitle()));
+				replaceMacrosInString(macroObjectMap, messageRecord.message()),
+				replaceMacrosInString(macroObjectMap, messageRecord.title()),
+				replaceMacrosInString(macroObjectMap, messageRecord.subtitle()));
 	}
 
 
 	/**
 	 * Replace macros in a message to be sent
 	 *
-	 * @param contextMap    the context map containing other objects whose values may be retrieved
+	 * @param macroObjectMap    the context map containing other objects whose values may be retrieved
 	 * @param messageString the message with placeholders to be replaced by macro values
 	 * @return the string with all macro replacements performed
 	 */
-	public String replaceMacrosInString(final ContextMap contextMap, final String messageString)
+	public String replaceMacrosInString(final MacroObjectMap macroObjectMap, final String messageString)
 	{
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
 
 		Function<String, Optional<MacroKey>> toMacroKey = MacroKey::of;
-		Function<MacroKey, ResultMap> resolveKey = key -> resolver.resolve(key, contextMap);
+		Function<MacroKey, ResultMap> resolveKey = key -> resolver.resolve(key, macroObjectMap);
 		BinaryOperator<ResultMap> mergeMaps = (r1, r2) -> {
 			r1.putAll(r2);
 			return r1;

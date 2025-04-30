@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.model.message;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.validation.Parameter;
@@ -41,7 +41,7 @@ public final class ValidMessage implements Message
 	private final Recipient.Valid recipient;
 	private final RecordKey messageKey;
 	private final MessagePipeline messagePipeline;
-	private final ContextMap contextMap;
+	private final MacroObjectMap macroObjectMap;
 
 
 	/**
@@ -60,9 +60,9 @@ public final class ValidMessage implements Message
 		this.messagePipeline = messagePipeline;
 
 		// create context map and add recipient field
-		this.contextMap = new ContextMap();
+		this.macroObjectMap = new MacroObjectMap();
 		MacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).orElseThrow();
-		this.contextMap.put(recipientKey, recipient);
+		this.macroObjectMap.put(recipientKey, recipient);
 	}
 
 
@@ -83,7 +83,7 @@ public final class ValidMessage implements Message
 
 		MacroKey macroKey = MacroKey.of(macro).orElseThrow();
 
-		contextMap.putIfAbsent(macroKey, value);
+		macroObjectMap.putIfAbsent(macroKey, value);
 		return this;
 	}
 
@@ -108,8 +108,8 @@ public final class ValidMessage implements Message
 		MacroKey macroKey = MacroKey.of(macro).orElseThrow();
 		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY").orElseThrow();
 
-		contextMap.putIfAbsent(macroKey, value);
-		contextMap.putIfAbsent(quantityKey, quantity);
+		macroObjectMap.putIfAbsent(macroKey, value);
+		macroObjectMap.putIfAbsent(quantityKey, quantity);
 		return this;
 	}
 
@@ -161,14 +161,14 @@ public final class ValidMessage implements Message
 
 
 	/**
-	 * Accessor method for contextMap that contains macro key/value pairs for the message
+	 * Accessor method for macroObjectMap that contains macro key/value pairs for the message
 	 *
 	 * @return the context map for the message
 	 */
 	@Override
-	public ContextMap getContextMap()
+	public MacroObjectMap getContextMap()
 	{
-		return contextMap;
+		return macroObjectMap;
 	}
 
 }

@@ -18,13 +18,13 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.messages.Macro;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
@@ -154,11 +154,11 @@ class MacroReplacerTest
 		@Test @DisplayName("Test replaceMacrosInString method with Valid parameters")
 		void testReplaceMacrosInString()
 		{
-			ContextMap contextMap = new ContextMap();
+			MacroObjectMap macroObjectMap = new MacroObjectMap();
 			MacroKey macroKey = MacroKey.of("ITEM_NAME").orElseThrow();
-			contextMap.putIfAbsent(macroKey, "TEST_STRING");
+			macroObjectMap.putIfAbsent(macroKey, "TEST_STRING");
 
-			String resultString = macroReplacer.replaceMacrosInString(contextMap, "Replace this: {ITEM_NAME}");
+			String resultString = macroReplacer.replaceMacrosInString(macroObjectMap, "Replace this: {ITEM_NAME}");
 			assertEquals("Replace this: TEST_STRING", resultString);
 		}
 
@@ -167,11 +167,11 @@ class MacroReplacerTest
 		void testReplaceMacrosInString_parameter_null_messageString()
 		{
 			// Arrange
-			ContextMap contextMap = new ContextMap();
+			MacroObjectMap macroObjectMap = new MacroObjectMap();
 
 			// Act
 			ValidationException exception = assertThrows(ValidationException.class,
-					() -> macroReplacer.replaceMacrosInString(contextMap, null));
+					() -> macroReplacer.replaceMacrosInString(macroObjectMap, null));
 
 			// Assert
 			assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
@@ -230,7 +230,7 @@ class MacroReplacerTest
 //			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 //		};
 //		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();
-//		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+//		MacroObjectMap contextMap = MacroObjectMap.of(recipient, messageKey).orElseThrow();
 //
 //		assertTrue(contextMap.contains(key));
 //	}

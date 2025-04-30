@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
 
 import java.util.List;
@@ -36,10 +36,10 @@ public class FieldResolver implements Resolver
 
 
 	@Override
-	public ResultMap resolve(final MacroKey macroKey, final ContextMap contextMap)
+	public ResultMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
 		return resolvers.stream()
-				.map(resolver -> resolver.resolve(macroKey, contextMap))
+				.map(resolver -> resolver.resolve(macroKey, macroObjectMap))
 				.collect(ResultMap::new, ResultMap::putAll, ResultMap::putAll);
 	}
 

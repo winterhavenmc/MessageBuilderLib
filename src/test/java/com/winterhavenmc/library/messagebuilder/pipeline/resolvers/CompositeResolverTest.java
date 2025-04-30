@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +46,7 @@ class CompositeResolverTest
 	private AdapterRegistry adapterRegistry;
 	private FieldExtractor fieldExtractor;
 	private CompositeResolver resolver;
-	private ContextMap contextMap;
+	private MacroObjectMap macroObjectMap;
 
 	private final MacroKey rootKey = MacroKey.of("ROOT").orElseThrow();
 	private final MacroKey childKey = MacroKey.of("CHILD").orElseThrow();
@@ -55,7 +55,7 @@ class CompositeResolverTest
 	void setUp() {
 		adapterRegistry = mock(AdapterRegistry.class);
 		fieldExtractor = mock(FieldExtractor.class);
-		contextMap = mock(ContextMap.class);
+		macroObjectMap = mock(MacroObjectMap.class);
 		resolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 	}
 
@@ -72,16 +72,16 @@ class CompositeResolverTest
 
 		// Recursive stub: resolve(childKey) returns a known map
 		CompositeResolver spyResolver = spy(resolver);
-		doReturn(childMap).when(spyResolver).resolve(childKey, contextMap);
+		doReturn(childMap).when(spyResolver).resolve(childKey, macroObjectMap);
 
-		when(contextMap.get(rootKey)).thenReturn(Optional.of(rootValue));
+		when(macroObjectMap.get(rootKey)).thenReturn(Optional.of(rootValue));
 		when(adapterRegistry.getMatchingAdapters(rootValue)).thenReturn(Stream.of(adapterMock));
 
 		when(adapterMock.adapt(rootValue)).thenReturn((Optional) Optional.of(adaptedValue));
 
 		when(fieldExtractor.extract(adapterMock, adaptedValue, rootKey)).thenReturn(Map.of(childKey, new Object()));
 
-		ResultMap result = spyResolver.resolve(rootKey, contextMap);
+		ResultMap result = spyResolver.resolve(rootKey, macroObjectMap);
 
 		assertFalse(result.isEmpty());
 		assertEquals("value", result.get(macroKey));
@@ -89,19 +89,19 @@ class CompositeResolverTest
 
 	@Test
 	void resolve_withMissingContextKey_returnsEmptyMap() {
-		when(contextMap.get(rootKey)).thenReturn(Optional.empty());
+		when(macroObjectMap.get(rootKey)).thenReturn(Optional.empty());
 
-		ResultMap result = resolver.resolve(rootKey, contextMap);
+		ResultMap result = resolver.resolve(rootKey, macroObjectMap);
 
 		assertTrue(result.isEmpty());
 	}
 
 	@Test
 	void resolve_withNoAdapters_returnsEmptyMap() {
-		when(contextMap.get(rootKey)).thenReturn(Optional.of("test"));
+		when(macroObjectMap.get(rootKey)).thenReturn(Optional.of("test"));
 		when(adapterRegistry.getMatchingAdapters("test")).thenReturn(Stream.empty());
 
-		ResultMap result = resolver.resolve(rootKey, contextMap);
+		ResultMap result = resolver.resolve(rootKey, macroObjectMap);
 
 		assertTrue(result.isEmpty());
 	}
@@ -109,11 +109,11 @@ class CompositeResolverTest
 	@Test
 	void resolve_withUnadaptableValue_returnsEmptyMap()
 	{
-		when(contextMap.get(rootKey)).thenReturn(Optional.of("test"));
+		when(macroObjectMap.get(rootKey)).thenReturn(Optional.of("test"));
 		when(adapterRegistry.getMatchingAdapters("test")).thenReturn(Stream.of(adapterMock));
 		when(adapterMock.adapt("test")).thenReturn(Optional.empty());
 
-		ResultMap result = resolver.resolve(rootKey, contextMap);
+		ResultMap result = resolver.resolve(rootKey, macroObjectMap);
 
 		assertTrue(result.isEmpty());
 	}

@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Bou
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.messages.Macro;
-import com.winterhavenmc.library.messagebuilder.pipeline.context.ContextMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.context.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -136,10 +136,10 @@ class ValidMessageTest
 			// Arrange
 			Message newMessage = message.setMacro(Macro.TOOL, itemStack);
 			MacroKey macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
-			ContextMap contextMap = newMessage.getContextMap();
+			MacroObjectMap macroObjectMap = newMessage.getContextMap();
 
 			// Act
-			Object object = contextMap.get(macroKey).orElseThrow();
+			Object object = macroObjectMap.get(macroKey).orElseThrow();
 
 			// Assert
 			assertInstanceOf(ItemStack.class, object);
@@ -169,10 +169,10 @@ class ValidMessageTest
 			// Arrange
 			Message newMessage = message.setMacro(10, Macro.TOOL, itemStack);
 			MacroKey macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
-			ContextMap contextMap = newMessage.getContextMap();
+			MacroObjectMap macroObjectMap = newMessage.getContextMap();
 
 			// Act
-			Object object = contextMap.get(macroKey).orElseThrow();
+			Object object = macroObjectMap.get(macroKey).orElseThrow();
 
 			// Assert
 			assertInstanceOf(ItemStack.class, object);
@@ -197,10 +197,10 @@ class ValidMessageTest
 		// Arrange
 		Message newMessage = message.setMacro(Macro.DURATION, Duration.ofMinutes(5), ChronoUnit.MINUTES);
 		MacroKey macroKey = MacroKey.of(Macro.DURATION).orElseThrow();
-		ContextMap contextMap = newMessage.getContextMap();
+		MacroObjectMap macroObjectMap = newMessage.getContextMap();
 
 		// Act
-		BoundedDuration boundedDuration = (BoundedDuration) contextMap.get(macroKey).orElseThrow();
+		BoundedDuration boundedDuration = (BoundedDuration) macroObjectMap.get(macroKey).orElseThrow();
 
 		// Assert
 		assertInstanceOf(BoundedDuration.class, boundedDuration);
