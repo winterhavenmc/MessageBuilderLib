@@ -24,11 +24,13 @@ import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.validation.Parameter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
+import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
@@ -79,9 +81,7 @@ public final class ValidMessage implements Message
 	public <K extends Enum<K>, V> Message setMacro(final K macro,
 												   final V value)
 	{
-		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
-
-		MacroKey macroKey = MacroKey.of(macro).orElseThrow();
+		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO));
 
 		macroObjectMap.putIfAbsent(macroKey, value);
 		return this;
@@ -103,10 +103,8 @@ public final class ValidMessage implements Message
 												   final K macro,
 												   final V value)
 	{
-		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
-
-		MacroKey macroKey = MacroKey.of(macro).orElseThrow();
-		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY").orElseThrow();
+		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO));
+		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY").orElseThrow(() -> new ValidationException(PARAMETER_INVALID, QUANTITY));
 
 		macroObjectMap.putIfAbsent(macroKey, value);
 		macroObjectMap.putIfAbsent(quantityKey, quantity);
