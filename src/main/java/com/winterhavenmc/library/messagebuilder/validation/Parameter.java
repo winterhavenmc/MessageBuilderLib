@@ -36,6 +36,7 @@ public enum Parameter
 	LOCATION("location"),
 	LOWER_BOUND("lowerBound"),
 	MACRO("macro"),
+	MACRO_KEY("macroKey"),
 	MESSAGE("message"),
 	MESSAGE_ID("messageId"),
 	MESSAGE_PROCESSOR("messageProcessor"),
