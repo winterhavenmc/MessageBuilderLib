@@ -30,14 +30,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.DURATION;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.MACRO;
+import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
 public final class ValidMessage implements Message
 {
+	private final static String RECIPIENT_KEY = "RECIPIENT";
 	private final Recipient.Valid recipient;
 	private final RecordKey messageKey;
 	private final MessagePipeline messagePipeline;
@@ -58,7 +58,11 @@ public final class ValidMessage implements Message
 		this.recipient = recipient;
 		this.messageKey = messageKey;
 		this.messagePipeline = messagePipeline;
-		this.contextMap = ContextMap.of(this.recipient, this.messageKey).orElseThrow();
+
+		// create context map and add recipient field
+		this.contextMap = new ContextMap();
+		MacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).orElseThrow();
+		this.contextMap.put(recipientKey, recipient);
 	}
 
 

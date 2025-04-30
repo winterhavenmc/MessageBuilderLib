@@ -47,7 +47,6 @@ import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKe
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -87,65 +86,65 @@ class ContextMapTest
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		contextMap = ContextMap.of(playerRecipient, messageKey).orElseThrow();
+		contextMap = new ContextMap();
 		location = new Location(worldMock, 11, 12, 13);
 
-		recipientMacroKey = MacroKey.of(TestField.RECIPIENT).orElseThrow();
-		locationMacroKey = recipientMacroKey.append(TestField.LOCATION).orElseThrow();
+		recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
+		locationMacroKey = recipientMacroKey.append("LOCATION").orElseThrow();
 	}
 
 
-	@Test
-	void testAddRecipientContext()
-	{
-		// Arrange
-		ContextMap contextMap = ContextMap.of(consoleRecipient, messageKey).orElseThrow();
-		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
-		//TODO: Add recipient location to context map
+//	@Test
+//	void testAddRecipientContext()
+//	{
+//		// Arrange
+//		ContextMap contextMap = ContextMap.of(consoleRecipient, messageKey).orElseThrow();
+//		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
+//		//TODO: Add recipient location to context map
+//
+//		// Act
+//		contextMap.addRecipientContext();
+//
+//		// Assert
+//		assertTrue(contextMap.contains(recipientMacroKey));
+//	}
 
-		// Act
-		contextMap.addRecipientContext();
+//	enum TestField
+//	{
+//		RECIPIENT, LOCATION
+//	}
 
-		// Assert
-		assertTrue(contextMap.contains(recipientMacroKey));
-	}
-
-	enum TestField
-	{
-		RECIPIENT, LOCATION
-	}
-
-	@Test
-	void testAddRecipientContext_player()
-	{
-		// Arrange
-		when(playerMock.getLocation()).thenReturn(location);
-		ContextMap contextMap = ContextMap.of(playerRecipient, messageKey).orElseThrow();
-
-		// Act
-		contextMap.addRecipientContext();
-
-		// Assert
-		assertTrue(contextMap.contains(recipientMacroKey));
-		assertTrue(contextMap.contains(locationMacroKey));
-	}
+//	@Test
+//	void testAddRecipientContext_player()
+//	{
+//		// Arrange
+//		when(playerMock.getLocation()).thenReturn(location);
+//		ContextMap contextMap = ContextMap.of(playerRecipient, messageKey).orElseThrow();
+//
+//		// Act
+//		contextMap.addRecipientContext();
+//
+//		// Assert
+//		assertTrue(contextMap.contains(recipientMacroKey));
+//		assertTrue(contextMap.contains(locationMacroKey));
+//	}
 
 
-	@Test
-	void testAddRecipientContext_non_entity()
-	{
-		// Arrange
-		ContextMap contextMap = ContextMap.of(consoleRecipient, messageKey).orElseThrow();
-		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
-		MacroKey locationMacroKey = MacroKey.of("LOCATION").orElseThrow();
-
-		// Act
-		contextMap.addRecipientContext();
-
-		// Assert
-		assertTrue(contextMap.contains(recipientMacroKey));
-		assertFalse(contextMap.contains(locationMacroKey));
-	}
+//	@Test
+//	void testAddRecipientContext_non_entity()
+//	{
+//		// Arrange
+//		ContextMap contextMap = ContextMap.of(consoleRecipient, messageKey).orElseThrow();
+//		MacroKey recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
+//		MacroKey locationMacroKey = MacroKey.of("LOCATION").orElseThrow();
+//
+//		// Act
+//		contextMap.addRecipientContext();
+//
+//		// Assert
+//		assertTrue(contextMap.contains(recipientMacroKey));
+//		assertFalse(contextMap.contains(locationMacroKey));
+//	}
 
 
 	@Test
@@ -271,23 +270,13 @@ class ContextMapTest
 	}
 
 
-	@Test
-	void getRecipient() {
-		// Arrange & Act
-		Recipient.Valid recipient = contextMap.getRecipient();
-
-		// Assert
-		assertNotNull(recipient);
-	}
-
-
-	@Test
-	void testGetMessageKey() {
-		// Arrange & Act
-		RecordKey result = contextMap.getMessageKey();
-
-		// Assert
-		assertEquals(MessageId.ENABLED_MESSAGE.name(), result.toString());
-	}
+//	@Test
+//	void getRecipient() {
+//		// Arrange & Act
+//		Recipient.Valid recipient = contextMap.getRecipient();
+//
+//		// Assert
+//		assertNotNull(recipient);
+//	}
 
 }

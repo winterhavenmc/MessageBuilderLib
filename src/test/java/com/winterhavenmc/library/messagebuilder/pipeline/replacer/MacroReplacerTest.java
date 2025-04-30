@@ -45,7 +45,6 @@ import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
@@ -155,7 +154,7 @@ class MacroReplacerTest
 		@Test @DisplayName("Test replaceMacrosInString method with Valid parameters")
 		void testReplaceMacrosInString()
 		{
-			ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+			ContextMap contextMap = new ContextMap();
 			MacroKey macroKey = MacroKey.of("ITEM_NAME").orElseThrow();
 			contextMap.putIfAbsent(macroKey, "TEST_STRING");
 
@@ -168,7 +167,7 @@ class MacroReplacerTest
 		void testReplaceMacrosInString_parameter_null_messageString()
 		{
 			// Arrange
-			ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+			ContextMap contextMap = new ContextMap();
 
 			// Act
 			ValidationException exception = assertThrows(ValidationException.class,
@@ -221,19 +220,19 @@ class MacroReplacerTest
 	}
 
 
-	@Test
-	void addRecipientContext()
-	{
-		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
-		recipient = switch (Recipient.of(console)) {
-			case Recipient.Valid valid -> valid;
-			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
-		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();
-		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
-
-		assertTrue(contextMap.contains(key));
-	}
+//	@Test
+//	void addRecipientContext()
+//	{
+//		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
+//		recipient = switch (Recipient.of(console)) {
+//			case Recipient.Valid valid -> valid;
+//			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+//			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+//		};
+//		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();
+//		ContextMap contextMap = ContextMap.of(recipient, messageKey).orElseThrow();
+//
+//		assertTrue(contextMap.contains(key));
+//	}
 
 }

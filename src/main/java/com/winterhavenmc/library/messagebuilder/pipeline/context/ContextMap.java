@@ -18,9 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.context;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import org.bukkit.entity.Entity;
 
 import java.util.Map;
 import java.util.Objects;
@@ -36,83 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ContextMap
 {
-	private final Recipient.Valid recipient;
-	private final RecordKey messageKey;
-
 	private final Map<MacroKey, Object> internalMap = new ConcurrentHashMap<>();
-
-	private enum InitialField
-	{
-		RECIPIENT,
-		LOCATION
-	}
-
-
-	/**
-	 * Class constructor
-	 *
-	 * @param recipient the message recipient
-	 * @param messageKey the message unique identifier as a string
-	 */
-	private ContextMap(final Recipient.Valid recipient, final RecordKey messageKey)
-	{
-		this.recipient = recipient;
-		this.messageKey = messageKey;
-
-		addRecipientContext();
-	}
-
-	/**
-	 * Add the recipient fields to the context map, including location field if the recipient is a player
-	 */
-	public void addRecipientContext()
-	{
-		MacroKey macroKey = MacroKey.of(InitialField.RECIPIENT).orElseThrow();
-		MacroKey locationMacroKey = macroKey.append(InitialField.LOCATION).orElseThrow();
-
-		this.putIfAbsent(macroKey, this.getRecipient());
-
-		if (this.getRecipient().sender() instanceof Entity entity)
-		{
-			this.putIfAbsent(locationMacroKey, entity.getLocation());
-		}
-	}
-
-
-	/**
-	 * Static factory method returns optional of context map
-	 *
-	 * @param recipient the message recipient
-	 * @param messageKey the message key
-	 * @return an Optional of a new instance of {@code ContextMap}
-	 */
-	public static Optional<ContextMap> of(final Recipient.Valid recipient, final RecordKey messageKey)
-	{
-		return Optional.of(new ContextMap(recipient, messageKey));
-	}
-
-
-	/**
-	 * Retrieve Optional recipient
-	 *
-	 * @return the recipient that was used to create the context map
-	 */
-	public Recipient.Valid getRecipient()
-	{
-		return recipient;
-	}
-
-
-	/**
-	 * Retrieve key
-	 *
-	 * @return {@code MessageId} the MessageId associated with this context map
-	 */
-
-	public RecordKey getMessageKey()
-	{
-		return messageKey;
-	}
 
 
 	/**
