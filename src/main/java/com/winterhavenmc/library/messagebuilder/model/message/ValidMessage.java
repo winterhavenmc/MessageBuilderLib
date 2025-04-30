@@ -166,7 +166,7 @@ public final class ValidMessage implements Message
 	 * @return the context map for the message
 	 */
 	@Override
-	public MacroObjectMap getContextMap()
+	public MacroObjectMap getObjectMap()
 	{
 		return macroObjectMap;
 	}

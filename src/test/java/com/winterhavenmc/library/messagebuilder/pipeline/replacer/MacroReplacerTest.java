@@ -141,7 +141,7 @@ class MacroReplacerTest
 	void testReplaceMacros_valid_parameters()
 	{
 		// Act
-		FinalMessageRecord result = macroReplacer.replaceMacros(validMessageRecord, message.getContextMap());
+		FinalMessageRecord result = macroReplacer.replaceMacros(validMessageRecord, message.getObjectMap());
 
 		// Assert
 		assertNotNull(result);

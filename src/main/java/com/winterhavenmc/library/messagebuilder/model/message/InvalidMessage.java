@@ -71,7 +71,7 @@ public record InvalidMessage(String reason) implements Message
 	}
 
 	@Override
-	public MacroObjectMap getContextMap()
+	public MacroObjectMap getObjectMap()
 	{
 		return null;
 	}

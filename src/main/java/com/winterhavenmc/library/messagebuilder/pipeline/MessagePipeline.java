@@ -61,7 +61,7 @@ public final class MessagePipeline implements Pipeline
 						: Optional.empty();
 
 		Function<ValidMessageRecord, FinalMessageRecord> resolveMacros = messageRecord -> macroReplacer
-				.replaceMacros(messageRecord, message.getContextMap());
+				.replaceMacros(messageRecord, message.getObjectMap());
 
 		Consumer<FinalMessageRecord> sendMessage = processed -> senders
 				.forEach(sender -> sender.send(message.getRecipient(), processed));

@@ -84,9 +84,9 @@ class InvalidMessageTest
 	}
 
 	@Test
-	void getContextMap()
+	void getObjectMap()
 	{
-		assertNull(invalidMessage.getContextMap());
+		assertNull(invalidMessage.getObjectMap());
 	}
 
 	@Test

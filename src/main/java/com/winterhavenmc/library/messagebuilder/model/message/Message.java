@@ -32,7 +32,7 @@ public sealed interface Message permits ValidMessage, InvalidMessage {
     void send();
     RecordKey getMessageKey();
     Recipient.Valid getRecipient();
-    MacroObjectMap getContextMap();
+    MacroObjectMap getObjectMap();
 
     static Message empty()
     {

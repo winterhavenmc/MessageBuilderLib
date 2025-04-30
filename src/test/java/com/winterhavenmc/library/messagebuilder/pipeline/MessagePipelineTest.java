@@ -120,7 +120,7 @@ class MessagePipelineTest
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(validMessageRecord);
 		ValidMessage message = new ValidMessage(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messagePipeline);
 
-		when(macroReplacerMock.replaceMacros(validMessageRecord, message.getContextMap())).thenReturn(finalMessageRecord);
+		when(macroReplacerMock.replaceMacros(validMessageRecord, message.getObjectMap())).thenReturn(finalMessageRecord);
 
 		// Act & Assert
 		assertDoesNotThrow(() -> messagePipeline.process(message));

@@ -121,9 +121,9 @@ class ValidMessageTest
 
 
 	@Test @DisplayName("test contextMap accessor")
-	void testGetContextMap()
+	void testGetObjectMap()
 	{
-		assertNotNull(message.getContextMap());
+		assertNotNull(message.getObjectMap());
 	}
 
 
@@ -136,7 +136,7 @@ class ValidMessageTest
 			// Arrange
 			Message newMessage = message.setMacro(Macro.TOOL, itemStack);
 			MacroKey macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
-			MacroObjectMap macroObjectMap = newMessage.getContextMap();
+			MacroObjectMap macroObjectMap = newMessage.getObjectMap();
 
 			// Act
 			Object object = macroObjectMap.get(macroKey).orElseThrow();
@@ -169,7 +169,7 @@ class ValidMessageTest
 			// Arrange
 			Message newMessage = message.setMacro(10, Macro.TOOL, itemStack);
 			MacroKey macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
-			MacroObjectMap macroObjectMap = newMessage.getContextMap();
+			MacroObjectMap macroObjectMap = newMessage.getObjectMap();
 
 			// Act
 			Object object = macroObjectMap.get(macroKey).orElseThrow();
@@ -197,7 +197,7 @@ class ValidMessageTest
 		// Arrange
 		Message newMessage = message.setMacro(Macro.DURATION, Duration.ofMinutes(5), ChronoUnit.MINUTES);
 		MacroKey macroKey = MacroKey.of(Macro.DURATION).orElseThrow();
-		MacroObjectMap macroObjectMap = newMessage.getContextMap();
+		MacroObjectMap macroObjectMap = newMessage.getObjectMap();
 
 		// Act
 		BoundedDuration boundedDuration = (BoundedDuration) macroObjectMap.get(macroKey).orElseThrow();
