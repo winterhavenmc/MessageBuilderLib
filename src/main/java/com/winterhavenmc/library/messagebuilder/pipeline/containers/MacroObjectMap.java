@@ -82,7 +82,7 @@ public class MacroObjectMap
 	 * @param macroKey the unique key to check
 	 * @return true if the key exists, false otherwise
 	 */
-	public boolean contains(final MacroKey macroKey)
+	public boolean containsKey(final MacroKey macroKey)
 	{
 		return internalMap.containsKey(macroKey);
 	}
