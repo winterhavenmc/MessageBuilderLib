@@ -34,6 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.NONEXISTENT_ENTRY;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 
@@ -57,12 +58,14 @@ class MessageQueryHandlerTest
 
 
 	@Test
-	void testGetRecord_parameter_valid() {
+	void testGetRecord_parameter_valid()
+	{
 		// Arrange
 		RecordKey queryKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		when(messageSectionMock.getConfigurationSection(ENABLED_MESSAGE.name())).thenReturn(messageEntryMock);
 
+		when(messageEntryMock.contains(anyString())).thenReturn(true);
 		when(messageEntryMock.getString(MessageRecord.Field.MESSAGE_TEXT.toKey())).thenReturn("Enabled message.");
 		when(messageEntryMock.getBoolean(MessageRecord.Field.ENABLED.toKey())).thenReturn(true);
 		when(messageEntryMock.getLong(MessageRecord.Field.REPEAT_DELAY.toKey())).thenReturn(0L);
