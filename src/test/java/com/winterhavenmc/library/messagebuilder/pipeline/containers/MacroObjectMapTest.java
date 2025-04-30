@@ -227,7 +227,7 @@ class MacroObjectMapTest
 
 
 	@Test
-	void testContains()
+	void testContainsKey()
 	{
 		// Arrange
 		macroKey = MacroKey.of("LOCATION").orElseThrow();
@@ -237,8 +237,8 @@ class MacroObjectMapTest
 		macroObjectMap.putIfAbsent(macroKey, location);
 
 		// Act & Assert
-		assertTrue(macroObjectMap.contains(macroKey), "Key should be present in the map");
-		assertFalse(macroObjectMap.contains(nonExistentKey), "Key should not be present in the map");
+		assertTrue(macroObjectMap.containsKey(macroKey), "Key should be present in the map");
+		assertFalse(macroObjectMap.containsKey(nonExistentKey), "Key should not be present in the map");
 	}
 
 
@@ -246,7 +246,7 @@ class MacroObjectMapTest
 	void testEmptyMap()
 	{
 		// Act & Assert
-		assertFalse(macroObjectMap.contains(macroKey), "Empty map should not contain macro key");
+		assertFalse(macroObjectMap.containsKey(macroKey), "Empty map should not contain macro key");
 	}
 
 
