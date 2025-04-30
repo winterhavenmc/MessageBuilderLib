@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MacroObjectMap
 {
-	private final Map<MacroKey, Object> internalMap = new ConcurrentHashMap<>();
+	private final Map<MacroKey, Object> INTERNAL_MAP = new ConcurrentHashMap<>();
 
 
 	/**
@@ -46,7 +46,7 @@ public class MacroObjectMap
 	public <T> void put(final MacroKey macroKey, final T value)
 	{
 		// insert value into map with key, replacing null values with string "NULL"
-		internalMap.put(macroKey, Objects.requireNonNullElse(value, "NULL"));
+		INTERNAL_MAP.put(macroKey, Objects.requireNonNullElse(value, "NULL"));
 	}
 
 
@@ -60,7 +60,7 @@ public class MacroObjectMap
 	public <T> void putIfAbsent(final MacroKey macroKey, final T value)
 	{
         // insert value into map with key, replacing null values with string "NULL"
-		internalMap.putIfAbsent(macroKey, Objects.requireNonNullElse(value, "NULL"));
+		INTERNAL_MAP.putIfAbsent(macroKey, Objects.requireNonNullElse(value, "NULL"));
 	}
 
 
@@ -72,7 +72,7 @@ public class MacroObjectMap
 	 */
 	public Optional<Object> get(final MacroKey macroKey)
 	{
-		return Optional.ofNullable(internalMap.get(macroKey));
+		return Optional.ofNullable(INTERNAL_MAP.get(macroKey));
 	}
 
 
@@ -84,7 +84,7 @@ public class MacroObjectMap
 	 */
 	public boolean containsKey(final MacroKey macroKey)
 	{
-		return internalMap.containsKey(macroKey);
+		return INTERNAL_MAP.containsKey(macroKey);
 	}
 
 
@@ -95,7 +95,7 @@ public class MacroObjectMap
 	 */
 	public Set<Map.Entry<MacroKey, Object>> entrySet()
 	{
-		return internalMap.entrySet();
+		return INTERNAL_MAP.entrySet();
 	}
 
 }
