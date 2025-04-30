@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.sender;
 
-import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
@@ -25,12 +24,15 @@ import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecor
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.function.Predicate;
+
 
 /**
  * This class is an implementation of the Sender interface, and is used to display a title to a player.
  */
 public final class TitleSender implements Sender
 {
+	private final static Predicate<String> NOT_EMPTY = string -> (string != null && !string.isBlank());
 	private final CooldownMap cooldownMap;
 
 
@@ -54,39 +56,21 @@ public final class TitleSender implements Sender
 	@Override
 	public void send(final Recipient.Valid recipient, final FinalMessageRecord messageRecord)
 	{
-		if (messageRecord.title() == null && messageRecord.subtitle() == null) { return; }
-
-		String titleString = (messageRecord.finalTitleString() == null)
-				? ""
-				: messageRecord.finalTitleString();
-
-		String subtitleString = (messageRecord.finalSubtitleString() == null)
-				? ""
-				: messageRecord.finalSubtitleString();
-
-		int fadeIn = (messageRecord.titleFadeIn() == 0)
-				? 10
-				: messageRecord.titleFadeIn();
-
-		int stay = (messageRecord.titleStay() == 0)
-				? 70
-				: messageRecord.titleStay();
-
-		int fadeOut = (messageRecord.titleFadeOut() == 0)
-				? 20
-				: messageRecord.titleFadeOut();
-
-
-		if (recipient.sender() instanceof Player player)
+		if (messageRecord.enabled())
 		{
-			player.sendTitle(
-					ChatColor.translateAlternateColorCodes('&', titleString),
-					ChatColor.translateAlternateColorCodes('&', subtitleString),
-					fadeIn,
-					stay,
-					fadeOut);
+			// if sender is player and at least one title/subtitle string is non-null and non-blank, send title to player
+			if (recipient.sender() instanceof Player player
+					&& (NOT_EMPTY.test(messageRecord.finalTitleString()) || NOT_EMPTY.test(messageRecord.finalTitleString())))
+			{
+				player.sendTitle(
+						ChatColor.translateAlternateColorCodes('&', messageRecord.finalTitleString()),
+						ChatColor.translateAlternateColorCodes('&', messageRecord.finalSubtitleString()),
+						messageRecord.titleFadeIn(),
+						messageRecord.titleStay(),
+						messageRecord.titleFadeOut());
 
-			cooldownMap.putExpirationTime(recipient, messageRecord);
+				cooldownMap.putExpirationTime(recipient, messageRecord);
+			}
 		}
 	}
 
