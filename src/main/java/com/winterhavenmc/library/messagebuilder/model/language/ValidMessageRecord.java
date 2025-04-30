@@ -63,27 +63,27 @@ public final class ValidMessageRecord implements MessageRecord
 		// replace any null strings with blank strings
 		this.key = key;
 		this.enabled = enabled;
-		this.message = (message != null) ? message : "";
+		this.message = message;
 		this.repeatDelay = repeatDelay;
-		this.title = (title != null) ? title : "";
+		this.title = title;
 		this.titleFadeIn = titleFadeIn;
 		this.titleStay = titleStay;
 		this.titleFadeOut = titleFadeOut;
-		this.subtitle = (subtitle != null) ? subtitle : "";
+		this.subtitle = subtitle;
 	}
 
 
 	public static ValidMessageRecord create(final RecordKey key, final ConfigurationSection section)
 	{
 		return new ValidMessageRecord(key,
-				section.getBoolean(Field.ENABLED.toKey()),
-				section.getString(Field.MESSAGE_TEXT.toKey()),
+				!section.contains(Field.ENABLED.toKey()) || section.getBoolean(Field.ENABLED.toKey()), // default true if missing
+				section.contains(Field.MESSAGE_TEXT.toKey()) ? section.getString(Field.MESSAGE_TEXT.toKey()) : "",
 				Duration.ofSeconds(section.getLong(Field.REPEAT_DELAY.toKey())),
-				section.getString(Field.TITLE_TEXT.toKey()),
-				section.getInt(Field.TITLE_FADE_IN.toKey()),
-				section.getInt(Field.TITLE_STAY.toKey()),
-				section.getInt(Field.TITLE_FADE_OUT.toKey()),
-				section.getString(Field.SUBTITLE_TEXT.toKey()));
+				section.contains(Field.TITLE_TEXT.toKey()) ? section.getString(Field.TITLE_TEXT.toKey()) : "",
+				section.contains(Field.TITLE_FADE_IN.toKey()) ? section.getInt(Field.TITLE_FADE_IN.toKey()) : 10,
+				section.contains(Field.TITLE_STAY.toKey()) ? section.getInt(Field.TITLE_STAY.toKey()) : 70,
+				section.contains(Field.TITLE_FADE_OUT.toKey()) ? section.getInt(Field.TITLE_FADE_OUT.toKey()) : 20,
+				section.contains(Field.SUBTITLE_TEXT.toKey()) ? section.getString(Field.SUBTITLE_TEXT.toKey()) : "");
 	}
 
 
