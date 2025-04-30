@@ -31,7 +31,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.ValidationHand
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
-public class ResultMap
+public class MacroStringMap
 {
 	private final Map<MacroKey, String> internalResultMap;
 	private static final Predicate<String> STRING_IS_NULL = Objects::isNull;
@@ -42,7 +42,7 @@ public class ResultMap
 	/**
 	 * Class constructor
 	 */
-	public ResultMap()
+	public MacroStringMap()
 	{
 		this.internalResultMap = new HashMap<>();
 	}
@@ -74,7 +74,7 @@ public class ResultMap
 	}
 
 
-	public void putAll(final ResultMap insertionMap)
+	public void putAll(final MacroStringMap insertionMap)
 	{
 		for (Map.Entry<MacroKey, String> entry : insertionMap.entrySet())
 		{

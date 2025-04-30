@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Bou
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
 
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,7 +73,7 @@ class AtomicResolverTest
 		when(durationFormatter.format(any(Duration.class), any(ChronoUnit.class))).thenReturn("5 minutes");
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("5 minutes", result.get(key));
@@ -93,7 +93,7 @@ class AtomicResolverTest
 		when(durationFormatter.format(eq(duration), any(ChronoUnit.class))).thenReturn("5 minutes");
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("5 minutes", result.get(key));
@@ -111,7 +111,7 @@ class AtomicResolverTest
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of("Hello world"));
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("Hello world", result.get(key));
@@ -129,7 +129,7 @@ class AtomicResolverTest
 		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("42", result.get(key));
@@ -149,7 +149,7 @@ class AtomicResolverTest
 		when(durationFormatter.format(boundedDuration.duration(), boundedDuration.precision())).thenReturn("12 seconds");
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("12 seconds", result.get(key));
@@ -168,7 +168,7 @@ class AtomicResolverTest
 		when(durationFormatter.format(duration, ChronoUnit.SECONDS)).thenReturn("15 minutes");
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("15 minutes", result.get(key));
@@ -186,7 +186,7 @@ class AtomicResolverTest
 		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("420,000", result.get(key));
@@ -205,7 +205,7 @@ class AtomicResolverTest
 		when(localeProviderMock.getLocale()).thenReturn(Locale.GERMAN);
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("420.000", result.get(key));
@@ -223,7 +223,7 @@ class AtomicResolverTest
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(Thread.State.RUNNABLE));
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("RUNNABLE", result.get(key));
@@ -241,7 +241,7 @@ class AtomicResolverTest
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(uuid));
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals(uuid.toString(), result.get(key));
@@ -258,7 +258,7 @@ class AtomicResolverTest
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(true));
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("true", result.get(key));
@@ -283,7 +283,7 @@ class AtomicResolverTest
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(custom));
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertEquals("custom-toString", result.get(key));
@@ -300,7 +300,7 @@ class AtomicResolverTest
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.empty());
 
 		// Act
-		ResultMap result = resolver.resolve(key, macroObjectMapMock);
+		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
 
 		// Assert
 		assertTrue(result.isEmpty());

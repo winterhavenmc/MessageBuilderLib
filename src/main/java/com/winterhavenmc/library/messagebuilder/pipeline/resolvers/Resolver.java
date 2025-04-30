@@ -19,11 +19,11 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
 
 
 @FunctionalInterface
 public interface Resolver
 {
-	ResultMap resolve(MacroKey key, MacroObjectMap macroObjectMap);
+	MacroStringMap resolve(MacroKey key, MacroObjectMap macroObjectMap);
 }

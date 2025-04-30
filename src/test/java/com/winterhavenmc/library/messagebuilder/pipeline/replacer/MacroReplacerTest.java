@@ -32,7 +32,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.AtomicResolve
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
@@ -184,13 +184,13 @@ class MacroReplacerTest
 		// Arrange
 		MacroReplacer localMacroReplacer = new MacroReplacer(fieldResolver, placeholderMatcher);
 
-		ResultMap resultMap = new ResultMap();
+		MacroStringMap macroStringMap = new MacroStringMap();
 		MacroKey resultMacroKey = MacroKey.of("KEY").orElseThrow();
-		resultMap.put(resultMacroKey, "value");
+		macroStringMap.put(resultMacroKey, "value");
 		String messageString = "this is a macro replacement string {KEY}.";
 
 		// Act
-		String resultString = localMacroReplacer.replacements(resultMap, messageString);
+		String resultString = localMacroReplacer.replacements(macroStringMap, messageString);
 
 		// Assert
 		assertEquals("this is a macro replacement string value.", resultString);
@@ -206,15 +206,15 @@ class MacroReplacerTest
 
 	@Test
 	void testReplacements_parameter_nul_message_string() {
-		ResultMap resultMap = new ResultMap();
+		MacroStringMap macroStringMap = new MacroStringMap();
 		MacroKey key1 = MacroKey.of("KEY1").orElseThrow();
 		MacroKey key2 = MacroKey.of("KEY2").orElseThrow();
-		resultMap.put(key1, "value1");
-		resultMap.put(key2, "value2");
-		resultMap.put(key1, "value3");
+		macroStringMap.put(key1, "value1");
+		macroStringMap.put(key2, "value2");
+		macroStringMap.put(key1, "value3");
 
 		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroReplacer.replacements(resultMap, null));
+				() -> macroReplacer.replacements(macroStringMap, null));
 
 		assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
 	}

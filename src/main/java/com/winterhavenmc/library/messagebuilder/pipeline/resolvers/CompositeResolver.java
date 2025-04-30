@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistr
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
 
 
 public class CompositeResolver implements Resolver
@@ -46,29 +46,29 @@ public class CompositeResolver implements Resolver
 	 * new result map.
 	 *
 	 * @param macroObjectMap a map containing key/value pairs of placeholder strings and their corresponding value object
-	 * @return {@code ResultMap} a map containing the placeholder strings and the string representations of the values
+	 * @return {@code MacroStringMap} a map containing the placeholder strings and the string representations of the values
 	 */
 	@Override
-	public ResultMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
+	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
-		ResultMap resultMap = new ResultMap();
+		MacroStringMap macroStringMap = new MacroStringMap();
 
 		macroObjectMap.get(macroKey).ifPresent(value ->
-				resolveSubkeysInto(resultMap, value, macroKey, macroObjectMap));
+				resolveSubkeysInto(macroStringMap, value, macroKey, macroObjectMap));
 
-		return resultMap;
+		return macroStringMap;
 	}
 
 
 	/**
 	 * Resolver static helper method
 	 */
-	private void resolveSubkeysInto(ResultMap resultMap, Object value, MacroKey macroKey, MacroObjectMap macroObjectMap)
+	private void resolveSubkeysInto(MacroStringMap macroStringMap, Object value, MacroKey macroKey, MacroObjectMap macroObjectMap)
 	{
 		adapterRegistry.getMatchingAdapters(value).forEach(adapter ->
 				adapter.adapt(value).ifPresent(adapted ->
 						fieldExtractor.extract(adapter, adapted, macroKey).keySet()
-								.forEach(subKey -> resultMap.putAll(resolve(subKey, macroObjectMap)))
+								.forEach(subKey -> macroStringMap.putAll(resolve(subKey, macroObjectMap)))
 				)
 		);
 	}

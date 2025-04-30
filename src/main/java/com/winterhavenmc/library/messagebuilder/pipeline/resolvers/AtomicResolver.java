@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
@@ -50,9 +50,9 @@ public class AtomicResolver implements Resolver
 	}
 
 
-	public ResultMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
+	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
-		ResultMap result = new ResultMap();
+		MacroStringMap result = new MacroStringMap();
 
 		macroObjectMap.get(macroKey)
 				.flatMap(this::resolveAtomic)

@@ -25,15 +25,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ResultMapTest
+class MacroStringMapTest
 {
-	ResultMap resultMap;
+	MacroStringMap macroStringMap;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		resultMap = new ResultMap();
+		macroStringMap = new MacroStringMap();
 	}
 
 
@@ -44,11 +44,11 @@ class ResultMapTest
 		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
 
 		// Act
-		resultMap.put(macroKey, "first value");
-		resultMap.put(macroKey, "second value");
+		macroStringMap.put(macroKey, "first value");
+		macroStringMap.put(macroKey, "second value");
 
 		// Assert
-		assertEquals("second value", resultMap.get(macroKey));
+		assertEquals("second value", macroStringMap.get(macroKey));
 	}
 
 
@@ -59,11 +59,11 @@ class ResultMapTest
 		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
 
 		// Act
-		resultMap.putIfAbsent(macroKey, "first value");
-		resultMap.putIfAbsent(macroKey, "second value");
+		macroStringMap.putIfAbsent(macroKey, "first value");
+		macroStringMap.putIfAbsent(macroKey, "second value");
 
 		// Assert
-		assertEquals("first value", resultMap.get(macroKey));
+		assertEquals("first value", macroStringMap.get(macroKey));
 	}
 
 
@@ -74,11 +74,11 @@ class ResultMapTest
 		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
 
 		// Act
-		resultMap.put(macroKey, "first value");
-		resultMap.put(macroKey, "second value");
+		macroStringMap.put(macroKey, "first value");
+		macroStringMap.put(macroKey, "second value");
 
 		// Assert
-		assertEquals("second value", resultMap.get(macroKey));
+		assertEquals("second value", macroStringMap.get(macroKey));
 	}
 
 
@@ -89,11 +89,11 @@ class ResultMapTest
 		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
 
 		// Act
-		resultMap.put(macroKey, "first value");
-		resultMap.put(macroKey, "second value");
+		macroStringMap.put(macroKey, "first value");
+		macroStringMap.put(macroKey, "second value");
 
 		// Assert
-		assertEquals("second value", resultMap.get(macroKey));
+		assertEquals("second value", macroStringMap.get(macroKey));
 	}
 
 
@@ -104,9 +104,9 @@ class ResultMapTest
 		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
 
 		// Act
-		resultMap.put(macroKey, "123");
+		macroStringMap.put(macroKey, "123");
 
-		String result = resultMap.get(macroKey);
+		String result = macroStringMap.get(macroKey);
 
 		assertEquals("123", result);
 	}
@@ -119,12 +119,12 @@ class ResultMapTest
 		MacroKey macroKey1 = MacroKey.of("abc").orElseThrow();
 		MacroKey macroKey2 = MacroKey.of("xyz").orElseThrow();
 		MacroKey macroKey3 = MacroKey.of("jkl").orElseThrow();
-		ResultMap firstMap = new ResultMap();
+		MacroStringMap firstMap = new MacroStringMap();
 
 		firstMap.put(macroKey1, "123");
 		firstMap.put(macroKey2, "1999");
 
-		ResultMap secondMap = new ResultMap();
+		MacroStringMap secondMap = new MacroStringMap();
 		secondMap.putAll(firstMap);
 
 		assertTrue(secondMap.containsKey(macroKey1));
@@ -138,10 +138,10 @@ class ResultMapTest
 	{
 		MacroKey macroKey1 = MacroKey.of("abc").orElseThrow();
 		MacroKey macroKey2 = MacroKey.of("xyz").orElseThrow();
-		resultMap.put(macroKey1, "123");
-		resultMap.put(macroKey2, "1999");
+		macroStringMap.put(macroKey1, "123");
+		macroStringMap.put(macroKey2, "1999");
 
-		var entrySet = resultMap.entrySet();
+		var entrySet = macroStringMap.entrySet();
 
 		assertEquals("[abc=123, xyz=1999]",entrySet.toString());
 
@@ -151,9 +151,9 @@ class ResultMapTest
 	void isEmpty()
 	{
 		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
-		assertTrue(resultMap.isEmpty());
-		resultMap.put(macroKey, "123");
-		assertFalse(resultMap.isEmpty());
+		assertTrue(macroStringMap.isEmpty());
+		macroStringMap.put(macroKey, "123");
+		assertFalse(macroStringMap.isEmpty());
 	}
 
 	@Test
@@ -163,7 +163,7 @@ class ResultMapTest
 		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
 
 		// Act
-		String result = resultMap.getValueOrKey(macroKey);
+		String result = macroStringMap.getValueOrKey(macroKey);
 
 		// Assert
 		assertEquals("KEY", result);

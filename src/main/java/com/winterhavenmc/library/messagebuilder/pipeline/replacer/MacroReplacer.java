@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectM
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.result.ResultMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.result.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.util.Delimiter;
@@ -84,8 +84,8 @@ public class MacroReplacer implements Replacer
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
 
 		Function<String, Optional<MacroKey>> toMacroKey = MacroKey::of;
-		Function<MacroKey, ResultMap> resolveKey = key -> resolver.resolve(key, macroObjectMap);
-		BinaryOperator<ResultMap> mergeMaps = (r1, r2) -> {
+		Function<MacroKey, MacroStringMap> resolveKey = key -> resolver.resolve(key, macroObjectMap);
+		BinaryOperator<MacroStringMap> mergeMaps = (r1, r2) -> {
 			r1.putAll(r2);
 			return r1;
 		};
@@ -94,7 +94,7 @@ public class MacroReplacer implements Replacer
 				.map(toMacroKey)
 				.flatMap(Optional::stream)
 				.map(resolveKey)
-				.reduce(new ResultMap(), mergeMaps), messageString);
+				.reduce(new MacroStringMap(), mergeMaps), messageString);
 	}
 
 
@@ -105,7 +105,7 @@ public class MacroReplacer implements Replacer
 	 * @param messageString  the message string containing placeholders to be replaced
 	 * @return {@code String} the final string with all replacements performed
 	 */
-	public String replacements(final ResultMap replacementMap, final String messageString)
+	public String replacements(final MacroStringMap replacementMap, final String messageString)
 	{
 		validate(replacementMap, Objects::isNull, throwing(PARAMETER_NULL, REPLACEMENT_MAP));
 		validate(messageString, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_STRING));
