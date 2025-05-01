@@ -27,7 +27,8 @@ public class LocaleProvider
 {
 	private final Supplier<Locale> localeSupplier;
 
-	public LocaleProvider(Supplier<Locale> localeSupplier)
+
+	private LocaleProvider(Supplier<Locale> localeSupplier)
 	{
 		this.localeSupplier = localeSupplier;
 	}
