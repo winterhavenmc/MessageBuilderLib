@@ -41,12 +41,12 @@ public class LanguageTag
 	 * @param string the language tag representing a potential language resource
 	 * @throws ValidationException if parameter is null or empty
 	 */
-	private LanguageTag(final String languageTag)
+	private LanguageTag(final String string)
 	{
-		validate(languageTag, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_TAG));
-		validate(languageTag, String::isBlank, throwing(PARAMETER_EMPTY, LANGUAGE_TAG));
+		validate(string, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_TAG));
+		validate(string, String::isBlank, throwing(PARAMETER_EMPTY, LANGUAGE_TAG));
 
-		this.wrappedLanguageTag = languageTag;
+		this.wrappedLanguageTag = string;
 	}
 
 
