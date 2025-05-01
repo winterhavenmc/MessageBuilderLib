@@ -38,7 +38,7 @@ public class LanguageTag
 	/**
 	 * Class constructor that takes a String language tag as a parameter
 	 *
-	 * @param languageTag the language tag representing a potential language resource
+	 * @param string the language tag representing a potential language resource
 	 * @throws ValidationException if parameter is null or empty
 	 */
 	private LanguageTag(final String languageTag)
