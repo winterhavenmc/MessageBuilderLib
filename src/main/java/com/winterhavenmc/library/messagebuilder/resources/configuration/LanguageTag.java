@@ -50,6 +50,12 @@ public class LanguageTag
 	}
 
 
+	/**
+	 * Static factory method that creates a new LanguageTag from a String
+	 *
+	 * @param string the string to use in the creation of a new LanguageTag
+	 * @return Optional of a LanguageTag if valid, otherwise an empty Optional
+	 */
 	public static Optional<LanguageTag> of(final String string)
 	{
 		return (string == null || string.isBlank())
@@ -58,6 +64,12 @@ public class LanguageTag
 	}
 
 
+	/**
+	 * Static factory method that creates a new LanguageTag from a Locale
+	 *
+	 * @param locale the Locale to use in the creation of a new LanguageTag
+	 * @return Optional of a LanguageTag if valid, otherwise an empty Optional
+	 */
 	public static Optional<LanguageTag> of(final Locale locale)
 	{
 		return (locale == null)
@@ -66,6 +78,11 @@ public class LanguageTag
 	}
 
 
+	/**
+	 * Get the default LanguageTag (en-US)
+	 *
+	 * @return a new default LanguageTag
+	 */
 	public static LanguageTag getDefault()
 	{
 		return new LanguageTag("en-US");
