@@ -58,9 +58,9 @@ public class LanguageTag
 	 */
 	public static Optional<LanguageTag> of(final String string)
 	{
-		return (string == null || string.isBlank())
-				? Optional.empty()
-				: Optional.of(new LanguageTag(string));
+		return (string != null && Locale.forLanguageTag(string) != null)
+				? Optional.of(new LanguageTag(string))
+				: Optional.empty();
 	}
 
 
