@@ -78,8 +78,7 @@ public class MacroStringMap
 	{
 		for (Map.Entry<MacroKey, String> entry : insertionMap.entrySet())
 		{
-			String value = entry.getValue();
-			INTERNAL_MAP.put(entry.getKey(), value);
+			INTERNAL_MAP.put(entry.getKey(), entry.getValue());
 		}
 	}
 
