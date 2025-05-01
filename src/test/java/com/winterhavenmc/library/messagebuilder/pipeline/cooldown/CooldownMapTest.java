@@ -30,6 +30,7 @@ import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.*;
@@ -86,9 +87,9 @@ class CooldownMapTest
 				40,
 				30,
 				"this is a subtitle.",
-				"this is a final message string",
-				"this is a final title string",
-				"this is a final subtitle string");
+				Optional.of("this is a final message string"),
+				Optional.of("this is a final title string"),
+				Optional.of("this is a final subtitle string"));
 	}
 
 

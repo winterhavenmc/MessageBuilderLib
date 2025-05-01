@@ -20,6 +20,7 @@ package com.winterhavenmc.library.messagebuilder.model.language;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 import java.time.Duration;
+import java.util.Optional;
 
 
 public record FinalMessageRecord(
@@ -32,7 +33,7 @@ public record FinalMessageRecord(
 		int titleStay,
 		int titleFadeOut,
 		String subtitle,
-		String finalMessageString,
-		String finalTitleString,
-		String finalSubtitleString) implements MessageRecord
+		Optional<String> finalMessageString,
+		Optional<String> finalTitleString,
+		Optional<String> finalSubtitleString) implements MessageRecord
 { }

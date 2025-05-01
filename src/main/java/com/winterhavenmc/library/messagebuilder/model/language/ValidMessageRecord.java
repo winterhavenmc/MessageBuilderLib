@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.time.Duration;
+import java.util.Optional;
 
 
 public final class ValidMessageRecord implements MessageRecord
@@ -109,9 +110,9 @@ public final class ValidMessageRecord implements MessageRecord
 				this.titleStay,
 				this.titleFadeOut,
 				this.subtitle,
-				finalMessageString,
-				finalTitleString,
-				finalSubTitleString);
+				Optional.ofNullable(finalMessageString),
+				Optional.ofNullable(finalTitleString),
+				Optional.ofNullable(finalSubTitleString));
 	}
 
 

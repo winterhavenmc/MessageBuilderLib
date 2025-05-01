@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.util.Optional;
 
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,9 +46,9 @@ class FinalMessageRecordTest
 				33,
 				44,
 				"this is a test subtitle",
-				"this is a final message string",
-				"this is a final title string",
-				"this is a final subtitle string");
+				Optional.of("this is a final message string"),
+				Optional.of("this is a final title string"),
+				Optional.of("this is a final subtitle string"));
 	}
 
 
@@ -145,7 +146,7 @@ class FinalMessageRecordTest
 	void testFinalMessageString()
 	{
 		// Arrange & Act
-		String result = validMessageRecord.finalMessageString();
+		String result = validMessageRecord.finalMessageString().orElse("");
 
 		// Assert
 		assertEquals("this is a final message string", result);
@@ -155,7 +156,7 @@ class FinalMessageRecordTest
 	void testFinalTitleString()
 	{
 		// Arrange & Act
-		String result = validMessageRecord.finalTitleString();
+		String result = validMessageRecord.finalTitleString().orElse("");
 
 		// Assert
 		assertEquals("this is a final title string", result);
@@ -165,7 +166,7 @@ class FinalMessageRecordTest
 	void testFinalSubtitleString()
 	{
 		// Arrange & Act
-		String result = validMessageRecord.finalSubtitleString();
+		String result = validMessageRecord.finalSubtitleString().orElse("");
 
 		// Assert
 		assertEquals("this is a final subtitle string", result);

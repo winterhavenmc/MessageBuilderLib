@@ -24,15 +24,12 @@ import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecor
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.function.Predicate;
-
 
 /**
  * This class is an implementation of the Sender interface, and is used to display a title to a player.
  */
 public final class TitleSender implements Sender
 {
-	private final static Predicate<String> NOT_EMPTY = string -> (string != null && !string.isBlank());
 	private final CooldownMap cooldownMap;
 
 
@@ -60,11 +57,11 @@ public final class TitleSender implements Sender
 		{
 			// if sender is player and at least one title/subtitle string is non-null and non-blank, send title to player
 			if (recipient.sender() instanceof Player player
-					&& (NOT_EMPTY.test(messageRecord.finalTitleString()) || NOT_EMPTY.test(messageRecord.finalTitleString())))
+					&& (messageRecord.finalTitleString().isPresent() || messageRecord.finalSubtitleString().isPresent()))
 			{
 				player.sendTitle(
-						ChatColor.translateAlternateColorCodes('&', messageRecord.finalTitleString()),
-						ChatColor.translateAlternateColorCodes('&', messageRecord.finalSubtitleString()),
+						ChatColor.translateAlternateColorCodes('&', messageRecord.finalTitleString().orElse("")),
+						ChatColor.translateAlternateColorCodes('&', messageRecord.finalSubtitleString().orElse("")),
 						messageRecord.titleFadeIn(),
 						messageRecord.titleStay(),
 						messageRecord.titleFadeOut());
