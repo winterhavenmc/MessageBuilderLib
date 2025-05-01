@@ -155,7 +155,7 @@ class ValidMessageTest
 					() -> message.setMacro(null, new ItemStack(Material.DIAMOND_SWORD)));
 
 			// Assert
-			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
+			assertEquals("The parameter 'macroKey' was invalid.", exception.getMessage());
 		}
 	}
 
@@ -186,7 +186,7 @@ class ValidMessageTest
 			ValidationException exception = assertThrows(ValidationException.class,
 					() -> message.setMacro(5, null, new ItemStack(Material.DIAMOND_SWORD)));
 
-			assertEquals("The parameter 'macro' cannot be null.", exception.getMessage());
+			assertEquals("The parameter 'macroKey' was invalid.", exception.getMessage());
 		}
 	}
 
