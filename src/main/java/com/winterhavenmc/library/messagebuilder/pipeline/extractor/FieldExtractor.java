@@ -29,6 +29,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.Quant
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.Identifiable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import org.bukkit.Location;
 
 import java.util.HashMap;
@@ -40,9 +42,9 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 public class FieldExtractor implements Extractor
 {
 	@Override
-	public <T> Map<MacroKey, Object> extract(Adapter adapter, T adapted, MacroKey baseKey)
+	public <T> MacroObjectMap extract(Adapter adapter, T adapted, MacroKey baseKey)
 	{
-		Map<MacroKey, Object> fields = new HashMap<>();
+		MacroObjectMap fields = new MacroObjectMap();
 
 		switch (adapter)
 		{

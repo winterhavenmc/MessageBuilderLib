@@ -19,12 +19,11 @@ package com.winterhavenmc.library.messagebuilder.pipeline.extractor;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-
-import java.util.Map;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 
 
 @FunctionalInterface
 public interface Extractor
 {
-	<T> Map<MacroKey, Object> extract(Adapter adapter, T adapted, MacroKey baseKey);
+	<T> MacroObjectMap extract(Adapter adapter, T adapted, MacroKey baseKey);
 }
