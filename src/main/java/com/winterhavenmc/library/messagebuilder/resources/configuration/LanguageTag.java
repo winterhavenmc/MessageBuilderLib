@@ -60,7 +60,7 @@ public class LanguageTag
 
 	public static Optional<LanguageTag> of(final Locale locale)
 	{
-		return locale == null
+		return (locale == null)
 				? Optional.empty()
 				: Optional.of(new LanguageTag(locale.toLanguageTag()));
 	}
