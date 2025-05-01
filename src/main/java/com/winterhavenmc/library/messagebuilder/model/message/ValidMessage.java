@@ -63,7 +63,7 @@ public final class ValidMessage implements Message
 
 		// create macro object map and add recipient field
 		this.macroObjectMap = new MacroObjectMap();
-		MacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
+		MacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).orElseThrow();
 		this.macroObjectMap.put(recipientKey, recipient);
 	}
 
@@ -104,7 +104,7 @@ public final class ValidMessage implements Message
 												   final V value)
 	{
 		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
-		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY").orElseThrow(() -> new ValidationException(PARAMETER_INVALID, QUANTITY));
+		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY").orElseThrow();
 
 		macroObjectMap.putIfAbsent(macroKey, value);
 		macroObjectMap.putIfAbsent(quantityKey, quantity);
