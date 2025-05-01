@@ -17,19 +17,18 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapter;
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -41,23 +40,22 @@ import static org.mockito.Mockito.*;
 class CompositeResolverTest
 {
 	@Mock NameAdapter adapterMock;
+	@Mock AdapterRegistry adapterRegistryMock;
+	@Mock FieldExtractor fieldExtractorMock;
+	@Mock MacroObjectMap macroObjectMapMock;
 
-
-	private AdapterRegistry adapterRegistry;
-	private FieldExtractor fieldExtractor;
 	private CompositeResolver resolver;
-	private MacroObjectMap macroObjectMap;
 
 	private final MacroKey rootKey = MacroKey.of("ROOT").orElseThrow();
 	private final MacroKey childKey = MacroKey.of("CHILD").orElseThrow();
 
+
 	@BeforeEach
-	void setUp() {
-		adapterRegistry = mock(AdapterRegistry.class);
-		fieldExtractor = mock(FieldExtractor.class);
-		macroObjectMap = mock(MacroObjectMap.class);
-		resolver = new CompositeResolver(adapterRegistry, fieldExtractor);
+	void setUp()
+	{
+		resolver = new CompositeResolver(adapterRegistryMock, fieldExtractorMock);
 	}
+
 
 	@Test
 	void resolve_withNestedKey_mergesSubResults()
@@ -72,49 +70,57 @@ class CompositeResolverTest
 
 		// Recursive stub: resolve(childKey) returns a known map
 		CompositeResolver spyResolver = spy(resolver);
-		doReturn(childMap).when(spyResolver).resolve(childKey, macroObjectMap);
+		doReturn(childMap).when(spyResolver).resolve(childKey, macroObjectMapMock);
 
-		when(macroObjectMap.get(rootKey)).thenReturn(Optional.of(rootValue));
-		when(adapterRegistry.getMatchingAdapters(rootValue)).thenReturn(Stream.of(adapterMock));
+		when(macroObjectMapMock.get(rootKey)).thenReturn(Optional.of(rootValue));
+		when(adapterRegistryMock.getMatchingAdapters(rootValue)).thenReturn(Stream.of(adapterMock));
 
 		when(adapterMock.adapt(rootValue)).thenReturn((Optional) Optional.of(adaptedValue));
 
-		when(fieldExtractor.extract(adapterMock, adaptedValue, rootKey)).thenReturn(Map.of(childKey, new Object()));
+		MacroObjectMap objectMap = new MacroObjectMap();
+		objectMap.put(childKey, new Object());
+		when(fieldExtractorMock.extract(adapterMock, adaptedValue, rootKey)).thenReturn(objectMap);
 
-		MacroStringMap result = spyResolver.resolve(rootKey, macroObjectMap);
+		MacroStringMap result = spyResolver.resolve(rootKey, macroObjectMapMock);
 
 		assertFalse(result.isEmpty());
 		assertEquals("value", result.get(macroKey));
 	}
 
-	@Test
-	void resolve_withMissingContextKey_returnsEmptyMap() {
-		when(macroObjectMap.get(rootKey)).thenReturn(Optional.empty());
 
-		MacroStringMap result = resolver.resolve(rootKey, macroObjectMap);
+	@Test
+	void resolve_withMissingContextKey_returnsEmptyMap()
+	{
+		when(macroObjectMapMock.get(rootKey)).thenReturn(Optional.empty());
+
+		MacroStringMap result = resolver.resolve(rootKey, macroObjectMapMock);
 
 		assertTrue(result.isEmpty());
 	}
 
-	@Test
-	void resolve_withNoAdapters_returnsEmptyMap() {
-		when(macroObjectMap.get(rootKey)).thenReturn(Optional.of("test"));
-		when(adapterRegistry.getMatchingAdapters("test")).thenReturn(Stream.empty());
 
-		MacroStringMap result = resolver.resolve(rootKey, macroObjectMap);
+	@Test
+	void resolve_withNoAdapters_returnsEmptyMap()
+	{
+		when(macroObjectMapMock.get(rootKey)).thenReturn(Optional.of("test"));
+		when(adapterRegistryMock.getMatchingAdapters("test")).thenReturn(Stream.empty());
+
+		MacroStringMap result = resolver.resolve(rootKey, macroObjectMapMock);
 
 		assertTrue(result.isEmpty());
 	}
+
 
 	@Test
 	void resolve_withUnadaptableValue_returnsEmptyMap()
 	{
-		when(macroObjectMap.get(rootKey)).thenReturn(Optional.of("test"));
-		when(adapterRegistry.getMatchingAdapters("test")).thenReturn(Stream.of(adapterMock));
+		when(macroObjectMapMock.get(rootKey)).thenReturn(Optional.of("test"));
+		when(adapterRegistryMock.getMatchingAdapters("test")).thenReturn(Stream.of(adapterMock));
 		when(adapterMock.adapt("test")).thenReturn(Optional.empty());
 
-		MacroStringMap result = resolver.resolve(rootKey, macroObjectMap);
+		MacroStringMap result = resolver.resolve(rootKey, macroObjectMapMock);
 
 		assertTrue(result.isEmpty());
 	}
+
 }
