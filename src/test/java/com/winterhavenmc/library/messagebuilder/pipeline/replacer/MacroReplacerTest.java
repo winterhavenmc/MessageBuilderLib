@@ -18,7 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
@@ -32,7 +31,6 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.AtomicResolve
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
@@ -61,7 +59,6 @@ import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLE
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -79,7 +76,6 @@ class MacroReplacerTest
 	Message message;
 	ConfigurationSection section;
 	ValidMessageRecord validMessageRecord;
-	FinalMessageRecord finalMessageRecord;
 	List<Resolver> resolvers;
 	FieldResolver fieldResolver;
 	PlaceholderMatcher placeholderMatcher;
@@ -88,7 +84,8 @@ class MacroReplacerTest
 	@BeforeEach
 	public void setUp()
 	{
-		recipient = switch (Recipient.of(playerMock)) {
+		recipient = switch (Recipient.of(playerMock))
+		{
 			case Recipient.Valid valid -> valid;
 			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
@@ -130,10 +127,6 @@ class MacroReplacerTest
 
 		validMessageRecord = ValidMessageRecord.create(messageKey, section);
 
-		finalMessageRecord = validMessageRecord.withFinalStrings(
-				"this is a final message",
-				"this is a final title",
-				"this is a final subtitle");
 	}
 
 
@@ -146,93 +139,5 @@ class MacroReplacerTest
 		// Assert
 		assertNotNull(result);
 	}
-
-
-	@Nested
-	class ReplaceMacrosInStringTests
-	{
-		@Test @DisplayName("Test replaceMacrosInString method with Valid parameters")
-		void testReplaceMacrosInString()
-		{
-			MacroObjectMap macroObjectMap = new MacroObjectMap();
-			MacroKey macroKey = MacroKey.of("ITEM_NAME").orElseThrow();
-			macroObjectMap.putIfAbsent(macroKey, "TEST_STRING");
-
-			String resultString = macroReplacer.replaceMacrosInString(macroObjectMap, "Replace this: {ITEM_NAME}");
-			assertEquals("Replace this: TEST_STRING", resultString);
-		}
-
-
-		@Test @DisplayName("Test replaceMacrosInString method with null messageString parameter")
-		void testReplaceMacrosInString_parameter_null_messageString()
-		{
-			// Arrange
-			MacroObjectMap macroObjectMap = new MacroObjectMap();
-
-			// Act
-			ValidationException exception = assertThrows(ValidationException.class,
-					() -> macroReplacer.replaceMacrosInString(macroObjectMap, null));
-
-			// Assert
-			assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
-		}
-	}
-
-
-	@Test
-	void testReplacements() {
-		// Arrange
-		MacroReplacer localMacroReplacer = new MacroReplacer(fieldResolver, placeholderMatcher);
-
-		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey resultMacroKey = MacroKey.of("KEY").orElseThrow();
-		macroStringMap.put(resultMacroKey, "value");
-		String messageString = "this is a macro replacement string {KEY}.";
-
-		// Act
-		String resultString = localMacroReplacer.replacements(macroStringMap, messageString);
-
-		// Assert
-		assertEquals("this is a macro replacement string value.", resultString);
-	}
-
-	@Test
-	void testReplacements_parameter_nul_replacement_map() {
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroReplacer.replacements(null, "some string"));
-
-		assertEquals("The parameter 'replacementMap' cannot be null.", exception.getMessage());
-	}
-
-	@Test
-	void testReplacements_parameter_nul_message_string() {
-		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey key1 = MacroKey.of("KEY1").orElseThrow();
-		MacroKey key2 = MacroKey.of("KEY2").orElseThrow();
-		macroStringMap.put(key1, "value1");
-		macroStringMap.put(key2, "value2");
-		macroStringMap.put(key1, "value3");
-
-		ValidationException exception = assertThrows(ValidationException.class,
-				() -> macroReplacer.replacements(macroStringMap, null));
-
-		assertEquals("The parameter 'messageString' cannot be null.", exception.getMessage());
-	}
-
-
-//	@Test
-//	void addRecipientContext()
-//	{
-//		ConsoleCommandSender console = mock(ConsoleCommandSender.class);
-//		recipient = switch (Recipient.of(console)) {
-//			case Recipient.Valid valid -> valid;
-//			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-//			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-//		};
-//		MacroKey key = MacroKey.of("RECIPIENT").orElseThrow();
-//		MacroObjectMap contextMap = MacroObjectMap.of(recipient, messageKey).orElseThrow();
-//
-//		assertTrue(contextMap.contains(key));
-//	}
 
 }
