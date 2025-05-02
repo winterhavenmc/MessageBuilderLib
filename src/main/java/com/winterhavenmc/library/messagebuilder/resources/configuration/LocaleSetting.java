@@ -19,9 +19,8 @@ package com.winterhavenmc.library.messagebuilder.resources.configuration;
 
 import java.util.Locale;
 
-public record LocaleSetting(LanguageTag languageTag) {
-
-
+public record LocaleSetting(LanguageTag languageTag)
+{
 	public Locale getLocale()
 	{
 		return languageTag.getLocale();
