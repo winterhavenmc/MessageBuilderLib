@@ -56,19 +56,19 @@ public final class LocaleValidator
 	};
 
 
-	/**
-	 * Attempts to parse a supported {@link Locale} from a language tag string.
-	 * <p>
-	 * Returns {@link Optional#empty()} if the input is null, blank, invalid,
-	 * or corresponds to an unrecognized or undefined language.
-	 *
-	 * @param languageTag the BCP 47 language tag to validate and parse
-	 * @return an Optional containing a valid Locale, or empty if invalid
-	 */
-	public static Optional<Locale> parseSupportedLocale(final String languageTag) {
-		return VALID_LOCALE.test(languageTag)
-				? Optional.of(Locale.forLanguageTag(languageTag))
-				: Optional.empty();
-	}
+//	/**
+//	 * Attempts to parse a supported {@link Locale} from a language tag string.
+//	 * <p>
+//	 * Returns {@link Optional#empty()} if the input is null, blank, invalid,
+//	 * or corresponds to an unrecognized or undefined language.
+//	 *
+//	 * @param languageTag the BCP 47 language tag to validate and parse
+//	 * @return an Optional containing a valid Locale, or empty if invalid
+//	 */
+//	public static Optional<Locale> parseSupportedLocale(final String languageTag) {
+//		return VALID_LOCALE.test(languageTag)
+//				? Optional.of(Locale.forLanguageTag(languageTag))
+//				: Optional.empty();
+//	}
 
 }
