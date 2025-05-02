@@ -58,7 +58,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlaceholderMatcherTest
 {
 	@Mock Player playerMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock
+	LocaleProvider localeProviderMock;
 	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
 
