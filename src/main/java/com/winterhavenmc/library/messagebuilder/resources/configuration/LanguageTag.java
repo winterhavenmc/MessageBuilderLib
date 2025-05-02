@@ -18,6 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.resources.configuration;
 
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -25,9 +27,12 @@ import java.util.Optional;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.validation.LocaleValidator.VALID_LOCALE;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LANGUAGE_TAG;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+
+import static java.util.Locale.forLanguageTag;
 
 
 public class LanguageTag
@@ -41,7 +46,7 @@ public class LanguageTag
 	 * @param string the language tag representing a potential language resource
 	 * @throws ValidationException if parameter is null or empty
 	 */
-	private LanguageTag(final String string)
+	private LanguageTag(@NotNull final String string)
 	{
 		validate(string, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_TAG));
 		validate(string, String::isBlank, throwing(PARAMETER_EMPTY, LANGUAGE_TAG));
@@ -51,41 +56,44 @@ public class LanguageTag
 
 
 	/**
-	 * Static factory method that creates a new LanguageTag from a String
-	 *
-	 * @param string the string to use in the creation of a new LanguageTag
-	 * @return Optional of a LanguageTag if valid, otherwise an empty Optional
-	 */
-	public static Optional<LanguageTag> of(final String string)
-	{
-		return (string != null && Locale.forLanguageTag(string) != null)
-				? Optional.of(new LanguageTag(string))
-				: Optional.empty();
-	}
-
-
-	/**
 	 * Static factory method that creates a new LanguageTag from a Locale
 	 *
 	 * @param locale the Locale to use in the creation of a new LanguageTag
 	 * @return Optional of a LanguageTag if valid, otherwise an empty Optional
 	 */
+	@Contract("_->!null")
 	public static Optional<LanguageTag> of(final Locale locale)
 	{
-		return (locale == null)
-				? Optional.empty()
-				: Optional.of(new LanguageTag(locale.toLanguageTag()));
+		return (locale != null)
+				? Optional.of(new LanguageTag(locale.toLanguageTag()))
+				: Optional.empty();
 	}
 
 
 	/**
-	 * Get the default LanguageTag (en-US)
+	 * Static factory method that creates a new validated LanguageTag from a String
+	 *
+	 * @param string the string to use in the creation of a new LanguageTag
+	 * @return Optional of a LanguageTag if valid, otherwise an empty Optional
+	 */
+	@Contract("_->!null")
+	public static Optional<LanguageTag> of(final String string)
+	{
+		return (VALID_LOCALE.test(string))
+				? Optional.of(new LanguageTag(Locale.forLanguageTag(string).toLanguageTag()))
+				: Optional.empty();
+	}
+
+
+	/**
+	 * Get the system default LanguageTag
 	 *
 	 * @return a new default LanguageTag
 	 */
-	public static LanguageTag getDefault()
+	@Contract(" -> new")
+	public static @NotNull LanguageTag getSystemDefault()
 	{
-		return new LanguageTag("en-US");
+		return new LanguageTag(Locale.getDefault().toLanguageTag());
 	}
 
 
@@ -94,9 +102,10 @@ public class LanguageTag
 	 *
 	 * @return the {@code Locale} associated with this language tag
 	 */
+	@Contract(pure = true)
 	public Locale getLocale()
 	{
-		return Locale.forLanguageTag(wrappedLanguageTag);
+		return forLanguageTag(wrappedLanguageTag);
 	}
 
 
@@ -105,7 +114,7 @@ public class LanguageTag
 	 *
 	 * @return {@code String} representing the IETF language tag associated with a potential language resource
 	 */
-	@Override
+	@Override @NotNull @Contract(pure = true)
 	public String toString()
 	{
 		return this.wrappedLanguageTag;
