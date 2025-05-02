@@ -52,7 +52,7 @@ class LocaleProviderTest
 	void create()
 	{
 		// Act
-		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
+		ConfigProvider<LocaleSetting> localeProvider = LocaleProvider.create(pluginMock);
 
 		// Assert
 		assertNotNull(localeProvider);
@@ -64,10 +64,11 @@ class LocaleProviderTest
 	{
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
+
+		ConfigProvider<LocaleSetting> localeProvider = LocaleProvider.create(pluginMock);
 
 		// Act
-		Locale locale = localeProvider.getLocale();
+		Locale locale = localeProvider.get().languageTag().getLocale();
 
 		// Assert
 		assertEquals(Locale.FRANCE, locale);
@@ -83,13 +84,50 @@ class LocaleProviderTest
 		// Arrange
 		configuration = new YamlConfiguration();
 		when(pluginMock.getConfig()).thenReturn(configuration);
+		ConfigProvider<LocaleSetting> localeProvider = LocaleProvider.create(pluginMock);
+
+		// Act
+		Locale locale = localeProvider.get().getLocale();
+
+		// Assert
+		assertNotNull(locale);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+	@Test
+	void testGetLanguageTag()
+	{
+		// Arrange
+		when(pluginMock.getConfig()).thenReturn(configuration);
+
+		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
+
+		// Act
+		LanguageTag languageTag = localeProvider.getLanguageTag();
+
+		// Assert
+		assertEquals(Locale.FRANCE, languageTag.getLocale());
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+	@Test
+	void getLocale()
+	{
+		// Arrange
+		when(pluginMock.getConfig()).thenReturn(configuration);
+
 		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
 
 		// Act
 		Locale locale = localeProvider.getLocale();
 
 		// Assert
-		assertNotNull(locale);
+		assertEquals(Locale.FRANCE, locale);
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getConfig();
