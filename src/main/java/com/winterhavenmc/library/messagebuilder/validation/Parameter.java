@@ -29,6 +29,7 @@ public enum Parameter
 	ENTITY("entity"),
 	ITEM_SECTION("itemSection"),
 	KEY("key"),
+	LANGUAGE_FILE("languageFile"),
 	LANGUAGE_QUERY_HANDLER("languageQueryHandler"),
 	LANGUAGE_RESOURCE_MANAGER("languageResourceManager"),
 	LANGUAGE_TAG("languageTag"),
