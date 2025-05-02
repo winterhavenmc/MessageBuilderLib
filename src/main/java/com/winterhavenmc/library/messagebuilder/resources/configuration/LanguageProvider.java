@@ -17,13 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.resources.configuration;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -32,7 +28,6 @@ public class LanguageProvider implements ConfigProvider<LanguageSetting>
 {
 	private final Supplier<LanguageSetting> languageSettingSupplier;
 
-	private static final String LANGUAGE_FOLDER = "language";
 	private static final String FALLBACK_NAME = "en-US";
 
 
@@ -47,37 +42,25 @@ public class LanguageProvider implements ConfigProvider<LanguageSetting>
 	}
 
 
-	private LanguageProvider(final Supplier<LanguageSetting> supplier)
+	private LanguageProvider(Supplier<LanguageSetting> supplier)
 	{
 		this.languageSettingSupplier = supplier;
 	}
 
 
-	@NotNull
-	public static LanguageProvider create(final @NotNull Plugin plugin)
+	public static LanguageProvider create(final Plugin plugin)
 	{
-		FileConfiguration config = plugin.getConfig();
-		File languageDir = new File(plugin.getDataFolder(), LANGUAGE_FOLDER);
+		return new LanguageProvider(() -> {
+			var config = plugin.getConfig();
 
-		Optional<LanguageSetting> setting = Stream.of(LanguageField.values())
-				.map(LanguageField::toString)
-				.map(config::getString)
-				.filter(Objects::nonNull)
-				.map(name -> {
-					File file = new File(languageDir, name + ".yml");
-					Optional<LanguageTag> tag = LanguageTag.of(name);
-					return new LanguageSetting(name, file, tag);
-				})
-				.findFirst();
-
-		// Fallback to "en-US"
-		LanguageSetting fallback = new LanguageSetting(
-				FALLBACK_NAME,
-				new File(languageDir, FALLBACK_NAME + ".yml"),
-				LanguageTag.of(FALLBACK_NAME)
-		);
-
-		return new LanguageProvider(() -> setting.orElse(fallback));
+			return Stream.of(LanguageField.values())
+					.map(LanguageField::toString)
+					.map(config::getString)
+					.filter(Objects::nonNull)
+					.map(LanguageSetting::new)
+					.findFirst()
+					.orElse(new LanguageSetting(FALLBACK_NAME));
+		});
 	}
 
 
@@ -88,9 +71,9 @@ public class LanguageProvider implements ConfigProvider<LanguageSetting>
 	}
 
 
-	public String getFilename()
+	public String getName()
 	{
-		return languageSettingSupplier.get().file().getName();
+		return languageSettingSupplier.get().name();
 	}
 
 }

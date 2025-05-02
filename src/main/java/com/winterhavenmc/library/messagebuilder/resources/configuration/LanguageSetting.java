@@ -25,35 +25,12 @@ import java.util.Optional;
 
 
 /**
- * Represents a language file setting selected from configuration.
- * Includes the raw name, the expected file location, and an optional parsed {@link LanguageTag}.
+ * Represents the name of the language setting as configured in plugin settings.
+ * Does not assume anything about the file system or structure.
  */
-public record LanguageSetting(
-		@NotNull String name,
-		@NotNull File file,
-		@NotNull Optional<LanguageTag> tag)
+public record LanguageSetting(@NotNull String name)
 {
-	/**
-	 * Returns whether the expected file currently exists on disk.
-	 */
-	@Contract(pure = true)
-	public boolean exists()
-	{
-		return file.isFile();
-	}
-
-
-	/**
-	 * Returns whether the name is a valid BCP 47 tag recognized by the JVM.
-	 */
-	@Contract(pure = true)
-	public boolean isConformant()
-	{
-		return tag.isPresent();
-	}
-
-
-	@Override @NotNull @Contract(pure = true)
+	@Override @NotNull
 	public String toString()
 	{
 		return name;
