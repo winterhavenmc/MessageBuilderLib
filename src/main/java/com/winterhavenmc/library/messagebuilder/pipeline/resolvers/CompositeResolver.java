@@ -72,4 +72,5 @@ public class CompositeResolver implements Resolver
 				)
 		);
 	}
+
 }
