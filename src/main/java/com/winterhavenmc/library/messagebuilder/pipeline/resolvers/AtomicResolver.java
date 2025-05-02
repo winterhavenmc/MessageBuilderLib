@@ -52,25 +52,25 @@ public class AtomicResolver implements Resolver
 
 	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
-		MacroStringMap result = new MacroStringMap();
+		MacroStringMap stringMap = new MacroStringMap();
 
 		macroObjectMap.get(macroKey)
 				.flatMap(this::resolveAtomic)
-				.ifPresent(formatted -> result.putIfAbsent(macroKey, formatted));
+				.ifPresent(formatted -> stringMap.putIfAbsent(macroKey, formatted));
 
-		return result;
+		return stringMap;
 	}
 
 
 	private Optional<String> resolveAtomic(final Object value) {
 		return switch (value) {
 			// TODO: Replace with record pattern match when Java 22+ is standard in Bukkit
-			case BoundedDuration boundedDuration -> Optional.of(durationFormatter
-					.format(boundedDuration.duration(), boundedDuration.precision()));
-			case Duration duration -> Optional.of(durationFormatter.format(duration, ChronoUnit.SECONDS));
-			case Number number -> Optional.of(localeNumberFormatter.getFormatted(number));
 //			case Boolean bool -> result.putIfAbsent(macroKey, bool.toString());
 			case String string -> Optional.of(string);
+			case Number number -> Optional.of(localeNumberFormatter.getFormatted(number));
+			case Duration duration -> Optional.of(durationFormatter.format(duration, ChronoUnit.SECONDS));
+			case BoundedDuration boundedDuration -> Optional.of(durationFormatter
+					.format(boundedDuration.duration(), boundedDuration.precision()));
 			default -> Optional.of(value.toString());
 		};
 	}
