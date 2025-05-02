@@ -17,21 +17,14 @@
 
 package com.winterhavenmc.library.messagebuilder.resources.configuration;
 
-enum LocaleSetting
-{
-	LOCALE("locale"),
-	LANGUAGE("language");
+import java.util.Locale;
 
-	private final String string;
+public record LocaleSetting(LanguageTag languageTag) {
 
-	LocaleSetting(String string)
+
+	public Locale getLocale()
 	{
-		this.string = string;
+		return languageTag.getLocale();
 	}
 
-	@Override
-	public String toString()
-	{
-		return this.string;
-	}
 }
