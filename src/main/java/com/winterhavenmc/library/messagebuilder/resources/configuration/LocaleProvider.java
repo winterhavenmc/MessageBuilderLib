@@ -47,17 +47,8 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 		LANGUAGE("language");
 
 		private final String string;
-
-		LocaleField(String string)
-		{
-			this.string = string;
-		}
-
-		@Override
-		public String toString()
-		{
-			return this.string;
-		}
+		LocaleField(String string) { this.string = string; }
+		@Override public String toString() { return this.string; }
 	}
 
 
