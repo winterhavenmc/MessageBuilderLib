@@ -20,6 +20,7 @@ package com.winterhavenmc.library.messagebuilder.validation;
 public enum ErrorMessageKey
 {
 	INVALID_SECTION,
+	MISSING_LANGUAGE_FILE,
 	MISSING_RESOURCE,
 	PARAMETER_EMPTY,
 	PARAMETER_INVALID,
