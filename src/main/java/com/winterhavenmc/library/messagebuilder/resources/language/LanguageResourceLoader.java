@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.resources.ResourceLoader;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LanguageTag;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -38,7 +39,7 @@ import java.util.function.Supplier;
  * result in a new configuration object loaded from the currently configured language file, or the en-US language
  * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
-public final class LanguageResourceLoader implements com.winterhavenmc.library.messagebuilder.resources.ResourceLoader
+public final class LanguageResourceLoader implements ResourceLoader
 {
 	private final Plugin plugin;
 	private final Supplier<YamlConfiguration> yamlFactory;
@@ -77,9 +78,9 @@ public final class LanguageResourceLoader implements com.winterhavenmc.library.m
 	{
 		String configLanguageTag = plugin.getConfig().getString(LanguageSetting.CONFIG_LANGUAGE_KEY.toString());
 
-		return (configLanguageTag == null || configLanguageTag.isBlank())
-				? Optional.empty()
-				: LanguageTag.of(Locale.forLanguageTag(configLanguageTag));
+		return (configLanguageTag != null && !configLanguageTag.isBlank())
+				? LanguageTag.of(Locale.forLanguageTag(configLanguageTag))
+				: Optional.empty();
 	}
 
 	@Override
