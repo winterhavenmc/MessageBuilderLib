@@ -30,11 +30,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.Identifia
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import org.bukkit.Location;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.*;
 

@@ -19,7 +19,6 @@ package com.winterhavenmc.library.messagebuilder.validation;
 
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 
