@@ -20,11 +20,7 @@ package com.winterhavenmc.library.messagebuilder.resources.configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.File;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,31 +28,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class LanguageSettingTest
 {
-	@Mock File fileMock;
-
 	LanguageSetting languageSetting;
-	Optional<LanguageTag> languageTag;
+
 
 	@BeforeEach
 	void setUp()
 	{
-		languageTag = LanguageTag.of("en-US");
-		languageSetting = new LanguageSetting("name", fileMock, languageTag);
+		languageSetting = new LanguageSetting("name");
 	}
 
-	@Test
-	void exists()
-	{
-		assertFalse(languageSetting.exists());
-	}
-
-
-
-	@Test
-	void isConformant()
-	{
-		assertTrue(languageSetting.isConformant());
-	}
 
 	@Test
 	void testToString()
@@ -68,18 +48,6 @@ class LanguageSettingTest
 	void name()
 	{
 		assertEquals("name", languageSetting.name());
-	}
-
-	@Test
-	void file()
-	{
-		assertEquals(fileMock, languageSetting.file());
-	}
-
-	@Test
-	void tag()
-	{
-		assertEquals(languageTag, languageSetting.tag());
 	}
 
 }
