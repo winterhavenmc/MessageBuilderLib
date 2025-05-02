@@ -65,7 +65,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MacroReplacerTest
 {
 	@Mock Player playerMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock
+	LocaleProvider localeProviderMock;
 	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
 
