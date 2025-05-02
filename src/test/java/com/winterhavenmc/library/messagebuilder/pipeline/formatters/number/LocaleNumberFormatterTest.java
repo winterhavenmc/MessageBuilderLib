@@ -18,12 +18,13 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.formatters.number;
 
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
+
+import java.util.Locale;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
