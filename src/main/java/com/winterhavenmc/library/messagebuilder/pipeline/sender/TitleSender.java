@@ -53,21 +53,19 @@ public final class TitleSender implements Sender
 	@Override
 	public void send(final Recipient.Valid recipient, final FinalMessageRecord messageRecord)
 	{
-		if (messageRecord.enabled())
+		// if sender is player and at least one title/subtitle string is non-null and non-blank, send title to player
+		if (recipient.sender() instanceof Player player
+				&& messageRecord.enabled()
+				&& (messageRecord.finalTitleString().isPresent() || messageRecord.finalSubtitleString().isPresent()))
 		{
-			// if sender is player and at least one title/subtitle string is non-null and non-blank, send title to player
-			if (recipient.sender() instanceof Player player
-					&& (messageRecord.finalTitleString().isPresent() || messageRecord.finalSubtitleString().isPresent()))
-			{
-				player.sendTitle(
-						ChatColor.translateAlternateColorCodes('&', messageRecord.finalTitleString().orElse("")),
-						ChatColor.translateAlternateColorCodes('&', messageRecord.finalSubtitleString().orElse("")),
-						messageRecord.titleFadeIn(),
-						messageRecord.titleStay(),
-						messageRecord.titleFadeOut());
+			player.sendTitle(
+					ChatColor.translateAlternateColorCodes('&', messageRecord.finalTitleString().orElse("")),
+					ChatColor.translateAlternateColorCodes('&', messageRecord.finalSubtitleString().orElse("")),
+					messageRecord.titleFadeIn(),
+					messageRecord.titleStay(),
+					messageRecord.titleFadeOut());
 
-				cooldownMap.putExpirationTime(recipient, messageRecord);
-			}
+			cooldownMap.putExpirationTime(recipient, messageRecord);
 		}
 	}
 
