@@ -23,29 +23,107 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 
-public class LocaleProvider
+/**
+ * Provides a resolved {@link LocaleSetting} from plugin configuration.
+ * <p>
+ * This class reads from the configuration fields {@code locale} and {@code language}
+ * (in that order of priority) to attempt to resolve a {@link LanguageTag}.
+ * If neither setting is valid or present, it falls back to {@link Locale#getDefault()}.
+ *
+ * <p>
+ * This is primarily used for formatting numbers, dates, and times using the JVM's {@link Locale}.
+ */
+public class LocaleProvider implements ConfigProvider<LocaleSetting>
 {
-	private final Supplier<Locale> localeSupplier;
+	private final Supplier<LocaleSetting> localeSettingSupplier;
 
 
-	private LocaleProvider(Supplier<Locale> localeSupplier)
+	/**
+	 * The configuration keys supported for resolving the locale.
+	 */
+	enum LocaleField
 	{
-		this.localeSupplier = localeSupplier;
+		LOCALE("locale"),
+		LANGUAGE("language");
+
+		private final String string;
+
+		LocaleField(String string)
+		{
+			this.string = string;
+		}
+
+		@Override
+		public String toString()
+		{
+			return this.string;
+		}
 	}
 
 
+	/**
+	 * Private constructor
+	 *
+	 * @param localeSettingSupplier a provider for the plugin config language setting
+	 */
+	private LocaleProvider(final Supplier<LocaleSetting> localeSettingSupplier)
+	{
+		this.localeSettingSupplier = localeSettingSupplier;
+	}
+
+
+	/**
+	 * Creates a new {@code LocaleProvider} for the specified plugin.
+	 * <p>
+	 * Resolution order:
+	 * <ol>
+	 *   <li>{@code locale} setting (must be a valid and available JVM locale)</li>
+	 *   <li>{@code language} setting (must be valid and available)</li>
+	 *   <li>{@link Locale#getDefault()} if both are invalid or missing</li>
+	 * </ol>
+	 *
+	 * @param plugin the plugin whose configuration should be used
+	 * @return a new LocaleProvider
+	 */
 	public static LocaleProvider create(final Plugin plugin)
 	{
-		return new LocaleProvider(() ->
-				LanguageTag.of(plugin.getConfig().getString(LocaleSetting.LOCALE.toString()))
-						.orElse(LanguageTag.of(plugin.getConfig().getString(LocaleSetting.LANGUAGE.toString()))
-								.orElse(LanguageTag.getDefault())).getLocale());
+		return new LocaleProvider(() -> new LocaleSetting(LanguageTag.of(plugin.getConfig().getString(LocaleField.LOCALE.toString()))
+						.orElse(LanguageTag.of(plugin.getConfig().getString(LocaleField.LANGUAGE.toString()))
+						.orElse(LanguageTag.getSystemDefault()))));
 	}
 
 
+	/**
+	 * Returns the resolved {@link LocaleSetting}.
+	 *
+	 * @return the current LocaleSetting
+	 */
+	@Override
+	public LocaleSetting get()
+	{
+		return localeSettingSupplier.get();
+	}
+
+
+	/**
+	 * Returns the resolved {@link LanguageTag} representing the locale tag.
+	 *
+	 * @return a valid LanguageTag
+	 */
+	public LanguageTag getLanguageTag()
+	{
+		return localeSettingSupplier.get().languageTag();
+	}
+
+
+	/**
+	 * Returns the actual {@link Locale} derived from the configuration.
+	 *
+	 * @return the Java Locale object
+	 */
 	public Locale getLocale()
 	{
-		return localeSupplier.get();
+		return localeSettingSupplier.get().languageTag().getLocale();
 	}
 
 }
