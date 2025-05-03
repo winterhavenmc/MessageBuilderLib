@@ -136,7 +136,7 @@ public class NameAdapterTest
 	class EntityNameableTests
 	{
 		@Test
-		void testGetName_withValidWorld()
+		void testAdaptedField_withValidWorld()
 		{
 			// Arrange
 			when(worldMock.getName()).thenReturn("world_name");
