@@ -22,6 +22,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -167,6 +169,46 @@ class MacroStringMapTest
 
 		// Assert
 		assertEquals("KEY", result);
+	}
+
+
+	@Test
+	void keySet()
+	{
+		// Arrange
+		MacroKey macroKey1 = MacroKey.of("KEY1").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("KEY2").orElseThrow();
+		MacroKey macroKey3 = MacroKey.of("KEY3").orElseThrow();
+		macroStringMap.put(macroKey1, "red");
+		macroStringMap.put(macroKey2, "blue");
+
+		// Act
+		Set<MacroKey> result = macroStringMap.keySet();
+
+		// Assert
+		assertTrue(result.contains(macroKey1));
+		assertTrue(result.contains(macroKey2));
+		assertFalse(result.contains(macroKey3));
+	}
+
+
+	@Test
+	void testSize()
+	{
+		// Arrange
+		MacroKey macroKey1 = MacroKey.of("KEY1").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("KEY2").orElseThrow();
+		MacroKey macroKey3 = MacroKey.of("KEY3").orElseThrow();
+		macroStringMap.put(macroKey1, "red");
+		macroStringMap.put(macroKey2, "green");
+		macroStringMap.put(macroKey3, "blue");
+
+		// Act
+		int result = macroStringMap.size();
+
+		// Assert
+		assertEquals(3, result);
+
 	}
 
 }
