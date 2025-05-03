@@ -17,11 +17,14 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+
+import java.util.Map;
 
 
 public class CompositeResolver implements Resolver
@@ -30,9 +33,6 @@ public class CompositeResolver implements Resolver
 	private final FieldExtractor fieldExtractor;
 
 
-	/**
-	 * Class constructor
-	 */
 	public CompositeResolver(final AdapterRegistry adapterRegistry,
 							 final FieldExtractor fieldExtractor)
 	{
@@ -41,36 +41,45 @@ public class CompositeResolver implements Resolver
 	}
 
 
-	/**
-	 * Convert the value objects contained in the context map into their string representations in a
-	 * new result map.
-	 *
-	 * @param macroObjectMap a map containing key/value pairs of placeholder strings and their corresponding value object
-	 * @return {@code MacroStringMap} a map containing the placeholder strings and the string representations of the values
-	 */
 	@Override
 	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
-		MacroStringMap macroStringMap = new MacroStringMap();
+		MacroStringMap result = new MacroStringMap();
 
+		// Extract a single entry if present for the given key
 		macroObjectMap.get(macroKey).ifPresent(value ->
-				resolveSubkeysInto(macroStringMap, value, macroKey, macroObjectMap));
+		{
+			for (Adapter adapter : adapterRegistry.getMatchingAdapters(value).toList())
+			{
+				adapter.adapt(value).ifPresent(adapted ->
+				{
+					MacroStringMap extracted = fieldExtractor.extract(adapter, adapted, macroKey);
+					result.putAll(extracted);
+				});
+			}
+		});
 
-		return macroStringMap;
+		return result;
 	}
 
 
-	/**
-	 * Resolver static helper method
-	 */
-	private void resolveSubkeysInto(MacroStringMap macroStringMap, Object value, MacroKey macroKey, MacroObjectMap macroObjectMap)
+	public MacroStringMap resolveAll(MacroObjectMap macroObjectMap)
 	{
-		adapterRegistry.getMatchingAdapters(value).forEach(adapter ->
-				adapter.adapt(value).ifPresent(adapted ->
-						fieldExtractor.extract(adapter, adapted, macroKey).keySet()
-								.forEach(subKey -> macroStringMap.putAll(resolve(subKey, macroObjectMap)))
-				)
-		);
+		MacroStringMap result = new MacroStringMap();
+
+		for (Map.Entry<MacroKey, Object> entry : macroObjectMap.entrySet())
+		{
+			for (Adapter adapter : adapterRegistry.getMatchingAdapters(entry.getValue()).toList())
+			{
+				adapter.adapt(entry.getValue()).ifPresent(adapted ->
+				{
+					MacroStringMap extracted = fieldExtractor.extract(adapter, adapted, entry.getKey());
+					result.putAll(extracted); // Key priority defined by map order
+				});
+			}
+		}
+
+		return result;
 	}
 
 }
