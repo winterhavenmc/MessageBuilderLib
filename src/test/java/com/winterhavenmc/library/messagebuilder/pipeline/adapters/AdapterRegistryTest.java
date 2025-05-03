@@ -102,7 +102,6 @@ class AdapterRegistryTest
 	{
 		class SampleEntity implements Nameable, DisplayNameable
 		{
-
 			@Override
 			public String getDisplayName()
 			{
