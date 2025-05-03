@@ -17,14 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
-
-import java.util.Map;
 
 
 public class CompositeResolver implements Resolver
@@ -44,42 +41,51 @@ public class CompositeResolver implements Resolver
 	@Override
 	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
-		MacroStringMap result = new MacroStringMap();
+		MacroStringMap macroStringMap = new MacroStringMap();
 
-		// Extract a single entry if present for the given key
-		macroObjectMap.get(macroKey).ifPresent(value ->
-		{
-			for (Adapter adapter : adapterRegistry.getMatchingAdapters(value).toList())
-			{
-				adapter.adapt(value).ifPresent(adapted ->
-				{
-					MacroStringMap extracted = fieldExtractor.extract(adapter, adapted, macroKey);
-					result.putAll(extracted);
-				});
-			}
-		});
+		macroObjectMap.get(macroKey).ifPresent(value -> adapterRegistry
+				.getMatchingAdapters(value)
+				.forEach(adapter -> adapter
+				.adapt(value)
+				.ifPresent(adapted -> fieldExtractor
+				.extract(adapter, adapted, macroKey)
+				.putAll(macroStringMap))));
 
-		return result;
+		return macroStringMap;
 	}
 
 
-	public MacroStringMap resolveAll(MacroObjectMap macroObjectMap)
-	{
-		MacroStringMap result = new MacroStringMap();
+//	@Override
+//	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
+//	{
+//		return macroObjectMap.get(macroKey)
+//				.map(value -> adapterRegistry.getMatchingAdapters(value)
+//						.flatMap(adapter -> adapter
+//								.adapt(value)
+//								.map(adapted -> fieldExtractor.extract(adapter, adapted, macroKey))
+//								.stream()) // flatten Optionals
+//						.reduce(new MacroStringMap(), (acc, next) -> { acc.putAll(next); return acc; }))
+//				.orElseGet(MacroStringMap::new);
+//	}
 
-		for (Map.Entry<MacroKey, Object> entry : macroObjectMap.entrySet())
-		{
-			for (Adapter adapter : adapterRegistry.getMatchingAdapters(entry.getValue()).toList())
-			{
-				adapter.adapt(entry.getValue()).ifPresent(adapted ->
-				{
-					MacroStringMap extracted = fieldExtractor.extract(adapter, adapted, entry.getKey());
-					result.putAll(extracted); // Key priority defined by map order
-				});
-			}
-		}
 
-		return result;
-	}
+//	public MacroStringMap resolveAll(final MacroObjectMap macroObjectMap)
+//	{
+//		MacroStringMap result = new MacroStringMap();
+//
+//		for (Map.Entry<MacroKey, Object> entry : macroObjectMap.entrySet())
+//		{
+//			for (Adapter adapter : adapterRegistry.getMatchingAdapters(entry.getValue()).toList())
+//			{
+//				adapter.adapt(entry.getValue()).ifPresent(adapted ->
+//				{
+//					MacroStringMap extracted = fieldExtractor.extract(adapter, adapted, entry.getKey());
+//					result.putAll(extracted); // Key priority defined by map order
+//				});
+//			}
+//		}
+//
+//		return result;
+//	}
 
 }
