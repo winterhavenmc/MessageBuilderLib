@@ -23,6 +23,7 @@ import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.*;
@@ -95,9 +96,21 @@ public class MacroStringMap
 	}
 
 
+	public Set<MacroKey> keySet()
+	{
+		return INTERNAL_MAP.keySet();
+	}
+
+
 	public boolean isEmpty()
 	{
 		return INTERNAL_MAP.isEmpty();
+	}
+
+
+	public int size()
+	{
+		return INTERNAL_MAP.size();
 	}
 
 }
