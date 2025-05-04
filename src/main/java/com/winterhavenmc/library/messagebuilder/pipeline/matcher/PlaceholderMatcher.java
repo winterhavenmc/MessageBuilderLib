@@ -27,7 +27,7 @@ public class PlaceholderMatcher implements Matcher
 {
 	private static final Pattern pattern = Pattern.compile(
             Pattern.quote(Delimiter.OPEN.toString()) +
-                    "([\\p{Lu}0-9_]+)" +
+                    "([\\p{Lu}0-9_.]+)" +
                     Pattern.quote(Delimiter.CLOSE.toString()));
 
 
