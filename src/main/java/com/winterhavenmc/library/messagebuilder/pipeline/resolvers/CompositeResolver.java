@@ -48,7 +48,7 @@ public class CompositeResolver implements Resolver
 				.forEach(adapter -> adapter
 				.adapt(value)
 				.ifPresent(adapted -> fieldExtractor
-				.extract(adapter, adapted, macroKey)
+				.extract(macroKey, adapter, adapted)
 				.putAll(macroStringMap))));
 
 		return macroStringMap;

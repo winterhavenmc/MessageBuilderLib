@@ -25,5 +25,5 @@ import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringM
 @FunctionalInterface
 public interface Extractor
 {
-	<T> MacroStringMap extract(Adapter adapter, T adapted, MacroKey baseKey);
+	<T> MacroStringMap extract(MacroKey baseKey, Adapter adapter, T adapted);
 }

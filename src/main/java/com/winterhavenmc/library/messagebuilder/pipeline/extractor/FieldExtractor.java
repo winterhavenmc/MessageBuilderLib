@@ -37,7 +37,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 
 public class FieldExtractor implements Extractor
 {
-	public <T> MacroStringMap extract(Adapter adapter, T adapted, MacroKey baseKey)
+	public <T> MacroStringMap extract(MacroKey baseKey, Adapter adapter, T adapted)
 	{
 		MacroStringMap fields = new MacroStringMap();
 
@@ -108,6 +108,7 @@ public class FieldExtractor implements Extractor
 
 		return worldName + " [" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + "]";
 	}
+
 
 	enum LocationField
 	{
