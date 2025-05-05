@@ -3,6 +3,7 @@ package com.winterhavenmc.library.messagebuilder.messages;
 
 public enum Macro
 {
+	PLAYER,
 	DURATION,
 	LOCATION,
 	PLUGIN,
