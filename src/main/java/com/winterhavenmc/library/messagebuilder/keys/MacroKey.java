@@ -29,6 +29,9 @@ import java.util.Optional;
  */
 public final class MacroKey extends AbstractKey implements StandardKey
 {
+	private static final Pattern BASE_KEY_PATTERN = Pattern.compile("(\\p{Lu}[\\p{Alnum}_]+)[\\p{Alnum}_.]*");
+
+
 	/**
 	 * Private constructor that allows instantiation only from within this class
 	 *
