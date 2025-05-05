@@ -91,7 +91,7 @@ public class NameAdapterTest
 
 
 	@Test
-	public void testGetDisplayName_withValidOfflinePlayer()
+	public void testGetName_with_valid_OfflinePlayer()
 	{
 		// Arrange
 		when(offlinePlayerMock.getName()).thenReturn("Offline Player Name");

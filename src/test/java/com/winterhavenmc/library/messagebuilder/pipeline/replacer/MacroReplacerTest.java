@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,128 +17,125 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.model.message.Message;
-import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
-import com.winterhavenmc.library.messagebuilder.messages.Macro;
-import com.winterhavenmc.library.messagebuilder.messages.MessageId;
-import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
-import com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher;
-import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.AtomicResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
-import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
-
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
-import org.bukkit.entity.Player;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.stream.Stream;
 
-import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer.BASE_KEY_PATTERN;
+import static com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer.FULL_KEY_PATTERN;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class MacroReplacerTest
 {
-	@Mock Player playerMock;
-	@Mock
-	LocaleProvider localeProviderMock;
-	@Mock WorldNameResolver worldNameResolverMock;
-	@Mock MessagePipeline messagePipelineMock;
+	@Mock Resolver resolver;
+	@Mock Matcher matcher;
+	@Mock MacroObjectMap macroObjectMap;
 
-	Recipient.Valid recipient;
-	RecordKey messageKey;
-	MacroKey macroKey;
-	MacroReplacer macroReplacer;
-	Message message;
-	ConfigurationSection section;
-	ValidMessageRecord validMessageRecord;
-	List<Resolver> resolvers;
-	FieldResolver fieldResolver;
-	PlaceholderMatcher placeholderMatcher;
+	private MacroReplacer replacer;
 
 
 	@BeforeEach
-	public void setUp()
+	void setUp()
 	{
-		recipient = switch (Recipient.of(playerMock))
-		{
-			case Recipient.Valid valid -> valid;
-			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
+		replacer = new MacroReplacer(resolver, matcher);
+	}
 
-		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		macroKey = MacroKey.of(Macro.OWNER).orElseThrow();
+	@Test
+	void testReplace_with_valid_parameters()
+	{
+		String input = "Hello {PLAYER_NAME}, welcome to {WORLD_NAME}!";
+		String expected = "Hello Steve, welcome to Earth!";
 
-		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
+		MacroKey baseKey1 = MacroKey.of("PLAYER_NAME").orElseThrow();
+		MacroKey baseKey2 = MacroKey.of("WORLD_NAME").orElseThrow();
+		MacroStringMap stringMap = new MacroStringMap();
+		stringMap.put(baseKey1, "Steve");
+		stringMap.put(baseKey2, "Earth");
 
-		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock);
+		when(matcher.match(input, BASE_KEY_PATTERN))
+				.thenReturn(Stream.of(baseKey1, baseKey2));
 
-		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
-		FieldExtractor fieldExtractor = new FieldExtractor();
-		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
-		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
-		FormatterContainer formatterContainer = new FormatterContainer(time4jDurationFormatter, localeNumberFormatter);
-		AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
+		when(resolver.resolve(baseKey1, macroObjectMap)).thenReturn(stringMap);
+		when(resolver.resolve(baseKey2, macroObjectMap)).thenReturn(stringMap);
 
+		when(matcher.match(input, FULL_KEY_PATTERN))
+				.thenReturn(Stream.of(baseKey1, baseKey2));
 
-		resolvers = List.of(compositeResolver, atomicResolver);
-		fieldResolver = new FieldResolver(resolvers);
-		placeholderMatcher = new PlaceholderMatcher();
+		String result = replacer.replace(macroObjectMap, input);
 
-		macroReplacer = new MacroReplacer(fieldResolver, placeholderMatcher);
-
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
-
-		section = new MemoryConfiguration();
-		section.set(MessageRecord.Field.ENABLED.toKey(), true);
-		section.set(MessageRecord.Field.MESSAGE_TEXT.toKey(), "this is a test message");
-		section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), 11);
-		section.set(MessageRecord.Field.TITLE_TEXT.toKey(), "this is a test title");
-		section.set(MessageRecord.Field.TITLE_FADE_IN.toKey(), 22);
-		section.set(MessageRecord.Field.TITLE_STAY.toKey(), 33);
-		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
-		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
-
-		validMessageRecord = ValidMessageRecord.create(messageKey, section);
-
+		assertEquals(expected, result);
+		verify(matcher).match(input, BASE_KEY_PATTERN);
+		verify(matcher).match(input, FULL_KEY_PATTERN);
+		verify(resolver).resolve(baseKey1, macroObjectMap);
+		verify(resolver).resolve(baseKey2, macroObjectMap);
 	}
 
 
-	@Test @DisplayName("Test replaceMacros method with Valid parameter")
-	void testReplaceMacros_valid_parameters()
+	@Test
+	void testReplace_with_valid_parameters_compound_key()
 	{
-		// Act
-		FinalMessageRecord result = macroReplacer.replaceMacros(validMessageRecord, message.getObjectMap());
+		String input = "Hello {PLAYER.NAME}, welcome to {WORLD_NAME}!";
+		String expected = "Hello Steve, welcome to Earth!";
 
-		// Assert
-		assertNotNull(result);
+		MacroKey baseKey1 = MacroKey.of("PLAYER.NAME").orElseThrow();
+		MacroKey baseKey2 = MacroKey.of("WORLD_NAME").orElseThrow();
+		MacroStringMap stringMap = new MacroStringMap();
+		stringMap.put(baseKey1, "Steve");
+		stringMap.put(baseKey2, "Earth");
+
+		when(matcher.match(input, BASE_KEY_PATTERN))
+				.thenReturn(Stream.of(baseKey1, baseKey2));
+
+		when(resolver.resolve(baseKey1, macroObjectMap)).thenReturn(stringMap);
+		when(resolver.resolve(baseKey2, macroObjectMap)).thenReturn(stringMap);
+
+		when(matcher.match(input, FULL_KEY_PATTERN))
+				.thenReturn(Stream.of(baseKey1, baseKey2));
+
+		String result = replacer.replace(macroObjectMap, input);
+
+		assertEquals(expected, result);
+		verify(matcher).match(input, BASE_KEY_PATTERN);
+		verify(matcher).match(input, FULL_KEY_PATTERN);
+		verify(resolver).resolve(baseKey1, macroObjectMap);
+		verify(resolver).resolve(baseKey2, macroObjectMap);
+	}
+
+
+	@Test
+	void testReplace_with_null_message()
+	{
+		String result = replacer.replace(macroObjectMap, null);
+		assertEquals("", result);
+	}
+
+
+	@Test
+	void testReplace_with_Missing_Resolved_Values()
+	{
+		String input = "This is {UNKNOWN_KEY}";
+		MacroKey macroKey = MacroKey.of("UNKNOWN_KEY").orElseThrow();
+
+		when(matcher.match(input, BASE_KEY_PATTERN)).thenReturn(Stream.of(macroKey));
+		when(matcher.match(input, FULL_KEY_PATTERN)).thenReturn(Stream.of(macroKey));
+		when(resolver.resolve(macroKey, macroObjectMap)).thenReturn(new MacroStringMap());
+
+		String result = replacer.replace(macroObjectMap, input);
+
+		assertEquals("This is {UNKNOWN_KEY}", result); // because map.get returns null
 	}
 
 }

@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
-import com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer;
+import com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
@@ -56,9 +56,8 @@ class MessageBuilderTest
 	@Mock Server serverMock;
 	@Mock PluginManager pluginManagerMock;
 	@Mock ProxiedCommandSender proxiedCommandSenderMock;
-	@Mock
-	LanguageResourceManager languageResourceManagerMock;
-	@Mock MacroReplacer macroReplacerMock;
+	@Mock LanguageResourceManager languageResourceManagerMock;
+	@Mock MessageProcessor messageProcessorMock;
 	@Mock MessagePipeline messagePipelineMock;
 
 	FileConfiguration pluginConfiguration;
@@ -90,7 +89,7 @@ class MessageBuilderTest
 		pluginConfiguration = null;
 		languageConfiguration = null;
 		languageResourceManagerMock = null;
-		macroReplacerMock = null;
+		messageProcessorMock = null;
 		messagePipelineMock = null;
 	}
 

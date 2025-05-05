@@ -159,16 +159,31 @@ class MacroStringMapTest
 	}
 
 	@Test
-	void getValueOrKey()
+	void getValueOrDefault_valid_entry()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
+		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
+		macroStringMap.put(macroKey, "123");
 
 		// Act
-		String result = macroStringMap.getValueOrKey(macroKey);
+		String result = macroStringMap.getValueOrDefault(macroKey, macroKey.toString());
 
 		// Assert
-		assertEquals("KEY", result);
+		assertEquals("123", result);
+	}
+
+
+	@Test
+	void getValueOrDefault_no_entry()
+	{
+		// Arrange
+		MacroKey macroKey = MacroKey.of("DEFAULT").orElseThrow();
+
+		// Act
+		String result = macroStringMap.getValueOrDefault(macroKey, macroKey.toString());
+
+		// Assert
+		assertEquals("DEFAULT", result);
 	}
 
 

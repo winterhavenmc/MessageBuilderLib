@@ -24,11 +24,13 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
+
 import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -125,22 +127,21 @@ class CompositeResolverTest
 //	}
 
 
-	@Test
-	@Disabled
-	void testResolve_player()
-	{
-		// Arrange
-		when(macroObjectMapMock.get(rootKey)).thenReturn(Optional.of(playerMock));
-		when(adapterRegistryMock.getMatchingAdapters(playerMock)).thenReturn(Stream.of(adapterMock));
-		when(adapterMock.adapt(playerMock)).thenReturn(Optional.of(nameableMock));
-		when(nameableMock.getName()).thenReturn("Player_Name");
-
-		// Act
-		MacroStringMap resultMap = resolver.resolve(rootKey, macroObjectMapMock);
-
-		// Assert
-		assertFalse(resultMap.isEmpty());
-	}
+//	@Test
+//	void testResolve_player()
+//	{
+//		// Arrange
+//		when(macroObjectMapMock.get(rootKey)).thenReturn(Optional.of(playerMock));
+//		when(adapterRegistryMock.getMatchingAdapters(playerMock)).thenReturn(Stream.of(adapterMock));
+//		when(adapterMock.adapt(playerMock)).thenReturn(Optional.of(nameableMock));
+//		when(nameableMock.getName()).thenReturn("Player_Name");
+//
+//		// Act
+//		MacroStringMap resultMap = resolver.resolve(rootKey, macroObjectMapMock);
+//
+//		// Assert
+//		assertFalse(resultMap.isEmpty());
+//	}
 
 
 	@Test
