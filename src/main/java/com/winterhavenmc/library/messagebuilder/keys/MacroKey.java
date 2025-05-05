@@ -17,9 +17,12 @@
 
 package com.winterhavenmc.library.messagebuilder.keys;
 
+import com.winterhavenmc.library.messagebuilder.util.Delimiter;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -103,6 +106,21 @@ public final class MacroKey extends AbstractKey implements StandardKey
 		return (subKey == null || IS_INVALID_KEY.test(subKey))
 				? Optional.empty()
 				: MacroKey.of(dotJoin(subKey));
+	}
+
+
+	public MacroKey getBase()
+	{
+		Matcher matcher = BASE_KEY_PATTERN.matcher(wrappedString);
+		return (matcher.find())
+			? MacroKey.of(matcher.group(1)).orElse(this)
+			: this;
+	}
+
+
+	public String asPlaceholder()
+	{
+		return Delimiter.OPEN + wrappedString + Delimiter.CLOSE;
 	}
 
 }
