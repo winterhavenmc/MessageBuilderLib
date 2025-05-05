@@ -69,9 +69,9 @@ public class MacroStringMap
 	}
 
 
-	public String getValueOrKey(final MacroKey key)
+	public String getValueOrDefault(final MacroKey key, final String defaultString)
 	{
-		return INTERNAL_MAP.getOrDefault(key, key.toString()); // Return key itself if not found
+		return INTERNAL_MAP.getOrDefault(key, defaultString);
 	}
 
 
