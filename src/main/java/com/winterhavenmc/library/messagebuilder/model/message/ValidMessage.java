@@ -140,7 +140,7 @@ public final class ValidMessage implements Message
 	@Override
 	public void send()
 	{
-		messagePipeline.process(this);
+		messagePipeline.initiate(this);
 	}
 
 
