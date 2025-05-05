@@ -17,24 +17,26 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.matcher;
 
-import com.winterhavenmc.library.messagebuilder.util.Delimiter;
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 
+/**
+ * Creates a stream of String containing placeholders from a message String using a regex pattern.
+ * Placeholders are enclosed in delimiters, which are removed from the resulting placeholder string,
+ * and may contain periods, denoting compound dot-separated keys made of a base key and any number of subkeys.
+ */
 public class PlaceholderMatcher implements Matcher
 {
-	private static final Pattern pattern = Pattern.compile(
-            Pattern.quote(Delimiter.OPEN.toString()) +
-                    "([\\p{Lu}0-9_.]+)" +
-                    Pattern.quote(Delimiter.CLOSE.toString()));
-
-
 	@Override
-	public Stream<String> match(final String input)
+	public Stream<MacroKey> match(final String input, final Pattern pattern)
 	{
-		return pattern.matcher(input).results().map(matchResult -> matchResult.group(1));
+		return pattern.matcher(input).results()
+				.map(matchResult -> MacroKey.of(matchResult.group(1)))
+				.flatMap(Optional::stream);
 	}
 
 }
