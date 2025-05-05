@@ -44,6 +44,7 @@ public enum Parameter
 	MESSAGE_SECTION("messageSection"),
 	MESSAGE_RECORD("messageRecord"),
 	MESSAGE_STRING("messageString"),
+	PLACEHOLDER("placeholder"),
 	PLUGIN("plugin"),
 	PRECISION("precision"),
 	QUANTITY("quantity"),
