@@ -17,11 +17,14 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.matcher;
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 
 @FunctionalInterface
 public interface Matcher
 {
-	Stream<String> match(String input);
+	Stream<MacroKey> match(String input, Pattern pattern);
 }
