@@ -24,7 +24,7 @@ import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Player;
 
 
-public sealed interface Recipient permits Recipient.Invalid, Recipient.Proxied, Recipient.Valid
+public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Recipient.Invalid
 {
 	enum InvalidReason { NULL, OTHER }
 	record Valid(CommandSender sender) implements Recipient { }
