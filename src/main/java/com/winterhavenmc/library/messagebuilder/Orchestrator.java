@@ -23,7 +23,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher;
-import com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer;
+import com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.AtomicResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
@@ -69,16 +69,16 @@ class Orchestrator
 	}
 
 
-	private static @NotNull MacroReplacer getMacroReplacer(final FormatterContainer formatterContainer, final AdapterContextContainer adapterContextContainer)
+	private static @NotNull MessageProcessor getMacroReplacer(final FormatterContainer formatterContainer, final AdapterContextContainer adapterContextContainer)
 	{
 		final AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
 		final FieldExtractor fieldExtractor = new FieldExtractor();
 		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		final AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
 		final FieldResolver fieldResolver = new FieldResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
-		final PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
 
-		return new MacroReplacer(fieldResolver, placeholderMatcher);
+		final PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
+		return new MessageProcessor(fieldResolver, placeholderMatcher);
 	}
 
 
@@ -87,11 +87,11 @@ class Orchestrator
 													   final AdapterContextContainer adapterContextContainer)
 	{
 		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
-		final MacroReplacer macroReplacer = getMacroReplacer(formatterContainer, adapterContextContainer);
+		final MessageProcessor messageProcessor = getMacroReplacer(formatterContainer, adapterContextContainer);
 		final CooldownMap cooldownMap = new CooldownMap();
 		final List<Sender> messageSenders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
 
-		return new MessagePipeline(messageRetriever, macroReplacer, cooldownMap, messageSenders);
+		return new MessagePipeline(messageRetriever, messageProcessor, cooldownMap, messageSenders);
 	}
 
 
