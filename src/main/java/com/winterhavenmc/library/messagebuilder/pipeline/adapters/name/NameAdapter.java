@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.name;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -53,6 +54,7 @@ public class NameAdapter implements Adapter
 		{
 			case Nameable nameable -> Optional.of(nameable);
 			case CommandSender commandSender -> Optional.of(commandSender::getName);
+			case OfflinePlayer offlinePlayer -> Optional.of(offlinePlayer::getName);
 			case PlayerProfile playerProfile -> Optional.of(playerProfile::getName);
 			case World world -> Optional.of(world::getName);
 			case Server server -> Optional.of(server::getName);
