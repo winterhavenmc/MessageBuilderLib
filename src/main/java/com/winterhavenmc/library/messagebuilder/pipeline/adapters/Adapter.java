@@ -23,6 +23,7 @@ import java.util.Optional;
 public interface Adapter
 {
 	Optional<?> adapt(Object obj);
+	boolean supports(Object value);
 
 	enum BuiltIn
 	{
