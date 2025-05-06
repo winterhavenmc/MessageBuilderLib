@@ -45,20 +45,20 @@ public class FieldExtractor implements Extractor
 		{
 			case NameAdapter ignored when adapted instanceof Nameable nameable ->
 			{
-				fields.put(baseKey, nameable.getName());
 				baseKey.append(NAME).ifPresent(macroKey -> fields.put(macroKey, nameable.getName()));
+				fields.put(baseKey, nameable.getName());
 			}
 
 			case DisplayNameAdapter ignored when adapted instanceof DisplayNameable displayNameable ->
 			{
-				fields.put(baseKey, displayNameable.getDisplayName());
 				baseKey.append(DISPLAY_NAME).ifPresent(macroKey -> fields.put(macroKey, displayNameable.getDisplayName()));
+				fields.putIfAbsent(baseKey, displayNameable.getDisplayName());
 			}
 
 			case UniqueIdAdapter ignored when adapted instanceof Identifiable identifiable ->
 			{
-				fields.put(baseKey, identifiable.getUniqueId().toString());
 				baseKey.append(UUID).ifPresent(macroKey -> fields.put(macroKey, identifiable.getUniqueId().toString()));
+				fields.putIfAbsent(baseKey, identifiable.getUniqueId().toString());
 			}
 
 			case LocationAdapter ignored when adapted instanceof Locatable locatable ->
@@ -81,8 +81,8 @@ public class FieldExtractor implements Extractor
 			case QuantityAdapter ignored when adapted instanceof Quantifiable quantifiable ->
 			{
 				String quantityString = String.valueOf(quantifiable.getQuantity());
-				fields.put(baseKey, quantityString);
 				baseKey.append(QUANTITY).ifPresent(macroKey -> fields.put(macroKey, quantityString));
+				fields.putIfAbsent(baseKey, quantityString);
 			}
 
 			default -> {} // no-op
