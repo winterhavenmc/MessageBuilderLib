@@ -130,6 +130,17 @@ class MacroKeyTest
 		Optional<MacroKey> key2 = MacroKey.of("SAME_KEY");
 
 		assertTrue(key1.isPresent() && key2.isPresent());
+		assertEquals(key1, key2);
+	}
+
+
+	@Test
+	void macroKeyEquality_ShouldBeTrueForSameKey_unwrapped()
+	{
+		Optional<MacroKey> key1 = MacroKey.of("SAME_KEY");
+		Optional<MacroKey> key2 = MacroKey.of("SAME_KEY");
+
+		assertTrue(key1.isPresent() && key2.isPresent());
 		assertEquals(key1.get(), key2.get());
 	}
 
