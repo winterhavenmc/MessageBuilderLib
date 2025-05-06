@@ -50,12 +50,19 @@ public class QuantityAdapter implements Adapter
 	{
 		return switch (obj)
 		{
+			case Quantifiable quantifiable -> Optional.of(quantifiable);
 			case ItemStack itemStack -> Optional.of(itemStack::getAmount);
 			case Chest chest -> Optional.of(() -> chest.getInventory().getSize());
 			case Inventory inventory -> Optional.of(inventory::getSize);
 			case Collection<?> collection -> Optional.of(collection::size);
 			case null, default -> Optional.empty();
 		};
+	}
+
+
+	@Override
+	public boolean supports(Object value) {
+		return value instanceof Quantifiable;
 	}
 
 }

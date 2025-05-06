@@ -54,6 +54,7 @@ public class LocationAdapter implements Adapter
 	{
 		return switch (obj)
 		{
+			case Locatable locatable -> Optional.of(locatable);
 			case Entity entity -> Optional.of(entity::getLocation);
 			case OfflinePlayer offlinePlayer -> Optional.of((offlinePlayer::getLocation));
 			case Block block -> Optional.of(block::getLocation);
@@ -64,6 +65,13 @@ public class LocationAdapter implements Adapter
 			case Location location -> Optional.of(location::clone);
 			case null, default -> Optional.empty();
 		};
+	}
+
+
+	@Override
+	public boolean supports(Object value)
+	{
+		return value instanceof Locatable;
 	}
 
 }
