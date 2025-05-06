@@ -43,49 +43,14 @@ public class CompositeResolver implements Resolver
 	{
 		MacroStringMap macroStringMap = new MacroStringMap();
 
-		macroObjectMap.get(macroKey).ifPresent(value -> adapterRegistry
-				.getMatchingAdapters(value)
+		macroObjectMap.get(macroKey).ifPresent(object -> adapterRegistry
+				.getMatchingAdapters(object)
 				.forEach(adapter -> adapter
-				.adapt(value)
-				.ifPresent(adapted -> fieldExtractor
-				.extract(macroKey, adapter, adapted)
-				.putAll(macroStringMap))));
+						.adapt(object)
+						.ifPresent(adapted -> macroStringMap
+								.putAll(fieldExtractor.extract(macroKey, adapter, adapted)))));
 
 		return macroStringMap;
 	}
-
-
-//	@Override
-//	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
-//	{
-//		return macroObjectMap.get(macroKey)
-//				.map(value -> adapterRegistry.getMatchingAdapters(value)
-//						.flatMap(adapter -> adapter
-//								.adapt(value)
-//								.map(adapted -> fieldExtractor.extract(adapter, adapted, macroKey))
-//								.stream()) // flatten Optionals
-//						.reduce(new MacroStringMap(), (acc, next) -> { acc.putAll(next); return acc; }))
-//				.orElseGet(MacroStringMap::new);
-//	}
-
-
-//	public MacroStringMap resolveAll(final MacroObjectMap macroObjectMap)
-//	{
-//		MacroStringMap result = new MacroStringMap();
-//
-//		for (Map.Entry<MacroKey, Object> entry : macroObjectMap.entrySet())
-//		{
-//			for (Adapter adapter : adapterRegistry.getMatchingAdapters(entry.getValue()).toList())
-//			{
-//				adapter.adapt(entry.getValue()).ifPresent(adapted ->
-//				{
-//					MacroStringMap extracted = fieldExtractor.extract(adapter, adapted, entry.getKey());
-//					result.putAll(extracted); // Key priority defined by map order
-//				});
-//			}
-//		}
-//
-//		return result;
-//	}
 
 }
