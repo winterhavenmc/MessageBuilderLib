@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  */
 public final class MacroKey extends AbstractKey implements StandardKey
 {
-	private static final Pattern BASE_KEY_PATTERN = Pattern.compile("(\\p{Lu}[\\p{Alnum}_]+)[\\p{Alnum}_.]*");
+	private static final Pattern VALID_KEY_PATTERN = Pattern.compile("(\\p{Lu}[\\p{Alnum}_]+)[\\p{Alnum}_.]*");
 
 
 	/**
@@ -91,7 +91,7 @@ public final class MacroKey extends AbstractKey implements StandardKey
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey.name()))
 				? Optional.empty()
-				: MacroKey.of(dotJoin(subKey.name()));
+				: MacroKey.of(dotJoin(this, subKey.name()));
 	}
 
 
@@ -105,16 +105,16 @@ public final class MacroKey extends AbstractKey implements StandardKey
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey))
 				? Optional.empty()
-				: MacroKey.of(dotJoin(subKey));
+				: MacroKey.of(dotJoin(this, subKey));
 	}
 
 
 	public MacroKey getBase()
 	{
-		Matcher matcher = BASE_KEY_PATTERN.matcher(wrappedString);
-		return (matcher.find())
-			? MacroKey.of(matcher.group(1)).orElse(this)
-			: this;
+		return Optional.of(VALID_KEY_PATTERN.matcher(wrappedString))
+				.filter(Matcher::find)
+				.flatMap(m -> MacroKey.of(m.group(1)))
+				.orElse(this);
 	}
 
 
@@ -122,5 +122,18 @@ public final class MacroKey extends AbstractKey implements StandardKey
 	{
 		return Delimiter.OPEN + wrappedString + Delimiter.CLOSE;
 	}
+
+
+	String dotJoin(String subKey)
+	{
+		return dotJoin(this, subKey);
+	}
+
+
+	static String dotJoin(AbstractKey baseKey, String subKey)
+	{
+		return String.join(".", baseKey.toString(), subKey);
+	}
+
 
 }
