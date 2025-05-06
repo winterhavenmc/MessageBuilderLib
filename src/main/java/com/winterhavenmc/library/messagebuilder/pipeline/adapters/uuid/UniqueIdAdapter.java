@@ -47,12 +47,20 @@ public class UniqueIdAdapter implements Adapter
 	{
 		return switch (obj)
 		{
+			case Identifiable identifiable -> Optional.of(identifiable);
 			case Entity entity -> Optional.of(entity::getUniqueId);
 			case PlayerProfile playerProfile -> Optional.of(playerProfile::getUniqueId);
 			case OfflinePlayer offlinePlayer -> Optional.of(offlinePlayer::getUniqueId);
 			case World world -> Optional.of(world::getUID);
 			case null, default -> Optional.empty();
 		};
+	}
+
+
+	@Override
+	public boolean supports(Object value)
+	{
+		return adapt(value).isPresent();
 	}
 
 }
