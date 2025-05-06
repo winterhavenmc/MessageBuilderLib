@@ -73,12 +73,4 @@ public final class RecordKey extends AbstractKey implements StandardKey
 						.map(RecordKey::new);
 	}
 
-
-	public Optional<RecordKey> append(final String subKey)
-	{
-		return (subKey == null || IS_INVALID_KEY.test(subKey))
-				? Optional.empty()
-				: RecordKey.of(dotJoin(subKey));
-	}
-
 }
