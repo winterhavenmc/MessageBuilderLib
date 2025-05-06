@@ -56,11 +56,11 @@ class MacroReplacerTest
 	@Test
 	void testReplace_with_valid_parameters()
 	{
-		String input = "Hello {PLAYER_NAME}, welcome to {WORLD_NAME}!";
+		String input = "Hello {PLAYER.NAME}, welcome to {WORLD.NAME}!";
 		String expected = "Hello Steve, welcome to Earth!";
 
-		MacroKey baseKey1 = MacroKey.of("PLAYER_NAME").orElseThrow();
-		MacroKey baseKey2 = MacroKey.of("WORLD_NAME").orElseThrow();
+		MacroKey baseKey1 = MacroKey.of("PLAYER.NAME").orElseThrow();
+		MacroKey baseKey2 = MacroKey.of("WORLD.NAME").orElseThrow();
 		MacroStringMap stringMap = new MacroStringMap();
 		stringMap.put(baseKey1, "Steve");
 		stringMap.put(baseKey2, "Earth");
