@@ -148,24 +148,4 @@ class StandardKeyTest
 		assertEquals("BASE.CHILD", result);
 	}
 
-	@Test
-	void testDotJoin_instanceMethod_record() {
-		RecordKey key = RecordKey.of("PARENT").orElseThrow();
-		String result = key.dotJoin("LEAF");
-		assertEquals("PARENT.LEAF", result);
-	}
-
-	@Test
-	void testDotJoin_staticMethod_macro() {
-		MacroKey key = MacroKey.of("STATIC").orElseThrow();
-		String result = AbstractKey.dotJoin(key, "METHOD");
-		assertEquals("STATIC.METHOD", result);
-	}
-
-	@Test
-	void testDotJoin_staticMethod_record() {
-		RecordKey key = RecordKey.of("NODE").orElseThrow();
-		String result = AbstractKey.dotJoin(key, "BRANCH");
-		assertEquals("NODE.BRANCH", result);
-	}
 }

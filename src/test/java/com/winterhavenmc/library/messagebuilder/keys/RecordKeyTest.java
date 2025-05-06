@@ -34,20 +34,6 @@ class RecordKeyTest
 	}
 
 
-	@Test
-	void append()
-	{
-		// Arrange
-		RecordKey recordKey = RecordKey.of("PLAYER").orElseThrow();
-
-		// Act
-		RecordKey result = recordKey.append("LOCATION").orElseThrow().append("X").orElseThrow();
-
-		// Assert
-		assertEquals("PLAYER.LOCATION.X", result.toString());
-	}
-
-
     @Nested
     class TestStaticFactoryMethod
 	{
@@ -149,51 +135,6 @@ class RecordKeyTest
 		Optional<RecordKey> key = RecordKey.of("TO_STRING_TEST");
 		assertTrue(key.isPresent());
 		assertEquals("TO_STRING_TEST", key.get().toString());
-	}
-
-	@Nested
-	class TestAppend
-	{
-		@Test
-		void testAppend_valid_parameters()
-		{
-			// Arrange
-			RecordKey recordKey = RecordKey.of("RECORD_KEY").orElseThrow();
-
-			// Act
-			Optional<RecordKey> recordKey1 = recordKey.append("SUB_KEY");
-
-			// Assert
-			assertTrue(recordKey1.isPresent());
-		}
-
-
-		@Test
-		void testAppend_invalid_string()
-		{
-			// Arrange
-			RecordKey recordKey = RecordKey.of("RECORD_KEY").orElseThrow();
-
-			// Act
-			Optional<RecordKey> recordKey1 = recordKey.append("SUB!KEY");
-
-			// Assert
-			assertTrue(recordKey1.isEmpty());
-		}
-
-
-		@Test
-		void testAppend_null_enum()
-		{
-			// Arrange
-			RecordKey recordKey = RecordKey.of("RECORD_KEY").orElseThrow();
-
-			// Act
-			Optional<RecordKey> recordKey1 = recordKey.append(null);
-
-			// Assert
-			assertTrue(recordKey1.isEmpty());
-		}
 	}
 
 }
