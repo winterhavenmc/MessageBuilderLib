@@ -80,6 +80,7 @@ public class MacroReplacer implements Replacer
 				.reduce(validMessageString,
 						(result, key) -> result.replace(
 								key.asPlaceholder(),
-								Optional.ofNullable(stringMap.get(key)).orElse(key.asPlaceholder())), (s1, s2) -> s2);	}
+								Optional.ofNullable(stringMap.get(key)).orElse(key.asPlaceholder())), (s1, s2) -> s2);
+	}
 
 }
