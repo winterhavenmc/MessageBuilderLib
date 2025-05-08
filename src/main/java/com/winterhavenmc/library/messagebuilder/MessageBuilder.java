@@ -18,10 +18,14 @@
 package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.Section;
+import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
+import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
@@ -36,6 +40,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static com.winterhavenmc.library.messagebuilder.Orchestrator.*;
@@ -189,6 +194,25 @@ public final class MessageBuilder
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
+	}
+
+
+	public Optional<String> getStringConstant(final String key)
+	{
+		Optional<RecordKey> constantKey = RecordKey.of(key);
+
+		if (constantKey.isPresent())
+		{
+			QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
+			QueryHandler<ConstantRecord> constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
+			ConstantRecord stringConstant = constantQueryHandler.getRecord(constantKey.get());
+
+			if (stringConstant instanceof ValidConstantRecord validRecord && validRecord.value() instanceof String string)
+			{
+				return Optional.of(string);
+			}
+		}
+		return Optional.empty();
 	}
 
 }
