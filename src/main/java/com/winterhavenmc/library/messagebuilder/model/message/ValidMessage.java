@@ -130,7 +130,11 @@ public final class ValidMessage implements Message
 		validate(duration, Objects::isNull, throwing(PARAMETER_NULL, DURATION));
 		validate(lowerBound, Objects::isNull, throwing(PARAMETER_NULL, Parameter.LOWER_BOUND));
 
-		return setMacro(macro, new BoundedDuration(duration, lowerBound));
+		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
+		BoundedDuration boundedDuration = new BoundedDuration(duration, lowerBound);
+
+		macroObjectMap.putIfAbsent(macroKey, boundedDuration);
+		return this;
 	}
 
 
