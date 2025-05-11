@@ -25,7 +25,7 @@ public enum DurationType
 {
 	NORMAL(""),
 	LESS_THAN("< {DURATION}"),
-	UNLIMITED("unlimited");
+	UNLIMITED("∞");
 
 	private final String fallback;
 
@@ -45,7 +45,7 @@ public enum DurationType
 	/**
 	 * Classifies a {@link Duration} into one of three {@link DurationType} categories used for formatting:
 	 * <ul>
-	 *   <li>{@link #UNLIMITED} – if the duration is negative</li>
+	 *   <li>{@link #UNLIMITED} – if the duration is negative, it represents an unlimited time</li>
 	 *   <li>{@link #LESS_THAN} – if the duration is non-negative and less than one unit of the specified precision</li>
 	 *   <li>{@link #NORMAL} – if the duration is equal to or greater than one unit of the specified precision</li>
 	 * </ul>
