@@ -125,15 +125,33 @@ class FieldExtractorTest
 	@Test
 	void testLocationAdapter()
 	{
-		MacroKey locationKey = (!baseKey.toString().endsWith("LOCATION"))
-				? baseKey.append(Adapter.BuiltIn.LOCATION).orElseThrow()
-				: baseKey;
+		MacroKey locationKey = baseKey.append("LOCATION").orElseThrow();
 
 		when(worldMock.getName()).thenReturn("test-world");
 		Location location = new Location(worldMock, 11, 12,13);
 		when(locatableMock.getLocation()).thenReturn(location);
 
 		MacroStringMap result = extractor.extract(baseKey, locationAdapterMock, locatableMock);
+
+		assertEquals("test-world [11, 12, 13]", result.get(locationKey));
+		assertEquals(worldMock.getName(), result.get(locationKey.append("WORLD").orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockX()), result.get(locationKey.append("X").orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockY()), result.get(locationKey.append("Y").orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockZ()), result.get(locationKey.append("Z").orElseThrow()));
+		assertTrue(result.containsKey(locationKey));
+	}
+
+
+	@Test
+	void testLocationAdapter_location_key()
+	{
+		MacroKey locationKey = MacroKey.of("LOCATION").orElseThrow();
+
+		when(worldMock.getName()).thenReturn("test-world");
+		Location location = new Location(worldMock, 11, 12,13);
+		when(locatableMock.getLocation()).thenReturn(location);
+
+		MacroStringMap result = extractor.extract(locationKey, locationAdapterMock, locatableMock);
 
 		assertEquals("test-world [11, 12, 13]", result.get(locationKey));
 		assertEquals(worldMock.getName(), result.get(locationKey.append("WORLD").orElseThrow()));
@@ -192,4 +210,11 @@ class FieldExtractorTest
 		assertTrue(result.isEmpty(), "Expected result to be empty for unmatched adapter type");
 	}
 
+	@Test
+	void getLocationString_null()
+	{
+		String result = extractor.getLocationString(null);
+
+		assertEquals("???", result);
+	}
 }
