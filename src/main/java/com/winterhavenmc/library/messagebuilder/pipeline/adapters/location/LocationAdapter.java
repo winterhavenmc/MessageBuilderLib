@@ -71,7 +71,15 @@ public class LocationAdapter implements Adapter
 	@Override
 	public boolean supports(Object value)
 	{
-		return value instanceof Locatable;
+		return value instanceof Locatable
+				|| value instanceof Location
+				|| value instanceof Entity
+				|| value instanceof Block
+				|| value instanceof BlockState
+				|| value instanceof DoubleChest
+				|| value instanceof Inventory
+				|| value instanceof Raid
+				|| value instanceof OfflinePlayer;
 	}
 
 }
