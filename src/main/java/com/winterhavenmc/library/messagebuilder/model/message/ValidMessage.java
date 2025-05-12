@@ -22,6 +22,7 @@ import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 import com.winterhavenmc.library.messagebuilder.validation.Parameter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
@@ -33,6 +34,7 @@ import java.util.Objects;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.logging;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
@@ -127,11 +129,11 @@ public final class ValidMessage implements Message
 												final ChronoUnit lowerBound)
 	{
 		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
-		validate(duration, Objects::isNull, throwing(PARAMETER_NULL, DURATION));
-		validate(lowerBound, Objects::isNull, throwing(PARAMETER_NULL, Parameter.LOWER_BOUND));
+		Duration validDuration = validate(duration, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, DURATION)).orElse(Duration.ZERO);
+		ChronoUnit validLowerBound = validate(lowerBound, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, Parameter.LOWER_BOUND)).orElse(ChronoUnit.MINUTES);
 
 		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
-		BoundedDuration boundedDuration = new BoundedDuration(duration, lowerBound);
+		BoundedDuration boundedDuration = new BoundedDuration(validDuration, validLowerBound);
 
 		macroObjectMap.putIfAbsent(macroKey, boundedDuration);
 		return this;
