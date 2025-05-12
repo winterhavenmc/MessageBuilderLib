@@ -31,6 +31,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageSetting.DEFAULT_LANGUAGE_TAG;
+
 
 /**
  * This class is responsible for the loading of the language file from the plugin data directory into
@@ -80,7 +82,7 @@ public final class LanguageResourceLoader implements ResourceLoader
 
 		return (configLanguageTag != null && !configLanguageTag.isBlank())
 				? LanguageTag.of(Locale.forLanguageTag(configLanguageTag))
-				: Optional.empty();
+				: LanguageTag.of(DEFAULT_LANGUAGE_TAG.toString());
 	}
 
 	@Override
