@@ -51,7 +51,7 @@ public class DisplayNameAdapter implements Adapter
 		{
 			case DisplayNameable displayNameable -> Optional.of(displayNameable);
 			case Player player -> Optional.of(player::getDisplayName);
-			case Nameable nameable -> Optional.of(nameable::getCustomName); // Note: this is bukkit nameable, not MessageBuilderLib
+			case Nameable nameable -> Optional.of(nameable::getCustomName); // Note: this is bukkit Nameable, NOT MessageBuilder Nameable
 			case World world -> Optional.of(() -> worldNameResolver.resolveWorldName(world));
 			case null, default -> Optional.empty();
 		};
@@ -59,7 +59,8 @@ public class DisplayNameAdapter implements Adapter
 
 
 	@Override
-	public boolean supports(Object value) {
+	public boolean supports(Object value)
+	{
 		return value instanceof DisplayNameable;
 	}
 
