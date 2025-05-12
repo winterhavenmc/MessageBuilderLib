@@ -76,7 +76,8 @@ class LanguageResourceLoaderTest
 
 		Optional<LanguageTag> result = loader.getConfiguredLanguageTag();
 
-		assertTrue(result.isEmpty());
+		assertTrue(result.isPresent());
+		assertEquals("en-US", result.get().toString());
 	}
 
 	@Test
@@ -87,7 +88,8 @@ class LanguageResourceLoaderTest
 
 		Optional<LanguageTag> result = loader.getConfiguredLanguageTag();
 
-		assertTrue(result.isEmpty());
+		assertTrue(result.isPresent());
+		assertEquals("en-US", result.get().toString());
 	}
 
 	@Test
@@ -127,12 +129,13 @@ class LanguageResourceLoaderTest
 	@Test
 	void load_ReturnsNull_WhenLanguageTagIsEmpty()
 	{
+		when(plugin.getLogger()).thenReturn(logger);
 		when(plugin.getConfig()).thenReturn(fileConfiguration);
 		when(fileConfiguration.getString("language")).thenReturn(null);
 
 		Configuration config = loader.load();
 
-		assertNull(config);
+		assertNotNull(config);
 	}
 
 	@Test
