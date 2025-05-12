@@ -13,5 +13,6 @@ public enum Macro
 	OWNER,
 	KILLER,
 	VIEWER,
-	TOOL
+	TOOL,
+	invalid,
 }
