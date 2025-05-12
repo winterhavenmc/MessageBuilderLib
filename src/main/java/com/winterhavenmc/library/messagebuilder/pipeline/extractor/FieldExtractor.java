@@ -43,46 +43,49 @@ public class FieldExtractor implements Extractor
 
 		switch (adapter)
 		{
-			case NameAdapter ignored when adapted instanceof Nameable nameable ->
+			case NameAdapter __ when adapted instanceof Nameable nameable ->
 			{
 				baseKey.append(NAME).ifPresent(macroKey -> fields.put(macroKey, nameable.getName()));
 				fields.put(baseKey, nameable.getName());
 			}
 
-			case DisplayNameAdapter ignored when adapted instanceof DisplayNameable displayNameable ->
+			case DisplayNameAdapter __ when adapted instanceof DisplayNameable displayNameable ->
 			{
 				baseKey.append(DISPLAY_NAME).ifPresent(macroKey -> fields.put(macroKey, displayNameable.getDisplayName()));
 				fields.putIfAbsent(baseKey, displayNameable.getDisplayName());
 			}
 
-			case UniqueIdAdapter ignored when adapted instanceof Identifiable identifiable ->
+			case UniqueIdAdapter __ when adapted instanceof Identifiable identifiable ->
 			{
 				baseKey.append(UUID).ifPresent(macroKey -> fields.put(macroKey, identifiable.getUniqueId().toString()));
 				fields.putIfAbsent(baseKey, identifiable.getUniqueId().toString());
 			}
 
-			case LocationAdapter ignored when adapted instanceof Locatable locatable ->
-			{
-				Location location = locatable.getLocation();
-				if (location != null)
-				{
-					baseKey.append(LOCATION).ifPresent(locationKey ->
-					{
-						fields.put(locationKey, getLocationString(locatable.getLocation()));
-						locationKey.append(LocationField.STRING).ifPresent(macroKey -> fields.put(macroKey, getLocationString(location)));
-						locationKey.append(LocationField.WORLD).ifPresent(macroKey -> fields.put(macroKey, getLocationWorldName(location)));
-						locationKey.append(LocationField.X).ifPresent(macroKey -> fields.put(macroKey, String.valueOf(location.getBlockX())));
-						locationKey.append(LocationField.Y).ifPresent(macroKey -> fields.put(macroKey, String.valueOf(location.getBlockY())));
-						locationKey.append(LocationField.Z).ifPresent(macroKey -> fields.put(macroKey, String.valueOf(location.getBlockZ())));
-					});
-				}
-			}
-
-			case QuantityAdapter ignored when adapted instanceof Quantifiable quantifiable ->
+			case QuantityAdapter __ when adapted instanceof Quantifiable quantifiable ->
 			{
 				String quantityString = String.valueOf(quantifiable.getQuantity());
 				baseKey.append(QUANTITY).ifPresent(macroKey -> fields.put(macroKey, quantityString));
 				fields.putIfAbsent(baseKey, quantityString);
+			}
+
+//			case Adapter a when a instanceof LocationAdapter && adapted instanceof Locatable locatable -> // stricter version
+			case LocationAdapter __ when adapted instanceof Locatable locatable ->
+			{
+				Location location = locatable.getLocation();
+				if (location != null)
+				{
+					if (!baseKey.toString().endsWith("LOCATION"))
+					{
+						baseKey = baseKey.append(LOCATION).orElse(baseKey);
+					}
+
+					fields.put(baseKey, getLocationString(location));
+					baseKey.append(LocationField.STRING).ifPresent(macroKey -> fields.put(macroKey, getLocationString(location)));
+					baseKey.append(LocationField.WORLD).ifPresent(macroKey -> fields.put(macroKey, getLocationWorldName(location)));
+					baseKey.append(LocationField.X).ifPresent(macroKey -> fields.put(macroKey, String.valueOf(location.getBlockX())));
+					baseKey.append(LocationField.Y).ifPresent(macroKey -> fields.put(macroKey, String.valueOf(location.getBlockY())));
+					baseKey.append(LocationField.Z).ifPresent(macroKey -> fields.put(macroKey, String.valueOf(location.getBlockZ())));
+				}
 			}
 
 			default -> {} // no-op
@@ -92,7 +95,7 @@ public class FieldExtractor implements Extractor
 	}
 
 
-	private String getLocationWorldName(final Location location)
+	String getLocationWorldName(final Location location)
 	{
 		return (location != null && location.getWorld() != null)
 				? location.getWorld().getName()
@@ -100,11 +103,14 @@ public class FieldExtractor implements Extractor
 	}
 
 
-	private String getLocationString(final Location location)
+	String getLocationString(final Location location)
 	{
-		String worldName = (location.getWorld() != null)
-				? location.getWorld().getName()
-				: "???";
+		if (location == null)
+		{
+			return "???";
+		}
+
+		String worldName = getLocationWorldName(location);
 
 		return worldName + " [" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + "]";
 	}
