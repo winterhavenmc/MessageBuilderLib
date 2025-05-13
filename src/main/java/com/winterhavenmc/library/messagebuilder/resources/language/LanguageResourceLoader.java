@@ -24,9 +24,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -45,6 +44,7 @@ public final class LanguageResourceLoader implements ResourceLoader
 {
 	private final Plugin plugin;
 	private final Supplier<YamlConfiguration> yamlFactory;
+	LanguageTag defaultLanguageTag = LanguageTag.of(DEFAULT_LANGUAGE_TAG.toString()).orElseThrow();
 
 
 	/**
@@ -54,7 +54,7 @@ public final class LanguageResourceLoader implements ResourceLoader
 	 */
 	public LanguageResourceLoader(final Plugin plugin)
 	{
-		this(plugin, YamlConfiguration::new); // Default behavior: normal YAML factory
+		this(plugin, YamlConfiguration::new);
 	}
 
 
@@ -79,7 +79,6 @@ public final class LanguageResourceLoader implements ResourceLoader
 	public Optional<LanguageTag> getConfiguredLanguageTag()
 	{
 		String configLanguageTag = plugin.getConfig().getString(LanguageSetting.CONFIG_LANGUAGE_KEY.toString());
-
 		return (configLanguageTag != null && !configLanguageTag.isBlank())
 				? LanguageTag.of(Locale.forLanguageTag(configLanguageTag))
 				: LanguageTag.of(DEFAULT_LANGUAGE_TAG.toString());
@@ -104,8 +103,8 @@ public final class LanguageResourceLoader implements ResourceLoader
 	public Configuration load()
 	{
 		return getConfiguredLanguageTag()
-				.map(this::load)
-				.orElse(null);
+				.map(tag -> loadWithFallback(tag, defaultLanguageTag))
+				.orElse(loadFromResource(defaultLanguageTag));
 	}
 
 
@@ -117,30 +116,66 @@ public final class LanguageResourceLoader implements ResourceLoader
 	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
 	@Override
-	public Configuration load(final LanguageTag languageTag)
+	public Configuration load(LanguageTag languageTag)
 	{
-		YamlConfiguration configuration = yamlFactory.get();
-		File languageFile = new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(languageTag));
+		return loadWithFallback(languageTag, defaultLanguageTag);
+	}
+
+	/**
+	 * Attempts to load the preferred language file from disk.
+	 * If unavailable or invalid, falls back to loading the fallback language directly from the plugin resource.
+	 */
+	public Configuration loadWithFallback(LanguageTag preferred, LanguageTag fallback)
+	{
+		File languageFile = new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(preferred));
+		YamlConfiguration config = yamlFactory.get();
 
 		try
 		{
-			configuration.load(languageFile);
-			plugin.getLogger().info("Language file " + languageFile + " successfully loaded.");
-		}
-		catch (FileNotFoundException e)
+			config.load(languageFile);
+			plugin.getLogger().info("Language file '" + languageFile.getName() + "' successfully loaded.");
+			return config;
+		} catch (FileNotFoundException e)
 		{
-			plugin.getLogger().severe("Language file " + languageFile + " does not exist.");
-		}
-		catch (IOException e)
+			plugin.getLogger().warning("Language file '" + languageFile.getName() + "' not found. Falling back to default.");
+		} catch (IOException e)
 		{
-			plugin.getLogger().severe("Language file " + languageFile + " could not be read.");
-		}
-		catch (InvalidConfigurationException e)
+			plugin.getLogger().warning("Language file '" + languageFile.getName() + "' could not be read. Falling back to default.");
+		} catch (InvalidConfigurationException e)
 		{
-			plugin.getLogger().severe("Language file " + languageFile + " is not valid yaml.");
+			plugin.getLogger().warning("Language file '" + languageFile.getName() + "' is not valid YAML. Falling back to default.");
 		}
 
-		return configuration;
+		return loadFromResource(fallback);
+	}
+
+	/**
+	 * Loads a language YAML file directly from the JAR resource as a last resort.
+	 */
+	Configuration loadFromResource(LanguageTag fallback)
+	{
+		String resourcePath = LanguageResourceManager.getResourceName(fallback);
+		try (InputStream stream = plugin.getResource(resourcePath))
+		{
+			if (stream != null)
+			{
+				YamlConfiguration config = yamlFactory.get();
+				config.load(new InputStreamReader(stream, StandardCharsets.UTF_8));
+				plugin.getLogger().info("Loaded fallback language resource '" + resourcePath + "' from plugin JAR.");
+				return config;
+			}
+			else
+			{
+				plugin.getLogger().severe("Fallback language resource '" + resourcePath + "' is missing from plugin JAR.");
+			}
+		}
+		catch (IOException | InvalidConfigurationException e)
+		{
+			plugin.getLogger().severe("Failed to load fallback language resource '" + resourcePath + "' from JAR.");
+			e.printStackTrace();
+		}
+
+		return new YamlConfiguration(); // always return a safe config
 	}
 
 }
