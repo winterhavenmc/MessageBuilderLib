@@ -39,15 +39,18 @@ public interface ResourceLoader
 	 */
 	Optional<LanguageTag> getConfiguredLanguageTag();
 
+
 	Locale getConfiguredLocale();
+
 
 	/**
 	 * Load the language configuration object for the configured language from file and return it. The returned
 	 * configuration object contains no default values loaded, by design
 	 *
-	 * @return Configuration - message configuration object
+	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
 	Configuration load();
+
 
 	/**
 	 * Load the language configuration object for the configured language from file and return it. The returned
