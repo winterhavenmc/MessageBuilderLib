@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LanguageTag;
+import com.winterhavenmc.library.messagebuilder.util.MockUtility;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,9 +31,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -41,25 +41,26 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
 @ExtendWith(MockitoExtension.class)
 class LanguageResourceLoaderTest
 {
-	@Mock Plugin plugin;
+	@Mock Plugin pluginMock;
 	@Mock FileConfiguration fileConfiguration;
-	@Mock Logger logger;
+	@Mock Logger loggerMock;
 
 	private LanguageResourceLoader loader;
 
 	@BeforeEach
 	void setUp()
 	{
-		loader = new LanguageResourceLoader(plugin);
+		loader = new LanguageResourceLoader(pluginMock);
 	}
 
 	@Test
 	void getConfiguredLanguageTag_ReturnsLanguageTag_WhenConfigIsPresent()
 	{
-		when(plugin.getConfig()).thenReturn(fileConfiguration);
+		when(pluginMock.getConfig()).thenReturn(fileConfiguration);
 		when(fileConfiguration.getString("language")).thenReturn("en-US");
 
 		Optional<LanguageTag> result = loader.getConfiguredLanguageTag();
@@ -71,7 +72,7 @@ class LanguageResourceLoaderTest
 	@Test
 	void getConfiguredLanguageTag_ReturnsEmpty_WhenConfigIsNull()
 	{
-		when(plugin.getConfig()).thenReturn(fileConfiguration);
+		when(pluginMock.getConfig()).thenReturn(fileConfiguration);
 		when(fileConfiguration.getString("language")).thenReturn(null);
 
 		Optional<LanguageTag> result = loader.getConfiguredLanguageTag();
@@ -83,7 +84,7 @@ class LanguageResourceLoaderTest
 	@Test
 	void getConfiguredLanguageTag_ReturnsEmpty_WhenConfigIsBlank()
 	{
-		when(plugin.getConfig()).thenReturn(fileConfiguration);
+		when(pluginMock.getConfig()).thenReturn(fileConfiguration);
 		when(fileConfiguration.getString("language")).thenReturn("   ");
 
 		Optional<LanguageTag> result = loader.getConfiguredLanguageTag();
@@ -95,7 +96,7 @@ class LanguageResourceLoaderTest
 	@Test
 	void getConfiguredLocale_ReturnsConfiguredLocale_WhenLanguageTagExists()
 	{
-		when(plugin.getConfig()).thenReturn(fileConfiguration);
+		when(pluginMock.getConfig()).thenReturn(fileConfiguration);
 		when(fileConfiguration.getString("language")).thenReturn("en-US");
 
 		Locale locale = loader.getConfiguredLocale();
@@ -106,7 +107,7 @@ class LanguageResourceLoaderTest
 	@Test
 	void getConfiguredLocale_ReturnsDefaultLocale_WhenLanguageTagNotSet()
 	{
-		when(plugin.getConfig()).thenReturn(fileConfiguration);
+		when(pluginMock.getConfig()).thenReturn(fileConfiguration);
 		when(fileConfiguration.getString("language")).thenReturn(null);
 
 		Locale locale = loader.getConfiguredLocale();
@@ -117,8 +118,8 @@ class LanguageResourceLoaderTest
 	@Test
 	void load_ReturnsNonNullConfiguration_WhenLanguageTagConfigured()
 	{
-		when(plugin.getConfig()).thenReturn(fileConfiguration);
-		when(plugin.getLogger()).thenReturn(logger);
+		when(pluginMock.getConfig()).thenReturn(fileConfiguration);
+		when(pluginMock.getLogger()).thenReturn(loggerMock);
 		when(fileConfiguration.getString("language")).thenReturn("en-US");
 
 		Configuration config = loader.load();
@@ -129,8 +130,8 @@ class LanguageResourceLoaderTest
 	@Test
 	void load_ReturnsNull_WhenLanguageTagIsEmpty()
 	{
-		when(plugin.getLogger()).thenReturn(logger);
-		when(plugin.getConfig()).thenReturn(fileConfiguration);
+		when(pluginMock.getLogger()).thenReturn(loggerMock);
+		when(pluginMock.getConfig()).thenReturn(fileConfiguration);
 		when(fileConfiguration.getString("language")).thenReturn(null);
 
 		Configuration config = loader.load();
@@ -141,22 +142,22 @@ class LanguageResourceLoaderTest
 	@Test
 	void load_WithLanguageTag_LogsFileNotFound(@TempDir File tempDir)
 	{
-		when(plugin.getLogger()).thenReturn(logger);
-		when(plugin.getDataFolder()).thenReturn(tempDir);
+		when(pluginMock.getLogger()).thenReturn(loggerMock);
+		when(pluginMock.getDataFolder()).thenReturn(tempDir);
 
 		LanguageTag tag = LanguageTag.of("en-US").orElseThrow();
 
 		Configuration config = loader.load(tag);
 
 		assertNotNull(config);
-		verify(logger).severe(contains("does not exist"));
+		verify(loggerMock).warning(contains("Language file 'en-US.yml' not found. Falling back to default."));
 	}
 
 	@Test
 	void load_WithLanguageTag_LoadsSuccessfully(@TempDir File tempDir) throws IOException
 	{
-		when(plugin.getLogger()).thenReturn(logger);
-		when(plugin.getDataFolder()).thenReturn(tempDir);
+		when(pluginMock.getLogger()).thenReturn(loggerMock);
+		when(pluginMock.getDataFolder()).thenReturn(tempDir);
 
 		writeLanguageFile(tempDir, "en-US", "greeting: Hello from test");
 
@@ -166,14 +167,14 @@ class LanguageResourceLoaderTest
 		assertNotNull(config);
 		assertEquals("Hello from test", config.getString("greeting"));
 
-		verify(logger).info(contains("successfully loaded"));
+		verify(loggerMock).info(contains("successfully loaded"));
 	}
 
 	@Test
 	void load_WithLanguageTag_ThrowsIOException(@TempDir File tempDir) throws Exception
 	{
-		when(plugin.getLogger()).thenReturn(logger);
-		when(plugin.getDataFolder()).thenReturn(tempDir);
+		when(pluginMock.getLogger()).thenReturn(loggerMock);
+		when(pluginMock.getDataFolder()).thenReturn(tempDir);
 
 		createLanguageFile(tempDir, "en-US");
 
@@ -194,14 +195,15 @@ class LanguageResourceLoaderTest
 		Configuration config = faultyLoader.load(tag);
 
 		assertNotNull(config);
-		verify(logger).severe(contains("could not be read"));
+		verify(loggerMock).warning(contains("Language file 'en-US.yml' could not be read. Falling back to default."));
 	}
+
 
 	@Test
 	void load_WithLanguageTag_ThrowsInvalidConfigurationException(@TempDir File tempDir) throws IOException
 	{
-		when(plugin.getLogger()).thenReturn(logger);
-		when(plugin.getDataFolder()).thenReturn(tempDir);
+		when(pluginMock.getLogger()).thenReturn(loggerMock);
+		when(pluginMock.getDataFolder()).thenReturn(tempDir);
 
 		createLanguageFile(tempDir, "en-US");
 
@@ -222,8 +224,69 @@ class LanguageResourceLoaderTest
 		Configuration config = faultyLoader.load(tag);
 
 		assertNotNull(config);
-		verify(logger).severe(contains("is not valid yaml"));
+		verify(loggerMock).warning(contains( "Language file 'en-US.yml' is not valid YAML. Falling back to default."));
 	}
+
+
+	@Test
+	void testLoadFromResource_validFallback()
+	{
+		when(pluginMock.getLogger()).thenReturn(loggerMock);
+		when(pluginMock.getResource("language/en-US.yml"))
+				.thenReturn(MockUtility.getResourceStream("language/en-US.yml"));
+
+		LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock);
+		Configuration config = loader.loadFromResource(LanguageTag.of("en-US").orElseThrow());
+
+		assertNotNull(config);
+		assertEquals("unlimited", config.getString("CONSTANTS.TIME.UNLIMITED"));
+	}
+
+
+	@Test
+	void testLoadWithFallback_fallbackUsedWhenFileMissing()
+	{
+		// Arrange
+		when(pluginMock.getLogger()).thenReturn(loggerMock);
+		when(pluginMock.getResource("language/en-US.yml"))
+				.thenReturn(MockUtility.getResourceStream("language/en-US.yml"));
+		LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock);
+
+		// Force the preferred tag to a non-existent file
+		LanguageTag preferred = LanguageTag.of("ru-RU").orElseThrow();
+		LanguageTag fallback = LanguageTag.of("en-US").orElseThrow();
+
+		// Act
+		Configuration config = loader.loadWithFallback(preferred, fallback);
+
+		// Assert
+		assertNotNull(config);
+		assertTrue(config.contains("MESSAGES"));
+	}
+
+
+	@Test
+	void testLoadFromResource_withGarbageYaml_throwsException()
+	{
+		// Arrange: give it a broken YAML input
+		when(pluginMock.getLogger()).thenReturn(loggerMock);
+
+		InputStream garbage = new ByteArrayInputStream("%%%%%%%".getBytes(StandardCharsets.UTF_8));
+
+		when(pluginMock.getResource("language/en-US.yml")).thenReturn(garbage);
+
+		LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock);
+		LanguageTag preferred = LanguageTag.of("ru-RU").orElseThrow();
+		LanguageTag fallback = LanguageTag.of("en-US").orElseThrow();
+
+
+		// Act
+		Configuration config = loader.loadWithFallback(preferred, fallback);
+
+		// Assert: we should still get a non-null config, but the error should have been logged
+		assertNotNull(config);
+	}
+
 
 	// --- Helpers ---
 
@@ -248,6 +311,6 @@ class LanguageResourceLoaderTest
 
 	private LanguageResourceLoader createFaultyLoader(Supplier<YamlConfiguration> yamlSupplier)
 	{
-		return new LanguageResourceLoader(plugin, yamlSupplier);
+		return new LanguageResourceLoader(pluginMock, yamlSupplier);
 	}
 }
