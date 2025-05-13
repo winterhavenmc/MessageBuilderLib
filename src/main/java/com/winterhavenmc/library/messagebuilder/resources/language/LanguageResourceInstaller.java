@@ -43,10 +43,10 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  */
 public final class LanguageResourceInstaller implements ResourceInstaller
 {
-	final static Pattern WHITESPACE = Pattern.compile("\\s", Pattern.UNICODE_CHARACTER_CLASS); // match Unicode whitespace
-	final static Pattern TWO_OR_MORE_DOTS = Pattern.compile("[.]{2,}");
-	final static Pattern LEADING_SLASHES = Pattern.compile("^/+");
-	final static Pattern TWO_OR_MORE_SLASHES = Pattern.compile("/{2,}");
+	static final Pattern WHITESPACE = Pattern.compile("\\s", Pattern.UNICODE_CHARACTER_CLASS);
+	static final Pattern TWO_OR_MORE_DOTS = Pattern.compile("[.]{2,}");
+	static final Pattern LEADING_SLASHES = Pattern.compile("^/+");
+	static final Pattern TWO_OR_MORE_SLASHES = Pattern.compile("/{2,}");
 
 	private final Plugin plugin;
 
