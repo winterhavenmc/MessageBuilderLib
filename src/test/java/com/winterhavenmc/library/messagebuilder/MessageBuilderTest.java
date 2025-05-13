@@ -81,18 +81,6 @@ class MessageBuilderTest
 				messagePipelineMock);
 	}
 
-	@AfterEach
-	public void tearDown()
-	{
-		playerMock = null;
-		pluginMock = null;
-		pluginConfiguration = null;
-		languageConfiguration = null;
-		languageResourceManagerMock = null;
-		messageProcessorMock = null;
-		messagePipelineMock = null;
-	}
-
 
 	@Test
 	void testTickUnit()
