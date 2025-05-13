@@ -26,6 +26,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -52,6 +54,7 @@ class LanguageResourceManagerTest
 	@Mock ConfigurationSection itemsSectionMock;
 	@Mock ConfigurationSection messagesSectionMock;
 	@Mock Configuration languageConfigurationMock;
+	@Mock Plugin pluginMock;
 
 	LanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
@@ -108,7 +111,10 @@ class LanguageResourceManagerTest
 		@Test
 		void testReload()
 		{
-			// Arrange & Act
+			// Arrange
+			when(languageResourceLoaderMock.load()).thenReturn(languageConfiguration);
+
+			// Act
 			boolean success = resourceManager.reload();
 
 			// Assert
@@ -122,12 +128,32 @@ class LanguageResourceManagerTest
 			// Arrange
 			FileConfiguration newLanguageConfiguration = new YamlConfiguration();
 			newLanguageConfiguration.set("test_key", "test_value");
+			when(languageResourceLoaderMock.load()).thenReturn(languageConfiguration);
 
 			// Act
 			boolean success = resourceManager.reload();
 
 			// Assert
 			assertTrue(success);
+		}
+
+
+		@Test
+		void testReload_failure_returnsFalse()
+		{
+			when(pluginMock.getLogger()).thenReturn(Logger.getLogger("test"));
+			LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock)
+			{
+				@Override
+				public Configuration load() {
+					return null; // Simulate failure
+				}
+			};
+
+			LanguageResourceInstaller installer = new LanguageResourceInstaller(pluginMock);
+			LanguageResourceManager manager = new LanguageResourceManager(installer, loader);
+
+			assertFalse(manager.reload());
 		}
 	}
 
