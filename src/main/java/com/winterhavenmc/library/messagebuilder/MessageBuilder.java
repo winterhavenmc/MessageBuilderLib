@@ -197,7 +197,7 @@ public final class MessageBuilder
 	}
 
 
-	public Optional<String> getStringConstant(final String key)
+	public Optional<String> getConstantString(final String key)
 	{
 		Optional<RecordKey> constantKey = RecordKey.of(key);
 
