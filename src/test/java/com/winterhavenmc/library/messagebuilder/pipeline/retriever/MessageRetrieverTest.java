@@ -53,7 +53,7 @@ class MessageRetrieverTest
 
 
 	@Test @DisplayName("Test getRecord method with valid parameters")
-	void getRecord()
+	void getRecord_with_valid_parameters()
 	{
 		// Arrange
 		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
@@ -68,7 +68,7 @@ class MessageRetrieverTest
 
 
 	@Test @DisplayName("Test getRecord method with nonexistent entry")
-	void getRecord_nonexistent()
+	void getRecord_nonexistent_entry()
 	{
 		// Arrange
 		RecordKey messageKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
