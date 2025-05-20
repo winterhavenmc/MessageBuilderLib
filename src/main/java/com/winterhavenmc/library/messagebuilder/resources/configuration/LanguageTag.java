@@ -47,15 +47,15 @@ public class LanguageTag
 	/**
 	 * Class constructor that takes a String language tag as a parameter
 	 *
-	 * @param string the language tag representing a potential language resource
+	 * @param languageTag a {@code String} representing a potential language resource
 	 * @throws ValidationException if parameter is null or empty
 	 */
-	private LanguageTag(@NotNull final String string)
+	private LanguageTag(@NotNull final String languageTag)
 	{
-		validate(string, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_TAG));
-		validate(string, String::isBlank, throwing(PARAMETER_EMPTY, LANGUAGE_TAG));
+		validate(languageTag, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_TAG));
+		validate(languageTag, String::isBlank, throwing(PARAMETER_EMPTY, LANGUAGE_TAG));
 
-		this.wrappedLanguageTag = string;
+		this.wrappedLanguageTag = languageTag;
 	}
 
 
