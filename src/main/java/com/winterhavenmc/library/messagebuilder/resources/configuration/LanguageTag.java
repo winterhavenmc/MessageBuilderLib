@@ -21,13 +21,14 @@ import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.LocaleValidator.VALID_LOCALE;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LANGUAGE_TAG;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
@@ -87,6 +88,23 @@ public class LanguageTag
 				? Optional.of(new LanguageTag(Locale.forLanguageTag(string).toLanguageTag()))
 				: Optional.empty();
 	}
+
+
+	/**
+	 * Predicate that evaluates to {@code true} if the input string resolves to a valid ISO 639 language
+	 * code recognized by the JVM. Rejects null, blank, "und", or non-existent tags.
+	 */
+	public static final Predicate<String> VALID_LOCALE = string -> {
+		if (string == null || string.isBlank()) return false;
+
+		Locale locale = Locale.forLanguageTag(string);
+		String language = locale.getLanguage();
+
+		if (language.isEmpty() || "und".equalsIgnoreCase(language)) return false;
+
+		// Ensure the language code is one of the official ISO 639 codes
+		return Arrays.asList(Locale.getISOLanguages()).contains(language);
+	};
 
 
 	/**
