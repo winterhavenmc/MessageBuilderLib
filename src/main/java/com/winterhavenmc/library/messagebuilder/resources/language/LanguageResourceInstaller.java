@@ -47,6 +47,7 @@ public final class LanguageResourceInstaller implements ResourceInstaller
 	static final Pattern TWO_OR_MORE_DOTS = Pattern.compile("[.]{2,}");
 	static final Pattern LEADING_SLASHES = Pattern.compile("^/+");
 	static final Pattern TWO_OR_MORE_SLASHES = Pattern.compile("/{2,}");
+	private static final String YAML_EXTENSION = ".yml";
 
 	private final Plugin plugin;
 
