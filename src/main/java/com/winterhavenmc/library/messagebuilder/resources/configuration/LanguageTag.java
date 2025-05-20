@@ -35,6 +35,10 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
 import static java.util.Locale.forLanguageTag;
 
 
+/**
+ * A class that wraps a string based language tag, allowing for validation against locale that
+ * are known to the system at runtime.
+ */
 public class LanguageTag
 {
 	private final String wrappedLanguageTag;
