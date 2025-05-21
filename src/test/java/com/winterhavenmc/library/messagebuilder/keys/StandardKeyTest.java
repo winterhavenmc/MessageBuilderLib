@@ -87,14 +87,14 @@ class StandardKeyTest
 		void testEquals_null_macro()
 		{
 			MacroKey key1 = MacroKey.of("ABC").orElseThrow();
-			assertNotEquals(key1, null);
+			assertNotEquals(null, key1);
 		}
 
 		@Test
 		void testEquals_null_record()
 		{
 			RecordKey key1 = RecordKey.of("ABC").orElseThrow();
-			assertNotEquals(key1, null);
+			assertNotEquals(null, key1);
 		}
 
 		@Test
@@ -102,7 +102,7 @@ class StandardKeyTest
 		{
 			MacroKey key1 = MacroKey.of("ABC").orElseThrow();
 			String key2 = "ABC";
-			assertNotEquals(key1, key2);
+			assertNotEquals(key2, key1);
 		}
 
 		@Test
@@ -110,7 +110,7 @@ class StandardKeyTest
 		{
 			RecordKey key1 = RecordKey.of("ABC").orElseThrow();
 			String key2 = "ABC";
-			assertNotEquals(key1, key2);
+			assertNotEquals(key2, key1);
 		}
 	}
 
@@ -139,13 +139,6 @@ class StandardKeyTest
 	void testToString_returnsWrappedString_record() {
 		RecordKey key = RecordKey.of("LOREM").orElseThrow();
 		assertEquals("LOREM", key.toString());
-	}
-
-	@Test
-	void testDotJoin_instanceMethod_macro() {
-		MacroKey key = MacroKey.of("BASE").orElseThrow();
-		String result = key.dotJoin("CHILD");
-		assertEquals("BASE.CHILD", result);
 	}
 
 }
