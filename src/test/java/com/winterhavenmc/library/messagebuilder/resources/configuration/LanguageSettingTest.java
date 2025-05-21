@@ -39,13 +39,13 @@ class LanguageSettingTest
 
 
 	@Test
-	void testToString()
+	void toString_returns_valid_string()
 	{
 		assertEquals("name", languageSetting.toString());
 	}
 
 	@Test
-	void name()
+	void name_returns_valid_string()
 	{
 		assertEquals("name", languageSetting.name());
 	}
