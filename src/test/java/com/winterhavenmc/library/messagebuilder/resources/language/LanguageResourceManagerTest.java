@@ -39,7 +39,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -139,9 +138,9 @@ class LanguageResourceManagerTest
 
 
 		@Test
-		void testReload_failure_returnsFalse()
+		void reload_failure_returnsFalse()
 		{
-			when(pluginMock.getLogger()).thenReturn(Logger.getLogger("test"));
+			// Arrange
 			LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock)
 			{
 				@Override
@@ -153,13 +152,17 @@ class LanguageResourceManagerTest
 			LanguageResourceInstaller installer = new LanguageResourceInstaller(pluginMock);
 			LanguageResourceManager manager = new LanguageResourceManager(installer, loader);
 
-			assertFalse(manager.reload());
+			// Act
+			boolean result = manager.reload();
+
+			// Assert
+			assertFalse(result);
 		}
 	}
 
 
 	@Test
-	void testGetResourceName()
+	void getResourceName_returns_only_valid_string()
 	{
 		// Arrange
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
@@ -171,7 +174,7 @@ class LanguageResourceManagerTest
 
 
 	@Test
-	void testGetFileName()
+	void getFileName_returns_only_valid_string()
 	{
 		// Arrange
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
