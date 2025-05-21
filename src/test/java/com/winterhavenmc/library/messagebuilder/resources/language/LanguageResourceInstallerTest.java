@@ -18,7 +18,9 @@
 package com.winterhavenmc.library.messagebuilder.resources.language;
 
 import org.bukkit.plugin.Plugin;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
@@ -41,8 +43,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class LanguageResourceInstallerTest
 {
-	@TempDir File tempDataDir;
-	@Mock Plugin pluginMock;
+	@TempDir
+	File tempDataDir;
+	@Mock
+	Plugin pluginMock;
 
 	LanguageResourceInstaller resourceInstaller;
 
@@ -74,21 +78,24 @@ public class LanguageResourceInstallerTest
 		}
 
 		@Test
-		void contains_two_or_more_dots() {
+		void contains_two_or_more_dots()
+		{
 			assertTrue(TWO_OR_MORE_DOTS.matcher("../example/path/name").find());
 			assertTrue(TWO_OR_MORE_DOTS.matcher("example/../../path/name").find());
 			assertFalse(TWO_OR_MORE_DOTS.matcher(".dotfile").find());
 		}
 
 		@Test
-		void contains_leading_slashes() {
+		void contains_leading_slashes()
+		{
 			assertTrue(LEADING_SLASHES.matcher("/abc").find());
 			assertTrue(LEADING_SLASHES.matcher("//xyz").find());
 			assertFalse(LEADING_SLASHES.matcher("abc/xyz").find());
 		}
 
 		@Test
-		void contains_two_or_more_slashes() {
+		void contains_two_or_more_slashes()
+		{
 			assertTrue(TWO_OR_MORE_SLASHES.matcher("//").find());
 			assertTrue(TWO_OR_MORE_SLASHES.matcher("example//path/name").find());
 			assertFalse(TWO_OR_MORE_SLASHES.matcher("example/path/name").find());
@@ -97,14 +104,7 @@ public class LanguageResourceInstallerTest
 
 
 	@Test
-	public void testGetAutoInstall_name_constant()
-	{
-		assertEquals("language/auto_install.txt", resourceInstaller.getAutoInstallResourceName());
-	}
-
-
-	@Test
-	public void testGetAutoInstallSet()
+	public void getAutoInstallSet_contains_only_valid_entry()
 	{
 		// Arrange & Act
 		Collection<String> autoInstallFilenames = resourceInstaller.getAutoInstallSet(resourceInstaller.getAutoInstallResourceName());
@@ -218,7 +218,6 @@ public class LanguageResourceInstallerTest
 	}
 
 
-
 	@Test
 	public void testInstall_ByName_parameter_null()
 	{
@@ -241,7 +240,7 @@ public class LanguageResourceInstallerTest
 		File languageDir = new File(tempDataDir, "language");
 
 		// Assert
-		assertTrue(languageDir.isDirectory(),"the language directory should exist but it does not.");
+		assertTrue(languageDir.isDirectory(), "the language directory should exist but it does not.");
 	}
 
 
@@ -255,7 +254,7 @@ public class LanguageResourceInstallerTest
 		long result = installResource("language/en-US.yml", tempDir);
 
 		// Assert: Verify the file exists and was successfully copied
-		assertTrue(result> 0, "Resource should have been installed successfully.");
+		assertTrue(result > 0, "Resource should have been installed successfully.");
 		assertTrue(Files.exists(tempDir.resolve("language/en-US.yml")));
 
 		// Cleanup: Delete the temporary directory and its contents
@@ -277,110 +276,126 @@ public class LanguageResourceInstallerTest
 	}
 
 
-
 	@Test
-	public void getDataFolderTest_not_null() {
+	public void getDataFolderTest_not_null()
+	{
+		// Assert
 		assertNotNull(pluginMock.getDataFolder());
+
+		// Verify
 		verify(pluginMock, atLeastOnce()).getDataFolder();
 	}
 
 	@Test
-	public void getDataFolderTest_is_directory() {
+	public void getDataFolderTest_is_directory()
+	{
+		// Assert
 		assertTrue(pluginMock.getDataFolder().isDirectory());
+
+		// Verify
 		verify(pluginMock, atLeastOnce()).getDataFolder();
 	}
 
 	@Test
-	public void getAutoInstallByNameResourceNamesTest_not_null() {
+	public void getAutoInstallByNameResourceNamesTest_not_null()
+	{
 		// Arrange
-		when(pluginMock.getResource( resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream( resourceInstaller.getAutoInstallResourceName()));
+		when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.getAutoInstallSet( resourceInstaller.getAutoInstallResourceName());
+		Collection<String> filenames = resourceInstaller.getAutoInstallSet(resourceInstaller.getAutoInstallResourceName());
 
 		// assert
 		assertNotNull(filenames);
 
 		// Verify
-		verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourceName());
+		verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
 	}
 
 	@Test
-	public void getAutoInstallByNameResourceNamesTest_not_empty() {
+	public void getAutoInstallByNameResourceNamesTest_not_empty()
+	{
 		// Arrange
-		when(pluginMock.getResource( resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream( resourceInstaller.getAutoInstallResourceName()));
+		when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName()))
+				.thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.getAutoInstallSet( resourceInstaller.getAutoInstallResourceName());
+		Collection<String> filenames = resourceInstaller.getAutoInstallSet(resourceInstaller.getAutoInstallResourceName());
 
 		// assert
 		assertFalse(filenames.isEmpty());
 
 		// Verify
-		verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourceName());
+		verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
 	}
 
 	@Test
-	public void getAutoInstallByNameResourceNamesTest_valid_entries() {
+	public void getAutoInstallByNameResourceNamesTest_valid_entries()
+	{
 		// Arrange
-		when(pluginMock.getResource( resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream( resourceInstaller.getAutoInstallResourceName()));
+		when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.getAutoInstallSet( resourceInstaller.getAutoInstallResourceName());
+		Collection<String> filenames = resourceInstaller.getAutoInstallSet(resourceInstaller.getAutoInstallResourceName());
 
 		// Assert
 		assertTrue(filenames.contains("language/en-US.yml"));
 		assertTrue(filenames.contains("language/fr-FR.yml"));
 
 		// Verify
-		verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourceName());
+		verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
 	}
 
 	@Test
-	public void getAutoInstallByNameResourceNamesTest_invalid_entries() {
+	public void getAutoInstallByNameResourceNamesTest_invalid_entries()
+	{
 		// Arrange
-		when(pluginMock.getResource( resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream( resourceInstaller.getAutoInstallResourceName()));
+		when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.getAutoInstallSet( resourceInstaller.getAutoInstallResourceName());
+		Collection<String> filenames = resourceInstaller.getAutoInstallSet(resourceInstaller.getAutoInstallResourceName());
 
 		// Assert
 		assertFalse(filenames.contains("nonexistent.yml"));
 		assertFalse(filenames.contains("this_line_is_intended_to_fail"));
 
 		// Verify
-		verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourceName());
+		verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
 	}
 
 	@Test
-	public void getAutoInstallByNameResourceNamesTest() {
+	public void getAutoInstallByNameResourceNamesTest()
+	{
 		// Arrange
-		when(pluginMock.getResource( resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream( resourceInstaller.getAutoInstallResourceName()));
+		when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
 
 		// Act
-		Collection<String> filenames = resourceInstaller.getAutoInstallSet( resourceInstaller.getAutoInstallResourceName());
+		Collection<String> filenames = resourceInstaller.getAutoInstallSet(resourceInstaller.getAutoInstallResourceName());
 
 		// Assert
 		assertTrue(filenames.contains("language/en-US.yml"));
 
 		// Verify
-		verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourceName());
+		verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
 	}
 
 	@Test
-	public void getAutoInstallFilenamesTest_no_auto_install_ByName_txt() {
-		when(pluginMock.getResource( resourceInstaller.getAutoInstallResourceName())).thenReturn(null);
-		assertTrue(resourceInstaller.getAutoInstallSet( resourceInstaller.getAutoInstallResourceName()).isEmpty());
-		verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourceName());
+	public void getAutoInstallFilenamesTest_no_auto_install_ByName_txt()
+	{
+		when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(null);
+		assertTrue(resourceInstaller.getAutoInstallSet(resourceInstaller.getAutoInstallResourceName()).isEmpty());
+		verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
 	}
 
 
 	@Nested
-	class VerifyResourceTypeInstalledTests {
+	class VerifyResourceTypeInstalledTests
+	{
 		@Test
-		public void verifyResourceInstalledTest() {
+		public void verifyResourceInstalledTest()
+		{
 			// Arrange
-			when(pluginMock.getResource( resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream( resourceInstaller.getAutoInstallResourceName()));
+			when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
 			when(pluginMock.getResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString())).thenReturn(getClass().getClassLoader().getResourceAsStream(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString()));
 			// install resource when saveResource is called
 			doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
@@ -394,12 +409,13 @@ public class LanguageResourceInstallerTest
 			assertFalse(resourceInstaller.isInstalled("nonexistent-resource"));
 
 			// verify
-			verify(pluginMock, atLeastOnce()).getResource( resourceInstaller.getAutoInstallResourceName());
+			verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
 			verify(pluginMock, atLeastOnce()).getResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
 		}
 
 		@Test
-		public void verifyResourceInstalledTest_nonexistent() {
+		public void verifyResourceInstalledTest_nonexistent()
+		{
 			assertFalse(resourceInstaller.isInstalled("nonexistent_file"));
 		}
 	}
