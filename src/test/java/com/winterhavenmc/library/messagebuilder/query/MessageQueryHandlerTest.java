@@ -23,6 +23,7 @@ import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 
+import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import org.bukkit.configuration.ConfigurationSection;
 
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLE
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.NONEXISTENT_ENTRY;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -46,10 +47,10 @@ class MessageQueryHandlerTest
 
 
 	@Test
-	void testConstructor_parameter_null()
+	void constructor_with_null_parameter_throws_ValidationException()
 	{
 		// Arrange & Act
-		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+		ValidationException exception = assertThrows(ValidationException.class,
 				() -> new MessageQueryHandler(null));
 
 		// Assert
@@ -58,7 +59,7 @@ class MessageQueryHandlerTest
 
 
 	@Test
-	void testGetRecord_parameter_valid()
+	void getRecord_with_valid_parameter_returns_ValidMessageRecord_type()
 	{
 		// Arrange
 		RecordKey queryKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
@@ -84,11 +85,18 @@ class MessageQueryHandlerTest
 		// Assert
 		assertInstanceOf(ValidMessageRecord.class, result);
 		assertEquals("Enabled message.", result.message());
+
+		// Verify
+		verify(messageSectionMock, atLeastOnce()).getConfigurationSection("ENABLED_MESSAGE");
+		verify(messageEntryMock, times(3)).getString(anyString());
+		verify(messageEntryMock, times(3)).getInt(anyString());
+		verify(messageEntryMock, times(1)).getLong(anyString());
+		verify(messageEntryMock, times(1)).getBoolean(anyString());
 	}
 
 
 	@Test
-	void testGetRecord_nonexistent_entry()
+	void getRecord_with_nonexistent_entry_returns_InvalidMessageRecord_type()
 	{
 		// Arrange
 		RecordKey messageKey = RecordKey.of(NONEXISTENT_ENTRY).orElseThrow();
@@ -103,6 +111,9 @@ class MessageQueryHandlerTest
 
 		// Assert
 		assertInstanceOf(InvalidMessageRecord.class, messageRecord);
+
+		// Verify
+		verify(messageSectionMock, atLeastOnce()).getConfigurationSection("NONEXISTENT_ENTRY");
 	}
 
 }

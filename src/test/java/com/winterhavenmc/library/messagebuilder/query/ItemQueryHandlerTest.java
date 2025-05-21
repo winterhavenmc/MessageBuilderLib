@@ -36,7 +36,7 @@ import java.util.List;
 
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.NONEXISTENT_ENTRY;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -47,7 +47,7 @@ class ItemQueryHandlerTest
 
 
 	@Test
-	void testConstructor_parameter_null()
+	void constructor_with_null_parameter_throws_ValidationException()
 	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -59,7 +59,7 @@ class ItemQueryHandlerTest
 
 
 	@Test
-	void testGetRecord_parameter_valid()
+	void getRecord_with_valid_parameter_returns_ValidItemRecord()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of("TEST_ITEM_1").orElseThrow();
@@ -80,15 +80,18 @@ class ItemQueryHandlerTest
 		// Assert
 		assertInstanceOf(ValidItemRecord.class, result);
 		assertEquals("Item Name singular", result.nameSingular());
+
+		// Verify
+		verify(itemSectionMock, atLeastOnce()).getConfigurationSection("TEST_ITEM_1");
+		verify(itemEntryMock, times(4)).getString(anyString());
 	}
 
 
 	@Test
-	void testGetRecord_non_existent_entry()
+	void getRecord_with_non_existent_entry_returns_InvalidItemRecord()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of(NONEXISTENT_ENTRY).orElseThrow();
-		when(itemSectionMock.getConfigurationSection(NONEXISTENT_ENTRY.name())).thenReturn(null);
 
 		SectionProvider mockProvider = () -> itemSectionMock;
 		ItemQueryHandler handler = new ItemQueryHandler(mockProvider);
@@ -98,6 +101,9 @@ class ItemQueryHandlerTest
 
 		// Assert
 		assertInstanceOf(InvalidItemRecord.class, itemRecord);
+
+		// Verify
+		verify(itemSectionMock, atLeastOnce()).getConfigurationSection("NONEXISTENT_ENTRY");
 	}
 
 }

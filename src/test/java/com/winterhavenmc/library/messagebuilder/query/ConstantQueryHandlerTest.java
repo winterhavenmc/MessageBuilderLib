@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -44,7 +44,7 @@ class ConstantQueryHandlerTest
 
 
 	@Test
-	void testConstructor_parameter_null()
+	void constructor_with_null_parameter_throws_validation_exception()
 	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -56,7 +56,7 @@ class ConstantQueryHandlerTest
 
 
 	@Test
-	void getRecord_keyPath_valid()
+	void getRecord_with_valid_key_returns_validRecord()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
@@ -72,11 +72,14 @@ class ConstantQueryHandlerTest
 		// Assert
 		assertInstanceOf(ValidConstantRecord.class, result);
 		assertEquals("Spawn Display Name", result.value());
+
+		// Verify
+		verify(constantSectionMock, atLeastOnce()).get("SPAWN.DISPLAY_NAME");
 	}
 
 
 	@Test
-	void getString_keyPath_valid()
+	void getString_with_valid_key_returns_valid_string()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
@@ -91,11 +94,14 @@ class ConstantQueryHandlerTest
 
 		// Assert
 		assertEquals(Optional.of("Spawn Display Name"), result);
+
+		// Verify
+		verify(constantSectionMock, atLeastOnce()).getString("SPAWN.DISPLAY_NAME");
 	}
 
 
 	@Test
-	void getString_keyPath_invalid()
+	void getRecord_with_invalid_key_returns_invalidRecord()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
@@ -108,11 +114,14 @@ class ConstantQueryHandlerTest
 
 		// Assert
 		assertInstanceOf(InvalidConstantRecord.class, constantRecord);
+
+		// Verify
+		verify(constantSectionMock, atLeastOnce()).get(any());
 	}
 
 
 	@Test
-	void getStringList_keyPath_valid()
+	void getStringList_with_valid_key_returns_valid_stringList()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of("TEST_LIST").orElseThrow();
@@ -122,17 +131,19 @@ class ConstantQueryHandlerTest
 		SectionProvider mockProvider = () -> constantSectionMock;
 		ConstantQueryHandler handler = new ConstantQueryHandler(mockProvider);
 
-
 		// Act
 		List<String> result = handler.getStringList(recordKey);
 
 		// Assert
 		assertEquals(List.of("string1", "string2"), result);
+
+		// Verify
+		verify(constantSectionMock, atLeastOnce()).getStringList(anyString());
 	}
 
 
 	@Test
-	void getInt_keyPath_valid()
+	void getInt_with_valid_key_returns_valid_int()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of("TEST_INT").orElseThrow();
@@ -147,6 +158,9 @@ class ConstantQueryHandlerTest
 
 		// Assert
 		assertEquals(42, result);
+
+		// Verify
+		verify(constantSectionMock, atLeastOnce()).getInt("TEST_INT");
 	}
 
 }
