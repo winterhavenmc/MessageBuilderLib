@@ -39,10 +39,11 @@ class PlaceholderMatcherTest
 
 
 	@Test
-	void testGetPlaceholderStream()
+	@DisplayName("Retrieve a stream of placeholders from a message string.")
+	void getPlaceholderMatcher_returns_only_valid_values()
 	{
 		// Arrange
-		String messageString = "This is a {MESSAGE} with {SEVERAL} {PLACE_HOLDERS} some {INVALID PLACEHOLDERS}.";
+		String messageString = "This is a {MESSAGE} with {SEVERAL} {PLACE_HOLDERS} and one {INVALID PLACEHOLDER}.";
 
 		// Act
 		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
@@ -58,10 +59,10 @@ class PlaceholderMatcherTest
 
 
 	@Test
-	void testGetPlaceholderStream_strict()
+	void getPlaceholderMatcher_does_not_return_invalid_values()
 	{
 		// Arrange
-		String messageString = "Invalid placeholders: {1MESSAGE} {several} {PLACE:HOLDERS} some {INVALID PLACEHOLDERS} like {this}.";
+		String messageString = "This {1MESSAGE} contains {only} invalid {PLACE:HOLDERS} including some {INVALID PLACEHOLDERS} like {this}.";
 
 		// Act
 		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
@@ -73,9 +74,10 @@ class PlaceholderMatcherTest
 
 
 	@Test
-	void testGetPlaceholder_with_dot_separators()
+	void getPlaceholderMatcher_returns_valid_with_dot_separator()
 	{
-		String messageString = "This is a {MESSAGE.DISPLAY_NAME} with {SEVERAL} {PLACE_HOLDERS}.";
+		// Arrange
+		String messageString = "This is a {MESSAGE.DISPLAY_NAME} with {SEVERAL} valid {PLACE_HOLDERS}.";
 
 		// Act
 		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
