@@ -124,12 +124,6 @@ public final class MacroKey extends AbstractKey implements StandardKey
 	}
 
 
-	String dotJoin(final String subKey)
-	{
-		return dotJoin(this, subKey);
-	}
-
-
 	static String dotJoin(final AbstractKey baseKey, final String subKey)
 	{
 		return String.join(".", baseKey.toString(), subKey);
