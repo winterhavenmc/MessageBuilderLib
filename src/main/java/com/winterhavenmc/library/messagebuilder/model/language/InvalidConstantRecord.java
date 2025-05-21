@@ -20,5 +20,4 @@ package com.winterhavenmc.library.messagebuilder.model.language;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 
-public record InvalidConstantRecord(RecordKey key, String reason) implements ConstantRecord
-{ }
+public record InvalidConstantRecord(RecordKey key, String reason) implements ConstantRecord { }
