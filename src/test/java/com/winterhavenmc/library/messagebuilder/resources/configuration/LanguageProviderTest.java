@@ -44,51 +44,75 @@ class LanguageProviderTest
 
 
 	@Test
-	void returnsLanguageSettingWhenLanguageFieldPresent()
+	void returns_language_setting_when_present()
 	{
+		// Arrange
 		when(configurationMock.getString("language")).thenReturn("custom");
 
+		// Act
 		LanguageProvider provider = LanguageProvider.create(pluginMock);
 		LanguageSetting setting = provider.get();
 
+		// Assert
 		assertEquals("custom", setting.name());
+
+		// Verify
+		verify(configurationMock, atLeastOnce()).getString("language");
 	}
 
 
 	@Test
-	void fallsBackToLocaleFieldIfLanguageMissing()
+	void falls_back_to_locale_setting_when_language_setting_missing()
 	{
+		// Arrange
 		when(configurationMock.getString("language")).thenReturn(null);
 		when(configurationMock.getString("locale")).thenReturn("fr-FR");
 
+		// Act
 		LanguageProvider provider = LanguageProvider.create(pluginMock);
 		LanguageSetting setting = provider.get();
 
+		// Assert
 		assertEquals("fr-FR", setting.name());
+
+		// Verify
+		verify(configurationMock, atLeast(2)).getString(anyString());
 	}
 
 
 	@Test
-	void fallsBackToDefaultIfBothFieldsMissing()
+	void falls_back_to_system_default_if_both_settings_missing()
 	{
+		// Arrange
 		when(configurationMock.getString("language")).thenReturn(null);
 		when(configurationMock.getString("locale")).thenReturn(null);
 
+		// Act
 		LanguageProvider provider = LanguageProvider.create(pluginMock);
 		LanguageSetting setting = provider.get();
 
+		// Assert
 		assertEquals("en-US", setting.name()); // The hardcoded fallback
+
+		// Verify
+		verify(configurationMock, atLeast(2)).getString(anyString());
 	}
 
 
 	@Test
-	void test_getName()
+	void getName_when_language_setting_present()
 	{
+		// Arrange
 		when(configurationMock.getString("language")).thenReturn("custom");
 
+		// Act
 		LanguageProvider provider = LanguageProvider.create(pluginMock);
 
+		// Assert
 		assertEquals("custom", provider.getName());
+
+		// Verify
+		verify(configurationMock, atLeastOnce()).getString("language");
 	}
 
 }
