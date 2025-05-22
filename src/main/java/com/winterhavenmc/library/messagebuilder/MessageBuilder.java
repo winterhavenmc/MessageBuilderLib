@@ -43,7 +43,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static com.winterhavenmc.library.messagebuilder.Orchestrator.*;
+import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
@@ -92,6 +92,7 @@ public final class MessageBuilder
 	private final Plugin plugin;
 	private final SectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
+//	private final ConstantResolver constantStringResolver;
 
 
 	/**
@@ -109,6 +110,8 @@ public final class MessageBuilder
 		this.languageResourceManager = languageResourceManager;
 		this.messagePipeline = messagePipeline;
 		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, LocaleProvider.create(plugin).getLocale());
+		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
+//		ConstantResolver constantStringResolver = new ConstantResolver(new QueryHandlerFactory(languageResourceManager));
 	}
 
 
@@ -126,11 +129,11 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final SectionResourceManager languageResourceManager = getLanguageResourceManager(plugin);
+		final SectionResourceManager languageResourceManager = createLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
-		final FormatterContainer formatterContainer = getResolverContextContainer(plugin, queryHandlerFactory);
-		final AdapterContextContainer adapterContextContainer = getAdapterContextContainer(plugin);
-		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer);
+		final FormatterContainer formatterContainer = createResolverContextContainer(plugin, queryHandlerFactory);
+		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin);
+		final MessagePipeline messagePipeline = createMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer);
 
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
 	}
