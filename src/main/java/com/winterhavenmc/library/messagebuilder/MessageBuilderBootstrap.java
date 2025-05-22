@@ -55,9 +55,9 @@ import java.util.List;
 /**
  * A companion utility class to facilitate arranging components necessary to initialize the MessageBuilder library.
  */
-class Orchestrator
+class MessageBuilderBootstrap
 {
-	private Orchestrator() { /* Private constructor to prevent instantiation of utility class */ }
+	private MessageBuilderBootstrap() { /* Private constructor to prevent instantiation of utility class */ }
 
 
 	static SectionResourceManager getLanguageResourceManager(Plugin plugin)
