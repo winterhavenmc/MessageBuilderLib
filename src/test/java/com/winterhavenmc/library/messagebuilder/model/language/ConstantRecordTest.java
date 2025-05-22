@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 class ConstantRecordTest
 {
 	@Test
-	void from_valid_section()
+	void of_with_valid_section()
 	{
 		// Arrange
 		RecordKey constantKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
@@ -45,7 +45,7 @@ class ConstantRecordTest
 
 
 	@Test
-	void from_null_section()
+	void of_with_null_section()
 	{
 		// Arrange
 		RecordKey constantKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
