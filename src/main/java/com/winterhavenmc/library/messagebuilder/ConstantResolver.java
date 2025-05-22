@@ -19,23 +19,31 @@ package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.Section;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 
 import java.util.Optional;
 
-public class ConstantStringResolver
+public class ConstantResolver
 {
 	private final QueryHandler<ConstantRecord> constantQueryHandler;
 
 
-	ConstantStringResolver(QueryHandler<ConstantRecord> constantQueryHandler)
+	ConstantResolver(QueryHandler<ConstantRecord> constantQueryHandler)
 	{
 		this.constantQueryHandler = constantQueryHandler;
 	}
 
 
-	public Optional<String> getConstantString(final String key)
+	ConstantResolver(QueryHandlerFactory queryHandlerFactory)
+	{
+		this.constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
+	}
+
+
+	public Optional<String> getString(final String key)
 	{
 		return RecordKey.of(key)
 				.flatMap(this::getConstantRecord)
