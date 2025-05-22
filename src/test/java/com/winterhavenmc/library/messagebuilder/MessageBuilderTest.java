@@ -41,7 +41,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
@@ -87,10 +86,6 @@ class MessageBuilderTest
 				messagePipelineMock);
 	}
 
-	@AfterEach
-	void tearDown() {
-		Mockito.reset(languageResourceManagerMock);
-	}
 
 	@Test
 	void testTickUnit()
