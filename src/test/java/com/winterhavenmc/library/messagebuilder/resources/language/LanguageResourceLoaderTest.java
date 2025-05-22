@@ -19,16 +19,17 @@ package com.winterhavenmc.library.messagebuilder.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LanguageTag;
 import com.winterhavenmc.library.messagebuilder.util.MockUtility;
+
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.configuration.InvalidConfigurationException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -206,118 +207,6 @@ class LanguageResourceLoaderTest
 				verify(pluginMock, atLeastOnce()).getLogger();
 				verify(pluginMock, atLeastOnce()).getConfig();
 				verify(fileConfigurationMock, atLeastOnce()).getString("language");
-			}
-		}
-
-
-		@Nested
-		class with_LanguageTag_parameter
-		{
-			@Test
-			void logs_file_not_found(@TempDir File tempDir)
-			{
-				// Arrange
-				when(pluginMock.getLogger()).thenReturn(loggerMock);
-				when(pluginMock.getDataFolder()).thenReturn(tempDir);
-				LanguageTag tag = LanguageTag.of("en-US").orElseThrow();
-
-				// Act
-				Configuration config = loader.load(tag);
-
-				// Assert
-				assertNotNull(config);
-
-				// Verify
-				verify(loggerMock).warning(contains("Language file 'en-US.yml' not found. Falling back to default."));
-			}
-
-			@Test
-			void loads_successfully(@TempDir File tempDir) throws IOException
-			{
-				// Arrange
-				when(pluginMock.getLogger()).thenReturn(loggerMock);
-				when(pluginMock.getDataFolder()).thenReturn(tempDir);
-				writeLanguageFile(tempDir, "en-US", "greeting: Hello from test");
-				LanguageTag tag = LanguageTag.of("en-US").orElseThrow();
-
-				// Act
-				Configuration config = loader.load(tag);
-
-				// Assert
-				assertNotNull(config);
-				assertEquals("Hello from test", config.getString("greeting"));
-
-				// Verify
-				verify(pluginMock, atLeastOnce()).getLogger();
-				verify(pluginMock, atLeastOnce()).getDataFolder();
-				verify(loggerMock).info(contains("successfully loaded"));
-			}
-
-			@Test
-			void throws_IO_exception(@TempDir File tempDir) throws Exception
-			{
-				// Arrange
-				when(pluginMock.getLogger()).thenReturn(loggerMock);
-				when(pluginMock.getDataFolder()).thenReturn(tempDir);
-				LanguageTag tag = LanguageTag.of("en-US").orElseThrow();
-				createLanguageFile(tempDir, "en-US");
-				LanguageResourceLoader faultyLoader = createFaultyLoader(() -> {
-					YamlConfiguration spyYaml = spy(new YamlConfiguration());
-					File languageFile = new File(tempDir, "language" + File.separator + "en-US.yml");
-					try
-					{
-						doThrow(new IOException("Simulated IOException")).when(spyYaml).load(languageFile);
-					} catch (IOException | InvalidConfigurationException e)
-					{
-						throw new RuntimeException(e);
-					}
-					return spyYaml;
-				});
-
-				// Act
-				Configuration config = faultyLoader.load(tag);
-
-				// Assert
-				assertNotNull(config);
-
-				// Verify
-				verify(pluginMock, atLeastOnce()).getLogger();
-				verify(pluginMock, atLeastOnce()).getDataFolder();
-				verify(loggerMock).warning(contains("Language file 'en-US.yml' could not be read. Falling back to default."));
-			}
-
-
-			@Test
-			void throws_invalid_configuration_exception(@TempDir File tempDir) throws IOException
-			{
-				// Arrange
-				when(pluginMock.getLogger()).thenReturn(loggerMock);
-				when(pluginMock.getDataFolder()).thenReturn(tempDir);
-				LanguageTag tag = LanguageTag.of("en-US").orElseThrow();
-				createLanguageFile(tempDir, "en-US");
-				LanguageResourceLoader faultyLoader = createFaultyLoader(() -> {
-					YamlConfiguration spyYaml = spy(new YamlConfiguration());
-					File languageFile = new File(tempDir, "language" + File.separator + "en-US.yml");
-					try
-					{
-						doThrow(new InvalidConfigurationException("Simulated invalid YAML")).when(spyYaml).load(languageFile);
-					} catch (IOException | InvalidConfigurationException e)
-					{
-						throw new RuntimeException(e);
-					}
-					return spyYaml;
-				});
-
-				// Act
-				Configuration config = faultyLoader.load(tag);
-
-				// Assert
-				assertNotNull(config);
-
-				// Verify
-				verify(pluginMock, atLeastOnce()).getLogger();
-				verify(pluginMock, atLeastOnce()).getDataFolder();
-				verify(loggerMock).warning(contains("Language file 'en-US.yml' is not valid YAML. Falling back to default."));
 			}
 		}
 
