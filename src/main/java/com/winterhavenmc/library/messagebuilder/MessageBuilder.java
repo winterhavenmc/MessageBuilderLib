@@ -18,12 +18,14 @@
 package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.Section;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
+import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
@@ -133,6 +135,7 @@ public final class MessageBuilder
 		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
 	}
 
+
 	/**
 	 * Initiate the message building sequence. Parameters of this method are passed into this library domain
 	 * from the plugin, so robust validation is employed and type-safety is enforced by converting to domain specific
@@ -198,14 +201,24 @@ public final class MessageBuilder
 	public Optional<String> getConstantString(final String key)
 	{
 		return RecordKey.of(key)
-				.map(k -> new QueryHandlerFactory(languageResourceManager)
-						.getQueryHandler(Section.CONSTANTS)
-						.getRecord(k))
-				.filter(ValidConstantRecord.class::isInstance)
-				.map(ValidConstantRecord.class::cast)
-				.map(ValidConstantRecord::value)
-				.filter(String.class::isInstance)
-				.map(String.class::cast);
+				.flatMap(this::getConstantRecord)
+				.flatMap(this::extractStringValue);
+	}
+
+
+	private Optional<ConstantRecord> getConstantRecord(RecordKey key)
+	{
+		QueryHandlerFactory factory = new QueryHandlerFactory(languageResourceManager);
+		QueryHandler<ConstantRecord> handler = factory.getQueryHandler(Section.CONSTANTS);
+		return Optional.ofNullable(handler.getRecord(key));
+	}
+
+
+	private Optional<String> extractStringValue(ConstantRecord record)
+	{
+		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof String string)
+				? Optional.of(string)
+				: Optional.empty();
 	}
 
 }
