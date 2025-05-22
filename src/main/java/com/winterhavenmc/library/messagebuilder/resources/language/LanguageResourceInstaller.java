@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.resources.ResourceInstaller;
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LanguageTag;
+
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -28,11 +28,6 @@ import java.util.regex.Pattern;
 
 import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageSetting.RESOURCE_AUTO_INSTALL;
 import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageSetting.RESOURCE_SUBDIRECTORY;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RESOURCE_NAME;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -69,52 +64,80 @@ public final class LanguageResourceInstaller implements ResourceInstaller
 	@Override
 	public void autoInstall()
 	{
-		Set<String> resourceNames = getAutoInstallResourceNames(getAutoInstallResourcePath());
-		for (String resource : resourceNames)
+		Set<String> resourceNames = getAutoInstallSet(getAutoInstallResourceName());
+		for (String resourceName : resourceNames)
 		{
-			installByName(resource);
+			installIfMissing(resourceName);
 		}
-	}
-
-
-	@Override
-	public InstallerStatus installIfMissing(final LanguageTag tag)
-	{
-		if (!isInstalledForTag(tag))
-		{
-			return installByName(LanguageResourceManager.getResourceName(tag));
-		}
-		return InstallerStatus.FILE_EXISTS;
 	}
 
 
 	/**
-	 * Install a resource for the given language tag if not already installed in the plugin data directory
+	 * Get path name of the auto install resource
 	 *
-	 * @param languageTag the language tag for the resource to be installed
+	 * @return String path of the auto install resource
 	 */
-	@Override
-	public InstallerStatus install(final LanguageTag languageTag)
+	String getAutoInstallResourceName()
 	{
-		return installByName(LanguageResourceManager.getResourceName(languageTag));
+		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), RESOURCE_AUTO_INSTALL.toString());
 	}
 
 
 	/**
-	 * Install resource from plugin jar to plugin data directory
+	 * Retrieve a {@code Set} of resources to be copied into the plugin data directory by reading resource names
+	 * from the auto-install.txt resource.
+	 *
+	 * @param autoInstallPathName a {@code String} containing the resource path of the auto install plain text resource
+	 * @return the set of filenames to be autoinstalled into the plugin data directory
+	 */
+	Set<String> getAutoInstallSet(final String autoInstallPathName)
+	{
+		InputStream input = plugin.getResource(autoInstallPathName);
+		if (input == null)
+		{
+			return Collections.emptySet();
+		}
+
+		Set<String> result = new LinkedHashSet<>();
+		try (Scanner scanner = new Scanner(input))
+		{
+			while (scanner.hasNextLine())
+			{
+				String line = scanner.nextLine().strip();
+				if (line.toLowerCase(Locale.ROOT).endsWith(YAML_EXTENSION))
+				{
+					result.add(sanitizeResourcePath(line));
+				}
+			}
+		}
+		return result;
+	}
+
+
+	/**
+	 * Check if a resource is already present in the plugin data directory
+	 *
+	 * @param resourceName the resource name
+	 */
+	InstallerStatus installIfMissing(final String resourceName)
+	{
+		return (!isInstalled(resourceName))
+				? installByName(resourceName)
+				: InstallerStatus.FILE_EXISTS;
+	}
+
+
+	/**
+	 * Install resource from plugin jar to plugin data directory.
 	 *
 	 * @param resourceName {@code String} the path name of the resource to be installed
 	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
 	 */
-	@Override
-	public InstallerStatus installByName(final String resourceName)
+	InstallerStatus installByName(final String resourceName)
 	{
-		validate(resourceName, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_NAME));
-		validate(resourceName, String::isBlank, throwing(PARAMETER_EMPTY, RESOURCE_NAME));
-
 		if (plugin.getResource(resourceName) == null)
 		{
-			plugin.getLogger().warning("[MessageBuilder] Resource not found in plugin JAR: " + resourceName);
+			plugin.getLogger().warning("Resource not found in plugin JAR: " + resourceName);
 			return InstallerStatus.UNAVAILABLE;
 		}
 
@@ -131,77 +154,20 @@ public final class LanguageResourceInstaller implements ResourceInstaller
 
 			if (installedFile.exists())
 			{
-				plugin.getLogger().info("[MessageBuilder] Installed resource: " + filePath);
+				plugin.getLogger().info("Installed resource: " + filePath);
 				return InstallerStatus.SUCCESS;
-			} else
+			}
+			else
 			{
-				plugin.getLogger().severe("[MessageBuilder] Installation failed. File missing after save: " + filePath);
+				plugin.getLogger().severe("Installation failed. File missing after save: " + filePath);
 				return InstallerStatus.FAIL;
 			}
-		} catch (Exception e)
+		}
+		catch (Exception exception)
 		{
-			plugin.getLogger().severe("[MessageBuilder] Exception during installation of " + resourceName + ": " + e.getMessage());
+			plugin.getLogger().severe("Exception during installation of " + resourceName + ": " + exception.getMessage());
 			return InstallerStatus.FAIL;
 		}
-	}
-
-
-	@Override
-	public Set<String> getAutoInstallResourceNames(final String autoInstallPathName)
-	{
-		InputStream input = plugin.getResource(autoInstallPathName);
-		if (input == null)
-		{
-			plugin.getLogger().warning("[MessageBuilder] auto-install.txt not found at " + autoInstallPathName);
-			return Collections.emptySet();
-		}
-
-		Set<String> result = new LinkedHashSet<>();
-		try (Scanner scanner = new Scanner(input))
-		{
-			while (scanner.hasNextLine())
-			{
-				String line = scanner.nextLine().strip();
-				if (line.startsWith(RESOURCE_SUBDIRECTORY + "/") && line.endsWith(".yml"))
-				{
-					result.add(sanitizeResourcePath(line));
-				}
-			}
-		}
-		return result;
-	}
-
-
-	@Override
-	public String getAutoInstallResourcePath()
-	{
-		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), RESOURCE_AUTO_INSTALL.toString());
-	}
-
-
-	/**
-	 * Check if a resource exists
-	 *
-	 * @param resourceName the name of the resource
-	 * @return {@code true} if the resource exists, {@code false} if it does not
-	 */
-	@Override
-	public boolean resourceExists(final String resourceName)
-	{
-		return plugin.getResource(resourceName) != null;
-	}
-
-
-	/**
-	 * Check if a resource exists
-	 *
-	 * @param languageTag the tag of the resource being checked for existence in the classpath
-	 * @return {@code true} if the resource exists, {@code false} if it does not
-	 */
-	@Override
-	public boolean resourceExists(final LanguageTag languageTag)
-	{
-		return plugin.getResource(LanguageResourceManager.getResourceName(languageTag)) != null;
 	}
 
 
@@ -211,28 +177,14 @@ public final class LanguageResourceInstaller implements ResourceInstaller
 	 * @param filename the name of the file being verified
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
-	@Override
-	public boolean isInstalled(final String filename)
+	boolean isInstalled(final String filename)
 	{
-		return new File(plugin.getDataFolder(), filename).exists();
+		return filename != null && new File(plugin.getDataFolder(), filename).exists();
 	}
 
 
 	/**
-	 * Test if resource is installed in the plugin data directory
-	 *
-	 * @param languageTag the language tag of the file being verified as installed in the plugin data directory
-	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
-	 */
-	@Override
-	public boolean isInstalledForTag(final LanguageTag languageTag)
-	{
-		return new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(languageTag)).exists();
-	}
-
-
-	/**
-	 * sanitize resource path file paths. these are ultimately set by server operators,
+	 * Sanitize resource path name. these paths are ultimately set by server operators,
 	 * and may be running on servers not owned by them. It is essential that filenames
 	 * in this list of files to be copied not contain the names of system resources outside
 	 * the plugin's data directory.
@@ -246,10 +198,10 @@ public final class LanguageResourceInstaller implements ResourceInstaller
 	 *     </ol>
 	 *
 	 *
-	 * @param resourcePath the {@code String} path name to be sanitized.
+	 * @param resourcePath the {@code String} path name to be sanitized
+	 * @return The sanitized resource path {@code String}
 	 */
-	@Override
-	public String sanitizeResourcePath(final String resourcePath)
+	String sanitizeResourcePath(final String resourcePath)
 	{
 		return resourcePath
 				.replaceAll(WHITESPACE.pattern(), "")
