@@ -260,7 +260,8 @@ class MessageBuilderTest
 
 
 	@Test
-	void testGetConstantString_invalidKey_returnsEmpty() {
+	void testGetConstantString_invalidKey_returnsEmpty()
+	{
 		// Act
 		Optional<String> result = messageBuilder.getConstantString("");
 
@@ -270,7 +271,8 @@ class MessageBuilderTest
 
 
 	@Test
-	void testGetConstantString_validKeyButMissingRecord_returnsEmpty() {
+	void testGetConstantString_validKeyButMissingRecord_returnsEmpty()
+	{
 		// Arrange
 		String key = "MISSING_KEY";
 
