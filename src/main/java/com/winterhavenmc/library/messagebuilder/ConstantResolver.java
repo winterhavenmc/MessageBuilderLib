@@ -26,18 +26,19 @@ import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 
 import java.util.Optional;
 
+
 public class ConstantResolver
 {
 	private final QueryHandler<ConstantRecord> constantQueryHandler;
 
 
-	ConstantResolver(QueryHandler<ConstantRecord> constantQueryHandler)
+	ConstantResolver(final QueryHandler<ConstantRecord> constantQueryHandler)
 	{
 		this.constantQueryHandler = constantQueryHandler;
 	}
 
 
-	ConstantResolver(QueryHandlerFactory queryHandlerFactory)
+	ConstantResolver(final QueryHandlerFactory queryHandlerFactory)
 	{
 		this.constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
 	}
@@ -51,13 +52,13 @@ public class ConstantResolver
 	}
 
 
-	private Optional<ConstantRecord> getConstantRecord(RecordKey key)
+	private Optional<ConstantRecord> getConstantRecord(final RecordKey key)
 	{
 		return Optional.ofNullable(constantQueryHandler.getRecord(key));
 	}
 
 
-	private Optional<String> extractStringValue(ConstantRecord record)
+	private Optional<String> extractStringValue(final ConstantRecord record)
 	{
 		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof String string)
 				? Optional.of(string)
