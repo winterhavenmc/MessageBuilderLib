@@ -26,9 +26,14 @@ import org.bukkit.entity.Player;
 
 public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Recipient.Invalid
 {
+	sealed interface Sendable permits Recipient.Valid, Recipient.Proxied
+	{
+		CommandSender sender();
+	}
+
 	enum InvalidReason { NULL, OTHER }
-	record Valid(CommandSender sender) implements Recipient { }
-	record Proxied(CommandSender sender, ProxiedCommandSender proxy) implements Recipient { }
+	record Valid(CommandSender sender) implements Recipient, Sendable { }
+	record Proxied(CommandSender sender, ProxiedCommandSender proxy) implements Recipient, Sendable { }
 	record Invalid(CommandSender sender, InvalidReason invalidReason) implements Recipient { }
 
 
