@@ -18,14 +18,10 @@
 package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.Section;
-import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
@@ -92,7 +88,7 @@ public final class MessageBuilder
 	private final Plugin plugin;
 	private final SectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
-//	private final ConstantResolver constantStringResolver;
+	private final ConstantResolver constantResolver;
 
 
 	/**
@@ -104,14 +100,14 @@ public final class MessageBuilder
 	 */
 	private MessageBuilder(final Plugin plugin,
 	                       final SectionResourceManager languageResourceManager,
+						   final ConstantResolver constantResolver,
 	                       final MessagePipeline messagePipeline)
 	{
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
 		this.messagePipeline = messagePipeline;
 		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, LocaleProvider.create(plugin).getLocale());
-		QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
-//		ConstantResolver constantStringResolver = new ConstantResolver(new QueryHandlerFactory(languageResourceManager));
+		this.constantResolver = constantResolver;
 	}
 
 
@@ -131,11 +127,13 @@ public final class MessageBuilder
 
 		final SectionResourceManager languageResourceManager = createLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
+		final ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactory);
+
 		final FormatterContainer formatterContainer = createResolverContextContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin);
 		final MessagePipeline messagePipeline = createMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer);
 
-		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, constantResolver, messagePipeline);
 	}
 
 
@@ -161,7 +159,7 @@ public final class MessageBuilder
 		return switch (Recipient.of(recipient))
 		{
 			case Recipient.Valid valid -> new ValidMessage(valid, validMessageKey, messagePipeline);
-			case Recipient.Proxied ignored -> Message.empty();
+			case Recipient.Proxied proxied -> new ValidMessage(proxied, validMessageKey, messagePipeline);
 			case Recipient.Invalid ignored -> Message.empty();
 		};
 	}
@@ -191,37 +189,26 @@ public final class MessageBuilder
 	 */
 	static MessageBuilder test(final Plugin plugin,
 							   final LanguageResourceManager languageResourceManager,
+							   final ConstantResolver constantResolver,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, constantResolver, messagePipeline);
+	}
+
+
+	public ConstantResolver getConstantResolver()
+	{
+		return this.constantResolver;
 	}
 
 
 	public Optional<String> getConstantString(final String key)
 	{
-		return RecordKey.of(key)
-				.flatMap(this::getConstantRecord)
-				.flatMap(this::extractStringValue);
-	}
-
-
-	private Optional<ConstantRecord> getConstantRecord(RecordKey key)
-	{
-		QueryHandlerFactory factory = new QueryHandlerFactory(languageResourceManager);
-		QueryHandler<ConstantRecord> handler = factory.getQueryHandler(Section.CONSTANTS);
-		return Optional.ofNullable(handler.getRecord(key));
-	}
-
-
-	private Optional<String> extractStringValue(ConstantRecord record)
-	{
-		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof String string)
-				? Optional.of(string)
-				: Optional.empty();
+		return constantResolver.getString(key);
 	}
 
 }
