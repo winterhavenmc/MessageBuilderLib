@@ -42,7 +42,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
 public final class ValidMessage implements Message
 {
 	private final static String RECIPIENT_KEY = "RECIPIENT";
-	private final Recipient.Valid recipient;
+	private final Recipient.Sendable recipient;
 	private final RecordKey messageKey;
 	private final MessagePipeline messagePipeline;
 	private final MacroObjectMap macroObjectMap;
@@ -55,13 +55,17 @@ public final class ValidMessage implements Message
 	 * @param messageKey message identifier
 	 * @param messagePipeline the message processor that will receive the message when the send method is called
 	 */
-	public ValidMessage(final Recipient.Valid recipient,
+	public ValidMessage(final Recipient.Sendable recipient,
 						final RecordKey messageKey,
 						final MessagePipeline messagePipeline)
 	{
-		this.recipient = recipient;
 		this.messageKey = messageKey;
 		this.messagePipeline = messagePipeline;
+		this.recipient = switch (recipient)
+		{
+			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied proxied -> proxied;
+		};
 
 		// create macro object map and add recipient field
 		this.macroObjectMap = new MacroObjectMap();
@@ -168,7 +172,7 @@ public final class ValidMessage implements Message
 	 * @return {@code Valid} the message recipient
 	 */
 	@Override
-	public Recipient.Valid getRecipient()
+	public Recipient.Sendable getRecipient()
 	{
 		return recipient;
 	}

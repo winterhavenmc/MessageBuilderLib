@@ -24,5 +24,5 @@ import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecor
 @FunctionalInterface
 public interface Sender
 {
-	void send(Recipient.Valid recipient, FinalMessageRecord messageRecord);
+	void send(Recipient.Sendable recipient, FinalMessageRecord messageRecord);
 }

@@ -50,7 +50,7 @@ public class CooldownKey
 	 * @param recipient the message recipient
 	 * @param messageKey the unique message id
 	 */
-	private CooldownKey(final Recipient.Valid recipient, final RecordKey messageKey)
+	private CooldownKey(final Recipient.Sendable recipient, final RecordKey messageKey)
 	{
 		this.messageKey = messageKey;
 		this.uuid = (recipient.sender() instanceof Entity entity)
@@ -65,7 +65,7 @@ public class CooldownKey
 	}
 
 
-	public static Optional<CooldownKey> of(final Recipient.Valid recipient, final RecordKey messageKey)
+	public static Optional<CooldownKey> of(final Recipient.Sendable recipient, final RecordKey messageKey)
 	{
 		return Optional.of(new CooldownKey(recipient, messageKey));
 	}

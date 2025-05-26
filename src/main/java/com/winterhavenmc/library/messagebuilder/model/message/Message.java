@@ -31,7 +31,7 @@ public sealed interface Message permits ValidMessage, InvalidMessage {
     <K extends Enum<K>> Message setMacro(K macro, Duration duration, ChronoUnit precision);
     void send();
     RecordKey getMessageKey();
-    Recipient.Valid getRecipient();
+    Recipient.Sendable getRecipient();
     MacroObjectMap getObjectMap();
 
     static Message empty()

@@ -65,7 +65,7 @@ public record InvalidMessage(String reason) implements Message
 	}
 
 	@Override
-	public Recipient.Valid getRecipient()
+	public Recipient.Sendable getRecipient()
 	{
 		return null;
 	}
