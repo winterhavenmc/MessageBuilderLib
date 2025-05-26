@@ -59,13 +59,9 @@ public final class ValidMessage implements Message
 						final RecordKey messageKey,
 						final MessagePipeline messagePipeline)
 	{
+		this.recipient = recipient;
 		this.messageKey = messageKey;
 		this.messagePipeline = messagePipeline;
-		this.recipient = switch (recipient)
-		{
-			case Recipient.Valid valid -> valid;
-			case Recipient.Proxied proxied -> proxied;
-		};
 
 		// create macro object map and add recipient field
 		this.macroObjectMap = new MacroObjectMap();
