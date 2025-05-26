@@ -32,15 +32,15 @@ public class ConstantResolver
 	private final QueryHandler<ConstantRecord> constantQueryHandler;
 
 
-	ConstantResolver(final QueryHandler<ConstantRecord> constantQueryHandler)
-	{
-		this.constantQueryHandler = constantQueryHandler;
-	}
-
-
 	ConstantResolver(final QueryHandlerFactory queryHandlerFactory)
 	{
 		this.constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
+	}
+
+
+	private Optional<ConstantRecord> getConstantRecord(final RecordKey key)
+	{
+		return Optional.ofNullable(constantQueryHandler.getRecord(key));
 	}
 
 
@@ -52,16 +52,42 @@ public class ConstantResolver
 	}
 
 
-	private Optional<ConstantRecord> getConstantRecord(final RecordKey key)
+	public Optional<Integer> getInteger(final String key)
 	{
-		return Optional.ofNullable(constantQueryHandler.getRecord(key));
+		return RecordKey.of(key)
+				.flatMap(this::getConstantRecord)
+				.flatMap(this::extractIntegerValue);
 	}
 
 
-	private Optional<String> extractStringValue(final ConstantRecord record)
+	public Optional<Boolean> getBoolean(final String key)
+	{
+		return RecordKey.of(key)
+				.flatMap(this::getConstantRecord)
+				.flatMap(this::extractBooleanValue);
+	}
+
+
+	Optional<String> extractStringValue(final ConstantRecord record)
 	{
 		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof String string)
 				? Optional.of(string)
+				: Optional.empty();
+	}
+
+
+	Optional<Integer> extractIntegerValue(final ConstantRecord record)
+	{
+		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof Integer integer)
+				? Optional.of(integer)
+				: Optional.empty();
+	}
+
+
+	Optional<Boolean> extractBooleanValue(final ConstantRecord record)
+	{
+		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof Boolean bool)
+				? Optional.of(bool)
 				: Optional.empty();
 	}
 
