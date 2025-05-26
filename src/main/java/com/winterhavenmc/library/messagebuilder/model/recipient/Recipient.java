@@ -45,7 +45,7 @@ public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Re
 			case ConsoleCommandSender ignored -> new Valid(sender);
 			case BlockCommandSender ignored -> new Valid(sender);
 			case ProxiedCommandSender proxy -> new Proxied(sender, proxy);
-			case null -> new Invalid(sender, InvalidReason.NULL);
+			case null -> new Invalid(null, InvalidReason.NULL);
 			default -> new Invalid(sender, InvalidReason.OTHER);
 		};
 	}
