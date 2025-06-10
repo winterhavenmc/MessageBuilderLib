@@ -18,6 +18,17 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname;
 
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+
+import java.util.Optional;
+import java.util.function.Predicate;
+
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.DISPLAY_NAME;
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
+
+
 /**
  * An interface that describes objects that have a {@code getDisplayName()}
  * method that returns a valid display name as a string.
@@ -26,4 +37,35 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname;
 public interface DisplayNameable
 {
 	String getDisplayName();
+
+	Predicate<String> VALID_DISPLAY_NAME = displayName -> displayName != null && !displayName.isBlank();
+
+
+	/**
+	 * Retrieve MacroStringMap with fields populated for objects that have a display name field or equivalent
+	 *
+	 * @param baseKey the base macro key for the object
+	 * @return MacroStringMap of macro keys with extracted string values
+	 */
+	default MacroStringMap extractDisplayName(final MacroKey baseKey, final AdapterContextContainer ctx)
+	{
+		return baseKey.append(DISPLAY_NAME)
+				.map(macroKey -> new MacroStringMap()
+						.with(macroKey, formatDisplayName(this.getDisplayName()).orElse(UNKNOWN_VALUE)))
+				.orElseGet(MacroStringMap::empty);
+	}
+
+
+	/**
+	 * Retrieve {@code Optional<String>} of valid display name for DisplayNameable implementing object
+	 *
+	 * @return {@code Optional<String>} of a valid display name, or an empty Optional if no valid display name found
+	 */
+	static Optional<String> formatDisplayName(final String displayName)
+	{
+		return (VALID_DISPLAY_NAME.test(displayName))
+				? Optional.of(displayName)
+				: Optional.empty();
+	}
+
 }

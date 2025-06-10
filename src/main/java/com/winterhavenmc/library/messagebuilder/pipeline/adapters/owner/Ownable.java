@@ -15,57 +15,58 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.pipeline.adapters.name;
-
+package com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import org.bukkit.entity.AnimalTamer;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.NAME;
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.OWNER;
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
 
-/**
- * An interface that describes objects that have a {@code getName()}
- * method that returns a valid name as a {@code String}
- */
-@FunctionalInterface
-public interface Nameable
-{
-	String getName();
 
+@FunctionalInterface
+public interface Ownable
+{
+	AnimalTamer getOwner();
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from a Durationable type
+	 * Returns a new MacroStringMap containing all fields extracted from an Ownable type
 	 *
 	 * @param baseKey the top level key for the fields of this object
-	 * @return a MacroStringMap containing the fields extracted for objects of Durationable type
+	 * @return a MacroStringMap containing the fields extracted for objects of Ownable type
 	 */
-	default MacroStringMap extractName(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractOwner(final MacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(NAME)
+		return baseKey.append(OWNER)
 				.map(macroKey -> new MacroStringMap()
-				.with(macroKey, formatName(this.getName()).orElse(UNKNOWN_VALUE)))
+				.with(macroKey, formatOwner(this.getOwner()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);
 	}
 
 
-	Predicate<String> VALID_NAME = name -> name != null && !name.isBlank();
+	/**
+	 * Predicate to test against null or blank name field
+	 */
+	Predicate<AnimalTamer> VALID_OWNER_NAME = animalTamer -> animalTamer != null
+			&& animalTamer.getName() != null
+			&& !animalTamer.getName().isBlank();
 
 
 	/**
-	 * Returns a formatted string of a name
+	 * Default method that returns a formatted string of an owner's name
 	 *
-	 * @return {@code Optional<String>} containing a formatted String of a name,
+	 * @return {@code Optional<String>} containing a formatted String of an owner's name,
 	 * or an empty Optional if not found
 	 */
-	static Optional<String> formatName(final String name)
+	static Optional<String> formatOwner(final AnimalTamer owner)
 	{
-		return (VALID_NAME.test(name))
-				? Optional.of(name)
+		return (VALID_OWNER_NAME.test(owner))
+				? Optional.ofNullable(owner.getName())
 				: Optional.empty();
 	}
 

@@ -18,10 +18,10 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.Durationable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant.Instantable;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
 
 import java.time.format.FormatStyle;
 import java.time.Instant;
@@ -29,7 +29,6 @@ import java.time.temporal.ChronoUnit;
 
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.*;
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
-import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Formatter.durationUntil;
 
 
 @FunctionalInterface
@@ -42,30 +41,31 @@ public interface Protectable
 	 * Returns a new MacroStringMap containing all fields extracted from a Protectable type
 	 *
 	 * @param baseKey the top level key for the fields of this object
-	 * @param protectable an object that conforms to the Protectable interface
-	 * @param formatterContainer the duration formatter to be used to convert the duration to a String
+	 * @param ctx the duration formatter to be used to convert the duration to a String
 	 * @return a MacroStringMap containing the fields extracted for objects of Protectable type
 	 */
-	default MacroStringMap extract(final MacroKey baseKey,
-								   final Protectable protectable,
-								   final ChronoUnit lowerBound,
-								   final FormatStyle formatStyle,
-								   final FormatterContainer formatterContainer)
+	default MacroStringMap extractProtection(final MacroKey baseKey,
+											 final ChronoUnit lowerBound,
+											 final FormatStyle formatStyle,
+											 final AdapterContextContainer ctx)
 	{
-		MacroKey protectionKey = baseKey.append(PROTECTION).orElseThrow();
 		MacroStringMap resultMap = new MacroStringMap();
 
-		// formatted date/time from Instant
-		protectionKey.append(INSTANT).ifPresent(macroKey ->
-				resultMap.put(macroKey, Instantable
-						.format(this.getProtection(), formatStyle, formatterContainer.localeProvider())
-						.orElse(UNKNOWN_VALUE)));
+		baseKey.append(PROTECTION).ifPresent(protectionKey ->
+		{
+			// formatted duration from current time
+			protectionKey.append(DURATION).ifPresent(macroKey ->
+					resultMap.put(macroKey, Durationable.formatDuration(Durationable
+							.durationUntil(this.getProtection()), lowerBound, ctx.formatterContainer()
+							.durationFormatter())
+							.orElse(UNKNOWN_VALUE)));
 
-		// formatted duration
-		protectionKey.append(DURATION).ifPresent(macroKey ->
-				resultMap.put(macroKey, Durationable
-						.format(durationUntil(this.getProtection()), lowerBound, formatterContainer.durationFormatter())
-						.orElse(UNKNOWN_VALUE)));
+			// formatted date/time from Instant
+			protectionKey.append(INSTANT).ifPresent(macroKey ->
+					resultMap.put(macroKey, Instantable.formatInstant(this.getProtection(), formatStyle, ctx.formatterContainer()
+							.localeProvider())
+							.orElse(UNKNOWN_VALUE)));
+		});
 
 		return resultMap;
 	}

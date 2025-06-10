@@ -17,8 +17,15 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid;
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+
+import java.util.Optional;
 import java.util.UUID;
 
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
 
 /**
  * An interface that describes objects
@@ -29,4 +36,32 @@ import java.util.UUID;
 public interface Identifiable
 {
 	UUID getUniqueId();
+
+
+	/**
+	 * Returns a new MacroStringMap containing all fields extracted from an Identifiable type
+	 *
+	 * @param baseKey      the top level key for the fields of this object
+	 * @return a MacroStringMap containing the fields extracted for objects of Identifiable type
+	 */
+	default MacroStringMap extractUid(final MacroKey baseKey, final AdapterContextContainer ctx)
+	{
+		return baseKey.append(Adapter.BuiltIn.UUID)
+				.map(macroKey -> new MacroStringMap()
+				.with(macroKey, formatUid(this.getUniqueId()).orElse(UNKNOWN_VALUE)))
+				.orElseGet(MacroStringMap::empty);
+	}
+
+
+	/**
+	 * Default method that returns a formatted string of a uuid
+	 *
+	 * @return {@code Optional<String>} containing a formatted String of a uuid,
+	 * or an empty Optional if not found
+	 */
+	static Optional<String> formatUid(final UUID uniqueId)
+	{
+		return Optional.of(String.valueOf(uniqueId));
+	}
+
 }
