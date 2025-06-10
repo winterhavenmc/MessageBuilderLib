@@ -59,10 +59,4 @@ public class QuantityAdapter implements Adapter
 		};
 	}
 
-
-	@Override
-	public boolean supports(Object value) {
-		return value instanceof Quantifiable;
-	}
-
 }

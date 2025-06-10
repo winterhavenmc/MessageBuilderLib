@@ -56,11 +56,4 @@ public class UniqueIdAdapter implements Adapter
 		};
 	}
 
-
-	@Override
-	public boolean supports(Object value)
-	{
-		return adapt(value).isPresent();
-	}
-
 }

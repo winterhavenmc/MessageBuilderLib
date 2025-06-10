@@ -63,11 +63,4 @@ public class NameAdapter implements Adapter
 		};
 	}
 
-
-	@Override
-	public boolean supports(Object value)
-	{
-		return value instanceof Nameable;
-	}
-
 }
