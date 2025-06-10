@@ -22,15 +22,34 @@ import java.util.Optional;
 
 public interface Adapter
 {
+	String UNKNOWN_VALUE = "=";
+
 	Optional<?> adapt(Object obj);
-	boolean supports(Object value);
+
+
+	default boolean supports(final Object value)
+	{
+		return adapt(value).isPresent();
+	}
+
 
 	enum BuiltIn
 	{
+		// single value fields
 		NAME,
 		DISPLAY_NAME,
-		UUID,
-		LOCATION,
+		OWNER,
+		LOOTER,
+		KILLER,
+		DURATION,
+		INSTANT,
 		QUANTITY,
+		UUID,
+
+		// compound fields
+		LOCATION,
+		EXPIRATION,
+		PROTECTION,
 	}
+
 }
