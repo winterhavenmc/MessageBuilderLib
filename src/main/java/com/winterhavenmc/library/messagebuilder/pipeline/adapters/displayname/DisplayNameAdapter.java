@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
+
 import org.bukkit.Nameable;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
