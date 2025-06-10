@@ -86,7 +86,7 @@ class MessageBuilderBootstrap
 																 final AdapterContextContainer adapterContextContainer)
 	{
 		final AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
-		final FieldExtractor fieldExtractor = new FieldExtractor();
+		final FieldExtractor fieldExtractor = new FieldExtractor(adapterContextContainer);
 		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		final AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
 		final FieldResolver fieldResolver = new FieldResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
