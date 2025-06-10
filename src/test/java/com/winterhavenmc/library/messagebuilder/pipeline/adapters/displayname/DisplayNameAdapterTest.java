@@ -42,8 +42,7 @@ import static org.mockito.Mockito.when;
 public class DisplayNameAdapterTest
 {
 	@Mock WorldNameResolver worldNameResolverMock;
-	@Mock
-	AdapterContextContainer adapterContextContainerMock;
+	@Mock AdapterContextContainer adapterContextContainerMock;
 
 	@Mock Player playerMock;
 	@Mock Entity entityMock;
