@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.STRING_BLANK;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LANGUAGE_TAG;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
@@ -54,7 +54,7 @@ public class LanguageTag
 	private LanguageTag(@NotNull final String languageTag)
 	{
 		validate(languageTag, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_TAG));
-		validate(languageTag, String::isBlank, throwing(PARAMETER_EMPTY, LANGUAGE_TAG));
+		validate(languageTag, String::isBlank, throwing(STRING_BLANK, LANGUAGE_TAG));
 
 		this.wrappedLanguageTag = languageTag;
 	}
