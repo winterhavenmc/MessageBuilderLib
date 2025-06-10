@@ -124,15 +124,15 @@ class MessageBuilderBootstrap
 	 * @param queryHandlerFactory instance of the query handler factory
 	 * @return the context container for to be injected into resolvers
 	 */
-	static FormatterContainer createResolverContextContainer(final Plugin plugin,
-															 final QueryHandlerFactory queryHandlerFactory)
+	static FormatterContainer createFormatterContainer(final Plugin plugin,
+													   final QueryHandlerFactory queryHandlerFactory)
 	{
 		final LocaleProvider localeProvider = LocaleProvider.create(plugin);
 		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProvider);
 		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProvider);
 		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, queryHandlerFactory);
 
-		return new FormatterContainer(durationFormatter, localeNumberFormatter);
+		return new FormatterContainer(localeProvider, durationFormatter, localeNumberFormatter);
 	}
 
 
@@ -142,9 +142,10 @@ class MessageBuilderBootstrap
 	 * @param plugin instance of the plugin
 	 * @return a populated context container
 	 */
-	static AdapterContextContainer createAdapterContextContainer(final Plugin plugin)
+	static AdapterContextContainer createAdapterContextContainer(final Plugin plugin,
+																 final FormatterContainer formatterContainer)
 	{
-		return new AdapterContextContainer(WorldNameResolver.getResolver(plugin.getServer().getPluginManager()));
+		return new AdapterContextContainer(WorldNameResolver.getResolver(plugin.getServer().getPluginManager()), formatterContainer);
 	}
 
 }
