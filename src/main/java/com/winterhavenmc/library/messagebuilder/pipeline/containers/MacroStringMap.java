@@ -49,6 +49,20 @@ public class MacroStringMap
 	}
 
 
+	/**
+	 * Static factory method to create new MacroStringMap from existing MacroStringMap
+	 *
+	 * @param map an existing MacroStringMap
+	 * @return a new MacroStringMap with the contents of the given map
+	 */
+	public static MacroStringMap of(MacroStringMap map)
+	{
+		MacroStringMap resultMap = new MacroStringMap();
+		resultMap.putAll(map);
+		return resultMap;
+	}
+
+
 	public void put(final MacroKey macroKey, final String value)
 	{
 		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
