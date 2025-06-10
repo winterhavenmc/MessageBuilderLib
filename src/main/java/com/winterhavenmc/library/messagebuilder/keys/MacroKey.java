@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 
 /**
- * A type that represents a validated key for a record. This type guarantees a valid key that has been
+ * A type that represents a validated key for a macro. This type guarantees a valid key that has been
  * validated upon creation. The static factory methods return an Optional of the RecordKey,
  * or an empty Optional if the parameter was invalid, as determined by regex pattern and Predicate.
  */
