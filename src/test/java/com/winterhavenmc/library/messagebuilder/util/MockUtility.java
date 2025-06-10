@@ -27,7 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_EMPTY;
+import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.STRING_BLANK;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RESOURCE_NAME;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.TARGET_DIR_PATH;
@@ -94,7 +94,7 @@ public final class MockUtility
 	public static long installResource(final String resourceName, final Path targetDirPath) throws IOException
 	{
 		validate(resourceName, Objects::isNull, throwing(PARAMETER_NULL, RESOURCE_NAME));
-		validate(resourceName, String::isBlank, throwing(PARAMETER_EMPTY, RESOURCE_NAME));
+		validate(resourceName, String::isBlank, throwing(STRING_BLANK, RESOURCE_NAME));
 		validate(targetDirPath, Objects::isNull, throwing(PARAMETER_NULL, TARGET_DIR_PATH));
 
 		// Ensure the target directory exists
