@@ -36,7 +36,7 @@ import java.util.Optional;
  */
 public class DisplayNameAdapter implements Adapter
 {
-	private final WorldNameResolver worldNameResolver;
+	private final AdapterContextContainer ctx;
 
 
 	/**
@@ -46,7 +46,7 @@ public class DisplayNameAdapter implements Adapter
 	 */
 	public DisplayNameAdapter(final AdapterContextContainer ctx)
 	{
-		this.worldNameResolver = ctx.worldNameResolver();
+		this.ctx = ctx;
 	}
 
 
@@ -66,7 +66,7 @@ public class DisplayNameAdapter implements Adapter
 			case DisplayNameable displayNameable -> Optional.of(displayNameable);
 			case Player player -> Optional.of(player::getDisplayName);
 			case Nameable nameable -> Optional.of(nameable::getCustomName); // Note: this is bukkit Nameable, NOT MessageBuilder Nameable
-			case World world -> Optional.of(() -> worldNameResolver.resolveWorldName(world));
+			case World world -> Optional.of(() -> ctx.worldNameResolver().resolveWorldName(world));
 			case null, default -> Optional.empty();
 		};
 	}
