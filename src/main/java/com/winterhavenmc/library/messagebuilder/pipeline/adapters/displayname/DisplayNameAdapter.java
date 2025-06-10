@@ -38,12 +38,26 @@ public class DisplayNameAdapter implements Adapter
 {
 	private final WorldNameResolver worldNameResolver;
 
+
+	/**
+	 * Constructor for DisplayNameAdapter
+	 *
+	 * @param ctx a context container carrying injectable components for use by this class
+	 */
 	public DisplayNameAdapter(final AdapterContextContainer ctx)
 	{
 		this.worldNameResolver = ctx.worldNameResolver();
 	}
 
 
+	/**
+	 * Adapt a type to conform to the {@link DisplayNameable} interface, making available a field with a value
+	 * equivalent to a displayName, and making it available via the {@code getDisplayName()} method
+	 * of the {@code DisplayNameable} interface
+	 *
+	 * @param obj the object to be adapted to the {@link DisplayNameable} interface
+	 * @return an {@code Optional} containing an adapted typed, or an empty Optional if the type could not be adapted
+	 */
 	@Override
 	public Optional<DisplayNameable> adapt(final Object obj)
 	{
