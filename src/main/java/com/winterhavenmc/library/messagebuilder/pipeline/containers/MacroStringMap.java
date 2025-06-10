@@ -20,10 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.containers;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.*;
@@ -125,6 +122,19 @@ public class MacroStringMap
 	public int size()
 	{
 		return INTERNAL_MAP.size();
+	}
+
+
+	static public MacroStringMap empty()
+	{
+		return new MacroStringMap();
+	}
+
+
+	public MacroStringMap with(MacroKey key, String value)
+	{
+		this.put(key, value);
+		return this;
 	}
 
 }
