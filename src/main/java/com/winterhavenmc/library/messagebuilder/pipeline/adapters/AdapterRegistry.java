@@ -18,14 +18,19 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.DurationAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.ExpirationAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant.InstantAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.location.LocationAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer.KillerAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter.LooterAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.OwnerAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
@@ -61,7 +66,7 @@ public class AdapterRegistry
 	}
 
 
-	public void register(Adapter adapter)
+	public void register(final Adapter adapter)
 	{
 		validate(adapter, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
 		adapters.add(adapter);
@@ -71,10 +76,11 @@ public class AdapterRegistry
 	/**
 	 * Returns all adapters that support the given value (based on instanceof checks inside each adapter).
 	 */
-	public Stream<Adapter> getMatchingAdapters(Object value)
+	public Stream<Adapter> getMatchingAdapters(final Object object)
 	{
-		if (value == null) return Stream.empty();
-		return adapters.stream().filter(adapter -> adapter.supports(value));
+		return (object != null)
+				? adapters.stream().filter(adapter -> adapter.supports(object))
+				: Stream.empty();
 	}
 
 }
