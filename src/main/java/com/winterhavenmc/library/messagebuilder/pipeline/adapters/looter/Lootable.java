@@ -54,7 +54,7 @@ public interface Lootable
 	/**
 	 * Predicate to test against null or blank looter name
 	 */
-	Predicate<AnimalTamer> VALID_LOOTER_NAME = looter -> looter != null
+	Predicate<AnimalTamer> VALID_LOOTER = looter -> looter != null
 			&& looter.getName() != null
 			&& !looter.getName().isBlank();
 
@@ -67,7 +67,7 @@ public interface Lootable
 	 */
 	static Optional<String> formatLooter(final AnimalTamer looter)
 	{
-		return (VALID_LOOTER_NAME.test(looter))
+		return (VALID_LOOTER.test(looter))
 				? Optional.ofNullable(looter.getName())
 				: Optional.empty();
 	}
