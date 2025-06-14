@@ -19,8 +19,6 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.Durationable;
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant.Instantable;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 
 import java.time.Instant;
@@ -29,6 +27,9 @@ import java.time.temporal.ChronoUnit;
 
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.*;
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.Durationable.durationUntil;
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.Durationable.formatDuration;
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant.Instantable.formatInstant;
 
 
 /**
@@ -56,19 +57,19 @@ public interface Expirable
 	{
 		MacroStringMap resultMap = new MacroStringMap();
 
-		baseKey.append(PROTECTION).ifPresent(protectionKey ->
+		baseKey.append(EXPIRATION).ifPresent(protectionKey ->
 		{
-			// formatted duration
+			// formatted duration (with 1/3 of lower bound duration added, to compensate for processing delay)
 			protectionKey.append(DURATION).ifPresent(macroKey ->
-					resultMap.put(macroKey, Durationable.formatDuration(Durationable
-							.durationUntil(this.getExpiration()), lowerBound, ctx.formatterContainer()
-							.durationFormatter())
+					resultMap.put(macroKey,
+							formatDuration(durationUntil(this.getExpiration().plus(lowerBound.getDuration().dividedBy(3))),
+									lowerBound, ctx.formatterContainer().durationFormatter())
 							.orElse(UNKNOWN_VALUE)));
 
 			// formatted date/time from Instant
 			protectionKey.append(INSTANT).ifPresent(macroKey ->
-					resultMap.put(macroKey, Instantable.formatInstant(this.getExpiration(), formatStyle, ctx.formatterContainer()
-							.localeProvider())
+					resultMap.put(macroKey,
+							formatInstant(this.getExpiration(), formatStyle, ctx.formatterContainer().localeProvider())
 							.orElse(UNKNOWN_VALUE)));
 		});
 
