@@ -17,20 +17,20 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 
-import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.KILLER;
+import java.util.Optional;
 
 
-@Deprecated
-public class KillerExtractor
+public class KillerAdapter implements Adapter
 {
-	MacroStringMap extract(final MacroKey baseKey, final Killable killable)
+	public Optional<Killable> adapt(final Object obj)
 	{
-		MacroStringMap resultMap = new MacroStringMap();
-		baseKey.append(KILLER).ifPresent(macroKey -> resultMap.put(macroKey, killable.format().orElse("-")));
-		return resultMap;
+		return switch (obj)
+		{
+			case Killable killable -> Optional.of(killable);
+			case null, default -> Optional.empty();
+		};
 	}
 
 }
