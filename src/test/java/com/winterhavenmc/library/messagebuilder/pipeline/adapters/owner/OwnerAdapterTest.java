@@ -17,9 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer.Killable;
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer.KillerAdapter;
-
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Player;
 
