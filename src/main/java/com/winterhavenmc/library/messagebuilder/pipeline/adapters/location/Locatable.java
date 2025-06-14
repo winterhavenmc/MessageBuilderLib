@@ -102,11 +102,11 @@ public interface Locatable
 		LocaleNumberFormatter numberFormatter = ctx.formatterContainer().localeNumberFormatter();
 
 		return (location != null)
-				? Optional.of(getLocationWorldName(location, ctx) +
-				" [" + String.join(", ",
-				ctx.formatterContainer().localeNumberFormatter().getFormatted(location.getBlockX()),
-				ctx.formatterContainer().localeNumberFormatter().getFormatted(location.getBlockY()),
-				ctx.formatterContainer().localeNumberFormatter().getFormatted(location.getBlockZ()) + "]"))
+				? Optional.of(getLocationWorldName(location, ctx).orElse(UNKNOWN_VALUE) +
+					" [" + String.join(", ",
+					ctx.formatterContainer().localeNumberFormatter().getFormatted(location.getBlockX()),
+					ctx.formatterContainer().localeNumberFormatter().getFormatted(location.getBlockY()),
+					ctx.formatterContainer().localeNumberFormatter().getFormatted(location.getBlockZ()) + "]"))
 				: Optional.empty();
 	}
 
