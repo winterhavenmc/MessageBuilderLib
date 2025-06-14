@@ -61,7 +61,9 @@ public interface Identifiable
 	 */
 	static Optional<String> formatUid(final UUID uniqueId)
 	{
-		return Optional.of(String.valueOf(uniqueId));
+		return (uniqueId != null)
+				? Optional.of(String.valueOf(uniqueId))
+				: Optional.empty();
 	}
 
 }
