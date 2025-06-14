@@ -103,11 +103,12 @@ public final class MessageBuilder
 						   final ConstantResolver constantResolver,
 	                       final MessagePipeline messagePipeline)
 	{
+		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, LocaleProvider.create(plugin).getLocale());
+
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
-		this.messagePipeline = messagePipeline;
-		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, LocaleProvider.create(plugin).getLocale());
 		this.constantResolver = constantResolver;
+		this.messagePipeline = messagePipeline;
 	}
 
 
