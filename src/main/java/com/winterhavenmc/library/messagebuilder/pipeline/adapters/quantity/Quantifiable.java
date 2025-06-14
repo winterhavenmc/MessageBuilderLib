@@ -22,7 +22,10 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContext
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.NumberFormatter;
 
+import java.util.Optional;
+
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.QUANTITY;
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
 
 
 /**
@@ -46,7 +49,7 @@ public interface Quantifiable
 	{
 		return baseKey.append(QUANTITY)
 				.map(macroKey -> new MacroStringMap()
-				.with(macroKey, formatQuantity(getQuantity(), ctx.formatterContainer().localeNumberFormatter())))
+				.with(macroKey, formatQuantity(getQuantity(), ctx.formatterContainer().localeNumberFormatter()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);
 	}
 
@@ -57,10 +60,10 @@ public interface Quantifiable
 	 * @param numberFormatter the number formatter to be used to convert the quantity to a String
 	 * @return a formatted String representing the quantity of the Quantifiable conforming object
 	 */
-	static String formatQuantity(final int quantity,
-								 final NumberFormatter numberFormatter)
+	static Optional<String> formatQuantity(final int quantity,
+										   final NumberFormatter numberFormatter)
 	{
-		return numberFormatter.getFormatted(quantity);
+		return Optional.of(numberFormatter.getFormatted(quantity));
 	}
 
 }
