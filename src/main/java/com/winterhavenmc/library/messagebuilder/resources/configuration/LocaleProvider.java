@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.resources.configuration;
 
 import org.bukkit.plugin.Plugin;
 
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.function.Supplier;
 
@@ -35,7 +36,9 @@ import java.util.function.Supplier;
  */
 public class LocaleProvider implements ConfigProvider<LocaleSetting>
 {
+	private final static String timeZoneSetting = "timezone";
 	private final Supplier<LocaleSetting> localeSettingSupplier;
+	private final Supplier<ZoneId> zoneIdSupplier;
 
 
 	/**
@@ -57,9 +60,10 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 	 *
 	 * @param localeSettingSupplier a provider for the plugin config language setting
 	 */
-	private LocaleProvider(final Supplier<LocaleSetting> localeSettingSupplier)
+	private LocaleProvider(final Supplier<LocaleSetting> localeSettingSupplier, final Supplier<ZoneId> zoneIdSupplier)
 	{
 		this.localeSettingSupplier = localeSettingSupplier;
+		this.zoneIdSupplier = zoneIdSupplier;
 	}
 
 
@@ -78,9 +82,21 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 	 */
 	public static LocaleProvider create(final Plugin plugin)
 	{
-		return new LocaleProvider(() -> new LocaleSetting(LanguageTag.of(plugin.getConfig().getString(LocaleField.LOCALE.toString()))
+		return new LocaleProvider(
+				() -> new LocaleSetting(LanguageTag.of(plugin.getConfig().getString(LocaleField.LOCALE.toString()))
 						.orElse(LanguageTag.of(plugin.getConfig().getString(LocaleField.LANGUAGE.toString()))
-						.orElse(LanguageTag.getSystemDefault()))));
+						.orElse(LanguageTag.getSystemDefault()))),
+				() -> getValidZoneId(plugin));
+	}
+
+
+	private static ZoneId getValidZoneId(final Plugin plugin)
+	{
+		String timezone = plugin.getConfig().getString(timeZoneSetting);
+
+		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
+				? ZoneId.of(timezone)
+				: ZoneId.systemDefault();
 	}
 
 
@@ -115,6 +131,12 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 	public Locale getLocale()
 	{
 		return localeSettingSupplier.get().languageTag().getLocale();
+	}
+
+
+	public ZoneId getZoneId()
+	{
+		return zoneIdSupplier.get();
 	}
 
 }
