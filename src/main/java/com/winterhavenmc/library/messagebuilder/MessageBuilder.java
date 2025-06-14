@@ -129,8 +129,8 @@ public final class MessageBuilder
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
 		final ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactory);
 
-		final FormatterContainer formatterContainer = createResolverContextContainer(plugin, queryHandlerFactory);
-		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin);
+		final FormatterContainer formatterContainer = createFormatterContainer(plugin, queryHandlerFactory);
+		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, formatterContainer);
 		final MessagePipeline messagePipeline = createMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer);
 
 		return new MessageBuilder(plugin, languageResourceManager, constantResolver, messagePipeline);
