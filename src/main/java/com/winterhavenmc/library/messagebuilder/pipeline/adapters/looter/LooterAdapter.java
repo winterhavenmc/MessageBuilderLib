@@ -33,17 +33,4 @@ public class LooterAdapter implements Adapter
 		};
 	}
 
-
-//	/**
-//	 * Returns true if the given object is of a type supported by this adapter interface
-//	 *
-//	 * @param value the object to evaluate for adaptability
-//	 * @return {@code true} if the object is of an adaptable type, or {@code false} if not
-//	 */
-//	@Override
-//	public boolean supports(final Object value)
-//	{
-//		return value instanceof Lootable;
-//	}
-
 }
