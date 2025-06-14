@@ -46,10 +46,17 @@ public class AdapterRegistry
 	public AdapterRegistry(final AdapterContextContainer adapterContextContainer)
 	{
 		// Register adapters in preferred priority order
-		register(new NameAdapter());
 		register(new DisplayNameAdapter(adapterContextContainer));
+		register(new DurationAdapter());
+		register(new ExpirationAdapter());
+		register(new InstantAdapter());
+		register(new NameAdapter());
+		register(new OwnerAdapter());
+		register(new KillerAdapter());
+		register(new LooterAdapter());
 		register(new LocationAdapter());
 		register(new QuantityAdapter());
+		register(new ProtectionAdapter());
 		register(new UniqueIdAdapter());
 	}
 
