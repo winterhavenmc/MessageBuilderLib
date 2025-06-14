@@ -50,10 +50,10 @@ public class NameAdapterTest
 
 
 	@Nested
-	class CommandSenderNameAdapterTests
+	class NameAdapterTests
 	{
 		@Test
-		public void testGetDisplayName_withValidCommandSender()
+		public void getName_with_Valid_CommandSender()
 		{
 			// Arrange
 			when(commandSenderMock.getName()).thenReturn("Command Sender Name");
@@ -73,7 +73,7 @@ public class NameAdapterTest
 		}
 
 		@Test
-		public void testGetName_withNull()
+		public void adapt_with_null_parameter_returns_empty_optional()
 		{
 			// Arrange
 			String name = null;
@@ -84,6 +84,7 @@ public class NameAdapterTest
 			{
 				name = adapter.get().getName();
 			}
+
 			// Assert
 			assertNull(name, "The adapter should return an empty string for a null Player.");
 		}

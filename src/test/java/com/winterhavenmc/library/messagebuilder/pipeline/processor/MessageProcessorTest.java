@@ -98,14 +98,14 @@ class MessageProcessorTest
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 
-		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock);
-
-		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
-		FieldExtractor fieldExtractor = new FieldExtractor();
-		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
 		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
-		FormatterContainer formatterContainer = new FormatterContainer(time4jDurationFormatter, localeNumberFormatter);
+		FormatterContainer formatterContainer = new FormatterContainer(localeProviderMock, time4jDurationFormatter, localeNumberFormatter);
+		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock, formatterContainer);
+		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
+		FieldExtractor fieldExtractor = new FieldExtractor(adapterContextContainer);
+
+		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
 
 

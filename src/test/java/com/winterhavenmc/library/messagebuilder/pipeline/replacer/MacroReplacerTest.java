@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import static com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer.BASE_KEY_PATTERN;
 import static com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer.FULL_KEY_PATTERN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,9 +41,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MacroReplacerTest
 {
-	@Mock Resolver resolver;
-	@Mock Matcher matcher;
-	@Mock MacroObjectMap macroObjectMap;
+	@Mock Resolver resolverMock;
+	@Mock Matcher matcherMock;
+	@Mock MacroObjectMap macroObjectMapMock;
 
 	private MacroReplacer replacer;
 
@@ -50,7 +51,7 @@ class MacroReplacerTest
 	@BeforeEach
 	void setUp()
 	{
-		replacer = new MacroReplacer(resolver, matcher);
+		replacer = new MacroReplacer(resolverMock, matcherMock);
 	}
 
 	@Test
@@ -65,22 +66,22 @@ class MacroReplacerTest
 		stringMap.put(baseKey1, "Steve");
 		stringMap.put(baseKey2, "Earth");
 
-		when(matcher.match(input, BASE_KEY_PATTERN))
+		when(matcherMock.match(input, BASE_KEY_PATTERN))
 				.thenReturn(Stream.of(baseKey1, baseKey2));
 
-		when(resolver.resolve(baseKey1, macroObjectMap)).thenReturn(stringMap);
-		when(resolver.resolve(baseKey2, macroObjectMap)).thenReturn(stringMap);
+		when(resolverMock.resolve(baseKey1, macroObjectMapMock)).thenReturn(stringMap);
+		when(resolverMock.resolve(baseKey2, macroObjectMapMock)).thenReturn(stringMap);
 
-		when(matcher.match(input, FULL_KEY_PATTERN))
+		when(matcherMock.match(input, FULL_KEY_PATTERN))
 				.thenReturn(Stream.of(baseKey1, baseKey2));
 
-		String result = replacer.replace(macroObjectMap, input);
+		String result = replacer.replace(macroObjectMapMock, input);
 
 		assertEquals(expected, result);
-		verify(matcher).match(input, BASE_KEY_PATTERN);
-		verify(matcher).match(input, FULL_KEY_PATTERN);
-		verify(resolver).resolve(baseKey1, macroObjectMap);
-		verify(resolver).resolve(baseKey2, macroObjectMap);
+		verify(matcherMock).match(input, BASE_KEY_PATTERN);
+		verify(matcherMock).match(input, FULL_KEY_PATTERN);
+		verify(resolverMock).resolve(baseKey1, macroObjectMapMock);
+		verify(resolverMock).resolve(baseKey2, macroObjectMapMock);
 	}
 
 
@@ -96,29 +97,83 @@ class MacroReplacerTest
 		stringMap.put(baseKey1, "Steve");
 		stringMap.put(baseKey2, "Earth");
 
-		when(matcher.match(input, BASE_KEY_PATTERN))
+		when(matcherMock.match(input, BASE_KEY_PATTERN))
 				.thenReturn(Stream.of(baseKey1, baseKey2));
 
-		when(resolver.resolve(baseKey1, macroObjectMap)).thenReturn(stringMap);
-		when(resolver.resolve(baseKey2, macroObjectMap)).thenReturn(stringMap);
+		when(resolverMock.resolve(baseKey1, macroObjectMapMock)).thenReturn(stringMap);
+		when(resolverMock.resolve(baseKey2, macroObjectMapMock)).thenReturn(stringMap);
 
-		when(matcher.match(input, FULL_KEY_PATTERN))
+		when(matcherMock.match(input, FULL_KEY_PATTERN))
 				.thenReturn(Stream.of(baseKey1, baseKey2));
 
-		String result = replacer.replace(macroObjectMap, input);
+		String result = replacer.replace(macroObjectMapMock, input);
 
 		assertEquals(expected, result);
-		verify(matcher).match(input, BASE_KEY_PATTERN);
-		verify(matcher).match(input, FULL_KEY_PATTERN);
-		verify(resolver).resolve(baseKey1, macroObjectMap);
-		verify(resolver).resolve(baseKey2, macroObjectMap);
+		verify(matcherMock).match(input, BASE_KEY_PATTERN);
+		verify(matcherMock).match(input, FULL_KEY_PATTERN);
+		verify(resolverMock).resolve(baseKey1, macroObjectMapMock);
+		verify(resolverMock).resolve(baseKey2, macroObjectMapMock);
+	}
+
+
+	@Test
+	void testReplace_with_valid_parameters_compound_key2()
+	{
+		String input = "Death chest is owned by {DEATH_CHEST.OWNER}";
+		String expected = "Death chest is owned by Steve";
+
+		MacroKey key1 = MacroKey.of("DEATH_CHEST.OWNER").orElseThrow();
+		MacroStringMap stringMap = new MacroStringMap();
+		stringMap.put(key1, "Steve");
+
+		when(matcherMock.match(input, BASE_KEY_PATTERN))
+				.thenReturn(Stream.of(key1));
+
+		when(resolverMock.resolve(key1, macroObjectMapMock)).thenReturn(stringMap);
+
+		when(matcherMock.match(input, FULL_KEY_PATTERN))
+				.thenReturn(Stream.of(key1));
+
+		String result = replacer.replace(macroObjectMapMock, input);
+
+		assertEquals(expected, result);
+		verify(matcherMock).match(input, BASE_KEY_PATTERN);
+		verify(matcherMock).match(input, FULL_KEY_PATTERN);
+		verify(resolverMock).resolve(key1, macroObjectMapMock);
+	}
+
+
+	@Test
+	void testReplace_with_valid_parameters_compound_key3()
+	{
+		String input = "Death chest expires in {DEATH_CHEST.EXPIRATION.DURATION}";
+		String expected = "Death chest expires in 1 hour, 15 minutes";
+
+		MacroKey key1 = MacroKey.of("DEATH_CHEST.EXPIRATION.DURATION").orElseThrow();
+		MacroStringMap stringMap = new MacroStringMap();
+		stringMap.put(key1, "1 hour, 15 minutes");
+
+		when(matcherMock.match(input, BASE_KEY_PATTERN))
+				.thenReturn(Stream.of(key1));
+
+		when(resolverMock.resolve(key1, macroObjectMapMock)).thenReturn(stringMap);
+
+		when(matcherMock.match(input, FULL_KEY_PATTERN))
+				.thenReturn(Stream.of(key1));
+
+		String result = replacer.replace(macroObjectMapMock, input);
+
+		assertEquals(expected, result);
+		verify(matcherMock).match(input, BASE_KEY_PATTERN);
+		verify(matcherMock).match(input, FULL_KEY_PATTERN);
+		verify(resolverMock).resolve(key1, macroObjectMapMock);
 	}
 
 
 	@Test
 	void testReplace_with_null_message()
 	{
-		String result = replacer.replace(macroObjectMap, null);
+		String result = replacer.replace(macroObjectMapMock, null);
 		assertEquals("", result);
 	}
 
@@ -129,13 +184,41 @@ class MacroReplacerTest
 		String input = "This is {UNKNOWN_KEY}";
 		MacroKey macroKey = MacroKey.of("UNKNOWN_KEY").orElseThrow();
 
-		when(matcher.match(input, BASE_KEY_PATTERN)).thenReturn(Stream.of(macroKey));
-		when(matcher.match(input, FULL_KEY_PATTERN)).thenReturn(Stream.of(macroKey));
-		when(resolver.resolve(macroKey, macroObjectMap)).thenReturn(new MacroStringMap());
+		when(matcherMock.match(input, BASE_KEY_PATTERN)).thenReturn(Stream.of(macroKey));
+		when(matcherMock.match(input, FULL_KEY_PATTERN)).thenReturn(Stream.of(macroKey));
+		when(resolverMock.resolve(macroKey, macroObjectMapMock)).thenReturn(new MacroStringMap());
 
-		String result = replacer.replace(macroObjectMap, input);
+		String result = replacer.replace(macroObjectMapMock, input);
 
 		assertEquals("This is {UNKNOWN_KEY}", result); // because map.get returns null
+	}
+
+
+	@Test
+	void baseKey_pattern_matches()
+	{
+		String original = "{DEATH_CHEST.PROTECTION.DURATION}";
+
+		java.util.regex.Matcher m = BASE_KEY_PATTERN.matcher(original);
+
+		m.find();
+
+		assertEquals("DEATH_CHEST", m.group(1));
+
+	}
+
+
+	@Test
+	void fullKey_pattern_matches()
+	{
+		String original = "{DEATH_CHEST.PROTECTION.DURATION}";
+
+		java.util.regex.Matcher m = FULL_KEY_PATTERN.matcher(original);
+
+		m.find();
+
+		assertEquals("DEATH_CHEST.PROTECTION.DURATION", m.group(1));
+
 	}
 
 }
