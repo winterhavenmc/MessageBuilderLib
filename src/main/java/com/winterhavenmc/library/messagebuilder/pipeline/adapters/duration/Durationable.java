@@ -79,7 +79,9 @@ public interface Durationable
 
 	static Duration durationUntil(final Instant instant)
 	{
-		return Duration.between(Instant.now(), instant);
+		return (instant != null)
+				? Duration.between(Instant.now(), instant)
+				: Duration.ZERO;
 	}
 
 }
