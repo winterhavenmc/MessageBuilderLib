@@ -66,8 +66,6 @@ public interface Locatable
 					: baseKey;
 
 			resultMap.put(locationKey, formatLocation(this.getLocation(), ctx).orElse(UNKNOWN_VALUE));
-			locationKey.append(Field.STRING).ifPresent(stringKey ->
-					resultMap.put(stringKey, formatLocation(this.getLocation(), ctx).orElse(UNKNOWN_VALUE)));
 			locationKey.append(Field.WORLD).ifPresent(worldKey ->
 					resultMap.put(worldKey, getLocationWorldName(this.getLocation(), ctx).orElse(UNKNOWN_VALUE)));
 			locationKey.append(Field.X).ifPresent(xKey ->
