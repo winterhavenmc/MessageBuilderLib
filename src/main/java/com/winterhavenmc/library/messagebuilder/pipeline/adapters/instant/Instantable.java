@@ -23,6 +23,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringM
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Optional;
@@ -73,10 +74,12 @@ public interface Instantable
 										  final FormatStyle formatStyle,
 										  final LocaleProvider localeProvider)
 	{
-		return Optional.of(DateTimeFormatter
-				.ofLocalizedDateTime(formatStyle)
-				.withLocale(localeProvider.getLocale())
-				.format(instant));
+		if (instant == null) { return Optional.empty(); }
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(formatStyle);
+		ZonedDateTime zonedDateTime = instant.atZone(localeProvider.getZoneId());
+
+		return Optional.of(formatter.format(zonedDateTime));
 	}
 
 }
