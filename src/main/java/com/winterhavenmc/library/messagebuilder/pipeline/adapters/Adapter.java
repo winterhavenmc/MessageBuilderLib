@@ -22,14 +22,14 @@ import java.util.Optional;
 
 public interface Adapter
 {
-	String UNKNOWN_VALUE = "=";
+	String UNKNOWN_VALUE = "-";
 
-	Optional<?> adapt(Object obj);
+	Optional<?> adapt(Object object);
 
 
-	default boolean supports(final Object value)
+	default boolean supports(final Object object)
 	{
-		return adapt(value).isPresent();
+		return adapt(object).isPresent();
 	}
 
 
