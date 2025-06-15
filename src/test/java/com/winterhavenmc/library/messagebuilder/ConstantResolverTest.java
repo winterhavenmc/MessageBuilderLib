@@ -48,7 +48,7 @@ class ConstantResolverTest
 	class GetStringTests
 	{
 		@Test
-		void getString()
+		void getString_returns_optional_String()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
@@ -112,7 +112,7 @@ class ConstantResolverTest
 	class GetIntegerTests
 	{
 		@Test
-		void getInteger()
+		void getInteger_returns_optional_Integer()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
@@ -156,7 +156,7 @@ class ConstantResolverTest
 	class GetBooleanTests
 	{
 		@Test
-		void getBoolean()
+		void getBoolean_returns_optional_Boolean()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
@@ -209,7 +209,7 @@ class ConstantResolverTest
 			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
-			Optional<String> result = constantResolver.extractStringValue(constantRecord);
+			Optional<String> result = constantResolver.fetchStringValue(constantRecord);
 
 			// Assert
 			assertEquals(Optional.of("result string"), result);
@@ -226,7 +226,7 @@ class ConstantResolverTest
 			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
-			Optional<String> result = constantResolver.extractStringValue(constantRecord);
+			Optional<String> result = constantResolver.fetchStringValue(constantRecord);
 
 			// Assert
 			assertEquals(Optional.empty(), result);
@@ -247,7 +247,7 @@ class ConstantResolverTest
 			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
-			Optional<Integer> result = constantResolver.extractIntegerValue(constantRecord);
+			Optional<Integer> result = constantResolver.fetchIntegerValue(constantRecord);
 
 			// Assert
 			assertEquals(Optional.of(42), result);
@@ -264,7 +264,7 @@ class ConstantResolverTest
 			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
-			Optional<Integer> result = constantResolver.extractIntegerValue(constantRecord);
+			Optional<Integer> result = constantResolver.fetchIntegerValue(constantRecord);
 
 			// Assert
 			assertEquals(Optional.empty(), result);
@@ -285,7 +285,7 @@ class ConstantResolverTest
 			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
-			Optional<Boolean> result = constantResolver.extractBooleanValue(constantRecord);
+			Optional<Boolean> result = constantResolver.fetchBooleanValue(constantRecord);
 
 			// Assert
 			assertEquals(Optional.of(true), result);
@@ -302,7 +302,7 @@ class ConstantResolverTest
 			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
-			Optional<Boolean> result = constantResolver.extractBooleanValue(constantRecord);
+			Optional<Boolean> result = constantResolver.fetchBooleanValue(constantRecord);
 
 			// Assert
 			assertEquals(Optional.empty(), result);

@@ -48,7 +48,7 @@ public class ConstantResolver
 	{
 		return RecordKey.of(key)
 				.flatMap(this::getConstantRecord)
-				.flatMap(this::extractStringValue);
+				.flatMap(this::fetchStringValue);
 	}
 
 
@@ -56,7 +56,7 @@ public class ConstantResolver
 	{
 		return RecordKey.of(key)
 				.flatMap(this::getConstantRecord)
-				.flatMap(this::extractIntegerValue);
+				.flatMap(this::fetchIntegerValue);
 	}
 
 
@@ -64,11 +64,11 @@ public class ConstantResolver
 	{
 		return RecordKey.of(key)
 				.flatMap(this::getConstantRecord)
-				.flatMap(this::extractBooleanValue);
+				.flatMap(this::fetchBooleanValue);
 	}
 
 
-	Optional<String> extractStringValue(final ConstantRecord record)
+	Optional<String> fetchStringValue(final ConstantRecord record)
 	{
 		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof String string)
 				? Optional.of(string)
@@ -76,7 +76,7 @@ public class ConstantResolver
 	}
 
 
-	Optional<Integer> extractIntegerValue(final ConstantRecord record)
+	Optional<Integer> fetchIntegerValue(final ConstantRecord record)
 	{
 		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof Integer integer)
 				? Optional.of(integer)
@@ -84,7 +84,7 @@ public class ConstantResolver
 	}
 
 
-	Optional<Boolean> extractBooleanValue(final ConstantRecord record)
+	Optional<Boolean> fetchBooleanValue(final ConstantRecord record)
 	{
 		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof Boolean bool)
 				? Optional.of(bool)
