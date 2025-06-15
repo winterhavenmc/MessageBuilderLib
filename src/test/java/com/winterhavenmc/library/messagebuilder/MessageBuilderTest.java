@@ -86,15 +86,15 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void testTickUnit()
+	@Test @DisplayName("Tick TimeUnit is valid.")
+	void Tick_timeUnit_is_valid()
 	{
 		assertEquals(Duration.ofMillis(50), TICKS.getDuration());
 	}
 
 
-	@Test
-	void compose()
+	@Test @DisplayName("compose method returns valid Message object.")
+	void compose_method_returns_valid_Message_object()
 	{
 		// Arrange & Act
 		Message result = messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE);
@@ -104,16 +104,16 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void compose_parameter_null_player()
+	@Test @DisplayName("compose method does not throw exception when recipient parameter is null.")
+	void compose_parameter_accepts_null_recipient_parameter()
 	{
 		// Act & Assert
 		assertDoesNotThrow(() -> messageBuilder.compose(null, MessageId.ENABLED_MESSAGE));
 	}
 
 
-	@Test
-	void compose_parameter_proxied_command_sender()
+	@Test @DisplayName("compose method accepts ProxiedCommandSender for sender parameter.")
+	void compose_parameter_accepts_proxied_command_sender()
 	{
 		// Act & Assert
 		Message result = messageBuilder.compose(proxiedCommandSenderMock, MessageId.ENABLED_MESSAGE);
@@ -122,8 +122,8 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void compose_parameter_null_message_id()
+	@Test @DisplayName("compose method throws exception when messageId parameter is null.")
+	void compose_throws_exception_when_parameter_messageId_is_null()
 	{
 		// Act
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -134,8 +134,8 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void reload()
+	@Test @DisplayName("Exception is not thrown when reload succeeds.")
+	void reload_success_does_not_throw_exception()
 	{
 		// Arrange
 		when(languageResourceManagerMock.reload()).thenReturn(true);
@@ -149,8 +149,8 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void reload_failed()
+	@Test @DisplayName("Exception is not thrown when reload fails.")
+	void reload_fail_does_not_throw_exception()
 	{
 		// Arrange
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
@@ -164,8 +164,8 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void testCreate()
+	@Test @DisplayName("Static factory method (create) returns valid MessageBuilder.")
+	void static_factory_create_returns_valid_MessageBuilder()
 	{
 		// Arrange
 		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
@@ -181,8 +181,8 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void testCreate_parameter_null_plugin()
+	@Test @DisplayName("ValidationException is thrown when plugin parameter is null (create method).")
+	void static_factory_create_throws_exception_when_plugin_parameter_is_null()
 	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -193,8 +193,8 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void test_parameter_null_plugin()
+	@Test @DisplayName("ValidationException is thrown when plugin parameter is null (test method).")
+	void static_factory_test_throws_exception_when_plugin_parameter_is_null()
 	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -208,8 +208,8 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void test_parameter_null_languageResourceManager()
+	@Test @DisplayName("ValidationException is thrown when languageResourceManager parameter is null (test method).")
+	void static_factory_test_throws_exception_when_languageResourceManager_parameter_is_null()
 	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -223,8 +223,8 @@ class MessageBuilderTest
 	}
 
 
-	@Test
-	void test_parameter_null_messageProcessor()
+	@Test @DisplayName("ValidationException is thrown when messageProcessor parameter is null (test method).")
+	void static_factory_test_throws_exception_when_messageProcessor_parameter_is_null()
 	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,
@@ -238,57 +238,13 @@ class MessageBuilderTest
 	}
 
 
-//	@Test
-//	void testGetConstantString_returnsValidString()
-//	{
-//		// Arrange
-//		String key = "MY_CONSTANT";
-//		String expectedValue = "Hello, World!";
-//
-//		// Mock the constants section
-//		when(constantsSectionMock.get(key)).thenReturn(expectedValue);
-//
-//		SectionProvider sectionProvider = () -> constantsSectionMock;
-//		when(languageResourceManagerMock.getSectionProvider(Section.CONSTANTS))
-//				.thenReturn(sectionProvider);
-//
-//		// Act
-//		Optional<String> result = messageBuilder.getConstantString(key);
-//
-//		// Assert
-//		assertTrue(result.isPresent());
-//		assertEquals(expectedValue, result.get());
-//	}
+	@Test @DisplayName("getConstantResolver returns valid ConstantResolver instance.")
+	void getConstantResolver_returns_valid_constantResolver()
+	{
+		ConstantResolver constantResolver = messageBuilder.getConstantResolver();
 
-
-//	@Test
-//	void testGetConstantString_invalidKey_returnsEmpty()
-//	{
-//		// Act
-//		Optional<String> result = messageBuilder.getConstantString("");
-//
-//		// Assert
-//		assertTrue(result.isEmpty());
-//	}
-//
-//
-//	@Test
-//	void testGetConstantString_validKeyButMissingRecord_returnsEmpty()
-//	{
-//		// Arrange
-//		String key = "MISSING_KEY";
-//
-//		ConfigurationSection constantsSection = mock(ConfigurationSection.class);
-//
-//		SectionProvider provider = () -> constantsSection;
-//		when(languageResourceManagerMock.getSectionProvider(Section.CONSTANTS))
-//				.thenReturn(provider);
-//
-//		// Act
-//		Optional<String> result = messageBuilder.getConstantString(key);
-//
-//		// Assert
-//		assertTrue(result.isEmpty());
-//	}
+		assertNotNull(constantResolver);
+		assertInstanceOf(ConstantResolver.class, constantResolver);
+	}
 
 }
