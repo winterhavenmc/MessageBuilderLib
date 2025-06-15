@@ -36,7 +36,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*;
