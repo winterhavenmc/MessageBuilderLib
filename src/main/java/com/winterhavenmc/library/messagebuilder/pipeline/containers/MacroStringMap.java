@@ -52,14 +52,6 @@ public class MacroStringMap
 	 * @param macroKey the key for the entry
 	 * @param value the value for the entry
 	 */
-	public static MacroStringMap of(MacroStringMap map)
-	{
-		MacroStringMap resultMap = new MacroStringMap();
-		resultMap.putAll(map);
-		return resultMap;
-	}
-
-
 	public void put(final MacroKey macroKey, final String value)
 	{
 		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
