@@ -17,6 +17,16 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity;
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.NumberFormatter;
+
+import java.util.Optional;
+
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.QUANTITY;
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
+
 
 /**
  * An interface that describes objects that have a {@code getQuantity()}
@@ -26,4 +36,34 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity;
 public interface Quantifiable
 {
 	int getQuantity();
+
+
+	/**
+	 * Returns a new MacroStringMap containing all fields extracted from a Quantifiable type
+	 *
+	 * @param baseKey the top level key for the fields of this object
+	 * @param ctx containing numberFormatter the duration formatter to be used to convert the duration to a String
+	 * @return a MacroStringMap containing the fields extracted for objects of Quantifiable type
+	 */
+	default MacroStringMap extractQuantity(final MacroKey baseKey, final AdapterContextContainer ctx)
+	{
+		return baseKey.append(QUANTITY)
+				.map(macroKey -> new MacroStringMap()
+				.with(macroKey, formatQuantity(getQuantity(), ctx.formatterContainer().localeNumberFormatter()).orElse(UNKNOWN_VALUE)))
+				.orElseGet(MacroStringMap::empty);
+	}
+
+
+	/**
+	 * Returns a formatted string representing a duration of time, using the supplied DurationFormatter
+	 *
+	 * @param numberFormatter the number formatter to be used to convert the quantity to a String
+	 * @return a formatted String representing the quantity of the Quantifiable conforming object
+	 */
+	static Optional<String> formatQuantity(final int quantity,
+										   final NumberFormatter numberFormatter)
+	{
+		return Optional.of(numberFormatter.getFormatted(quantity));
+	}
+
 }

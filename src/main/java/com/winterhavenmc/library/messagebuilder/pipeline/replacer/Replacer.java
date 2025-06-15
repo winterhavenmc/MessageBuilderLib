@@ -18,12 +18,15 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 
-
-@FunctionalInterface
 public interface Replacer
 {
-	FinalMessageRecord replaceMacros(ValidMessageRecord messageRecord, MacroObjectMap macroObjectMap);
+	/**
+	 * Replace macros in a message to be sent
+	 *
+	 * @param macroObjectMap the context map containing other objects whose values may be retrieved
+	 * @param messageString  the message with placeholders to be replaced by macro values
+	 * @return the string with all macro replacements performed
+	 */
+	String replace(MacroObjectMap macroObjectMap, String messageString);
 }

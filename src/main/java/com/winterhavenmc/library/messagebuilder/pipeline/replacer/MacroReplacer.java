@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,40 +18,69 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
-import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.util.Delimiter;
+
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 
-/**
- * This class provides handling of the Macro Processors and their Registry
- */
 public class MacroReplacer implements Replacer
 {
-	private final StringReplacer stringReplacer;
+	private final Resolver resolver;
+	private final Matcher placeholderMatcher;
+
+	public static final Pattern FULL_KEY_PATTERN = Pattern.compile(
+			Pattern.quote(Delimiter.OPEN.toString())
+					+ "(\\p{Lu}[\\p{Alnum}_.]+)"
+					+ Pattern.quote(Delimiter.CLOSE.toString()));
+
+	public static final Pattern BASE_KEY_PATTERN = Pattern.compile(
+			Pattern.quote(Delimiter.OPEN.toString())
+					+ "(\\p{Lu}[\\p{Alnum}_]+)[\\p{Alnum}_.]*"
+					+ Pattern.quote(Delimiter.CLOSE.toString()));
 
 
-	public MacroReplacer(final Resolver resolver, final Matcher matcher)
+
+	/**
+	 * Class constructor
+	 *
+	 * @param resolver resolver instance
+	 * @param placeholderMatcher placeholder matcher instance
+	 */
+	public MacroReplacer(final Resolver resolver, final Matcher placeholderMatcher)
 	{
-		this.stringReplacer = new StringReplacer(resolver, matcher);
+		this.resolver = resolver;
+		this.placeholderMatcher = placeholderMatcher;
 	}
 
 
 	/**
 	 * Replace macros in a message to be sent
 	 *
-	 * @param messageRecord the message record to have macro placeholders replaced in message and title strings
-	 * @return a new {@code FinalMessageRecord} with all macro replacements performed and placed into the final string fields
+	 * @param macroObjectMap the context map containing other objects whose values may be retrieved
+	 * @param messageString the message with placeholders to be replaced by macro values
+	 * @return the string with all macro replacements performed
 	 */
 	@Override
-	public FinalMessageRecord replaceMacros(final ValidMessageRecord messageRecord, final MacroObjectMap macroObjectMap)
+	public String replace(final MacroObjectMap macroObjectMap, final String messageString)
 	{
-		// return new message record with final string fields added with macro replacements performed
-		return messageRecord.withFinalStrings(
-				stringReplacer.replaceStrings(macroObjectMap, messageRecord.message()),
-				stringReplacer.replaceStrings(macroObjectMap, messageRecord.title()),
-				stringReplacer.replaceStrings(macroObjectMap, messageRecord.subtitle()));
+		String validMessageString = (messageString != null)
+				? messageString
+				: "";
+
+		MacroStringMap stringMap = placeholderMatcher.match(validMessageString, BASE_KEY_PATTERN)
+				.collect(MacroStringMap::new, (map, key) -> map
+				.putAll(resolver.resolve(key, macroObjectMap)), MacroStringMap::putAll);
+
+		return placeholderMatcher.match(validMessageString, FULL_KEY_PATTERN)
+				.distinct()
+				.reduce(validMessageString,
+						(result, key) -> result.replace(
+								key.asPlaceholder(),
+								Optional.ofNullable(stringMap.get(key)).orElse(key.asPlaceholder())), (s1, s2) -> s2);
 	}
 
 }

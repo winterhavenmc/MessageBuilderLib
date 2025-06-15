@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration;
 
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
+
 import net.time4j.CalendarUnit;
 import net.time4j.ClockUnit;
 import net.time4j.PrettyTime;
@@ -56,17 +57,26 @@ public final class Time4jDurationFormatter implements DurationFormatter
 	@Override
 	public String format(final Duration duration, final ChronoUnit lowerBound)
 	{
-		final Duration validDuration = validate(duration, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, DURATION)).orElse(Duration.ZERO);
-		final ChronoUnit validLowerBound = validate(lowerBound, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, PRECISION)).orElse(ChronoUnit.MINUTES);
+		Duration validDuration = validate(duration, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, DURATION)).orElse(Duration.ZERO);
+		ChronoUnit validLowerBound = validate(lowerBound, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, LOWER_BOUND)).orElse(ChronoUnit.MINUTES);
 
-		// clamp duration to lowerBound threshold for formatting if needed
-		final Duration toFormat = validDuration.compareTo(Duration.of(1, validLowerBound)) < 0
-				? Duration.of(1, validLowerBound)
-				: validDuration;
+		validDuration = validDuration.truncatedTo(validLowerBound);
 
-		final net.time4j.Duration<?> t4jDuration = net.time4j.Duration.from(toFormat).toClockPeriod();
-		final net.time4j.Duration<CalendarUnit> calendarPart = t4jDuration.toCalendarPeriod();
-		final net.time4j.Duration<ClockUnit> clockPart = t4jDuration.toClockPeriod().with(ClockUnit.SECONDS.rounded());
+		// Extract total seconds for conversion
+		long totalSeconds = validDuration.getSeconds();
+		long days = totalSeconds / (24 * 3600);
+		long remainderSeconds = totalSeconds % (24 * 3600);
+
+		// extract hours, minutes and seconds
+		long hours = remainderSeconds / 3600;
+		long minutes = (remainderSeconds % 3600) / 60;
+		long seconds = remainderSeconds % 60;
+
+		// Build calendar part with days, clock part with remainder
+		net.time4j.Duration<CalendarUnit> calendarPart = net.time4j.Duration.of(days, CalendarUnit.DAYS);
+		net.time4j.Duration<ClockUnit> clockPart = net.time4j.Duration.of(hours, ClockUnit.HOURS)
+				.with(minutes, ClockUnit.MINUTES)
+				.with(seconds, ClockUnit.SECONDS);
 
 		return PrettyTime.of(localeProvider.getLocale()).print(net.time4j.Duration.compose(calendarPart, clockPart), TextWidth.WIDE);
 	}

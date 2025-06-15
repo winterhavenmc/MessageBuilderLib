@@ -52,6 +52,7 @@ public class NameAdapter implements Adapter
 	{
 		return switch (obj)
 		{
+			case Nameable nameable -> Optional.of(nameable);
 			case CommandSender commandSender -> Optional.of(commandSender::getName);
 			case OfflinePlayer offlinePlayer -> Optional.of(offlinePlayer::getName);
 			case PlayerProfile playerProfile -> Optional.of(playerProfile::getName);

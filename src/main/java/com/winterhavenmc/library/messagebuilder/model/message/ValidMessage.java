@@ -22,6 +22,7 @@ import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 import com.winterhavenmc.library.messagebuilder.validation.Parameter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
@@ -33,6 +34,7 @@ import java.util.Objects;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
+import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.logging;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
@@ -40,7 +42,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
 public final class ValidMessage implements Message
 {
 	private final static String RECIPIENT_KEY = "RECIPIENT";
-	private final Recipient.Valid recipient;
+	private final Recipient.Sendable recipient;
 	private final RecordKey messageKey;
 	private final MessagePipeline messagePipeline;
 	private final MacroObjectMap macroObjectMap;
@@ -53,7 +55,7 @@ public final class ValidMessage implements Message
 	 * @param messageKey message identifier
 	 * @param messagePipeline the message processor that will receive the message when the send method is called
 	 */
-	public ValidMessage(final Recipient.Valid recipient,
+	public ValidMessage(final Recipient.Sendable recipient,
 						final RecordKey messageKey,
 						final MessagePipeline messagePipeline)
 	{
@@ -61,9 +63,8 @@ public final class ValidMessage implements Message
 		this.messageKey = messageKey;
 		this.messagePipeline = messagePipeline;
 
-		// create macro object map and add recipient field
-		this.macroObjectMap = new MacroObjectMap();
 		MacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).orElseThrow();
+		this.macroObjectMap = new MacroObjectMap();
 		this.macroObjectMap.put(recipientKey, recipient);
 	}
 
@@ -127,10 +128,14 @@ public final class ValidMessage implements Message
 												final ChronoUnit lowerBound)
 	{
 		validate(macro, Objects::isNull, throwing(PARAMETER_NULL, MACRO));
-		validate(duration, Objects::isNull, throwing(PARAMETER_NULL, DURATION));
-		validate(lowerBound, Objects::isNull, throwing(PARAMETER_NULL, Parameter.LOWER_BOUND));
+		Duration validDuration = validate(duration, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, DURATION)).orElse(Duration.ZERO);
+		ChronoUnit validLowerBound = validate(lowerBound, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, Parameter.LOWER_BOUND)).orElse(ChronoUnit.MINUTES);
 
-		return setMacro(macro, new BoundedDuration(duration, lowerBound));
+		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
+		BoundedDuration boundedDuration = new BoundedDuration(validDuration, validLowerBound);
+
+		macroObjectMap.putIfAbsent(macroKey, boundedDuration);
+		return this;
 	}
 
 
@@ -140,7 +145,7 @@ public final class ValidMessage implements Message
 	@Override
 	public void send()
 	{
-		messagePipeline.process(this);
+		messagePipeline.initiate(this);
 	}
 
 
@@ -162,7 +167,7 @@ public final class ValidMessage implements Message
 	 * @return {@code Valid} the message recipient
 	 */
 	@Override
-	public Recipient.Valid getRecipient()
+	public Recipient.Sendable getRecipient()
 	{
 		return recipient;
 	}

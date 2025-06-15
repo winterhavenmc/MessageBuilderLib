@@ -213,7 +213,7 @@ class LocalizedDurationFormatterTest
 		String result = formatter.getTimeConstant(timeUnlimitedKey, DurationType.UNLIMITED);
 
 		// Assert
-		assertEquals("unlimited", result);
+		assertEquals("∞", result);
 
 		// Verify
 		verify(queryHandlerFactoryMock, atLeastOnce()).getQueryHandler(Section.CONSTANTS);

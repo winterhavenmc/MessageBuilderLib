@@ -101,6 +101,6 @@ class DurationTypeTest
 	{
 		assertEquals("", DurationType.NORMAL.getFallback());
 		assertEquals("< {DURATION}", DurationType.LESS_THAN.getFallback());
-		assertEquals("unlimited", DurationType.UNLIMITED.getFallback());
+		assertEquals("∞", DurationType.UNLIMITED.getFallback());
 	}
 }

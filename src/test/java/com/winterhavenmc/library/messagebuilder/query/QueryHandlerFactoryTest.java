@@ -42,7 +42,7 @@ class QueryHandlerFactoryTest
 
 
 	@Test
-	void getMessageQueryHandler()
+	void getMessageQueryHandler_with_valid_parameter_returns_MessageQueryHandler_type()
 	{
 		// Arrange
 		when(languageResourceManagerMock.getSectionProvider(Section.MESSAGES)).thenReturn(sectionProviderMock);
@@ -60,7 +60,7 @@ class QueryHandlerFactoryTest
 
 
 	@Test
-	void getItemQueryHandler()
+	void getItemQueryHandler_with_valid_parameter_returns_ItemQueryHandler_type()
 	{
 		// Arrange
 		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(sectionProviderMock);
@@ -78,7 +78,7 @@ class QueryHandlerFactoryTest
 
 
 	@Test
-	void getConstantQueryHandler()
+	void getConstantQueryHandler_with_valid_parameter_returns_ConstantQueryHandler_type()
 	{
 		// Arrange
 		when(languageResourceManagerMock.getSectionProvider(Section.CONSTANTS)).thenReturn(sectionProviderMock);
@@ -96,7 +96,7 @@ class QueryHandlerFactoryTest
 
 
 	@Test
-	void getQueryHandler_null()
+	void getQueryHandler_with_null_parameter_throws_ValidationException()
 	{
 		// Arrange & Act
 		ValidationException exception = assertThrows(ValidationException.class,

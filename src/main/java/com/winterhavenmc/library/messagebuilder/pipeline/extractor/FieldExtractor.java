@@ -17,107 +17,147 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.extractor;
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.DurationAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.Durationable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.Expirable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.ExpirationAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant.InstantAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant.Instantable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer.Killable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.location.Locatable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.location.LocationAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer.KillerAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter.Lootable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter.LooterAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.Ownable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.OwnerAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.Protectable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.Quantifiable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.Identifiable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
-import org.bukkit.Location;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.*;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 
 
+/**
+ * A class that extracts formatted string fields into a MacroStringMap
+ */
 public class FieldExtractor implements Extractor
 {
-	@Override
-	public <T> MacroObjectMap extract(Adapter adapter, T adapted, MacroKey baseKey)
+	private final AdapterContextContainer ctx;
+
+
+	/**
+	 * Class constructor
+	 *
+	 * @param ctx context container carrying dependencies for injection
+	 */
+
+	public FieldExtractor(final AdapterContextContainer ctx)
 	{
-		MacroObjectMap fields = new MacroObjectMap();
+		this.ctx = ctx;
+	}
+
+
+	/**
+	 * Extract fields for an adapted type
+	 *
+	 * @param baseKey the base MacroKey for the field
+	 * @param adapter the adapter to apply
+	 * @param adapted the adapted object
+	 * @return a MacroStringMap containing the formatted string fields extracted
+	 * @param <T> the Type of the adapted object
+	 */
+	@Override
+	public <T> MacroStringMap extract(final MacroKey baseKey, final Adapter adapter, final T adapted)
+	{
+		MacroStringMap resultMap = new MacroStringMap();
 
 		switch (adapter)
 		{
-			case NameAdapter ignored when adapted instanceof Nameable nameable ->
+			// Extract name field as string
+			case NameAdapter __ when adapted instanceof Nameable nameable ->
 			{
-				baseKey.append(NAME).ifPresent(macroKey -> fields.put(macroKey, nameable.getName()));
-				fields.putIfAbsent(baseKey, nameable.getName());
+				resultMap.putAll(nameable.extractName(baseKey, ctx));
+				Nameable.formatName(nameable.getName()).ifPresent(string ->
+						resultMap.putIfAbsent(baseKey, string));
 			}
 
-			case DisplayNameAdapter ignored when adapted instanceof DisplayNameable displayNameable ->
+			// Extract displayName field as string
+			case DisplayNameAdapter __ when adapted instanceof DisplayNameable displayNameable ->
 			{
-				baseKey.append(DISPLAY_NAME).ifPresent(macroKey -> fields.put(macroKey, displayNameable.getDisplayName()));
-				fields.putIfAbsent(baseKey, displayNameable.getDisplayName());
+				resultMap.putAll(displayNameable.extractDisplayName(baseKey, ctx));
+				DisplayNameable.formatDisplayName(displayNameable.getDisplayName()).ifPresent(string ->
+						resultMap.putIfAbsent(baseKey, string));
 			}
 
-			case UniqueIdAdapter ignored when adapted instanceof Identifiable identifiable ->
+			// Extract owner field as string
+			case OwnerAdapter __ when adapted instanceof Ownable ownable ->
 			{
-				baseKey.append(UUID).ifPresent(macroKey -> fields.put(macroKey, identifiable.getUniqueId()));
-				fields.putIfAbsent(baseKey, identifiable.getUniqueId());
+				resultMap.putAll(ownable.extractOwner(baseKey, ctx));
+				Ownable.formatOwner(ownable.getOwner()).ifPresent(string ->
+						resultMap.putIfAbsent(baseKey, string));
 			}
 
-			case LocationAdapter ignored when adapted instanceof Locatable locatable ->
+			// Extract killer field as string
+			case KillerAdapter __ when adapted instanceof Killable killable ->
 			{
-				if (!baseKey.toString().endsWith(LOCATION.name()))
-				{
-					baseKey = baseKey.append(LOCATION).orElse(baseKey);
-				}
-
-				fields.putIfAbsent(baseKey, getLocationString(locatable.getLocation()));
-				baseKey.append(LocationField.STRING).ifPresent(macroKey ->
-						fields.putIfAbsent(macroKey, getLocationString(locatable.getLocation())));
-				baseKey.append(LocationField.WORLD).ifPresent(macroKey ->
-						fields.putIfAbsent(macroKey, getLocationWorldName(locatable.getLocation())));
-				baseKey.append(LocationField.X).ifPresent(macroKey ->
-						fields.putIfAbsent(macroKey, locatable.getLocation().getBlockX()));
-				baseKey.append(LocationField.Y).ifPresent(macroKey ->
-						fields.putIfAbsent(macroKey, locatable.getLocation().getBlockY()));
-				baseKey.append(LocationField.Z).ifPresent(macroKey ->
-						fields.putIfAbsent(macroKey, locatable.getLocation().getBlockZ()));
+				resultMap.putAll(killable.extractKiller(baseKey, ctx));
+				Killable.formatKiller(killable.getKiller()).ifPresent(string ->
+						resultMap.putIfAbsent(baseKey, string));
 			}
 
-			case QuantityAdapter ignored when adapted instanceof Quantifiable quantifiable ->
+			// Extract killer field as string
+			case LooterAdapter __ when adapted instanceof Lootable lootable ->
 			{
-				baseKey.append(QUANTITY).ifPresent(macroKey -> fields.put(macroKey, quantifiable.getQuantity()));
-				fields.putIfAbsent(baseKey, quantifiable.getQuantity());
+				resultMap.putAll(lootable.extractLooter(baseKey, ctx));
+				Lootable.formatLooter(lootable.getLooter()).ifPresent(string ->
+						resultMap.putIfAbsent(baseKey, string));
 			}
+
+			// Extract location fields as strings
+			case LocationAdapter __ when adapted instanceof Locatable locatable ->
+				resultMap.putAll(locatable.extractLocation(baseKey, ctx));
+
+			// Extract uniqueId field as string
+			case UniqueIdAdapter __ when adapted instanceof Identifiable identifiable ->
+					resultMap.putAll(identifiable.extractUid(baseKey, ctx));
+
+			// Extract quantity field as string
+			case QuantityAdapter __ when adapted instanceof Quantifiable quantifiable ->
+					resultMap.putAll(quantifiable.extractQuantity(baseKey, ctx));
+
+			// Extract duration field as string
+			case DurationAdapter __ when adapted instanceof Durationable durationable ->
+					resultMap.putAll(durationable.extractDuration(baseKey, ChronoUnit.MINUTES, ctx));
+
+			// Extract instant field as string
+			case InstantAdapter __ when adapted instanceof Instantable instantable ->
+					resultMap.putAll(instantable.extractInstant(baseKey, FormatStyle.MEDIUM, ctx));
+
+			// Extract expiration fields as strings
+			case ExpirationAdapter __ when adapted instanceof Expirable expirable ->
+				resultMap.putAll(expirable.extractExpiration(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, ctx));
+
+			// Extract protection fields as strings
+			case ProtectionAdapter __ when adapted instanceof Protectable protectable ->
+					resultMap.putAll(protectable.extractProtection(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, ctx));
+
 			default -> {} // no-op
 		}
 
-		return fields;
-	}
-
-
-	private String getLocationWorldName(final Location location)
-	{
-		return (location != null && location.getWorld() != null)
-				? location.getWorld().getName()
-				: "???";
-	}
-
-
-	private String getLocationString(final Location location)
-	{
-		String worldName = (location.getWorld() != null)
-				? location.getWorld().getName()
-				: "???";
-
-		return worldName + " [" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + "]";
-	}
-
-	enum LocationField
-	{
-		STRING, WORLD, X, Y, Z
+		return resultMap;
 	}
 
 }

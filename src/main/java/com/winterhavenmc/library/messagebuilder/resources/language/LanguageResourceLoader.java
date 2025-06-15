@@ -19,17 +19,19 @@ package com.winterhavenmc.library.messagebuilder.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.resources.ResourceLoader;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LanguageTag;
+
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageSetting.DEFAULT_LANGUAGE_TAG;
 
 
 /**
@@ -39,10 +41,11 @@ import java.util.function.Supplier;
  * result in a new configuration object loaded from the currently configured language file, or the en-US language
  * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
-public final class LanguageResourceLoader implements ResourceLoader
+public class LanguageResourceLoader implements ResourceLoader
 {
 	private final Plugin plugin;
 	private final Supplier<YamlConfiguration> yamlFactory;
+	LanguageTag defaultLanguageTag = LanguageTag.of(DEFAULT_LANGUAGE_TAG.toString()).orElseThrow();
 
 
 	/**
@@ -52,7 +55,7 @@ public final class LanguageResourceLoader implements ResourceLoader
 	 */
 	public LanguageResourceLoader(final Plugin plugin)
 	{
-		this(plugin, YamlConfiguration::new); // Default behavior: normal YAML factory
+		this(plugin, YamlConfiguration::new);
 	}
 
 
@@ -68,6 +71,7 @@ public final class LanguageResourceLoader implements ResourceLoader
 		this.yamlFactory = yamlFactory;
 	}
 
+
 	/**
 	 * Gets language tag specified in config.yml.
 	 *
@@ -77,11 +81,11 @@ public final class LanguageResourceLoader implements ResourceLoader
 	public Optional<LanguageTag> getConfiguredLanguageTag()
 	{
 		String configLanguageTag = plugin.getConfig().getString(LanguageSetting.CONFIG_LANGUAGE_KEY.toString());
-
 		return (configLanguageTag != null && !configLanguageTag.isBlank())
 				? LanguageTag.of(Locale.forLanguageTag(configLanguageTag))
-				: Optional.empty();
+				: LanguageTag.of(DEFAULT_LANGUAGE_TAG.toString());
 	}
+
 
 	@Override
 	public Locale getConfiguredLocale()
@@ -102,43 +106,69 @@ public final class LanguageResourceLoader implements ResourceLoader
 	public Configuration load()
 	{
 		return getConfiguredLanguageTag()
-				.map(this::load)
-				.orElse(null);
+				.map(tag -> loadWithFallback(tag, defaultLanguageTag))
+				.orElse(loadFromResource(defaultLanguageTag));
 	}
 
 
 	/**
-	 * Load the language configuration object for the given language tag from file and return it.
-	 * The returned configuration object contains no default values loaded, by design.
-	 *
-	 * @param languageTag the language tag to load configuration for
-	 * @return {@link Configuration} containing the configuration loaded from the language file
+	 * Attempts to load the preferred language file from disk.
+	 * If unavailable or invalid, falls back to loading the fallback language directly from the plugin resource.
 	 */
-	@Override
-	public Configuration load(final LanguageTag languageTag)
+	public Configuration loadWithFallback(LanguageTag preferred, LanguageTag fallback)
 	{
-		YamlConfiguration configuration = yamlFactory.get();
-		File languageFile = new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(languageTag));
+		File languageFile = new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(preferred));
+		YamlConfiguration config = yamlFactory.get();
 
 		try
 		{
-			configuration.load(languageFile);
-			plugin.getLogger().info("Language file " + languageFile + " successfully loaded.");
+			config.load(languageFile);
+			plugin.getLogger().info("Language file '" + languageFile.getName() + "' successfully loaded.");
+			return config;
 		}
 		catch (FileNotFoundException e)
 		{
-			plugin.getLogger().severe("Language file " + languageFile + " does not exist.");
+			plugin.getLogger().warning("Language file '" + languageFile.getName() + "' not found. Falling back to default.");
 		}
 		catch (IOException e)
 		{
-			plugin.getLogger().severe("Language file " + languageFile + " could not be read.");
+			plugin.getLogger().warning("Language file '" + languageFile.getName() + "' could not be read. Falling back to default.");
 		}
 		catch (InvalidConfigurationException e)
 		{
-			plugin.getLogger().severe("Language file " + languageFile + " is not valid yaml.");
+			plugin.getLogger().warning("Language file '" + languageFile.getName() + "' is not valid YAML. Falling back to default.");
 		}
 
-		return configuration;
+		return loadFromResource(fallback);
+	}
+
+
+	/**
+	 * Loads a language YAML file directly from the JAR resource as a last resort.
+	 */
+	Configuration loadFromResource(LanguageTag fallback)
+	{
+		String resourcePath = LanguageResourceManager.getResourceName(fallback);
+		try (InputStream stream = plugin.getResource(resourcePath))
+		{
+			if (stream != null)
+			{
+				YamlConfiguration config = yamlFactory.get();
+				config.load(new InputStreamReader(stream, StandardCharsets.UTF_8));
+				plugin.getLogger().info("Loaded fallback language resource '" + resourcePath + "' from plugin JAR.");
+				return config;
+			}
+			else
+			{
+				plugin.getLogger().severe("Fallback language resource '" + resourcePath + "' is missing from plugin JAR.");
+			}
+		}
+		catch (IOException | InvalidConfigurationException exception)
+		{
+			plugin.getLogger().severe("Failed to load fallback language resource '" + resourcePath + "' from JAR.");
+		}
+
+		return new YamlConfiguration(); // always return a safe config
 	}
 
 }

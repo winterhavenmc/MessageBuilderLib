@@ -2,6 +2,7 @@
 
 # Locale. If the specified locale can not be found, the en-US locale will be used
 locale: en-US
+timezone: UTC
 
 # language file name. uncomment this if you would like to specify a different language file than your locale.
 #language: en-US

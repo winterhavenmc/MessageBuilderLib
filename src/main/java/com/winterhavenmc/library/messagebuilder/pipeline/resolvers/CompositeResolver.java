@@ -30,9 +30,6 @@ public class CompositeResolver implements Resolver
 	private final FieldExtractor fieldExtractor;
 
 
-	/**
-	 * Class constructor
-	 */
 	public CompositeResolver(final AdapterRegistry adapterRegistry,
 							 final FieldExtractor fieldExtractor)
 	{
@@ -41,36 +38,19 @@ public class CompositeResolver implements Resolver
 	}
 
 
-	/**
-	 * Convert the value objects contained in the context map into their string representations in a
-	 * new result map.
-	 *
-	 * @param macroObjectMap a map containing key/value pairs of placeholder strings and their corresponding value object
-	 * @return {@code MacroStringMap} a map containing the placeholder strings and the string representations of the values
-	 */
 	@Override
 	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
 		MacroStringMap macroStringMap = new MacroStringMap();
 
-		macroObjectMap.get(macroKey).ifPresent(value ->
-				resolveSubkeysInto(macroStringMap, value, macroKey, macroObjectMap));
+		macroObjectMap.get(macroKey).ifPresent(object -> adapterRegistry
+				.getMatchingAdapters(object)
+				.forEach(adapter -> adapter
+						.adapt(object)
+						.ifPresent(adapted -> macroStringMap
+								.putAll(fieldExtractor.extract(macroKey, adapter, adapted)))));
 
 		return macroStringMap;
-	}
-
-
-	/**
-	 * Resolver static helper method
-	 */
-	private void resolveSubkeysInto(MacroStringMap macroStringMap, Object value, MacroKey macroKey, MacroObjectMap macroObjectMap)
-	{
-		adapterRegistry.getMatchingAdapters(value).forEach(adapter ->
-				adapter.adapt(value).ifPresent(adapted ->
-						fieldExtractor.extract(adapter, adapted, macroKey).keySet()
-								.forEach(subKey -> macroStringMap.putAll(resolve(subKey, macroObjectMap)))
-				)
-		);
 	}
 
 }

@@ -24,23 +24,29 @@ import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Player;
 
 
-public sealed interface Recipient permits Recipient.Invalid, Recipient.Proxied, Recipient.Valid
+public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Recipient.Invalid
 {
-	enum InvalidReason { NULL, OTHER }
-	record Valid(CommandSender sender) implements Recipient { }
-	record Proxied(CommandSender sender, ProxiedCommandSender proxy) implements Recipient { }
+	sealed interface Sendable permits Recipient.Valid, Recipient.Proxied
+	{
+		CommandSender sender();
+	}
+
+	record Valid(CommandSender sender) implements Recipient, Sendable { }
+	record Proxied(CommandSender sender, ProxiedCommandSender proxy) implements Recipient, Sendable { }
 	record Invalid(CommandSender sender, InvalidReason invalidReason) implements Recipient { }
+
+	enum InvalidReason { NULL, OTHER }
 
 
 	static Recipient of(final CommandSender sender)
 	{
 		return switch (sender)
 		{
-			case Player ignored -> new Valid(sender);
-			case ConsoleCommandSender ignored -> new Valid(sender);
-			case BlockCommandSender ignored -> new Valid(sender);
+			case Player __ -> new Valid(sender);
+			case ConsoleCommandSender __ -> new Valid(sender);
+			case BlockCommandSender __ -> new Valid(sender);
 			case ProxiedCommandSender proxy -> new Proxied(sender, proxy);
-			case null -> new Invalid(sender, InvalidReason.NULL);
+			case null -> new Invalid(null, InvalidReason.NULL);
 			default -> new Invalid(sender, InvalidReason.OTHER);
 		};
 	}

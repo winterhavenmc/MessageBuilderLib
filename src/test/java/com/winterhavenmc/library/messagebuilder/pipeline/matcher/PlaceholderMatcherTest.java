@@ -17,104 +17,97 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.matcher;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.library.messagebuilder.model.message.Message;
-import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
-import com.winterhavenmc.library.messagebuilder.messages.MessageId;
-
-import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
-import com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.AtomicResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
-import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
-import org.bukkit.entity.Player;
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer.BASE_KEY_PATTERN;
+import static com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer.FULL_KEY_PATTERN;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class PlaceholderMatcherTest
 {
-	@Mock Player playerMock;
-	@Mock
-	LocaleProvider localeProviderMock;
-	@Mock WorldNameResolver worldNameResolverMock;
-	@Mock MessagePipeline messagePipelineMock;
-
-	Recipient.Valid recipient;
-	MacroReplacer macroReplacer;
-	Message message;
-
-
 	@BeforeEach
 	public void setUp()
 	{
-		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-
-		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock);
-
-		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
-		FieldExtractor fieldExtractor = new FieldExtractor();
-
-		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
-		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
-		FormatterContainer formatterContainer = new FormatterContainer(time4jDurationFormatter, localeNumberFormatter);
-
-		AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
-		List<Resolver> resolvers = List.of(compositeResolver, atomicResolver);
-
 		PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
-
-		recipient = switch (Recipient.of(playerMock)) {
-			case Recipient.Valid valid -> valid;
-			case Recipient.Proxied ignored-> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
-
-		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
-		macroReplacer = new MacroReplacer(new FieldResolver(resolvers), placeholderMatcher);
 	}
 
 
 	@Test
-	void testGetPlaceholderStream()
+	@DisplayName("Retrieve a stream of placeholders from a message string.")
+	void getPlaceholderMatcher_returns_only_valid_values()
 	{
 		// Arrange
-		String messageString = "This is a {MESSAGE} with {SEVERAL} {PLACE_HOLDERS}.";
+		String messageString = "This is a {MESSAGE} with {SEVERAL} {PLACE_HOLDERS} and one {INVALID PLACEHOLDER}.";
 
 		// Act
-		Stream<String> placeholderStream = new PlaceholderMatcher().match(messageString);
-		Set<String> placeholderSet = placeholderStream.collect(Collectors.toSet());
+		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
+		Set<MacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
 
 		// Assert
-		assertFalse(placeholderSet.isEmpty());
-		assertTrue(placeholderSet.contains("SEVERAL"));
-		assertTrue(placeholderSet.contains("MESSAGE"));
-		assertTrue(placeholderSet.contains("PLACE_HOLDERS"));
-		assertFalse(placeholderSet.contains("This"));
+		assertTrue(placeholderSet.contains(MacroKey.of("SEVERAL").orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("MESSAGE").orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("PLACE_HOLDERS").orElseThrow()));
+		assertFalse(placeholderSet.contains(MacroKey.of("This").orElseThrow()));
+		assertEquals(3, placeholderSet.size());
+	}
+
+
+	@Test
+	void getPlaceholderMatcher_does_not_return_invalid_values()
+	{
+		// Arrange
+		String messageString = "This {1MESSAGE} contains {only} invalid {PLACE:HOLDERS} including some {INVALID PLACEHOLDERS} like {this}.";
+
+		// Act
+		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
+		Set<MacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
+
+		// Assert
+		assertEquals(0, placeholderSet.size());
+	}
+
+
+	@Test
+	void getPlaceholderMatcher_returns_valid_with_dot_separator()
+	{
+		// Arrange
+		String messageString = "This is a {MESSAGE.DISPLAY_NAME} with {SEVERAL} valid {PLACE_HOLDERS}.";
+
+		// Act
+		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
+		Set<MacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
+
+		// Assert
+		assertTrue(placeholderSet.contains(MacroKey.of("MESSAGE.DISPLAY_NAME").orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("SEVERAL").orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("PLACE_HOLDERS").orElseThrow()));
+		assertEquals(3, placeholderSet.size());
+	}
+
+
+	@Test
+	void testGetPlaceholderStream_base_keys()
+	{
+		// Arrange
+		String messageString = "This is a {MESSAGE.DISPLAY_NAME} with {SEVERAL} {PLACE_HOLDERS} including {INVALID PLACEHOLDERS}.";
+
+		// Act
+		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, BASE_KEY_PATTERN);
+		Set<MacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
+
+		// Assert
+		assertTrue(placeholderSet.contains(MacroKey.of("SEVERAL").orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("MESSAGE").orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("PLACE_HOLDERS").orElseThrow()));
+		assertFalse(placeholderSet.contains(MacroKey.of("MESSAGE.DISPLAY_NAME").orElseThrow()));
+		assertFalse(placeholderSet.contains(MacroKey.of("This").orElseThrow()));
+		assertEquals(3, placeholderSet.size());
 	}
 
 }

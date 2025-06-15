@@ -23,5 +23,5 @@ import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 @FunctionalInterface
 public interface Pipeline
 {
-	void process(ValidMessage message);
+	void initiate(ValidMessage message);
 }

@@ -21,8 +21,7 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 
 /**
- * A data object record for item information contained in the language file. This class also contains
- * an enum of fields with their corresponding path key, and a static method for retrieving a record.
+ * A data object record for item information contained in the language file.
  *
  * @param key the keyPath in the language file for this record
  */

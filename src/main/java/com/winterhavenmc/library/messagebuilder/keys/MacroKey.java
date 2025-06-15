@@ -17,18 +17,24 @@
 
 package com.winterhavenmc.library.messagebuilder.keys;
 
+import com.winterhavenmc.library.messagebuilder.util.Delimiter;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
- * A type that represents a validated key for a record. This type guarantees a valid key that has been
+ * A type that represents a validated key for a macro. This type guarantees a valid key that has been
  * validated upon creation. The static factory methods return an Optional of the RecordKey,
  * or an empty Optional if the parameter was invalid, as determined by regex pattern and Predicate.
  */
 public final class MacroKey extends AbstractKey implements StandardKey
 {
+	private static final Pattern VALID_KEY_PATTERN = Pattern.compile("(\\p{Lu}[\\p{Alnum}_]+)[\\p{Alnum}_.]*");
+
+
 	/**
 	 * Private constructor that allows instantiation only from within this class
 	 *
@@ -85,7 +91,7 @@ public final class MacroKey extends AbstractKey implements StandardKey
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey.name()))
 				? Optional.empty()
-				: MacroKey.of(dotJoin(subKey.name()));
+				: MacroKey.of(dotJoin(this, subKey.name()));
 	}
 
 
@@ -99,7 +105,29 @@ public final class MacroKey extends AbstractKey implements StandardKey
 	{
 		return (subKey == null || IS_INVALID_KEY.test(subKey))
 				? Optional.empty()
-				: MacroKey.of(dotJoin(subKey));
+				: MacroKey.of(dotJoin(this, subKey));
 	}
+
+
+	public MacroKey getBase()
+	{
+		return Optional.of(VALID_KEY_PATTERN.matcher(wrappedString))
+				.filter(Matcher::find)
+				.flatMap(m -> MacroKey.of(m.group(1)))
+				.orElse(this);
+	}
+
+
+	public String asPlaceholder()
+	{
+		return Delimiter.OPEN + wrappedString + Delimiter.CLOSE;
+	}
+
+
+	static String dotJoin(final AbstractKey baseKey, final String subKey)
+	{
+		return String.join(".", baseKey.toString(), subKey);
+	}
+
 
 }

@@ -36,9 +36,10 @@ import org.bukkit.plugin.Plugin;
 
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static com.winterhavenmc.library.messagebuilder.Orchestrator.*;
+import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
@@ -87,6 +88,7 @@ public final class MessageBuilder
 	private final Plugin plugin;
 	private final SectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
+	private final ConstantResolver constantResolver;
 
 
 	/**
@@ -98,12 +100,15 @@ public final class MessageBuilder
 	 */
 	private MessageBuilder(final Plugin plugin,
 	                       final SectionResourceManager languageResourceManager,
+						   final ConstantResolver constantResolver,
 	                       final MessagePipeline messagePipeline)
 	{
+		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, LocaleProvider.create(plugin).getLocale());
+
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
+		this.constantResolver = constantResolver;
 		this.messagePipeline = messagePipeline;
-		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, LocaleProvider.create(plugin).getLocale());
 	}
 
 
@@ -121,14 +126,17 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final SectionResourceManager languageResourceManager = getLanguageResourceManager(plugin);
+		final SectionResourceManager languageResourceManager = createLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
-		final FormatterContainer formatterContainer = getResolverContextContainer(plugin, queryHandlerFactory);
-		final AdapterContextContainer adapterContextContainer = getAdapterContextContainer(plugin);
-		final MessagePipeline messagePipeline = getMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer);
+		final ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactory);
 
-		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
+		final FormatterContainer formatterContainer = createFormatterContainer(plugin, queryHandlerFactory);
+		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, formatterContainer);
+		final MessagePipeline messagePipeline = createMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer);
+
+		return new MessageBuilder(plugin, languageResourceManager, constantResolver, messagePipeline);
 	}
+
 
 	/**
 	 * Initiate the message building sequence. Parameters of this method are passed into this library domain
@@ -152,7 +160,7 @@ public final class MessageBuilder
 		return switch (Recipient.of(recipient))
 		{
 			case Recipient.Valid valid -> new ValidMessage(valid, validMessageKey, messagePipeline);
-			case Recipient.Proxied ignored -> Message.empty();
+			case Recipient.Proxied proxied -> new ValidMessage(proxied, validMessageKey, messagePipeline);
 			case Recipient.Invalid ignored -> Message.empty();
 		};
 	}
@@ -182,13 +190,26 @@ public final class MessageBuilder
 	 */
 	static MessageBuilder test(final Plugin plugin,
 							   final LanguageResourceManager languageResourceManager,
+							   final ConstantResolver constantResolver,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, constantResolver, messagePipeline);
+	}
+
+
+	public ConstantResolver getConstantResolver()
+	{
+		return this.constantResolver;
+	}
+
+
+	public Optional<String> getConstantString(final String key)
+	{
+		return constantResolver.getString(key);
 	}
 
 }

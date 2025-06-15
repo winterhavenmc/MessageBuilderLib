@@ -19,6 +19,9 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 
 
-public record FormatterContainer(DurationFormatter durationFormatter, LocaleNumberFormatter localeNumberFormatter) { }
+public record FormatterContainer(LocaleProvider localeProvider,
+								 DurationFormatter durationFormatter,
+								 LocaleNumberFormatter localeNumberFormatter) { }

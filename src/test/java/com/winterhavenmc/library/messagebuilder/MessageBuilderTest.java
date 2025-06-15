@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
-import com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer;
+import com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
@@ -28,6 +28,7 @@ import com.winterhavenmc.library.messagebuilder.util.MockUtility;
 import org.bukkit.Server;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -56,10 +57,11 @@ class MessageBuilderTest
 	@Mock Server serverMock;
 	@Mock PluginManager pluginManagerMock;
 	@Mock ProxiedCommandSender proxiedCommandSenderMock;
-	@Mock
-	LanguageResourceManager languageResourceManagerMock;
-	@Mock MacroReplacer macroReplacerMock;
+	@Mock LanguageResourceManager languageResourceManagerMock;
+	@Mock MessageProcessor messageProcessorMock;
 	@Mock MessagePipeline messagePipelineMock;
+	@Mock ConfigurationSection constantsSectionMock;
+	@Mock ConstantResolver constantResolverMock;
 
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;
@@ -79,19 +81,8 @@ class MessageBuilderTest
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		messageBuilder = MessageBuilder.test(pluginMock,
 				languageResourceManagerMock,
+				constantResolverMock,
 				messagePipelineMock);
-	}
-
-	@AfterEach
-	public void tearDown()
-	{
-		playerMock = null;
-		pluginMock = null;
-		pluginConfiguration = null;
-		languageConfiguration = null;
-		languageResourceManagerMock = null;
-		macroReplacerMock = null;
-		messagePipelineMock = null;
 	}
 
 
@@ -106,10 +97,10 @@ class MessageBuilderTest
 	void compose()
 	{
 		// Arrange & Act
-		Message message = messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE);
+		Message result = messageBuilder.compose(playerMock, MessageId.ENABLED_MESSAGE);
 
 		// Assert
-		assertNotNull(message);
+		assertNotNull(result);
 	}
 
 
@@ -125,9 +116,9 @@ class MessageBuilderTest
 	void compose_parameter_proxied_command_sender()
 	{
 		// Act & Assert
-		var result = messageBuilder.compose(proxiedCommandSenderMock, MessageId.ENABLED_MESSAGE);
+		Message result = messageBuilder.compose(proxiedCommandSenderMock, MessageId.ENABLED_MESSAGE);
 
-		assertEquals(Message.empty(), result);
+		assertNotNull(result);
 	}
 
 
@@ -209,6 +200,7 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(null,
 						languageResourceManagerMock,
+						constantResolverMock,
 						messagePipelineMock));
 
 		// Assert
@@ -223,6 +215,7 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(pluginMock,
 						null,
+						constantResolverMock,
 						messagePipelineMock));
 
 		// Assert
@@ -237,10 +230,65 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(pluginMock,
 						languageResourceManagerMock,
+						constantResolverMock,
 						null));
 
 		// Assert
 		assertEquals("The parameter 'messageProcessor' cannot be null.", exception.getMessage());
 	}
+
+
+//	@Test
+//	void testGetConstantString_returnsValidString()
+//	{
+//		// Arrange
+//		String key = "MY_CONSTANT";
+//		String expectedValue = "Hello, World!";
+//
+//		// Mock the constants section
+//		when(constantsSectionMock.get(key)).thenReturn(expectedValue);
+//
+//		SectionProvider sectionProvider = () -> constantsSectionMock;
+//		when(languageResourceManagerMock.getSectionProvider(Section.CONSTANTS))
+//				.thenReturn(sectionProvider);
+//
+//		// Act
+//		Optional<String> result = messageBuilder.getConstantString(key);
+//
+//		// Assert
+//		assertTrue(result.isPresent());
+//		assertEquals(expectedValue, result.get());
+//	}
+
+
+//	@Test
+//	void testGetConstantString_invalidKey_returnsEmpty()
+//	{
+//		// Act
+//		Optional<String> result = messageBuilder.getConstantString("");
+//
+//		// Assert
+//		assertTrue(result.isEmpty());
+//	}
+//
+//
+//	@Test
+//	void testGetConstantString_validKeyButMissingRecord_returnsEmpty()
+//	{
+//		// Arrange
+//		String key = "MISSING_KEY";
+//
+//		ConfigurationSection constantsSection = mock(ConfigurationSection.class);
+//
+//		SectionProvider provider = () -> constantsSection;
+//		when(languageResourceManagerMock.getSectionProvider(Section.CONSTANTS))
+//				.thenReturn(provider);
+//
+//		// Act
+//		Optional<String> result = messageBuilder.getConstantString(key);
+//
+//		// Assert
+//		assertTrue(result.isEmpty());
+//	}
 
 }

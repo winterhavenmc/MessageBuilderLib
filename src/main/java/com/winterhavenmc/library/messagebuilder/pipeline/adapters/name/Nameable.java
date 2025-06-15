@@ -18,12 +18,55 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.name;
 
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+
+import java.util.Optional;
+import java.util.function.Predicate;
+
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.NAME;
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
+
 /**
  * An interface that describes objects that have a {@code getName()}
- * method that returns a valid name as a {@code String}.
+ * method that returns a valid name as a {@code String}
  */
 @FunctionalInterface
 public interface Nameable
 {
 	String getName();
+
+
+	/**
+	 * Returns a new MacroStringMap containing all fields extracted from a Durationable type
+	 *
+	 * @param baseKey the top level key for the fields of this object
+	 * @return a MacroStringMap containing the fields extracted for objects of Durationable type
+	 */
+	default MacroStringMap extractName(final MacroKey baseKey, final AdapterContextContainer ctx)
+	{
+		return baseKey.append(NAME)
+				.map(macroKey -> new MacroStringMap()
+				.with(macroKey, formatName(this.getName()).orElse(UNKNOWN_VALUE)))
+				.orElseGet(MacroStringMap::empty);
+	}
+
+
+	Predicate<String> VALID_NAME = name -> name != null && !name.isBlank();
+
+
+	/**
+	 * Returns a formatted string of a name
+	 *
+	 * @return {@code Optional<String>} containing a formatted String of a name,
+	 * or an empty Optional if not found
+	 */
+	static Optional<String> formatName(final String name)
+	{
+		return (VALID_NAME.test(name))
+				? Optional.of(name)
+				: Optional.empty();
+	}
+
 }

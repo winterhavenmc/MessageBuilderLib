@@ -27,7 +27,7 @@ class ValidConstantRecordTest
     @Test
     void constructorTest()
     {
-        RecordKey key = RecordKey.of("testKey").orElseThrow();
+        RecordKey key = RecordKey.of("TESTKEY").orElseThrow();
         Object value = 42;
         ValidConstantRecord record = ValidConstantRecord.create(key, value);
 
@@ -50,7 +50,7 @@ class ValidConstantRecordTest
     @Test
     void testConstantRecordEquality()
     {
-        RecordKey key = RecordKey.of("key").orElseThrow();
+        RecordKey key = RecordKey.of("KEY").orElseThrow();
 
         ValidConstantRecord record1 = ValidConstantRecord.create(key, 123);
         ValidConstantRecord record2 = ValidConstantRecord.create(key, 123);
@@ -63,8 +63,8 @@ class ValidConstantRecordTest
     @Test
     void testConstantRecordInequality()
     {
-        RecordKey key1 = RecordKey.of("key").orElseThrow();
-        RecordKey key2 = RecordKey.of("key").orElseThrow();
+        RecordKey key1 = RecordKey.of("KEY").orElseThrow();
+        RecordKey key2 = RecordKey.of("KEY").orElseThrow();
 
         ValidConstantRecord record1 = ValidConstantRecord.create(key1, 123);
         ValidConstantRecord record2 = ValidConstantRecord.create(key2, 456);
@@ -76,7 +76,7 @@ class ValidConstantRecordTest
     @Test
     void testGetValue()
     {
-        RecordKey key = RecordKey.of("testKey").orElseThrow();
+        RecordKey key = RecordKey.of("TESTKEY").orElseThrow();
         Object value = 42;
         ValidConstantRecord record = ValidConstantRecord.create(key, value);
 

@@ -22,6 +22,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -41,7 +43,7 @@ class MacroStringMapTest
 	void testPut_does_overwrite()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
+		MacroKey macroKey = MacroKey.of("ABC").orElseThrow();
 
 		// Act
 		macroStringMap.put(macroKey, "first value");
@@ -101,7 +103,7 @@ class MacroStringMapTest
 	void get()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
+		MacroKey macroKey = MacroKey.of("ABC").orElseThrow();
 
 		// Act
 		macroStringMap.put(macroKey, "123");
@@ -116,9 +118,9 @@ class MacroStringMapTest
 	void putAll()
 	{
 		// Arrange
-		MacroKey macroKey1 = MacroKey.of("abc").orElseThrow();
-		MacroKey macroKey2 = MacroKey.of("xyz").orElseThrow();
-		MacroKey macroKey3 = MacroKey.of("jkl").orElseThrow();
+		MacroKey macroKey1 = MacroKey.of("ABC").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("XYZ").orElseThrow();
+		MacroKey macroKey3 = MacroKey.of("JKL").orElseThrow();
 		MacroStringMap firstMap = new MacroStringMap();
 
 		firstMap.put(macroKey1, "123");
@@ -136,37 +138,92 @@ class MacroStringMapTest
 	@Test
 	void entrySet()
 	{
-		MacroKey macroKey1 = MacroKey.of("abc").orElseThrow();
-		MacroKey macroKey2 = MacroKey.of("xyz").orElseThrow();
+		MacroKey macroKey1 = MacroKey.of("ABC").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("XYZ").orElseThrow();
 		macroStringMap.put(macroKey1, "123");
 		macroStringMap.put(macroKey2, "1999");
 
 		var entrySet = macroStringMap.entrySet();
 
-		assertEquals("[abc=123, xyz=1999]",entrySet.toString());
+		assertEquals("[ABC=123, XYZ=1999]",entrySet.toString());
 
 	}
 
 	@Test
 	void isEmpty()
 	{
-		MacroKey macroKey = MacroKey.of("abc").orElseThrow();
+		MacroKey macroKey = MacroKey.of("ABC").orElseThrow();
 		assertTrue(macroStringMap.isEmpty());
 		macroStringMap.put(macroKey, "123");
 		assertFalse(macroStringMap.isEmpty());
 	}
 
 	@Test
-	void getValueOrKey()
+	void getValueOrDefault_valid_entry()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
+		MacroKey macroKey = MacroKey.of("ABC").orElseThrow();
+		macroStringMap.put(macroKey, "123");
 
 		// Act
-		String result = macroStringMap.getValueOrKey(macroKey);
+		String result = macroStringMap.getValueOrDefault(macroKey, macroKey.toString());
 
 		// Assert
-		assertEquals("KEY", result);
+		assertEquals("123", result);
+	}
+
+
+	@Test
+	void getValueOrDefault_no_entry()
+	{
+		// Arrange
+		MacroKey macroKey = MacroKey.of("DEFAULT").orElseThrow();
+
+		// Act
+		String result = macroStringMap.getValueOrDefault(macroKey, macroKey.toString());
+
+		// Assert
+		assertEquals("DEFAULT", result);
+	}
+
+
+	@Test
+	void keySet()
+	{
+		// Arrange
+		MacroKey macroKey1 = MacroKey.of("KEY1").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("KEY2").orElseThrow();
+		MacroKey macroKey3 = MacroKey.of("KEY3").orElseThrow();
+		macroStringMap.put(macroKey1, "red");
+		macroStringMap.put(macroKey2, "blue");
+
+		// Act
+		Set<MacroKey> result = macroStringMap.keySet();
+
+		// Assert
+		assertTrue(result.contains(macroKey1));
+		assertTrue(result.contains(macroKey2));
+		assertFalse(result.contains(macroKey3));
+	}
+
+
+	@Test
+	void testSize()
+	{
+		// Arrange
+		MacroKey macroKey1 = MacroKey.of("KEY1").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("KEY2").orElseThrow();
+		MacroKey macroKey3 = MacroKey.of("KEY3").orElseThrow();
+		macroStringMap.put(macroKey1, "red");
+		macroStringMap.put(macroKey2, "green");
+		macroStringMap.put(macroKey3, "blue");
+
+		// Act
+		int result = macroStringMap.size();
+
+		// Assert
+		assertEquals(3, result);
+
 	}
 
 }

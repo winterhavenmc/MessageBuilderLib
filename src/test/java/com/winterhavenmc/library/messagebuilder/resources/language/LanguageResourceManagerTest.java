@@ -26,6 +26,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,7 @@ class LanguageResourceManagerTest
 	@Mock ConfigurationSection itemsSectionMock;
 	@Mock ConfigurationSection messagesSectionMock;
 	@Mock Configuration languageConfigurationMock;
+	@Mock Plugin pluginMock;
 
 	LanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
@@ -108,7 +110,10 @@ class LanguageResourceManagerTest
 		@Test
 		void testReload()
 		{
-			// Arrange & Act
+			// Arrange
+			when(languageResourceLoaderMock.load()).thenReturn(languageConfiguration);
+
+			// Act
 			boolean success = resourceManager.reload();
 
 			// Assert
@@ -122,6 +127,7 @@ class LanguageResourceManagerTest
 			// Arrange
 			FileConfiguration newLanguageConfiguration = new YamlConfiguration();
 			newLanguageConfiguration.set("test_key", "test_value");
+			when(languageResourceLoaderMock.load()).thenReturn(languageConfiguration);
 
 			// Act
 			boolean success = resourceManager.reload();
@@ -129,11 +135,34 @@ class LanguageResourceManagerTest
 			// Assert
 			assertTrue(success);
 		}
+
+
+		@Test
+		void reload_failure_returnsFalse()
+		{
+			// Arrange
+			LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock)
+			{
+				@Override
+				public Configuration load() {
+					return null; // Simulate failure
+				}
+			};
+
+			LanguageResourceInstaller installer = new LanguageResourceInstaller(pluginMock);
+			LanguageResourceManager manager = new LanguageResourceManager(installer, loader);
+
+			// Act
+			boolean result = manager.reload();
+
+			// Assert
+			assertFalse(result);
+		}
 	}
 
 
 	@Test
-	void testGetResourceName()
+	void getResourceName_returns_only_valid_string()
 	{
 		// Arrange
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
@@ -145,7 +174,7 @@ class LanguageResourceManagerTest
 
 
 	@Test
-	void testGetFileName()
+	void getFileName_returns_only_valid_string()
 	{
 		// Arrange
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();

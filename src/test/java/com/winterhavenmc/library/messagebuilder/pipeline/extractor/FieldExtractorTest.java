@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.extractor;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.location.Locatable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.location.LocationAdapter;
@@ -29,10 +30,12 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.Identifia
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameable;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,11 +44,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -60,14 +59,21 @@ class FieldExtractorTest
 	@Mock QuantityAdapter quantityAdapter;
 	@Mock World worldMock;
 
-	private FieldExtractor extractor;
-	private MacroKey baseKey;
+	@Mock Nameable nameableMock;
+	@Mock DisplayNameable displayNameableMock;
+	@Mock Identifiable identifiableMock;
+	@Mock Locatable locatableMock;
+	@Mock Quantifiable quantifiableMock;
+	@Mock AdapterContextContainer adapterContextContainerMock;
+
+	FieldExtractor extractor;
+	MacroKey baseKey;
 
 
 	@BeforeEach
 	void setup()
 	{
-		extractor = new FieldExtractor();
+		extractor = new FieldExtractor(adapterContextContainerMock);
 		baseKey = MacroKey.of("TEST").orElseThrow();
 	}
 
@@ -75,46 +81,62 @@ class FieldExtractorTest
 	@Test
 	void testNameAdapter()
 	{
-		var nameable = mock(Nameable.class);
-		when(nameable.getName()).thenReturn("TestName");
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "TestName");
+		expected.put(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow(), "TestName_subfield");
 
-		MacroObjectMap result = extractor.extract(nameAdapterMock, nameable, baseKey);
+		when(nameableMock.getName()).thenReturn("TestName");
+		when(nameableMock.extractName(baseKey, adapterContextContainerMock)).thenReturn(expected);
+
+		MacroStringMap result = extractor.extract(baseKey, nameAdapterMock, nameableMock);
 
 		assertEquals(2, result.size());
 		assertTrue(result.containsKey(baseKey));
-		assertTrue(result.get(baseKey).isPresent());
+		assertNotNull(result.get(baseKey));
 		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow()));
-		assertEquals(Optional.of("TestName"), result.get(baseKey));
+		assertEquals("TestName", result.get(baseKey));
+		assertEquals("TestName_subfield", result.get(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow()));
 	}
 
 
 	@Test
 	void testDisplayNameAdapter()
 	{
-		var displayNameable = mock(DisplayNameable.class);
-		when(displayNameable.getDisplayName()).thenReturn("FancyName");
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "FancyName");
+		expected.put(baseKey.append(Adapter.BuiltIn.DISPLAY_NAME).orElseThrow(), "FancyName_subfield");
+		when(displayNameableMock.getDisplayName()).thenReturn("FancyName");
+		when(displayNameableMock.extractDisplayName(baseKey, adapterContextContainerMock)).thenReturn(expected);
 
-		MacroObjectMap result = extractor.extract(displayNameAdapterMock, displayNameable, baseKey);
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, displayNameAdapterMock, displayNameableMock);
 
+		// Assert
 		assertEquals(2, result.size());
-		assertTrue(result.get(baseKey).isPresent());
-		assertEquals(Optional.of("FancyName"), result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append("DISPLAY_NAME").orElseThrow()));
+		assertNotNull(result.get(baseKey));
+		assertEquals("FancyName", result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.DISPLAY_NAME).orElseThrow()));
 	}
 
 
 	@Test
 	void testUniqueIdAdapter()
 	{
-		var identifiable = mock(Identifiable.class);
-		UUID uuid = UUID.randomUUID();
-		when(identifiable.getUniqueId()).thenReturn(uuid);
+		// Arrange
+		UUID uuid = new UUID(42, 42);
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, uuid.toString());
+		expected.put(baseKey.append(Adapter.BuiltIn.UUID).orElseThrow(), uuid.toString());
+		when(identifiableMock.extractUid(baseKey, adapterContextContainerMock)).thenReturn(expected);
 
-		MacroObjectMap result = extractor.extract(uniqueIdAdapterMock, identifiable, baseKey);
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, uniqueIdAdapterMock, identifiableMock);
 
+		// Assert
 		assertEquals(2, result.size());
-		assertTrue(result.get(baseKey).isPresent());
-		assertEquals(Optional.of(uuid), result.get(baseKey));
+		assertNotNull(result.get(baseKey));
+		assertEquals(uuid.toString(), result.get(baseKey));
 		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.UUID).orElseThrow()));
 	}
 
@@ -122,27 +144,57 @@ class FieldExtractorTest
 	@Test
 	void testLocationAdapter()
 	{
-		var locatable = mock(Locatable.class);
-
-		MacroKey locationKey = baseKey;
-
-		if (!locationKey.toString().endsWith("LOCATION"))
-		{
-			locationKey = locationKey.append("LOCATION").orElseThrow();
-		}
-
-		when(worldMock.getName()).thenReturn("test-world");
+		// Arrange
 		Location location = new Location(worldMock, 11, 12,13);
-		when(locatable.getLocation()).thenReturn(location);
+		MacroKey locationKey = baseKey.append("LOCATION").orElseThrow();
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(locationKey, "test-world [11, 12, 13]");
+		expected.put(locationKey.append("STRING").orElseThrow(), "test-world [11, 12, 13]");
+		expected.put(locationKey.append("WORLD").orElseThrow(), "test-world");
+		expected.put(locationKey.append("X").orElseThrow(), "11");
+		expected.put(locationKey.append("Y").orElseThrow(), "12");
+		expected.put(locationKey.append("Z").orElseThrow(), "13");
+		when(locatableMock.extractLocation(baseKey, adapterContextContainerMock)).thenReturn(expected);
 
-		MacroObjectMap result = extractor.extract(locationAdapterMock, locatable, baseKey);
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, locationAdapterMock, locatableMock);
 
-		assertEquals(6, result.size());
-		assertEquals(Optional.of("test-world [11, 12, 13]"), result.get(locationKey));
-		assertEquals(Optional.of(location.getWorld().getName()), result.get(locationKey.append("WORLD").orElseThrow()));
-		assertEquals(Optional.of(location.getBlockX()), result.get(locationKey.append("X").orElseThrow()));
-		assertEquals(Optional.of(location.getBlockY()), result.get(locationKey.append("Y").orElseThrow()));
-		assertEquals(Optional.of(location.getBlockZ()), result.get(locationKey.append("Z").orElseThrow()));
+		// Assert
+		assertEquals("test-world [11, 12, 13]", result.get(locationKey));
+		assertEquals("test-world [11, 12, 13]", result.get(locationKey.append("STRING").orElseThrow()));
+		assertEquals("test-world", result.get(locationKey.append("WORLD").orElseThrow()));
+		assertEquals("11", result.get(locationKey.append("X").orElseThrow()));
+		assertEquals("12", result.get(locationKey.append("Y").orElseThrow()));
+		assertEquals("13", result.get(locationKey.append("Z").orElseThrow()));
+		assertTrue(result.containsKey(locationKey));
+	}
+
+
+	@Test
+	void testLocationAdapter_location_key()
+	{
+		// Arrange
+		Location location = new Location(worldMock, 11, 12,13);
+		MacroKey locationKey = MacroKey.of("LOCATION").orElseThrow();
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(locationKey, "test-world [11, 12, 13]");
+		expected.put(locationKey.append("STRING").orElseThrow(), "test-world [11, 12, 13]");
+		expected.put(locationKey.append("WORLD").orElseThrow(), "test-world");
+		expected.put(locationKey.append("X").orElseThrow(), "11");
+		expected.put(locationKey.append("Y").orElseThrow(), "12");
+		expected.put(locationKey.append("Z").orElseThrow(), "13");
+		when(locatableMock.extractLocation(locationKey, adapterContextContainerMock)).thenReturn(expected);
+		when(worldMock.getName()).thenReturn("test-world");
+
+		// Act
+		MacroStringMap result = extractor.extract(locationKey, locationAdapterMock, locatableMock);
+
+		// Assert
+		assertEquals("test-world [11, 12, 13]", result.get(locationKey));
+		assertEquals(worldMock.getName(), result.get(locationKey.append("WORLD").orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockX()), result.get(locationKey.append("X").orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockY()), result.get(locationKey.append("Y").orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockZ()), result.get(locationKey.append("Z").orElseThrow()));
 		assertTrue(result.containsKey(locationKey));
 	}
 
@@ -150,25 +202,26 @@ class FieldExtractorTest
 	@Test
 	void testLocationAdapter_null_world()
 	{
-		var locatable = mock(Locatable.class);
-
-		MacroKey locationKey = baseKey;
-
-		if (!locationKey.toString().endsWith("LOCATION"))
-		{
-			locationKey = locationKey.append("LOCATION").orElseThrow();
-		}
-
+		// Arrange
 		Location location = new Location(null, 11, 12,13);
-		when(locatable.getLocation()).thenReturn(location);
+		MacroKey locationKey = MacroKey.of("LOCATION").orElseThrow();
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(locationKey, "- [11, 12, 13]");
+		expected.put(locationKey.append("STRING").orElseThrow(), "- [11, 12, 13]");
+		expected.put(locationKey.append("WORLD").orElseThrow(), "-");
+		expected.put(locationKey.append("X").orElseThrow(), "11");
+		expected.put(locationKey.append("Y").orElseThrow(), "12");
+		expected.put(locationKey.append("Z").orElseThrow(), "13");
+		when(locatableMock.extractLocation(locationKey, adapterContextContainerMock)).thenReturn(expected);
 
-		MacroObjectMap result = extractor.extract(locationAdapterMock, locatable, baseKey);
+		// Act
+		MacroStringMap result = extractor.extract(locationKey, locationAdapterMock, locatableMock);
 
-		assertEquals(6, result.size());
-		assertEquals(Optional.of("??? [11, 12, 13]"), result.get(locationKey));
-		assertEquals(Optional.of(location.getBlockX()), result.get(locationKey.append("X").orElseThrow()));
-		assertEquals(Optional.of(location.getBlockY()), result.get(locationKey.append("Y").orElseThrow()));
-		assertEquals(Optional.of(location.getBlockZ()), result.get(locationKey.append("Z").orElseThrow()));
+		// Assert
+		assertEquals("- [11, 12, 13]", result.get(locationKey));
+		assertEquals(String.valueOf(location.getBlockX()), result.get(locationKey.append("X").orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockY()), result.get(locationKey.append("Y").orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockZ()), result.get(locationKey.append("Z").orElseThrow()));
 		assertTrue(result.containsKey(locationKey));
 	}
 
@@ -176,13 +229,17 @@ class FieldExtractorTest
 	@Test
 	void testQuantityAdapter()
 	{
-		var quantifiable = mock(Quantifiable.class);
-		when(quantifiable.getQuantity()).thenReturn(42);
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "42");
+		expected.put(baseKey.append(Adapter.BuiltIn.QUANTITY).orElseThrow(), "42");
+		when(quantifiableMock.extractQuantity(baseKey, adapterContextContainerMock)).thenReturn(expected);
 
-		MacroObjectMap result = extractor.extract(quantityAdapter, quantifiable, baseKey);
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, quantityAdapter, quantifiableMock);
 
 		assertEquals(2, result.size());
-		assertEquals(Optional.of(42), result.get(baseKey));
+		assertEquals("42", result.get(baseKey));
 		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.QUANTITY).orElseThrow()));
 	}
 
@@ -193,9 +250,16 @@ class FieldExtractorTest
 		Adapter unknownAdapter = mock(Adapter.class);
 
 		Object randomObject = new Object();
-		MacroObjectMap result = extractor.extract(unknownAdapter, randomObject, baseKey);
+		MacroStringMap result = extractor.extract(baseKey, unknownAdapter, randomObject);
 
 		assertTrue(result.isEmpty(), "Expected result to be empty for unmatched adapter type");
 	}
 
+//	@Test
+//	void getLocationString_null()
+//	{
+//		String result = extractor.getLocationString(null);
+//
+//		assertEquals("???", result);
+//	}
 }

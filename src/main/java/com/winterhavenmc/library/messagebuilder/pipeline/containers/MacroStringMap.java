@@ -20,9 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.containers;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.*;
@@ -48,6 +46,20 @@ public class MacroStringMap
 	}
 
 
+	/**
+	 * Static factory method to create new MacroStringMap from existing MacroStringMap
+	 *
+	 * @param map an existing MacroStringMap
+	 * @return a new MacroStringMap with the contents of the given map
+	 */
+	public static MacroStringMap of(MacroStringMap map)
+	{
+		MacroStringMap resultMap = new MacroStringMap();
+		resultMap.putAll(map);
+		return resultMap;
+	}
+
+
 	public void put(final MacroKey macroKey, final String value)
 	{
 		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
@@ -68,9 +80,9 @@ public class MacroStringMap
 	}
 
 
-	public String getValueOrKey(final MacroKey key)
+	public String getValueOrDefault(final MacroKey key, final String defaultString)
 	{
-		return INTERNAL_MAP.getOrDefault(key, key.toString()); // Return key itself if not found
+		return INTERNAL_MAP.getOrDefault(key, defaultString);
 	}
 
 
@@ -95,9 +107,34 @@ public class MacroStringMap
 	}
 
 
+	public Set<MacroKey> keySet()
+	{
+		return INTERNAL_MAP.keySet();
+	}
+
+
 	public boolean isEmpty()
 	{
 		return INTERNAL_MAP.isEmpty();
+	}
+
+
+	public int size()
+	{
+		return INTERNAL_MAP.size();
+	}
+
+
+	static public MacroStringMap empty()
+	{
+		return new MacroStringMap();
+	}
+
+
+	public MacroStringMap with(MacroKey key, String value)
+	{
+		this.put(key, value);
+		return this;
 	}
 
 }

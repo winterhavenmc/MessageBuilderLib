@@ -62,10 +62,11 @@ public class AtomicResolver implements Resolver
 	}
 
 
-	private Optional<String> resolveAtomic(final Object value) {
-		return switch (value) {
-			// TODO: Replace with record pattern match when Java 22+ is standard in Bukkit
-//			case Boolean bool -> result.putIfAbsent(macroKey, bool.toString());
+	private Optional<String> resolveAtomic(final Object value)
+	{
+		return switch (value)
+		{
+			// case Boolean bool -> result.putIfAbsent(macroKey, bool.toString());
 			case String string -> Optional.of(string);
 			case Number number -> Optional.of(localeNumberFormatter.getFormatted(number));
 			case Duration duration -> Optional.of(durationFormatter.format(duration, ChronoUnit.SECONDS));

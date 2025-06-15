@@ -40,7 +40,13 @@ public class FieldResolver implements Resolver
 	{
 		return resolvers.stream()
 				.map(resolver -> resolver.resolve(macroKey, macroObjectMap))
-				.collect(MacroStringMap::new, MacroStringMap::putAll, MacroStringMap::putAll);
+				.collect(
+						MacroStringMap::new,
+						(map, m) -> m.entrySet()
+								.forEach(e -> map.putIfAbsent(e.getKey(), e.getValue())),
+						(m1, m2) -> m2.entrySet()
+								.forEach(e -> m1.putIfAbsent(e.getKey(), e.getValue()))
+				);
 	}
 
 }

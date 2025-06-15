@@ -182,7 +182,7 @@ class LocationAdapterTest
 				.map(Locatable::getLocation).orElseThrow();
 
 		// Assert
-		assertEquals(location, result, "The resolver should return the getLocation from the DoubleChest.");
+		assertEquals(location, result, "The resolver should return the getLocation from the Inventory.");
 	}
 
 
@@ -199,6 +199,22 @@ class LocationAdapterTest
 
 		// Assert
 		assertEquals(location, result, "The resolver should return the getLocation from the DoubleChest.");
+	}
+
+
+	@Test
+	public void testGetLocation_with_location()
+	{
+		// Arrange
+		Location testLocation = new Location(worldMock, 11, 12, 13);
+
+		// Act
+		Location result = new LocationAdapter()
+				.adapt(testLocation)
+				.map(Locatable::getLocation).orElseThrow();
+
+		// Assert
+		assertEquals(testLocation, result, "The resolver should return the getLocation from the Location.");
 	}
 
 }

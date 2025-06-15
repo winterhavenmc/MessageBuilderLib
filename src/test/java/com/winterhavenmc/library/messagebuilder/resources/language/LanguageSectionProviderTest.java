@@ -55,13 +55,19 @@ class LanguageSectionProviderTest
 	}
 
 	@Test
-	void getSectionReturnsCorrectSection()
+	void getConfigurationSection_returns_valid_section()
 	{
+		// Arrange
 		when(configuration.getConfigurationSection("MESSAGES")).thenReturn(mockSection);
 
+		// Act
 		ConfigurationSection result = provider.getSection();
 
+		// Assert
 		assertSame(mockSection, result);
+
+		// Verify
 		verify(configuration).getConfigurationSection("MESSAGES");
 	}
+
 }

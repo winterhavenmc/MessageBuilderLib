@@ -87,14 +87,14 @@ class StandardKeyTest
 		void testEquals_null_macro()
 		{
 			MacroKey key1 = MacroKey.of("ABC").orElseThrow();
-			assertNotEquals(key1, null);
+			assertNotEquals(null, key1);
 		}
 
 		@Test
 		void testEquals_null_record()
 		{
 			RecordKey key1 = RecordKey.of("ABC").orElseThrow();
-			assertNotEquals(key1, null);
+			assertNotEquals(null, key1);
 		}
 
 		@Test
@@ -102,7 +102,7 @@ class StandardKeyTest
 		{
 			MacroKey key1 = MacroKey.of("ABC").orElseThrow();
 			String key2 = "ABC";
-			assertNotEquals(key1, key2);
+			assertNotEquals(key2, key1);
 		}
 
 		@Test
@@ -110,7 +110,7 @@ class StandardKeyTest
 		{
 			RecordKey key1 = RecordKey.of("ABC").orElseThrow();
 			String key2 = "ABC";
-			assertNotEquals(key1, key2);
+			assertNotEquals(key2, key1);
 		}
 	}
 
@@ -141,31 +141,4 @@ class StandardKeyTest
 		assertEquals("LOREM", key.toString());
 	}
 
-	@Test
-	void testDotJoin_instanceMethod_macro() {
-		MacroKey key = MacroKey.of("BASE").orElseThrow();
-		String result = key.dotJoin("CHILD");
-		assertEquals("BASE.CHILD", result);
-	}
-
-	@Test
-	void testDotJoin_instanceMethod_record() {
-		RecordKey key = RecordKey.of("PARENT").orElseThrow();
-		String result = key.dotJoin("LEAF");
-		assertEquals("PARENT.LEAF", result);
-	}
-
-	@Test
-	void testDotJoin_staticMethod_macro() {
-		MacroKey key = MacroKey.of("STATIC").orElseThrow();
-		String result = AbstractKey.dotJoin(key, "METHOD");
-		assertEquals("STATIC.METHOD", result);
-	}
-
-	@Test
-	void testDotJoin_staticMethod_record() {
-		RecordKey key = RecordKey.of("NODE").orElseThrow();
-		String result = AbstractKey.dotJoin(key, "BRANCH");
-		assertEquals("NODE.BRANCH", result);
-	}
 }

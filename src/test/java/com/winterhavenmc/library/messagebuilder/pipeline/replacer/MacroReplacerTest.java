@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,128 +17,209 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.model.message.Message;
-import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
-import com.winterhavenmc.library.messagebuilder.messages.Macro;
-import com.winterhavenmc.library.messagebuilder.messages.MessageId;
-import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtractor;
-import com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher;
-import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.AtomicResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
-import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
-import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
-import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
-import org.bukkit.entity.Player;
+import java.util.stream.Stream;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-
-import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer.BASE_KEY_PATTERN;
+import static com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer.FULL_KEY_PATTERN;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class MacroReplacerTest
 {
-	@Mock Player playerMock;
-	@Mock
-	LocaleProvider localeProviderMock;
-	@Mock WorldNameResolver worldNameResolverMock;
-	@Mock MessagePipeline messagePipelineMock;
+	@Mock Resolver resolverMock;
+	@Mock Matcher matcherMock;
+	@Mock MacroObjectMap macroObjectMapMock;
 
-	Recipient.Valid recipient;
-	RecordKey messageKey;
-	MacroKey macroKey;
-	MacroReplacer macroReplacer;
-	Message message;
-	ConfigurationSection section;
-	ValidMessageRecord validMessageRecord;
-	List<Resolver> resolvers;
-	FieldResolver fieldResolver;
-	PlaceholderMatcher placeholderMatcher;
+	private MacroReplacer replacer;
 
 
 	@BeforeEach
-	public void setUp()
+	void setUp()
 	{
-		recipient = switch (Recipient.of(playerMock))
-		{
-			case Recipient.Valid valid -> valid;
-			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
+		replacer = new MacroReplacer(resolverMock, matcherMock);
+	}
 
-		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		macroKey = MacroKey.of(Macro.OWNER).orElseThrow();
+	@Test
+	void testReplace_with_valid_parameters()
+	{
+		String input = "Hello {PLAYER.NAME}, welcome to {WORLD.NAME}!";
+		String expected = "Hello Steve, welcome to Earth!";
 
-		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
+		MacroKey baseKey1 = MacroKey.of("PLAYER.NAME").orElseThrow();
+		MacroKey baseKey2 = MacroKey.of("WORLD.NAME").orElseThrow();
+		MacroStringMap stringMap = new MacroStringMap();
+		stringMap.put(baseKey1, "Steve");
+		stringMap.put(baseKey2, "Earth");
 
-		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock);
+		when(matcherMock.match(input, BASE_KEY_PATTERN))
+				.thenReturn(Stream.of(baseKey1, baseKey2));
 
-		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
-		FieldExtractor fieldExtractor = new FieldExtractor();
-		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
-		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
-		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
-		FormatterContainer formatterContainer = new FormatterContainer(time4jDurationFormatter, localeNumberFormatter);
-		AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
+		when(resolverMock.resolve(baseKey1, macroObjectMapMock)).thenReturn(stringMap);
+		when(resolverMock.resolve(baseKey2, macroObjectMapMock)).thenReturn(stringMap);
+
+		when(matcherMock.match(input, FULL_KEY_PATTERN))
+				.thenReturn(Stream.of(baseKey1, baseKey2));
+
+		String result = replacer.replace(macroObjectMapMock, input);
+
+		assertEquals(expected, result);
+		verify(matcherMock).match(input, BASE_KEY_PATTERN);
+		verify(matcherMock).match(input, FULL_KEY_PATTERN);
+		verify(resolverMock).resolve(baseKey1, macroObjectMapMock);
+		verify(resolverMock).resolve(baseKey2, macroObjectMapMock);
+	}
 
 
-		resolvers = List.of(compositeResolver, atomicResolver);
-		fieldResolver = new FieldResolver(resolvers);
-		placeholderMatcher = new PlaceholderMatcher();
+	@Test
+	void testReplace_with_valid_parameters_compound_key()
+	{
+		String input = "Hello {PLAYER.NAME}, welcome to {WORLD_NAME}!";
+		String expected = "Hello Steve, welcome to Earth!";
 
-		macroReplacer = new MacroReplacer(fieldResolver, placeholderMatcher);
+		MacroKey baseKey1 = MacroKey.of("PLAYER.NAME").orElseThrow();
+		MacroKey baseKey2 = MacroKey.of("WORLD_NAME").orElseThrow();
+		MacroStringMap stringMap = new MacroStringMap();
+		stringMap.put(baseKey1, "Steve");
+		stringMap.put(baseKey2, "Earth");
 
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		when(matcherMock.match(input, BASE_KEY_PATTERN))
+				.thenReturn(Stream.of(baseKey1, baseKey2));
 
-		section = new MemoryConfiguration();
-		section.set(MessageRecord.Field.ENABLED.toKey(), true);
-		section.set(MessageRecord.Field.MESSAGE_TEXT.toKey(), "this is a test message");
-		section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), 11);
-		section.set(MessageRecord.Field.TITLE_TEXT.toKey(), "this is a test title");
-		section.set(MessageRecord.Field.TITLE_FADE_IN.toKey(), 22);
-		section.set(MessageRecord.Field.TITLE_STAY.toKey(), 33);
-		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
-		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
+		when(resolverMock.resolve(baseKey1, macroObjectMapMock)).thenReturn(stringMap);
+		when(resolverMock.resolve(baseKey2, macroObjectMapMock)).thenReturn(stringMap);
 
-		validMessageRecord = ValidMessageRecord.create(messageKey, section);
+		when(matcherMock.match(input, FULL_KEY_PATTERN))
+				.thenReturn(Stream.of(baseKey1, baseKey2));
+
+		String result = replacer.replace(macroObjectMapMock, input);
+
+		assertEquals(expected, result);
+		verify(matcherMock).match(input, BASE_KEY_PATTERN);
+		verify(matcherMock).match(input, FULL_KEY_PATTERN);
+		verify(resolverMock).resolve(baseKey1, macroObjectMapMock);
+		verify(resolverMock).resolve(baseKey2, macroObjectMapMock);
+	}
+
+
+	@Test
+	void testReplace_with_valid_parameters_compound_key2()
+	{
+		String input = "Death chest is owned by {DEATH_CHEST.OWNER}";
+		String expected = "Death chest is owned by Steve";
+
+		MacroKey key1 = MacroKey.of("DEATH_CHEST.OWNER").orElseThrow();
+		MacroStringMap stringMap = new MacroStringMap();
+		stringMap.put(key1, "Steve");
+
+		when(matcherMock.match(input, BASE_KEY_PATTERN))
+				.thenReturn(Stream.of(key1));
+
+		when(resolverMock.resolve(key1, macroObjectMapMock)).thenReturn(stringMap);
+
+		when(matcherMock.match(input, FULL_KEY_PATTERN))
+				.thenReturn(Stream.of(key1));
+
+		String result = replacer.replace(macroObjectMapMock, input);
+
+		assertEquals(expected, result);
+		verify(matcherMock).match(input, BASE_KEY_PATTERN);
+		verify(matcherMock).match(input, FULL_KEY_PATTERN);
+		verify(resolverMock).resolve(key1, macroObjectMapMock);
+	}
+
+
+	@Test
+	void testReplace_with_valid_parameters_compound_key3()
+	{
+		String input = "Death chest expires in {DEATH_CHEST.EXPIRATION.DURATION}";
+		String expected = "Death chest expires in 1 hour, 15 minutes";
+
+		MacroKey key1 = MacroKey.of("DEATH_CHEST.EXPIRATION.DURATION").orElseThrow();
+		MacroStringMap stringMap = new MacroStringMap();
+		stringMap.put(key1, "1 hour, 15 minutes");
+
+		when(matcherMock.match(input, BASE_KEY_PATTERN))
+				.thenReturn(Stream.of(key1));
+
+		when(resolverMock.resolve(key1, macroObjectMapMock)).thenReturn(stringMap);
+
+		when(matcherMock.match(input, FULL_KEY_PATTERN))
+				.thenReturn(Stream.of(key1));
+
+		String result = replacer.replace(macroObjectMapMock, input);
+
+		assertEquals(expected, result);
+		verify(matcherMock).match(input, BASE_KEY_PATTERN);
+		verify(matcherMock).match(input, FULL_KEY_PATTERN);
+		verify(resolverMock).resolve(key1, macroObjectMapMock);
+	}
+
+
+	@Test
+	void testReplace_with_null_message()
+	{
+		String result = replacer.replace(macroObjectMapMock, null);
+		assertEquals("", result);
+	}
+
+
+	@Test
+	void testReplace_with_Missing_Resolved_Values()
+	{
+		String input = "This is {UNKNOWN_KEY}";
+		MacroKey macroKey = MacroKey.of("UNKNOWN_KEY").orElseThrow();
+
+		when(matcherMock.match(input, BASE_KEY_PATTERN)).thenReturn(Stream.of(macroKey));
+		when(matcherMock.match(input, FULL_KEY_PATTERN)).thenReturn(Stream.of(macroKey));
+		when(resolverMock.resolve(macroKey, macroObjectMapMock)).thenReturn(new MacroStringMap());
+
+		String result = replacer.replace(macroObjectMapMock, input);
+
+		assertEquals("This is {UNKNOWN_KEY}", result); // because map.get returns null
+	}
+
+
+	@Test
+	void baseKey_pattern_matches()
+	{
+		String original = "{DEATH_CHEST.PROTECTION.DURATION}";
+
+		java.util.regex.Matcher m = BASE_KEY_PATTERN.matcher(original);
+
+		m.find();
+
+		assertEquals("DEATH_CHEST", m.group(1));
 
 	}
 
 
-	@Test @DisplayName("Test replaceMacros method with Valid parameter")
-	void testReplaceMacros_valid_parameters()
+	@Test
+	void fullKey_pattern_matches()
 	{
-		// Act
-		FinalMessageRecord result = macroReplacer.replaceMacros(validMessageRecord, message.getObjectMap());
+		String original = "{DEATH_CHEST.PROTECTION.DURATION}";
 
-		// Assert
-		assertNotNull(result);
+		java.util.regex.Matcher m = FULL_KEY_PATTERN.matcher(original);
+
+		m.find();
+
+		assertEquals("DEATH_CHEST.PROTECTION.DURATION", m.group(1));
+
 	}
 
 }

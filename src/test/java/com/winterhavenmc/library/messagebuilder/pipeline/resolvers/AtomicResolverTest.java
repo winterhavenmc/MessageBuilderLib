@@ -59,7 +59,7 @@ class AtomicResolverTest
 	void setUp()
 	{
 		LocaleNumberFormatter localeNumberFormatterMock = new LocaleNumberFormatter(localeProviderMock);
-		FormatterContainer formatterContainer = new FormatterContainer(durationFormatter, localeNumberFormatterMock);
+		FormatterContainer formatterContainer = new FormatterContainer(localeProviderMock, durationFormatter, localeNumberFormatterMock);
 		resolver = new AtomicResolver(formatterContainer);
 	}
 

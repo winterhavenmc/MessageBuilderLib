@@ -17,10 +17,12 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline;
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer;
+import com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender;
@@ -59,7 +61,8 @@ class MessagePipelineTest
 {
 
 	@Mock MessageRetriever messageRetrieverMock;
-	@Mock MacroReplacer macroReplacerMock;
+	@Mock
+	MessageProcessor messageProcessorMock;
 	@Mock Player playerMock;
 	@Mock MessageSender messageSenderMock;
 	@Mock TitleSender titleSenderMock;
@@ -72,6 +75,7 @@ class MessagePipelineTest
 	FinalMessageRecord finalMessageRecord;
 	ConfigurationSection section;
 	RecordKey recordKey;
+	MacroStringMap macroStringMap;
 
 
 	@BeforeEach
@@ -85,7 +89,7 @@ class MessagePipelineTest
 		cooldownMap = new CooldownMap();
 		messagePipeline = new MessagePipeline(
 				messageRetrieverMock,
-				macroReplacerMock,
+				messageProcessorMock,
 				cooldownMap,
 				List.of(messageSenderMock, titleSenderMock)
 		);
@@ -108,11 +112,15 @@ class MessagePipelineTest
 				"this is a final message",
 				"this is a final title",
 				"this is a final subtitle");
+
+		macroStringMap = new MacroStringMap();
+		macroStringMap.put(MacroKey.of("RECIPIENT").orElseThrow(), "player name");
+		macroStringMap.put(MacroKey.of("RECIPIENT.NAME").orElseThrow(), "player name");
 	}
 
 
 	@Test @DisplayName("Test process method with Valid parameter")
-	void testProcess()
+	void testInitiate()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
@@ -120,10 +128,10 @@ class MessagePipelineTest
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(validMessageRecord);
 		ValidMessage message = new ValidMessage(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messagePipeline);
 
-		when(macroReplacerMock.replaceMacros(validMessageRecord, message.getObjectMap())).thenReturn(finalMessageRecord);
+		when(messageProcessorMock.process(validMessageRecord, message.getObjectMap())).thenReturn(finalMessageRecord);
 
 		// Act & Assert
-		assertDoesNotThrow(() -> messagePipeline.process(message));
+		assertDoesNotThrow(() -> messagePipeline.initiate(message));
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();
@@ -131,7 +139,7 @@ class MessagePipelineTest
 	}
 
 	@Test
-	void testProcess_non_existent_message()
+	void testInitiate_non_existent_message()
 	{
 		// Arrange
 		RecordKey recordKey = RecordKey.of(NONEXISTENT_ENTRY).orElseThrow();
@@ -140,7 +148,7 @@ class MessagePipelineTest
 		ValidMessage message = new ValidMessage(recipient, RecordKey.of(NONEXISTENT_ENTRY).orElseThrow(), messagePipeline);
 
 		// Act & Assert
-		messagePipeline.process(message);
+		messagePipeline.initiate(message);
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();

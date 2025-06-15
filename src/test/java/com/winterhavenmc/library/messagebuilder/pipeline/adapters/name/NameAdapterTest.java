@@ -50,10 +50,10 @@ public class NameAdapterTest
 
 
 	@Nested
-	class CommandSenderNameAdapterTests
+	class NameAdapterTests
 	{
 		@Test
-		public void testGetDisplayName_withValidCommandSender()
+		public void getName_with_Valid_CommandSender()
 		{
 			// Arrange
 			when(commandSenderMock.getName()).thenReturn("Command Sender Name");
@@ -73,7 +73,7 @@ public class NameAdapterTest
 		}
 
 		@Test
-		public void testGetName_withNull()
+		public void adapt_with_null_parameter_returns_empty_optional()
 		{
 			// Arrange
 			String name = null;
@@ -84,6 +84,7 @@ public class NameAdapterTest
 			{
 				name = adapter.get().getName();
 			}
+
 			// Assert
 			assertNull(name, "The adapter should return an empty string for a null Player.");
 		}
@@ -91,7 +92,7 @@ public class NameAdapterTest
 
 
 	@Test
-	public void testGetDisplayName_withValidOfflinePlayer()
+	public void testGetName_with_valid_OfflinePlayer()
 	{
 		// Arrange
 		when(offlinePlayerMock.getName()).thenReturn("Offline Player Name");
@@ -136,7 +137,7 @@ public class NameAdapterTest
 	class EntityNameableTests
 	{
 		@Test
-		void testGetName_withValidWorld()
+		void testAdaptedField_withValidWorld()
 		{
 			// Arrange
 			when(worldMock.getName()).thenReturn("world_name");

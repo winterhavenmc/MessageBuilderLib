@@ -25,7 +25,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -42,93 +41,68 @@ import static org.mockito.Mockito.when;
 public class DisplayNameAdapterTest
 {
 	@Mock WorldNameResolver worldNameResolverMock;
-	@Mock
-	AdapterContextContainer adapterContextContainerMock;
+	@Mock AdapterContextContainer adapterContextContainerMock;
 
 	@Mock Player playerMock;
 	@Mock Entity entityMock;
 	@Mock World worldMock;
 
 
-	@Nested
-	class PlayerDisplayNameAdapterTests
+	@Test @DisplayName("adapt with valid Player")
+	public void adapt_with_valid_player()
 	{
-		@Test @DisplayName("Get DisplayName with valid Player.")
-		public void testGetDisplayName_withValidPlayer()
-		{
-			// Arrange
-			when(playerMock.getDisplayName()).thenReturn("&aPlayer One Display Name");
+		// Arrange
+		when(playerMock.getDisplayName()).thenReturn("&aPlayer One Display Name");
 
-			// Act
-			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(playerMock);
-			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
+		// Act
+		Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(playerMock);
+		Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
-			// Assert
-			assertTrue(displayName.isPresent());
-			assertEquals("&aPlayer One Display Name", displayName.get(), "The adapter should return the displayName from the Player.");
-		}
-
-
-		@Test
-		public void testGetDisplayName_withNullPlayer()
-		{
-			// Arrange & Act
-			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(null);
-			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
-
-			// Assert
-			assertTrue(displayName.isEmpty(), "The adapter should return an empty string for a null Player.");
-		}
-
-
-		@Test @DisplayName("Test constructor with null player.")
-		public void testConstructor_withNullPlayer()
-		{
-			// Arrange & Act
-			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(null);
-			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
-
-			// assert
-			assertTrue(displayName.isEmpty());
-		}
+		// Assert
+		assertTrue(displayName.isPresent());
+		assertEquals("&aPlayer One Display Name", displayName.get(), "The adapter should return the displayName from the Player.");
 	}
 
 
-	@Nested @DisplayName("DisplayNameable Tests for Entity")
-	class EntityDisplayNameableTests
+	@Test @DisplayName("adapt with valid Entity")
+	void getDisplayName_with_valid_entity()
 	{
-		@Test @DisplayName("Get DisplayName with valid Entity.")
-		void testGetDisplayName_withValidEntity()
-		{
-			// Arrange
-			when(entityMock.getCustomName()).thenReturn("Custom Entity Name");
+		// Arrange
+		when(entityMock.getCustomName()).thenReturn("Custom Entity Name");
 
-			// Act
-			Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(entityMock);
-			Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
+		// Act
+		Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(entityMock);
+		Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
 
-			// Assert
-			assertTrue(displayName.isPresent());
-			assertEquals("Custom Entity Name", displayName.get(), "The adapter should return the displayName from the Entity.");
-		}
+		// Assert
+		assertTrue(displayName.isPresent());
+		assertEquals("Custom Entity Name", displayName.get(), "The adapter should return the displayName from the Entity.");
 	}
 
 
-	@Nested @DisplayName("DisplayNameable Tests for World.")
-	class WorldDisplayNameableTests
+	@Test @DisplayName("adapt with valid World")
+	void getDisplayName_with_valid_world()
 	{
-		@Test
-		void testGetDisplayName_withValidWorld()
-		{
-			when(worldNameResolverMock.resolveWorldName(worldMock)).thenReturn("Resolved World Name");
-			when(adapterContextContainerMock.worldNameResolver()).thenReturn(worldNameResolverMock);
+		when(worldNameResolverMock.resolveWorldName(worldMock)).thenReturn("Resolved World Name");
+		when(adapterContextContainerMock.worldNameResolver()).thenReturn(worldNameResolverMock);
 
-			DisplayNameAdapter adapter = new DisplayNameAdapter(adapterContextContainerMock);
-			Optional<DisplayNameable> adapted = adapter.adapt(worldMock);
+		DisplayNameAdapter adapter = new DisplayNameAdapter(adapterContextContainerMock);
+		Optional<DisplayNameable> adapted = adapter.adapt(worldMock);
 
-			assertTrue(adapted.isPresent());
-			assertEquals("Resolved World Name", adapted.get().getDisplayName());
-		}
+		assertTrue(adapted.isPresent());
+		assertEquals("Resolved World Name", adapted.get().getDisplayName());
+	}
+
+
+	@Test @DisplayName("adapt with null")
+	public void adapt_with_null_object()
+	{
+		// Arrange & Act
+		Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(null);
+		Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
+
+		// Assert
+		assertTrue(displayName.isEmpty(), "The adapter should return an empty string for a null Player.");
 	}
 
 }

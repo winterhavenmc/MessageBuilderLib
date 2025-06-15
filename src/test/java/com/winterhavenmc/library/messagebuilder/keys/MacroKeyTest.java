@@ -39,14 +39,40 @@ class MacroKeyTest
     class TestStaticFactoryMethod
 	{
 		@Test
-		void testOf_valid_string ()
+		void testOf_valid_key()
 		{
-			// Arrange & Act
-			Optional<MacroKey> result = MacroKey.of("VALID_KEY");
+			// Assert
+			assertTrue(MacroKey.of("VALID_KEY").isPresent());
+		}
+
+
+		@Test
+		void testOf_valid_compound_key()
+		{
+			// Assert
+			assertTrue(MacroKey.of("BASE.SUB").isPresent());
+		}
+
+
+		@Test
+		void testGetBase_valid_compound_key()
+		{
+			// Arrange
+			MacroKey macroKey = MacroKey.of("BASE.SUB").orElseThrow();
 
 			// Assert
-			assertTrue(result.isPresent());
-			assertEquals("VALID_KEY", result.get().toString());
+			assertEquals("BASE", macroKey.getBase().toString());
+		}
+
+
+		@Test
+		void testGetBase_valid_simple_key()
+		{
+			// Arrange
+			MacroKey macroKey = MacroKey.of("BASE_NO_SUB").orElseThrow();
+
+			// Assert
+			assertEquals("BASE_NO_SUB", macroKey.getBase().toString());
 		}
 
 
@@ -99,6 +125,17 @@ class MacroKeyTest
 
 	@Test
 	void macroKeyEquality_ShouldBeTrueForSameKey()
+	{
+		Optional<MacroKey> key1 = MacroKey.of("SAME_KEY");
+		Optional<MacroKey> key2 = MacroKey.of("SAME_KEY");
+
+		assertTrue(key1.isPresent() && key2.isPresent());
+		assertEquals(key1, key2);
+	}
+
+
+	@Test
+	void macroKeyEquality_ShouldBeTrueForSameKey_unwrapped()
 	{
 		Optional<MacroKey> key1 = MacroKey.of("SAME_KEY");
 		Optional<MacroKey> key2 = MacroKey.of("SAME_KEY");
@@ -238,6 +275,53 @@ class MacroKeyTest
 			assertTrue(macroKey1.isEmpty());
 		}
 
+	}
+
+
+	@Test
+	void getBase_simple()
+	{
+		// Arrange
+		MacroKey macroKey = MacroKey.of("PLAYER").orElseThrow();
+		MacroKey expected = MacroKey.of("PLAYER").orElseThrow();
+
+		// Act
+		MacroKey result = macroKey.getBase();
+
+		// Assert
+		assertEquals(expected, result);
+	}
+
+
+	@Test
+	void getBase_compound()
+	{
+		// Arrange
+		MacroKey macroKey1 = MacroKey.of("PLAYER.NAME").orElseThrow();
+		MacroKey macroKey2 = MacroKey.of("PLAYER.LOCATION.WORLD").orElseThrow();
+		MacroKey expected = MacroKey.of("PLAYER").orElseThrow();
+
+		// Act
+		MacroKey result1 = macroKey1.getBase();
+		MacroKey result2 = macroKey2.getBase();
+
+		// Assert
+		assertEquals(expected, result1);
+		assertEquals(expected, result2);
+	}
+
+
+	@Test
+	void asPlaceholder()
+	{
+		// Arrange
+		MacroKey macroKey = MacroKey.of("PLAYER.NAME").orElseThrow();
+
+		// Act
+		String placeholder = macroKey.asPlaceholder();
+
+		// Assert
+		assertEquals("{PLAYER.NAME}", placeholder);
 	}
 
 }

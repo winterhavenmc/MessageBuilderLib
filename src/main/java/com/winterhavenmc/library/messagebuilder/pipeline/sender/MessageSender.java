@@ -41,7 +41,7 @@ public final class MessageSender implements Sender
 
 
 	@Override
-	public void send(final Recipient.Valid recipient, final FinalMessageRecord messageRecord)
+	public void send(final Recipient.Sendable recipient, final FinalMessageRecord messageRecord)
 	{
 		if (messageRecord.enabled()
 				&& messageRecord.finalMessageString().isPresent()

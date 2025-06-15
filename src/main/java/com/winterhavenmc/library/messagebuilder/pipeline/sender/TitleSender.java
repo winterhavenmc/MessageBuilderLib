@@ -51,7 +51,7 @@ public final class TitleSender implements Sender
 	 * @param messageRecord a message record containing the fields necessary for sending a title to a player
 	 */
 	@Override
-	public void send(final Recipient.Valid recipient, final FinalMessageRecord messageRecord)
+	public void send(final Recipient.Sendable recipient, final FinalMessageRecord messageRecord)
 	{
 		// if sender is player and at least one title/subtitle string is non-null and non-blank, send title to player
 		if (recipient.sender() instanceof Player player

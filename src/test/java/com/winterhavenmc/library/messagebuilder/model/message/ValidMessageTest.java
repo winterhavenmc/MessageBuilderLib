@@ -78,7 +78,8 @@ class ValidMessageTest
 
 		itemStack = new ItemStack(Material.DIAMOND_SWORD);
 
-		recipient = switch (Recipient.of(playerMock)) {
+		recipient = switch (Recipient.of(playerMock))
+		{
 			case Recipient.Valid valid -> valid;
 			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
@@ -180,7 +181,7 @@ class ValidMessageTest
 		}
 
 
-		@Test @DisplayName("test setMacro (three parameter) method with null macro parameter")
+		@Test @DisplayName("test setMacro (quantity) method with null macro parameter")
 		void testSetMacro2_parameter_null_macro()
 		{
 			ValidationException exception = assertThrows(ValidationException.class,
@@ -212,21 +213,45 @@ class ValidMessageTest
 	@Test
 	void testSetMacro4_null_duration()
 	{
-		ValidationException exception = assertThrows(ValidationException.class,
-				() ->  message.setMacro(Macro.DURATION, null, ChronoUnit.SECONDS));
+		// Arrange
+		Duration duration = Duration.ofSeconds(15);
+		MacroKey macroKey = MacroKey.of(Macro.DURATION).orElseThrow();
 
-		assertEquals("The parameter 'duration' cannot be null.", exception.getMessage());
+		// Act
+		Message newMessage = message.setMacro(Macro.DURATION, null, ChronoUnit.MINUTES);
+		MacroObjectMap macroObjectMap = newMessage.getObjectMap();
+		BoundedDuration boundedDuration = (BoundedDuration) macroObjectMap.get(macroKey).orElseThrow();
+
+		// Assert
+		assertEquals(Duration.ZERO, boundedDuration.duration());
 	}
 
 
 	@Test
 	void testSetMacro4_null_lower_bound()
 	{
+		// Arrange
+		Duration duration = Duration.ofSeconds(15);
+		MacroKey macroKey = MacroKey.of(Macro.DURATION).orElseThrow();
+
+		// Act
+		Message newMessage = message.setMacro(Macro.DURATION, duration, null);
+		MacroObjectMap macroObjectMap = newMessage.getObjectMap();
+		BoundedDuration boundedDuration = (BoundedDuration) macroObjectMap.get(macroKey).orElseThrow();
+
+		// Assert
+		assertEquals(ChronoUnit.MINUTES, boundedDuration.precision());
+	}
+
+
+	@Test
+	void testSetMacro4_invalid_key()
+	{
 		Duration duration = Duration.ofSeconds(15);
 		ValidationException exception = assertThrows(ValidationException.class,
-				() ->  message.setMacro(Macro.DURATION, duration, null));
+				() ->  message.setMacro(Macro.invalid, duration, ChronoUnit.MINUTES));
 
-		assertEquals("The parameter 'lowerBound' cannot be null.", exception.getMessage());
+		assertEquals("The parameter 'macroKey' was invalid.", exception.getMessage());
 	}
 
 

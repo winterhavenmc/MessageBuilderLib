@@ -33,8 +33,8 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  */
 public abstract class AbstractKey
 {
-	// valid key must begin with alpha only and may contain alpha, digits, underscore or period
-	protected static final Pattern VALID_KEY = Pattern.compile("^[a-zA-Z][a-zA-Z\\d_.]*$");
+	// valid key must begin with uppercase alpha only and may contain alpha, digits, underscore or period
+	protected static final Pattern VALID_KEY = Pattern.compile("^[A-Z][a-zA-Z\\d_.]*$");
 	protected static final Predicate<String> IS_INVALID_KEY = string -> !VALID_KEY.matcher(string).matches();
 
 	protected final String wrappedString;
@@ -46,18 +46,6 @@ public abstract class AbstractKey
 		validate(key, IS_INVALID_KEY, throwing(PARAMETER_INVALID, KEY));
 
 		this.wrappedString = key;
-	}
-
-
-	protected String dotJoin(String subKey)
-	{
-		return dotJoin(this, subKey);
-	}
-
-
-	static protected String dotJoin(AbstractKey baseKey, String subKey)
-	{
-		return String.join(".", baseKey.toString(), subKey);
 	}
 
 
