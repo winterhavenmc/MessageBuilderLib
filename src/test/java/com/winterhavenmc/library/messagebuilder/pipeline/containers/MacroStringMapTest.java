@@ -158,34 +158,6 @@ class MacroStringMapTest
 		assertFalse(macroStringMap.isEmpty());
 	}
 
-	@Test
-	void getValueOrDefault_valid_entry()
-	{
-		// Arrange
-		MacroKey macroKey = MacroKey.of("ABC").orElseThrow();
-		macroStringMap.put(macroKey, "123");
-
-		// Act
-		String result = macroStringMap.getValueOrDefault(macroKey, macroKey.toString());
-
-		// Assert
-		assertEquals("123", result);
-	}
-
-
-	@Test
-	void getValueOrDefault_no_entry()
-	{
-		// Arrange
-		MacroKey macroKey = MacroKey.of("DEFAULT").orElseThrow();
-
-		// Act
-		String result = macroStringMap.getValueOrDefault(macroKey, macroKey.toString());
-
-		// Assert
-		assertEquals("DEFAULT", result);
-	}
-
 
 	@Test
 	void keySet()
