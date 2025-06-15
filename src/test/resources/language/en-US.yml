@@ -11,6 +11,7 @@ CONSTANTS:
   TIME:
     LESS_THAN: "less than {DURATION}"
     UNLIMITED: "unlimited"
+    EXPIRED: "expired"
 
   SPAWN:
     DISPLAY_NAME: '&aSpawn'
