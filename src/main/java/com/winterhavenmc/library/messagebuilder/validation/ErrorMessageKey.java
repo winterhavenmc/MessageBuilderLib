@@ -17,6 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.validation;
 
+
+/**
+ * Enum of exception and error message keys. The enum name value is used as the key in the resource bundle.
+ */
 public enum ErrorMessageKey
 {
 	INVALID_SECTION,
