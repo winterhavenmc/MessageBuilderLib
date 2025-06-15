@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
+import org.bukkit.entity.Tameable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,12 +32,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 public class OwnerAdapterTest
 {
 	@Mock Player playerMock;
+	@Mock Tameable tameableMock;
 
 	class TestObject implements Ownable
 	{
@@ -48,14 +51,30 @@ public class OwnerAdapterTest
 	}
 
 
-	@Test @DisplayName("adapt with valid Player")
-	public void adapt_with_valid_player_returns_adapted_player()
+	@Test @DisplayName("adapt with implementation of Ownable")
+	public void adapt_with_valid_Ownable_returns_adapted_Ownable()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
 		Optional<Ownable> adapter = new OwnerAdapter().adapt(testObject);
+		Optional<AnimalTamer> owner = adapter.map(Ownable::getOwner);
+
+		// Assert
+		assertTrue(owner.isPresent());
+		assertEquals(playerMock, owner.get(), "The adapted object should return the mock Player.");
+	}
+
+
+	@Test @DisplayName("adapt with valid Tameable")
+	public void adapt_with_valid_Tameable_returns_adapted_Tameable()
+	{
+		// Arrange
+		when(tameableMock.getOwner()).thenReturn(playerMock);
+
+		// Act
+		Optional<Ownable> adapter = new OwnerAdapter().adapt(tameableMock);
 		Optional<AnimalTamer> owner = adapter.map(Ownable::getOwner);
 
 		// Assert
