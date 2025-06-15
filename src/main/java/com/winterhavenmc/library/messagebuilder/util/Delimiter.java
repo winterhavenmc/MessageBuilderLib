@@ -18,6 +18,9 @@
 package com.winterhavenmc.library.messagebuilder.util;
 
 
+/**
+ * An Enum containing the placeholder delimiters
+ */
 public enum Delimiter
 {
 	OPEN("{"),
