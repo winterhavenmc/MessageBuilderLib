@@ -40,19 +40,17 @@ public abstract class AbstractKey
 	protected final String wrappedString;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param key a String to be used for the key
+	 */
 	protected AbstractKey(String key)
 	{
 		validate(key, Objects::isNull, throwing(PARAMETER_NULL, KEY));
 		validate(key, IS_INVALID_KEY, throwing(PARAMETER_INVALID, KEY));
 
 		this.wrappedString = key;
-	}
-
-
-	@Override
-	public String toString()
-	{
-		return this.wrappedString;
 	}
 
 
@@ -77,5 +75,13 @@ public abstract class AbstractKey
 	{
 		return wrappedString.hashCode();
 	}
+
+
+	@Override
+	public String toString()
+	{
+		return this.wrappedString;
+	}
+
 
 }
