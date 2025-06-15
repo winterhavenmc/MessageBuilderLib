@@ -1,14 +1,5 @@
 # Language configuration file for ${project.name} v${project.version}
 
-##########
-# Settings
-##########
-SETTINGS:
-  DELIMITERS:
-    LEFT: '{'
-    RIGHT: '}'
-
-
 #################################
 # Constant Strings
 #################################
