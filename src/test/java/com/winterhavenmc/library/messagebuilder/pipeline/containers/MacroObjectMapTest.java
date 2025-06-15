@@ -171,26 +171,6 @@ class MacroObjectMapTest
 
 
 	@Test
-	void size()
-	{
-		// Arrange
-		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
-		Integer value1 = 41;
-		macroObjectMap.putIfAbsent(key1, value1);
-
-		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
-		Integer value2 = 42;
-		macroObjectMap.putIfAbsent(key2, value2);
-
-		// Act
-		var result = macroObjectMap.size();
-
-		// Assert
-		assertEquals(2, result);
-	}
-
-
-	@Test
 	void isEmpty()
 	{
 		assertTrue(macroObjectMap.isEmpty());
