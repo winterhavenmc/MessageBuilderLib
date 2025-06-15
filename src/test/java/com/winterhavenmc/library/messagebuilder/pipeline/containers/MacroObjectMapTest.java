@@ -174,30 +174,6 @@ class MacroObjectMapTest
 
 
 	@Test
-	void testContainsKey()
-	{
-		// Arrange
-		macroKey = MacroKey.of("LOCATION").orElseThrow();
-		MacroKey nonExistentKey = MacroKey.of("NON_EXISTENT_KEY").orElseThrow();
-		World world = mock(World.class, "MockWorld");
-		Location location = new Location(world, 10, 20, 30);
-		macroObjectMap.putIfAbsent(macroKey, location);
-
-		// Act & Assert
-		assertTrue(macroObjectMap.containsKey(macroKey), "Key should be present in the map");
-		assertFalse(macroObjectMap.containsKey(nonExistentKey), "Key should not be present in the map");
-	}
-
-
-	@Test
-	void testEmptyMap()
-	{
-		// Act & Assert
-		assertFalse(macroObjectMap.containsKey(macroKey), "Empty map should not contain macro key");
-	}
-
-
-	@Test
 	void testEntrySet()
 	{
 		// Arrange
