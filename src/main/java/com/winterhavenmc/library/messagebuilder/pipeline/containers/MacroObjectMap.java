@@ -120,10 +120,4 @@ public class MacroObjectMap
 		return INTERNAL_MAP.isEmpty();
 	}
 
-
-	public Iterable<MacroKey> keySet()
-	{
-		return INTERNAL_MAP.keySet();
-	}
-
 }
