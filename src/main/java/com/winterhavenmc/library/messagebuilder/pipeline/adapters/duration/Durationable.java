@@ -77,6 +77,13 @@ public interface Durationable
 	}
 
 
+	/**
+	 * Calculate the Duration of time from current time until an Instant.
+	 * Returns a Duration of zero if passed null. Returns a negative duration if Instant is in the past.
+	 *
+	 * @param instant the instant to use in duration calculation
+	 * @return {@code Duration} between current time and Instant parameter
+	 */
 	static Duration durationUntil(final Instant instant)
 	{
 		return (instant != null)
