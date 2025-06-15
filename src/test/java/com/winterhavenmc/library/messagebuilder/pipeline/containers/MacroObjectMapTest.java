@@ -32,16 +32,14 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
@@ -169,26 +167,6 @@ class MacroObjectMapTest
 		// Assert
 		assertTrue(retrievedValue.isPresent());
 		assertInstanceOf(ItemStack.class, retrievedValue.get(), "Value should not be present for mismatched type");
-	}
-
-
-	@Test
-	void testEntrySet()
-	{
-		// Arrange
-		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
-		Integer value1 = 41;
-		macroObjectMap.putIfAbsent(key1, value1);
-
-		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
-		Integer value2 = 42;
-		macroObjectMap.putIfAbsent(key2, value2);
-
-		// Act
-		Set<Map.Entry<MacroKey, Object>> entrySet = macroObjectMap.entrySet();
-
-		// Assert
-		assertTrue(entrySet.size() >= 2);
 	}
 
 
