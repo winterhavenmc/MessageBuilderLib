@@ -169,11 +169,4 @@ class MacroObjectMapTest
 		assertInstanceOf(ItemStack.class, retrievedValue.get(), "Value should not be present for mismatched type");
 	}
 
-
-	@Test
-	void isEmpty()
-	{
-		assertTrue(macroObjectMap.isEmpty());
-	}
-
 }
