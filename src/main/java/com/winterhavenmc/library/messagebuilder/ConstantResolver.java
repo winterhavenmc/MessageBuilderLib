@@ -27,6 +27,9 @@ import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import java.util.Optional;
 
 
+/**
+ * A class that allows clients of the library to access values in the constants section of the language file
+ */
 public class ConstantResolver
 {
 	private final QueryHandler<ConstantRecord> constantQueryHandler;
