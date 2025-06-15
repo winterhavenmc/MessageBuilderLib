@@ -118,7 +118,7 @@ public class FieldExtractor implements Extractor
 						resultMap.putIfAbsent(baseKey, string));
 			}
 
-			// Extract killer field as string
+			// Extract looter field as string
 			case LooterAdapter __ when adapted instanceof Lootable lootable ->
 			{
 				resultMap.putAll(lootable.extractLooter(baseKey, ctx));
