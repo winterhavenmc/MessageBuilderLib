@@ -144,7 +144,7 @@ class LanguageResourceLoaderTest
 		}
 
 		@Test
-		void returns_default_Locale_when_Language_setting_does_not_set()
+		void returns_default_Locale_when_Language_setting_is_not_set()
 		{
 			// Arrange
 			when(pluginMock.getConfig()).thenReturn(fileConfigurationMock);
@@ -154,7 +154,7 @@ class LanguageResourceLoaderTest
 			Locale locale = loader.getConfiguredLocale();
 
 			// Assert
-			assertEquals(Locale.getDefault(), locale);
+			assertEquals(Locale.forLanguageTag("en-US"), locale);
 
 			// Verify
 			verify(pluginMock, atLeastOnce()).getConfig();
