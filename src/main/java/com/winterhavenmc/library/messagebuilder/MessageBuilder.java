@@ -206,10 +206,4 @@ public final class MessageBuilder
 		return this.constantResolver;
 	}
 
-
-	public Optional<String> getConstantString(final String key)
-	{
-		return constantResolver.getString(key);
-	}
-
 }
