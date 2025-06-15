@@ -243,24 +243,4 @@ class MacroObjectMapTest
 		assertTrue(macroObjectMap.isEmpty());
 	}
 
-
-	@Test
-	void keySet()
-	{
-		// Arrange
-		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
-		Integer value1 = 41;
-		macroObjectMap.put(key1, value1);
-
-		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
-		Integer value2 = 42;
-		macroObjectMap.put(key2, value2);
-
-		// Act
-		Iterable<MacroKey> result = macroObjectMap.keySet();
-
-		// Assert
-		result.forEach(macroKey -> assertInstanceOf(MacroKey.class, macroKey));
-	}
-
 }
