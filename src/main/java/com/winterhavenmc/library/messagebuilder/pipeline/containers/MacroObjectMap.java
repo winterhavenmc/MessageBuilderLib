@@ -99,12 +99,22 @@ public class MacroObjectMap
 	}
 
 
+	/**
+	 * Return the number of entries in the map as int
+	 *
+	 * @return {@code int} number of entries in the map
+	 */
 	public int size()
 	{
 		return INTERNAL_MAP.size();
 	}
 
 
+	/**
+	 * Return {@code boolean} representing whether the map contains any entries
+	 *
+	 * @return {@code true} if the map contains no entries, or {@code false} if it contains one or more entries
+	 */
 	public boolean isEmpty()
 	{
 		return INTERNAL_MAP.isEmpty();
