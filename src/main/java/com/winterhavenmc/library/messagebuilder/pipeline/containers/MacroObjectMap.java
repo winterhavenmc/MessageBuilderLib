@@ -77,17 +77,6 @@ public class MacroObjectMap
 
 
 	/**
-	 * Returns a set view of the mappings in the map.
-	 *
-	 * @return A set of entries in the map.
-	 */
-	public Set<Map.Entry<MacroKey, Object>> entrySet()
-	{
-		return INTERNAL_MAP.entrySet();
-	}
-
-
-	/**
 	 * Return the number of entries in the map as int
 	 *
 	 * @return {@code int} number of entries in the map
