@@ -94,7 +94,7 @@ public class LanguageResourceInstallerTest
 		}
 
 		@Test
-		void contains_two_or_more_slashes()
+		void contains_two_or_more_adjacent_slashes()
 		{
 			assertTrue(TWO_OR_MORE_SLASHES.matcher("//").find());
 			assertTrue(TWO_OR_MORE_SLASHES.matcher("example//path/name").find());
@@ -300,7 +300,9 @@ public class LanguageResourceInstallerTest
 	public void getAutoInstallByNameResourceNamesTest_not_null()
 	{
 		// Arrange
-		when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
+		when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName()))
+				.thenReturn(getClass().getClassLoader()
+				.getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
 
 		// Act
 		Collection<String> filenames = resourceInstaller.getAutoInstallSet(resourceInstaller.getAutoInstallResourceName());
