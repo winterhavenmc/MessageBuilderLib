@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.cooldown;
 
-import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import org.bukkit.entity.Entity;
@@ -56,18 +55,6 @@ public class CooldownKey
 		this.uuid = (recipient.sender() instanceof Entity entity)
 				? entity.getUniqueId()
 				: DEFAULT_UUID;
-	}
-
-
-	/**
-	 * Static factory method with Message parameter
-	 *
-	 * @param message the Message used for CooldownKey creation
-	 * @return {@code Optional} CooldownKey, or empty Optional if parameter is invalid
-	 */
-	public static Optional<CooldownKey> of(final Message message)
-	{
-		return Optional.of(new CooldownKey(message.getRecipient(), message.getMessageKey()));
 	}
 
 
