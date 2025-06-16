@@ -51,7 +51,7 @@ class FieldResolverTest
 
 
 	@Test
-	void testResolve()
+	void resolve_for_keys()
 	{
 		// Arrange
 		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
@@ -63,6 +63,31 @@ class FieldResolverTest
 
 		// Act
 		MacroStringMap result = resolver.resolve(macroKey, objectMap);
+
+		// Assert
+		assertInstanceOf(MacroStringMap.class, result);
+	}
+
+
+	@Test
+	void testResolve()
+	{
+		// Arrange
+		MacroKey macroKey1 = MacroKey.of("KEY1").orElseThrow();
+
+		MacroObjectMap objectMap = new MacroObjectMap();
+		objectMap.put(macroKey1, "STRING");
+
+		stringMap.put(macroKey1, "STRING");
+
+
+		when(compositeResolver.resolve(macroKey1, objectMap)).thenReturn(stringMap);
+		when(atomicResolver.resolve(macroKey1, objectMap)).thenReturn(stringMap);
+
+		FieldResolver resolver = new FieldResolver(resolvers);
+
+		// Act
+		MacroStringMap result = resolver.resolve(macroKey1, objectMap);
 
 		// Assert
 		assertInstanceOf(MacroStringMap.class, result);
