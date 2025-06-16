@@ -35,6 +35,9 @@ import static com.winterhavenmc.library.messagebuilder.validation.ValidationHand
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
+/**
+ * Resolves simple object values that have only one value that is mapped to the root level key in the result map.
+ */
 public class AtomicResolver implements Resolver
 {
 	private final DurationFormatter durationFormatter;
