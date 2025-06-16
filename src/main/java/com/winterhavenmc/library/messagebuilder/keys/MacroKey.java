@@ -129,5 +129,4 @@ public final class MacroKey extends AbstractKey implements StandardKey
 		return String.join(".", baseKey.toString(), subKey);
 	}
 
-
 }

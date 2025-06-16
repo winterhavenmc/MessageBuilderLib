@@ -25,7 +25,11 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 
-public sealed interface Message permits ValidMessage, InvalidMessage {
+/**
+ * A sealed interface that defines a Message
+ */
+public sealed interface Message permits ValidMessage, InvalidMessage
+{
     <K extends Enum<K>, V> Message setMacro(K macro, V value);
     <K extends Enum<K>, V> Message setMacro(int quantity, K macro, V value);
     <K extends Enum<K>> Message setMacro(K macro, Duration duration, ChronoUnit precision);
@@ -34,6 +38,11 @@ public sealed interface Message permits ValidMessage, InvalidMessage {
     Recipient.Sendable getRecipient();
     MacroObjectMap getObjectMap();
 
+
+    /**
+     * Return an empty Message
+     * @return an empty message
+     */
     static Message empty()
     {
         return InvalidMessage.empty();

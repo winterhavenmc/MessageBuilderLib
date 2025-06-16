@@ -19,11 +19,11 @@ package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.InvalidConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.Section;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,8 +47,8 @@ class ConstantResolverTest
 	@Nested
 	class GetStringTests
 	{
-		@Test
-		void getString()
+		@Test @DisplayName("getString returns optional String value when present.")
+		void getString_returns_optional_String()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
@@ -67,7 +67,7 @@ class ConstantResolverTest
 		}
 
 
-		@Test
+		@Test @DisplayName("getString returns empty optional when not present.")
 		void getString_returns_empty_optional()
 		{
 			// Arrange
@@ -87,12 +87,52 @@ class ConstantResolverTest
 		}
 
 
-		@Test
+		@Test @DisplayName("getString returns empty optional when fetched value type is not String.")
 		void getString_returns_empty_optional_when_non_string_value_record()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
+
+			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+
+			// Act
+			Optional<String> result = constantResolver.getString("KEY");
+
+			// Assert
+			assertEquals(Optional.empty(), result);
+		}
+
+
+		@Test @DisplayName("getString returns empty optional when fetched value type is null.")
+		void getString_returns_empty_optional_when_null_value_record()
+		{
+			// Arrange
+			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, null);
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
+
+			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+
+			// Act
+			Optional<String> result = constantResolver.getString("KEY");
+
+			// Assert
+			assertEquals(Optional.empty(), result);
+		}
+
+
+		@Test @DisplayName("getString returns empty optional when fetched value type is empty Optional.")
+		void getString_returns_empty_optional_when_empty_optional_value_record()
+		{
+			// Arrange
+			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -111,8 +151,8 @@ class ConstantResolverTest
 	@Nested
 	class GetIntegerTests
 	{
-		@Test
-		void getInteger()
+		@Test @DisplayName("getInteger() returns optional Integer value when present.")
+		void getInteger_returns_optional_Integer()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
@@ -131,8 +171,68 @@ class ConstantResolverTest
 		}
 
 
-		@Test
+		@Test @DisplayName("getInteger() returns empty optional when not present.")
 		void getInteger_returns_empty_optional()
+		{
+			// Arrange
+			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
+
+			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+
+			// Act
+			Optional<Integer> result = constantResolver.getInteger("KEY");
+
+			// Assert
+			assertEquals(Optional.empty(), result);
+		}
+
+
+		@Test @DisplayName("getInteger() returns empty optional when fetched value type is not Integer.")
+		void getInteger_returns_empty_optional_when_non_Integer_value_record()
+		{
+			// Arrange
+			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, "string");
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
+
+			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+
+			// Act
+			Optional<Integer> result = constantResolver.getInteger("KEY");
+
+			// Assert
+			assertEquals(Optional.empty(), result);
+		}
+
+
+		@Test @DisplayName("getInteger() returns empty optional when fetched value type is null.")
+		void getInteger_returns_empty_optional_when_null_value_record()
+		{
+			// Arrange
+			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, null);
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
+
+			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+
+			// Act
+			Optional<Integer> result = constantResolver.getInteger("KEY");
+
+			// Assert
+			assertEquals(Optional.empty(), result);
+		}
+
+
+		@Test @DisplayName("getInteger() returns empty optional when fetched value type is empty Optional.")
+		void getInteger_returns_empty_optional_when_empty_optional_value_record()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
@@ -155,8 +255,8 @@ class ConstantResolverTest
 	@Nested
 	class GetBooleanTests
 	{
-		@Test
-		void getBoolean()
+		@Test @DisplayName("getBoolean() returns optional boolean value when present.")
+		void getBoolean_returns_optional_Boolean()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
@@ -175,7 +275,7 @@ class ConstantResolverTest
 		}
 
 
-		@Test
+		@Test @DisplayName("getBoolean returns empty optional when not present.")
 		void getBoolean_returns_empty_optional()
 		{
 			// Arrange
@@ -193,116 +293,62 @@ class ConstantResolverTest
 			// Assert
 			assertEquals(Optional.empty(), result);
 		}
-	}
 
 
-	@Nested
-	class ExtractStringTests
-	{
-		@Test
-		void extractString_returns_optional_string_when_given_valid_record()
-		{
-			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, "result string");
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
-
-			// Act
-			Optional<String> result = constantResolver.extractStringValue(constantRecord);
-
-			// Assert
-			assertEquals(Optional.of("result string"), result);
-		}
-
-
-		@Test
-		void extractString_returns_empty_optional_when_given_invalid_constant_record()
-		{
-			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
-			InvalidConstantRecord constantRecord = new InvalidConstantRecord(recordKey, "reason");
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
-
-			// Act
-			Optional<String> result = constantResolver.extractStringValue(constantRecord);
-
-			// Assert
-			assertEquals(Optional.empty(), result);
-		}
-	}
-
-
-	@Nested
-	class ExtractIntegerTests
-	{
-		@Test
-		void extractInteger_returns_optional_integer_when_given_valid_record()
+		@Test @DisplayName("getBoolean returns empty optional when fetched value type is not Boolean.")
+		void getBoolean_returns_empty_optional_when_non_Boolean_value_record()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
 
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
-
-			// Act
-			Optional<Integer> result = constantResolver.extractIntegerValue(constantRecord);
-
-			// Assert
-			assertEquals(Optional.of(42), result);
-		}
-
-
-		@Test
-		void extractInteger_returns_empty_optional_when_given_invalid_constant_record()
-		{
-			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
-			InvalidConstantRecord constantRecord = new InvalidConstantRecord(recordKey, "reason");
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
 
 			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
-			Optional<Integer> result = constantResolver.extractIntegerValue(constantRecord);
+			Optional<Boolean> result = constantResolver.getBoolean("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
 		}
-	}
 
 
-	@Nested
-	class ExtractBooleanTests
-	{
-		@Test
-		void extractBoolean_returns_optional_boolean_when_given_valid_record()
+		@Test @DisplayName("getBoolean() returns empty optional when fetched value type is null.")
+		void getBoolean_returns_empty_optional_when_null_value_record()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, true);
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, null);
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
 
 			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
-			Optional<Boolean> result = constantResolver.extractBooleanValue(constantRecord);
+			Optional<Boolean> result = constantResolver.getBoolean("KEY");
 
 			// Assert
-			assertEquals(Optional.of(true), result);
+			assertEquals(Optional.empty(), result);
 		}
 
 
-		@Test
-		void extractBoolean_returns_empty_optional_when_given_invalid_constant_record()
+		@Test @DisplayName("getBoolean() returns empty optional when fetched value type is empty Optional.")
+		void getBoolean_returns_empty_optional_when_empty_optional_value_record()
 		{
 			// Arrange
 			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
-			InvalidConstantRecord constantRecord = new InvalidConstantRecord(recordKey, "reason");
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
 
 			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
-			Optional<Boolean> result = constantResolver.extractBooleanValue(constantRecord);
+			Optional<Boolean> result = constantResolver.getBoolean("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);

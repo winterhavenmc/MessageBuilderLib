@@ -207,7 +207,7 @@ class MacroKeyTest
 
 
 		@Test
-		void testAppend_invalid_string()
+		void testAppend_with_invalid_string()
 		{
 			// Arrange
 			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
@@ -221,7 +221,7 @@ class MacroKeyTest
 
 
 		@Test
-		void testAppend_null_string()
+		void testAppend_with_null_string()
 		{
 			// Arrange
 			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
@@ -235,7 +235,7 @@ class MacroKeyTest
 
 
 		@Test
-		void testAppend_valid_enum()
+		void testAppend_with_valid_enum()
 		{
 			// Arrange
 			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
@@ -249,7 +249,7 @@ class MacroKeyTest
 
 
 		@Test
-		void testAppend_invalid_enum()
+		void testAppend_with_invalid_enum()
 		{
 			// Arrange
 			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
@@ -263,7 +263,7 @@ class MacroKeyTest
 
 
 		@Test
-		void testAppend_null_enum()
+		void testAppend_with_null_enum()
 		{
 			// Arrange
 			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
@@ -279,7 +279,7 @@ class MacroKeyTest
 
 
 	@Test
-	void getBase_simple()
+	void getBase_with_simple_key()
 	{
 		// Arrange
 		MacroKey macroKey = MacroKey.of("PLAYER").orElseThrow();
@@ -294,7 +294,7 @@ class MacroKeyTest
 
 
 	@Test
-	void getBase_compound()
+	void getBase_with_compound_key()
 	{
 		// Arrange
 		MacroKey macroKey1 = MacroKey.of("PLAYER.NAME").orElseThrow();
@@ -312,7 +312,7 @@ class MacroKeyTest
 
 
 	@Test
-	void asPlaceholder()
+	void asPlaceholder_returns_key_with_delimiters()
 	{
 		// Arrange
 		MacroKey macroKey = MacroKey.of("PLAYER.NAME").orElseThrow();

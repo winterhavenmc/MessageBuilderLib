@@ -1,14 +1,5 @@
 # Language configuration file for ${project.name} v${project.version}
 
-##########
-# Settings
-##########
-SETTINGS:
-  DELIMITERS:
-    LEFT: '{'
-    RIGHT: '}'
-
-
 #################################
 # Constant Strings
 #################################
@@ -20,6 +11,7 @@ CONSTANTS:
   TIME:
     LESS_THAN: "less than {DURATION}"
     UNLIMITED: "unlimited"
+    EXPIRED: "expired"
 
   SPAWN:
     DISPLAY_NAME: '&aSpawn'

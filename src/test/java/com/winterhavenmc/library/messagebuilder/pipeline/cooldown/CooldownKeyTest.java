@@ -75,8 +75,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test
-	void testStaticFactory()
+	@Test @DisplayName("of() method with valid parameters returns valid key.")
+	void static_factory_method_with_valid_parameters_returns_valid_key()
 	{
 		// Arrange
 		// Act
@@ -87,8 +87,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test
-	void testConstructor_non_entity()
+	@Test @DisplayName("of() method with non-entity inserts zero uuid.")
+	void static_factory_method_with_non_entity_inerts_zero_uuid()
 	{
 		// Arrange
 		consoleRecipient = switch (Recipient.of(consoleMock))
@@ -107,8 +107,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test
-	void testToString()
+	@Test @DisplayName("toString() returns String representation of key.")
+	void toString_returns_string_representation_of_key()
 	{
 		// Arrange
 		UUID randomUUID = UUID.randomUUID();
@@ -125,8 +125,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test
-	void testEquals_SameObject()
+	@Test @DisplayName("Key is equal to self.")
+	void equals_SameObject()
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
@@ -142,8 +142,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test
-	void testEquals_EqualObjects()
+	@Test @DisplayName("keys created with same values are equal.")
+	void keys_with_same_values_are_equal()
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
@@ -161,7 +161,7 @@ class CooldownKeyTest
 
 
 	@Test @DisplayName("Different UUIDs should result in inequality")
-	void testEquals_DifferentUUIDs()
+	void keys_with_different_uuids_are_not_equal()
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(new UUID(1, 1));
@@ -180,8 +180,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test @DisplayName("Different messageIdStrings should result in inequality")
-	void testEquals_DifferentMessageIdStrings()
+	@Test @DisplayName("Different messageIds result in inequality")
+	void keys_with_different_messageIds_are_not_equal()
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
@@ -200,8 +200,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test @DisplayName("An object should not be equal to null")
-	void testEquals_Null()
+	@Test @DisplayName("Key is not equal to null")
+	void key_not_equal_to_null()
 	{
 		// Arrange
 		// Act
@@ -215,11 +215,10 @@ class CooldownKeyTest
 	}
 
 
-	@Test @DisplayName("An object should not be equal to an instance of another class")
-	void testEquals_DifferentClass()
+	@Test @DisplayName("An key is not equal to an instance of another class")
+	void objects_of_different_class_are_not_equal()
 	{
-		// Arrange
-		// Act
+		// Arrange & Act
 		CooldownKey key = CooldownKey.of(recipient, messageKey).orElseThrow();
 
 		// Assert
@@ -230,8 +229,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test @DisplayName("Equal objects must have the same hash code")
-	void testHashCode_EqualObjects()
+	@Test @DisplayName("Equal objects have the same hash code")
+	void equal_objects_have_same_hashcode()
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
@@ -248,8 +247,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test @DisplayName("Different UUIDs likely result in different hash codes")
-	void testHashCode_DifferentUUIDs()
+	@Test @DisplayName("Different UUIDs result in different hash codes")
+	void unequal_uuids_result_in_different_hash_codes()
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
@@ -268,8 +267,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test @DisplayName("Different RecordKeys should result in different hash codes")
-	void testHashCode_DifferentMessageIdStrings()
+	@Test @DisplayName("Different MessageIds result in different hash codes")
+	void unequal_messageIds_result_in_different_hash_codes()
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
@@ -288,8 +287,8 @@ class CooldownKeyTest
 	}
 
 
-	@Test
-	void testGetMessageId()
+	@Test @DisplayName("getMessageId() returns valid messageId.")
+	void getMessageId_returns_valid_messageId()
 	{
 		// Arrange
 		// Act

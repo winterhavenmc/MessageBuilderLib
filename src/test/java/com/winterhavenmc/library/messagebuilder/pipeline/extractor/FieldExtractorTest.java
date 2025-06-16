@@ -20,10 +20,24 @@ package com.winterhavenmc.library.messagebuilder.pipeline.extractor;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.DurationAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.Durationable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.Expirable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.ExpirationAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant.InstantAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant.Instantable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer.Killable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer.KillerAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.location.Locatable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.location.LocationAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter.Lootable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter.LooterAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.Ownable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.OwnerAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.Protectable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.Quantifiable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.Identifiable;
@@ -35,9 +49,12 @@ import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringM
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -45,24 +62,37 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class FieldExtractorTest
 {
-	@Mock NameAdapter nameAdapterMock;
 	@Mock DisplayNameAdapter displayNameAdapterMock;
-	@Mock UniqueIdAdapter uniqueIdAdapterMock;
+	@Mock DurationAdapter durationAdapterMock;
+	@Mock ExpirationAdapter expirationAdapterMock;
+	@Mock InstantAdapter instantAdapterMock;
 	@Mock LocationAdapter locationAdapterMock;
+	@Mock LooterAdapter looterAdapterMock;
+	@Mock KillerAdapter killerAdapterMock;
+	@Mock NameAdapter nameAdapterMock;
+	@Mock OwnerAdapter ownerAdapterMock;
+	@Mock ProtectionAdapter protectionAdapterMock;
 	@Mock QuantityAdapter quantityAdapter;
+	@Mock UniqueIdAdapter uniqueIdAdapterMock;
 	@Mock World worldMock;
 
-	@Mock Nameable nameableMock;
 	@Mock DisplayNameable displayNameableMock;
+	@Mock Durationable durationableMock;
+	@Mock Expirable expirableMock;
+	@Mock Instantable instantableMock;
 	@Mock Identifiable identifiableMock;
 	@Mock Locatable locatableMock;
+	@Mock Lootable lootableMock;
+	@Mock Killable killableMock;
+	@Mock Nameable nameableMock;
+	@Mock Ownable ownableMock;
+	@Mock Protectable protectableMock;
 	@Mock Quantifiable quantifiableMock;
 	@Mock AdapterContextContainer adapterContextContainerMock;
 
@@ -78,29 +108,8 @@ class FieldExtractorTest
 	}
 
 
-	@Test
-	void testNameAdapter()
-	{
-		MacroStringMap expected = new MacroStringMap();
-		expected.put(baseKey, "TestName");
-		expected.put(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow(), "TestName_subfield");
-
-		when(nameableMock.getName()).thenReturn("TestName");
-		when(nameableMock.extractName(baseKey, adapterContextContainerMock)).thenReturn(expected);
-
-		MacroStringMap result = extractor.extract(baseKey, nameAdapterMock, nameableMock);
-
-		assertEquals(2, result.size());
-		assertTrue(result.containsKey(baseKey));
-		assertNotNull(result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow()));
-		assertEquals("TestName", result.get(baseKey));
-		assertEquals("TestName_subfield", result.get(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow()));
-	}
-
-
-	@Test
-	void testDisplayNameAdapter()
+	@Test @DisplayName("DisplayNameAdapter adapts DisplayNameable objects.")
+	void DisplayNameAdapter_adapts_DisplayNameable_objects()
 	{
 		// Arrange
 		MacroStringMap expected = new MacroStringMap();
@@ -117,32 +126,106 @@ class FieldExtractorTest
 		assertNotNull(result.get(baseKey));
 		assertEquals("FancyName", result.get(baseKey));
 		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.DISPLAY_NAME).orElseThrow()));
+
+		// Verify
+		verify(displayNameableMock, atLeastOnce()).extractDisplayName(any(), any());
 	}
 
 
-	@Test
-	void testUniqueIdAdapter()
+	@Test @DisplayName("DurationAdapter adapts Durationable objects.")
+	void DurationAdapter_adapts_Durationable_objects()
 	{
 		// Arrange
-		UUID uuid = new UUID(42, 42);
 		MacroStringMap expected = new MacroStringMap();
-		expected.put(baseKey, uuid.toString());
-		expected.put(baseKey.append(Adapter.BuiltIn.UUID).orElseThrow(), uuid.toString());
-		when(identifiableMock.extractUid(baseKey, adapterContextContainerMock)).thenReturn(expected);
+		expected.put(baseKey, "10 Minutes");
+		expected.put(baseKey.append(Adapter.BuiltIn.DURATION).orElseThrow(), "20 Minutes");
+		when(durationableMock.extractDuration(baseKey, ChronoUnit.MINUTES, adapterContextContainerMock)).thenReturn(expected);
 
 		// Act
-		MacroStringMap result = extractor.extract(baseKey, uniqueIdAdapterMock, identifiableMock);
+		MacroStringMap result = extractor.extract(baseKey, durationAdapterMock, durationableMock);
 
 		// Assert
 		assertEquals(2, result.size());
 		assertNotNull(result.get(baseKey));
-		assertEquals(uuid.toString(), result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.UUID).orElseThrow()));
+		assertEquals("10 Minutes", result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.DURATION).orElseThrow()));
+
+		// Verify
+		verify(durationableMock, atLeastOnce()).extractDuration(any(), any(), any());
 	}
 
 
-	@Test
-	void testLocationAdapter()
+	@Test @DisplayName("DurationAdapter adapts Durationable objects.")
+	void ExpirationAdapter_adapts_Expirable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "base expiration string");
+		expected.put(baseKey.append(Adapter.BuiltIn.EXPIRATION).orElseThrow(), "subfield expiration string");
+		when(expirableMock.extractExpiration(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, expirationAdapterMock, expirableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals("base expiration string", result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.EXPIRATION).orElseThrow()));
+
+		// Verify
+		verify(expirableMock, atLeastOnce()).extractExpiration(any(), any(), any(), any());
+	}
+
+
+	@Test @DisplayName("InstantAdapter adapts Instantable objects.")
+	void InstantAdapter_adapts_Instantable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "base instant string");
+		expected.put(baseKey.append(Adapter.BuiltIn.INSTANT).orElseThrow(), "subfield instant string");
+		when(instantableMock.extractInstant(baseKey, FormatStyle.MEDIUM, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, instantAdapterMock, instantableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals("base instant string", result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.INSTANT).orElseThrow()));
+
+		// Verify
+		verify(instantableMock, atLeastOnce()).extractInstant(any(), any(), any());
+	}
+
+
+	@Test @DisplayName("KillerAdapter adapts Killable objects.")
+	void KillerAdapter_adapts_Killable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "base killer string");
+		expected.put(baseKey.append(Adapter.BuiltIn.KILLER).orElseThrow(), "subfield killer string");
+		when(killableMock.extractKiller(baseKey, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, killerAdapterMock, killableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals("base killer string", result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.KILLER).orElseThrow()));
+
+		// Verify
+		verify(killableMock, atLeastOnce()).extractKiller(any(), any());
+	}
+
+
+	@Test @DisplayName("LocationAdapter adapts Locatable objects.")
+	void LocationAdapter_adapts_Locatable_objects()
 	{
 		// Arrange
 		Location location = new Location(worldMock, 11, 12,13);
@@ -161,30 +244,31 @@ class FieldExtractorTest
 
 		// Assert
 		assertEquals("test-world [11, 12, 13]", result.get(locationKey));
-		assertEquals("test-world [11, 12, 13]", result.get(locationKey.append("STRING").orElseThrow()));
 		assertEquals("test-world", result.get(locationKey.append("WORLD").orElseThrow()));
 		assertEquals("11", result.get(locationKey.append("X").orElseThrow()));
 		assertEquals("12", result.get(locationKey.append("Y").orElseThrow()));
 		assertEquals("13", result.get(locationKey.append("Z").orElseThrow()));
 		assertTrue(result.containsKey(locationKey));
+
+		// Verify
+		verify(locatableMock, atLeastOnce()).extractLocation(any(), any());
 	}
 
 
-	@Test
-	void testLocationAdapter_location_key()
+	@Test @DisplayName("LocationAdapter adapts location key.")
+	void LocationAdapter_adapts_location_key()
 	{
 		// Arrange
+		when(worldMock.getName()).thenReturn("test-world");
 		Location location = new Location(worldMock, 11, 12,13);
 		MacroKey locationKey = MacroKey.of("LOCATION").orElseThrow();
 		MacroStringMap expected = new MacroStringMap();
 		expected.put(locationKey, "test-world [11, 12, 13]");
-		expected.put(locationKey.append("STRING").orElseThrow(), "test-world [11, 12, 13]");
 		expected.put(locationKey.append("WORLD").orElseThrow(), "test-world");
 		expected.put(locationKey.append("X").orElseThrow(), "11");
 		expected.put(locationKey.append("Y").orElseThrow(), "12");
 		expected.put(locationKey.append("Z").orElseThrow(), "13");
 		when(locatableMock.extractLocation(locationKey, adapterContextContainerMock)).thenReturn(expected);
-		when(worldMock.getName()).thenReturn("test-world");
 
 		// Act
 		MacroStringMap result = extractor.extract(locationKey, locationAdapterMock, locatableMock);
@@ -196,11 +280,14 @@ class FieldExtractorTest
 		assertEquals(String.valueOf(location.getBlockY()), result.get(locationKey.append("Y").orElseThrow()));
 		assertEquals(String.valueOf(location.getBlockZ()), result.get(locationKey.append("Z").orElseThrow()));
 		assertTrue(result.containsKey(locationKey));
+
+		// Verify
+		verify(locatableMock, atLeastOnce()).extractLocation(any(), any());
 	}
 
 
-	@Test
-	void testLocationAdapter_null_world()
+	@Test @DisplayName("LocationAdapter adapts location with null World.")
+	void LocationAdapter_adapts_with_null_world()
 	{
 		// Arrange
 		Location location = new Location(null, 11, 12,13);
@@ -223,11 +310,110 @@ class FieldExtractorTest
 		assertEquals(String.valueOf(location.getBlockY()), result.get(locationKey.append("Y").orElseThrow()));
 		assertEquals(String.valueOf(location.getBlockZ()), result.get(locationKey.append("Z").orElseThrow()));
 		assertTrue(result.containsKey(locationKey));
+
+		// Verify
+		verify(locatableMock, atLeastOnce()).extractLocation(any(), any());
 	}
 
 
-	@Test
-	void testQuantityAdapter()
+	@Test @DisplayName("LooterAdapter adapts Lootable objects.")
+	void LooterAdapter_adapts_Lootable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "base looter string");
+		expected.put(baseKey.append(Adapter.BuiltIn.LOOTER).orElseThrow(), "subfield looter string");
+		when(lootableMock.extractLooter(baseKey, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, looterAdapterMock, lootableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals("base looter string", result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.LOOTER).orElseThrow()));
+
+		// Verify
+		verify(lootableMock, atLeastOnce()).extractLooter(any(), any());
+	}
+
+
+	@Test @DisplayName("NameAdapter adapts Nameable objects.")
+	void NameAdapter_adapts_with_Nameable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "TestName");
+		expected.put(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow(), "TestName_subfield");
+
+		when(nameableMock.getName()).thenReturn("TestName");
+		when(nameableMock.extractName(baseKey, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, nameAdapterMock, nameableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertTrue(result.containsKey(baseKey));
+		assertNotNull(result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow()));
+		assertEquals("TestName", result.get(baseKey));
+		assertEquals("TestName_subfield", result.get(baseKey.append(Adapter.BuiltIn.NAME).orElseThrow()));
+
+		// Verify
+		verify(nameableMock, atLeastOnce()).extractName(any(), any());
+	}
+
+
+	@Test @DisplayName("OwnerAdapter adapts Ownable objects.")
+	void OwnerAdapter_adapts_Ownable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "base owner string");
+		expected.put(baseKey.append(Adapter.BuiltIn.OWNER).orElseThrow(), "subfield owner string");
+		when(ownableMock.extractOwner(baseKey, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, ownerAdapterMock, ownableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals("base owner string", result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.OWNER).orElseThrow()));
+
+		// Verify
+		verify(ownableMock, atLeastOnce()).extractOwner(any(), any());
+	}
+
+
+	@Test @DisplayName("ProtectionAdapter adapts Protectable objects.")
+	void ProtectionAdapter_adapts_Protectable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "base protection string");
+		expected.put(baseKey.append(Adapter.BuiltIn.PROTECTION).orElseThrow(), "subfield protection string");
+		when(protectableMock.extractProtection(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, protectionAdapterMock, protectableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals("base protection string", result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.PROTECTION).orElseThrow()));
+
+		// Verify
+		verify(protectableMock, atLeastOnce()).extractProtection(any(), any(), any(), any());
+	}
+
+
+	@Test @DisplayName("QuantityAdapter adapts Quantifiable objects.")
+	void QuantityAdapter_adapts_Quantifiable_objects()
 	{
 		// Arrange
 		MacroStringMap expected = new MacroStringMap();
@@ -241,11 +427,38 @@ class FieldExtractorTest
 		assertEquals(2, result.size());
 		assertEquals("42", result.get(baseKey));
 		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.QUANTITY).orElseThrow()));
+
+		// Verify
+		verify(quantifiableMock, atLeastOnce()).extractQuantity(any(), any());
 	}
 
 
-	@Test
-	void testNoOpAdapter()
+	@Test @DisplayName("UniqueIdAdapter adapts Identifiable objects.")
+	void UniqueIdAdapter_adapts_Identifiable_objects()
+	{
+		// Arrange
+		UUID uuid = new UUID(42, 42);
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, uuid.toString());
+		expected.put(baseKey.append(Adapter.BuiltIn.UUID).orElseThrow(), uuid.toString());
+		when(identifiableMock.extractUid(baseKey, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, uniqueIdAdapterMock, identifiableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals(uuid.toString(), result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.UUID).orElseThrow()));
+
+		// Verify
+		verify(identifiableMock, atLeastOnce()).extractUid(any(), any());
+	}
+
+
+	@Test @DisplayName("NoOpAdapter returns empty stream.")
+	void NoOpAdapter_returns_empty_stream()
 	{
 		Adapter unknownAdapter = mock(Adapter.class);
 
@@ -255,11 +468,4 @@ class FieldExtractorTest
 		assertTrue(result.isEmpty(), "Expected result to be empty for unmatched adapter type");
 	}
 
-//	@Test
-//	void getLocationString_null()
-//	{
-//		String result = extractor.getLocationString(null);
-//
-//		assertEquals("???", result);
-//	}
 }

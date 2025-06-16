@@ -95,10 +95,10 @@ class CooldownMapTest
 
 	@Nested
 	@DisplayName("putExpirationTime Tests")
-	class PutExpirationTimeTests {
+	class putExpirationTimeTests {
 		@Test
-		@DisplayName("Test putExpirationTime with Valid parameters")
-		void testPutExpirationTime()
+		@DisplayName("putExpirationTime() inserts entry in map with Valid parameters")
+		void putExpirationTime_inserts_entry_in_map()
 		{
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
@@ -124,8 +124,9 @@ class CooldownMapTest
 
 
 		@Test
-		@DisplayName("Test putExpirationTime when already cooling")
-		void testPutExpirationTime_already_cooling() {
+		@DisplayName("putExpirationTime() does not overwrite existing entry for player/message.")
+		void putExpirationTime_does_not_overwrite_existing_entry()
+		{
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(new UUID(42, 17));
 			recipient = switch (Recipient.of(playerMock)) {
@@ -152,8 +153,9 @@ class CooldownMapTest
 
 
 	@Test
-	@DisplayName("Test isCooling with Valid parameters")
-	void testIsCooling() {
+	@DisplayName("notCooling() returns false when entry for key exists in map.")
+	void notCooling_returns_false_if_entry_with_key_exists_in_map()
+	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 		recipient = switch (Recipient.of(playerMock)) {
@@ -176,12 +178,39 @@ class CooldownMapTest
 	}
 
 
+	@Test
+	@DisplayName("notCooling returns true when entry for key does not exist in map.")
+	void notCooling_returns_true_if_entry_with_key_does_not_exist_in_map()
+	{
+		// Arrange
+		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
+		recipient = switch (Recipient.of(playerMock)) {
+			case Recipient.Valid valid -> valid;
+			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+		};
+
+		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
+
+		// Act
+		boolean result = cooldownMap.notCooling(cooldownKey);
+
+		// assert
+		assertTrue(result);
+
+		// Verify
+		verify(playerMock, atLeastOnce()).getUniqueId();
+	}
+
+
 	@Nested
 	@DisplayName("removeExpired Tests")
-	class RemoveExpiredTests {
+	class RemoveExpiredTests
+	{
 		@Test
-		@DisplayName("Test removeExpired with empty map")
-		void testRemoveExpired_empty_map() {
+		@DisplayName("removeExpired() does nothing when map is empty.")
+		void removeExpired_does_nothing_when_map_is_empty() {
 			// Arrange & Act
 			int count = cooldownMap.removeExpired();
 
@@ -190,8 +219,9 @@ class CooldownMapTest
 		}
 
 		@Test
-		@DisplayName("Test removeExpired")
-		void testRemoveExpired() {
+		@DisplayName("removeExpired() leaves all unexpired entries in map")
+		void removeExpired_leaves_all_unexpired_entries_in_map() //TODO: test multiple expired entries
+		{
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
 			recipient = switch (Recipient.of(playerMock)) {
@@ -200,27 +230,36 @@ class CooldownMapTest
 				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
+			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 			cooldownMap.putExpirationTime(recipient, finalMessageRecord);
 
 			// Act
-			int count = cooldownMap.removeExpired();
+			int result = cooldownMap.removeExpired();
 
 			// Assert
-			assertEquals(0, count);
+			assertEquals(0, result);
+			assertFalse(cooldownMap.notCooling(cooldownKey));
 		}
 
+
 		@Test
-		@DisplayName("Test removeExpired with expired entry")
-		void testRemoveExpired_expired() {
+		@DisplayName("removeExpired() removes all expired entries from map")
+		void removeExpired_removes_all_expired_entries_from_map()
+		{
 			// Arrange
 			when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-			recipient = switch (Recipient.of(playerMock)) {
+			recipient = switch (Recipient.of(playerMock))
+			{
 				case Recipient.Valid valid -> valid;
 				case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
+			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 			section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), -10);
+			//TODO: what is this testing? negative repeatDelay should not be inserted in the first place.
 
 			validMessageRecord = ValidMessageRecord.create(recordKey, section);
 
@@ -232,10 +271,11 @@ class CooldownMapTest
 			cooldownMap.putExpirationTime(recipient, expiredMessageRecord);
 
 			// Act
-			int count = cooldownMap.removeExpired();
+			int result = cooldownMap.removeExpired();
 
 			// Assert
-			assertEquals(1, count);
+			assertEquals(1, result);
+			assertTrue(cooldownMap.notCooling(cooldownKey));
 		}
 	}
 

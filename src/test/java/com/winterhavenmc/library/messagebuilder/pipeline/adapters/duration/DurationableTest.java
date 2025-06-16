@@ -25,6 +25,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterCont
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration.Durationable.durationUntil;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
@@ -132,6 +134,32 @@ class DurationableTest
 
 		// Assert
 		assertEquals(Optional.empty(), result);
+	}
+
+
+	@Test
+	void durationUntil_returns_duration_until_future_instant()
+	{
+		// Arrange
+		Instant futureInstant = Instant.now().plus(10, ChronoUnit.MINUTES);
+
+		// Act
+		Duration result = durationUntil(futureInstant);
+
+		// Assert
+		// add millis and truncate to seconds to account for processing time
+		assertEquals(Duration.ofMinutes(10), result.plusMillis(999).truncatedTo(ChronoUnit.SECONDS));
+	}
+
+
+	@Test
+	void durationUntil_with_null_parameter_returns_zero_duration()
+	{
+		// Arrange & Act
+		Duration result = durationUntil(null);
+
+		// Assert
+		assertEquals(Duration.ZERO, result);
 	}
 
 }

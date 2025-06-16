@@ -27,23 +27,43 @@ import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import java.util.Optional;
 
 
+/**
+ * A class that allows clients of the library to access values in the constants section of the language file
+ */
 public class ConstantResolver
 {
 	private final QueryHandler<ConstantRecord> constantQueryHandler;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param queryHandlerFactory an instance of the query handler factory
+	 */
 	ConstantResolver(final QueryHandlerFactory queryHandlerFactory)
 	{
 		this.constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
 	}
 
 
+	/**
+	 * Retrieves a constant record using the constant query handler
+	 *
+	 * @param key a string to be used as the key for the record to be retrieved
+	 * @return an Optional constant record, or an empty Optional if no record could be retrieved
+	 */
 	private Optional<ConstantRecord> getConstantRecord(final RecordKey key)
 	{
 		return Optional.ofNullable(constantQueryHandler.getRecord(key));
 	}
 
 
+	/**
+	 * Retrieves an Optional String from the constants section of the language file
+	 *
+	 * @param key a string to be used as the key for the String to be retrieved
+	 * @return an Optional String, or an empty Optional if no String record could be retrieved
+	 */
 	public Optional<String> getString(final String key)
 	{
 		return RecordKey.of(key)
@@ -52,6 +72,12 @@ public class ConstantResolver
 	}
 
 
+	/**
+	 * Retrieves an Optional Integer from the constants section of the language file
+	 *
+	 * @param key a string to be used as the key for the Integer to be retrieved
+	 * @return an Optional Integer, or an empty Optional if no Integer record could be retrieved
+	 */
 	public Optional<Integer> getInteger(final String key)
 	{
 		return RecordKey.of(key)
@@ -60,6 +86,12 @@ public class ConstantResolver
 	}
 
 
+	/**
+	 * Retrieves an Optional Boolean from the constants section of the language file
+	 *
+	 * @param key a string to be used as the key for the Boolean to be retrieved
+	 * @return an Optional Boolean, or an empty Optional if no Boolean record could be retrieved
+	 */
 	public Optional<Boolean> getBoolean(final String key)
 	{
 		return RecordKey.of(key)
@@ -68,7 +100,13 @@ public class ConstantResolver
 	}
 
 
-	Optional<String> extractStringValue(final ConstantRecord record)
+	/**
+	 * Private helper method to extract a String value from a ConstantRecord
+	 *
+	 * @param record the ConstantRecord to extract a value
+	 * @return an Optional String, or an empty Optional if a String value could not be extracted from the ConstantRecord
+	 */
+	private Optional<String> extractStringValue(final ConstantRecord record)
 	{
 		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof String string)
 				? Optional.of(string)
@@ -76,7 +114,13 @@ public class ConstantResolver
 	}
 
 
-	Optional<Integer> extractIntegerValue(final ConstantRecord record)
+	/**
+	 * Private helper method to extract an Integer value from a ConstantRecord
+	 *
+	 * @param record the ConstantRecord to extract a value
+	 * @return an Optional Integer, or an empty Optional if an Integer value could not be extracted from the ConstantRecord
+	 */
+	private Optional<Integer> extractIntegerValue(final ConstantRecord record)
 	{
 		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof Integer integer)
 				? Optional.of(integer)
@@ -84,7 +128,13 @@ public class ConstantResolver
 	}
 
 
-	Optional<Boolean> extractBooleanValue(final ConstantRecord record)
+	/**
+	 * Private helper method to extract a Boolean value from a ConstantRecord
+	 *
+	 * @param record the ConstantRecord to extract a value
+	 * @return an Optional Boolean, or an empty Optional if a Boolean value could not be extracted from the ConstantRecord
+	 */
+	private Optional<Boolean> extractBooleanValue(final ConstantRecord record)
 	{
 		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof Boolean bool)
 				? Optional.of(bool)

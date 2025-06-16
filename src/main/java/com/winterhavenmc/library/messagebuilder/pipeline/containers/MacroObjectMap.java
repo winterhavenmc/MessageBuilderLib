@@ -22,7 +22,6 @@ import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -73,47 +72,6 @@ public class MacroObjectMap
 	public Optional<Object> get(final MacroKey macroKey)
 	{
 		return Optional.ofNullable(INTERNAL_MAP.get(macroKey));
-	}
-
-
-	/**
-	 * Check if the map contains a value for the specified key.
-	 *
-	 * @param macroKey the unique key to check
-	 * @return true if the key exists, false otherwise
-	 */
-	public boolean containsKey(final MacroKey macroKey)
-	{
-		return INTERNAL_MAP.containsKey(macroKey);
-	}
-
-
-	/**
-	 * Returns a set view of the mappings in the map.
-	 *
-	 * @return A set of entries in the map.
-	 */
-	public Set<Map.Entry<MacroKey, Object>> entrySet()
-	{
-		return INTERNAL_MAP.entrySet();
-	}
-
-
-	public int size()
-	{
-		return INTERNAL_MAP.size();
-	}
-
-
-	public boolean isEmpty()
-	{
-		return INTERNAL_MAP.isEmpty();
-	}
-
-
-	public Iterable<MacroKey> keySet()
-	{
-		return INTERNAL_MAP.keySet();
 	}
 
 }

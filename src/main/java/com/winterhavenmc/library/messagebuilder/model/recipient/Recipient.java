@@ -24,8 +24,14 @@ import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Player;
 
 
+/**
+ * A sealed interface and records that define a message recipient
+ */
 public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Recipient.Invalid
 {
+	/**
+	 * A marker interface that denotes a Recipient capable of receiving messages
+	 */
 	sealed interface Sendable permits Recipient.Valid, Recipient.Proxied
 	{
 		CommandSender sender();
@@ -35,9 +41,19 @@ public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Re
 	record Proxied(CommandSender sender, ProxiedCommandSender proxy) implements Recipient, Sendable { }
 	record Invalid(CommandSender sender, InvalidReason invalidReason) implements Recipient { }
 
+
+	/**
+	 * Enum defining the reason an InvalidRecipient was returned
+	 */
 	enum InvalidReason { NULL, OTHER }
 
 
+	/**
+	 * Create a Recipient object from a CommandSender
+	 *
+	 * @param sender the CommandSender used in the creation of the Recipient
+	 * @return the newly created recipient of the appropriate subtype
+	 */
 	static Recipient of(final CommandSender sender)
 	{
 		return switch (sender)

@@ -18,88 +18,29 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.containers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.messages.Macro;
-import com.winterhavenmc.library.messagebuilder.messages.MessageId;
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import java.util.Optional;
 
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)
 class MacroObjectMapTest
 {
-	@Mock Player playerMock;
-	@Mock ConsoleCommandSender consoleCommandSenderMock;
-	@Mock World worldMock;
-
-	Recipient.Valid consoleRecipient;
-	Recipient.Valid playerRecipient;
-	RecordKey messageKey;
-	MacroKey macroKey;
-	MacroObjectMap macroObjectMap;
-	Location location;
-	MacroKey recipientMacroKey;
-	MacroKey locationMacroKey;
-
-
-	@BeforeEach
-	void setUp()
-	{
-		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
-
-		consoleRecipient = switch (Recipient.of(consoleCommandSenderMock))
-		{
-			case Recipient.Valid vr -> vr;
-			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
-
-		playerRecipient = switch (Recipient.of(playerMock))
-		{
-			case Recipient.Valid vr -> vr;
-			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
-
-		macroObjectMap = new MacroObjectMap();
-		location = new Location(worldMock, 11, 12, 13);
-
-		recipientMacroKey = MacroKey.of("RECIPIENT").orElseThrow();
-		locationMacroKey = recipientMacroKey.append("LOCATION").orElseThrow();
-	}
-
-
-	@Test
-	void testPutAndGet()
+	@Test @DisplayName("put inserts key/value pair in map.")
+	void put_inserts_key_value_pair_in_map()
 	{
 		// Arrange
 		Integer number = 42;
-		macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
 
 		// Act
 		macroObjectMap.put(macroKey, number);
@@ -109,12 +50,29 @@ class MacroObjectMapTest
 	}
 
 
-	@Test
-	void testPutIfAbsent()
+	@Test @DisplayName("put inserts string 'NULL' if parameter value is null.")
+	void put_inserts_string_NULL_if_parameter_is_null()
+	{
+		// Arrange
+		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
+		macroObjectMap.put(macroKey, null);
+
+		// Act
+		Optional<Object> result = macroObjectMap.get(macroKey);
+
+		// Assert
+		assertEquals(Optional.of("NULL"), result);
+	}
+
+
+	@Test @DisplayName("putIfAbsent inserts key/value pair in map when not already present.")
+	void putIfAbsent_inserts_key_value_pair_in_map_when_not_already_present()
 	{
 		// Arrange
 		Integer number = 42;
-		macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
 
 		// Act
 		macroObjectMap.putIfAbsent(macroKey, number);
@@ -124,11 +82,30 @@ class MacroObjectMapTest
 	}
 
 
-	@Test
-	void testPut_parameter_null_value()
+	@Test @DisplayName("putIfAbsent inserts key/value pair in map when not already present.")
+	void putIfAbsent_does_not_insert_key_value_pair_in_map_when_already_present()
 	{
 		// Arrange
-		macroKey = MacroKey.of("NUMBER").orElseThrow();
+		Integer number1 = 42;
+		Integer number2 = 43;
+		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
+		macroObjectMap.put(macroKey, number1);
+
+		// Act
+		macroObjectMap.putIfAbsent(macroKey, number2);
+
+		// Assert
+		assertEquals(Optional.of(42), macroObjectMap.get(macroKey), "Retrieved value should match the original");
+	}
+
+
+	@Test @DisplayName("putIfAbsent inserts string 'NULL' if parameter value is null.")
+	void putIfAbsent_inserts_string_NULL_if_parameter_is_null()
+	{
+		// Arrange
+		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.putIfAbsent(macroKey, null);
 
 		// Act
@@ -139,128 +116,35 @@ class MacroObjectMapTest
 	}
 
 
-	@Test
-	void testGetValueWithCorrectType()
+	@Test @DisplayName("get retrieves value for key in map.")
+	void get_retrieves_value_for_key_in_map()
 	{
 		// Arrange
-		macroKey = MacroKey.of("PLAYER.LOCATION").orElseThrow();
-		Location location = new Location(worldMock, 10, 20, 30);
-		macroObjectMap.putIfAbsent(macroKey, location);
+		Integer number = 42;
+		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
+		macroObjectMap.put(macroKey, number);
 
 		// Act
-		Optional<Object> retrievedValue = macroObjectMap.get(macroKey);
+		Optional<Object> result = macroObjectMap.get(macroKey);
 
 		// Assert
-		assertNotNull(retrievedValue, "Value should be non-null");
-		assertEquals(Optional.of(location), retrievedValue, "Retrieved value should match the original");
+		assertEquals(Optional.of(42), result, "Retrieved value should match the original");
 	}
 
 
-	@Test
-	void testGetValueWithIncorrectType()
+	@Test @DisplayName("get returns empty optional for key not in map.")
+	void get_retrieves_empty_optional_for_key_not_in_map()
 	{
 		// Arrange
-		macroKey = MacroKey.of("SWORD").orElseThrow();
-		ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
-		macroObjectMap.putIfAbsent(macroKey, itemStack);
+		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		MacroObjectMap macroObjectMap = new MacroObjectMap();
 
 		// Act
-		Optional<Object> retrievedValue = macroObjectMap.get(macroKey);
+		Optional<Object> result = macroObjectMap.get(macroKey);
 
 		// Assert
-		assertTrue(retrievedValue.isPresent());
-		assertInstanceOf(ItemStack.class, retrievedValue.get(), "Value should not be present for mismatched type");
-	}
-
-
-	@Test
-	void testContainsKey()
-	{
-		// Arrange
-		macroKey = MacroKey.of("LOCATION").orElseThrow();
-		MacroKey nonExistentKey = MacroKey.of("NON_EXISTENT_KEY").orElseThrow();
-		World world = mock(World.class, "MockWorld");
-		Location location = new Location(world, 10, 20, 30);
-		macroObjectMap.putIfAbsent(macroKey, location);
-
-		// Act & Assert
-		assertTrue(macroObjectMap.containsKey(macroKey), "Key should be present in the map");
-		assertFalse(macroObjectMap.containsKey(nonExistentKey), "Key should not be present in the map");
-	}
-
-
-	@Test
-	void testEmptyMap()
-	{
-		// Act & Assert
-		assertFalse(macroObjectMap.containsKey(macroKey), "Empty map should not contain macro key");
-	}
-
-
-	@Test
-	void testEntrySet()
-	{
-		// Arrange
-		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
-		Integer value1 = 41;
-		macroObjectMap.putIfAbsent(key1, value1);
-
-		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
-		Integer value2 = 42;
-		macroObjectMap.putIfAbsent(key2, value2);
-
-		// Act
-		Set<Map.Entry<MacroKey, Object>> entrySet = macroObjectMap.entrySet();
-
-		// Assert
-		assertTrue(entrySet.size() >= 2);
-	}
-
-
-	@Test
-	void size()
-	{
-		// Arrange
-		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
-		Integer value1 = 41;
-		macroObjectMap.putIfAbsent(key1, value1);
-
-		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
-		Integer value2 = 42;
-		macroObjectMap.putIfAbsent(key2, value2);
-
-		// Act
-		var result = macroObjectMap.size();
-
-		// Assert
-		assertEquals(2, result);
-	}
-
-
-	@Test
-	void isEmpty()
-	{
-		assertTrue(macroObjectMap.isEmpty());
-	}
-
-
-	@Test
-	void keySet()
-	{
-		// Arrange
-		MacroKey key1 = MacroKey.of("NUMBER1").orElseThrow();
-		Integer value1 = 41;
-		macroObjectMap.put(key1, value1);
-
-		MacroKey key2 = MacroKey.of("NUMBER2").orElseThrow();
-		Integer value2 = 42;
-		macroObjectMap.put(key2, value2);
-
-		// Act
-		Iterable<MacroKey> result = macroObjectMap.keySet();
-
-		// Assert
-		result.forEach(macroKey -> assertInstanceOf(MacroKey.class, macroKey));
+		assertEquals(Optional.empty(), result, "Non-existent entry should return empty optional.");
 	}
 
 }

@@ -48,10 +48,10 @@ public class AdapterRegistry
 	private final List<Adapter> adapters = new ArrayList<>();
 
 
-	public AdapterRegistry(final AdapterContextContainer adapterContextContainer)
+	public AdapterRegistry(final AdapterContextContainer ctx)
 	{
 		// Register adapters in preferred priority order
-		register(new DisplayNameAdapter(adapterContextContainer));
+		register(new DisplayNameAdapter(ctx));
 		register(new DurationAdapter());
 		register(new ExpirationAdapter());
 		register(new InstantAdapter());
@@ -66,7 +66,7 @@ public class AdapterRegistry
 	}
 
 
-	public void register(final Adapter adapter)
+	public final void register(final Adapter adapter)
 	{
 		validate(adapter, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
 		adapters.add(adapter);
