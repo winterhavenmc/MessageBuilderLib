@@ -71,7 +71,7 @@ public final class MessagePipeline implements Pipeline
 
 
 		// process message through pipeline
-		CooldownKey.of(message)
+		CooldownKey.of(message.getRecipient(), message.getMessageKey())
 				.filter(cooldownMap::notCooling)
 				.flatMap(retrieveMessageRecord)
 				.map(processMessageRecord)
