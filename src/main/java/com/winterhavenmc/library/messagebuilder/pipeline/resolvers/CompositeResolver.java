@@ -24,12 +24,24 @@ import com.winterhavenmc.library.messagebuilder.pipeline.extractor.FieldExtracto
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 
 
+/**
+ * Resolves compound object values that are mapped to subkeys of the base key. Values may also be duplicated
+ * in the base key entry, depending on the object adapter type. For instance, an adapted Name value for an object
+ * will exist under the BASEKEY.NAME entry, as well as the BASEKEY entry for an object in the result map.
+ * Priority is given by the order of registration of the adapters in the {@link AdapterRegistry}.
+ */
 public class CompositeResolver implements Resolver
 {
 	private final AdapterRegistry adapterRegistry;
 	private final FieldExtractor fieldExtractor;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param adapterRegistry an instance of an adapter registry
+	 * @param fieldExtractor an instance of a field extractor
+	 */
 	public CompositeResolver(final AdapterRegistry adapterRegistry,
 							 final FieldExtractor fieldExtractor)
 	{
