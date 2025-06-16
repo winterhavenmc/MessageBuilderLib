@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RESOLVER_CONTEXT_CONTAINER;
+import static com.winterhavenmc.library.messagebuilder.validation.Parameter.FORMATTER_CONTAINER;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
@@ -46,7 +46,7 @@ public class AtomicResolver implements Resolver
 
 	public AtomicResolver(final FormatterContainer formatterContainer)
 	{
-		validate(formatterContainer, Objects::isNull, throwing(PARAMETER_NULL, RESOLVER_CONTEXT_CONTAINER));
+		validate(formatterContainer, Objects::isNull, throwing(PARAMETER_NULL, FORMATTER_CONTAINER));
 
 		this.durationFormatter = formatterContainer.durationFormatter();
 		this.localeNumberFormatter = formatterContainer.localeNumberFormatter();
