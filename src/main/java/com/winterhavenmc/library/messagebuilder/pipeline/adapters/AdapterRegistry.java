@@ -66,7 +66,7 @@ public class AdapterRegistry
 	}
 
 
-	public void register(final Adapter adapter)
+	public final void register(final Adapter adapter)
 	{
 		validate(adapter, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
 		adapters.add(adapter);
