@@ -51,7 +51,7 @@ import java.time.temporal.ChronoUnit;
 
 
 /**
- * A class that extracts formatted string fields into a MacroStringMap
+ * Extracts formatted string fields into a MacroStringMap from their object values
  */
 public class FieldExtractor implements Extractor
 {
