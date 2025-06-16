@@ -51,6 +51,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -79,8 +80,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_DisplayNameAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams DisplayNameAdapter for DisplayNameable types.")
+	void GetMatchingAdapters_streams_DisplayNameAdapter()
 	{
 		// Arrange
 		class SampleEntity implements DisplayNameable
@@ -102,8 +103,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_DurationAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams DurationAdapter for Durationable types.")
+	void getMatchingAdapters_streams_DurationAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Durationable
@@ -125,8 +126,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_ExpirationAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams ExpirationAdapter for Expirable types.")
+	void getMatchingAdapters_streams_ExpirationAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Expirable
@@ -148,8 +149,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_InstantAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams InstantAdapter for Instantable types.")
+	void getMatchingAdapters_streams_InstantAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Instantable
@@ -171,8 +172,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_KillerAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams KillerAdapter for Killable types.")
+	void getMatchingAdapters_streams_KillerAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Killable
@@ -194,8 +195,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_LocationAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams LocationAdapter for Locatable types.")
+	void getMatchingAdapters_streams_LocationAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Locatable
@@ -217,8 +218,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_LooterAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams LooterAdapter for Lootable types.")
+	void getMatchingAdapters_streams_LooterAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Lootable
@@ -240,8 +241,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_NameAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams NameAdapter for Nameable types.")
+	void getMatchingAdapters_streams_NameAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Nameable
@@ -263,8 +264,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_OwnerAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams OwnerAdapter for Ownable types.")
+	void getMatchingAdapters_streams_OwnerAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Ownable
@@ -286,8 +287,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_ProtectionAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams ProtectionAdapter for Protectable types.")
+	void getMatchingAdapters_streams_ProtectionAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Protectable
@@ -309,8 +310,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_QuantityAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams QuantityAdapter for Quantifiable types.")
+	void getMatchingAdapters_streams_QuantityAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Quantifiable
@@ -332,8 +333,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_UniqueIdAdapter()
+	@Test @DisplayName("getMatchingAdapters() streams UniqueIdAdapter for Identifiable types.")
+	void getMatchingAdapters_streams_UniqueIdAdapter()
 	{
 		// Arrange
 		class SampleEntity implements Identifiable
@@ -355,8 +356,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void GetMatchingAdapters_returns_correct_adapters()
+	@Test @DisplayName("getMatchingAdapters() streams multiple adapters when multiple types match.")
+	void getMatchingAdapters_streams_multiple_adapters()
 	{
 		class SampleEntity implements Nameable, DisplayNameable
 		{
@@ -378,8 +379,8 @@ class AdapterRegistryTest
 	}
 
 
-	@Test
-	void testGetMatchingAdaptersReturnsEmptyStreamForNull()
+	@Test @DisplayName("getMatchingAdapters() returns empty Stream for null.")
+	void getMatchingAdapters_returns_empty_stream_for_null()
 	{
 		assertTrue(registry.getMatchingAdapters(null).findAny().isEmpty());
 	}
