@@ -53,7 +53,7 @@ public enum Parameter
 	RECIPIENT("recipient"),
 	RECORD_TYPE("recordType"),
 	REPLACEMENT_MAP("replacementMap"),
-	RESOLVER_CONTEXT_CONTAINER("resolverContextContainer"),
+	FORMATTER_CONTAINER("formatterContainer"),
 	RESOURCE_INSTALLER("resourceInstaller"),
 	RESOURCE_LOADER("resourceLoader"),
 	RESOURCE_NAME("resourceName"),
