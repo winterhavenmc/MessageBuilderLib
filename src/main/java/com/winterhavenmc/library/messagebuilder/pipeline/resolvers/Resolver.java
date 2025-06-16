@@ -18,15 +18,50 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 
 
 /**
- * A resolver of object field values to their corresponding String representations.
+ * Defines a contract for resolving values from a {@link MacroObjectMap} into a
+ * set of string-replaceable entries mapped by {@link MacroKey}s.
+ * <p>
+ * A {@code Resolver} converts one or more input objects associated with a given
+ * macro key into a {@link MacroStringMap}, where each entry corresponds to a
+ * placeholder that may be used in a templated message or text.
+ * <p>
+ * Implementations may vary in complexity:
+ * <ul>
+ *   <li>{@link AtomicResolver} handles single, directly formattable values.</li>
+ *   <li>{@link CompositeResolver} handles structured or composite values using
+ *       {@link Adapter}s to produce multiple sub-entries.</li>
+ *   <li>{@link FieldResolver} combines multiple resolvers in a prioritized chain.</li>
+ * </ul>
+ * This interface supports functional-style composition and may be used in lambda
+ * form where appropriate.
+ *
+ * @see MacroKey
+ * @see MacroObjectMap
+ * @see MacroStringMap
+ * @see AtomicResolver
+ * @see CompositeResolver
+ * @see FieldResolver
  */
 @FunctionalInterface
 public interface Resolver
 {
+	/**
+	 * Resolves a set of string values from the given {@link MacroObjectMap}
+	 * for the provided {@link MacroKey}. Each resolved value corresponds to
+	 * a macro placeholder that may appear in a templated message.
+	 * <p>
+	 * The resulting {@link MacroStringMap} may contain one or more entries.
+	 * Implementations may also return an empty map if no resolution was possible.
+	 *
+	 * @param key the base macro key used to look up and resolve objects
+	 * @param macroObjectMap the map of objects available for macro resolution
+	 * @return a {@link MacroStringMap} containing resolved macro key-value pairs
+	 */
 	MacroStringMap resolve(MacroKey key, MacroObjectMap macroObjectMap);
 }

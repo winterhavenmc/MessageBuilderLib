@@ -36,7 +36,27 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
 
 
 /**
- * Resolves simple object values that have only one value that is mapped to the root level key in the result map.
+ * A {@link Resolver} implementation that handles simple or atomic values,
+ * converting them into formatted strings mapped directly to the base {@link MacroKey}.
+ * <p>
+ * The {@code AtomicResolver} is typically used as the final step in a resolution chain,
+ * after more complex resolvers (such as {@link CompositeResolver}) have had a chance
+ * to handle structured objects. It processes values such as {@link String}, {@link Number},
+ * {@link Duration}, and other primitive or directly representable types.
+ * <p>
+ * Formatting is applied for supported types:
+ * <ul>
+ *   <li>{@link Number} values are formatted using a {@link LocaleNumberFormatter}</li>
+ *   <li>{@link Duration} and {@link BoundedDuration} values are formatted using a {@link DurationFormatter}</li>
+ *   <li>All other values fall back to {@code toString()}</li>
+ * </ul>
+ * The resolved value is added under the original macro key only if no value already exists for it.
+ *
+ * @see Resolver
+ * @see FieldResolver
+ * @see CompositeResolver
+ * @see LocaleNumberFormatter
+ * @see DurationFormatter
  */
 public class AtomicResolver implements Resolver
 {
@@ -44,6 +64,12 @@ public class AtomicResolver implements Resolver
 	private final LocaleNumberFormatter localeNumberFormatter;
 
 
+	/**
+	 * Constructs an {@code AtomicResolver} using the provided formatter container.
+	 *
+	 * @param formatterContainer a container providing formatters for durations and numbers
+	 * @throws IllegalArgumentException if the formatter container is {@code null}
+	 */
 	public AtomicResolver(final FormatterContainer formatterContainer)
 	{
 		validate(formatterContainer, Objects::isNull, throwing(PARAMETER_NULL, FORMATTER_CONTAINER));
@@ -53,6 +79,17 @@ public class AtomicResolver implements Resolver
 	}
 
 
+	/**
+	 * Resolves a single value mapped to the provided {@link MacroKey} into a
+	 * string representation, if the object exists and can be formatted.
+	 * <p>
+	 * Only one entry is produced per resolution: a single mapping from the
+	 * {@code macroKey} to the formatted string value.
+	 *
+	 * @param macroKey the key used to retrieve the value from the macro object map
+	 * @param macroObjectMap the object map containing macro values to be resolved
+	 * @return a {@link MacroStringMap} containing at most one resolved key-value pair
+	 */
 	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
 		MacroStringMap stringMap = new MacroStringMap();
