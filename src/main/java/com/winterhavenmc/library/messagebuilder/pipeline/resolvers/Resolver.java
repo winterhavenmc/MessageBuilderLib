@@ -22,6 +22,9 @@ import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectM
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 
 
+/**
+ * A resolver of object field values to their corresponding String representations.
+ */
 @FunctionalInterface
 public interface Resolver
 {
