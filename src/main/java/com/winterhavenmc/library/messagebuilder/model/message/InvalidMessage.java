@@ -30,9 +30,43 @@ import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECI
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.logging;
 
 
+/**
+ * A fallback {@link Message} implementation representing an invalid or unrenderable message.
+ * <p>
+ * This is returned by the system when a message cannot be composed — for example,
+ * due to a {@code null} recipient or missing configuration.
+ * <p>
+ * Calling {@link #send()} on an {@code InvalidMessage} results in a no-op.
+ * The reason for failure is stored in the {@code reason} field for debugging
+ * or logging purposes.
+ *
+ * <p>This class is typically returned by:
+ * <ul>
+ *   <li>{@link Message#empty()}</li>
+ *   <li>Internal pipeline safeguards during failed message composition</li>
+ * </ul>
+ *
+ * @param reason the reason this message is considered invalid
+ *
+ * @see Message
+ * @see ValidMessage
+ */
 public record InvalidMessage(String reason) implements Message
 {
 	private static final InvalidMessage EMPTY_INSTANCE = new InvalidMessage("Null recipient passed to compose()");
+
+
+	/**
+	 * Returns a reusable {@code InvalidMessage} instance representing an empty message
+	 * caused by a {@code null} recipient passed to the {@code compose()} method.
+	 *
+	 * @return a shared instance of an {@code InvalidMessage} with a standard failure reason
+	 */
+	public static InvalidMessage empty()
+	{
+		return EMPTY_INSTANCE;
+	}
+
 
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(K macro, V value)
@@ -74,11 +108,6 @@ public record InvalidMessage(String reason) implements Message
 	public MacroObjectMap getObjectMap()
 	{
 		return null;
-	}
-
-	public static InvalidMessage empty()
-	{
-		return EMPTY_INSTANCE;
 	}
 
 }
