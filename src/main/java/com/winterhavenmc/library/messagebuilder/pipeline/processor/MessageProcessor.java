@@ -30,7 +30,8 @@ import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecor
  * macro replacement on message fields.
  *
  * <p>This class uses a {@link com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer}
- * to apply all relevant placeholder substitutions on a {@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord},
+ * to apply all relevant placeholder substitutions on a
+ * {@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord},
  * producing a new {@link com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord}
  * with all final strings populated.
  *
