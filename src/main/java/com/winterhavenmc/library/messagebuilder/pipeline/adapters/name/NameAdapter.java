@@ -29,23 +29,42 @@ import java.util.Optional;
 
 
 /**
- * Adapter for {@link Nameable} objects with an associated name. Any object that has a known method
- * for retrieving a name as a {@code String} will be returned as an {@link Optional} {@code Nameable} object type,
- * with a {@code getName()} method. This method will be mapped to the actual method of the object that returns a
- * {@code String} name, regardless of its real method name. Any object that is not known to have a
- * name will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
+ * An {@link com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter Adapter} for extracting
+ * name information from objects that expose a {@code getName()} method.
+ *
+ * <p>This adapter wraps supported objects into the {@link Nameable} interface, which unifies
+ * access to name-like properties through a standard {@link Nameable#getName()} accessor.
+ * The resulting {@code Nameable} can then be used in the message pipeline to perform macro substitution
+ * for placeholders such as {@code {OBJECT.NAME}}.
+ *
+ * <p>Supported types include:
+ * <ul>
+ *   <li>{@link org.bukkit.command.CommandSender}</li>
+ *   <li>{@link org.bukkit.OfflinePlayer}</li>
+ *   <li>{@link org.bukkit.profile.PlayerProfile}</li>
+ *   <li>{@link org.bukkit.World}</li>
+ *   <li>{@link org.bukkit.Server}</li>
+ *   <li>{@link org.bukkit.plugin.Plugin}</li>
+ * </ul>
+ *
+ * <p>If the provided object is already an instance of {@code Nameable}, it is returned directly.
+ * Otherwise, the adapter attempts to map a known {@code getName()} source into a {@code Nameable}
+ * lambda reference. If no match is found, an empty {@code Optional} is returned.
+ *
+ * @see Nameable
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  */
 public class NameAdapter implements Adapter
 {
 	/**
-	 * Return an {@link Optional} of {@code Nameable}, or an empty Optional if the passed
-	 * object is not known to have an associated getName method. The Optional value, if present,
-	 * implements the {@code Nameable} Interface, and is guaranteed to have a {@code getName()} method
-	 * that maps to the adapted type's underlying {@code getName()} method.
+	 * Attempts to adapt the given object to a {@link Nameable}, if it exposes a name field.
 	 *
-	 * @param obj the object being evaluated as being {@code Nameable}
-	 * @return an {@code Optional} of the object as a Nameable type, or an empty Optional if the passed
-	 * object does not have a known method of retrieving a name.
+	 * <p>Returns a {@link java.util.Optional} containing a {@code Nameable} wrapper
+	 * if the object is a known type that provides a {@code getName()} method, either directly or indirectly.
+	 * Returns an empty {@code Optional} if the object does not expose a supported name source.
+	 *
+	 * @param obj the object to evaluate and adapt
+	 * @return an optional {@code Nameable} if the object is name-compatible, otherwise empty
 	 */
 	@Override
 	public Optional<Nameable> adapt(final Object obj)
