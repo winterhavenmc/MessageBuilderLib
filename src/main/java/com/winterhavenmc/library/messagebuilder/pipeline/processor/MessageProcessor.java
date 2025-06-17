@@ -26,13 +26,33 @@ import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecor
 
 
 /**
- * This class provides handling of the Macro Processors and their Registry
+ * Default implementation of the {@link Processor} interface responsible for performing
+ * macro replacement on message fields.
+ *
+ * <p>This class uses a {@link com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer}
+ * to apply all relevant placeholder substitutions on a {@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord},
+ * producing a new {@link com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord}
+ * with all final strings populated.
+ *
+ * <p>It serves as the final step in the message pipeline before rendering or dispatching.
+ *
+ * @see Processor
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer
+ * @see com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord
  */
 public class MessageProcessor implements Processor
 {
 	private final MacroReplacer macroReplacer;
 
 
+	/**
+	 * Constructs a {@code MessageProcessor} using the provided {@link Resolver} and {@link Matcher}
+	 * to configure the underlying {@link MacroReplacer}.
+	 *
+	 * @param resolver the macro resolver used to extract string representations from context objects
+	 * @param placeholderMatcher the placeholder matcher used to detect macro keys in strings
+	 */
 	public MessageProcessor(final Resolver resolver, final Matcher placeholderMatcher)
 	{
 		this.macroReplacer = new MacroReplacer(resolver, placeholderMatcher);
@@ -40,10 +60,15 @@ public class MessageProcessor implements Processor
 
 
 	/**
-	 * Replace macros in a message to be sent
+	 * Processes a {@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord}
+	 * by replacing all macros in its fields using the provided {@link MacroObjectMap}.
 	 *
-	 * @param messageRecord the message record to have macro placeholders replaced in message and title strings
-	 * @return a new {@code FinalMessageRecord} with all macro replacements performed and placed into the final string fields
+	 * <p>This includes the {@code message}, {@code title}, and {@code subtitle} fields,
+	 * which are resolved and returned as part of a new {@link FinalMessageRecord}.
+	 *
+	 * @param messageRecord the valid message record to process
+	 * @param macroObjectMap the macro context object map used to resolve placeholder values
+	 * @return a {@code FinalMessageRecord} with all macros resolved and final strings populated
 	 */
 	@Override
 	public FinalMessageRecord process(final ValidMessageRecord messageRecord, final MacroObjectMap macroObjectMap)
