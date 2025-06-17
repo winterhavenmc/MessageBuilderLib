@@ -26,7 +26,20 @@ import org.bukkit.entity.Player;
 
 
 /**
- * This class is an implementation of the Sender interface, and is used to display a title to a player.
+ * Sends a title and optional subtitle to a {@link org.bukkit.entity.Player}
+ * using values from a {@link com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord}.
+ *
+ * <p>This implementation ensures that:
+ * <ul>
+ *   <li>Only players receive title messages (non-player senders are ignored)</li>
+ *   <li>Title and subtitle strings are validated for presence before sending</li>
+ *   <li>Colors are translated using {@code '&'} codes</li>
+ *   <li>Cooldowns are applied using the provided {@link com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap}</li>
+ * </ul>
+ *
+ * @see Sender
+ * @see com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap
  */
 public final class TitleSender implements Sender
 {
@@ -34,9 +47,9 @@ public final class TitleSender implements Sender
 
 
 	/**
-	 * Class constructor
+	 * Constructs a {@code TitleSender} using the specified cooldown map.
 	 *
-	 * @param cooldownMap an instance of the message cooldown map
+	 * @param cooldownMap an instance of the message cooldown map used to prevent redundant delivery
 	 */
 	public TitleSender(final CooldownMap cooldownMap)
 	{
@@ -45,10 +58,14 @@ public final class TitleSender implements Sender
 
 
 	/**
-	 * Display a title for protoRecipient, if protoRecipient is a player, using the relevant fields from a ValidMessageRecord.
+	 * Sends a title and subtitle to a player if applicable, using values from the given message record.
 	 *
-	 * @param recipient a message protoRecipient
-	 * @param messageRecord a message record containing the fields necessary for sending a title to a player
+	 * <p>This method checks whether the sender is a {@link org.bukkit.entity.Player}, whether the
+	 * message is enabled, and whether at least one of the final title or subtitle strings is non-empty.
+	 * Cooldown state is recorded upon successful delivery.
+	 *
+	 * @param recipient the message recipient
+	 * @param messageRecord the message record containing the title, subtitle, and timing data
 	 */
 	@Override
 	public void send(final Recipient.Sendable recipient, final FinalMessageRecord messageRecord)

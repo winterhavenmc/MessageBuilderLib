@@ -22,8 +22,36 @@ import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecor
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 
 
+/**
+ * A functional interface representing the final stage in the message pipeline: transforming a
+ * {@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord ValidMessageRecord}
+ * into a {@link com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord FinalMessageRecord}
+ * by resolving and replacing all macro placeholders.
+ *
+ * <p>This step is typically performed after a message record has been retrieved and
+ * all necessary context objects have been registered to a {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap}.
+ *
+ * <p>Macro resolution is delegated internally to a {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver Resolver},
+ * and placeholder substitution is handled by a {@link com.winterhavenmc.library.messagebuilder.pipeline.replacer.Replacer Replacer}.
+ *
+ * @see com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord ValidMessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord FinalMessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor MessageProcessor
+ */
 @FunctionalInterface
 public interface Processor
 {
+	/**
+	 * Processes a valid message record by replacing all macros using the provided macro object map.
+	 *
+	 * <p>This includes macro substitution in the message body, title, and subtitle fields.
+	 * The result is a {@link com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord}
+	 * containing the final rendered strings ready for output.
+	 *
+	 * @param messageRecord the message record to process
+	 * @param macroObjectMap the context data used to resolve placeholder values
+	 * @return a new {@code FinalMessageRecord} with all macros resolved
+	 */
 	FinalMessageRecord process(ValidMessageRecord messageRecord, MacroObjectMap macroObjectMap);
 }
