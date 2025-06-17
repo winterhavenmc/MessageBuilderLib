@@ -9,7 +9,7 @@
  * <p>The library provides built-in adapters for many common object types, such as:
  * <ul>
  *   <li>{@code Nameable} — provides {@code {OBJECT.NAME}}</li>
- *   <li>{@code Locatable} — provides {@code %OBJECT.LOCATION%}, {@code {OBJECT.LOCATION.X}}, etc.</li>
+ *   <li>{@code Locatable} — provides {@code {OBJECT.LOCATION}}, {@code {OBJECT.LOCATION.X}}, etc.</li>
  *   <li>{@code Expirable} and {@code Protectable} — provide {@code DURATION} and {@code INSTANT} subkeys</li>
  *   <li>{@code Owner}, {@code Killer}, {@code Looter}, {@code UUID}, and others</li>
  * </ul>
