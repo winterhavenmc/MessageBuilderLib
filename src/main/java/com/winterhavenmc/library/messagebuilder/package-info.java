@@ -12,9 +12,10 @@
  *       The primary entry point into the library, providing the fluent API used to construct and send messages.</li>
  *   <li><strong>{@link com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler}</strong> –
  *       A customizable source for message templates and item definitions, often backed by YAML files.</li>
- *   <li><strong>{@code MacroObjectMap}</strong> –
+ *   <li><strong>{@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap}</strong> –
  *       A runtime container of objects used to resolve macros into final string values.</li>
- *   <li><strong>{@code Macro}</strong> – Placeholders in messages (e.g., {@code {PLAYER_NAME}}, {@code {LOCATION}})
+ *   <li>{@code Macro} – Plugin defined Enum that correlates to Placeholders
+ *       in messages (e.g., {@code {PLAYER_NAME}}, {@code {LOCATION}})
  *       that are dynamically replaced with values drawn from objects supplied at runtime.</li>
  * </ul>
  *
