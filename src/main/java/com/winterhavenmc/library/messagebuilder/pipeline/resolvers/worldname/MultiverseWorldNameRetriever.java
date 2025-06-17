@@ -23,7 +23,7 @@ import org.bukkit.World;
 
 /**
  * A {@link WorldNameRetriever} implementation that retrieves the alias name of a
- * {@link org.bukkit.World} using the {@code Multiverse-Core} API.
+ * {@link org.bukkit.World} using the <strong>Multiverse-Core</strong> API.
  * <p>
  * This class interacts directly with {@link MultiverseCore} and its {@code MVWorldManager}
  * to look up world metadata, including alias and display formatting.

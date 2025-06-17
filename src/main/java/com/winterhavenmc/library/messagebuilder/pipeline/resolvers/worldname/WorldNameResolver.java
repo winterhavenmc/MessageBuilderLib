@@ -26,7 +26,7 @@ import org.bukkit.plugin.PluginManager;
 /**
  * A runtime-resolvable strategy interface for obtaining a display-friendly name
  * for a {@link org.bukkit.World}, optionally integrating with external plugins
- * such as <strong>Multiverse</strong>.
+ * such as <strong>Multiverse-Core</strong>.
  * <p>
  * This interface builds upon {@link WorldNameRetriever} by providing a static
  * factory method that selects an appropriate implementation based on the server

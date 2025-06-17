@@ -24,7 +24,7 @@ import org.bukkit.plugin.PluginManager;
 
 /**
  * A {@link WorldNameResolver} implementation that retrieves world name aliases
- * using the {@code Multiverse-Core} plugin.
+ * using the <strong>Multiverse-Core</strong> plugin.
  * <p>
  * If an alias is found for the given {@link org.bukkit.World}, it is returned as the
  * display name. If no alias is available (e.g., null or blank), the resolver
@@ -33,7 +33,7 @@ import org.bukkit.plugin.PluginManager;
  * If the input world is {@code null}, this resolver returns the string
  * {@code "NULL WORLD"}.
  *
- * <p>This class is only instantiated when {@code Multiverse-Core} is detected and enabled
+ * <p>This class is only instantiated when <strong>Multiverse-Core</strong> is detected and enabled
  * at runtime. Use {@link WorldNameResolver#getResolver(PluginManager)} to safely select
  * the appropriate implementation.
  *
