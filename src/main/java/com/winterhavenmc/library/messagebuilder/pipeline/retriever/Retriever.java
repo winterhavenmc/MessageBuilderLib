@@ -21,6 +21,22 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 
 
+/**
+ * A functional interface representing the first stage of the message pipeline:
+ * retrieving a {@link com.winterhavenmc.library.messagebuilder.model.language.MessageRecord}
+ * associated with a given {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey}.
+ *
+ * <p>Implementations of this interface typically fetch records from a pre-parsed
+ * data source such as a YAML-backed {@code ConfigurationSection}, returning either
+ * a valid or invalid message record.
+ *
+ * <p>This interface abstracts retrieval behavior for flexibility and testability,
+ * and is typically used by {@link com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline}.
+ *
+ * @see com.winterhavenmc.library.messagebuilder.model.language.MessageRecord MessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetriever MessageRetriever
+ * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
+ */
 @FunctionalInterface
 public interface Retriever
 {

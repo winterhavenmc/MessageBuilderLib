@@ -23,15 +23,34 @@ import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 
 
+/**
+ * Default implementation of the {@link Retriever} interface that retrieves
+ * a {@link com.winterhavenmc.library.messagebuilder.model.language.MessageRecord}
+ * using a {@link com.winterhavenmc.library.messagebuilder.query.QueryHandler}.
+ *
+ * <p>This class ensures safety and consistency by always returning a non-null record.
+ * If the underlying query handler fails to provide a valid message, a fallback
+ * {@linkplain com.winterhavenmc.library.messagebuilder.model.language.MessageRecord#empty(RecordKey) empty record}
+ * is returned instead.
+ *
+ * <p>This class is typically used as the entry point in a
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline MessagePipeline}.
+ *
+ * @see Retriever
+ * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
+ * @see com.winterhavenmc.library.messagebuilder.model.language.MessageRecord MessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord ValidMessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord InvalidMessageRecord
+ */
 public final class MessageRetriever implements Retriever
 {
 	private final QueryHandler<MessageRecord> queryHandler;
 
 
 	/**
-	 * Class constructor
+	 * Constructs a {@code MessageRetriever} using the specified query handler.
 	 *
-	 * @param queryHandler the query handler to be used to retrieve a message record
+	 * @param queryHandler a handler responsible for resolving message records from a configuration source
 	 */
 	public MessageRetriever(final QueryHandler<MessageRecord> queryHandler)
 	{
@@ -39,6 +58,17 @@ public final class MessageRetriever implements Retriever
 	}
 
 
+	/**
+	 * Retrieves a {@link com.winterhavenmc.library.messagebuilder.model.language.MessageRecord}
+	 * for the given key using the underlying {@link QueryHandler}.
+	 *
+	 * <p>If the result is not an instance of {@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord},
+	 * this method returns an {@linkplain com.winterhavenmc.library.messagebuilder.model.language.MessageRecord#empty(RecordKey)
+	 * empty record} as a safe fallback.
+	 *
+	 * @param messageKey the key used to locate the message record
+	 * @return a valid or empty message record; never {@code null}
+	 */
 	@Override
 	public MessageRecord getRecord(final RecordKey messageKey)
 	{
