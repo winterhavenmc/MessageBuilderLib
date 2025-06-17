@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
+package com.winterhavenmc.library.messagebuilder.pipeline.containers;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter;

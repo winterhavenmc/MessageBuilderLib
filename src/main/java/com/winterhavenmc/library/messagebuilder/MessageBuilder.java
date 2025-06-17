@@ -27,7 +27,7 @@ import com.winterhavenmc.library.messagebuilder.resources.configuration.LocalePr
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.library.time.Tick;
 

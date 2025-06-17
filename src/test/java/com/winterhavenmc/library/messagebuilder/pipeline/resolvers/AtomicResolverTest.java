@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;

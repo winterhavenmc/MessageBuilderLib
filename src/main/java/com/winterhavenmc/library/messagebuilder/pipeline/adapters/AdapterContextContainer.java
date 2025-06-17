@@ -17,9 +17,27 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 
 
+/**
+ * A simple context container that provides shared services to adapter implementations during macro extraction.
+ *
+ * <p>This container encapsulates external utilities and formatters that adapters may require, such as
+ * the ability to resolve user-friendly world names (via Multiverse, for example), or locale-aware
+ * formatting for durations and instants.
+ *
+ * <p>It is passed to certain adapters (e.g., {@code Locatable}, {@code Expirable}, {@code Protectable})
+ * to support context-sensitive formatting logic.
+ *
+ * @param worldNameResolver the resolver responsible for resolving world name aliases
+ * @param formatterContainer the container holding time/locale-based formatters
+ *
+ * @see FormatterContainer FormatterContainer
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable Nameable
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.location.Locatable Locatable
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.Expirable Expirable
+ */
 public record AdapterContextContainer(WorldNameResolver worldNameResolver,
 									  FormatterContainer formatterContainer) { }

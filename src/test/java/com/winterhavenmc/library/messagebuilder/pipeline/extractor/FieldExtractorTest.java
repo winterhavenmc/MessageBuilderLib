@@ -47,7 +47,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.Di
 import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.containers.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 
 import org.bukkit.Location;
