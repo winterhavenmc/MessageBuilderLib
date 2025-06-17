@@ -23,6 +23,15 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {
+	/**
+	 * Factory method that constructs a {@code MessageRecord} from a YAML configuration section.
+	 * Returns a {@link ValidMessageRecord} if the section is non-null and valid,
+	 * or an {@link InvalidMessageRecord} if the section is missing.
+	 *
+	 * @param itemKey the unique record key used to identify this item
+	 * @param itemEntry the corresponding YAML configuration section
+	 * @return a valid or invalid {@code MessageRecord} depending on input
+	 */
 	static ItemRecord from(final RecordKey itemKey, final ConfigurationSection itemEntry)
 	{
 		return itemEntry == null
@@ -31,12 +40,28 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	}
 
 
+	/**
+	 * Returns an {@link InvalidItemRecord} representing a missing or invalid item definition.
+	 *
+	 * @param itemKey the key associated with the missing record
+	 * @return a placeholder {@code ItemRecord} indicating an empty or unresolved item
+	 */
 	static InvalidItemRecord empty(final RecordKey itemKey)
 	{
 		return new InvalidItemRecord(itemKey, "Missing item section.");
 	}
 
 
+	/**
+	 * Enum representing the fields defined in a {@link ValidItemRecord}.
+	 * <p>
+	 * Each constant in this enum maps to a specific key in the YAML configuration.
+	 * This enum provides a single source of truth for these keys, which may be
+	 * decoupled from the enum constant names in the future.
+	 *
+	 * <p>This design ensures central schema management and supports future extensions
+	 * such as metadata annotations or type hints per field.
+	 */
 	enum Field
 	{
 		NAME_SINGULAR("NAME.SINGULAR"),
@@ -45,16 +70,16 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 		INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL"),
 		LORE("LORE");
 
-		private final String keyString; // keyPath field
+		private final String keyString;
 
-		// constructor for enum constants
 		Field(String keyString) { this.keyString = keyString; }
 
-		// getter for keyPath field
+		/**
+		 * Returns the raw YAML key string associated with this field.
+		 *
+		 * @return the field key string
+		 */
 		public String toKey() { return this.keyString; }
-
-		@Override
-		public String toString() { return this.keyString; }
 	}
 
 }

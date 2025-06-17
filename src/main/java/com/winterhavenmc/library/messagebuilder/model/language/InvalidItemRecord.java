@@ -21,8 +21,24 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 
 /**
- * A data object record for item information contained in the language file.
+ * An {@link ItemRecord} representing a missing or invalid entry from the
+ * {@code ITEMS} section of a language file.
+ * <p>
+ * This class is returned by the
+ * {@code ItemRecord.from(RecordKey, ConfigurationSection)}
+ * factory method when the provided section is {@code null}, or when a parsing error occurs.
+ * <p>
+ * The {@code reason} field provides a human-readable explanation for why the record is considered invalid.
+ * This allows for safe logging, debugging, and non-fatal fallback behavior in the library's message pipeline.
  *
- * @param key the keyPath in the language file for this record
+ * <p>Invalid item records are safe to pass around and will typically result in no item
+ * being created when encountered.
+ *
+ * @param key the {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey} that identifies the missing or failed item
+ * @param reason a description of why this item record is invalid
+ *
+ * @see ItemRecord
+ * @see ValidItemRecord
+ * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey
  */
 public record InvalidItemRecord(RecordKey key, String reason) implements ItemRecord { }

@@ -23,6 +23,42 @@ import java.time.Duration;
 import java.util.Optional;
 
 
+/**
+ * A {@link MessageRecord} representing a fully constructed, macro-resolved message
+ * ready for delivery to a recipient.
+ * <p>
+ * This record is typically derived from a {@link ValidMessageRecord} using the
+ * {@link ValidMessageRecord#withFinalStrings(String, String, String)} method.
+ * It retains all original message metadata while attaching resolved versions of
+ * the chat message, title, and subtitle strings.
+ *
+ * <h2>Resolved Fields</h2>
+ * The following fields contain the final rendered output after macro resolution:
+ * <ul>
+ *   <li>{@code finalMessageString} – The resolved chat message</li>
+ *   <li>{@code finalTitleString} – The resolved title (if any)</li>
+ *   <li>{@code finalSubtitleString} – The resolved subtitle (if any)</li>
+ * </ul>
+ * These are provided as {@link Optional} values to distinguish between
+ * unresolved and empty content.
+ *
+ * @param key the original message key
+ * @param enabled whether this message is active
+ * @param message the original raw message string (pre-resolution)
+ * @param repeatDelay the repeat delay setting for this message
+ * @param title the raw title string
+ * @param titleFadeIn title fade-in time in ticks
+ * @param titleStay title stay time in ticks
+ * @param titleFadeOut title fade-out time in ticks
+ * @param subtitle the raw subtitle string
+ * @param finalMessageString the resolved chat message string, if available
+ * @param finalTitleString the resolved title string, if available
+ * @param finalSubtitleString the resolved subtitle string, if available
+ *
+ * @see ValidMessageRecord#withFinalStrings(String, String, String)
+ * @see MessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline MessagePipeline
+ */
 public record FinalMessageRecord(
 		RecordKey key,
 		boolean enabled,
@@ -35,5 +71,4 @@ public record FinalMessageRecord(
 		String subtitle,
 		Optional<String> finalMessageString,
 		Optional<String> finalTitleString,
-		Optional<String> finalSubtitleString) implements MessageRecord
-{ }
+		Optional<String> finalSubtitleString) implements MessageRecord { }

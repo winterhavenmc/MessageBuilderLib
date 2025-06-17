@@ -21,4 +21,25 @@ package com.winterhavenmc.library.messagebuilder.model.language;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 
+/**
+ * A {@link MessageRecord} representing a missing or invalid entry from the
+ * {@code MESSAGES} section of a language file.
+ * <p>
+ * This class is returned by the
+ * {@code MessageRecord.from(RecordKey, ConfigurationSection)}
+ * factory method when the provided section is {@code null}, or when a parsing error occurs.
+ * <p>
+ * The {@code reason} field provides a human-readable explanation for why the record is considered invalid.
+ * This allows for safe logging, debugging, and non-fatal fallback behavior in the library's message pipeline.
+ *
+ * <p>Invalid message records are safe to pass around and will typically result in no message
+ * being rendered or sent when encountered.
+ *
+ * @param key the {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey} that identifies the missing or failed message
+ * @param reason a description of why this message record is invalid
+ *
+ * @see MessageRecord
+ * @see ValidMessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey
+ */
 public record InvalidMessageRecord(RecordKey key, String reason) implements MessageRecord { }

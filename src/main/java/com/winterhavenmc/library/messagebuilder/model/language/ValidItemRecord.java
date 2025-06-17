@@ -24,6 +24,18 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.List;
 
 
+/**
+ * A validated, immutable {@link ItemRecord} representing a single entry from the
+ * {@code ITEMS} section of a language YAML file.
+ * <p>
+ * This class is created via the {@link #create(RecordKey, ConfigurationSection)} factory method,
+ * which performs all necessary validation and applies default values where appropriate. Once constructed,
+ * instances are considered safe and complete and can be used without additional checks.
+ *
+ * @see ItemRecord
+ * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
+ */
 public final class ValidItemRecord implements ItemRecord, Pluralizable
 {
 	RecordKey key;
@@ -61,14 +73,24 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	}
 
 
-	public static ValidItemRecord create(RecordKey key, ConfigurationSection itemEntry)
+	/**
+	 * Creates a {@code ValidItemRecord} from the provided key and value.
+	 * <p>
+	 * This method should be called only after validation, typically from
+	 * {@code ItemRecord.from(RecordKey, ConfigurationSection)}.
+	 *
+	 * @param key the unique constant key
+	 * @param section the configuration section containing the item definition
+	 * @return a validated constant record instance
+	 */
+	public static ValidItemRecord create(RecordKey key, ConfigurationSection section)
 	{
 		return new ValidItemRecord(key,
-				itemEntry.getString(Field.NAME_SINGULAR.toKey()),
-				itemEntry.getString(Field.NAME_PLURAL.toKey()),
-				itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.toKey()),
-				itemEntry.getString(Field.INVENTORY_NAME_PLURAL.toKey()),
-				itemEntry.getStringList(Field.LORE.toKey()));
+				section.getString(Field.NAME_SINGULAR.toKey()),
+				section.getString(Field.NAME_PLURAL.toKey()),
+				section.getString(Field.INVENTORY_NAME_SINGULAR.toKey()),
+				section.getString(Field.INVENTORY_NAME_PLURAL.toKey()),
+				section.getStringList(Field.LORE.toKey()));
 	}
 
 
