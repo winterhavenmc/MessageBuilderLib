@@ -24,7 +24,7 @@
  *   <li>Allows multiple macros to be resolved from a single object via adapters</li>
  *   <li>Built-in support for standard Bukkit types like {@code Player}, {@code Location}, {@code ItemStack}, etc.</li>
  *   <li>Extensible via custom {@code MacroProcessor}, {@code Resolver}, or {@code Adapter} implementations
- *   <emphasis>(planned for a future version)</emphasis></li>
+ *   <em>(planned for a future version)</em></li>
  * </ul>
  *
  * <h2>Typical Usage</h2>
