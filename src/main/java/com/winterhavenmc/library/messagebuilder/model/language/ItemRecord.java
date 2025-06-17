@@ -21,16 +21,46 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 
+/**
+ * A sealed interface representing a record loaded from the {@code ITEMS}
+ * section of a language YAML file.
+ * <p>
+ * Item records contain metadata used to localize or customize item names,
+ * inventory display names, and lore descriptions. These values may be used
+ * dynamically in messages or as part of macro resolution, but are chiefly designed
+ * to provide localized strings for items to be created for use in plugins.
+ *
+ * <h2>Implementations</h2>
+ * <ul>
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord} –
+ *       A fully parsed and validated item entry</li>
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord} –
+ *       A fallback object representing a missing or invalid item definition</li>
+ * </ul>
+ *
+ * <p>Instances are created using {@link #from(RecordKey, ConfigurationSection)},
+ * which applies default behavior and validation automatically.
+ * <p>
+ * This interface extends {@link SectionRecord}, allowing all item records
+ * to be safely passed through the macro and message systems once constructed.
+ *
+ * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
+ * @see com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord ValidItemRecord
+ * @see com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord InvalidItemRecord
+ * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ */
 public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {
 	/**
-	 * Factory method that constructs a {@code MessageRecord} from a YAML configuration section.
-	 * Returns a {@link ValidMessageRecord} if the section is non-null and valid,
-	 * or an {@link InvalidMessageRecord} if the section is missing.
+	 * Creates an {@code ItemRecord} from the given configuration section.
+	 * <p>
+	 * If the section is {@code null}, an {@link InvalidItemRecord} is returned
+	 * with a reason indicating the failure. Otherwise, a {@link ValidItemRecord}
+	 * is created using parsed and validated values.
 	 *
-	 * @param itemKey the unique record key used to identify this item
-	 * @param itemEntry the corresponding YAML configuration section
-	 * @return a valid or invalid {@code MessageRecord} depending on input
+	 * @param itemKey the key identifying this item record
+	 * @param itemEntry the configuration section associated with this item
+	 * @return a valid or invalid {@code ItemRecord}, depending on input
 	 */
 	static ItemRecord from(final RecordKey itemKey, final ConfigurationSection itemEntry)
 	{
@@ -41,10 +71,10 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 
 
 	/**
-	 * Returns an {@link InvalidItemRecord} representing a missing or invalid item definition.
+	 * Returns an {@link InvalidItemRecord} representing a missing or unresolved item section.
 	 *
-	 * @param itemKey the key associated with the missing record
-	 * @return a placeholder {@code ItemRecord} indicating an empty or unresolved item
+	 * @param itemKey the key that could not be resolved
+	 * @return an invalid item record
 	 */
 	static InvalidItemRecord empty(final RecordKey itemKey)
 	{
@@ -53,14 +83,17 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 
 
 	/**
-	 * Enum representing the fields defined in a {@link ValidItemRecord}.
+	 * Enumeration of field keys within an {@code ItemRecord}, mapping enum constants
+	 * to their corresponding YAML key paths.
 	 * <p>
-	 * Each constant in this enum maps to a specific key in the YAML configuration.
-	 * This enum provides a single source of truth for these keys, which may be
-	 * decoupled from the enum constant names in the future.
+	 * This enum centralizes all known fields used for parsing and provides
+	 * a stable location for field-to-path mappings. It also allows the YAML
+	 * structure to evolve without requiring widespread changes to lookup logic.
 	 *
-	 * <p>This design ensures central schema management and supports future extensions
-	 * such as metadata annotations or type hints per field.
+	 * <p>Example usage:
+	 * <pre>{@code
+	 * String singularName = section.getString(ItemRecord.Field.NAME_SINGULAR.toKey());
+	 * }</pre>
 	 */
 	enum Field
 	{
@@ -74,10 +107,11 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 
 		Field(String keyString) { this.keyString = keyString; }
 
+
 		/**
-		 * Returns the raw YAML key string associated with this field.
+		 * Returns the YAML key path string associated with this field.
 		 *
-		 * @return the field key string
+		 * @return the raw configuration key string
 		 */
 		public String toKey() { return this.keyString; }
 	}

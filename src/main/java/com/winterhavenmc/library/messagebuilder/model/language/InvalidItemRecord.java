@@ -21,24 +21,24 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 
 /**
- * An {@link ItemRecord} representing a missing or invalid entry from the
- * {@code ITEMS} section of a language file.
+ * An {@link ItemRecord} representing a missing or invalid item entry from the
+ * {@code ITEMS} section of a language YAML file.
  * <p>
- * This class is returned by the
- * {@code ItemRecord.from(RecordKey, ConfigurationSection)}
- * factory method when the provided section is {@code null}, or when a parsing error occurs.
- * <p>
- * The {@code reason} field provides a human-readable explanation for why the record is considered invalid.
- * This allows for safe logging, debugging, and non-fatal fallback behavior in the library's message pipeline.
+ * This record is typically returned by {@code ItemRecord.from(RecordKey, ConfigurationSection)}
+ * when the associated configuration section is {@code null} or otherwise unusable.
  *
- * <p>Invalid item records are safe to pass around and will typically result in no item
- * being created when encountered.
+ * <p>The {@code reason} field provides a human-readable explanation of the failure,
+ * useful for diagnostics or logging, but is not required for program logic.
  *
- * @param key the {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey} that identifies the missing or failed item
- * @param reason a description of why this item record is invalid
+ * <p>This record is safe to pass through all systems in the library, and guarantees
+ * that item-related logic does not throw {@code NullPointerException} due to
+ * missing configurations.
+ *
+ * @param key the {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey} that could not be resolved
+ * @param reason an explanation of why the record is invalid (e.g., missing section)
  *
  * @see ItemRecord
  * @see ValidItemRecord
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey
+ * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler
  */
 public record InvalidItemRecord(RecordKey key, String reason) implements ItemRecord { }
