@@ -74,7 +74,8 @@ public class MultiverseWorldNameResolver implements WorldNameResolver
 	{
 		if (world == null) { return "NULL WORLD"; }
 
-		String mvAlias = new MultiverseWorldNameRetriever(multiverseCore).getWorldName(world);
+		final String mvAlias = new MultiverseWorldNameRetriever(multiverseCore).getWorldName(world);
+
 		return (mvAlias == null || mvAlias.isBlank())
 				? world.getName()
 				: mvAlias;
