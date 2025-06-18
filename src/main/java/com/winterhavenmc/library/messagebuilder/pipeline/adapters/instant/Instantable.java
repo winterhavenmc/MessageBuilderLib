@@ -33,22 +33,37 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 
 
 /**
- * An interface that can be implemented by any class that contains
- * an {@code Instant} and appropriately named accessor method
+ * An interface for types that expose a single {@link Instant} value, such as a timestamp
+ * for creation, expiration, modification, or other moments in time.
+ *
+ * <p>When used with the MessageBuilderLib adapter pipeline, implementing this interface enables
+ * support for macro placeholders like:
+ * <pre>{@code %OBJECT.INSTANT%}</pre>
+ * which will be automatically replaced with a localized string representation of the instant,
+ * using the system’s configured {@link FormatStyle} and {@link java.util.Locale}.
+ *
+ * <p>This allows plugin-defined types to seamlessly integrate timestamp-based information
+ * into translatable message strings.
  */
 @FunctionalInterface
 public interface Instantable
 {
+	/**
+	 * Returns the {@link Instant} that this object represents.
+	 *
+	 * @return an {@code Instant}, or {@code null} if none is defined
+	 */
 	Instant getInstant();
 
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from an Instantable conforming object
+	 * Extracts a formatted timestamp field from this {@code Instantable}, based on the given
+	 * {@code FormatStyle} and locale context.
 	 *
-	 * @param baseKey the top level key for the fields of this object
-	 * @param formatStyle the format style to use for formatting date/time
-	 * @param ctx containing a provider of the currently configured locale
-	 * @return a MacroStringMap containing the fields extracted for objects of Instantable type
+	 * @param baseKey the macro key prefix under which the {@code INSTANT} field will be inserted
+	 * @param formatStyle the {@link FormatStyle} to use for localization
+	 * @param ctx the adapter context container providing a {@link LocaleProvider}
+	 * @return a {@code MacroStringMap} with the formatted timestamp under {@code baseKey.INSTANT}
 	 */
 	default MacroStringMap extractInstant(final MacroKey baseKey,
 										  final FormatStyle formatStyle,
@@ -63,12 +78,12 @@ public interface Instantable
 
 
 	/**
-	 * Returns a formatted string representing an instant in time, using the supplied style and locale
+	 * Formats the provided {@link Instant} using the specified {@code FormatStyle} and locale.
 	 *
-	 * @param instant the time instant to format to String
-	 * @param formatStyle the formatting style
-	 * @param localeProvider a provider of the current locale setting in plugin config.yml
-	 * @return {@code Optional<String>} containing the formatted instant
+	 * @param instant the instant to format
+	 * @param formatStyle the formatting style to use
+	 * @param localeProvider a provider of the current locale and timezone
+	 * @return an {@code Optional<String>} containing the formatted timestamp, or empty if the instant is {@code null}
 	 */
 	static Optional<String> formatInstant(final Instant instant,
 										  final FormatStyle formatStyle,
