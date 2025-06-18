@@ -29,16 +29,39 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
 
 
+/**
+ * Represents an object that has a concept of ownership, expressed through an {@link AnimalTamer}.
+ *
+ * <p>This interface is used to extract an owner identifier—typically a player name—for insertion into a
+ * {@link MacroStringMap} used in macro replacement. Implementing this interface enables support for
+ * the {@code {OBJECT.OWNER}} macro in localized message templates.
+ *
+ * <p>Ownership in this context is not limited to entity taming. It may also refer to logical or permission-based
+ * ownership, such as a player who owns or controls a placed structure or data-bound object—e.g., the owner of
+ * a {@code DeathChest}, or a protected area. The use of {@link AnimalTamer} allows support for a broad range of
+ * owner-capable entities, including {@link org.bukkit.OfflinePlayer}, which is important for messages about players
+ * who may be offline.
+ */
 @FunctionalInterface
 public interface Ownable
 {
+	/**
+	 * Returns the {@link AnimalTamer} representing the owner of this object.
+	 * This may include tamed entities, or other objects with an ownership link.
+	 *
+	 * @return the owner of this object, or {@code null} if no owner is defined
+	 */
 	AnimalTamer getOwner();
 
+
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from an Ownable type
+	 * Extracts the macro value for the owner's name and adds it to a {@link MacroStringMap},
+	 * using the {@code {OBJECT.OWNER}} key.
 	 *
-	 * @param baseKey the top level key for the fields of this object
-	 * @return a MacroStringMap containing the fields extracted for objects of Ownable type
+	 * @param baseKey the macro key prefix (e.g., {@code OBJECT}) used to construct the full macro key
+	 * @param ctx the adapter context container, which holds formatting dependencies
+	 * @return a {@code MacroStringMap} containing the extracted owner name,
+	 * or an empty map if the owner is null or invalid
 	 */
 	default MacroStringMap extractOwner(final MacroKey baseKey, final AdapterContextContainer ctx)
 	{
@@ -50,22 +73,22 @@ public interface Ownable
 
 
 	/**
-	 * Predicate to test against null or blank name field
+	 * Predicate used to validate an owner. An owner is considered valid if it is non-null and has a non-blank name.
 	 */
-	Predicate<AnimalTamer> VALID_OWNER_NAME = animalTamer -> animalTamer != null
+	Predicate<AnimalTamer> VALID_OWNER = animalTamer -> animalTamer != null
 			&& animalTamer.getName() != null
 			&& !animalTamer.getName().isBlank();
 
 
 	/**
-	 * Default method that returns a formatted string of an owner's name
+	 * Returns a formatted string representing the owner's name, if available and valid.
 	 *
-	 * @return {@code Optional<String>} containing a formatted String of an owner's name,
-	 * or an empty Optional if not found
+	 * @param owner the {@link AnimalTamer} to format
+	 * @return an {@code Optional<String>} containing the owner's name, or empty if not valid
 	 */
 	static Optional<String> formatOwner(final AnimalTamer owner)
 	{
-		return (VALID_OWNER_NAME.test(owner))
+		return (VALID_OWNER.test(owner))
 				? Optional.ofNullable(owner.getName())
 				: Optional.empty();
 	}

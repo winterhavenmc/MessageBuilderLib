@@ -29,17 +29,35 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
 
 
+/**
+ * An interface for objects that provide information about the entity that killed them.
+ *
+ * <p>This abstraction is used to populate the {@code {OBJECT.KILLER}} macro field in messages.
+ * It allows server operators to define custom or built-in behaviors for logging or describing
+ * the cause of death in messages.
+ *
+ * <p>The most common implementation source is a
+ * {@link org.bukkit.entity.LivingEntity LivingEntity},
+ * whose {@code getKiller()} method returns the killing {@link org.bukkit.entity.Player Player}.
+ * However, plugin-defined objects may implement this interface to expose similar semantics.
+ */
 @FunctionalInterface
 public interface Killable
 {
+	/**
+	 * Returns the killer of this object, typically a {@link org.bukkit.entity.Player Player}.
+	 *
+	 * @return the killer as an {@link AnimalTamer}, or {@code null} if not available
+	 */
 	AnimalTamer getKiller();
 
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from a Lootable type
+	 * Extracts a macro string map with the killer's name, using the given base key and context.
 	 *
-	 * @param baseKey the top level key for the fields of this object
-	 * @return a MacroStringMap containing the fields extracted for objects of Lootable type
+	 * @param baseKey the macro key that identifies the root placeholder
+	 * @param ctx the adapter context container with formatting tools
+	 * @return a {@link MacroStringMap} containing the killer field, or an empty map if not resolvable
 	 */
 	default MacroStringMap extractKiller(final MacroKey baseKey, final AdapterContextContainer ctx)
 	{
@@ -50,18 +68,23 @@ public interface Killable
 	}
 
 
-	Predicate<AnimalTamer> VALID_KILLER_NAME = killer -> killer != null && killer.getName() != null && !killer.getName().isBlank();
+	/**
+	 * Predicate that evaluates whether a killer is considered valid and non-blank.
+	 */
+	Predicate<AnimalTamer> VALID_KILLER = killer -> killer != null
+			&& killer.getName() != null
+			&& !killer.getName().isBlank();
 
 
 	/**
-	 * Returns a formatted string of a killer's name
+	 * Formats the killer name for use in placeholder replacement.
 	 *
-	 * @return {@code Optional<String>} containing a formatted String of a killer's name,
-	 * or an empty Optional if not found
+	 * @param killer the entity that performed the kill
+	 * @return an {@code Optional<String>} containing the killer's name, if valid
 	 */
 	static Optional<String> formatKiller(final AnimalTamer killer)
 	{
-		return (VALID_KILLER_NAME.test(killer))
+		return (VALID_KILLER.test(killer))
 				? Optional.ofNullable(killer.getName())
 				: Optional.empty();
 	}

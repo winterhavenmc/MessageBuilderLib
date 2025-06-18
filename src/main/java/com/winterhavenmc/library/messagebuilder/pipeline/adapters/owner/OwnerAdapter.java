@@ -24,23 +24,29 @@ import java.util.Optional;
 
 
 /**
- * Adapter for {@link Ownable} objects with an associated owner. Any object that has a known method
- * for retrieving an Ownable will be returned as an {@link Optional} {@code Ownable} object type,
- * with a {@code getOwner()} method. This method will be mapped to the actual method of the object that returns
- * an {@code Optional} owner, regardless of its real method owner. Any object that is not known to have a
- * owner will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
+ * Adapter that extracts ownership information from objects that either implement {@link Ownable}
+ * or are {@link Tameable} Bukkit entities.
+ *
+ * <p>This adapter enables support for the {@code {OBJECT.OWNER}} macro by wrapping objects
+ * that expose a semantic concept of ownership. It checks for two sources:
+ * <ul>
+ *   <li>Objects that directly implement {@link Ownable} (e.g., plugin-defined types such as a "DeathChest")</li>
+ *   <li>{@link Tameable} entities, where ownership is derived from {@code getOwner()}</li>
+ * </ul>
+ *
+ * <p>Use cases include pet ownership, data-bound entity or item ownership, and permission-based
+ * structures such as protected regions or storage blocks. Because {@link Ownable} defines ownership
+ * via an {@link org.bukkit.entity.AnimalTamer}, it supports {@link org.bukkit.OfflinePlayer} references,
+ * allowing message replacement even for offline owners.
  */
 public class OwnerAdapter implements Adapter
 {
 	/**
-	 * Return an {@link Optional} of {@code Ownable}, or an empty Optional if the passed
-	 * object is not known to have an associated getOwner method. The Optional value, if present,
-	 * implements the {@code Ownable} Interface, and is guaranteed to have a {@code getOwner()} method
-	 * that maps to the adapted type's underlying {@code getOwner()} method.
+	 * Attempts to adapt the given object to the {@link Ownable} interface, either directly or by wrapping
+	 * supported Bukkit types.
 	 *
-	 * @param obj the object being evaluated as being {@code Ownable}
-	 * @return an {@code Optional} of the object as a Ownable type, or an empty Optional if the passed
-	 * object does not have a known method of retrieving a owner.
+	 * @param obj the object to adapt
+	 * @return an {@code Optional<Ownable>} if the object is supported, otherwise {@code Optional.empty()}
 	 */
 	@Override
 	public Optional<Ownable> adapt(final Object obj)
