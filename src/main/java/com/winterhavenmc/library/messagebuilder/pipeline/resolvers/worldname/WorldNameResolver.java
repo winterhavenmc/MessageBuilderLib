@@ -67,7 +67,7 @@ public interface WorldNameResolver
 	 */
 	static WorldNameResolver getResolver(final PluginManager pluginManager)
 	{
-		Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
+		final Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
 
 		return (plugin instanceof MultiverseCore multiverseCore && plugin.isEnabled())
 				? new MultiverseWorldNameResolver(multiverseCore)
