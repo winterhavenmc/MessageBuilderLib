@@ -19,26 +19,30 @@ package com.winterhavenmc.library.messagebuilder.pipeline.maps;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * A thread-safe mapping of {@link MacroKey} to arbitrary {@link Object} values,
+ * A key-value map associating {@link MacroKey} keys with arbitrary {@link Object} values,
  * used during macro substitution to store raw objects before formatting.
  * <p>
  * This class allows both {@code put} and {@code putIfAbsent} insertion behavior.
  * Null values are not permitted; any {@code null} value is automatically replaced
  * with the string literal {@code "NULL"}.
- *
+ * </p>
+ * <p>
  * <p>Primarily intended for internal use within the message pipeline where macro
- * resolution requires intermediate object capture before string conversion.</p>
+ * resolution requires intermediate object capture before string conversion.
+ * This class is not thread-safe and uses a {@link HashMap} internally,
+ * as message composition typically occurs on the main server thread within a single execution context.
+ * </p>
  */
 public class MacroObjectMap
 {
-	private final Map<MacroKey, Object> INTERNAL_MAP = new ConcurrentHashMap<>();
+	private final Map<MacroKey, Object> INTERNAL_MAP = new HashMap<>();
 
 
 	/**
