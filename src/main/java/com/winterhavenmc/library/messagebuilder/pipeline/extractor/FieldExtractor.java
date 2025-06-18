@@ -51,7 +51,16 @@ import java.time.temporal.ChronoUnit;
 
 
 /**
- * Extracts formatted string fields into a MacroStringMap from their object values
+ * Default implementation of the {@link Extractor} interface that delegates
+ * field extraction to the appropriate functional interface based on the adapter type.
+ * <p>
+ * The {@code FieldExtractor} is responsible for mapping adapted objects (e.g., {@link Nameable},
+ * {@link Locatable}, {@link Quantifiable}, etc.) to their extracted macro string values.
+ * These values are inserted into a {@link MacroStringMap}, keyed by the supplied {@link MacroKey}.
+ * <p>
+ * This implementation supports all built-in {@link Adapter} types and ensures
+ * that the correct extraction method is called based on both the adapter class
+ * and the runtime type of the adapted object.
  */
 public class FieldExtractor implements Extractor
 {
@@ -59,11 +68,10 @@ public class FieldExtractor implements Extractor
 
 
 	/**
-	 * Class constructor
+	 * Constructs a new {@code FieldExtractor} with the provided context container.
 	 *
-	 * @param ctx context container carrying dependencies for injection
+	 * @param ctx the context container holding formatter and configuration dependencies
 	 */
-
 	public FieldExtractor(final AdapterContextContainer ctx)
 	{
 		this.ctx = ctx;
@@ -71,13 +79,20 @@ public class FieldExtractor implements Extractor
 
 
 	/**
-	 * Extract fields for an adapted type
+	 * Extracts macro string values from the adapted object using the adapter's
+	 * corresponding interface, such as {@code Nameable} or {@code Locatable}.
+	 * <p>
+	 * If the adapter is recognized and the adapted object is an instance of the
+	 * expected functional interface, the appropriate extractor method is invoked.
+	 * <p>
+	 * If no valid match is found for the adapter/object combination, an empty
+	 * {@link MacroStringMap} is returned.
 	 *
-	 * @param baseKey the base MacroKey for the field
-	 * @param adapter the adapter to apply
-	 * @param adapted the adapted object
-	 * @return a MacroStringMap containing the formatted string fields extracted
-	 * @param <T> the Type of the adapted object
+	 * @param baseKey the base {@link MacroKey} representing the placeholder prefix
+	 * @param adapter the adapter that was used to adapt the original object
+	 * @param adapted the adapted object implementing one of the field interfaces
+	 * @param <T>     the type of the adapted object
+	 * @return a {@code MacroStringMap} containing extracted macro values
 	 */
 	@Override
 	public <T> MacroStringMap extract(final MacroKey baseKey, final Adapter adapter, final T adapted)
