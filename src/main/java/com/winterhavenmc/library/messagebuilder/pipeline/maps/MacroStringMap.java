@@ -29,6 +29,18 @@ import static com.winterhavenmc.library.messagebuilder.validation.ValidationHand
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
+/**
+ * A specialized map for storing string macro values keyed by {@link MacroKey}.
+ * <p>
+ * This map is used during the macro resolution phase of the message pipeline
+ * to provide string substitution values for placeholders.
+ *
+ * <p>All insertions are validated: null and blank strings are considered invalid,
+ * and will trigger a validation warning (but are still inserted).</p>
+ *
+ * <p>This class is mutable and not thread-safe. It is expected to be used in a
+ * single-threaded message construction context.</p>
+ */
 public class MacroStringMap
 {
 	private final Map<MacroKey, String> INTERNAL_MAP;
@@ -38,7 +50,7 @@ public class MacroStringMap
 
 
 	/**
-	 * Class constructor
+	 * Constructs an empty {@code MacroStringMap}.
 	 */
 	public MacroStringMap()
 	{
@@ -47,10 +59,11 @@ public class MacroStringMap
 
 
 	/**
-	 * Insert a key/value pair into the map
+	 * Inserts a key-value pair into the map.
+	 * If the value is {@code null} or blank, a validation warning is logged.
 	 *
-	 * @param macroKey the key for the entry
-	 * @param value the value for the entry
+	 * @param macroKey the macro key
+	 * @param value    the string value to associate
 	 */
 	public void put(final MacroKey macroKey, final String value)
 	{
@@ -60,10 +73,11 @@ public class MacroStringMap
 
 
 	/**
-	 * Insert a key/value pair into the map only if an entry for the key is not already present
+	 * Inserts a key-value pair into the map only if the key is not already present.
+	 * If the value is {@code null} or blank, a validation warning is logged.
 	 *
-	 * @param macroKey the key for the entry
-	 * @param value the value for the entry
+	 * @param macroKey the macro key
+	 * @param value    the string value to associate
 	 */
 	public void putIfAbsent(final MacroKey macroKey, final String value)
 	{
@@ -73,10 +87,10 @@ public class MacroStringMap
 
 
 	/**
-	 * Retrieve a {@code String} value from the map for the key, or {@code null} if no entry is present for the key
+	 * Returns the value associated with the given key, or {@code null} if not found.
 	 *
-	 * @param key the key for which to retrieve a value
-	 * @return the {@code String} value for the key in the map, or {@code null} if no entry is present for the key
+	 * @param key the macro key
+	 * @return the associated value, or {@code null} if not present
 	 */
 	public String get(final MacroKey key)
 	{
@@ -85,9 +99,10 @@ public class MacroStringMap
 
 
 	/**
-	 * Insert all entries from the passed in map to an existing map
+	 * Inserts all entries from another {@code MacroStringMap} into this map.
+	 * Existing keys will be overwritten.
 	 *
-	 * @param insertionMap the map whose entries are to be inserted into the existing map
+	 * @param insertionMap the map whose entries should be copied
 	 */
 	public void putAll(final MacroStringMap insertionMap)
 	{
@@ -99,10 +114,10 @@ public class MacroStringMap
 
 
 	/**
-	 * Return a {@code boolean} representing whether a key is contained in the map
+	 * Returns {@code true} if this map contains the specified key.
 	 *
-	 * @param key the MacroKey to test for existence in the map
-	 * @return {@code true} if an entry with the key exists in the map, or {@code false} if not
+	 * @param key the key to check
+	 * @return {@code true} if the key is present
 	 */
 	public boolean containsKey(final MacroKey key)
 	{
@@ -111,9 +126,9 @@ public class MacroStringMap
 
 
 	/**
-	 * Return an Iterable Set view of the entries of the map
+	 * Returns the set of key-value entries in this map.
 	 *
-	 * @return Iterable Set of map entries
+	 * @return an iterable view of the map's entries
 	 */
 	public Iterable<? extends Map.Entry<MacroKey, String>> entrySet()
 	{
@@ -122,9 +137,9 @@ public class MacroStringMap
 
 
 	/**
-	 * Return a {@code Set} view of the keys of the map
+	 * Returns the set of keys contained in this map.
 	 *
-	 * @return {@code Set} of map keys
+	 * @return a set of macro keys
 	 */
 	public Set<MacroKey> keySet()
 	{
@@ -133,9 +148,9 @@ public class MacroStringMap
 
 
 	/**
-	 * Return {@code boolean} representing whether the map contains any entries
+	 * Returns {@code true} if this map is empty.
 	 *
-	 * @return {@code true} if the map contains no entries, or {@code false} if it contains one or more entries
+	 * @return {@code true} if there are no entries
 	 */
 	public boolean isEmpty()
 	{
@@ -144,9 +159,9 @@ public class MacroStringMap
 
 
 	/**
-	 * Return the number of entries in the MacroStringMap as int
+	 * Returns the number of entries in this map.
 	 *
-	 * @return {@code int} number of entries in the map
+	 * @return the map size
 	 */
 	public int size()
 	{
@@ -155,9 +170,9 @@ public class MacroStringMap
 
 
 	/**
-	 * Return a new, unpopulated instance of a MacroStringMap
+	 * Returns a new, empty {@code MacroStringMap}.
 	 *
-	 * @return an empty MacroStringMap
+	 * @return an empty instance
 	 */
 	static public MacroStringMap empty()
 	{
@@ -166,11 +181,12 @@ public class MacroStringMap
 
 
 	/**
-	 * Return the instance of MacroStringMap with the key/value pair added
+	 * Adds a key-value pair to this map and returns the map itself.
+	 * This method is useful for fluent building patterns.
 	 *
-	 * @param key the key to be added to the map
-	 * @param value the value to be added to the map
-	 * @return the map instance with the key/value pair added
+	 * @param key   the macro key
+	 * @param value the string value to associate
+	 * @return this map, with the new entry included
 	 */
 	public MacroStringMap with(MacroKey key, String value)
 	{

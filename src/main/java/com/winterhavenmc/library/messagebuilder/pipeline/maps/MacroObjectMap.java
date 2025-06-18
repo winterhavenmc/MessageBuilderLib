@@ -26,9 +26,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * This class implements a map of macro objects that have been passed in by the message builder
- * to be processed for replacement strings. The map key is an enum member, and the corresponding value
- * is the object to be processed. It is backed by a HashMap.
+ * A thread-safe mapping of {@link MacroKey} to arbitrary {@link Object} values,
+ * used during macro substitution to store raw objects before formatting.
+ * <p>
+ * This class allows both {@code put} and {@code putIfAbsent} insertion behavior.
+ * Null values are not permitted; any {@code null} value is automatically replaced
+ * with the string literal {@code "NULL"}.
+ *
+ * <p>Primarily intended for internal use within the message pipeline where macro
+ * resolution requires intermediate object capture before string conversion.</p>
  */
 public class MacroObjectMap
 {
@@ -36,11 +42,12 @@ public class MacroObjectMap
 
 
 	/**
-	 * Create and puts a new value with its into the context map.
+	 * Inserts a key-value pair into the map. If the value is {@code null}, the string {@code "NULL"}
+	 * is used instead.
 	 *
-	 * @param macroKey      the unique key for the value
-	 * @param value         the value to store
-	 * @param <T>           the type of the value
+	 * @param macroKey the key under which the value should be stored
+	 * @param value    the value to store, or {@code "NULL"} if null
+	 * @param <T>      the type of the value
 	 */
 	public <T> void put(final MacroKey macroKey, final T value)
 	{
@@ -50,11 +57,12 @@ public class MacroObjectMap
 
 
 	/**
-	 * Create and puts a new value with its associated ProcessorType into the context map.
+	 * Inserts a key-value pair only if the key is not already present in the map.
+	 * If the value is {@code null}, the string {@code "NULL"} is used instead.
 	 *
-	 * @param macroKey      the unique key for the value
-	 * @param value         the value to store
-	 * @param <T>           the type of the value
+	 * @param macroKey the key to insert
+	 * @param value    the value to associate, or {@code "NULL"} if null
+	 * @param <T>      the type of the value
 	 */
 	public <T> void putIfAbsent(final MacroKey macroKey, final T value)
 	{
@@ -64,10 +72,10 @@ public class MacroObjectMap
 
 
 	/**
-	 * Retrieve a value from the context map for the specified key.
+	 * Retrieves the value associated with the specified {@link MacroKey}, if present.
 	 *
-	 * @param macroKey the context map key
-	 * @return the value for the key
+	 * @param macroKey the key whose value to retrieve
+	 * @return an {@link Optional} containing the associated value, or empty if not found
 	 */
 	public Optional<Object> get(final MacroKey macroKey)
 	{
