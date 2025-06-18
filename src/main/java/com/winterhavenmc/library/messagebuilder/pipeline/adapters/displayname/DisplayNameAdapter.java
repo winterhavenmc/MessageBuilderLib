@@ -28,11 +28,22 @@ import java.util.Optional;
 
 
 /**
- * Adapter for DisplayNameable objects with an associated display name. Any object that has a known method
- * for retrieving a {@code String} display name will be returned as an {@link Optional} DisplayNameable object type,
- * with a {@code getDisplayName()} method. This method will be mapped to the method of the object that returns a
- * {@code String} display name, regardless of its actual method name. Any object that is not known to have a
- * display name will result in an empty {@code Optional} being returned from the static {@code asDisplayNameable} method.
+ * Adapter implementation for extracting display names from supported object types.
+ *
+ * <p>This adapter converts objects into {@link DisplayNameable} instances to support macro
+ * replacement using the {@code {OBJECT.DISPLAY_NAME}} placeholder.
+ *
+ * <p>Supported types include:
+ * <ul>
+ *     <li>Objects implementing {@link DisplayNameable}</li>
+ *     <li>{@link Player} — mapped to {@link Player#getDisplayName()}</li>
+ *     <li>{@link Nameable} — mapped to {@link Nameable#getCustomName()}</li>
+ *     <li>{@link World} — mapped using the
+ *     {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver}</li>
+ * </ul>
+ *
+ * @see DisplayNameable
+ * @see Adapter
  */
 public class DisplayNameAdapter implements Adapter
 {
@@ -40,9 +51,9 @@ public class DisplayNameAdapter implements Adapter
 
 
 	/**
-	 * Constructor for DisplayNameAdapter
+	 * Constructs a new {@code DisplayNameAdapter} with the given context container.
 	 *
-	 * @param ctx a context container carrying injectable components for use by this class
+	 * @param ctx the adapter context providing services such as world name resolution
 	 */
 	public DisplayNameAdapter(final AdapterContextContainer ctx)
 	{
@@ -51,12 +62,10 @@ public class DisplayNameAdapter implements Adapter
 
 
 	/**
-	 * Adapt a type to conform to the {@link DisplayNameable} interface, making available a field with a value
-	 * equivalent to a displayName, and making it available via the {@code getDisplayName()} method
-	 * of the {@code DisplayNameable} interface
+	 * Attempts to adapt the given object to a {@link DisplayNameable} instance.
 	 *
-	 * @param obj the object to be adapted to the {@link DisplayNameable} interface
-	 * @return an {@code Optional} containing an adapted typed, or an empty Optional if the type could not be adapted
+	 * @param obj the object to adapt
+	 * @return an optional {@code DisplayNameable} if supported, or empty otherwise
 	 */
 	@Override
 	public Optional<DisplayNameable> adapt(final Object obj)
