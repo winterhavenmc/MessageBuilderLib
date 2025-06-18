@@ -29,21 +29,37 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 
 
 /**
- * An interface that describes objects that have a {@code getQuantity()}
- * method that returns a quantity as an {@code int}.
+ * Represents objects that expose a numerical quantity for macro replacement.
+ * <p>
+ * This interface allows objects to contribute to the {@code {OBJECT.QUANTITY}} placeholder
+ * using an integer-based {@link #getQuantity()} accessor. Implementing this interface enables
+ * plugins to automatically extract and localize quantity values from plugin-defined or
+ * Bukkit-provided objects.
+ *
+ * <p>Common examples of quantities include item stack sizes, inventory capacities,
+ * or collection sizes.
+ *
+ * @see QuantityAdapter
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter Adapter
  */
 @FunctionalInterface
 public interface Quantifiable
 {
+	/**
+	 * Returns the numeric quantity associated with this object.
+	 *
+	 * @return the quantity as an integer
+	 */
 	int getQuantity();
 
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from a Quantifiable type
+	 * Extracts a {@link MacroStringMap} containing the formatted quantity string.
+	 * This value will be added using the subkey {@code QUANTITY} of the provided macro key.
 	 *
-	 * @param baseKey the top level key for the fields of this object
-	 * @param ctx containing numberFormatter the duration formatter to be used to convert the duration to a String
-	 * @return a MacroStringMap containing the fields extracted for objects of Quantifiable type
+	 * @param baseKey the macro key under which to store the formatted quantity
+	 * @param ctx     the adapter context providing the number formatter
+	 * @return a {@code MacroStringMap} with a formatted quantity string, or an empty map if the key cannot be derived
 	 */
 	default MacroStringMap extractQuantity(final MacroKey baseKey, final AdapterContextContainer ctx)
 	{
@@ -55,10 +71,11 @@ public interface Quantifiable
 
 
 	/**
-	 * Returns a formatted string representing a duration of time, using the supplied DurationFormatter
+	 * Converts a raw integer quantity into a localized string using the provided number formatter.
 	 *
-	 * @param numberFormatter the number formatter to be used to convert the quantity to a String
-	 * @return a formatted String representing the quantity of the Quantifiable conforming object
+	 * @param quantity        the raw integer quantity
+	 * @param numberFormatter the number formatter used for localization
+	 * @return an optional containing the formatted string
 	 */
 	static Optional<String> formatQuantity(final int quantity,
 										   final NumberFormatter numberFormatter)
