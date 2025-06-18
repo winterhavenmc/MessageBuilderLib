@@ -25,14 +25,32 @@ import java.util.function.Supplier;
 
 
 /**
- * Provides a resolved {@link LocaleSetting} from plugin configuration.
+ * A configuration-backed provider for both {@link Locale} and {@link ZoneId} settings.
  * <p>
- * This class reads from the configuration fields {@code locale} and {@code language}
- * (in that order of priority) to attempt to resolve a {@link LanguageTag}.
- * If neither setting is valid or present, it falls back to {@link Locale#getDefault()}.
+ * This class wraps a {@link LocaleSetting} and provides a centralized access point
+ * for retrieving the user's desired locale and timezone, both of which are commonly
+ * required for time/date formatting and localization operations throughout the plugin.
+ * </p>
  *
  * <p>
- * This is primarily used for formatting numbers, dates, and times using the JVM's {@link Locale}.
+ * The {@code LocaleProvider} resolves configuration values from {@code config.yml}
+ * in the following order:
+ * </p>
+ * <ul>
+ *   <li>{@code locale} key (preferred)</li>
+ *   <li>{@code language} key (fallback)</li>
+ *   <li>{@link Locale#getDefault()} (system fallback)</li>
+ * </ul>
+ *
+ * <p>
+ * The {@code timezone} configuration value, if present and valid, is resolved into a
+ * {@link ZoneId}. If the value is invalid or missing, the system default time zone is used.
+ * </p>
+ *
+ * @see com.winterhavenmc.library.messagebuilder.resources.configuration.ConfigProvider
+ * @see com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleSetting
+ * @see java.util.Locale
+ * @see java.time.ZoneId
  */
 public class LocaleProvider implements ConfigProvider<LocaleSetting>
 {
@@ -42,7 +60,7 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 
 
 	/**
-	 * The configuration keys supported for resolving the locale.
+	 * Enum representing the recognized configuration keys for language settings.
 	 */
 	enum LocaleField
 	{
@@ -56,9 +74,10 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 
 
 	/**
-	 * Private constructor
+	 * Constructs a new {@code LocaleProvider} with injected suppliers.
 	 *
-	 * @param localeSettingSupplier a provider for the plugin config language setting
+	 * @param localeSettingSupplier supplies the current {@link LocaleSetting}
+	 * @param zoneIdSupplier supplies the current {@link ZoneId}
 	 */
 	private LocaleProvider(final Supplier<LocaleSetting> localeSettingSupplier, final Supplier<ZoneId> zoneIdSupplier)
 	{
@@ -68,17 +87,18 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 
 
 	/**
-	 * Creates a new {@code LocaleProvider} for the specified plugin.
+	 * Factory method to construct a {@code LocaleProvider} using a plugin's configuration.
 	 * <p>
-	 * Resolution order:
+	 * This method attempts to extract valid configuration values in the following order:
+	 * </p>
 	 * <ol>
-	 *   <li>{@code locale} setting (must be a valid and available JVM locale)</li>
-	 *   <li>{@code language} setting (must be valid and available)</li>
-	 *   <li>{@link Locale#getDefault()} if both are invalid or missing</li>
+	 *   <li>{@code locale} field (must be a valid BCP-47 language tag)</li>
+	 *   <li>{@code language} field (fallback, same format)</li>
+	 *   <li>System default locale and timezone as final fallback</li>
 	 * </ol>
 	 *
-	 * @param plugin the plugin whose configuration should be used
-	 * @return a new LocaleProvider
+	 * @param plugin the plugin whose configuration will be consulted
+	 * @return a new {@code LocaleProvider} with dynamic access to locale and time zone settings
 	 */
 	public static LocaleProvider create(final Plugin plugin)
 	{
@@ -90,6 +110,17 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 	}
 
 
+	/**
+	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
+	 * <p>
+	 * If the {@code timezone} value is present in the configuration and matches
+	 * one of the available {@link ZoneId} IDs, it is used. Otherwise, this method
+	 * falls back to the system default time zone.
+	 * </p>
+	 *
+	 * @param plugin the plugin whose configuration is queried for the timezone
+	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
+	 */
 	private static ZoneId getValidZoneId(final Plugin plugin)
 	{
 		String timezone = plugin.getConfig().getString(timeZoneSetting);
@@ -101,9 +132,9 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 
 
 	/**
-	 * Returns the resolved {@link LocaleSetting}.
+	 * Returns the resolved {@link LocaleSetting} based on the plugin configuration.
 	 *
-	 * @return the current LocaleSetting
+	 * @return a locale setting encapsulating a {@link LanguageTag}
 	 */
 	@Override
 	public LocaleSetting get()
@@ -124,9 +155,9 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 
 
 	/**
-	 * Returns the actual {@link Locale} derived from the configuration.
+	 * Returns the {@link Locale} object derived from the configuration.
 	 *
-	 * @return the Java Locale object
+	 * @return a Java {@code Locale}
 	 */
 	public Locale getLocale()
 	{
@@ -134,6 +165,11 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 	}
 
 
+	/**
+	 * Returns the configured {@link ZoneId} if valid, or the system default otherwise.
+	 *
+	 * @return the applicable {@code ZoneId}
+	 */
 	public ZoneId getZoneId()
 	{
 		return zoneIdSupplier.get();

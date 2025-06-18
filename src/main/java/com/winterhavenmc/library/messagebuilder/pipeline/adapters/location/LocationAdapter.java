@@ -27,6 +27,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.loot.LootContext;
 
 import java.util.Optional;
 
@@ -77,6 +78,7 @@ public class LocationAdapter implements Adapter
 			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
 			case Inventory inventory -> Optional.of(inventory::getLocation);
 			case Raid raid -> Optional.of(raid::getLocation);
+			case LootContext lootContext -> Optional.of(lootContext::getLocation);
 			case Location location -> Optional.of(location::clone);
 			case null, default -> Optional.empty();
 		};

@@ -21,8 +21,21 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents the name of the language setting as configured in plugin settings.
- * Does not assume anything about the file system or structure.
+ * Represents a configured language or locale identifier.
+ * <p>
+ * This record encapsulates a string such as {@code en-US} or {@code fr-FR},
+ * typically sourced from the plugin's {@code config.yml}. It is used by
+ * localization components such as {@link LanguageProvider} and downstream
+ * language or formatting tools to select appropriate resource files or
+ * locale-sensitive formatters.
+ * </p>
+ *
+ * <p>
+ * The {@code name} field is expected to follow the IETF BCP 47 language tag format
+ * (e.g., {@code en-US}, {@code de-DE}), although enforcement is deferred to consumers.
+ * </p>
+ *
+ * @param name the raw language or locale tag string, never {@code null}
  */
 public record LanguageSetting(@NotNull String name)
 {
@@ -31,5 +44,4 @@ public record LanguageSetting(@NotNull String name)
 	{
 		return name;
 	}
-
 }
