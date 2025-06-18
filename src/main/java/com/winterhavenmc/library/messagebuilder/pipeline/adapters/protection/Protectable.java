@@ -31,18 +31,45 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
 
 
+/**
+ * An interface representing objects that have a limited protection period,
+ * retrievable via an {@link Instant} timestamp.
+ *
+ * <p>Objects implementing this interface allow protection-related time values
+ * to be extracted and formatted for use in macro placeholder replacement,
+ * such as:
+ *
+ * <ul>
+ *   <li>{@code %OBJECT.PROTECTION.DURATION%} – time remaining until protection expires</li>
+ *   <li>{@code %OBJECT.PROTECTION.INSTANT%} – the exact localized date/time when protection ends</li>
+ * </ul>
+ *
+ * <p>These macros are automatically populated using this interface's
+ * {@code extractProtection(...)} method when objects are processed by
+ * the {@link ProtectionAdapter}.
+ */
 @FunctionalInterface
 public interface Protectable
 {
+	/**
+	 * Returns the protection {@link Instant}, representing the moment at which
+	 * protection ends or expires.
+	 *
+	 * @return the protection expiration timestamp
+	 */
 	Instant getProtection();
 
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from a Protectable type
+	 * Extracts protection-related fields from this object into a {@link MacroStringMap}.
+	 * This includes both a localized duration until protection ends and a formatted
+	 * date/time string.
 	 *
-	 * @param baseKey the top level key for the fields of this object
-	 * @param ctx the duration formatter to be used to convert the duration to a String
-	 * @return a MacroStringMap containing the fields extracted for objects of Protectable type
+	 * @param baseKey the macro base key this object is mapped to
+	 * @param lowerBound the lowest time unit to include in the duration formatting
+	 * @param formatStyle the desired style of date/time formatting (e.g. SHORT, MEDIUM)
+	 * @param ctx container for formatter dependencies and resolvers
+	 * @return a {@link MacroStringMap} with entries for both duration and instant representations
 	 */
 	default MacroStringMap extractProtection(final MacroKey baseKey,
 											 final ChronoUnit lowerBound,

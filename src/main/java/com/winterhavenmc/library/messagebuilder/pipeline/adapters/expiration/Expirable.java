@@ -33,22 +33,58 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant
 
 
 /**
- * An interface that describes objects with an {@code Instant} expiration field
- * and a corresponding getExpiration() accessor method
+ * Provides an adapter for objects that expose an expiration {@link java.time.Instant}.
+ *
+ * <p>This package defines the {@link Expirable}
+ * interface for adapting expiration timestamps into human-readable macro values.
+ * It enables support for both duration-based and instant-based macro replacements.
+ *
+ * <p>The following macro keys are supported (assuming a macro key prefix of {@code OBJECT}):
+ * <ul>
+ *     <li>{@code %OBJECT.EXPIRATION.DURATION%} — A formatted duration string representing time remaining until expiration</li>
+ *     <li>{@code %OBJECT.EXPIRATION.INSTANT%} — A localized date/time string representing the expiration instant</li>
+ * </ul>
+ *
+ * <p>The duration string is formatted using a
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter DurationFormatter}
+ * implementation, such as {@code LocalizedDurationFormatter}, and the instant string is formatted using a
+ * {@link java.time.format.DateTimeFormatter DateTimeFormatter} constructed with
+ * {@link java.time.format.FormatStyle FormatStyle} and a
+ * {@link com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider LocaleProvider}.
+ *
+ * <p>These macros provide flexibility to server operators, allowing them to choose the display format
+ * that best suits their message context.
+ *
+ * <p>This adapter does not attempt to adapt Bukkit-native types. Only plugin-defined types that implement
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.Expirable} will be supported.
+ *
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.Expirable Expirable
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter Adapter
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter DurationFormatter
  */
 @FunctionalInterface
 public interface Expirable
 {
+	/**
+	 * Returns the expiration timestamp for this object.
+	 *
+	 * @return an {@link Instant} representing when the object expires
+	 */
 	Instant getExpiration();
 
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from an Expirable type
+	 * Extracts macro key-value pairs for this object's expiration, including a formatted duration
+	 * and a formatted instant string.
 	 *
-	 * @param baseKey the top level key for the fields of this object
-	 * @param lowerBound a Temporal unit for use as a lower bound of units displayed
-	 * @param ctx containing the duration formatter to be used to convert the duration to a String
-	 * @return a MacroStringMap containing the fields extracted for objects of Expirable type
+	 * <p>Uses the provided macro key as a base, and appends {@code EXPIRATION.DURATION} and
+	 * {@code EXPIRATION.INSTANT} keys, resolving their values using the supplied formatter context.
+	 *
+	 * @param baseKey the top-level macro key associated with this object
+	 * @param lowerBound the smallest unit of time to be displayed in the duration (e.g., {@code ChronoUnit.MINUTES})
+	 * @param formatStyle the formatting style for displaying the instant (e.g., {@code FormatStyle.MEDIUM})
+	 * @param ctx the context container with formatters and world resolvers
+	 * @return a {@link MacroStringMap} containing populated expiration macro keys and their string values
 	 */
 	default MacroStringMap extractExpiration(final MacroKey baseKey,
 											 final ChronoUnit lowerBound,
