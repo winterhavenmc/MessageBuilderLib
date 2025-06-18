@@ -21,4 +21,23 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 
+/**
+ * A simple data container that encapsulates a {@link java.time.Duration}
+ * and its corresponding lower bound of precision, represented by a {@link java.time.temporal.ChronoUnit}.
+ *
+ * <p>This record is typically used in conjunction with duration formatters to specify
+ * not only the length of time to be formatted, but also the level of detail or granularity
+ * to include in the formatted output (e.g., rounding to the nearest minute, second, etc.).
+ *
+ * <p>For example, a {@code BoundedDuration} of {@code Duration.ofSeconds(4110)} with
+ * {@code ChronoUnit.MINUTES} as the precision might format to {@code "1 hour, 8 minutes"} rather than
+ * {@code "1 hour, 8 minutes and 30 seconds"}, depending on the formatter implementation.
+ *
+ * @param duration the time-based duration to format
+ * @param precision the lowest {@link ChronoUnit} to include in the formatted result
+ *
+ * @see java.time.Duration
+ * @see java.time.temporal.ChronoUnit
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter
+ */
 public record BoundedDuration(Duration duration, ChronoUnit precision) { }

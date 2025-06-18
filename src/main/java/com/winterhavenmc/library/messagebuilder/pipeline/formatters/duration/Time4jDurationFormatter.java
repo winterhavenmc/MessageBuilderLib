@@ -36,24 +36,53 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
 
 
 /**
- * Formats a duration using the Time4J {@link PrettyTime} formatter.
- * <p>
- * Given a {@code Duration} and a {@code ChronoUnit} precision, this formatter returns
- * a localized string with appropriate pluralized time units.
- * If the duration is less than one unit of the specified precision, the output is
- * rendered as if it were exactly one unit of that precision.
+ * A {@link DurationFormatter} implementation that uses the Time4J library's {@link PrettyTime}
+ * to render {@link java.time.Duration} values as human-readable, localized strings.
+ *
+ * <p>This formatter decomposes the {@code Duration} into calendar and clock units and uses Time4J’s
+ * formatting capabilities to generate grammatically correct, locale-aware strings with wide text style.
+ * For example, a duration of 2 days, 3 hours, and 4 minutes might be rendered as:
+ * {@code "2 days, 3 hours, and 4 minutes"} in English, or a culturally appropriate equivalent in other locales.
+ *
+ * <p>If the provided {@code Duration} or {@code ChronoUnit} is {@code null}, this class falls back
+ * to a default duration of 0 and a default lower bound of {@link ChronoUnit#MINUTES}, respectively,
+ * with warnings logged through the configured logging strategy.
+ *
+ * <p>The {@code lowerBound} determines the level of truncation applied before formatting. For example,
+ * a lower bound of {@code ChronoUnit.MINUTES} would discard all precision below minutes.
+ *
+ * @see PrettyTime
+ * @see LocaleProvider
+ * @see DurationFormatter
  */
 public final class Time4jDurationFormatter implements DurationFormatter
 {
 	private final LocaleProvider localeProvider;
 
 
+	/**
+	 * Constructs a {@code Time4jDurationFormatter} with the provided {@link LocaleProvider}.
+	 *
+	 * @param localeProvider supplies the {@link java.util.Locale} to use for formatting
+	 */
 	public Time4jDurationFormatter(final LocaleProvider localeProvider)
 	{
 		this.localeProvider = localeProvider;
 	}
 
 
+	/**
+	 * Formats a {@link java.time.Duration} using Time4J's {@link PrettyTime} engine.
+	 * The duration is truncated to the given {@code lowerBound}, and formatted into a
+	 * locale-sensitive string using {@code TextWidth.WIDE}.
+	 *
+	 * <p>The method maps Java {@code Duration} to Time4J's {@code Duration} classes
+	 * by separating calendar and clock units before composing them for formatting.
+	 *
+	 * @param duration the duration to format; {@code null} defaults to {@code Duration.ZERO}
+	 * @param lowerBound the lowest time unit to preserve; {@code null} defaults to {@code ChronoUnit.MINUTES}
+	 * @return a localized, human-friendly string representation of the duration
+	 */
 	@Override
 	public String format(final Duration duration, final ChronoUnit lowerBound)
 	{

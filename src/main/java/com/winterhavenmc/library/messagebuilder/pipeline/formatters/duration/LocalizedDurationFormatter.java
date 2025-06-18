@@ -29,6 +29,28 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 
+/**
+ * A {@link DurationFormatter} implementation that localizes duration strings using configurable
+ * constants from the language file, while delegating formatting of standard durations to another formatter.
+ *
+ * <p>This class wraps a delegate {@code DurationFormatter}, enhancing it with support for
+ * localized representations of special duration types such as {@code UNLIMITED} and {@code LESS_THAN}.
+ *
+ * <p>The localized constants are fetched from the {@code CONSTANTS} section of the language file using
+ * the following keys:
+ * <ul>
+ *   <li>{@code TIME.UNLIMITED} – defines the display string for unlimited (negative) durations</li>
+ *   <li>{@code TIME.LESS_THAN} – a template string for durations shorter than the given precision</li>
+ * </ul>
+ *
+ * <p>If the constants are not found or improperly configured, fallback values from the associated
+ * {@link DurationType} enum are used.
+ *
+ * @see DurationFormatter
+ * @see DurationType
+ * @see Time4jDurationFormatter
+ * @see com.winterhavenmc.library.messagebuilder.model.language.Section#CONSTANTS
+ */
 public final class LocalizedDurationFormatter implements DurationFormatter
 {
 	private final DurationFormatter delegate;
@@ -37,6 +59,12 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 	private static final RecordKey LESS_THAN_KEY = RecordKey.of("TIME.LESS_THAN").orElseThrow();
 
 
+	/**
+	 * Constructs a {@code LocalizedDurationFormatter} with a backing delegate and query handler factory.
+	 *
+	 * @param delegate the base formatter to handle standard durations
+	 * @param queryHandlerFactory factory for retrieving language constants from the configuration
+	 */
 	public LocalizedDurationFormatter(final DurationFormatter delegate, final QueryHandlerFactory queryHandlerFactory)
 	{
 		this.delegate = Objects.requireNonNull(delegate);
@@ -44,6 +72,14 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 	}
 
 
+	/**
+	 * Formats a {@link Duration} into a localized string, applying special handling for unlimited or
+	 * too-small durations.
+	 *
+	 * @param duration the duration to format
+	 * @param lowerBound the smallest time unit to represent (e.g., SECONDS)
+	 * @return a formatted string representation of the duration, localized as needed
+	 */
 	@Override
 	public String format(final Duration duration, final ChronoUnit lowerBound)
 	{
@@ -59,11 +95,11 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 
 
 	/**
-	 * Transform a duration into a formatted string.
+	 * Formats a standard duration using the delegate formatter.
 	 *
-	 * @param duration the duration to be formatted
-	 * @param lowerBound the lowest time unit to use in the formatted string
-	 * @return a localized String representing a normal duration.
+	 * @param duration the duration to format
+	 * @param lowerBound the smallest time unit to include
+	 * @return a formatted string for a normal duration
 	 */
 	String formatNormal(final Duration duration, final ChronoUnit lowerBound)
 	{
@@ -72,9 +108,9 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 
 
 	/**
-	 * Format duration string as configured UNLIMITED constant string in language file
+	 * Retrieves the configured string constant for unlimited durations.
 	 *
-	 * @return a localized String representing unlimited time.
+	 * @return a localized string representing an unlimited time
 	 */
 	String formatUnlimited()
 	{
@@ -83,10 +119,11 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 
 
 	/**
-	 * Format a duration into a string using the configured LESS_THAN String constant in the language file.
+	 * Formats a "less than" string for durations smaller than the lower bound.
+	 * Uses the template string from the configuration and fills in a sample value.
 	 *
-	 * @param lowerBound the time unit to use in the formatted string
-	 * @return a localized String representing less than a unit of time.
+	 * @param lowerBound the smallest unit of time to represent
+	 * @return a localized "less than" duration string
 	 */
 	String formatLessThan(final ChronoUnit lowerBound)
 	{
@@ -99,11 +136,12 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 
 
 	/**
-	 * Retrieve the time string constant for a language file constant key
+	 * Retrieves a string constant from the language file, falling back to a default
+	 * if the constant is missing or invalid.
 	 *
-	 * @param constantKey the key in the language file CONSTANTS section
-	 * @param durationType the duration type (NORMAL, UNLIMITED, LESS_THAN)
-	 * @return a String value from the language file for the key
+	 * @param constantKey the configuration key to fetch
+	 * @param durationType the fallback duration type if the constant is unavailable
+	 * @return a localized or fallback string
 	 */
 	String getTimeConstant(final RecordKey constantKey, final DurationType durationType)
 	{
