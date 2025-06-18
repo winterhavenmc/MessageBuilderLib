@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;

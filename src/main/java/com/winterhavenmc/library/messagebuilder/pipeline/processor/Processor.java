@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.processor;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 
@@ -29,14 +29,14 @@ import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecor
  * by resolving and replacing all macro placeholders.
  *
  * <p>This step is typically performed after a message record has been retrieved and
- * all necessary context objects have been registered to a {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap}.
+ * all necessary context objects have been registered to a {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap}.
  *
  * <p>Macro resolution is delegated internally to a {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver Resolver},
  * and placeholder substitution is handled by a {@link com.winterhavenmc.library.messagebuilder.pipeline.replacer.Replacer Replacer}.
  *
  * @see com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord ValidMessageRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord FinalMessageRecord
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap
  * @see com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor MessageProcessor
  */
 @FunctionalInterface

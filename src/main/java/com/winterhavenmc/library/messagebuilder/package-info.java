@@ -12,7 +12,7 @@
  *       The primary entry point into the library, providing the fluent API used to construct and send messages.</li>
  *   <li><strong>{@link com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler}</strong> –
  *       A customizable source for message templates and item definitions, often backed by YAML files.</li>
- *   <li><strong>{@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap}</strong> –
+ *   <li><strong>{@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap}</strong> –
  *       A runtime container of objects used to resolve macros into final string values.</li>
  *   <li>{@code Macro} – Plugin defined Enum that correlates to Placeholders
  *       in messages (e.g., {@code {PLAYER_NAME}}, {@code {LOCATION}})
@@ -43,7 +43,7 @@
  *
  * @see com.winterhavenmc.library.messagebuilder.MessageBuilder MessageBuilder
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap
  * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers resolvers
  */
 package com.winterhavenmc.library.messagebuilder;

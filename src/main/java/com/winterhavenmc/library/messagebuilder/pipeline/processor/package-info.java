@@ -6,7 +6,7 @@
  *
  * <p>At this stage, all macros within the message fields (such as the body text, title, and subtitle)
  * are replaced with their corresponding values, derived from context data stored in a
- * {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap}.
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap}.
  *
  * <h2>Key Components</h2>
  * <ul>

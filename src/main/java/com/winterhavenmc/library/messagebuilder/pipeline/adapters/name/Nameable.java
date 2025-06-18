@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.name;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -40,7 +40,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  * domain models that provide a display name or identifier suitable for macro replacement.
  *
  * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapter NameAdapter
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap MacroStringMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap MacroStringMap
  */
 @FunctionalInterface
 public interface Nameable
@@ -55,7 +55,7 @@ public interface Nameable
 
 	/**
 	 * Extracts the name field into a
-	 * {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap},
+	 * {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap},
 	 * using the provided base key to construct a dot-notated macro key (e.g., {@code OBJECT.NAME}).
 	 *
 	 * <p>The name is formatted and validated before being inserted into the map.

@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.model.message;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
@@ -48,7 +48,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  *   <li>A {@link com.winterhavenmc.library.messagebuilder.model.recipient.Recipient.Sendable recipient}</li>
  *   <li>A {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey messageKey} identifying the template</li>
  *   <li>A {@link com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline} to handle rendering and delivery</li>
- *   <li>A {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap macro object map}
+ *   <li>A {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap macro object map}
  *       holding values to be substituted into the message</li>
  * </ul>
  * The recipient is also automatically added as a macro object under the key {@code %RECIPIENT%}.

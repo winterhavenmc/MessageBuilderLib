@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.pipeline.containers;
+package com.winterhavenmc.library.messagebuilder.pipeline.maps;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;

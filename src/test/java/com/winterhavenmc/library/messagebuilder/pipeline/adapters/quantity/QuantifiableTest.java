@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import org.junit.jupiter.api.Test;

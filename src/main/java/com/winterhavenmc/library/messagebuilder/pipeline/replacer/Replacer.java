@@ -17,13 +17,13 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 
 
 /**
  * A functional interface representing a macro replacement engine that substitutes
  * placeholder values within a message string using data from a
- * {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap}.
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap}.
  *
  * <p>This interface abstracts the final stage in the message-building pipeline, where
  * macros (e.g., {@code %PLAYER_NAME%}, {@code %LOCATION_X%}) are resolved to actual
@@ -32,7 +32,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectM
  * <p>Implementations must ensure that all macros present in the input string are
  * replaced using context objects available in the provided {@code MacroObjectMap}.
  *
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap
  * @see MacroReplacer
  */
 public interface Replacer

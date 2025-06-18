@@ -44,7 +44,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.Quant
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.Identifiable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;

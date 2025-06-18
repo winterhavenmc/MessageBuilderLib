@@ -41,7 +41,7 @@ import java.util.Optional;
  * {@code Locatable}, {@code Expirable}, and others in their own types.
  *
  * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn BuiltIn
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap MacroStringMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap MacroStringMap
  * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver CompositeResolver
  */
 public interface Adapter

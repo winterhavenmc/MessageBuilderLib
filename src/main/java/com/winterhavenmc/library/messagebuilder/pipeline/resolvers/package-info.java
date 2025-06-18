@@ -7,9 +7,9 @@
  * pipeline in the {@code MessageBuilderLib} library.
  * Each {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver Resolver}
  * translates values stored in a
- * {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap}
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap}
  * into one or more entries in a
- * {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap MacroStringMap},
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap MacroStringMap},
  * keyed by {@code MacroKey} placeholders.
  *
  * <h2>Design Overview</h2>
@@ -36,8 +36,8 @@
  * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver FieldResolver
  * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter Adapter
  * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry AdapterRegistry
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap MacroStringMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap MacroStringMap
  * @see com.winterhavenmc.library.messagebuilder.keys.MacroKey MacroKey
  */
 

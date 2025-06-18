@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.model.message;
 
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 import java.time.Duration;
@@ -53,7 +53,7 @@ import java.time.temporal.ChronoUnit;
  * @see InvalidMessage
  * @see com.winterhavenmc.library.messagebuilder.MessageBuilder
  * @see com.winterhavenmc.library.messagebuilder.model.recipient.Recipient
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap
  * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey
  */
 public sealed interface Message permits ValidMessage, InvalidMessage

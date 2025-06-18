@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
 import com.winterhavenmc.library.messagebuilder.util.Delimiter;
@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 
 /**
  * Default implementation of the {@link Replacer} interface that performs macro substitution
- * on input strings using values derived from a {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap}.
+ * on input strings using values derived from a {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap}.
  *
  * <p>This replacer extracts macros from the message using configurable regular expressions,
  * then delegates resolution of each macro to a {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver}.
@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
  * @see Replacer
  * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver
  * @see com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap
  */
 public class MacroReplacer implements Replacer
 {

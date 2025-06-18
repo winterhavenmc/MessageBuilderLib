@@ -1,6 +1,6 @@
 /**
  * Contains interfaces and classes responsible for replacing macros in message strings
- * using resolved values from a {@link com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap}.
+ * using resolved values from a {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap}.
  *
  * <p>This package represents the final stage in the message-building pipeline,
  * where macros such as {@code %PLAYER_NAME%} or {@code %LOCATION.X%} are substituted
@@ -26,6 +26,6 @@
  * @see com.winterhavenmc.library.messagebuilder.pipeline.replacer.Replacer Replacer
  * @see com.winterhavenmc.library.messagebuilder.pipeline.replacer.MacroReplacer MacroReplacer
  * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver Resolver
- * @see com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap MacroObjectMap
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap
  */
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;

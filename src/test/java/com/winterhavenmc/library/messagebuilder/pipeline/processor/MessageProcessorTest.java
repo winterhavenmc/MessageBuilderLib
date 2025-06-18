@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.processor;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
