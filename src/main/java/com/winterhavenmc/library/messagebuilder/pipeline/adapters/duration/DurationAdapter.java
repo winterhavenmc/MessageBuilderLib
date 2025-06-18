@@ -22,8 +22,30 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import java.util.Optional;
 
 
+/**
+ * Adapter for objects that expose a {@link java.time.Duration} via the {@link Durationable} interface.
+ *
+ * <p>This adapter supports macro resolution for duration-based placeholders such as
+ * {@code {OBJECT.DURATION}}. It delegates all adaptation responsibilities to the object itself,
+ * requiring it to explicitly implement {@link Durationable}.
+ *
+ * <p>This design assumes that no Bukkit-provided types expose a {@code getDuration()} method
+ * by default. If such types are discovered in the future, they can be added to this adapter
+ * using additional instanceof branches or method references.
+ *
+ * <p>Adapter type: {@link BuiltIn#DURATION} (single-value field).
+ *
+ * @see Durationable
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry AdapterRegistry
+ */
 public class DurationAdapter implements Adapter
 {
+	/**
+	 * Attempts to adapt the given object into a {@link Durationable} if it explicitly implements the interface.
+	 *
+	 * @param obj the object to adapt
+	 * @return an {@code Optional<Durationable>} if the object is a {@code Durationable}, otherwise empty
+	 */
 	@Override
 	public Optional<Durationable> adapt(final Object obj)
 	{
