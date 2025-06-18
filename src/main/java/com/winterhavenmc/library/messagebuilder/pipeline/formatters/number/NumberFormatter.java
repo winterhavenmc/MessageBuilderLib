@@ -17,8 +17,31 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.formatters.number;
 
+/**
+ * A functional interface for formatting numeric values into localized {@link String} representations.
+ *
+ * <p>Implementations of this interface convert {@link Number} instances into strings
+ * based on localization rules, such as digit grouping, decimal separators, and numeric styles
+ * defined by a {@link java.util.Locale}.
+ *
+ * <p>This interface is used throughout the message building pipeline to ensure
+ * numeric values (e.g., coordinates, quantities) are presented in a locale-aware manner
+ * within macro-replaced messages.
+ *
+ * <p>To provide a concrete implementation, see
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter}.
+ *
+ * @see java.text.NumberFormat
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter
+ */
 @FunctionalInterface
 public interface NumberFormatter
 {
+	/**
+	 * Formats the provided {@link Number} using a locale-specific format.
+	 *
+	 * @param number the numeric value to format
+	 * @return a localized string representation of the number
+	 */
 	String getFormatted(Number number);
 }
