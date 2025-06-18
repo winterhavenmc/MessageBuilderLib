@@ -21,7 +21,7 @@
  * which uses the world’s raw Bukkit name.
  *
  * <h2>Usage</h2>
- * This package supports the replacement of macros like {@code %WORLDNAME%} in message templates
+ * This package supports the replacement of macros like {@code {WORLD.NAME}} in message templates
  * via MessageBuilderLib's macro resolution pipeline.
  *
  * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameRetriever WorldNameRetriever
