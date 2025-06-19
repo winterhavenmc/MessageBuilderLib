@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 
-import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class KillerAdapterTest
 	class TestObject implements Killable
 	{
 		@Override
-		public AnimalTamer getKiller()
+		public Entity getKiller()
 		{
 			return playerMock;
 		}
@@ -60,7 +60,7 @@ public class KillerAdapterTest
 
 		// Act
 		Optional<Killable> adapter = new KillerAdapter().adapt(testObject);
-		Optional<AnimalTamer> killer = adapter.map(Killable::getKiller);
+		Optional<Entity> killer = adapter.map(Killable::getKiller);
 
 		// Assert
 		assertTrue(killer.isPresent());

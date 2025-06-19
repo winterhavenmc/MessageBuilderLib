@@ -247,7 +247,7 @@ class FieldExtractorTest
 		class TestObject implements Killable
 		{
 			@Override
-			public AnimalTamer getKiller()
+			public Entity getKiller()
 			{
 				return playerMock;
 			}

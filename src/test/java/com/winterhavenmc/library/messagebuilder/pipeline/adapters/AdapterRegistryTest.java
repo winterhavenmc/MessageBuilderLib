@@ -180,7 +180,7 @@ class AdapterRegistryTest
 		class SampleEntity implements Killable
 		{
 			@Override
-			public AnimalTamer getKiller()
+			public Entity getKiller()
 			{
 				return playerMock;
 			}

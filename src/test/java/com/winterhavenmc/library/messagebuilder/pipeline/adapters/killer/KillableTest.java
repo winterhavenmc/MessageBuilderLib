@@ -20,10 +20,13 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
-import org.bukkit.entity.AnimalTamer;
+
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -44,7 +47,7 @@ class KillableTest
 	class TestObject implements Killable
 	{
 		@Override
-		public AnimalTamer getKiller()
+		public Entity getKiller()
 		{
 			return playerMock;
 		}
@@ -63,13 +66,13 @@ class KillableTest
 
 
 	@Test
-	void getKiller_returns_AnimalTamer()
+	void getKiller_returns_Entity()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
-		AnimalTamer result = testObject.getKiller();
+		Entity result = testObject.getKiller();
 
 		// Assert
 		assertEquals(playerMock, result);
@@ -106,22 +109,6 @@ class KillableTest
 
 		// Assert
 		assertEquals(Optional.of("Killer"), result);
-	}
-
-
-	@Test
-	void formatKiller_with_null_name_returns_empty_optional()
-	{
-		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
-		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn(null);
-
-		// Act
-		Optional<String> result = Killable.formatKiller(playerMock);
-
-		// Assert
-		assertEquals(Optional.empty(), result);
 	}
 
 
