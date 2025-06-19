@@ -60,6 +60,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -370,7 +371,7 @@ class FieldExtractorTest
 		class TestObject implements Lootable
 		{
 			@Override
-			public AnimalTamer getLooter() { return playerMock; }
+			public Entity getLooter() { return playerMock; }
 		}
 
 		MacroKey subKey = baseKey.append(LOOTER).orElseThrow();

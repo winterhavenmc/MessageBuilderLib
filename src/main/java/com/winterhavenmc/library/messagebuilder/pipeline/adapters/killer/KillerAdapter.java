@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.loot.LootContext;
 
 import java.util.Optional;
 
@@ -50,6 +51,7 @@ public class KillerAdapter implements Adapter
 		{
 			case Killable killable -> Optional.of(killable);
 			case LivingEntity livingEntity -> Optional.of(livingEntity::getKiller);
+			case LootContext lootContext -> Optional.of(lootContext::getKiller);
 			case null, default -> Optional.empty();
 		};
 	}
