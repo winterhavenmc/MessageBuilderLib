@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 
 
 /**
- * A {@link ValidationHandler} implementation that throws a {@link ValidationException}
+ * A {@link Validator} implementation that throws a {@link ValidationException}
  * when a value fails validation.
  * <p>
  * The exception is supplied via a {@link java.util.function.Supplier}, allowing
@@ -33,14 +33,14 @@ import java.util.function.Supplier;
  * rather than the supplier's origin.
  *
  * <p>
- * Typically used via {@link ValidationHandler#throwing(ErrorMessageKey, Parameter)}.
+ * Typically used via {@link Validator#throwing(ErrorMessageKey, Parameter)}.
  *
  * @param <T> the type of the value being validated
  *
- * @see ValidationHandler
+ * @see Validator
  * @see ValidationException
  */
-public record Throwing<T>(Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
+public record Throwing<T>(Supplier<ValidationException> exceptionSupplier) implements Validator<T>
 {
     /**
      * Throws the supplied exception when the value is invalid.

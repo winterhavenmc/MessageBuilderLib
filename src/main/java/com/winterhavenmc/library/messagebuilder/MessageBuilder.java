@@ -43,8 +43,8 @@ import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.validate;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
 /**

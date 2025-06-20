@@ -27,7 +27,7 @@ package com.winterhavenmc.library.messagebuilder.validation;
  * to plugin users and administrators.
  * <p>
  * Typically used in conjunction with {@link ValidationException} and
- * {@link ValidationUtility#formatMessage(ErrorMessageKey, Parameter)}.
+ * {@link Validator#formatMessage(ErrorMessageKey, Parameter)}.
  *
  * <p>
  * Example key in the language file: {@code PARAMETER_NULL=Parameter {0} must not be null.}

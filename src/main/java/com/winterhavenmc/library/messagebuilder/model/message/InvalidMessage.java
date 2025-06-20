@@ -27,7 +27,7 @@ import java.time.temporal.ChronoUnit;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.logging;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.logging;
 
 
 /**

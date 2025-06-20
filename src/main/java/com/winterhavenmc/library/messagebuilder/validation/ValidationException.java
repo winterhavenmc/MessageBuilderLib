@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.validation;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.formatMessage;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.formatMessage;
 
 
 /**
@@ -31,7 +31,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtil
  * to support structured, translatable messages in a plugin context.
  *
  * <p>
- * The message string is generated using {@link ValidationUtility#formatMessage(ErrorMessageKey, Parameter)},
+ * The message string is generated using {@link Validator#formatMessage(ErrorMessageKey, Parameter)},
  * and may vary depending on the configured locale.
  *
  * @see ErrorMessageKey
@@ -49,7 +49,7 @@ public class ValidationException extends IllegalArgumentException
 	 * {@link ErrorMessageKey} and {@link Parameter} describing the failed validation.
 	 * <p>
 	 * The exception message is immediately formatted using the current
-	 * locale returned by {@link ValidationUtility#getConfiguredLocale()}.
+	 * locale returned by {@link ValidationContext#getLocale()}.
 	 *
 	 * @param errorMessageKey a structured key identifying the error message template
 	 * @param parameter the parameter that failed validation

@@ -25,8 +25,8 @@ import java.util.function.Predicate;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.VALUE;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.logging;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.validate;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.logging;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
 /**

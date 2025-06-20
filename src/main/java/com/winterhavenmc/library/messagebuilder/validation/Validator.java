@@ -17,7 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.validation;
 
+import java.text.MessageFormat;
 import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 /**
  * A functional interface representing a strategy for handling invalid values
@@ -26,15 +29,58 @@ import java.util.Optional;
  * Implementations may choose to throw an exception, log a message, or
  * perform some other side-effect based on the invalid value.
  * <p>
- * Used in conjunction with {@code ValidationUtility.validate(Object, Predicate, ValidationHandler)}.
+ * Used in conjunction with {@code ValidationUtility.validate(Object, Predicate, Validator)}.
  *
  * @param <T> the type of the value being validated
- *
- * @see ValidationUtility
  */
 @FunctionalInterface
-public interface ValidationHandler<T>
+public interface Validator<T>
 {
+	String BUNDLE_NAME = "exception.messages";
+
+	/**
+	 * Validates a value using the given predicate and handler.
+	 * <p>
+	 * If the predicate returns {@code true}, the handler is invoked
+	 * to process the invalid value (e.g., throw or log). Otherwise,
+	 * the valid value is returned as an {@link Optional}.
+	 *
+	 * @param value the value to validate
+	 * @param predicate the condition indicating invalidity
+	 * @param handler the strategy for handling invalid values
+	 * @return an {@code Optional} containing the valid value, or empty if handled
+	 * @param <T> the type of the value
+	 */
+	static <T> Optional<T> validate(T value, Predicate<T> predicate, Validator<T> handler)
+	{
+		return predicate.test(value)
+				? handler.handleInvalid(value)
+				: Optional.ofNullable(value);
+	}
+
+
+	/**
+	 * Formats a localized error message using the specified key and parameter.
+	 * <p>
+	 * Message templates are retrieved from the {@code exception.messages}
+	 * resource bundle, and parameter placeholders are replaced using
+	 * {@link java.text.MessageFormat}.
+	 *
+	 * @param errorMessageKey the structured error key
+	 * @param parameter the parameter involved in the validation
+	 * @return the formatted, localized message
+	 */
+	static String formatMessage(final ErrorMessageKey errorMessageKey,
+								final Parameter parameter)
+	{
+		// Fetch localized message pattern from resource bundle
+		String pattern = ResourceBundle.getBundle(BUNDLE_NAME, ValidationContext.getLocale()).getString(errorMessageKey.name());
+
+		// Insert parameter name into the pattern
+		return MessageFormat.format(pattern, parameter.getDisplayName());
+	}
+
+
 	/**
 	 * Handles an invalid value detected during validation.
 	 *
@@ -53,7 +99,7 @@ public interface ValidationHandler<T>
 	 * @return a throwing validation handler
 	 * @param <T> the type of the value
 	 */
-	static <T> ValidationHandler<T> throwing(final ErrorMessageKey messageKey, final Parameter parameter)
+	static <T> Validator<T> throwing(final ErrorMessageKey messageKey, final Parameter parameter)
 	{
 		return new Throwing<>(() -> new ValidationException(messageKey, parameter));
 	}
@@ -69,9 +115,9 @@ public interface ValidationHandler<T>
 	 * @return a logging validation handler
 	 * @param <T> the type of the value
 	 */
-	static <T> ValidationHandler<T> logging(final LogLevel level,
-											final ErrorMessageKey messageKey,
-											final Parameter parameter)
+	static <T> Validator<T> logging(final LogLevel level,
+									final ErrorMessageKey messageKey,
+									final Parameter parameter)
 	{
 		return new Logging<>(level, messageKey, parameter);
 	}

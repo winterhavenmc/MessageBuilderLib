@@ -30,11 +30,11 @@ import java.util.Locale;
  * using {@link #initialize(LocaleProvider)}. After initialization,
  * the locale is considered immutable.
  * <p>
- * Validation logic (e.g., {@link ValidationUtility}) uses this context
+ * Validation logic (e.g., {@link Validator}) uses this context
  * to format localized error messages.
  *
+ * @see Validator
  * @see LocaleProvider
- * @see ValidationUtility
  */
 public final class ValidationContext
 {

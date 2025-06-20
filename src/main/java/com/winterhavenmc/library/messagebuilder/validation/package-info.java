@@ -13,7 +13,7 @@
  *         a custom runtime exception for reporting validation failures with localized messages.</li>
  *     <li>{@link com.winterhavenmc.library.messagebuilder.validation.Parameter} —
  *         an enum of symbolic parameter names used to identify invalid arguments in error messages.</li>
- *     <li>{@link com.winterhavenmc.library.messagebuilder.validation.ValidationHandler} —
+ *     <li>{@link com.winterhavenmc.library.messagebuilder.validation.Validator} —
  *         a functional interface representing a strategy for handling invalid values (e.g., throwing or logging).</li>
  *     <li>{@link com.winterhavenmc.library.messagebuilder.validation.ValidationUtility} —
  *         a static utility class for performing validations and formatting localized messages.</li>
@@ -32,7 +32,7 @@
  * overridable via plugin configuration through a global locale context.
  *
  * @see com.winterhavenmc.library.messagebuilder.validation.ValidationUtility
- * @see com.winterhavenmc.library.messagebuilder.validation.ValidationHandler
+ * @see com.winterhavenmc.library.messagebuilder.validation.Validator
  * @see com.winterhavenmc.library.messagebuilder.validation.ValidationException
  * @see com.winterhavenmc.library.messagebuilder.validation.Parameter
  * @see com.winterhavenmc.library.messagebuilder.validation.LogLevel

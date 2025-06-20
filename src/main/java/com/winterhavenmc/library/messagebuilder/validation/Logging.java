@@ -20,17 +20,17 @@ package com.winterhavenmc.library.messagebuilder.validation;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.formatMessage;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.formatMessage;
 
 
 /**
- * A {@link ValidationHandler} implementation that logs a warning or error
+ * A {@link Validator} implementation that logs a warning or error
  * when a value fails validation, but does not throw.
  * <p>
  * This handler is useful in cases where validation failures are non-critical
  * or should be tracked without disrupting normal flow.
  * <p>
- * The message is localized using {@link ValidationUtility#formatMessage(ErrorMessageKey, Parameter)},
+ * The message is localized using {@link Validator#formatMessage(ErrorMessageKey, Parameter)},
  * and is logged using the Java {@link java.util.logging.Logger} API.
  *
  * <p>
@@ -38,17 +38,17 @@ import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtil
  * {@link java.util.logging.Level} for improved readability and intent.
  *
  * <p>
- * Typically used via {@link ValidationHandler#logging(LogLevel, ErrorMessageKey, Parameter)}.
+ * Typically used via {@link Validator#logging(LogLevel, ErrorMessageKey, Parameter)}.
  *
  * @param <T> the type of the value being validated
  *
- * @see ValidationHandler
+ * @see Validator
  * @see ValidationUtility
  * @see LogLevel
  */
 public record Logging<T>(LogLevel logLevel,
                          ErrorMessageKey messageKey,
-                         Parameter parameter) implements ValidationHandler<T>
+                         Parameter parameter) implements Validator<T>
 {
     private static final Logger LOGGER = Logger.getLogger("ValidationLogger");
 

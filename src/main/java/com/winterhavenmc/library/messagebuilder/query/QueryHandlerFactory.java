@@ -27,8 +27,8 @@ import java.util.Objects;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LANGUAGE_RESOURCE_MANAGER;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.SECTION;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.validate;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
 public class QueryHandlerFactory
