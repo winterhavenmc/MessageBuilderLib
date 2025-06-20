@@ -39,7 +39,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  * and automatically extract localized string representations of that duration through the
  * {@link #extractDuration(MacroKey, ChronoUnit, AdapterContextContainer)} method.
  *
- * <p>This interface supports usage in message templates via the {@code %OBJECT.DURATION%} macro.
+ * <p>This interface supports usage in message templates via the {@code [OBJECT.DURATION}} macro.
  * Formatting is handled by the {@link com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter}
  * implementation provided in the {@link AdapterContextContainer}.
  *

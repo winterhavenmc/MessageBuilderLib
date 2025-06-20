@@ -51,7 +51,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  *   <li>A {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap macro object map}
  *       holding values to be substituted into the message</li>
  * </ul>
- * The recipient is also automatically added as a macro object under the key {@code %RECIPIENT%}.
+ * The recipient is also automatically added as a macro object under the key {@code [RECIPIENT}}.
  *
  * @see Message
  * @see com.winterhavenmc.library.messagebuilder.MessageBuilder MessageBuilder

@@ -41,8 +41,8 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant
  *
  * <p>The following macro keys are supported (assuming a macro key prefix of {@code OBJECT}):
  * <ul>
- *     <li>{@code %OBJECT.EXPIRATION.DURATION%} — A formatted duration string representing time remaining until expiration</li>
- *     <li>{@code %OBJECT.EXPIRATION.INSTANT%} — A localized date/time string representing the expiration instant</li>
+ *     <li>{@code [OBJECT.EXPIRATION.DURATION}} — A formatted duration string representing time remaining until expiration</li>
+ *     <li>{@code [OBJECT.EXPIRATION.INSTANT}} — A localized date/time string representing the expiration instant</li>
  * </ul>
  *
  * <p>The duration string is formatted using a

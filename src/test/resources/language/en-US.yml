@@ -227,7 +227,7 @@ MESSAGES:
 
   DURATION_MESSAGE:
     ENABLED: true
-    MESSAGE_TEXT: "Duration is %DURATION%"
+    MESSAGE_TEXT: "Duration is [DURATION}"
 
 
   # all number fields are present and unique from each other and the bukkit defaults (20, 70, 10)

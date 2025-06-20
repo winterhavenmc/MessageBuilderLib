@@ -30,8 +30,8 @@ import java.util.Optional;
  *
  * <p>Supports macro replacements such as:
  * <ul>
- *   <li>{@code %OBJECT.EXPIRATION.DURATION%} – formatted time until expiration</li>
- *   <li>{@code %OBJECT.EXPIRATION.INSTANT%} – formatted expiration date/time</li>
+ *   <li>{@code [OBJECT.EXPIRATION.DURATION}} – formatted time until expiration</li>
+ *   <li>{@code [OBJECT.EXPIRATION.INSTANT}} – formatted expiration date/time</li>
  * </ul>
  *
  * <p>This adapter is commonly used in time-sensitive contexts such as expiring items, events,

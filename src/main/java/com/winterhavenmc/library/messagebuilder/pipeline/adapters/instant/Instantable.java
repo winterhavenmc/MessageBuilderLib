@@ -38,7 +38,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  *
  * <p>When used with the MessageBuilderLib adapter pipeline, implementing this interface enables
  * support for macro placeholders like:
- * <pre>{@code %OBJECT.INSTANT%}</pre>
+ * <pre>{@code [OBJECT.INSTANT}}</pre>
  * which will be automatically replaced with a localized string representation of the instant,
  * using the system’s configured {@link FormatStyle} and {@link java.util.Locale}.
  *

@@ -40,8 +40,8 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  * such as:
  *
  * <ul>
- *   <li>{@code %OBJECT.PROTECTION.DURATION%} – time remaining until protection expires</li>
- *   <li>{@code %OBJECT.PROTECTION.INSTANT%} – the exact localized date/time when protection ends</li>
+ *   <li>{@code [OBJECT.PROTECTION.DURATION}} – time remaining until protection expires</li>
+ *   <li>{@code [OBJECT.PROTECTION.INSTANT}} – the exact localized date/time when protection ends</li>
  * </ul>
  *
  * <p>These macros are automatically populated using this interface's

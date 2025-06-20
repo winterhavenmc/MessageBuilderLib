@@ -6,7 +6,7 @@
  * instant-based placeholders such as:
  *
  * <pre>{@code
- * %OBJECT.INSTANT%
+ * [OBJECT.INSTANT}
  * }</pre>
  *
  * <p>At runtime, the

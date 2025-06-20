@@ -32,8 +32,8 @@ import java.util.Optional;
  *
  * <p>Once adapted, the object can be used to populate macro placeholders such as:
  * <ul>
- *   <li>{@code %OBJECT.PROTECTION.DURATION%} – a localized string showing the remaining protection time</li>
- *   <li>{@code %OBJECT.PROTECTION.INSTANT%} – the formatted expiration date/time</li>
+ *   <li>{@code [OBJECT.PROTECTION.DURATION}} – a localized string showing the remaining protection time</li>
+ *   <li>{@code [OBJECT.PROTECTION.INSTANT}} – the formatted expiration date/time</li>
  * </ul>
  *
  * <p>These macros are generated using the {@link Protectable#extractProtection} method.
