@@ -33,7 +33,7 @@ import org.bukkit.configuration.ConfigurationSection;
  *   <li>A main message body (chat message)</li>
  *   <li>An optional title/subtitle display</li>
  *   <li>Timing controls (title fade-in, stay, and fade-out durations)</li>
- *   <li>Optional repeat delay for scheduled messages</li>
+ *   <li>Optional repeat delay for messages that would otherwise repeat too frequently</li>
  * </ul>
  *
  * <h2>Implementations</h2>
