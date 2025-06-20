@@ -20,7 +20,12 @@ package com.winterhavenmc.library.messagebuilder.validation;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 
 import java.util.Locale;
+import java.util.Objects;
 
+import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LOCALE_PROVIDER;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 /**
  * Provides global access to the plugin-configured locale used
@@ -58,14 +63,14 @@ public final class ValidationContext
 	 */
 	public static void initialize(final LocaleProvider provider)
 	{
-		if (localeProvider != null)
-			return;
+		validate(provider, Objects::isNull, throwing(PARAMETER_NULL, LOCALE_PROVIDER));
 
-		if (provider == null)
-			throw new IllegalArgumentException("LocaleProvider must not be null");
-
-		localeProvider = provider;
+		if (localeProvider == null)
+		{
+			localeProvider = provider;
+		}
 	}
+
 
 	/**
 	 * Returns the current locale used for formatting validation messages.
