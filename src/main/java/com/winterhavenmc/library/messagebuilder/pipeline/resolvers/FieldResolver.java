@@ -83,10 +83,10 @@ public class FieldResolver implements Resolver
 				.map(resolver -> resolver.resolve(macroKey, macroObjectMap))
 				.collect(
 						MacroStringMap::new,
-						(map, m) -> m.entrySet()
-								.forEach(e -> map.putIfAbsent(e.getKey(), e.getValue())),
-						(m1, m2) -> m2.entrySet()
-								.forEach(e -> m1.putIfAbsent(e.getKey(), e.getValue()))
+						(map1, map2) -> map2.entrySet()
+								.forEach(e -> map1.putIfAbsent(e.getKey(), e.getValue())),
+						(map3, map4) -> map4.entrySet()
+								.forEach(e -> map3.putIfAbsent(e.getKey(), e.getValue()))
 				);
 	}
 
