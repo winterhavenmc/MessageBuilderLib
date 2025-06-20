@@ -20,13 +20,12 @@
  * The factory method {@link com.winterhavenmc.library.messagebuilder.model.recipient.Recipient#of(CommandSender)}
  * is used to classify any incoming {@link org.bukkit.command.CommandSender}, and returns a
  * sealed {@code Recipient} subtype appropriate to its role.
- *
- * <pre>{@code
- * Recipient recipient = Recipient.of(sender);
- * if (recipient instanceof Recipient.Sendable sendable) {
- *     sendable.sender().sendMessage("Welcome!");
+ * {@snippet lang=java:
+ *  Recipient recipient = Recipient.of(sender);
+ *  if (recipient instanceof Recipient.Sendable sendable) {
+ *      sendable.sender().sendMessage("Welcome!");
+ *  }
  * }
- * }</pre>
  *
  * This model is typically used by the message dispatch layer of the library to safely and clearly
  * manage how messages are sent based on the sender's context.

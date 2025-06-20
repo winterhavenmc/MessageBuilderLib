@@ -10,8 +10,7 @@
  * <h2>Plugin Integration</h2>
  * <p>Plugin developers can opt into this system by having their own domain types implement the {@code Nameable} interface.
  * For example, a plugin-defined class:
- *
- * <pre>{@code
+ *{@snippet lang=java:
  * public class CustomNPC implements Nameable {
  *     private final String name;
  *
@@ -24,7 +23,7 @@
  *         return this.name;
  *     }
  * }
- * }</pre>
+ * }
  *
  * <p>When a {@code CustomNPC} instance is passed into the macro context (via {@code setMacro()}),
  * the message builder will automatically resolve the placeholder {@code {CUSTOMNPC.NAME}}.

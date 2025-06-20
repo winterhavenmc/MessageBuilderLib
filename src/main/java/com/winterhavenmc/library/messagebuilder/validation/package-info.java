@@ -18,10 +18,12 @@
  * </ul>
  *
  * <h2>Usage Pattern</h2>
- * <pre>{@code
- *     String result = validate(name, String::isBlank, logging(STRING_BLANK, Parameter.PLAYER_NAME)).orElse("Steve");
- * }</pre>
- *
+ * {@snippet lang = java:
+ *     validate(recipient, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.RECIPIENT));
+ *}
+ * {@snippet lang=java:
+ *     String validName = validate(name, String::isBlank, logging(LogLevel.INFO, ErrorMessageKey.STRING_BLANK, Parameter.NAME)).orElse("Steve");
+ * }
  * <h2>Localization</h2>
  * <p>
  * Localized messages are loaded from the {@code exception.messages} resource bundle.
@@ -30,6 +32,7 @@
  *
  * @see com.winterhavenmc.library.messagebuilder.validation.Validator
  * @see com.winterhavenmc.library.messagebuilder.validation.ValidationException
+ * @see com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey
  * @see com.winterhavenmc.library.messagebuilder.validation.Parameter
  * @see com.winterhavenmc.library.messagebuilder.validation.LogLevel
  */
