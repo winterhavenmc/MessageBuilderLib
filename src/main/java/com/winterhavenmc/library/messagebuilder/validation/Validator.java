@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
+
 /**
  * A functional interface representing a strategy for handling invalid values
  * detected during validation.
@@ -74,7 +75,8 @@ public interface Validator<T>
 								final Parameter parameter)
 	{
 		// Fetch localized message pattern from resource bundle
-		String pattern = ResourceBundle.getBundle(BUNDLE_NAME, ValidationContext.getLocale()).getString(errorMessageKey.name());
+		String pattern = ResourceBundle.getBundle(BUNDLE_NAME, ValidationContext.getLocale())
+				.getString(errorMessageKey.name());
 
 		// Insert parameter name into the pattern
 		return MessageFormat.format(pattern, parameter.getDisplayName());
