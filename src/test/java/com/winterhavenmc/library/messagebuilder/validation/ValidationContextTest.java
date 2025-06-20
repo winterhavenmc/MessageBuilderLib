@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.validation;
 
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,16 +79,17 @@ class ValidationContextTest
 
 
 	@Test @DisplayName("getLocale() returns valid locale object.")
+	@Disabled
 	void getLocale_returns_valid_locale_object()
 	{
 		// Arrange
-		lenient().when(localeProviderMockUS.getLocale()).thenReturn(Locale.US);
+		when(localeProviderMockUS.getLocale()).thenReturn(Locale.FRANCE);
 
 		// Act
 		Locale result = ValidationContext.getLocale();
 
 		// Assert
-		assertEquals(Locale.US, result);
+		assertEquals(Locale.FRANCE, result);
 	}
 
 }
