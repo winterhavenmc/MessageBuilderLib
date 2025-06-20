@@ -30,12 +30,12 @@
  * </ul>
  *
  * <h2>Typical Usage</h2>
- * <pre>{@code
- * ItemRecord itemRecord = queryHandler.getItemRecord(MY_ITEM_KEY);
- * if (itemRecord instanceof ValidItemRecord valid) {
- *     String name = valid.nameSingular();
- * }
- * }</pre>
+ * {@snippet lang = "java":
+ * 	ItemRecord itemRecord = queryHandler.getItemRecord(MY_ITEM_KEY);
+ * 	if (itemRecord instanceof ValidItemRecord valid) {
+ * 		String name = valid.nameSingular();
+ * 	}
+ *  }
  *
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  * @see com.winterhavenmc.library.messagebuilder.model.language.MessageRecord MessageRecord
