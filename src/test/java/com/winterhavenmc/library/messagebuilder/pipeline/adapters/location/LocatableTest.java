@@ -19,9 +19,9 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.location;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 import org.bukkit.Location;
 import org.bukkit.World;

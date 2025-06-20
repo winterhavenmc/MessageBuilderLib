@@ -18,8 +18,23 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.cooldown;
 
 
+/**
+ * A functional interface representing a cooldown check for a given key.
+ * <p>
+ * This is used to determine whether a message should be allowed to send,
+ * based on the last time it was shown and the configured delay.
+ */
 @FunctionalInterface
 public interface Cooldown
 {
+	/**
+	 * Determines if the given cooldown key is not currently cooling down.
+	 * <p>
+	 * Returns {@code true} if either no cooldown exists for the key, or
+	 * the cooldown has expired.
+	 *
+	 * @param cooldownKey the cooldown key composed of recipient and message identifier
+	 * @return {@code true} if the message is not cooling down and may be shown
+	 */
 	boolean notCooling(CooldownKey cooldownKey);
 }

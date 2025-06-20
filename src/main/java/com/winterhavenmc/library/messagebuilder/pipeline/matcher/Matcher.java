@@ -23,8 +23,37 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 
+/**
+ * A functional interface representing a strategy for extracting {@link com.winterhavenmc.library.messagebuilder.keys.MacroKey}
+ * instances from an input string using a specified regular expression pattern.
+ *
+ * <p>This interface abstracts the placeholder matching logic used throughout the message
+ * processing pipeline, allowing different implementations or syntaxes if desired.
+ *
+ * <p>Typically used to:
+ * <ul>
+ *   <li>Find base macro keys that indicate which objects should be resolved</li>
+ *   <li>Locate full placeholder keys to be substituted during rendering</li>
+ * </ul>
+ *
+ * <p>Implementations must return a stream of distinct {@code MacroKey} instances derived
+ * from all matches found in the input string.
+ *
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher
+ * @see com.winterhavenmc.library.messagebuilder.keys.MacroKey
+ */
 @FunctionalInterface
 public interface Matcher
 {
+	/**
+	 * Extracts macro keys from the given input string using the specified regular expression pattern.
+	 *
+	 * <p>Each successful match is converted into a {@link com.winterhavenmc.library.messagebuilder.keys.MacroKey}.
+	 * Implementations may choose to skip invalid or malformed macro segments.
+	 *
+	 * @param input the raw string to search for macros (e.g., a message from the YAML file)
+	 * @param pattern the regular expression pattern used to locate macro placeholders
+	 * @return a stream of matched {@code MacroKey} instances (may be empty but never {@code null})
+	 */
 	Stream<MacroKey> match(String input, Pattern pattern);
 }

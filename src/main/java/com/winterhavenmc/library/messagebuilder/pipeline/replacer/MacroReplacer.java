@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
 import com.winterhavenmc.library.messagebuilder.util.Delimiter;
@@ -27,28 +27,60 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 
+/**
+ * Default implementation of the {@link Replacer} interface that performs macro substitution
+ * on input strings using values derived from a {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap}.
+ *
+ * <p>This replacer extracts macros from the message using configurable regular expressions,
+ * then delegates resolution of each macro to a {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver}.
+ * Once resolved, macros are replaced in the string using their corresponding values.
+ *
+ * <p>The class supports two levels of macro detection:
+ * <ul>
+ *     <li>{@linkplain #BASE_KEY_PATTERN} — for determining candidate base keys used in resolution</li>
+ *     <li>{@linkplain #FULL_KEY_PATTERN} — for actual replacement of placeholders in the final string</li>
+ * </ul>
+ *
+ * <p>Unresolvable macros are left intact in the output string, ensuring safe and
+ * fail-tolerant rendering behavior.
+ *
+ * @see Replacer
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap
+ */
 public class MacroReplacer implements Replacer
 {
 	private final Resolver resolver;
 	private final Matcher placeholderMatcher;
 
+	/**
+	 * Pattern used to match fully qualified macro placeholders (e.g., {@code %ITEM.NAME_SINGULAR%})
+	 * for the purpose of final string replacement.
+	 */
 	public static final Pattern FULL_KEY_PATTERN = Pattern.compile(
 			Pattern.quote(Delimiter.OPEN.toString())
 					+ "(\\p{Lu}[\\p{Alnum}_.]+)"
 					+ Pattern.quote(Delimiter.CLOSE.toString()));
 
+
+	/**
+	 * Pattern used to match base macro keys (e.g., {@code %ITEM%}) for macro resolution via the {@link Resolver}.
+	 * <p>
+	 * This pattern determines which objects should be passed to the resolver to populate
+	 * values for all matching derived keys.
+	 */
 	public static final Pattern BASE_KEY_PATTERN = Pattern.compile(
 			Pattern.quote(Delimiter.OPEN.toString())
 					+ "(\\p{Lu}[\\p{Alnum}_]+)[\\p{Alnum}_.]*"
 					+ Pattern.quote(Delimiter.CLOSE.toString()));
 
 
-
 	/**
-	 * Class constructor
+	 * Constructs a {@code MacroReplacer} with the given resolver and placeholder matcher.
 	 *
-	 * @param resolver resolver instance
-	 * @param placeholderMatcher placeholder matcher instance
+	 * @param resolver the macro resolver responsible for producing string values for each macro
+	 * @param placeholderMatcher the matcher used to identify macro patterns in message strings
 	 */
 	public MacroReplacer(final Resolver resolver, final Matcher placeholderMatcher)
 	{
@@ -58,11 +90,21 @@ public class MacroReplacer implements Replacer
 
 
 	/**
-	 * Replace macros in a message to be sent
+	 * Replaces all macro placeholders found in the given message string using the provided
+	 * {@link MacroObjectMap}.
 	 *
-	 * @param macroObjectMap the context map containing other objects whose values may be retrieved
-	 * @param messageString the message with placeholders to be replaced by macro values
-	 * @return the string with all macro replacements performed
+	 * <p>The replacement process is performed in two stages:
+	 * <ol>
+	 *   <li>Extract base macro keys from the string using {@linkplain #BASE_KEY_PATTERN}</li>
+	 *   <li>Resolve and populate a {@link MacroStringMap} with string values</li>
+	 *   <li>Substitute each matching placeholder using {@linkplain #FULL_KEY_PATTERN}</li>
+	 * </ol>
+	 *
+	 * <p>If a macro cannot be resolved, it is left in-place as its original placeholder form.
+	 *
+	 * @param macroObjectMap a map of macro keys to context objects used for resolution
+	 * @param messageString the input string containing macro placeholders (may be {@code null})
+	 * @return the final formatted message with macros replaced
 	 */
 	@Override
 	public String replace(final MacroObjectMap macroObjectMap, final String messageString)

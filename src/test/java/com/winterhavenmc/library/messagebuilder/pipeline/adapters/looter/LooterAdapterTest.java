@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 
-import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -46,7 +46,7 @@ public class LooterAdapterTest
 	class TestObject implements Lootable
 	{
 		@Override
-		public AnimalTamer getLooter()
+		public Entity getLooter()
 		{
 			return playerMock;
 		}
@@ -61,7 +61,7 @@ public class LooterAdapterTest
 
 		// Act
 		Optional<Lootable> adapter = new LooterAdapter().adapt(testObject);
-		Optional<AnimalTamer> looter = adapter.map(Lootable::getLooter);
+		Optional<Entity> looter = adapter.map(Lootable::getLooter);
 
 		// Assert
 		assertTrue(looter.isPresent());

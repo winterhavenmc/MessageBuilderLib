@@ -44,10 +44,10 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.Identifia
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameable;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 
 import org.bukkit.Location;
@@ -60,6 +60,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -246,7 +247,7 @@ class FieldExtractorTest
 		class TestObject implements Killable
 		{
 			@Override
-			public AnimalTamer getKiller()
+			public Entity getKiller()
 			{
 				return playerMock;
 			}
@@ -370,7 +371,7 @@ class FieldExtractorTest
 		class TestObject implements Lootable
 		{
 			@Override
-			public AnimalTamer getLooter() { return playerMock; }
+			public Entity getLooter() { return playerMock; }
 		}
 
 		MacroKey subKey = baseKey.append(LOOTER).orElseThrow();

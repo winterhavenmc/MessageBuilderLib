@@ -35,19 +35,41 @@ import java.util.stream.Stream;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.ADAPTER;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
 /**
- * Registry of adapters provides cache of built-in and plugin registered adapters.
- * Lazy loading of adapters is provided by computeIfAbsent method.
+ * Maintains an ordered registry of all {@link Adapter} instances available to the macro resolution pipeline.
+ *
+ * <p>This registry is responsible for:
+ * <ul>
+ *   <li>Registering built-in adapters at construction time, in a defined priority order</li>
+ *   <li>Allowing additional plugin-defined adapters to be registered at runtime</li>
+ *   <li>Providing a filtered stream of adapters that support a given object type</li>
+ * </ul>
+ *
+ * <p>Adapters are evaluated in the order they are registered, ensuring predictable
+ * precedence when multiple adapters populate the same macro keys. The first adapter to
+ * return a value for a given key wins, and later adapters cannot overwrite it.
+ *
+ * <p>This allows plugin developers and library consumers to control the resolution order by
+ * selectively registering their own adapters before or after the built-in set.
+ *
+ * @see Adapter
+ * @see AdapterContextContainer
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver CompositeResolver
  */
 public class AdapterRegistry
 {
 	private final List<Adapter> adapters = new ArrayList<>();
 
 
+	/**
+	 * Constructs an {@code AdapterRegistry} and registers all built-in adapters in preferred priority order.
+	 *
+	 * @param ctx a context container providing shared utilities to each adapter
+	 */
 	public AdapterRegistry(final AdapterContextContainer ctx)
 	{
 		// Register adapters in preferred priority order
@@ -66,6 +88,16 @@ public class AdapterRegistry
 	}
 
 
+	/**
+	 * Registers a new {@link Adapter} into the registry.
+	 *
+	 * <p>Adapters are added to the end of the internal list and evaluated in the order
+	 * they were registered. It is the caller's responsibility to ensure adapters are registered
+	 * in a preferred resolution priority.
+	 *
+	 * @param adapter the adapter to register
+	 * @throws NullPointerException if the adapter is {@code null}
+	 */
 	public final void register(final Adapter adapter)
 	{
 		validate(adapter, Objects::isNull, throwing(PARAMETER_NULL, ADAPTER));
@@ -74,7 +106,13 @@ public class AdapterRegistry
 
 
 	/**
-	 * Returns all adapters that support the given value (based on instanceof checks inside each adapter).
+	 * Returns a stream of all registered {@link Adapter} instances that support the given object.
+	 *
+	 * <p>Each adapter is evaluated in order, and only those for which
+	 * {@link Adapter#supports(Object)} returns {@code true} are included in the result.
+	 *
+	 * @param object the object to test for adapter support
+	 * @return a stream of supporting adapters, or an empty stream if the object is {@code null}
 	 */
 	public Stream<Adapter> getMatchingAdapters(final Object object)
 	{

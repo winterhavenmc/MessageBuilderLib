@@ -22,15 +22,23 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import java.util.Optional;
 
 /**
- * Adapts a class that contains an Instant and an appropriate accessor method
+ * An adapter that supports any object implementing the {@link Instantable} interface.
+ *
+ * <p>This adapter enables macro resolution for objects that expose an {@link java.time.Instant}
+ * via the {@code getInstant()} method. It contributes the macro field:
+ * <pre>{@code {OBJECT.INSTANT}}</pre>
+ * to the {@code MacroStringMap} used for message composition and formatting.
+ *
+ * <p>This adapter is automatically registered with the {@code AdapterRegistry} in the core pipeline
+ * and is available for plugin-defined objects that implement the {@code Instantable} interface.
  */
 public class InstantAdapter implements Adapter
 {
 	/**
-	 * Adapt an object to an Optional of Instantable
+	 * Attempts to adapt an object into an {@link Instantable}, if it already implements the interface.
 	 *
 	 * @param obj the object to adapt
-	 * @return {@code Optional<Instantable>} object, or empty Optional if not adaptable
+	 * @return an {@code Optional} containing the adapted {@code Instantable}, or empty if unsupported
 	 */
 	@Override
 	public Optional<Instantable> adapt(final Object obj)

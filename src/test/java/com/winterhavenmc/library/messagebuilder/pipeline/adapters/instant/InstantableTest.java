@@ -19,8 +19,8 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 
 import java.time.Instant;

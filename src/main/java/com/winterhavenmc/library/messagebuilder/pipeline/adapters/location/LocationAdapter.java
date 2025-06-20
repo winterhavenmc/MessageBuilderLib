@@ -27,28 +27,44 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.loot.LootContext;
 
 import java.util.Optional;
 
 
 /**
- * Adapter for {@link Locatable} objects with an associated getLocation. Any object that has a known method
- * for retrieving a {@link Location} will be returned as an Optional Lootable object type, with a
- * {@code getLocation()} method. This method will be mapped to the actual method of the object that returns a
- * {@code Location}, regardless of its real method name. Any object that is not known to have a
- * getLocation will result in an empty {@code Optional} being returned from the {@code asLocatable} method.
+ * Adapter for objects that expose a {@link org.bukkit.Location}, either directly or via a {@link Locatable} interface.
+ *
+ * <p>This adapter provides macro key support for structured location data, including:
+ * <ul>
+ *   <li>{@code %OBJECT.LOCATION%} – the full location string, including world and coordinates</li>
+ *   <li>{@code %OBJECT.LOCATION.WORLD%}, {@code %OBJECT.LOCATION.X%}, {@code Y}, {@code Z} – individual components</li>
+ * </ul>
+ *
+ * <p>The world name is resolved using the
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver}
+ * if Multiverse is installed and enabled, allowing server-defined aliases to appear in resolved messages.
+ *
+ * <p>This adapter supports the following object types:
+ * <ul>
+ *   <li>{@code Locatable} – objects implementing the {@link Locatable} interface</li>
+ *   <li>{@link org.bukkit.entity.Entity}</li>
+ *   <li>{@link org.bukkit.OfflinePlayer}</li>
+ *   <li>{@link org.bukkit.block.Block} and {@link org.bukkit.block.BlockState}</li>
+ *   <li>{@link org.bukkit.block.DoubleChest}</li>
+ *   <li>{@link org.bukkit.inventory.Inventory}</li>
+ *   <li>{@code Raid}</li>
+ *   <li>{@link org.bukkit.Location} itself</li>
+ * </ul>
+ *
+ * <p>Each type is adapted to a {@code Locatable} using a method reference that returns the underlying {@code Location}.
+ *
+ * @see Locatable
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter Adapter
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver
  */
 public class LocationAdapter implements Adapter
 {
-	/**
-	 * Returns an {@link Optional} of {@code Lootable}, or an empty Optional if the passed
-	 * object is not known to have an associated getLocation. The Optional value, if present, implements the
-	 * {@code Lootable} Interface, and is guaranteed to have a {@code getLocation()} method.
-	 *
-	 * @param obj the object being evaluated as being Lootable
-	 * @return an {@code Optional} of the object as a {@code Lootable}, or an empty Optional if the passed
-	 * object does not have a known method of retrieving a getLocation.
-	 */
 	@Override
 	public Optional<Locatable> adapt(final Object obj)
 	{
@@ -62,6 +78,7 @@ public class LocationAdapter implements Adapter
 			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
 			case Inventory inventory -> Optional.of(inventory::getLocation);
 			case Raid raid -> Optional.of(raid::getLocation);
+			case LootContext lootContext -> Optional.of(lootContext::getLocation);
 			case Location location -> Optional.of(location::clone);
 			case null, default -> Optional.empty();
 		};

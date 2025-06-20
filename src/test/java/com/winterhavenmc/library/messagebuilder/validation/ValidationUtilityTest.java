@@ -19,9 +19,6 @@ package com.winterhavenmc.library.messagebuilder.validation;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Locale;
-
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -30,25 +27,25 @@ class ValidationUtilityTest
 	@Test
 	void testFormatMessage()
 	{
-		String result = formatMessage(ErrorMessageKey.PARAMETER_NULL, Parameter.RECIPIENT);
+		String result = Validator.formatMessage(ErrorMessageKey.PARAMETER_NULL, Parameter.RECIPIENT);
 
 		assertEquals("The parameter 'recipient' cannot be null.", result);
 	}
 
 
-	@Test
-	void testGetConfiguredLocale()
-	{
-		Locale result = getConfiguredLocale();
-
-		assertEquals(Locale.getDefault(), result);
-	}
+//	@Test
+//	void testGetConfiguredLocale()
+//	{
+//		Locale result = getConfiguredLocale();
+//
+//		assertEquals(Locale.getDefault(), result);
+//	}
 
 
 	@Test
 	void testBundleName()
 	{
-		assertEquals("exception.messages", BUNDLE_NAME);
+		assertEquals("exception.messages", Validator.BUNDLE_NAME);
 	}
 
 }

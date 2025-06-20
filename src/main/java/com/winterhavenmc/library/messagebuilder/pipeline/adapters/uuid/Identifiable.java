@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,21 +28,32 @@ import java.util.UUID;
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
 
 /**
- * An interface that describes objects
- * that have a {@code getUniqueId()}
- * method that returns a valid UUID.
+ * Represents an object that exposes a unique {@link UUID}.
+ *
+ * <p>Implementations of this interface contribute a {@code {OBJECT.UUID}} macro to the
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap}, allowing the UUID
+ * of the object to be used in dynamically composed messages.</p>
+ *
+ * <p>This is especially useful for identifying objects such as players, entities, or worlds,
+ * where the UUID serves as a persistent and unique reference.</p>
  */
 @FunctionalInterface
 public interface Identifiable
 {
+	/**
+	 * Returns the unique ID for this object.
+	 *
+	 * @return a UUID that uniquely identifies this object
+	 */
 	UUID getUniqueId();
 
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from an Identifiable type
+	 * Extracts a macro string map containing the UUID field.
 	 *
-	 * @param baseKey      the top level key for the fields of this object
-	 * @return a MacroStringMap containing the fields extracted for objects of Identifiable type
+	 * @param baseKey the top-level macro key
+	 * @param ctx     the adapter context
+	 * @return a {@code MacroStringMap} with the UUID value formatted as a string
 	 */
 	default MacroStringMap extractUid(final MacroKey baseKey, final AdapterContextContainer ctx)
 	{
@@ -54,10 +65,10 @@ public interface Identifiable
 
 
 	/**
-	 * Default method that returns a formatted string of a uuid
+	 * Returns an optional string representation of a UUID.
 	 *
-	 * @return {@code Optional<String>} containing a formatted String of a uuid,
-	 * or an empty Optional if not found
+	 * @param uniqueId the UUID to format
+	 * @return an {@code Optional<String>} if the UUID is non-null
 	 */
 	static Optional<String> formatUid(final UUID uniqueId)
 	{

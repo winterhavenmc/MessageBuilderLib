@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.location;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import org.bukkit.Location;
 
@@ -30,17 +30,37 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 
 
 /**
- * An interface that describes objects that have a {@code getLocation()} method
- * that returns a {@link Location}.
+ * Represents an object that has a {@link org.bukkit.Location}, which can be extracted
+ * and used for macro substitution in messages.
+ *
+ * <p>This interface is used by the {@link LocationAdapter}
+ * to extract structured location data for use in messages. It supports both full string representations and
+ * granular subfields such as world name and block coordinates.
+ *
+ * <p>Any plugin-defined object can implement this interface to automatically enable macro expansion of the form:
+ * <ul>
+ *   <li>{@code {OBJECT.LOCATION}} – full formatted location string</li>
+ *   <li>{@code {OBJECT.LOCATION.WORLD}} – world name (optionally aliased by Multiverse)</li>
+ *   <li>{@code {OBJECT.LOCATION.X}}, {@code {OBJECT.LOCATION.Y}, {OBJECT.LOCATION.Z}} – localized coordinate values</li>
+ * </ul>
+ *
+ * <p>The resulting macro values are extracted via {@link #extractLocation(MacroKey, AdapterContextContainer)}.
+ * This method is used internally by the MessageBuilder pipeline and should not need to be called directly.
  */
 @FunctionalInterface
 public interface Locatable
 {
+	/**
+	 * Returns the Bukkit {@link Location} associated with this object.
+	 *
+	 * @return the location of the object, or {@code null} if none exists
+	 */
 	Location getLocation();
 
 
 	/**
-	 * Enumeration of subfields for {@code Location}
+	 * Enumeration of subfields extractable from a {@link Location}.
+	 * These correspond to macro keys used in message templates.
 	 */
 	enum Field
 	{
@@ -49,11 +69,18 @@ public interface Locatable
 
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from a Durationable type
+	 * Extracts macro key-value pairs representing location data from this object.
+	 * <p>
+	 * The returned {@link MacroStringMap} may contain:
+	 * <ul>
+	 *   <li>{@code LOCATION} – formatted string of world name and coordinates</li>
+	 *   <li>{@code LOCATION.WORLD} – resolved world name (Multiverse alias if available)</li>
+	 *   <li>{@code LOCATION.X}, {@code Y}, {@code Z} – localized block coordinates</li>
+	 * </ul>
 	 *
-	 * @param baseKey the top level key for the fields of this object
-	 * @param ctx context container with the number formatter to be used to convert coordinate numbers to a localized String
-	 * @return a MacroStringMap containing the fields extracted for objects of Durationable type
+	 * @param baseKey the top-level macro key associated with this object
+	 * @param ctx a container providing access to formatters and world name resolution
+	 * @return a {@code MacroStringMap} containing extracted location-related macro keys
 	 */
 	default MacroStringMap extractLocation(final MacroKey baseKey, final AdapterContextContainer ctx)
 	{
@@ -80,6 +107,17 @@ public interface Locatable
 	}
 
 
+	/**
+	 * Resolves the name of the world for the given {@link Location}.
+	 * <p>
+	 * If Multiverse is installed and enabled, this method may return an alias
+	 * rather than the raw world name.
+	 *
+	 * @param location the Bukkit location
+	 * @param ctx the context container with the
+	 * {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver}
+	 * @return an optional world name, or empty if it could not be resolved
+	 */
 	static Optional<String> getLocationWorldName(final Location location, final AdapterContextContainer ctx)
 	{
 		return (location != null && location.getWorld() != null && !location.getWorld().getName().isBlank())
@@ -89,11 +127,14 @@ public interface Locatable
 
 
 	/**
-	 * Returns a formatted string representing a duration of time, using the supplied DurationFormatter
+	 * Produces a formatted string representation of the given location,
+	 * consisting of the world name followed by localized coordinates.
 	 *
-	 * @param location the object that conforms to the Expirable interface by including a getExpiration() method
-	 * @param ctx the number formatter to be used to convert the location coordinates to localized Strings
-	 * @return a formatted String representing the location of the Locatable conforming object
+	 * <p>Example output: {@code world [123, 64, -512]}
+	 *
+	 * @param location the location to format
+	 * @param ctx the context container with the number formatter and world name resolver
+	 * @return an {@code Optional<String>} containing the formatted location, or empty if the location is {@code null}
 	 */
 	static Optional<String> formatLocation(final Location location, final AdapterContextContainer ctx)
 	{

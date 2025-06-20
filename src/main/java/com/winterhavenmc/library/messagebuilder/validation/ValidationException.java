@@ -17,15 +17,43 @@
 
 package com.winterhavenmc.library.messagebuilder.validation;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.formatMessage;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.formatMessage;
 
 
+/**
+ * Thrown to indicate that a parameter validation has failed.
+ * <p>
+ * This exception supports localized error messages using the provided
+ * {@link ErrorMessageKey} and {@link Parameter}, and is typically thrown
+ * via static methods in {@link Validator}.
+ * <p>
+ * Unlike {@link IllegalArgumentException}, this class is designed specifically
+ * to support structured, translatable messages in a plugin context.
+ *
+ * <p>
+ * The message string is generated using {@link Validator#formatMessage(ErrorMessageKey, Parameter)},
+ * and may vary depending on the configured locale.
+ *
+ * @see ErrorMessageKey
+ * @see Parameter
+ * @see Validator
+ */
 public class ValidationException extends IllegalArgumentException
 {
 	private final ErrorMessageKey errorMessageKey;
 	private final Parameter parameter;
 
 
+	/**
+	 * Constructs a new {@code ValidationException} with the specified
+	 * {@link ErrorMessageKey} and {@link Parameter} describing the failed validation.
+	 * <p>
+	 * The exception message is immediately formatted using the current
+	 * locale returned by {@link ValidationContext#getLocale()}.
+	 *
+	 * @param errorMessageKey a structured key identifying the error message template
+	 * @param parameter the parameter that failed validation
+	 */
 	public ValidationException(final ErrorMessageKey errorMessageKey, final Parameter parameter)
 	{
 		super(formatMessage(errorMessageKey, parameter));
@@ -34,6 +62,13 @@ public class ValidationException extends IllegalArgumentException
 	}
 
 
+	/**
+	 * Returns the localized message for this validation exception.
+	 * The message is re-formatted on each call to reflect any changes
+	 * in the active locale.
+	 *
+	 * @return the localized validation error message
+	 */
 	@Override
 	public String getMessage()
 	{

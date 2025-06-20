@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.Test;

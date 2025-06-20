@@ -18,8 +18,9 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
@@ -31,7 +32,7 @@ import java.util.Optional;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.FORMATTER_CONTAINER;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
@@ -41,7 +42,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  * <p>
  * The {@code AtomicResolver} is typically used as the final step in a resolution chain,
  * after more complex resolvers (such as {@link CompositeResolver}) have had a chance
- * to handle structured objects. It processes values such as {@link String}, {@link Number},
+ * to handle structured objects. It processes values such as {@link Boolean}, {@link String}, {@link Number},
  * {@link Duration}, and other primitive or directly representable types.
  * <p>
  * Formatting is applied for supported types:
@@ -106,7 +107,7 @@ public class AtomicResolver implements Resolver
 	{
 		return switch (value)
 		{
-			// case Boolean bool -> result.putIfAbsent(macroKey, bool.toString());
+			case Boolean bool -> Optional.of(bool.toString());
 			case String string -> Optional.of(string);
 			case Number number -> Optional.of(localeNumberFormatter.getFormatted(number));
 			case Duration duration -> Optional.of(durationFormatter.format(duration, ChronoUnit.SECONDS));

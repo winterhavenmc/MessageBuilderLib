@@ -18,17 +18,38 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
+import org.bukkit.loot.LootContext;
 
 import java.util.Optional;
 
 
+/**
+ * Adapter that converts supported objects into the {@link Lootable} interface for macro resolution.
+ *
+ * <p>This adapter is designed to identify the entity who is entitled to loot a container or object,
+ * not necessarily one who has already looted it. It is useful for generating access-related
+ * messages such as "Only {OBJECT.LOOTER} may open this chest."
+ *
+ * <p>Supports:
+ * <ul>
+ *   <li>Objects explicitly implementing {@link Lootable}</li>
+ *   <li>{@link LootContext} via its {@code getKiller()} method</li>
+ * </ul>
+ */
 public class LooterAdapter implements Adapter
 {
+	/**
+	 * Attempts to adapt an object into a {@link Lootable}.
+	 *
+	 * @param obj the object to adapt
+	 * @return an {@code Optional<Lootable>} if supported, or empty otherwise
+	 */
 	public Optional<Lootable> adapt(final Object obj)
 	{
 		return switch (obj)
 		{
 			case Lootable lootable -> Optional.of(lootable);
+			case LootContext lootContext -> Optional.of(lootContext::getKiller);
 			case null, default -> Optional.empty();
 		};
 	}

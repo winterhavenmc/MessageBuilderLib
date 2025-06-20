@@ -27,7 +27,8 @@ import com.winterhavenmc.library.messagebuilder.resources.configuration.LocalePr
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.validation.ValidationContext;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.library.time.Tick;
 
@@ -42,7 +43,7 @@ import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
@@ -102,7 +103,9 @@ public final class MessageBuilder
 						   final ConstantResolver constantResolver,
 	                       final MessagePipeline messagePipeline)
 	{
-		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, LocaleProvider.create(plugin).getLocale());
+		LocaleProvider localeProvider = LocaleProvider.create(plugin);
+		ValidationContext.initialize(LocaleProvider.create(plugin));
+		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, localeProvider.getLocale());
 
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;

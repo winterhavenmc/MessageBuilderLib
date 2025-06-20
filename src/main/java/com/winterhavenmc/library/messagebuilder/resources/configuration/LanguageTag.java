@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.STRING_BLANK;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LANGUAGE_TAG;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 import static java.util.Locale.forLanguageTag;

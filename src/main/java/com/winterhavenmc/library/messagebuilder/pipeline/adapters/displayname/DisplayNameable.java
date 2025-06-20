@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -30,22 +30,47 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 
 
 /**
- * An interface that describes objects that have a {@code getDisplayName()}
- * method that returns a valid display name as a string.
+ * An interface representing objects that expose a <i>display name</i> for macro replacement.
+ *
+ * <p>Implementing this interface allows objects to automatically contribute to the
+ * {@code {OBJECT.DISPLAY_NAME}} placeholder replacement in localized message strings.
+ * The extracted value is validated to ensure it is non-null and non-blank.
+ *
+ * <p>This interface is primarily used by the {@link DisplayNameAdapter} and is supported
+ * out of the box for Bukkit {@link org.bukkit.entity.Player}, {@link org.bukkit.Nameable},
+ * and {@link org.bukkit.World} types.
+ *
+ * <p>Plugins can also implement this interface on custom types to enable automatic
+ * macro support for display names.
+ *
+ * @see DisplayNameAdapter
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter Adapter
  */
 @FunctionalInterface
 public interface DisplayNameable
 {
+	/**
+	 * Returns the display name associated with this object.
+	 *
+	 * @return a string representing the display name, or {@code null} if not available
+	 */
 	String getDisplayName();
 
+
+	/**
+	 * A predicate used to validate that a display name is non-null and non-blank.
+	 */
 	Predicate<String> VALID_DISPLAY_NAME = displayName -> displayName != null && !displayName.isBlank();
 
 
 	/**
-	 * Retrieve MacroStringMap with fields populated for objects that have a display name field or equivalent
+	 * Extracts a {@link MacroStringMap} containing the formatted display name
+	 * under the {@code DISPLAY_NAME} subkey of the given base key.
 	 *
-	 * @param baseKey the base macro key for the object
-	 * @return MacroStringMap of macro keys with extracted string values
+	 * @param baseKey the root macro key from which to derive the full macro path
+	 * @param ctx     the adapter context containing any contextual helpers
+	 * @return a {@code MacroStringMap} containing a single entry for the display name,
+	 * or an empty map if the name is invalid or the key cannot be derived
 	 */
 	default MacroStringMap extractDisplayName(final MacroKey baseKey, final AdapterContextContainer ctx)
 	{
@@ -57,9 +82,10 @@ public interface DisplayNameable
 
 
 	/**
-	 * Retrieve {@code Optional<String>} of valid display name for DisplayNameable implementing object
+	 * Attempts to format and return a display name if valid.
 	 *
-	 * @return {@code Optional<String>} of a valid display name, or an empty Optional if no valid display name found
+	 * @param displayName the raw display name string
+	 * @return an optional containing the display name if valid, or empty otherwise
 	 */
 	static Optional<String> formatDisplayName(final String displayName)
 	{

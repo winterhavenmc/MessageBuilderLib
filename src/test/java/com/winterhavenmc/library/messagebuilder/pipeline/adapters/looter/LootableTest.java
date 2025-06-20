@@ -19,9 +19,9 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
-import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -47,7 +47,7 @@ class LootableTest
 	class TestObject implements Lootable
 	{
 		@Override
-		public AnimalTamer getLooter()
+		public Entity getLooter()
 		{
 			return playerMock;
 		}
@@ -66,13 +66,13 @@ class LootableTest
 
 
 	@Test
-	void getLooter_returns_AnimalTamer()
+	void getLooter_returns_Entity()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
-		AnimalTamer result = testObject.getLooter();
+		Entity result = testObject.getLooter();
 
 		// Assert
 		assertEquals(playerMock, result);
@@ -113,22 +113,6 @@ class LootableTest
 
 
 	@Test
-	void formatLooter_with_null_name_returns_optional_UNKNOWN_VLAUE()
-	{
-		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
-		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn(null);
-
-		// Act
-		Optional<String> result = Lootable.formatLooter(playerMock);
-
-		// Assert
-		assertEquals(Optional.empty(), result);
-	}
-
-
-	@Test
 	void formatLooter_with_blank_name_returns_optional_UNKNOWN_VALUE()
 	{
 		// Arrange
@@ -149,7 +133,6 @@ class LootableTest
 	{
 		// Arrange
 		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
-		TestObject testObject = new TestObject();
 
 		// Act
 		Optional<String> result = Lootable.formatLooter(null);

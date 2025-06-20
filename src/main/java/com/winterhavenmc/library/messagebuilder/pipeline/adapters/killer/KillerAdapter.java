@@ -18,17 +18,40 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.loot.LootContext;
 
 import java.util.Optional;
 
 
+/**
+ * Adapter that maps supported objects to the {@link Killable} interface for macro extraction.
+ *
+ * <p>This adapter enables the use of the {@code {OBJECT.KILLER}} macro by wrapping objects
+ * that can report who killed them. This includes:
+ * <ul>
+ *   <li>Custom plugin-defined objects implementing {@link Killable}</li>
+ *   <li>{@link LivingEntity} types from Bukkit, where {@code getKiller()} is available</li>
+ * </ul>
+ *
+ * <p>This adapter is commonly used to generate messages about deaths, such as kill feeds
+ * or death chest logs.
+ */
 public class KillerAdapter implements Adapter
 {
+	/**
+	 * Attempts to adapt an object to the {@link Killable} interface.
+	 *
+	 * @param obj the object to adapt
+	 * @return an {@code Optional<Killable>} if supported, otherwise empty
+	 */
 	public Optional<Killable> adapt(final Object obj)
 	{
 		return switch (obj)
 		{
 			case Killable killable -> Optional.of(killable);
+			case LivingEntity livingEntity -> Optional.of(livingEntity::getKiller);
+			case LootContext lootContext -> Optional.of(lootContext::getKiller);
 			case null, default -> Optional.empty();
 		};
 	}

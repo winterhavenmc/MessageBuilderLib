@@ -44,6 +44,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdA
 
 import org.bukkit.Location;
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
@@ -179,7 +180,7 @@ class AdapterRegistryTest
 		class SampleEntity implements Killable
 		{
 			@Override
-			public AnimalTamer getKiller()
+			public Entity getKiller()
 			{
 				return playerMock;
 			}
@@ -225,7 +226,7 @@ class AdapterRegistryTest
 		class SampleEntity implements Lootable
 		{
 			@Override
-			public AnimalTamer getLooter()
+			public Entity getLooter()
 			{
 				return playerMock;
 			}

@@ -19,9 +19,25 @@ package com.winterhavenmc.library.messagebuilder.resources.configuration;
 
 
 /**
- * Generic provider for configuration settings
+ * Represents a functional interface for retrieving dynamic configuration values.
+ * <p>
+ * A {@code ConfigProvider} wraps a {@link java.util.function.Supplier Supplier}, enabling
+ * deferred and always up-to-date access to individual settings defined in the plugin’s
+ * {@code config.yml} file.
+ * </p>
  *
- * @param <T>
+ * <p>
+ * Typical usage includes injecting implementations such as {@code LanguageProvider}
+ * or {@code LocaleProvider} into dependent classes that require access to language
+ * tags, locales, or other server-defined options.
+ * </p>
+ *
+ * <p>
+ * This abstraction decouples configuration access from implementation details,
+ * promoting testability and runtime flexibility.
+ * </p>
+ *
+ * @param <T> the type of the configuration value provided
  */
 @FunctionalInterface
 public interface ConfigProvider<T>

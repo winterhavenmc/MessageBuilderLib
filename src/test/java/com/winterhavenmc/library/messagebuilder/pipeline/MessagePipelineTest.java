@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetriever;

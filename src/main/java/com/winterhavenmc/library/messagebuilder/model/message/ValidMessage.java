@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.model.message;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroObjectMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
@@ -34,11 +34,28 @@ import java.util.Objects;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.logging;
-import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.logging;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
+/**
+ * A concrete implementation of {@link Message} representing a fully constructed,
+ * resolvable, and sendable message.
+ * <p>
+ * This class encapsulates all components required to render and dispatch a message:
+ * <ul>
+ *   <li>A {@link com.winterhavenmc.library.messagebuilder.model.recipient.Recipient.Sendable recipient}</li>
+ *   <li>A {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey messageKey} identifying the template</li>
+ *   <li>A {@link com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline} to handle rendering and delivery</li>
+ *   <li>A {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap macro object map}
+ *       holding values to be substituted into the message</li>
+ * </ul>
+ * The recipient is also automatically added as a macro object under the key {@code %RECIPIENT%}.
+ *
+ * @see Message
+ * @see com.winterhavenmc.library.messagebuilder.MessageBuilder MessageBuilder
+ */
 public final class ValidMessage implements Message
 {
 	private final static String RECIPIENT_KEY = "RECIPIENT";
@@ -69,15 +86,6 @@ public final class ValidMessage implements Message
 	}
 
 
-	/**
-	 * set macro for message replacements
-	 *
-	 * @param macro token for placeholder
-	 * @param value object that contains value that will be substituted in message
-	 * @param <K> type parameter for key
-	 * @param <V> type parameter for value
-	 * @return this message object with macro value set in map
-	 */
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(final K macro,
 												   final V value)
@@ -89,16 +97,6 @@ public final class ValidMessage implements Message
 	}
 
 
-	/**
-	 * set macro for message replacements, with a corresponding quantity
-	 *
-	 * @param quantity an integer representing a quantity associated with the macro value
-	 * @param macro token for placeholder
-	 * @param value object that contains value that will be substituted in message
-	 * @param <K> type parameter for key
-	 * @param <V> type parameter for value
-	 * @return this message object with macro value set in object map
-	 */
 	@Override
 	public <K extends Enum<K>, V> Message setMacro(final int quantity,
 												   final K macro,
@@ -113,15 +111,6 @@ public final class ValidMessage implements Message
 	}
 
 
-	/**
-	 * set macro for message replacements, with a duration and lower bound
-	 *
-	 * @param macro token for placeholder
-	 * @param duration a duration
-	 * @param lowerBound a lower bound, represented by a ChronoUnit
-	 * @param <K> type parameter for enum derived macro key
-	 * @return this message object with macro value set in object map
-	 */
 	@Override
 	public <K extends Enum<K>> Message setMacro(final K macro,
 												final Duration duration,
@@ -139,9 +128,6 @@ public final class ValidMessage implements Message
 	}
 
 
-	/**
-	 * Final step of message builder, performs replacements and sends message to recipient
-	 */
 	@Override
 	public void send()
 	{
@@ -149,11 +135,6 @@ public final class ValidMessage implements Message
 	}
 
 
-	/**
-	 * Accessor method for message key
-	 *
-	 * @return {@code RecordKey} the unique message identifier
-	 */
 	@Override
 	public RecordKey getMessageKey()
 	{
@@ -161,11 +142,6 @@ public final class ValidMessage implements Message
 	}
 
 
-	/**
-	 * Accessor method for recipient
-	 *
-	 * @return {@code Valid} the message recipient
-	 */
 	@Override
 	public Recipient.Sendable getRecipient()
 	{
@@ -173,11 +149,6 @@ public final class ValidMessage implements Message
 	}
 
 
-	/**
-	 * Accessor method for macroObjectMap that contains macro key/value pairs for the message
-	 *
-	 * @return the context map for the message
-	 */
 	@Override
 	public MacroObjectMap getObjectMap()
 	{

@@ -24,6 +24,27 @@ import java.time.Duration;
 import java.util.Optional;
 
 
+/**
+ * A validated, immutable {@link MessageRecord} representing a single entry from the
+ * {@code MESSAGES} section of a language YAML file.
+ * <p>
+ * This record contains the full structure of a templated message, including:
+ * <ul>
+ *   <li>A unique {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey}</li>
+ *   <li>A plain-text message body (with placeholders)</li>
+ *   <li>Optional title and subtitle text</li>
+ *   <li>Title animation parameters (fade-in, stay, fade-out durations)</li>
+ *   <li>An optional repeat delay for scheduled messages</li>
+ * </ul>
+ * <p>
+ * This class is created via the {@link #create(RecordKey, ConfigurationSection)} factory method,
+ * which performs all necessary validation and applies default values where appropriate. Once constructed,
+ * instances are considered safe and complete and can be used without additional checks.
+ *
+ * @see MessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
+ */
 public final class ValidMessageRecord implements MessageRecord
 {
 	private final RecordKey key;
@@ -38,8 +59,9 @@ public final class ValidMessageRecord implements MessageRecord
 
 
 	/**
-	 * A data object record for message information contained in the language file. This class also contains
-	 * an enum of fields with their corresponding path key, and a static method for retrieving a record.
+	 * Constructs a {@code ValidMessageRecord} from fully parsed and validated data fields.
+	 * <p>
+	 * Use {@link #create(RecordKey, ConfigurationSection)} to construct new instances.
 	 *
 	 * @param key the key for the message
 	 * @param enabled the enabled setting for the message
@@ -61,7 +83,6 @@ public final class ValidMessageRecord implements MessageRecord
 							   int titleFadeOut,
 							   String subtitle)
 	{
-		// replace any null strings with blank strings
 		this.key = key;
 		this.enabled = enabled;
 		this.message = message;
@@ -74,6 +95,16 @@ public final class ValidMessageRecord implements MessageRecord
 	}
 
 
+	/**
+	 * Creates a {@code ValidMessageRecord} from a YAML configuration section.
+	 * <p>
+	 * All expected fields are validated or defaulted according to their definitions
+	 * in {@link MessageRecord.Field}. If a field is missing, a sensible default is applied.
+	 *
+	 * @param key the record key representing this message
+	 * @param section the configuration section containing the message definition
+	 * @return a new, fully validated {@code ValidMessageRecord}
+	 */
 	public static ValidMessageRecord create(final RecordKey key, final ConfigurationSection section)
 	{
 		return new ValidMessageRecord(key,
@@ -89,12 +120,15 @@ public final class ValidMessageRecord implements MessageRecord
 
 
 	/**
-	 * Create a duplicate record with the final message string fields populated
+	 * Creates a {@link FinalMessageRecord} using the current record data,
+	 * combined with finalized message, title, and subtitle strings after macro resolution.
+	 * <p>
+	 * This is typically used as the last step in the message pipeline before dispatch.
 	 *
-	 * @param finalMessageString final message string
-	 * @param finalTitleString final title string
-	 * @param finalSubTitleString final subtitle string
-	 * @return a new {@code ValidMessageRecord} with the final message string fields populated
+	 * @param finalMessageString the resolved chat message string
+	 * @param finalTitleString the resolved title string
+	 * @param finalSubTitleString the resolved subtitle string
+	 * @return a {@link FinalMessageRecord} that includes the resolved strings
 	 */
 	public FinalMessageRecord withFinalStrings(final String finalMessageString,
 											   final String finalTitleString,

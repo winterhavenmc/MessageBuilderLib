@@ -21,8 +21,34 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 
-public record Throwing<T>(Supplier<ValidationException> exceptionSupplier) implements ValidationHandler<T>
+/**
+ * A {@link Validator} implementation that throws a {@link ValidationException}
+ * when a value fails validation.
+ * <p>
+ * The exception is supplied via a {@link java.util.function.Supplier}, allowing
+ * lazy instantiation and support for dynamic message construction.
+ * <p>
+ * The exception's stack trace is reset via {@link Throwable#fillInStackTrace()}
+ * to ensure that the reported call site accurately reflects the point of failure,
+ * rather than the supplier's origin.
+ *
+ * <p>
+ * Typically used via {@link Validator#throwing(ErrorMessageKey, Parameter)}.
+ *
+ * @param <T> the type of the value being validated
+ *
+ * @see Validator
+ * @see ValidationException
+ */
+public record Throwing<T>(Supplier<ValidationException> exceptionSupplier) implements Validator<T>
 {
+    /**
+     * Throws the supplied exception when the value is invalid.
+     *
+     * @param value the invalid value
+     * @return never returns normally
+     * @throws ValidationException always thrown when this handler is invoked
+     */
     @Override
     public Optional<T> handleInvalid(final T value)
     {

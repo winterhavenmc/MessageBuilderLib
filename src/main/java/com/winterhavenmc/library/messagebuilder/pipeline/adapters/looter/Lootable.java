@@ -19,9 +19,10 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -30,17 +31,35 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
 
 
+/**
+ * Represents an object that exposes looter or claimant information for permission or access control.
+ *
+ * <p>This interface is intended for scenarios where an entity (typically a player) has
+ * permission or claim to retrieve or interact with an object, such as a container or reward drop.
+ * It does not imply that looting has already occurred, only that the looter is authorized to do so.
+ *
+ * <p>The looter is expected to be resolvable to a name-compatible {@link AnimalTamer}, such as a
+ * {@link org.bukkit.OfflinePlayer OfflinePlayer} or {@link org.bukkit.entity.Player Player}.
+ *
+ * <p>Macro placeholder resolution supports usage of keys like {@code {OBJECT.LOOTER}}.
+ */
 @FunctionalInterface
 public interface Lootable
 {
-	AnimalTamer getLooter();
+	/**
+	 * Returns the looter or claimant entity who has permission to access the lootable object.
+	 *
+	 * @return the looter as an {@link AnimalTamer}, or {@code null} if unknown
+	 */
+	Entity getLooter();
 
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from a Lootable type
+	 * Extracts the looter's name as a macro replacement field.
 	 *
-	 * @param baseKey the top level key for the fields of this object
-	 * @return a MacroStringMap containing the fields extracted for objects of Lootable type
+	 * @param baseKey the macro key root
+	 * @param ctx the adapter context with formatting support
+	 * @return a {@link MacroStringMap} containing the looter key and value if resolvable
 	 */
 	default MacroStringMap extractLooter(final MacroKey baseKey, final AdapterContextContainer ctx)
 	{
@@ -52,23 +71,22 @@ public interface Lootable
 
 
 	/**
-	 * Predicate to test against null or blank looter name
+	 * Predicate to validate whether a looter has a valid, non-blank name.
 	 */
-	Predicate<AnimalTamer> VALID_LOOTER = looter -> looter != null
-			&& looter.getName() != null
+	Predicate<Entity> VALID_LOOTER = looter -> looter != null
 			&& !looter.getName().isBlank();
 
+
 	/**
-	 * Returns a formatted string of a looter's name
+	 * Formats the looter name for placeholder substitution.
 	 *
-	 * @param looter an OfflinePlayer used as a placeholder
-	 * @return {@code Optional<String>} containing a formatted String of a looter's name,
-	 * or an empty Optional if not found
+	 * @param looter the entity who has permission to loot the object
+	 * @return an {@code Optional<String>} containing the name if valid, otherwise empty
 	 */
-	static Optional<String> formatLooter(final AnimalTamer looter)
+	static Optional<String> formatLooter(final Entity looter)
 	{
 		return (VALID_LOOTER.test(looter))
-				? Optional.ofNullable(looter.getName())
+				? Optional.of(looter.getName())
 				: Optional.empty();
 	}
 

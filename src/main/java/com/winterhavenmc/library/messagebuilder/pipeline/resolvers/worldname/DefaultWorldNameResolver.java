@@ -20,8 +20,27 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 import org.bukkit.World;
 
 
+/**
+ * Default implementation of {@link WorldNameResolver} that returns the raw name
+ * of a {@link org.bukkit.World} using {@code World#getName()}.
+ * <p>
+ * This resolver is used when no aliasing system (such as Multiverse) is available,
+ * or when default Bukkit world names are preferred.
+ * <p>
+ * Example output values include {@code "world"}, {@code "world_nether"}, or
+ * {@code "custom_world"}.
+ *
+ * @see WorldNameResolver
+ * @see org.bukkit.World#getName()
+ */
 public class DefaultWorldNameResolver implements WorldNameResolver
 {
+	/**
+	 * Returns the default Bukkit world name by calling {@link org.bukkit.World#getName()}.
+	 *
+	 * @param world the {@link org.bukkit.World} to resolve a name for
+	 * @return the world's raw name as defined by Bukkit
+	 */
 	@Override
 	public String resolveWorldName(final World world)
 	{

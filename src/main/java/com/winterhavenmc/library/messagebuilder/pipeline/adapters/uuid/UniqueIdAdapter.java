@@ -24,23 +24,39 @@ import org.bukkit.entity.Entity;
 import org.bukkit.profile.PlayerProfile;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
- * Resolver for Identifiable objects with an associated UUID. Any object that has a known method for retrieving
- * a UUID will be returned as an Identifiable object type, with a getUniqueID method. This method will be mapped
- * to the actual method of the object that returns a UUID, regardless of its method name. Any object that is not
- * known to have a UUID will result in an empty {@code Optional} being returned from the asIdentifiable method.
+ * Adapter for identifying objects with a unique {@link UUID}.
+ *
+ * <p>This adapter supports Bukkit types that expose UUIDs directly, including:
+ * <ul>
+ *     <li>{@link org.bukkit.entity.Entity}</li>
+ *     <li>{@link org.bukkit.OfflinePlayer}</li>
+ *     <li>{@link org.bukkit.profile.PlayerProfile}</li>
+ *     <li>{@link org.bukkit.World}</li>
+ * </ul>
+ *
+ * <p>It also supports any object implementing the {@link Identifiable} interface.</p>
  */
 public class UniqueIdAdapter implements Adapter
 {
 	/**
-	 * Static method that returns an object of type Identifiable, or null if the passed object is not known to have
-	 * an associated UUID.
+	 * Attempts to adapt the given object to an {@link Identifiable} instance.
 	 *
-	 * @param obj the object being evaluated as being Identifiable
-	 * @return the object, wrapped in a Identifiable type, with its method to retrieve a UUID mapped to
-	 * the getUniqueId() method of the Identifiable type.
+	 * <p>This method supports the following object types:
+	 * <ul>
+	 *     <li>{@link Identifiable} — returned directly</li>
+	 *     <li>{@link org.bukkit.entity.Entity} — adapts via {@code getUniqueId()}</li>
+	 *     <li>{@link org.bukkit.OfflinePlayer} — adapts via {@code getUniqueId()}</li>
+	 *     <li>{@link org.bukkit.profile.PlayerProfile} — adapts via {@code getUniqueId()}</li>
+	 *     <li>{@link org.bukkit.World} — adapts via {@code getUID()}</li>
+	 * </ul>
+	 *
+	 * @param obj the object to adapt
+	 * @return an {@code Optional} containing an {@code Identifiable} instance if the object is supported;
+	 *         otherwise an empty {@code Optional}
 	 */
 	@Override
 	public Optional<Identifiable> adapt(final Object obj)

@@ -27,23 +27,31 @@ import java.util.Optional;
 
 
 /**
- * Adapter for {@link Quantifiable} objects with an associated quantity. Any object that has a known method
- * for retrieving an {@code int} quantity will be returned as an {@link Optional} {@code Quantifiable} object type,
- * with the assurance of the existence of a {@code getQuantity()} method. This method will be mapped to the actual
- * method of the object that returns an {@code int} quantity, regardless of its real method name. Any object that
- * is not known to have a quantity will result in an empty {@code Optional} being returned from the
- * static {@code asQuantifiable} method.
+ * Adapter implementation for extracting quantity values from supported objects.
+ * <p>
+ * This adapter enables macro substitution for {@code {OBJECT.QUANTITY}} by adapting
+ * known types into {@link Quantifiable} instances. Supported types include:
+ * <ul>
+ *     <li>{@link Quantifiable} — directly implemented by plugins</li>
+ *     <li>{@link ItemStack} — maps to {@code getAmount()}</li>
+ *     <li>{@link Chest} — maps to inventory size via {@code getInventory().getSize()}</li>
+ *     <li>{@link Inventory} — maps to inventory size via {@code getSize()}</li>
+ *     <li>{@link Collection} — maps to {@code size()}</li>
+ * </ul>
+ *
+ * <p>Plugins may implement {@link Quantifiable} directly to add custom macro support
+ * for other object types.
+ *
+ * @see Quantifiable
+ * @see Adapter
  */
 public class QuantityAdapter implements Adapter
 {
 	/**
-	 * Static method that returns an {@link Optional} of {@code Quantifiable}, or an empty {@code Optional} if the passed
-	 * object is not known to have an associated quantity. The {@code Optional} value, if present, implements the
-	 * {@code Quantifiable} Interface, and is guaranteed to have a {@code getQuantity()} method.
+	 * Attempts to adapt the given object into a {@link Quantifiable} instance.
 	 *
-	 * @param obj the object being evaluated as being Quantifiable
-	 * @return an {@code Optional} of the object as a {@code Quantifiable}, or an empty Optional if the passed
-	 * object does not have a known method of retrieving a quantity.
+	 * @param obj the object to adapt
+	 * @return an {@code Optional<Quantifiable>} if the object is supported, otherwise empty
 	 */
 	@Override
 	public Optional<Quantifiable> adapt(final Object obj)

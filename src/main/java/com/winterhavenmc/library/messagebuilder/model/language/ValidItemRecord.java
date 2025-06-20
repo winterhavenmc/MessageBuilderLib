@@ -24,6 +24,22 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.List;
 
 
+/**
+ * A validated, immutable {@link ItemRecord} representing a localized or macro-enabled item
+ * definition loaded from the {@code ITEMS} section of a language YAML file.
+ * <p>
+ * A {@code ValidItemRecord} includes singular and plural display names, optional inventory-specific
+ * name overrides, and a list of lore lines. It also implements {@link Pluralizable} to provide
+ * dynamic name selection based on quantity.
+ *
+ * <p>This class is instantiated using the static {@link #create(RecordKey, ConfigurationSection)} method,
+ * which applies YAML-based parsing and normalization of optional fields.
+ *
+ * @see ItemRecord
+ * @see InvalidItemRecord
+ * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see com.winterhavenmc.library.messagebuilder.util.Pluralizable Pluralizable
+ */
 public final class ValidItemRecord implements ItemRecord, Pluralizable
 {
 	RecordKey key;
@@ -35,15 +51,15 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 
 
 	/**
-	 * A data object record for item information contained in the language file. This class also contains
-	 * an enum of fields with their corresponding path key, and a static method for retrieving a record.
+	 * Constructs a {@code ValidItemRecord} with parsed item metadata.
+	 * This constructor is private; use {@link #create(RecordKey, ConfigurationSection)} instead.
 	 *
-	 * @param key the keyPath in the language file for this record
-	 * @param nameSingular the singular name of this item
-	 * @param namePlural the plural name of this item
-	 * @param inventoryItemSingular the singular inventory name of this item
-	 * @param inventoryItemPlural the plural inventory name of this item
-	 * @param itemLore a List of Strings containing the lines of lore for this item
+	 * @param key the key that uniquely identifies this item record
+	 * @param nameSingular the singular item name
+	 * @param namePlural the plural item name
+	 * @param inventoryItemSingular the inventory-specific singular display name
+	 * @param inventoryItemPlural the inventory-specific plural display name
+	 * @param itemLore the list of lore lines (may be empty but not {@code null})
 	 */
 	private ValidItemRecord(RecordKey key,
 							String nameSingular,
@@ -61,14 +77,40 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	}
 
 
-	public static ValidItemRecord create(RecordKey key, ConfigurationSection itemEntry)
+	/**
+	 * Creates a {@code ValidItemRecord} from a configuration section.
+	 * <p>
+	 * This method parses each field from the YAML structure and wraps the
+	 * result into a validated record. All fields are assumed to be non-null
+	 * if present, and fallback behavior is the caller's responsibility.
+	 *
+	 * @param key the unique identifier for this item
+	 * @param section the configuration section representing the item
+	 * @return a new validated item record
+	 */
+	public static ValidItemRecord create(RecordKey key, ConfigurationSection section)
 	{
 		return new ValidItemRecord(key,
-				itemEntry.getString(Field.NAME_SINGULAR.toKey()),
-				itemEntry.getString(Field.NAME_PLURAL.toKey()),
-				itemEntry.getString(Field.INVENTORY_NAME_SINGULAR.toKey()),
-				itemEntry.getString(Field.INVENTORY_NAME_PLURAL.toKey()),
-				itemEntry.getStringList(Field.LORE.toKey()));
+				section.getString(Field.NAME_SINGULAR.toKey()),
+				section.getString(Field.NAME_PLURAL.toKey()),
+				section.getString(Field.INVENTORY_NAME_SINGULAR.toKey()),
+				section.getString(Field.INVENTORY_NAME_PLURAL.toKey()),
+				section.getStringList(Field.LORE.toKey()));
+	}
+
+
+	/**
+	 * Returns the appropriate name form (singular or plural) based on quantity.
+	 *
+	 * @param quantity the number of items
+	 * @return {@code nameSingular} if quantity is 1; otherwise {@code namePlural}
+	 */
+	@Override
+	public String nameFor(final int quantity)
+	{
+		return (quantity == 1)
+				? nameSingular
+				: namePlural;
 	}
 
 
@@ -88,14 +130,6 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	public String namePlural()
 	{
 		return namePlural;
-	}
-
-	@Override
-	public String nameFor(final int quantity)
-	{
-		return (quantity == 1)
-				? nameSingular
-				: namePlural;
 	}
 
 }

@@ -25,9 +25,18 @@ import java.util.stream.Stream;
 
 
 /**
- * Creates a stream of String containing placeholders from a message String using a regex pattern.
- * Placeholders are enclosed in delimiters, which are removed from the resulting placeholder string,
- * and may contain periods, denoting compound dot-separated keys made of a base key and any number of subkeys.
+ * Default implementation of the {@link Matcher} interface that uses Java’s built-in
+ * {@link java.util.regex.Pattern} and {@link java.util.regex.MatchResult} APIs to extract
+ * macro keys from an input string.
+ *
+ * <p>This class transforms matching groups into {@link com.winterhavenmc.library.messagebuilder.keys.MacroKey}
+ * instances using {@code MacroKey.of(...)}, and silently skips any invalid results.
+ *
+ * <p>It is designed for use in both the resolution and replacement stages of the pipeline,
+ * depending on whether base keys or full macro keys are being matched.
+ *
+ * @see Matcher
+ * @see com.winterhavenmc.library.messagebuilder.keys.MacroKey
  */
 public class PlaceholderMatcher implements Matcher
 {

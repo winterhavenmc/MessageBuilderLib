@@ -21,6 +21,27 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 
+/**
+ * Enumeration representing the classification of a {@link java.time.Duration}
+ * for use in formatting logic and conditional display of duration-related values.
+ *
+ * <p>This type is used to determine how a given duration should be interpreted
+ * when formatting: as a normal value, an "unlimited" sentinel, or a value less than
+ * the minimum precision, such as "less than 1 second".
+ *
+ * <p>Each constant provides a fallback string used in cases where a duration cannot
+ * or should not be formatted using a formatter.
+ *
+ * <ul>
+ *     <li>{@code NORMAL} – a standard positive duration that can be formatted normally.</li>
+ *     <li>{@code LESS_THAN} – a duration shorter than the specified {@link ChronoUnit} precision.</li>
+ *     <li>{@code UNLIMITED} – a negative duration, which is treated as a sentinel for "no limit".</li>
+ * </ul>
+ *
+ * @see java.time.Duration
+ * @see java.time.temporal.ChronoUnit
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter
+ */
 public enum DurationType
 {
 	NORMAL(""),
@@ -30,12 +51,22 @@ public enum DurationType
 	private final String fallback;
 
 
-	DurationType(final String failback)
+	/**
+	 * Constructs a DurationType with a fallback formatting string.
+	 *
+	 * @param fallback the fallback string used in display
+	 */
+	DurationType(final String fallback)
 	{
-		this.fallback = failback;
+		this.fallback = fallback;
 	}
 
 
+	/**
+	 * Returns the fallback string associated with this duration type.
+	 *
+	 * @return a fallback string used for rendering this classification
+	 */
 	String getFallback()
 	{
 		return this.fallback;
@@ -70,12 +101,25 @@ public enum DurationType
 	}
 
 
+	/**
+	 * Checks if the given duration should be treated as "unlimited" (i.e., negative).
+	 *
+	 * @param duration the duration to check
+	 * @return {@code true} if the duration is negative; otherwise {@code false}
+	 */
 	public static boolean isUnlimited(Duration duration)
 	{
 		return duration != null && duration.isNegative();
 	}
 
 
+	/**
+	 * Checks if the given duration is shorter than the provided precision threshold.
+	 *
+	 * @param duration the duration to compare
+	 * @param precision the precision unit used as threshold
+	 * @return {@code true} if duration is non-null, non-negative, and less than 1 {@code precision} unit
+	 */
 	public static boolean isLessThan(Duration duration, ChronoUnit precision)
 	{
 		if (duration == null || precision == null || isUnlimited(duration)) { return false; }

@@ -19,6 +19,26 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
 import org.bukkit.World;
 
+
+/**
+ * Strategy interface for retrieving a user-friendly name for a given {@link org.bukkit.World}.
+ * <p>
+ * This is used to abstract world name resolution logic so that plugins can optionally
+ * integrate with external world-aliasing plugins like <strong>Multiverse</strong>, without
+ * hard dependencies on them.
+ * <p>
+ * Implementations may:
+ * <ul>
+ *   <li>Return the default world name from {@code World#getName()}</li>
+ *   <li>Return an alias or display name from an external plugin such as Multiverse</li>
+ * </ul>
+ * <p>
+ * Used internally by the {@code worldname} macro resolver to substitute values like
+ * {@code {WORLDNAME}} in messages.
+ *
+ * @see org.bukkit.World
+ * @see DefaultWorldNameResolver
+ */
 public interface WorldNameRetriever
 {
 	String getWorldName(World world);

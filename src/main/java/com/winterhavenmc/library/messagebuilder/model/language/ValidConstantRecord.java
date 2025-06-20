@@ -22,12 +22,33 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import java.util.Objects;
 
 
+/**
+ * A validated, immutable {@link ConstantRecord} representing a constant value
+ * loaded from the {@code CONSTANTS} section of a language YAML file.
+ * <p>
+ * A constant may represent a string, number, boolean, or other supported type.
+ * These values are typically referenced using macros in messages (e.g. {@code %SERVER_NAME%}).
+ * <p>
+ * This record is considered safe and complete once constructed, and is created
+ * via the {@link #create(RecordKey, Object)} static factory method.
+ *
+ * @see ConstantRecord
+ * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ */
 public final class ValidConstantRecord implements ConstantRecord
 {
 	private final RecordKey key;
 	private final Object value;
 
 
+	/**
+	 * Constructs a {@code ValidConstantRecord} with the given key and value.
+	 * <p>
+	 * This constructor is private; use {@link #create(RecordKey, Object)} to instantiate.
+	 *
+	 * @param key the unique constant key
+	 * @param value the constant value as loaded from the configuration
+	 */
 	private ValidConstantRecord(final RecordKey key, final Object value)
 	{
 		this.key = key;
@@ -35,6 +56,16 @@ public final class ValidConstantRecord implements ConstantRecord
 	}
 
 
+	/**
+	 * Creates a {@code ValidConstantRecord} from the provided key and value.
+	 * <p>
+	 * This method should be called only after validation, typically from
+	 * {@link ConstantRecord#from(RecordKey, Object)}.
+	 *
+	 * @param key the unique constant key
+	 * @param value the raw value from the YAML configuration
+	 * @return a validated constant record instance
+	 */
 	public static ValidConstantRecord create(final RecordKey key, final Object value)
 	{
 		return new ValidConstantRecord(key, value);
@@ -48,6 +79,14 @@ public final class ValidConstantRecord implements ConstantRecord
 	}
 
 
+	/**
+	 * Returns the raw constant value associated with this record.
+	 * <p>
+	 * The type may vary depending on what was stored in the language configuration.
+	 * It is typically expected to be a {@link String}, {@link Number}, or {@link Boolean}.
+	 *
+	 * @return the constant value
+	 */
 	public Object value()
 	{
 		return this.value;

@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.containers.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter;
 
 import java.time.Duration;
@@ -32,22 +32,61 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
 
 
 /**
- * An interface that can be implemented by any class that contains
- * a duration and appropriately named accessor method
+ * Represents an object that exposes a {@link java.time.Duration}, enabling it to participate
+ * in macro substitution using duration-based placeholders.
+ *
+ * <p>Objects implementing this interface can provide a duration value via {@link #getDuration()},
+ * and automatically extract localized string representations of that duration through the
+ * {@link #extractDuration(MacroKey, ChronoUnit, AdapterContextContainer)} method.
+ *
+ * <p>This interface supports usage in message templates via the {@code %OBJECT.DURATION%} macro.
+ * Formatting is handled by the {@link com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter}
+ * implementation provided in the {@link AdapterContextContainer}.
+ *
+ * <p>Three utility methods are provided:
+ * <ul>
+ *   <li>{@link #extractDuration(MacroKey, ChronoUnit, AdapterContextContainer)} — generates a
+ *       {@link MacroStringMap} with the localized string representation of the duration</li>
+ *   <li>{@link #formatDuration(Duration, ChronoUnit, DurationFormatter)} — formats a duration using
+ *       the configured {@code DurationFormatter}</li>
+ *   <li>{@link #durationUntil(Instant)} — helper for computing the {@code Duration} until a future
+ *       {@link java.time.Instant}</li>
+ * </ul>
+ *
+ * <p>Durations are automatically classified using the {@link com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationType}
+ * enum into:
+ * <ul>
+ *   <li>{@code NORMAL} — durations above 1 unit</li>
+ *   <li>{@code LESS_THAN} — durations under the specified {@link ChronoUnit} lower bound</li>
+ *   <li>{@code UNLIMITED} — negative durations signifying no expiration or restriction</li>
+ * </ul>
+ *
+ * @see java.time.Duration
+ * @see java.time.temporal.ChronoUnit
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter DurationFormatter
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationType DurationType
  */
 @FunctionalInterface
 public interface Durationable
 {
+	/**
+	 * Returns the duration value associated with this object.
+	 *
+	 * @return the duration, or {@code null} if unavailable
+	 */
 	Duration getDuration();
 
 
 	/**
-	 * Returns a new MacroStringMap containing all fields extracted from a Durationable type
+	 * Extracts a {@link MacroStringMap} containing a single entry mapping the provided
+	 * {@link MacroKey} (with {@code .DURATION} appended) to a localized string representation
+	 * of this object's duration.
 	 *
-	 * @param baseKey the top level key for the fields of this object
-	 * @param lowerBound a Temporal unit for use as a lower bound of units displayed
-	 * @param ctx containing durationFormatter the duration formatter to be used to convert the duration to a String
-	 * @return a MacroStringMap containing the fields extracted for objects of Durationable type
+	 * @param baseKey the top-level key to which {@code DURATION} will be appended
+	 * @param lowerBound the smallest {@link ChronoUnit} to display (e.g., {@code MINUTES}, {@code SECONDS})
+	 * @param ctx context container providing the
+	 * {@link com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter}
+	 * @return a {@code MacroStringMap} containing the extracted duration string; empty if the key could not be constructed
 	 */
 	default MacroStringMap extractDuration(final MacroKey baseKey,
 										   final ChronoUnit lowerBound,
@@ -62,12 +101,13 @@ public interface Durationable
 
 
 	/**
-	 * Returns a formatted string representing a duration of time, using the supplied DurationFormatter
+	 * Uses the configured {@link DurationFormatter} to format the given {@link Duration}
+	 * according to the specified precision.
 	 *
-	 * @param duration the duration to convert to a formatted string
-	 * @param lowerBound a Temporal unit for use as a lower bound of units displayed
-	 * @param durationFormatter the duration formatter to be used to convert the duration to a String
-	 * @return an {@code Optional<String>} wrapping a formatted string representation of the duration
+	 * @param duration the duration to format
+	 * @param lowerBound the lowest precision unit to include in the result (e.g., seconds, minutes)
+	 * @param durationFormatter the formatter to use for localization
+	 * @return an {@code Optional<String>} containing the formatted result, or empty if input is {@code null}
 	 */
 	static Optional<String> formatDuration(final Duration duration,
 										   final ChronoUnit lowerBound,
@@ -78,11 +118,10 @@ public interface Durationable
 
 
 	/**
-	 * Calculate the Duration of time from current time until an Instant.
-	 * Returns a Duration of zero if passed null. Returns a negative duration if Instant is in the past.
+	 * Computes the duration from the current moment until the given {@link Instant}.
 	 *
-	 * @param instant the instant to use in duration calculation
-	 * @return {@code Duration} between current time and Instant parameter
+	 * @param instant a future point in time
+	 * @return the computed duration, or {@link Duration#ZERO} if the instant is {@code null}
 	 */
 	static Duration durationUntil(final Instant instant)
 	{

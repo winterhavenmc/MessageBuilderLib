@@ -20,17 +20,51 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 
+
+/**
+ * A {@link WorldNameRetriever} implementation that retrieves the alias name of a
+ * {@link org.bukkit.World} using the <strong>Multiverse-Core</strong> API.
+ * <p>
+ * This class interacts directly with {@link MultiverseCore} and its {@code MVWorldManager}
+ * to look up world metadata, including alias and display formatting.
+ * <p>
+ * If the world is not managed by Multiverse, or if any part of the plugin's world
+ * management system is unavailable, this retriever returns {@code null}.
+ * <p>
+ * Typically used internally by {@link MultiverseWorldNameResolver}, and not intended
+ * to be used directly unless fine-grained access to Multiverse aliases is needed.
+ *
+ * @see WorldNameRetriever
+ * @see MultiverseWorldNameResolver
+ * @see MultiverseCore
+ * @see org.bukkit.World
+ */
 public class MultiverseWorldNameRetriever implements WorldNameRetriever
 {
 	private final MultiverseCore multiverseCore;
 
 
+	/**
+	 * Constructs a {@code MultiverseWorldNameRetriever} with the given Multiverse-Core instance.
+	 *
+	 * @param multiverseCore the active {@link MultiverseCore} plugin instance
+	 */
 	public MultiverseWorldNameRetriever(MultiverseCore multiverseCore)
 	{
 		this.multiverseCore = multiverseCore;
 	}
 
 
+	/**
+	 * Attempts to retrieve the alias name of the given {@link org.bukkit.World}
+	 * using the Multiverse world manager.
+	 * <p>
+	 * If the world is not managed by Multiverse, or if plugin internals are unavailable,
+	 * this method returns {@code null}.
+	 *
+	 * @param world the Bukkit world to retrieve an alias for
+	 * @return the world alias from Multiverse, or {@code null} if unavailable
+	 */
 	@Override
 	public String getWorldName(World world)
 	{
