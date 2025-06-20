@@ -25,7 +25,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.form
  * <p>
  * This exception supports localized error messages using the provided
  * {@link ErrorMessageKey} and {@link Parameter}, and is typically thrown
- * via static methods in {@link ValidationUtility}.
+ * via static methods in {@link Validator}.
  * <p>
  * Unlike {@link IllegalArgumentException}, this class is designed specifically
  * to support structured, translatable messages in a plugin context.
@@ -36,7 +36,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.form
  *
  * @see ErrorMessageKey
  * @see Parameter
- * @see ValidationUtility
+ * @see Validator
  */
 public class ValidationException extends IllegalArgumentException
 {

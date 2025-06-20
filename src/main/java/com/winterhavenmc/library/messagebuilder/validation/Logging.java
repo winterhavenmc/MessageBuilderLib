@@ -43,7 +43,6 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.form
  * @param <T> the type of the value being validated
  *
  * @see Validator
- * @see ValidationUtility
  * @see LogLevel
  */
 public record Logging<T>(LogLevel logLevel,

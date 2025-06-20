@@ -33,7 +33,7 @@ package com.winterhavenmc.library.messagebuilder.validation;
  * Example key in the language file: {@code PARAMETER_NULL=Parameter {0} must not be null.}
  *
  * @see ValidationException
- * @see ValidationUtility
+ * @see Validator
  * @see Parameter
  */
 public enum ErrorMessageKey
