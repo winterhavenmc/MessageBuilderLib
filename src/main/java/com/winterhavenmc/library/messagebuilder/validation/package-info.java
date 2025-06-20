@@ -19,8 +19,7 @@
  *
  * <h2>Usage Pattern</h2>
  * <pre>{@code
- *     Optional<String> result = validate(name, String::isBlank,
- *         throwing(STRING_BLANK, Parameter.PLAYER_NAME));
+ *     String result = validate(name, String::isBlank, logging(STRING_BLANK, Parameter.PLAYER_NAME)).orElse("Steve");
  * }</pre>
  *
  * <h2>Localization</h2>
