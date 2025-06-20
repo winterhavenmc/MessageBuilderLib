@@ -65,7 +65,7 @@ public class MacroReplacer implements Replacer
 
 
 	/**
-	 * Pattern used to match base macro keys (e.g., {@code %ITEM%}) for macro resolution via the {@link Resolver}.
+	 * Pattern used to match base macro keys (e.g., {@code [ITEM}}) for macro resolution via the {@link Resolver}.
 	 * <p>
 	 * This pattern determines which objects should be passed to the resolver to populate
 	 * values for all matching derived keys.

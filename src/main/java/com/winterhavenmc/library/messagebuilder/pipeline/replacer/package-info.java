@@ -3,7 +3,7 @@
  * using resolved values from a {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap}.
  *
  * <p>This package represents the final stage in the message-building pipeline,
- * where macros such as {@code %PLAYER_NAME%} or {@code %LOCATION.X%} are substituted
+ * where macros such as {@code %PLAYER_NAME%} or {@code [LOCATION.X}} are substituted
  * with their corresponding string values.
  *
  * <h2>Key Components</h2>

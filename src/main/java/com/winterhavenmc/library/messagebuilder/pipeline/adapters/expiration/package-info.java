@@ -6,8 +6,8 @@
  * These data points are used to populate macro placeholders in messages, such as:
  *
  * <ul>
- *   <li>{@code %OBJECT.EXPIRATION.DURATION%} – a human-readable duration until expiration</li>
- *   <li>{@code %OBJECT.EXPIRATION.INSTANT%} – a localized date/time of expiration</li>
+ *   <li>{@code [OBJECT.EXPIRATION.DURATION}} – a human-readable duration until expiration</li>
+ *   <li>{@code [OBJECT.EXPIRATION.INSTANT}} – a localized date/time of expiration</li>
  * </ul>
  *
  * <p>The {@link com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.ExpirationAdapter}

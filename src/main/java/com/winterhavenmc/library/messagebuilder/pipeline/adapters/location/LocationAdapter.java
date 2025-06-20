@@ -37,8 +37,8 @@ import java.util.Optional;
  *
  * <p>This adapter provides macro key support for structured location data, including:
  * <ul>
- *   <li>{@code %OBJECT.LOCATION%} – the full location string, including world and coordinates</li>
- *   <li>{@code %OBJECT.LOCATION.WORLD%}, {@code %OBJECT.LOCATION.X%}, {@code Y}, {@code Z} – individual components</li>
+ *   <li>{@code [OBJECT.LOCATION}} – the full location string, including world and coordinates</li>
+ *   <li>{@code [OBJECT.LOCATION.WORLD}}, {@code [OBJECT.LOCATION.X}}, {@code Y}, {@code Z} – individual components</li>
  * </ul>
  *
  * <p>The world name is resolved using the
