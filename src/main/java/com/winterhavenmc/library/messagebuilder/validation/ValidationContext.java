@@ -32,6 +32,9 @@ import java.util.Locale;
  * <p>
  * Validation logic (e.g., {@link Validator}) uses this context
  * to format localized error messages.
+ * <p>
+ * <strong>Note:</strong> The {@link #reset()} method is intended for use
+ * in unit tests only and should never be called during normal plugin execution.
  *
  * @see Validator
  * @see LocaleProvider
@@ -75,6 +78,18 @@ public final class ValidationContext
 		return (localeProvider != null)
 				? localeProvider.getLocale()
 				: Locale.getDefault();
+	}
+
+
+	/**
+	 * Resets the validation context, clearing the configured locale provider.
+	 * <p>
+	 * <strong>Intended for use in test environments only.</strong>
+	 * This method allows tests to reinitialize the context with different
+	 * locale providers without restarting the plugin.
+	 */
+	static void reset() {
+		localeProvider = null;
 	}
 
 }
