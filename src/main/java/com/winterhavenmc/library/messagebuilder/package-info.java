@@ -31,12 +31,12 @@
  * <h2>Typical Usage</h2>
  * Messages are composed fluently using the {@link com.winterhavenmc.library.messagebuilder.MessageBuilder} API:
  *
- * <pre>{@code
+ * {@snippet lang = "java":
  * messageBuilder.compose(sender, MessageId.WELCOME)
  *               .setMacro(Macro.PLAYER, player)
- *               .setMacro(Macro.WORLDNAME, world)
+ *               .setMacro(Macro.WORLD, world)
  *               .send();
- * }</pre>
+ * }
  *
  * This will retrieve the message template for {@code WELCOME}, substitute relevant
  * macro values, and send the result to the command sender.
