@@ -26,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.ZoneId;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -128,6 +129,99 @@ class LocaleProviderTest
 
 		// Assert
 		assertEquals(Locale.FRANCE, locale);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+	@Test
+	void getValidZoneId_returns_configured_timezone()
+	{
+		// Arrange
+		configuration.set("timezone", "UTC");
+		when(pluginMock.getConfig()).thenReturn(configuration);
+		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
+
+		// Act
+		ZoneId result = LocaleProvider.getValidZoneId(pluginMock);
+
+		// Assert
+		assertEquals(ZoneId.of("UTC"), result);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+	@Test
+	void getValidZoneId_returns_configured_system_default_timezone_when_not_set()
+	{
+		// Arrange
+		when(pluginMock.getConfig()).thenReturn(configuration);
+		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
+
+		// Act
+		ZoneId result = LocaleProvider.getValidZoneId(pluginMock);
+
+		// Assert
+		assertEquals(ZoneId.systemDefault(), result);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+	@Test
+	void getZoneId_returns_configured_timezone()
+	{
+		// Arrange
+		configuration.set("timezone", "UTC");
+		when(pluginMock.getConfig()).thenReturn(configuration);
+		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
+
+		// Act
+		ZoneId result = localeProvider.getZoneId();
+
+		// Assert
+		assertEquals(ZoneId.of("UTC"), result);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+	@Test
+	void getZoneId_returns_configured_timezone_when_valid()
+	{
+		// Arrange
+		when(pluginMock.getConfig()).thenReturn(configuration);
+		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
+
+		// Act
+		ZoneId result = localeProvider.getZoneId();
+
+		// Assert
+		assertEquals(ZoneId.systemDefault(), result);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+	@Test
+	void getZoneId_returns_system_default_timezone_when_configured_is_invalid()
+	{
+		// Arrange
+		configuration.set("timezone", "invalid");
+		when(pluginMock.getConfig()).thenReturn(configuration);
+		LocaleProvider localeProvider = LocaleProvider.create(pluginMock);
+
+		// Act
+		ZoneId result = localeProvider.getZoneId();
+
+		// Assert
+		assertEquals(ZoneId.systemDefault(), result);
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getConfig();

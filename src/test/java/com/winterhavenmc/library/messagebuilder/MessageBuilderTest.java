@@ -153,10 +153,9 @@ class MessageBuilderTest
 	void reload_fail_does_not_throw_exception()
 	{
 		// Arrange
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+//		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
-		// Act
-		// Assert
+		// Act & Assert
 		assertDoesNotThrow(() -> messageBuilder.reload());
 
 		// Verify

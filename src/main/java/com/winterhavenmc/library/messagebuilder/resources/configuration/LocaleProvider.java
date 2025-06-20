@@ -111,27 +111,6 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 
 
 	/**
-	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
-	 * <p>
-	 * If the {@code timezone} value is present in the configuration and matches
-	 * one of the available {@link ZoneId} IDs, it is used. Otherwise, this method
-	 * falls back to the system default time zone.
-	 * </p>
-	 *
-	 * @param plugin the plugin whose configuration is queried for the timezone
-	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
-	 */
-	private static ZoneId getValidZoneId(final Plugin plugin)
-	{
-		String timezone = plugin.getConfig().getString(timeZoneSetting);
-
-		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
-				? ZoneId.of(timezone)
-				: ZoneId.systemDefault();
-	}
-
-
-	/**
 	 * Returns the resolved {@link LocaleSetting} based on the plugin configuration.
 	 *
 	 * @return a locale setting encapsulating a {@link LanguageTag}
@@ -173,6 +152,27 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 	public ZoneId getZoneId()
 	{
 		return zoneIdSupplier.get();
+	}
+
+
+	/**
+	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
+	 * <p>
+	 * If the {@code timezone} value is present in the configuration and matches
+	 * one of the available {@link ZoneId} IDs, it is used. Otherwise, this method
+	 * falls back to the system default time zone.
+	 * </p>
+	 *
+	 * @param plugin the plugin whose configuration is queried for the timezone
+	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
+	 */
+	static ZoneId getValidZoneId(final Plugin plugin)
+	{
+		String timezone = plugin.getConfig().getString(timeZoneSetting);
+
+		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
+				? ZoneId.of(timezone)
+				: ZoneId.systemDefault();
 	}
 
 }

@@ -58,6 +58,7 @@ public enum Parameter
 	LANGUAGE_RESOURCE_MANAGER("languageResourceManager"),
 	LANGUAGE_TAG("languageTag"),
 	LOCALE("locale"),
+	LOCALE_PROVIDER("localeProvider"),
 	LOCATION("location"),
 	LOWER_BOUND("lowerBound"),
 	MACRO("macro"),

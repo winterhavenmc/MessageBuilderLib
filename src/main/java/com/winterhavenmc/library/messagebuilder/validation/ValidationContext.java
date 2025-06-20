@@ -20,7 +20,12 @@ package com.winterhavenmc.library.messagebuilder.validation;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 
 import java.util.Locale;
+import java.util.Objects;
 
+import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LOCALE_PROVIDER;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 /**
  * Provides global access to the plugin-configured locale used
@@ -32,6 +37,9 @@ import java.util.Locale;
  * <p>
  * Validation logic (e.g., {@link Validator}) uses this context
  * to format localized error messages.
+ * <p>
+ * <strong>Note:</strong> The {@link #reset()} method is intended for use
+ * in unit tests only and should never be called during normal plugin execution.
  *
  * @see Validator
  * @see LocaleProvider
@@ -55,14 +63,14 @@ public final class ValidationContext
 	 */
 	public static void initialize(final LocaleProvider provider)
 	{
-		if (localeProvider != null)
-			return;
+		validate(provider, Objects::isNull, throwing(PARAMETER_NULL, LOCALE_PROVIDER));
 
-		if (provider == null)
-			throw new IllegalArgumentException("LocaleProvider must not be null");
-
-		localeProvider = provider;
+		if (localeProvider == null)
+		{
+			localeProvider = provider;
+		}
 	}
+
 
 	/**
 	 * Returns the current locale used for formatting validation messages.
@@ -75,6 +83,18 @@ public final class ValidationContext
 		return (localeProvider != null)
 				? localeProvider.getLocale()
 				: Locale.getDefault();
+	}
+
+
+	/**
+	 * Resets the validation context, clearing the configured locale provider.
+	 * <p>
+	 * <strong>Intended for use in test environments only.</strong>
+	 * This method allows tests to reinitialize the context with different
+	 * locale providers without restarting the plugin.
+	 */
+	static void reset() {
+		localeProvider = null;
 	}
 
 }

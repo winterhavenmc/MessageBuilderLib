@@ -27,7 +27,9 @@ import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 
 import org.bukkit.inventory.Inventory;
+import org.bukkit.loot.LootContext;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -151,6 +153,23 @@ class LocationAdapterTest
 
 		// Assert
 		assertEquals(location, result, "The resolver should return the getLocation from the DoubleChest.");
+	}
+
+
+	@Test @DisplayName("adapt with valid LootContext")
+	public void adapt_with_valid_LootContext_returns_adapted_Location()
+	{
+		// Arrange
+		Location location = new Location(worldMock, 11, 12, 13);
+		LootContext lootContext = new LootContext.Builder(location).killer(playerMock).build();
+
+		// Act
+		Optional<Locatable> adapted = new LocationAdapter().adapt(lootContext);
+		Optional<Location> result = adapted.map(Locatable::getLocation);
+
+		// Assert
+		assertTrue(result.isPresent());
+		assertEquals(location, result.get(), "The adapter should return the location.");
 	}
 
 

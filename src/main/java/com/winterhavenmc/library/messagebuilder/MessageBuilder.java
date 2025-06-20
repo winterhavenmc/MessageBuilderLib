@@ -28,6 +28,7 @@ import com.winterhavenmc.library.messagebuilder.resources.language.SectionResour
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationContext;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.library.time.Tick;
@@ -43,8 +44,7 @@ import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;
 
 
 /**
@@ -83,9 +83,7 @@ public final class MessageBuilder
 {
 	public final static TemporalUnit TICKS = new Tick();
 	private final static String EXCEPTION_MESSAGES = "exception.messages";
-	private final ResourceBundle BUNDLE;
 
-	private final Plugin plugin;
 	private final SectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
 	private final ConstantResolver constantResolver;
@@ -105,9 +103,8 @@ public final class MessageBuilder
 	{
 		LocaleProvider localeProvider = LocaleProvider.create(plugin);
 		ValidationContext.initialize(LocaleProvider.create(plugin));
-		BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, localeProvider.getLocale());
+		ResourceBundle BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, localeProvider.getLocale());
 
-		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
 		this.constantResolver = constantResolver;
 		this.messagePipeline = messagePipeline;
@@ -173,10 +170,8 @@ public final class MessageBuilder
 	 */
 	public void reload()
 	{
-		if (!languageResourceManager.reload())
-		{
-			plugin.getLogger().warning(BUNDLE.getString(RELOAD_FAILED.name()));
-		}
+		boolean result = languageResourceManager.reload();
+		validate(result, bool -> bool.equals(false), logging(LogLevel.WARN, RELOAD_FAILED, LANGUAGE_FILE));
 	}
 
 
