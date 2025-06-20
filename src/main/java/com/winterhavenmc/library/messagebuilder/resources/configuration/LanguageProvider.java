@@ -55,7 +55,7 @@ public class LanguageProvider implements ConfigProvider<LanguageSetting>
 		LOCALE("locale");
 
 		private final String key;
-		LanguageField(String key) { this.key = key; }
+		LanguageField(final String key) { this.key = key; }
 		@Override public String toString() { return key; }
 	}
 
@@ -65,7 +65,7 @@ public class LanguageProvider implements ConfigProvider<LanguageSetting>
 	 *
 	 * @param supplier a supplier that yields the most current {@link LanguageSetting}
 	 */
-	private LanguageProvider(Supplier<LanguageSetting> supplier)
+	private LanguageProvider(final Supplier<LanguageSetting> supplier)
 	{
 		this.languageSettingSupplier = supplier;
 	}

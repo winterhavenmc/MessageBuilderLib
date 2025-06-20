@@ -17,6 +17,30 @@
 
 package com.winterhavenmc.library.messagebuilder.validation;
 
+/**
+ * Enumerates the names of parameters that may be subject to validation
+ * within the MessageBuilder library.
+ * <p>
+ * Each enum constant corresponds to a symbolic parameter name used in
+ * validation methods and exception messages. This design provides compile-time
+ * safety, IDE auto-completion, and helps ensure consistency across the codebase.
+ * <p>
+ * The {@link #displayName} associated with each parameter is used in
+ * localized messages and can be retrieved via {@link #getDisplayName()}.
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ *     throw new ValidationException(PARAMETER_NULL, Parameter.COMMAND_SENDER);
+ * }</pre>
+ *
+ * <p>
+ * Inspired by the best practices outlined in "Effective Java" (Joshua Bloch),
+ * this approach avoids stringly-typed parameter keys while enabling
+ * internationalization support via structured message formatting.
+ *
+ * @see ValidationException
+ * @see ErrorMessageKey
+ */
 public enum Parameter
 {
 	ADAPTER("adapter"),
@@ -71,18 +95,35 @@ public enum Parameter
 	private final String displayName;
 
 
+	/**
+	 * Constructs a {@code Parameter} enum constant with the given display name.
+	 *
+	 * @param displayName the canonical or user-facing name of the parameter
+	 */
 	Parameter(final String displayName)
 	{
 		this.displayName = displayName;
 	}
 
 
+	/**
+	 * Returns the canonical display name for this parameter, as used in
+	 * localized error messages.
+	 *
+	 * @return the parameter's display name
+	 */
 	public String getDisplayName()
 	{
 		return displayName;
 	}
 
 
+	/**
+	 * Returns the {@linkplain #getDisplayName() display name} of the parameter.
+	 * Equivalent to {@code getDisplayName()}.
+	 *
+	 * @return the parameter's display name
+	 */
 	@Override
 	public String toString()
 	{

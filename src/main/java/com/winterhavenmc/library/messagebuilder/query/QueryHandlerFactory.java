@@ -28,7 +28,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKe
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LANGUAGE_RESOURCE_MANAGER;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.SECTION;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.validate;
 
 
 public class QueryHandlerFactory

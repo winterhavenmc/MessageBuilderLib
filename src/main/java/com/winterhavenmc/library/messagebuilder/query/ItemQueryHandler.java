@@ -28,7 +28,7 @@ import java.util.Objects;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.validate;
 
 
 /**

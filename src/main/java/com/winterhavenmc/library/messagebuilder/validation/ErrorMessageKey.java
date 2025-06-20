@@ -19,17 +19,67 @@ package com.winterhavenmc.library.messagebuilder.validation;
 
 
 /**
- * Enum of exception and error message keys. The enum name value is used as the key in the resource bundle.
+ * Enumeration of structured keys used to identify localized error messages
+ * for validation and configuration-related exceptions.
+ * <p>
+ * These keys correspond to entries in a {@link java.util.ResourceBundle},
+ * allowing the library to provide translatable, context-aware messages
+ * to plugin users and administrators.
+ * <p>
+ * Typically used in conjunction with {@link ValidationException} and
+ * {@link ValidationUtility#formatMessage(ErrorMessageKey, Parameter)}.
+ *
+ * <p>
+ * Example key in the language file: {@code PARAMETER_NULL=Parameter {0} must not be null.}
+ *
+ * @see ValidationException
+ * @see ValidationUtility
+ * @see Parameter
  */
 public enum ErrorMessageKey
 {
+	/**
+	 * Indicates that a required configuration section is invalid or missing.
+	 */
 	INVALID_SECTION,
+
+	/**
+	 * Indicates that a language file could not be found for the configured locale.
+	 */
 	MISSING_LANGUAGE_FILE,
+
+	/**
+	 * Indicates that a required language resource file is missing from the plugin jar.
+	 */
 	MISSING_LANGUAGE_RESOURCE,
+
+	/**
+	 * Indicates a general failure to locate a required resource.
+	 */
 	MISSING_RESOURCE,
+
+	/**
+	 * Indicates that a parameter failed validation, but no specific cause is given.
+	 */
 	PARAMETER_INVALID,
+
+	/**
+	 * Indicates that a required parameter was {@code null}.
+	 */
 	PARAMETER_NULL,
+
+	/**
+	 * Indicates that a parameter was of the wrong type.
+	 */
 	PARAMETER_TYPE_MISMATCH,
+
+	/**
+	 * Indicates that a configuration reload operation failed.
+	 */
 	RELOAD_FAILED,
+
+	/**
+	 * Indicates that a provided string was blank (empty or only whitespace).
+	 */
 	STRING_BLANK,
 }

@@ -23,6 +23,29 @@ import java.util.logging.Logger;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.formatMessage;
 
 
+/**
+ * A {@link ValidationHandler} implementation that logs a warning or error
+ * when a value fails validation, but does not throw.
+ * <p>
+ * This handler is useful in cases where validation failures are non-critical
+ * or should be tracked without disrupting normal flow.
+ * <p>
+ * The message is localized using {@link ValidationUtility#formatMessage(ErrorMessageKey, Parameter)},
+ * and is logged using the Java {@link java.util.logging.Logger} API.
+ *
+ * <p>
+ * The {@link LogLevel} enum provides a clearer abstraction over
+ * {@link java.util.logging.Level} for improved readability and intent.
+ *
+ * <p>
+ * Typically used via {@link ValidationHandler#logging(LogLevel, ErrorMessageKey, Parameter)}.
+ *
+ * @param <T> the type of the value being validated
+ *
+ * @see ValidationHandler
+ * @see ValidationUtility
+ * @see LogLevel
+ */
 public record Logging<T>(LogLevel logLevel,
                          ErrorMessageKey messageKey,
                          Parameter parameter) implements ValidationHandler<T>
@@ -30,11 +53,17 @@ public record Logging<T>(LogLevel logLevel,
     private static final Logger LOGGER = Logger.getLogger("ValidationLogger");
 
 
+    /**
+     * Logs a validation failure using the specified log level and message,
+     * but continues execution by returning the original value.
+     *
+     * @param value the invalid value
+     * @return an {@code Optional} containing the value, despite being invalid
+     */
     @Override
     public Optional<T> handleInvalid(final T value)
     {
         LOGGER.log(logLevel.toJavaUtilLevel(), formatMessage(messageKey, parameter));
-
         return Optional.ofNullable(value); // return the value even though it failed validation
     }
 

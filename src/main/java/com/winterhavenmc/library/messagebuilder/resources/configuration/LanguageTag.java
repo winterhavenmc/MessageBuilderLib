@@ -31,7 +31,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKe
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LANGUAGE_TAG;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.validate;
 
 import static java.util.Locale.forLanguageTag;
 

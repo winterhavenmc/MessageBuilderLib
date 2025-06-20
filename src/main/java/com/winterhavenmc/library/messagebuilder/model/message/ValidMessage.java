@@ -36,7 +36,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKe
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.logging;
 import static com.winterhavenmc.library.messagebuilder.validation.ValidationHandler.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.validation.ValidationUtility.validate;
 
 
 /**
