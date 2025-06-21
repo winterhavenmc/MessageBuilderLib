@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.validation;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.formatMessage;
@@ -37,13 +38,18 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.form
  * The {@link LogLevel} enum provides a clearer abstraction over
  * {@link java.util.logging.Level} for improved readability and intent.
  *
- * <p>
- * Typically used via {@link Validator#logging(LogLevel, ErrorMessageKey, Parameter)}.
+ * <h2>Typical usage:</h2>
+ * {@snippet lang="java":
+ *  validate(value, Predicate, Validator.logging(logLevel, ErrorMessageKey, Parameter));
+ * }
  *
  * @param <T> the type of the value being validated
  *
  * @see Validator
+ * @see Predicate
  * @see LogLevel
+ * @see ErrorMessageKey
+ * @see Parameter
  */
 public record Logging<T>(LogLevel logLevel,
                          ErrorMessageKey messageKey,

@@ -37,8 +37,20 @@ import static java.util.Locale.forLanguageTag;
 
 
 /**
- * A class that wraps a string based language tag, allowing for validation against locale that
+ * A class that wraps a string-based IETF BCP 47 language tag, allowing for validation against locales that
  * are known to the system at runtime.
+ *
+ * <h2>Typical usage:</h2>
+ * From string:
+ * {@snippet lang="java":
+ *  LanguageTag tag = LanguageTag.of("en-US");
+ * }
+ * From Locale:
+ * {@snippet lang="java":
+ *  LanguageTag tag = LanguageTag.of(Locale.US);
+ * }
+ *
+ * @see Locale
  */
 public class LanguageTag
 {
@@ -108,7 +120,7 @@ public class LanguageTag
 
 
 	/**
-	 * Get the system default LanguageTag
+	 * Get the system default locale expressed as a LanguageTag
 	 *
 	 * @return a new default LanguageTag
 	 */
