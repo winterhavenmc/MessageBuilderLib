@@ -33,11 +33,11 @@ import java.util.logging.Level;
  *
  * <p>
  * Example usage:
- * <pre>{@code
+ * {@snippet lang="java":
  *     logger.log(LogLevel.WARN.toJavaUtilLevel(), "Validation issue detected...");
- * }</pre>
+ * }
  *
- * @see ValidationUtility
+ * @see Validator
  */
 public enum LogLevel
 {

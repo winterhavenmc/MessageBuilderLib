@@ -39,7 +39,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  *
  * <p>The most common implementation source is a
  * {@link org.bukkit.entity.LivingEntity LivingEntity},
- * whose {@code getKiller()} method returns the killing {@link org.bukkit.entity.Player Player}.
+ * whose {@code getKiller()} method returns the killing {@link org.bukkit.entity.Entity Entity}.
  * However, plugin-defined objects may implement this interface to expose similar semantics.
  */
 @FunctionalInterface
@@ -48,7 +48,7 @@ public interface Killable
 	/**
 	 * Returns the killer of this object, typically a {@link org.bukkit.entity.Player Player}.
 	 *
-	 * @return the killer as an {@link AnimalTamer}, or {@code null} if not available
+	 * @return the killer as an {@link Entity}, or {@code null} if not available
 	 */
 	Entity getKiller();
 

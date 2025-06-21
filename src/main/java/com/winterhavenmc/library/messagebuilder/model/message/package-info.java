@@ -23,13 +23,12 @@
  * <h2>Usage</h2>
  * Developers do not typically instantiate message types directly. Instead, messages are created
  * via the fluent API exposed by {@link com.winterhavenmc.library.messagebuilder.MessageBuilder}:
- *
- * <pre>{@code
+ * {@snippet lang="java":
  * messageBuilder.compose(sender, MessageId.LOGIN_SUCCESS)
  *               .setMacro(Macro.PLAYER, player)
  *               .send();
- * }</pre>
- *
+ * }
+ * <p>
  * If the recipient or message key is invalid, the library will return an
  * {@link com.winterhavenmc.library.messagebuilder.model.message.InvalidMessage InvalidMessage}, which safely performs no action when sent.
  *
