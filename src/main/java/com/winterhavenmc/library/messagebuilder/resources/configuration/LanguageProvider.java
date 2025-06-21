@@ -27,16 +27,24 @@ import java.util.stream.Stream;
 /**
  * Provides a dynamic {@link LanguageSetting} derived from the plugin's {@code config.yml}.
  * <p>
- * This class implements {@link ConfigProvider} to supply a locale-based language setting,
- * allowing server operators to specify preferred language or locale values. It checks
- * for the presence of the {@code language} or {@code locale} keys in the configuration
- * and uses the first valid match. If neither is found, a default of {@code en-US} is used.
+ * This class implements {@link ConfigProvider} to supply a language setting,
+ * allowing server operators to specify a localized language file containing plugin messages
+ * and other localized strings. It checks for the presence of the {@code language} or
+ * {@code locale} keys in the configuration and uses the first valid match. If neither setting
+ * is found, a default of {@code en-US} is used. While an IETF language tag is recommended for
+ * language file naming, it is not required. This allows server operators to use a custom
+ * language file of their own creation, without interfering with existing or provided files.
  * </p>
  *
  * <p>
  * The configuration value is accessed via a {@link Supplier}, allowing dynamic reloading
  * of the setting without requiring object reinitialization. This enables consistent
  * behavior across classes that rely on the selected language configuration.
+ * </p>
+ *
+ * <p>
+ * Note that the {@code .yml} suffix is appended to the setting, and therefore should not
+ * be included in the language file name setting of the {@code config.yml} file.
  * </p>
  */
 public class LanguageProvider implements ConfigProvider<LanguageSetting>
@@ -111,9 +119,9 @@ public class LanguageProvider implements ConfigProvider<LanguageSetting>
 
 
 	/**
-	 * Returns the configured language name string (e.g., {@code en-US}).
+	 * Returns the configured language file name string (e.g., {@code en-US}).
 	 *
-	 * @return the string representation of the current language setting
+	 * @return the string representation of the current language file setting
 	 */
 	public String getName()
 	{

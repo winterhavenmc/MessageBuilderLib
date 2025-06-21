@@ -23,6 +23,10 @@ import org.bukkit.configuration.Configuration;
 import java.util.Locale;
 import java.util.Optional;
 
+/**
+ * An interface that represents classes responsible for loading an installed resource file from
+ * the plugin data directory.
+ */
 public interface ResourceLoader
 {
 	/**

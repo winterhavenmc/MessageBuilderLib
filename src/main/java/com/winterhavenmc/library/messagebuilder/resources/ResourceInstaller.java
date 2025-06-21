@@ -18,6 +18,10 @@
 package com.winterhavenmc.library.messagebuilder.resources;
 
 
+/**
+ * An interface that describes classes that are responsible for installing resources
+ * from the jar to the plugin data directory.
+ */
 public interface ResourceInstaller
 {
 	/**

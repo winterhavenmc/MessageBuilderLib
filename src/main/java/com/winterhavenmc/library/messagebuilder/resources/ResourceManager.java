@@ -18,6 +18,11 @@
 package com.winterhavenmc.library.messagebuilder.resources;
 
 
+/**
+ * An interface that describes a resource manager that is responsible for installing resources
+ * from the plugin jar file to the plugin data directory, as well as loading and reloading
+ * the installed files at startup or issuance of the {@code reload} command.
+ */
 public interface ResourceManager
 {
 	/**

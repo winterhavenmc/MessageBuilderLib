@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  * </p>
  *
  * <p>
- * The {@code LocaleProvider} resolves configuration values from {@code config.yml}
+ * The {@code LocaleProvider} resolves configuration values from the plugin {@code config.yml}
  * in the following order:
  * </p>
  * <ul>
@@ -92,8 +92,8 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 	 * This method attempts to extract valid configuration values in the following order:
 	 * </p>
 	 * <ol>
-	 *   <li>{@code locale} field (must be a valid BCP-47 language tag)</li>
-	 *   <li>{@code language} field (fallback, same format)</li>
+	 *   <li>{@code locale} setting (must be a valid BCP-47 language tag)</li>
+	 *   <li>{@code language} setting (fallback, same format or else ignored)</li>
 	 *   <li>System default locale and timezone as final fallback</li>
 	 * </ol>
 	 *
@@ -147,7 +147,7 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 	/**
 	 * Returns the configured {@link ZoneId} if valid, or the system default otherwise.
 	 *
-	 * @return the applicable {@code ZoneId}
+	 * @return the applicable time zone as represented by a {@code ZoneId} object.
 	 */
 	public ZoneId getZoneId()
 	{
@@ -159,8 +159,8 @@ public class LocaleProvider implements ConfigProvider<LocaleSetting>
 	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
 	 * <p>
 	 * If the {@code timezone} value is present in the configuration and matches
-	 * one of the available {@link ZoneId} IDs, it is used. Otherwise, this method
-	 * falls back to the system default time zone.
+	 * one of the available {@link ZoneId} recoginized by the JVM, it is used.
+	 * Otherwise, this method falls back to the system default time zone.
 	 * </p>
 	 *
 	 * @param plugin the plugin whose configuration is queried for the timezone
