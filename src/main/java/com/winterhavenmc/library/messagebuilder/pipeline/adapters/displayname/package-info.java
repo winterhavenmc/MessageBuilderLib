@@ -17,8 +17,10 @@
  * <p>The {@code DisplayNameAdapter} supports:
  * <ul>
  *   <li>Objects already implementing {@code DisplayNameable}</li>
- *   <li>{@link org.bukkit.entity.Player Playre} — uses {@code Player#getDisplayName()}</li>
- *   <li>{@link org.bukkit.Nameable Nameable} — uses {@code Nameable#getCustomName()}</li>
+ *   <li>{@link org.bukkit.entity.Player Player} — uses {@link org.bukkit.entity.Player#getDisplayName()}</li>
+ *   <li>{@link org.bukkit.Nameable Nameable} — uses {@link org.bukkit.Nameable#getCustomName()}
+ *   <em>Note: this references the Bukkit Nameable interface, and not the Nameable interface of the corresponding
+ *   adapter found in this library.</em></li>
  *   <li>{@link org.bukkit.World World} — resolves the display name via a
  *       {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver}</li>
  * </ul>

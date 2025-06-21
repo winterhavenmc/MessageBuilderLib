@@ -29,9 +29,9 @@ package com.winterhavenmc.library.messagebuilder.validation;
  * localized messages and can be retrieved via {@link #getDisplayName()}.
  * <p>
  * Example usage:
- * <pre>{@code
- *     throw new ValidationException(PARAMETER_NULL, Parameter.COMMAND_SENDER);
- * }</pre>
+ * {@snippet lang="java":
+ * throw new ValidationException(PARAMETER_NULL, Parameter.COMMAND_SENDER);
+ * }
  *
  * <p>
  * Inspired by the best practices outlined in "Effective Java" (Joshua Bloch),

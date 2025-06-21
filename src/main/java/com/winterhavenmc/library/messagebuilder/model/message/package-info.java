@@ -23,7 +23,7 @@
  * <h2>Usage</h2>
  * Developers do not typically instantiate message types directly. Instead, messages are created
  * via the fluent API exposed by {@link com.winterhavenmc.library.messagebuilder.MessageBuilder}:
- * {@snippet lang=java:
+ * {@snippet lang="java":
  * messageBuilder.compose(sender, MessageId.LOGIN_SUCCESS)
  *               .setMacro(Macro.PLAYER, player)
  *               .send();

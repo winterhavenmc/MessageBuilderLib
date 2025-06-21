@@ -44,13 +44,13 @@ import org.bukkit.entity.Player;
  * type safety and clarity at the call site.
  *
  * <p>Typical usage:
- * <pre>{@code
- * Recipient recipient = Recipient.of(sender);
+ * {@snippet lang="java":
+ *  Recipient recipient = Recipient.of(sender);
  *
- * if (recipient instanceof Recipient.Sendable sendable) {
- *     sendable.sender().sendMessage("Hello!");
+ *  if (recipient instanceof Recipient.Sendable sendable) {
+ *      sendable.sender().sendMessage("Hello!");
+ *  }
  * }
- * }</pre>
  *
  * @see Recipient.Sendable
  * @see Recipient.Valid

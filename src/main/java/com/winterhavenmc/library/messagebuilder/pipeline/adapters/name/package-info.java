@@ -10,13 +10,8 @@
  * <h2>Plugin Integration</h2>
  * <p>Plugin developers can opt into this system by having their own domain types implement the {@code Nameable} interface.
  * For example, a plugin-defined class:
- *{@snippet lang=java:
+ * {@snippet lang="java":
  * public class CustomNPC implements Nameable {
- *     private final String name;
- *
- *     public CustomNPC(String name) {
- *         this.name = name;
- *     }
  *
  *     @Override
  *     public String getName() {

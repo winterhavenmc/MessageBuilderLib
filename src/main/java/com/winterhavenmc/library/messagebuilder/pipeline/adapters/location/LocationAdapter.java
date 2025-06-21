@@ -24,6 +24,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Raid;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
@@ -50,10 +51,11 @@ import java.util.Optional;
  *   <li>{@code Locatable} – objects implementing the {@link Locatable} interface</li>
  *   <li>{@link org.bukkit.entity.Entity}</li>
  *   <li>{@link org.bukkit.OfflinePlayer}</li>
+ *   <li>{@link org.bukkit.block.Chest} and {@link org.bukkit.block.DoubleChest}</li>
  *   <li>{@link org.bukkit.block.Block} and {@link org.bukkit.block.BlockState}</li>
- *   <li>{@link org.bukkit.block.DoubleChest}</li>
  *   <li>{@link org.bukkit.inventory.Inventory}</li>
- *   <li>{@code Raid}</li>
+ *   <li>{@link org.bukkit.Raid}</li>
+ *   <li>{@link org.bukkit.loot.LootContext}</li>
  *   <li>{@link org.bukkit.Location} itself</li>
  * </ul>
  *
@@ -73,9 +75,10 @@ public class LocationAdapter implements Adapter
 			case Locatable locatable -> Optional.of(locatable);
 			case Entity entity -> Optional.of(entity::getLocation);
 			case OfflinePlayer offlinePlayer -> Optional.of((offlinePlayer::getLocation));
+			case Chest chest -> Optional.of(chest::getLocation);
+			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
 			case Block block -> Optional.of(block::getLocation);
 			case BlockState blockState -> Optional.of(blockState::getLocation);
-			case DoubleChest doubleChest -> Optional.of(doubleChest::getLocation);
 			case Inventory inventory -> Optional.of(inventory::getLocation);
 			case Raid raid -> Optional.of(raid::getLocation);
 			case LootContext lootContext -> Optional.of(lootContext::getLocation);

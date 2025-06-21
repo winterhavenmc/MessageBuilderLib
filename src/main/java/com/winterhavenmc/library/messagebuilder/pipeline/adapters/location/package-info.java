@@ -14,6 +14,14 @@
  *   <li>{@code {OBJECT.LOCATION.WORLD}} – Resolved world name, optionally via Multiverse alias</li>
  *   <li>{@code {OBJECT.LOCATION.X}}, {@code {OBJECT.LOCATION.Y}}, {@code {OBJECT.LOCATION.Z}} – Localized coordinate values</li>
  * </ul>
+ * <p>Many built-in Bukkit objects contain a location field that will be extracted by this adapter, including:
+ * {@link org.bukkit.entity.Entity Entity},
+ * {@link org.bukkit.block.Block Block},
+ * {@link org.bukkit.inventory.Inventory Inventory},
+ * {@link org.bukkit.loot.LootContext LootContext},
+ * {@link org.bukkit.Raid Raid}, among others, including
+ * {@link org.bukkit.Location Location} itself.
+ *
  *
  * <p>Integration with {@code Multiverse-Core}, if installed, allows location macros to display world aliases.
  * If not present, standard Bukkit world names are used.

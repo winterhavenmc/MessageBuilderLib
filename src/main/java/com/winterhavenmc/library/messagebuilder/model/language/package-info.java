@@ -30,7 +30,7 @@
  * </ul>
  *
  * <h2>Typical Usage</h2>
- * {@snippet lang = "java":
+ * {@snippet lang="java":
  * 	ItemRecord itemRecord = queryHandler.getItemRecord(MY_ITEM_KEY);
  * 	if (itemRecord instanceof ValidItemRecord valid) {
  * 		String name = valid.nameSingular();

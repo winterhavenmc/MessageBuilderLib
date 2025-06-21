@@ -30,7 +30,7 @@
  *
  * <h2>Typical Usage</h2>
  * Messages are composed fluently using the {@link com.winterhavenmc.library.messagebuilder.MessageBuilder} API:
- * {@snippet lang = "java":
+ * {@snippet lang="java":
  * messageBuilder.compose(sender, MessageId.WELCOME)
  *               .setMacro(Macro.PLAYER, player)
  *               .setMacro(Macro.WORLD, world)

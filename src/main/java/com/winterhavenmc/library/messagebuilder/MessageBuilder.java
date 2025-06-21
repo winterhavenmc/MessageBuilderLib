@@ -62,8 +62,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;
  * cooldown map after the configured repeat-delay time has elapsed.
  * <p>
  * <i>example:</i>
- * <pre>
- * {@code
+ * {@snippet lang="java":
  * MessageBuilder messageBuilder = MessageBuilder.create(plugin)
  *
  * messageBuilder.compose(recipient, MessageId.MESSAGE_KEY)
@@ -71,7 +70,6 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;
  *     .setMacro(Macro.PLACEHOLDER2, replacementString)
  *     .send();
  * }
- * </pre>
  * <p>
  * Note that any object may be passed as the replacement string, which will be converted using
  * that object's toString method, except in the case of some placeholder keys that are treated

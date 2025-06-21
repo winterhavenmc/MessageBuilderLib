@@ -18,10 +18,10 @@
  * </ul>
  *
  * <h2>Usage Pattern</h2>
- * {@snippet lang = java:
+ * {@snippet lang="java":
  *     validate(recipient, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.RECIPIENT));
- *}
- * {@snippet lang=java:
+ * }
+ * {@snippet lang="java":
  *     String validName = validate(name, String::isBlank, logging(LogLevel.INFO, ErrorMessageKey.STRING_BLANK, Parameter.NAME)).orElse("Steve");
  * }
  * <h2>Localization</h2>

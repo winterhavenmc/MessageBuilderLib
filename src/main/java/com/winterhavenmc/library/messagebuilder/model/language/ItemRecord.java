@@ -91,9 +91,9 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	 * structure to evolve without requiring widespread changes to lookup logic.
 	 *
 	 * <p>Example usage:
-	 * <pre>{@code
-	 * String singularName = section.getString(ItemRecord.Field.NAME_SINGULAR.toKey());
-	 * }</pre>
+	 * {@snippet lang="java":
+	 *  String singularName = section.getString(ItemRecord.Field.NAME_SINGULAR.toKey());
+	 * }
 	 */
 	enum Field
 	{

@@ -5,9 +5,7 @@
  * interface allows plugin-defined objects to participate in macro substitution using
  * instant-based placeholders such as:
  *
- * <pre>{@code
- * [OBJECT.INSTANT}
- * }</pre>
+ * <pre>{@code {OBJECT.INSTANT}}</pre>
  *
  * <p>At runtime, the
  * {@link com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant.InstantAdapter InstantAdapter}

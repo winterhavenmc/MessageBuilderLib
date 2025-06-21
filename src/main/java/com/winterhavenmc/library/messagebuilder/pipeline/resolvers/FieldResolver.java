@@ -36,13 +36,12 @@ import java.util.List;
  * Typical usage involves registering a {@code CompositeResolver} first, followed by
  * an {@code AtomicResolver}, allowing composite (adapted) values to take priority
  * over simpler atomic ones only if the base key has not already been defined.
- *
- * <pre>{@code
+ * {@snippet lang="java":
  * Resolver resolver = new FieldResolver(List.of(
- *     new CompositeResolver(...),
- *     new AtomicResolver(...)
+ *     new CompositeResolver(),
+ *     new AtomicResolver()
  * ));
- * }</pre>
+ * }
  *
  * @see Resolver
  * @see CompositeResolver

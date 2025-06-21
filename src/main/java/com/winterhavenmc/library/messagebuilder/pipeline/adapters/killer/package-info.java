@@ -13,7 +13,7 @@
  *
  * <p>Macros such as {@code {OBJECT.KILLER}} are replaced with the name of the killer, if resolvable.
  * The adapter supports both online and offline players through the
- * {@link org.bukkit.entity.AnimalTamer AnimalTamer}
+ * {@link org.bukkit.entity.Entity Entity}
  * abstraction, enabling broader compatibility.
  */
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
