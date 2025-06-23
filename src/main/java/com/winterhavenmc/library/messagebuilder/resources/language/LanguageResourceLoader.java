@@ -107,7 +107,7 @@ public class LanguageResourceLoader implements ResourceLoader
 	{
 		return getConfiguredLanguageTag()
 				.map(tag -> loadWithFallback(tag, defaultLanguageTag))
-				.orElse(loadFromResource(defaultLanguageTag));
+				.orElseThrow(() -> new IllegalStateException("No valid language tag could be resolved from config or default."));
 	}
 
 
@@ -119,12 +119,12 @@ public class LanguageResourceLoader implements ResourceLoader
 	{
 		File languageFile = new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(preferred));
 		YamlConfiguration config = yamlFactory.get();
+		boolean success = false;
 
 		try
 		{
 			config.load(languageFile);
-			plugin.getLogger().info("Language file '" + languageFile.getName() + "' successfully loaded.");
-			return config;
+			success = true;
 		}
 		catch (FileNotFoundException e)
 		{
@@ -147,7 +147,15 @@ public class LanguageResourceLoader implements ResourceLoader
 			plugin.getLogger().severe("Unexpected exception loading language file '" + languageFile.getName() + "'");
 		}
 
-		return loadFromResource(fallback);
+		if (success)
+		{
+			plugin.getLogger().info("Language file '" + languageFile.getName() + "' successfully loaded.");
+			return config;
+		}
+		else
+		{
+			return loadFromResource(fallback);
+		}
 	}
 
 
