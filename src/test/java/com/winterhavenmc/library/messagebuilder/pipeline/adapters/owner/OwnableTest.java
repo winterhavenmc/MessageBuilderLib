@@ -20,14 +20,17 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
+
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Player;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -62,7 +65,7 @@ class OwnableTest
 
 
 	@Test
-	void getOwner_returns_AnimalTamer()
+	void getOwner_returns_Entity()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
