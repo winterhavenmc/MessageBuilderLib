@@ -138,6 +138,14 @@ public class LanguageResourceLoader implements ResourceLoader
 		{
 			plugin.getLogger().warning("Language file '" + languageFile.getName() + "' is not valid YAML. Falling back to default.");
 		}
+		catch (IllegalArgumentException e)
+		{
+			plugin.getLogger().warning("Language file '" + languageFile.getName() + "' is invalid: " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			plugin.getLogger().severe("Unexpected exception loading language file '" + languageFile.getName() + "'");
+		}
 
 		return loadFromResource(fallback);
 	}
