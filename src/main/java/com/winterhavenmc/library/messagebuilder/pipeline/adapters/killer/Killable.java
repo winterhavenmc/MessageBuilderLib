@@ -20,7 +20,6 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
-import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 
 import java.util.Optional;
