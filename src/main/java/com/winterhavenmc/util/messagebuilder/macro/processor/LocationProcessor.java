@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.bukkit.Bukkit;
@@ -84,7 +82,8 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 	private Optional<String> getWorldName(final Location location) {
 
 		// check for null parameter
-		if (location == null) {
+		if (location == null)
+		{
 			return Optional.empty();
 		}
 
@@ -93,29 +92,16 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 		// in order to avoid otherwise unnecessary dependency injection
 		Server server = Bukkit.getServer();
 
-		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) server.getPluginManager().getPlugin("Multiverse-Core");
-
 		// declare resultString with world name for location
 		String resultString;
-		if (location.getWorld() != null) {
+		if (location.getWorld() != null)
+		{
 			resultString = location.getWorld().getName();
 		}
-		else {
+		else
+		{
 			// get name of first world
 			resultString = server.getWorlds().getFirst().getName();
-		}
-
-		// if Multiverse is enabled, use Multiverse world alias if available
-		if (mvCore != null && mvCore.isEnabled()) {
-
-			// get Multiverse world object
-			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(location.getWorld());
-
-			// if Multiverse alias is not null or empty, set world name to alias if set
-			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
-				resultString = mvWorld.getAlias();
-			}
 		}
 
 		// return resultString
