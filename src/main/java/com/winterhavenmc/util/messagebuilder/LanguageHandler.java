@@ -177,6 +177,4 @@ public interface LanguageHandler {
 	 */
 	void reload();
 
-	Optional<String> getWorldAlias(final World world);
-
 }
