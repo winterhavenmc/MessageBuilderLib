@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,9 @@ class WorldNameResolverTest
 {
 	@Mock PluginManager pluginManagerMock;
 	@Mock World worldMock;
-	@Mock MultiverseCore multiverseCoreMock;
+	@Mock MultiverseCore multiverseCoreV4Mock;
+	@Mock org.mvplugins.multiverse.core.MultiverseCore multiverseCoreV5Mock;
+	@Mock PluginDescriptionFile descriptionMock;
 
 
 	@Test
@@ -72,7 +75,7 @@ class WorldNameResolverTest
 	void resolveWorldName_multiverse_fail()
 	{
 		// Arrange
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseV4WorldNameResolver(multiverseCoreV4Mock);
 
 		// Act
 		var result = resolver.resolveWorldName(worldMock);
@@ -86,7 +89,7 @@ class WorldNameResolverTest
 	void resolveWorldName_multiverse_succeed()
 	{
 		// Arrange
-		WorldNameResolver resolver = mock(MultiverseWorldNameResolver.class);
+		WorldNameResolver resolver = mock(MultiverseV4WorldNameResolver.class);
 		when(resolver.resolveWorldName(worldMock)).thenReturn("fake alias");
 
 		// Act
@@ -97,24 +100,45 @@ class WorldNameResolverTest
 	}
 
 
-
-
 	@Test
-	void getResolver_multiverse()
+	void getResolver_multiverseV4()
 	{
 		// Arrange
-		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreMock);
-		when(multiverseCoreMock.isEnabled()).thenReturn(true);
+		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreV4Mock);
+		when(multiverseCoreV4Mock.isEnabled()).thenReturn(true);
+		when(multiverseCoreV4Mock.getDescription()).thenReturn(descriptionMock);
+		when(descriptionMock.getVersion()).thenReturn("4.3.14");
 
 		// Act
 		WorldNameResolver resolver = WorldNameResolver.getResolver(pluginManagerMock);
 
 		// Assert
-		assertInstanceOf(MultiverseWorldNameResolver.class, resolver);
+		assertInstanceOf(MultiverseV4WorldNameResolver.class, resolver);
 
 		// Verify
 		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
-		verify(multiverseCoreMock, atLeastOnce()).isEnabled();
+		verify(multiverseCoreV4Mock, atLeastOnce()).isEnabled();
+	}
+
+
+	@Test
+	void getResolver_multiverseV5()
+	{
+		// Arrange
+		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreV5Mock);
+		when(multiverseCoreV5Mock.isEnabled()).thenReturn(true);
+		when(multiverseCoreV5Mock.getDescription()).thenReturn(descriptionMock);
+		when(descriptionMock.getVersion()).thenReturn("5.0.2");
+
+		// Act
+		WorldNameResolver resolver = WorldNameResolver.getResolver(pluginManagerMock);
+
+		// Assert
+		assertInstanceOf(MultiverseV5WorldNameResolver.class, resolver);
+
+		// Verify
+		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
+		verify(multiverseCoreV5Mock, atLeastOnce()).isEnabled();
 	}
 
 }

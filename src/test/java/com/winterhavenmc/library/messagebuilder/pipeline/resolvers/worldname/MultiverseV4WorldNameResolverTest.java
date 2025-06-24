@@ -34,7 +34,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MultiverseWorldNameResolverTest
+class MultiverseV4WorldNameResolverTest
 {
 	@Mock World worldMock;
 	@Mock MultiverseCore multiverseCoreMock;
@@ -45,7 +45,7 @@ class MultiverseWorldNameResolverTest
 	@Test
 	void testResolveWorldName_null_world()
 	{
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseV4WorldNameResolver(multiverseCoreMock);
 
 		String result = resolver.resolveWorldName(null);
 
@@ -57,7 +57,7 @@ class MultiverseWorldNameResolverTest
 	void testResolveWorldName_valid_world()
 	{
 		when(worldMock.getName()).thenReturn("test_world");
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseV4WorldNameResolver(multiverseCoreMock);
 
 		String result = resolver.resolveWorldName(worldMock);
 
@@ -74,7 +74,7 @@ class MultiverseWorldNameResolverTest
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
 		when(mvWorldMock.getColoredWorldString()).thenReturn("");
 
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseV4WorldNameResolver(multiverseCoreMock);
 
 		// Act
 		String result = resolver.resolveWorldName(worldMock);
@@ -96,7 +96,7 @@ class MultiverseWorldNameResolverTest
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
 
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseV4WorldNameResolver(multiverseCoreMock);
 
 		// Act
 		String result = resolver.resolveWorldName(worldMock);

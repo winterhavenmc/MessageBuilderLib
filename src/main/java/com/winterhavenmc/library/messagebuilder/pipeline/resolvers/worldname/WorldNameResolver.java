@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -39,7 +38,7 @@ import org.bukkit.plugin.PluginManager;
  *
  * @see WorldNameRetriever
  * @see DefaultWorldNameResolver
- * @see MultiverseWorldNameResolver
+ * @see MultiverseV4WorldNameResolver
  * @see org.bukkit.World
  */
 public interface WorldNameResolver
@@ -59,7 +58,7 @@ public interface WorldNameResolver
 	 * the availability of the {@code Multiverse-Core} plugin.
 	 * <p>
 	 * If Multiverse is installed and enabled, this method returns a
-	 * {@link MultiverseWorldNameResolver}; otherwise, it falls back to
+	 * {@link MultiverseV4WorldNameResolver}; otherwise, it falls back to
 	 * a {@link DefaultWorldNameResolver}.
 	 *
 	 * @param pluginManager the server's {@link org.bukkit.plugin.PluginManager}
@@ -69,9 +68,22 @@ public interface WorldNameResolver
 	{
 		final Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
 
-		return (plugin instanceof MultiverseCore multiverseCore && plugin.isEnabled())
-				? new MultiverseWorldNameResolver(multiverseCore)
-				: new DefaultWorldNameResolver();
+		String version = (plugin != null && plugin.isEnabled())
+				? plugin.getDescription().getVersion()
+				: "0";
+
+		if (plugin instanceof com.onarandombox.MultiverseCore.MultiverseCore multiverseCore && version.startsWith("4"))
+		{
+			return new MultiverseV4WorldNameResolver(multiverseCore);
+		}
+		else if (plugin instanceof org.mvplugins.multiverse.core.MultiverseCore multiverseCore && version.startsWith("5"))
+		{
+			return new MultiverseV5WorldNameResolver(multiverseCore);
+		}
+		else
+		{
+			return new DefaultWorldNameResolver();
+		}
 	}
 
 }

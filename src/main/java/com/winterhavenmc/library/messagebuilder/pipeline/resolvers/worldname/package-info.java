@@ -15,7 +15,7 @@
  *
  * <h2>Runtime Integration</h2>
  * If <code>Multiverse-Core</code> is detected and enabled at runtime, the resolver system will use
- * {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.MultiverseWorldNameResolver MultiverseWorldNameResolver}
+ * {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.MultiverseV4WorldNameResolver MultiverseV4WorldNameResolver}
  * to obtain world aliases. Otherwise, it falls back to
  * {@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultWorldNameResolver DefaultWorldNameResolver},
  * which uses the world’s raw Bukkit name.
@@ -27,8 +27,8 @@
  * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameRetriever WorldNameRetriever
  * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver
  * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultWorldNameResolver DefaultWorldNameResolver
- * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.MultiverseWorldNameResolver MultiverseWorldNameResolver
- * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.MultiverseWorldNameRetriever MultiverseWorldNameRetriever
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.MultiverseV4WorldNameResolver MultiverseV4WorldNameResolver
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.MultiverseV4WorldNameRetriever MultiverseV4WorldNameRetriever
  * @see org.bukkit.World
  */
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;

@@ -17,18 +17,18 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
+import org.mvplugins.multiverse.core.MultiverseCore;
 
 
 /**
  * A {@link WorldNameResolver} implementation that retrieves world name aliases
  * using the <strong>Multiverse-Core</strong> plugin.
  * <p>
- * If an alias is found for the given {@link org.bukkit.World}, it is returned as the
+ * If an alias is found for the given {@link World}, it is returned as the
  * display name. If no alias is available (e.g., null or blank), the resolver
- * falls back to the default world name from {@link org.bukkit.World#getName()}.
+ * falls back to the default world name from {@link World#getName()}.
  * <p>
  * If the input world is {@code null}, this resolver returns the string
  * {@code "NULL WORLD"}.
@@ -38,23 +38,23 @@ import org.bukkit.plugin.PluginManager;
  * the appropriate implementation.
  *
  * @see WorldNameResolver
- * @see MultiverseWorldNameRetriever
+ * @see MultiverseV4WorldNameRetriever
  * @see DefaultWorldNameResolver
- * @see org.bukkit.World
+ * @see World
  * @see MultiverseCore
  */
-public class MultiverseWorldNameResolver implements WorldNameResolver
+public class MultiverseV5WorldNameResolver implements WorldNameResolver
 {
 	private final MultiverseCore multiverseCore;
 
 
 	/**
-	 * Constructs a {@code MultiverseWorldNameResolver} using the given instance
+	 * Constructs a {@code MultiverseV4WorldNameResolver} using the given instance
 	 * of {@link MultiverseCore}.
 	 *
 	 * @param multiverseCore the active Multiverse-Core plugin instance
 	 */
-	public MultiverseWorldNameResolver(MultiverseCore multiverseCore)
+	public MultiverseV5WorldNameResolver(MultiverseCore multiverseCore)
 	{
 		this.multiverseCore = multiverseCore;
 	}
@@ -62,10 +62,10 @@ public class MultiverseWorldNameResolver implements WorldNameResolver
 
 	/**
 	 * Attempts to retrieve the alias name of the specified world using
-	 * {@link MultiverseWorldNameRetriever}. If the alias is null or blank,
+	 * {@link MultiverseV4WorldNameRetriever}. If the alias is null or blank,
 	 * falls back to {@code world.getName()}.
 	 *
-	 * @param world the {@link org.bukkit.World} whose alias or name should be returned
+	 * @param world the {@link World} whose alias or name should be returned
 	 * @return the Multiverse alias if available, otherwise the world name;
 	 *         or {@code "NULL WORLD"} if the world is {@code null}
 	 */
@@ -74,7 +74,7 @@ public class MultiverseWorldNameResolver implements WorldNameResolver
 	{
 		if (world == null) { return "NULL WORLD"; }
 
-		final String mvAlias = new MultiverseWorldNameRetriever(multiverseCore).getWorldName(world);
+		final String mvAlias = new MultiverseV5WorldNameRetriever(multiverseCore).getWorldName(world);
 
 		return (mvAlias == null || mvAlias.isBlank())
 				? world.getName()

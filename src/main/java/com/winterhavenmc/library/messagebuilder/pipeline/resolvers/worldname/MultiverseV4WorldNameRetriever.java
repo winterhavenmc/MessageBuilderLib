@@ -31,25 +31,25 @@ import org.bukkit.World;
  * If the world is not managed by Multiverse, or if any part of the plugin's world
  * management system is unavailable, this retriever returns {@code null}.
  * <p>
- * Typically used internally by {@link MultiverseWorldNameResolver}, and not intended
+ * Typically used internally by {@link MultiverseV4WorldNameResolver}, and not intended
  * to be used directly unless fine-grained access to Multiverse aliases is needed.
  *
  * @see WorldNameRetriever
- * @see MultiverseWorldNameResolver
+ * @see MultiverseV4WorldNameResolver
  * @see MultiverseCore
  * @see org.bukkit.World
  */
-public class MultiverseWorldNameRetriever implements WorldNameRetriever
+public class MultiverseV4WorldNameRetriever implements WorldNameRetriever
 {
 	private final MultiverseCore multiverseCore;
 
 
 	/**
-	 * Constructs a {@code MultiverseWorldNameRetriever} with the given Multiverse-Core instance.
+	 * Constructs a {@code MultiverseV4WorldNameRetriever} with the given Multiverse-Core instance.
 	 *
 	 * @param multiverseCore the active {@link MultiverseCore} plugin instance
 	 */
-	public MultiverseWorldNameRetriever(MultiverseCore multiverseCore)
+	public MultiverseV4WorldNameRetriever(MultiverseCore multiverseCore)
 	{
 		this.multiverseCore = multiverseCore;
 	}
