@@ -84,15 +84,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-
-		<!-- Multiverse-Core -->
-		<dependency>
-			<groupId>com.onarandombox.multiversecore</groupId>
-			<artifactId>Multiverse-Core</artifactId>
-			<version>4.3.1</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- Unit Testing Dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
