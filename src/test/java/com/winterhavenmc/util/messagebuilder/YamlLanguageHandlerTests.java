@@ -371,22 +371,6 @@ class YamlLanguageHandlerTests {
 		}
 	}
 
-	@Nested
-	class WorldAliasTests {
-
-		@Disabled
-		@Test
-		void getWorldAliasTest() {
-			World world = server.getWorld("world");
-			assertTrue(languageHandler.getWorldAlias(world).isEmpty());
-		}
-
-		@Test
-		void getWorldAliasTest_null() {
-			assertTrue(languageHandler.getWorldAlias(null).isEmpty());
-		}
-	}
-
 	@Test
 	void reload() {
 		languageHandler.reload();

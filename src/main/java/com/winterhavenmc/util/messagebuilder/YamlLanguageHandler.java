@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import com.winterhavenmc.util.TimeUnit;
 
 import org.bukkit.ChatColor;
@@ -33,8 +31,8 @@ import java.util.*;
  * provides common methods for the installation and management of
  * localized language files for bukkit plugins.
  */
-public final class YamlLanguageHandler implements LanguageHandler {
-
+public final class YamlLanguageHandler implements LanguageHandler
+{
 	// reference to main plugin
 	private final Plugin plugin;
 
@@ -45,8 +43,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	/**
 	 * class constructor
 	 */
-	public YamlLanguageHandler(final Plugin plugin) {
-
+	public YamlLanguageHandler(final Plugin plugin)
+	{
 		this.plugin = plugin;
 
 		// load messages
@@ -60,7 +58,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return Collection of String containing the keys for a message section of the language file
 	 */
 	@Override
-	public Collection<String> getMessageKeys() {
+	public Collection<String> getMessageKeys()
+	{
 		return Objects.requireNonNull(messages.getConfigurationSection("MESSAGES")).getKeys(false);
 	}
 
@@ -75,8 +74,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return true if message is enabled, false if not
 	 */
 	@Override
-	public <MessageId extends Enum<MessageId>> boolean isEnabled(final MessageId messageId) {
-
+	public <MessageId extends Enum<MessageId>> boolean isEnabled(final MessageId messageId)
+	{
 		// check for null parameter
 		if (messageId == null) {
 			return false;
@@ -102,8 +101,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return int message repeat delay in seconds
 	 */
 	@Override
-	public <MessageId extends Enum<MessageId>> long getRepeatDelay(final MessageId messageId) {
-
+	public <MessageId extends Enum<MessageId>> long getRepeatDelay(final MessageId messageId)
+	{
 		// check for null parameter
 		if (messageId == null) {
 			return 0L;
@@ -121,8 +120,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return String message text, or empty string if no message string found
 	 */
 	@Override
-	public <MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId) {
-
+	public <MessageId extends Enum<MessageId>> String getMessage(final MessageId messageId)
+	{
 		// check for null parameter
 		if (messageId == null) {
 			return "";
@@ -153,8 +152,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return String title text, or empty string if no title string found
 	 */
 	@Override
-	public <MessageId extends Enum<MessageId>> String getTitle(final MessageId messageId) {
-
+	public <MessageId extends Enum<MessageId>> String getTitle(final MessageId messageId)
+	{
 		// check for null parameter
 		if (messageId == null) {
 			return "";
@@ -174,8 +173,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return String subtitle text, or empty string if no subtitle string found
 	 */
 	@Override
-	public <MessageId extends Enum<MessageId>> String getSubtitle(final MessageId messageId) {
-
+	public <MessageId extends Enum<MessageId>> String getSubtitle(final MessageId messageId)
+	{
 		// check for null parameter
 		if (messageId == null) {
 			return "";
@@ -188,8 +187,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 
 
 	@Override
-	public <MessageId extends Enum<MessageId>> int getTitleFadeIn(final MessageId messageId) {
-
+	public <MessageId extends Enum<MessageId>> int getTitleFadeIn(final MessageId messageId)
+	{
 		// check for null parameter
 		if (messageId == null || !messages.isInt("MESSAGES." + messageId + ".title-fade-in")) {
 			return 10;
@@ -199,8 +198,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 
 
 	@Override
-	public <MessageId extends Enum<MessageId>> int getTitleStay(final MessageId messageId) {
-
+	public <MessageId extends Enum<MessageId>> int getTitleStay(final MessageId messageId)
+	{
 		// check for null parameter
 		if (messageId == null || !messages.isInt("MESSAGES." + messageId + ".title-stay")) {
 			return 70;
@@ -210,8 +209,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 
 
 	@Override
-	public <MessageId extends Enum<MessageId>> int getTitleFadeOut(final MessageId messageId) {
-
+	public <MessageId extends Enum<MessageId>> int getTitleFadeOut(final MessageId messageId)
+	{
 		// check for null parameter
 		if (messageId == null || !messages.isInt("MESSAGES." + messageId + ".title-fade-out")) {
 			return 20;
@@ -226,8 +225,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return String ITEM_NAME, or empty string if key not found
 	 */
 	@Override
-	public Optional<String> getItemName() {
-
+	public Optional<String> getItemName()
+	{
 		String string = messages.getString("ITEM_INFO.ITEM_NAME");
 
 		if (string == null) {
@@ -244,8 +243,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return String ITEM_NAME, or empty string if key not found
 	 */
 	@Override
-	public Optional<String> getItemName(String def) {
-
+	public Optional<String> getItemName(String def)
+	{
 		String string = messages.getString("ITEM_INFO.ITEM_NAME", def);
 
 		if (string == null) {
@@ -262,8 +261,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted plural display name of an item, or empty string if key not found
 	 */
 	@Override
-	public Optional<String> getItemNamePlural() {
-
+	public Optional<String> getItemNamePlural()
+	{
 		String string = messages.getString("ITEM_INFO.ITEM_NAME_PLURAL");
 
 		if (string == null) {
@@ -280,8 +279,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted inventory display name of an item, or empty string if key not found
 	 */
 	@Override
-	public Optional<String> getInventoryItemName() {
-
+	public Optional<String> getInventoryItemName()
+	{
 		String string = messages.getString("ITEM_INFO.INVENTORY_ITEM_NAME");
 
 		if (string == null) {
@@ -298,8 +297,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return List of strings, one string for each line of lore, or empty list if key not found
 	 */
 	@Override
-	public List<String> getItemLore() {
-
+	public List<String> getItemLore()
+	{
 		List<String> configLore = messages.getStringList("ITEM_INFO.ITEM_LORE");
 		List<String> coloredLore = new ArrayList<>();
 		for (String line : configLore) {
@@ -315,8 +314,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted display name for the world spawn, or empty string if key not found
 	 */
 	@Override
-	public Optional<String> getSpawnDisplayName() {
-
+	public Optional<String> getSpawnDisplayName()
+	{
 		String string = messages.getString("ITEM_INFO.SPAWN_DISPLAY_NAME");
 
 		if (string == null) {
@@ -333,8 +332,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return the formatted display name for home, or empty string if key not found
 	 */
 	@Override
-	public Optional<String> getHomeDisplayName() {
-
+	public Optional<String> getHomeDisplayName()
+	{
 		String string = messages.getString("ITEM_INFO.HOME_DISPLAY_NAME");
 
 		if (string == null) {
@@ -352,7 +351,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return formatted time string
 	 */
 	@Override
-	public String getTimeString(final long duration) {
+	public String getTimeString(final long duration)
+	{
 		return getTimeString(duration, TimeUnit.SECONDS);
 	}
 
@@ -365,9 +365,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @return formatted time string
 	 */
 	@Override
-	public String getTimeString(final long duration, final TimeUnit timeUnit) {
-		//TODO: Refactor this entire method
-
+	public String getTimeString(final long duration, final TimeUnit timeUnit)
+	{
 		TimeUnit finalTimeUnit = timeUnit;
 
 		// check for null parameter
@@ -515,7 +514,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @param path the message path for the string being retrieved
 	 * @return the retrieved string, or null if no matching key found
 	 */
-	public Optional<String> getString(final String path) {
+	public Optional<String> getString(final String path)
+	{
 		return Optional.ofNullable(messages.getString(path));
 	}
 
@@ -526,52 +526,20 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * @param path the message path for the string list being retrieved
 	 * @return List of String - the string list retrieved by path from message file
 	 */
-	public List<String> getStringList(final String path) {
+	public List<String> getStringList(final String path)
+	{
 		return messages.getStringList(path);
 	}
 
 
-	public Optional<String> getWorldName(final World world) {
+	public Optional<String> getWorldName(final World world)
+	{
 		// if world is null, return empty optional
 		if (world == null) {
 			return Optional.empty();
 		}
 		// return multiverse alias or bukkit world name as optional string
-		return Optional.of(getWorldAlias(world).orElse(world.getName()));
-	}
-
-
-	/**
-	 * Get world name from world object, using Multiverse alias if available
-	 *
-	 * @param world the world object to retrieve name
-	 * @return bukkit world name or multiverse alias as {@link Optional} wrapped String
-	 */
-	public Optional<String> getWorldAlias(final World world) {
-
-		// if world is null, return empty optional
-		if (world == null) {
-			return Optional.empty();
-		}
-
-		String worldName = null;
-
-		// get reference to Multiverse-Core if installed
-		MultiverseCore mvCore = (MultiverseCore) plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
-
-		// if Multiverse is enabled, get MultiverseWorld object
-		if (mvCore != null && mvCore.isEnabled()) {
-
-			MultiverseWorld mvWorld = mvCore.getMVWorldManager().getMVWorld(world);
-
-			// if Multiverse alias is not null or empty, set worldName to alias
-			if (mvWorld != null && mvWorld.getAlias() != null && !mvWorld.getAlias().isEmpty()) {
-				worldName = mvWorld.getAlias();
-			}
-		}
-
-		// return the bukkit world name or Multiverse world alias
-		return Optional.ofNullable(worldName);
+		return Optional.of(world.getName());
 	}
 
 
@@ -580,8 +548,8 @@ public final class YamlLanguageHandler implements LanguageHandler {
 	 * does not exist in the plugin data directory, it will be re-copied from the jar embedded resource.
 	 */
 	@Override
-	public void reload() {
-
+	public void reload()
+	{
 		// install message files if necessary; this will not overwrite existing files
 		new YamlFileInstaller(plugin).install();
 
