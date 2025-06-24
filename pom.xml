@@ -87,6 +87,7 @@
 				<repository>
 					<id>multiverse-repo</id>
 					<url>https://repo.onarandombox.com/content/groups/public/</url>
+<!--					<url>https://repo.onarandombox.com/multiverse-releases/</url>-->
 				</repository>
 			</repositories>
 		</profile>
@@ -101,12 +102,19 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Multiverse-Core -->
+		<!-- Multiverse-Core 4 -->
 		<dependency>
 			<groupId>com.onarandombox.multiversecore</groupId>
 			<artifactId>multiverse-core</artifactId>
 			<version>4.3.14</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- Multiverse-Core 5 -->
+		<dependency>
+			<groupId>org.mvplugins.multiverse.core</groupId>
+			<artifactId>multiverse-core</artifactId>
+			<version>5.0.2</version>
 		</dependency>
 
 		<dependency>
