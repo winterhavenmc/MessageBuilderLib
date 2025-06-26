@@ -37,7 +37,8 @@ import org.bukkit.World;
  * {@code {WORLDNAME}} in messages.
  *
  * @see org.bukkit.World
- * @see DefaultWorldNameResolver
+ * @see DefaultResolver
+ * @see PluginResolver
  */
 public interface WorldNameRetriever
 {
