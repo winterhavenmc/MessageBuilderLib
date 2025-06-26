@@ -63,7 +63,7 @@ enums as parameterized types:
 ```java
 @Override
 public void onEnable() {
-    messageBuilder<MessageId, Macro> = new MessageBuilder<>(this);
+    messageBuilder = new MessageBuilder.create(this);
 }
 ```
 
