@@ -145,7 +145,7 @@ class MessageBuilderBootstrap
 	static AdapterContextContainer createAdapterContextContainer(final Plugin plugin,
 																 final FormatterContainer formatterContainer)
 	{
-		return new AdapterContextContainer(WorldNameResolver.getResolver(plugin.getServer().getPluginManager()), formatterContainer);
+		return new AdapterContextContainer(WorldNameResolver.get(plugin.getServer().getPluginManager()), formatterContainer);
 	}
 
 }

@@ -17,9 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
+import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.mvplugins.multiverse.core.MultiverseCore;
 
 
 /**
@@ -34,35 +35,35 @@ import org.mvplugins.multiverse.core.MultiverseCore;
  * {@code "NULL WORLD"}.
  *
  * <p>This class is only instantiated when <strong>Multiverse-Core</strong> is detected and enabled
- * at runtime. Use {@link WorldNameResolver#getResolver(PluginManager)} to safely select
+ * at runtime. Use {@link WorldNameResolver#get(PluginManager)} to safely select
  * the appropriate implementation.
  *
  * @see WorldNameResolver
- * @see MultiverseV4WorldNameRetriever
- * @see DefaultWorldNameResolver
+ * @see Multiverse4Retriever
+ * @see DefaultResolver
  * @see World
  * @see MultiverseCore
  */
-public class MultiverseV5WorldNameResolver implements WorldNameResolver
+public final class PluginResolver implements WorldNameResolver
 {
-	private final MultiverseCore multiverseCore;
+	private final Plugin plugin;
 
 
 	/**
 	 * Constructs a {@code MultiverseV4WorldNameResolver} using the given instance
 	 * of {@link MultiverseCore}.
 	 *
-	 * @param multiverseCore the active Multiverse-Core plugin instance
+	 * @param plugin the active Multiverse-Core plugin instance
 	 */
-	public MultiverseV5WorldNameResolver(MultiverseCore multiverseCore)
+	public PluginResolver(Plugin plugin)
 	{
-		this.multiverseCore = multiverseCore;
+		this.plugin = plugin;
 	}
 
 
 	/**
 	 * Attempts to retrieve the alias name of the specified world using
-	 * {@link MultiverseV4WorldNameRetriever}. If the alias is null or blank,
+	 * {@link Multiverse4Retriever}. If the alias is null or blank,
 	 * falls back to {@code world.getName()}.
 	 *
 	 * @param world the {@link World} whose alias or name should be returned
@@ -70,15 +71,22 @@ public class MultiverseV5WorldNameResolver implements WorldNameResolver
 	 *         or {@code "NULL WORLD"} if the world is {@code null}
 	 */
 	@Override
-	public String resolveWorldName(final World world)
+	public String resolve(final World world)
 	{
-		if (world == null) { return "NULL WORLD"; }
+		if (world == null) { return "NULL"; }
 
-		final String mvAlias = new MultiverseV5WorldNameRetriever(multiverseCore).getWorldName(world);
+		WorldNameRetriever retriever = switch (plugin)
+		{
+			case com.onarandombox.MultiverseCore.MultiverseCore mvPlugin -> new Multiverse4Retriever(mvPlugin);
+			case org.mvplugins.multiverse.core.MultiverseCore mvPlugin -> new Multiverse5Retriever(mvPlugin);
+			default -> new DefaultRetriever();
+		};
 
-		return (mvAlias == null || mvAlias.isBlank())
-				? world.getName()
-				: mvAlias;
+		final String result = retriever.getWorldName(world);
+
+		return (result != null && !result.isBlank())
+				? result
+				: world.getName();
 	}
 
 }

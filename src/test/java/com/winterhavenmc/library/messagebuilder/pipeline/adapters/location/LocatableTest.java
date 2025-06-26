@@ -22,7 +22,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContext
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultResolver;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ class LocatableTest
 {
 	@Mock AdapterContextContainer ctxMock;
 	@Mock FormatterContainer formatterContainerMock;
-	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock DefaultResolver worldNameResolverMock;
 	@Mock LocaleNumberFormatter localeNumberFormatterMock;
 	@Mock Location locationMock;
 	@Mock World worldMock;
@@ -113,7 +114,7 @@ class LocatableTest
 		when(ctxMock.formatterContainer()).thenReturn(formatterContainerMock);
 		when(ctxMock.worldNameResolver()).thenReturn(worldNameResolverMock);
 		when(formatterContainerMock.localeNumberFormatter()).thenReturn(localeNumberFormatterMock);
-		when(worldNameResolverMock.resolveWorldName(any())).thenReturn("test_world");
+		when(worldNameResolverMock.resolve(any())).thenReturn("test_world");
 		when(locationMock.getBlockX()).thenReturn(11);
 		when(locationMock.getBlockY()).thenReturn(12);
 		when(locationMock.getBlockZ()).thenReturn(13);
@@ -169,7 +170,7 @@ class LocatableTest
 		when(locationMock.getWorld()).thenReturn(worldMock);
 		when(worldMock.getName()).thenReturn("test_world");
 		when(ctxMock.worldNameResolver()).thenReturn(worldNameResolverMock);
-		when(worldNameResolverMock.resolveWorldName(any())).thenReturn("test_world");
+		when(worldNameResolverMock.resolve(any())).thenReturn("test_world");
 
 		// Act
 		Optional<String> result = Locatable.getLocationWorldName(locationMock, ctxMock);

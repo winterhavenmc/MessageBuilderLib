@@ -17,13 +17,14 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
+import org.mvplugins.multiverse.core.MultiverseCore;
 
 
 /**
  * A {@link WorldNameRetriever} implementation that retrieves the alias name of a
- * {@link org.bukkit.World} using the <strong>Multiverse-Core</strong> API.
+ * {@link World} using the <strong>Multiverse-Core</strong> API.
  * <p>
  * This class interacts directly with {@link MultiverseCore} and its {@code MVWorldManager}
  * to look up world metadata, including alias and display formatting.
@@ -31,32 +32,32 @@ import org.bukkit.World;
  * If the world is not managed by Multiverse, or if any part of the plugin's world
  * management system is unavailable, this retriever returns {@code null}.
  * <p>
- * Typically used internally by {@link MultiverseV4WorldNameResolver}, and not intended
+ * Typically used internally by {@link PluginResolver}, and not intended
  * to be used directly unless fine-grained access to Multiverse aliases is needed.
  *
  * @see WorldNameRetriever
- * @see MultiverseV4WorldNameResolver
+ * @see PluginResolver
  * @see MultiverseCore
- * @see org.bukkit.World
+ * @see World
  */
-public class MultiverseV4WorldNameRetriever implements WorldNameRetriever
+public class Multiverse5Retriever implements WorldNameRetriever
 {
-	private final MultiverseCore multiverseCore;
+	private final Plugin plugin;
 
 
 	/**
-	 * Constructs a {@code MultiverseV4WorldNameRetriever} with the given Multiverse-Core instance.
+	 * Constructs a {@code Multiverse4Retriever} with the given Multiverse-Core instance.
 	 *
-	 * @param multiverseCore the active {@link MultiverseCore} plugin instance
+	 * @param plugin the active {@link MultiverseCore} plugin instance
 	 */
-	public MultiverseV4WorldNameRetriever(MultiverseCore multiverseCore)
+	public Multiverse5Retriever(Plugin plugin)
 	{
-		this.multiverseCore = multiverseCore;
+		this.plugin = plugin;
 	}
 
 
 	/**
-	 * Attempts to retrieve the alias name of the given {@link org.bukkit.World}
+	 * Attempts to retrieve the alias name of the given {@link World}
 	 * using the Multiverse world manager.
 	 * <p>
 	 * If the world is not managed by Multiverse, or if plugin internals are unavailable,
@@ -66,13 +67,11 @@ public class MultiverseV4WorldNameRetriever implements WorldNameRetriever
 	 * @return the world alias from Multiverse, or {@code null} if unavailable
 	 */
 	@Override
-	public String getWorldName(World world)
+	public String getWorldName(final World world)
 	{
-		if (world == null || multiverseCore == null || multiverseCore.getMVWorldManager() == null)
-		{
-			return null;
-		}
-		return multiverseCore.getMVWorldManager().getMVWorld(world).getColoredWorldString();
+		return (world != null && plugin instanceof MultiverseCore)
+				? ((MultiverseCore) plugin).getApi().getWorldManager().getWorld(world).getOrNull().getAliasOrName()
+				: null;
 	}
 
 }

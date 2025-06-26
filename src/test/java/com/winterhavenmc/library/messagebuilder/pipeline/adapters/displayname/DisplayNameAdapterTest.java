@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultResolver;
 
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class DisplayNameAdapterTest
 {
-	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock DefaultResolver worldNameResolverMock;
 	@Mock AdapterContextContainer adapterContextContainerMock;
 
 	@Mock Player playerMock;
@@ -83,7 +83,7 @@ public class DisplayNameAdapterTest
 	@Test @DisplayName("adapt with valid World")
 	void getDisplayName_with_valid_world()
 	{
-		when(worldNameResolverMock.resolveWorldName(worldMock)).thenReturn("Resolved World Name");
+		when(worldNameResolverMock.resolve(worldMock)).thenReturn("Resolved World Name");
 		when(adapterContextContainerMock.worldNameResolver()).thenReturn(worldNameResolverMock);
 
 		DisplayNameAdapter adapter = new DisplayNameAdapter(adapterContextContainerMock);

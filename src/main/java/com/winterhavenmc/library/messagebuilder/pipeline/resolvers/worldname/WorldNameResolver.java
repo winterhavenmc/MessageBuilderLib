@@ -37,11 +37,10 @@ import org.bukkit.plugin.PluginManager;
  * world name from {@link org.bukkit.World#getName()}.
  *
  * @see WorldNameRetriever
- * @see DefaultWorldNameResolver
- * @see MultiverseV4WorldNameResolver
+ * @see DefaultResolver
  * @see org.bukkit.World
  */
-public interface WorldNameResolver
+public sealed interface WorldNameResolver permits DefaultResolver, PluginResolver
 {
 	/**
 	 * Resolves the user-facing name of the given {@link org.bukkit.World}, using
@@ -50,7 +49,7 @@ public interface WorldNameResolver
 	 * @param world the {@link org.bukkit.World} whose name should be resolved
 	 * @return the display or alias name for the world
 	 */
-	String resolveWorldName(World world);
+	String resolve(World world);
 
 
 	/**
@@ -58,32 +57,19 @@ public interface WorldNameResolver
 	 * the availability of the {@code Multiverse-Core} plugin.
 	 * <p>
 	 * If Multiverse is installed and enabled, this method returns a
-	 * {@link MultiverseV4WorldNameResolver}; otherwise, it falls back to
-	 * a {@link DefaultWorldNameResolver}.
+	 * {@link PluginResolver}; otherwise, it falls back to
+	 * a {@link DefaultResolver}.
 	 *
 	 * @param pluginManager the server's {@link org.bukkit.plugin.PluginManager}
 	 * @return a {@link WorldNameResolver} appropriate for the current server environment
 	 */
-	static WorldNameResolver getResolver(final PluginManager pluginManager)
+	static WorldNameResolver get(final PluginManager pluginManager)
 	{
-		final Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
+		Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
 
-		String version = (plugin != null && plugin.isEnabled())
-				? plugin.getDescription().getVersion()
-				: "0";
-
-		if (plugin instanceof com.onarandombox.MultiverseCore.MultiverseCore multiverseCore && version.startsWith("4"))
-		{
-			return new MultiverseV4WorldNameResolver(multiverseCore);
-		}
-		else if (plugin instanceof org.mvplugins.multiverse.core.MultiverseCore multiverseCore && version.startsWith("5"))
-		{
-			return new MultiverseV5WorldNameResolver(multiverseCore);
-		}
-		else
-		{
-			return new DefaultWorldNameResolver();
-		}
+		return (plugin != null && plugin.isEnabled())
+				? new PluginResolver(plugin)
+				: new DefaultResolver();
 	}
 
 }

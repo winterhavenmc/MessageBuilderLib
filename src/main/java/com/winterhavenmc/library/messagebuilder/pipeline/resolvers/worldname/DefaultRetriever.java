@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
+import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
-import org.mvplugins.multiverse.core.MultiverseCore;
 
 
 /**
@@ -31,30 +31,15 @@ import org.mvplugins.multiverse.core.MultiverseCore;
  * If the world is not managed by Multiverse, or if any part of the plugin's world
  * management system is unavailable, this retriever returns {@code null}.
  * <p>
- * Typically used internally by {@link MultiverseV4WorldNameResolver}, and not intended
+ * Typically used internally by {@link WorldNameResolver}, and not intended
  * to be used directly unless fine-grained access to Multiverse aliases is needed.
  *
  * @see WorldNameRetriever
- * @see MultiverseV4WorldNameResolver
  * @see MultiverseCore
  * @see World
  */
-public class MultiverseV5WorldNameRetriever implements WorldNameRetriever
+public class DefaultRetriever implements WorldNameRetriever
 {
-	private final MultiverseCore multiverseCore;
-
-
-	/**
-	 * Constructs a {@code MultiverseV4WorldNameRetriever} with the given Multiverse-Core instance.
-	 *
-	 * @param multiverseCore the active {@link MultiverseCore} plugin instance
-	 */
-	public MultiverseV5WorldNameRetriever(MultiverseCore multiverseCore)
-	{
-		this.multiverseCore = multiverseCore;
-	}
-
-
 	/**
 	 * Attempts to retrieve the alias name of the given {@link World}
 	 * using the Multiverse world manager.
@@ -68,8 +53,8 @@ public class MultiverseV5WorldNameRetriever implements WorldNameRetriever
 	@Override
 	public String getWorldName(World world)
 	{
-		return (world != null && multiverseCore != null)
-				? multiverseCore.getApi().getWorldManager().getWorld(world).getOrNull().getAliasOrName()
+		return (world != null)
+				? world.getName()
 				: null;
 	}
 

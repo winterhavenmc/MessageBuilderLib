@@ -33,7 +33,7 @@ import org.bukkit.World;
  * @see WorldNameResolver
  * @see org.bukkit.World#getName()
  */
-public class DefaultWorldNameResolver implements WorldNameResolver
+public final class DefaultResolver implements WorldNameResolver
 {
 	/**
 	 * Returns the default Bukkit world name by calling {@link org.bukkit.World#getName()}.
@@ -42,7 +42,7 @@ public class DefaultWorldNameResolver implements WorldNameResolver
 	 * @return the world's raw name as defined by Bukkit
 	 */
 	@Override
-	public String resolveWorldName(final World world)
+	public String resolve(final World world)
 	{
 		return world.getName();
 	}

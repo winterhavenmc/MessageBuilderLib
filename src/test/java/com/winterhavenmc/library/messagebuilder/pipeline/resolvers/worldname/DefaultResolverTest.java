@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class DefaultWorldNameResolverTest
+class DefaultResolverTest
 {
 	@Mock World worldMock;
 
@@ -39,10 +39,10 @@ class DefaultWorldNameResolverTest
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
-		WorldNameResolver resolver = new DefaultWorldNameResolver();
+		WorldNameResolver resolver = new DefaultResolver();
 
 		// Act
-		String result = resolver.resolveWorldName(worldMock);
+		String result = resolver.resolve(worldMock);
 
 		// Assert
 		assertEquals("test_world", result);
