@@ -20,6 +20,8 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 
+import java.util.Optional;
+
 
 /**
  * A {@link WorldNameRetriever} implementation that retrieves the alias name of a
@@ -51,11 +53,11 @@ public class DefaultRetriever implements WorldNameRetriever
 	 * @return the world alias from Multiverse, or {@code null} if unavailable
 	 */
 	@Override
-	public String getWorldName(World world)
+	public Optional<String> getWorldName(World world)
 	{
 		return (world != null)
-				? world.getName()
-				: null;
+				? Optional.of(world.getName())
+				: Optional.empty();
 	}
 
 }

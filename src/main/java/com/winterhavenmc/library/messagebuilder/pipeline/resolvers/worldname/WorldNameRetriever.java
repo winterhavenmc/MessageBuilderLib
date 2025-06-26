@@ -19,6 +19,8 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
 import org.bukkit.World;
 
+import java.util.Optional;
+
 
 /**
  * Strategy interface for retrieving a user-friendly name for a given {@link org.bukkit.World}.
@@ -29,7 +31,7 @@ import org.bukkit.World;
  * <p>
  * Implementations may:
  * <ul>
- *   <li>Return the default world name from {@code World#getName()}</li>
+ *   <li>Return the default world name from {@code World.getName()}</li>
  *   <li>Return an alias or display name from an external plugin such as Multiverse</li>
  * </ul>
  * <p>
@@ -42,5 +44,5 @@ import org.bukkit.World;
  */
 public interface WorldNameRetriever
 {
-	String getWorldName(World world);
+	Optional<String> getWorldName(World world);
 }

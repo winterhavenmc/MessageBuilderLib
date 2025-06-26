@@ -21,13 +21,16 @@ import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.mvplugins.multiverse.core.MultiverseCore;
 
+import java.util.Optional;
+
 
 /**
  * A {@link WorldNameRetriever} implementation that retrieves the alias name of a
  * {@link World} using the <strong>Multiverse-Core</strong> API.
  * <p>
- * This class interacts directly with {@link MultiverseCore} and its {@code MVWorldManager}
- * to look up world metadata, including alias and display formatting.
+ * This class interacts directly with {@link MultiverseCore} and its {@code WorldManager}
+ * to look up world metadata, including alias and display formatting. This implementation
+ * retrieves a world alias or name using Multiverse version 5.
  * <p>
  * If the world is not managed by Multiverse, or if any part of the plugin's world
  * management system is unavailable, this retriever returns {@code null}.
@@ -57,21 +60,21 @@ public class Multiverse5Retriever implements WorldNameRetriever
 
 
 	/**
-	 * Attempts to retrieve the alias name of the given {@link World}
+	 * Attempts to retrieve the alias or name of the given {@link World}
 	 * using the Multiverse world manager.
 	 * <p>
 	 * If the world is not managed by Multiverse, or if plugin internals are unavailable,
 	 * this method returns {@code null}.
 	 *
 	 * @param world the Bukkit world to retrieve an alias for
-	 * @return the world alias from Multiverse, or {@code null} if unavailable
+	 * @return the world alias or name from Multiverse, or {@code null} if unavailable
 	 */
 	@Override
-	public String getWorldName(final World world)
+	public Optional<String> getWorldName(final World world)
 	{
 		return (world != null && plugin instanceof MultiverseCore)
-				? ((MultiverseCore) plugin).getApi().getWorldManager().getWorld(world).getOrNull().getAliasOrName()
-				: null;
+				? Optional.of(((MultiverseCore) plugin).getApi().getWorldManager().getWorld(world).getOrNull().getAliasOrName())
+				: Optional.empty();
 	}
 
 }

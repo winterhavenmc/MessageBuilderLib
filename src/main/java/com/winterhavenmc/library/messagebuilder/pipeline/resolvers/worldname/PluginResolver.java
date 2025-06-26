@@ -22,6 +22,8 @@ import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.Optional;
+
 
 /**
  * A {@link WorldNameResolver} implementation that retrieves world name aliases
@@ -82,10 +84,10 @@ public final class PluginResolver implements WorldNameResolver
 			default -> new DefaultRetriever();
 		};
 
-		final String result = retriever.getWorldName(world);
+		final Optional<String> result = retriever.getWorldName(world);
 
-		return (result != null && !result.isBlank())
-				? result
+		return (result.isPresent() && !result.get().isBlank())
+				? result.get()
 				: world.getName();
 	}
 
