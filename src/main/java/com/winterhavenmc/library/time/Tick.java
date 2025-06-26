@@ -67,7 +67,7 @@ public final class Tick implements TemporalUnit
 	@Override
 	public String toString()
 	{
-		return "Ticks (50ms)";
+		return "Ticks";
 	}
 
 }
