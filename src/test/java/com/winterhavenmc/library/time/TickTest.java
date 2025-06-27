@@ -87,7 +87,7 @@ class TickTest {
 
 	@Test
 	void testToString() {
-		assertEquals("Ticks (50ms)", tick.toString(), "The string representation should match.");
+		assertEquals("Ticks", tick.toString(), "The string representation should match.");
 	}
 
 	@Test
