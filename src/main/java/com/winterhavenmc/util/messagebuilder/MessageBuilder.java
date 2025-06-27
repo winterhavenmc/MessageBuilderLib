@@ -18,7 +18,6 @@
 package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.TimeUnit;
-
 import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -58,11 +57,11 @@ import java.util.Optional;
  * DURATION or DURATION_MINUTES
  *
  * @param <MessageId> An enum whose members correspond to a message key in a language file
- * @param <Macro> An enum whose members correspond to a string replacement placeholder in a message string
+ * @param <Macro>     An enum whose members correspond to a string replacement placeholder in a message string
  */
 @SuppressWarnings("unused")
-public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>> {
-
+public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro extends Enum<Macro>>
+{
 	private final LanguageHandler languageHandler;
 	private final Plugin plugin;
 	private final MacroProcessorHandler macroProcessorHandler;
@@ -72,7 +71,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public MessageBuilder(final Plugin plugin) {
+	public MessageBuilder(final Plugin plugin)
+	{
 		this.plugin = plugin;
 		this.languageHandler = new YamlLanguageHandler(plugin);
 		this.macroProcessorHandler = new MacroProcessorHandler(languageHandler);
@@ -81,9 +81,11 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Set both delimiters to the same specific character
+	 *
 	 * @param character the character to use for both delimiters
 	 */
-	public void setDelimiters(final Character character) {
+	public void setDelimiters(final Character character)
+	{
 		MacroProcessorHandler.MacroDelimiter.LEFT.set(character);
 		MacroProcessorHandler.MacroDelimiter.RIGHT.set(character);
 	}
@@ -91,10 +93,12 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Set delimiters to unique characters by passing two parameters
-	 * @param leftCharacter the character to use for the left delimiter
+	 *
+	 * @param leftCharacter  the character to use for the left delimiter
 	 * @param rightCharacter the character to use for the right delimiter
 	 */
-	public void setDelimiters(final Character leftCharacter, final Character rightCharacter) {
+	public void setDelimiters(final Character leftCharacter, final Character rightCharacter)
+	{
 		MacroProcessorHandler.MacroDelimiter.LEFT.set(leftCharacter);
 		MacroProcessorHandler.MacroDelimiter.RIGHT.set(rightCharacter);
 	}
@@ -102,31 +106,37 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 
 	/**
 	 * Initiate a message
+	 *
 	 * @param recipient the command sender to whom the message will be sent
 	 * @param messageId the message identifier
 	 * @return Message - an initialized message object
 	 */
-	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId) {
+	public Message<MessageId, Macro> compose(final CommandSender recipient, final MessageId messageId)
+	{
 		return new Message<>(plugin, languageHandler, macroProcessorHandler, recipient, messageId);
 	}
 
 
 	/**
 	 * Check if a message is enabled in the configuration file
+	 *
 	 * @param messageId the message identifier
 	 * @return true if message is enabled, false if not
 	 */
-	public boolean isEnabled(final MessageId messageId) {
+	public boolean isEnabled(final MessageId messageId)
+	{
 		return languageHandler.isEnabled(messageId);
 	}
 
 
 	/**
 	 * Get the configured repeat delay for a message
+	 *
 	 * @param messageId the message identifier
 	 * @return long - the message repeat delay (in seconds)
 	 */
-	public long getRepeatDelay(final MessageId messageId) {
+	public long getRepeatDelay(final MessageId messageId)
+	{
 		return languageHandler.getRepeatDelay(messageId);
 	}
 
@@ -137,7 +147,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param messageId the message identifier
 	 * @return String message text, or empty string if no message string found
 	 */
-	public String getMessage(final MessageId messageId) {
+	public String getMessage(final MessageId messageId)
+	{
 		return languageHandler.getMessage(messageId);
 	}
 
@@ -147,7 +158,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the formatted item name from language file, or empty string if key not found
 	 */
-	public Optional<String> getItemName() {
+	public Optional<String> getItemName()
+	{
 		return languageHandler.getItemName();
 	}
 
@@ -157,7 +169,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the formatted item plural name from language file, or empty string if key not found
 	 */
-	public Optional<String> getItemNamePlural() {
+	public Optional<String> getItemNamePlural()
+	{
 		return languageHandler.getItemNamePlural();
 	}
 
@@ -167,7 +180,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the formatted inventory display name of an item, as a String wrapped in an {@link Optional}
 	 */
-	public Optional<String> getInventoryItemName() {
+	public Optional<String> getInventoryItemName()
+	{
 		return languageHandler.getInventoryItemName();
 	}
 
@@ -177,7 +191,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return List of strings, one string for each line of lore, or empty list if key not found
 	 */
-	public List<String> getItemLore() {
+	public List<String> getItemLore()
+	{
 		return languageHandler.getItemLore();
 	}
 
@@ -187,7 +202,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the formatted display name for the world spawn, as a String wrapped in an {@link Optional}
 	 */
-	public Optional<String> getSpawnDisplayName() {
+	public Optional<String> getSpawnDisplayName()
+	{
 		return languageHandler.getSpawnDisplayName();
 	}
 
@@ -197,7 +213,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 *
 	 * @return the formatted display name for home, as a String wrapped in an {@link Optional}
 	 */
-	public Optional<String> getHomeDisplayName() {
+	public Optional<String> getHomeDisplayName()
+	{
 		return languageHandler.getHomeDisplayName();
 	}
 
@@ -208,7 +225,8 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param duration a time duration in milliseconds
 	 * @return formatted time string
 	 */
-	public String getTimeString(final long duration) {
+	public String getTimeString(final long duration)
+	{
 		return languageHandler.getTimeString(duration);
 	}
 
@@ -220,44 +238,52 @@ public final class MessageBuilder<MessageId extends Enum<MessageId>, Macro exten
 	 * @param timeUnit the time granularity to display (days | hours | minutes | seconds)
 	 * @return formatted time string
 	 */
-	public String getTimeString(final long duration, final TimeUnit timeUnit) {
+	public String getTimeString(final long duration, final TimeUnit timeUnit)
+	{
 		return languageHandler.getTimeString(duration, timeUnit);
 	}
 
 
 	/**
 	 * Get string by path in message file
+	 *
 	 * @param path the message path for the string being retrieved
 	 * @return String - the string retrieved by path from message file, wrapped in an {@link Optional}
 	 */
-	public Optional<String> getString(final String path) {
+	public Optional<String> getString(final String path)
+	{
 		return languageHandler.getString(path);
 	}
 
 
 	/**
 	 * Get List of String by path in message file
+	 *
 	 * @param path the message path for the string list being retrieved
 	 * @return List of String - the string list retrieved by path from message file
 	 */
-	public List<String> getStringList(final String path) {
+	public List<String> getStringList(final String path)
+	{
 		return languageHandler.getStringList(path);
 	}
 
 
 	/**
 	 * Get optional string of world name or multiverse alias if available
+	 *
 	 * @param world the world to retrieve name
 	 * @return Optional String containing world name or multiverse alias
 	 */
-	public Optional<String> getWorldName(final World world) {
+	public Optional<String> getWorldName(final World world)
+	{
 		return languageHandler.getWorldName(world);
 	}
 
 	/**
 	 * Reload messages from configured language file
 	 */
-	public void reload() {
+	public void reload()
+	{
 		languageHandler.reload();
 	}
 
