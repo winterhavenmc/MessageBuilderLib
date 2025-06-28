@@ -45,10 +45,11 @@ class MultiverseV4WorldNameResolverTest
 	@Test
 	void testResolveWorldName_null_world()
 	{
+		// Act
 		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
-
 		String result = resolver.resolve(null);
 
+		// Assert
 		assertEquals("NULL", result);
 	}
 
@@ -56,11 +57,14 @@ class MultiverseV4WorldNameResolverTest
 	@Test
 	void testResolveWorldName_valid_world()
 	{
+		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
 
+		// Act
+		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
+		// Assert
 		assertEquals("test_world", result);
 	}
 
@@ -74,9 +78,8 @@ class MultiverseV4WorldNameResolverTest
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
 		when(mvWorldMock.getAlias()).thenReturn("");
 
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
-
 		// Act
+		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
@@ -96,9 +99,8 @@ class MultiverseV4WorldNameResolverTest
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
 
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
-
 		// Act
+		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
