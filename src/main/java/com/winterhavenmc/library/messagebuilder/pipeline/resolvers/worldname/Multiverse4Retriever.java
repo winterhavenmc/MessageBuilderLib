@@ -70,9 +70,12 @@ public class Multiverse4Retriever implements WorldNameRetriever
 	@Override
 	public Optional<String> getWorldName(World world)
 	{
-		return (world != null && multiverseCore != null && multiverseCore.getMVWorldManager() != null)
-				? Optional.ofNullable(multiverseCore.getMVWorldManager().getMVWorld(world).getAlias())
-				: Optional.empty();
+		return (world != null
+				&& multiverseCore != null
+				&& multiverseCore.getMVWorldManager() != null
+				&& multiverseCore.getMVWorldManager().getMVWorld(world) != null)
+			? Optional.ofNullable(multiverseCore.getMVWorldManager().getMVWorld(world).getAlias())
+			: Optional.empty();
 	}
 
 }

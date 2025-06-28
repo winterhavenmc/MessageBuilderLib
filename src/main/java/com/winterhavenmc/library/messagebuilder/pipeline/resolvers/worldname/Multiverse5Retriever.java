@@ -20,6 +20,9 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.mvplugins.multiverse.core.MultiverseCore;
+import org.mvplugins.multiverse.core.MultiverseCoreApi;
+import org.mvplugins.multiverse.core.world.MultiverseWorld;
+import org.mvplugins.multiverse.external.vavr.control.Option;
 
 import java.util.Optional;
 
@@ -64,16 +67,37 @@ public class Multiverse5Retriever implements WorldNameRetriever
 	 * using the Multiverse world manager.
 	 * <p>
 	 * If the world is not managed by Multiverse, or if plugin internals are unavailable,
-	 * this method returns {@code null}.
+	 * this method returns an empty {@code Optional}
 	 *
 	 * @param world the Bukkit world to retrieve an alias for
-	 * @return the world alias or name from Multiverse, or {@code null} if unavailable
+	 * @return the world alias or name from Multiverse, or an empty {@code Optional} if unavailable
 	 */
 	@Override
 	public Optional<String> getWorldName(final World world)
 	{
-		return (world != null && plugin instanceof MultiverseCore)
-				? Optional.of(((MultiverseCore) plugin).getApi().getWorldManager().getWorld(world).getOrNull().getAliasOrName())
+		if (plugin == null)
+		{
+			return Optional.empty();
+		}
+
+		MultiverseCoreApi multiverseCoreApi = ((MultiverseCore) plugin).getApi();
+
+		if (multiverseCoreApi == null)
+		{
+			return Optional.empty();
+		}
+
+		Option<MultiverseWorld> optionWorld = multiverseCoreApi.getWorldManager().getWorld(world);
+
+		if (optionWorld.isEmpty())
+		{
+			return Optional.empty();
+		}
+
+		MultiverseWorld multiverseWorld = optionWorld.getOrNull();
+
+		return (multiverseWorld != null)
+				? Optional.of(multiverseWorld.getAliasOrName())
 				: Optional.empty();
 	}
 
