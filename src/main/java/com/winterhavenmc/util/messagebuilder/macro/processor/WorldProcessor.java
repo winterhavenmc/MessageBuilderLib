@@ -22,6 +22,8 @@ import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 
 import org.bukkit.World;
 
+import java.util.Optional;
+
 
 public class WorldProcessor extends AbstractProcessor implements Processor {
 
@@ -35,7 +37,8 @@ public class WorldProcessor extends AbstractProcessor implements Processor {
 		ResultMap resultMap = new ResultMap();
 
 		if (object instanceof World world) {
-			resultMap.put(key, languageHandler.getWorldName(world).orElse(UNKNOWN_VALUE));
+			Optional<String> worldName = languageHandler.getWorldName(world);
+			resultMap.put(key, worldName.orElse(UNKNOWN_VALUE));
 		}
 
 		return resultMap;
