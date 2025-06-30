@@ -43,17 +43,17 @@ import java.util.Optional;
  */
 public class Multiverse4Retriever implements WorldNameRetriever
 {
-	private final MultiverseCore multiverseCore;
+	private final MultiverseCore plugin;
 
 
 	/**
 	 * Constructs a {@code Multiverse4Retriever} with the given Multiverse-Core instance.
 	 *
-	 * @param multiverseCore the active {@link MultiverseCore} plugin instance
+	 * @param plugin the active {@link MultiverseCore} plugin instance
 	 */
-	public Multiverse4Retriever(MultiverseCore multiverseCore)
+	public Multiverse4Retriever(MultiverseCore plugin)
 	{
-		this.multiverseCore = multiverseCore;
+		this.plugin = plugin;
 	}
 
 
@@ -71,10 +71,9 @@ public class Multiverse4Retriever implements WorldNameRetriever
 	public Optional<String> getWorldName(World world)
 	{
 		return (world != null
-				&& multiverseCore != null
-				&& multiverseCore.getMVWorldManager() != null
-				&& multiverseCore.getMVWorldManager().getMVWorld(world) != null)
-			? Optional.ofNullable(multiverseCore.getMVWorldManager().getMVWorld(world).getAlias())
+				&& plugin.getMVWorldManager() != null
+				&& plugin.getMVWorldManager().getMVWorld(world) != null)
+			? Optional.ofNullable(plugin.getMVWorldManager().getMVWorld(world).getAlias())
 			: Optional.empty();
 	}
 
