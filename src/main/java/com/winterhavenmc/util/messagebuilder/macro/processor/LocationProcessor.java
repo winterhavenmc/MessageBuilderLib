@@ -19,6 +19,8 @@ package com.winterhavenmc.util.messagebuilder.macro.processor;
 
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -96,7 +98,8 @@ public class LocationProcessor extends AbstractProcessor implements Processor {
 		String resultString;
 		if (location.getWorld() != null)
 		{
-			resultString = location.getWorld().getName();
+			WorldNameResolver resolver = WorldNameResolver.get(server.getPluginManager());
+			resultString = resolver.resolve(location.getWorld());
 		}
 		else
 		{

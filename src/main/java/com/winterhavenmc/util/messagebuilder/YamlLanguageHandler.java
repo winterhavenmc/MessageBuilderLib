@@ -19,6 +19,7 @@ package com.winterhavenmc.util.messagebuilder;
 
 import com.winterhavenmc.util.TimeUnit;
 
+import com.winterhavenmc.util.messagebuilder.worldname.WorldNameResolver;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
@@ -534,12 +535,8 @@ public final class YamlLanguageHandler implements LanguageHandler
 
 	public Optional<String> getWorldName(final World world)
 	{
-		// if world is null, return empty optional
-		if (world == null) {
-			return Optional.empty();
-		}
-		// return multiverse alias or bukkit world name as optional string
-		return Optional.of(world.getName());
+		WorldNameResolver worldNameResolver = WorldNameResolver.get(plugin.getServer().getPluginManager());
+		return Optional.of(worldNameResolver.resolve(world));
 	}
 
 
