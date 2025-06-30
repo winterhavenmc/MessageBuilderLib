@@ -23,6 +23,7 @@ import com.onarandombox.MultiverseCore.api.MVWorldManager;
 
 import org.bukkit.World;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -40,6 +41,7 @@ class MultiverseV4WorldNameResolverTest
 	@Mock MultiverseCore multiverseCoreMock;
 	@Mock MVWorldManager mvWorldManagerMock;
 	@Mock MVWorld mvWorldMock;
+	@Mock PluginDescriptionFile descriptionMock;
 
 
 	@Test
@@ -59,6 +61,8 @@ class MultiverseV4WorldNameResolverTest
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
+		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
+		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 
 		// Act
 		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
@@ -74,6 +78,8 @@ class MultiverseV4WorldNameResolverTest
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("world-name");
+		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
+		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
 		when(mvWorldMock.getAlias()).thenReturn("");
@@ -95,7 +101,8 @@ class MultiverseV4WorldNameResolverTest
 	{
 		// Arrange
 		when(mvWorldMock.getAlias()).thenReturn("World Alias");
-		lenient().when(multiverseCoreMock.isEnabled()).thenReturn(true);
+		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
+		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
 
