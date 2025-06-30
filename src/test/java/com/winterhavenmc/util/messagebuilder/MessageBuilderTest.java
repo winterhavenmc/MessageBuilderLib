@@ -17,14 +17,18 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.TimeUnit;
 import com.winterhavenmc.util.messagebuilder.macro.MacroProcessorHandler;
 import com.winterhavenmc.util.messagebuilder.messages.Macro;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+
 import org.bukkit.World;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,38 +42,24 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class MessageBuilderTest {
+@ExtendWith(MockitoExtension.class)
+class MessageBuilderTest
+{
+	@Mock Plugin pluginMock;
+	@Mock ConsoleCommandSender consoleCommandSenderMock;
 
-	private ServerMock server;
-	@SuppressWarnings("FieldCanBeLocal")
-	private PluginMain plugin;
-	private MessageBuilder<MessageId, Macro> messageBuilder;
+	MessageBuilder<MessageId, Macro> messageBuilder;
 
 	@BeforeEach
-	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		messageBuilder = new MessageBuilder<>(plugin);
-	}
-
-	@AfterEach
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-
-		// explicitly destroy messageBuilder
-		messageBuilder = null;
+	public void setUp()
+	{
+		messageBuilder = new MessageBuilder<>(pluginMock);
 	}
 
 
 	@Test
 	void composeTest() {
-		Message<MessageId, Macro> message = messageBuilder.compose(server.getConsoleSender(), MessageId.ENABLED_MESSAGE);
+		Message<MessageId, Macro> message = messageBuilder.compose(consoleCommandSenderMock, MessageId.ENABLED_MESSAGE);
 		assertEquals("This is an enabled message", message.toString());
 	}
 

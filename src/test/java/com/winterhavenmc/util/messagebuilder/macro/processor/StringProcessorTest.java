@@ -17,46 +17,32 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+
+import org.bukkit.plugin.Plugin;
+
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class StringProcessorTest {
+@ExtendWith(MockitoExtension.class)
+class StringProcessorTest
+{
+	@Mock Plugin pluginMock;
+	@Mock LanguageHandler languageHandlerMock;
 
-	ServerMock server;
-	PluginMain plugin;
-
-
-	@BeforeAll
-	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-	}
-
-	@AfterAll
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-	}
 
 	@Test
-	void execute() {
-
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+	void execute()
+	{
+		LanguageHandler languageHandler = new YamlLanguageHandler(pluginMock);
 		Processor processor = new StringProcessor(languageHandler);
 
 		String key = "SOME_NAME";
@@ -75,7 +61,7 @@ class StringProcessorTest {
 	@Test
 	void executeWithItem() {
 
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+		LanguageHandler languageHandler = new YamlLanguageHandler(pluginMock);
 		Processor processor = new StringProcessor(languageHandler);
 
 		String key = "ITEM";

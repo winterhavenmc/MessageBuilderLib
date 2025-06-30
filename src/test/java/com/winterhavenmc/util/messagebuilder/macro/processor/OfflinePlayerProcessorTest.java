@@ -17,62 +17,47 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+@ExtendWith(MockitoExtension.class)
 class OfflinePlayerProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
+	@Mock Plugin pluginMock;
 
-
-	@BeforeAll
-	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-	}
-
-	@AfterAll
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-	}
-
-	@Disabled
-	@Test
-	void execute() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
-		Processor processor = new StringProcessor(languageHandler);
-
-		String key = "SOME_NAME";
-		OfflinePlayer offlinePlayer = server.getOfflinePlayer(UUID.randomUUID());
-		assertNotNull(offlinePlayer);
-
-		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, offlinePlayer);
-
-		ResultMap resultMap = processor.execute(macroObjectMap, key, offlinePlayer);
-
-		assertTrue(resultMap.containsKey(key), "No match: " + key);
-	}
+//	@Disabled
+//	@Test
+//	void execute() {
+//		LanguageHandler languageHandler = new YamlLanguageHandler(pluginMock);
+//		Processor processor = new StringProcessor(languageHandler);
+//
+//		String key = "SOME_NAME";
+//		OfflinePlayer offlinePlayer = server.getOfflinePlayer(UUID.randomUUID());
+//		assertNotNull(offlinePlayer);
+//
+//		MacroObjectMap macroObjectMap = new MacroObjectMap();
+//		macroObjectMap.put(key, offlinePlayer);
+//
+//		ResultMap resultMap = processor.execute(macroObjectMap, key, offlinePlayer);
+//
+//		assertTrue(resultMap.containsKey(key), "No match: " + key);
+//	}
 
 	@Test
 	void execute_with_null_offlinePlayer() {
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+		LanguageHandler languageHandler = new YamlLanguageHandler(pluginMock);
 		Processor processor = new StringProcessor(languageHandler);
 
 		String key = "SOME_NAME";

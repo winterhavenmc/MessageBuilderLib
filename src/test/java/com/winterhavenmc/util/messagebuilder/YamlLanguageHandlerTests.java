@@ -17,44 +17,42 @@
 
 package com.winterhavenmc.util.messagebuilder;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
+
 import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import static com.winterhavenmc.util.TimeUnit.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class YamlLanguageHandlerTests {
+@ExtendWith(MockitoExtension.class)
+class YamlLanguageHandlerTests
+{
+	@Mock Plugin pluginMock;
+	@Mock World worldMock;
 
-	private ServerMock server;
-	private PluginMain plugin;
-	private LanguageHandler languageHandler;
+	LanguageHandler languageHandler;
 
 	@BeforeEach
-	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		// create a language handler instance
-		languageHandler = new YamlLanguageHandler(plugin);
+	public void setUp()
+	{
+		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+		languageHandler = new YamlLanguageHandler(pluginMock);
 
 	}
 
-	@AfterEach
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-	}
 
 	@Test
 	void getMessageKeys() {
@@ -257,8 +255,8 @@ class YamlLanguageHandlerTests {
 
 		@Test
 		void getItemName_null() {
-			plugin.getConfig().set("item-name", null);
-			assertNull(plugin.getConfig().getString("item-name"));
+			pluginMock.getConfig().set("item-name", null);
+			assertNull(pluginMock.getConfig().getString("item-name"));
 			assertEquals("§aTest Item", languageHandler.getItemName(null).orElse("fail"));
 			// this test still passes because the null config entry is supplanted by the default config
 		}
@@ -334,22 +332,22 @@ class YamlLanguageHandlerTests {
 		assertTrue(languageHandler.getStringList("ARBITRARY_STRING_LIST").containsAll(List.of("item 1", "item 2", "item 3")));
 	}
 
-	@Disabled
-	@Nested
-	class mockServerWorldTests {
-		@Test
-		void getWorlds_test_for_empty() {
-			assertFalse(server.getWorlds().isEmpty());
-		}
-		@Test
-		void addSimpleWorld_test_for_null() {
-			assertNotNull(server.addSimpleWorld("test_world"));
-		}
-		@Test
-		void addPlayerTest() {
-			assertNotNull(server.addPlayer("player1"));
-		}
-	}
+//	@Disabled
+//	@Nested
+//	class mockServerWorldTests {
+//		@Test
+//		void getWorlds_test_for_empty() {
+//			assertFalse(server.getWorlds().isEmpty());
+//		}
+//		@Test
+//		void addSimpleWorld_test_for_null() {
+//			assertNotNull(server.addSimpleWorld("test_world"));
+//		}
+//		@Test
+//		void addPlayerTest() {
+//			assertNotNull(server.addPlayer("player1"));
+//		}
+//	}
 
 
 	@Nested
@@ -357,9 +355,8 @@ class YamlLanguageHandlerTests {
 		@Disabled
 		@Test
 		void getWorldNameTest() {
-			World world = server.getWorld("world");
-			Optional<String> optionalWorldName = languageHandler.getWorldName(world);
-			assertNotNull(world, "The default mock world is null.");
+			when(worldMock.getName()).thenReturn("world");
+			Optional<String> optionalWorldName = languageHandler.getWorldName(worldMock);
 			assertTrue(optionalWorldName.isPresent());
 			assertEquals("world", optionalWorldName.get());
 		}

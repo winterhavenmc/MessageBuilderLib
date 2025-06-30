@@ -17,18 +17,19 @@
 
 package com.winterhavenmc.util.messagebuilder.macro;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
+
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
-import org.junit.jupiter.api.AfterEach;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
@@ -36,31 +37,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+
+@ExtendWith(MockitoExtension.class)
 class MacroProcessorHandlerTest {
 
-	private final Plugin mockPlugin = mock(Plugin.class);
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
+	@Mock Plugin pluginMock;
+	@Mock ConsoleCommandSender consoleCommandSenderMock;
+	@Mock LanguageHandler languageHandlerMock;
 	private MacroProcessorHandler macroProcessorHandler;
 
 	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
-		macroProcessorHandler = new MacroProcessorHandler(languageHandler);
+		macroProcessorHandler = new MacroProcessorHandler(languageHandlerMock);
 	}
 
-	@AfterEach
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-	}
 
 	@Nested
 	class DelimiterTests {
@@ -80,7 +70,7 @@ class MacroProcessorHandlerTest {
 	@Test
 	void replaceMacrosTest() {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		String resultString = macroProcessorHandler.replaceMacros(server.getConsoleSender(), macroObjectMap, "Replace this: %ITEM_NAME%");
+		String resultString = macroProcessorHandler.replaceMacros(consoleCommandSenderMock, macroObjectMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
@@ -88,14 +78,14 @@ class MacroProcessorHandlerTest {
 	void replaceMacrosTest_item_already_in_map() {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put("ITEM_NAME", "item_name");
-		String resultString = macroProcessorHandler.replaceMacros(server.getConsoleSender(), macroObjectMap, "Replace this: %ITEM_NAME%");
+		String resultString = macroProcessorHandler.replaceMacros(consoleCommandSenderMock, macroObjectMap, "Replace this: %ITEM_NAME%");
 		assertEquals("Replace this: §aTest Item", resultString);
 	}
 
 	@Test
 	void replaceMacrosTest_item_no_delimiter() {
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		String resultString = macroProcessorHandler.replaceMacros(server.getConsoleSender(), macroObjectMap, "Replace this: ITEM_NAME");
+		String resultString = macroProcessorHandler.replaceMacros(consoleCommandSenderMock, macroObjectMap, "Replace this: ITEM_NAME");
 		assertEquals("Replace this: ITEM_NAME", resultString);
 	}
 

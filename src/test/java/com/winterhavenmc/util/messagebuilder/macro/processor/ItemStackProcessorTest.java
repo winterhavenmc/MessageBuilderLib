@@ -17,47 +17,37 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ItemStackProcessorTest {
-
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
+@ExtendWith(MockitoExtension.class)
+class ItemStackProcessorTest
+{
+	@Mock Plugin pluginMock;
+	@Mock LanguageHandler languageHandlerMock;
 	Processor processor;
 
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new ItemStackProcessor(languageHandler);
+		languageHandlerMock = new YamlLanguageHandler(pluginMock);
+		processor = new ItemStackProcessor(languageHandlerMock);
 	}
 
-
-	@AfterAll
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-	}
 
 	@Disabled
 	@Test

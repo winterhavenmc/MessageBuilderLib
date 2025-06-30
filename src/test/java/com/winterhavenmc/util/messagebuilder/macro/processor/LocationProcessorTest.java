@@ -17,42 +17,35 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+@ExtendWith(MockitoExtension.class)
 class LocationProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
+	@Mock Server serverMock;
+	@Mock World worldMock;
+	@Mock Plugin pluginMock;
+	@Mock LanguageHandler languageHandler;
 	Processor processor;
 
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
 		processor = new LocationProcessor(languageHandler);
-	}
-
-	@AfterAll
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
 	}
 
 	@Disabled
@@ -60,7 +53,8 @@ class LocationProcessorTest {
 	void execute() {
 		String key = "SOME_LOCATION";
 
-		Location location = new Location(server.getWorld("world"), 80.0, 90.0, 100.0);
+		when(worldMock.getName()).thenReturn("SOME_LOCATION_WORLD");
+		Location location = new Location(worldMock, 80.0, 90.0, 100.0);
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(key, location);

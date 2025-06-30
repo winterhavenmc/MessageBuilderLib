@@ -17,70 +17,54 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.WorldMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class WorldProcessorTest {
 
-	private final Plugin mockPlugin = mock(Plugin.class);
-	ServerMock server;
-	PluginMain plugin;
+@ExtendWith(MockitoExtension.class)
+class WorldProcessorTest
+{
+	@Mock Plugin pluginMock;
+	@Mock World worldMock;
 
 
-	@BeforeEach
-	public void setUp() {
-
-//		when(mockPlugin)
-
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-	}
-
-	@AfterEach
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
-	}
-
-	@Disabled
 	@Test
-	void execute() {
-
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+	void execute()
+	{
+		LanguageHandler languageHandler = new YamlLanguageHandler(pluginMock);
 		Processor processor = new WorldProcessor(languageHandler);
 
 		String key = "SOME_WORLD";
 		String value = "some word";
 
-		WorldMock world = server.addSimpleWorld("test_world");
+		when(worldMock.getName()).thenReturn("test-world");
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, world);
+		macroObjectMap.put(key, worldMock);
 
-		ResultMap resultMap = processor.execute(macroObjectMap, key, world);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, worldMock);
 		assertTrue(resultMap.containsKey("SOME_WORLD"));
 		assertEquals("test_world", resultMap.get("SOME_WORLD"));
 	}
 
-	@Test
-	void execute_with_null_world() {
 
-		LanguageHandler languageHandler = new YamlLanguageHandler(plugin);
+	@Test
+	void execute_with_null_world()
+	{
+		LanguageHandler languageHandler = new YamlLanguageHandler(pluginMock);
 		Processor processor = new WorldProcessor(languageHandler);
 
 		String key = "SOME_WORLD";

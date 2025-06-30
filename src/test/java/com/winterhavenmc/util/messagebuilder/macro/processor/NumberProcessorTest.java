@@ -17,41 +17,28 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
-import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+@ExtendWith(MockitoExtension.class)
 class NumberProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
+	@Mock LanguageHandler languageHandlerMock;
+
 	Processor processor;
 
 
 	@BeforeEach
-	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new NumberProcessor(languageHandler);
-	}
-
-	@AfterEach
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+	public void setUp()
+	{
+		processor = new NumberProcessor(languageHandlerMock);
 	}
 
 

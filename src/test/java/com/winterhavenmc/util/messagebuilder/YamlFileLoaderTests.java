@@ -1,11 +1,13 @@
 package com.winterhavenmc.util.messagebuilder;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.Plugin;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.util.HashSet;
@@ -14,38 +16,20 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class YamlFileLoaderTests {
+@ExtendWith(MockitoExtension.class)
+public class YamlFileLoaderTests
+{
+    @Mock Plugin pluginMock;
 
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private ServerMock server;
-    private Plugin plugin;
     private YamlFileLoader fileLoader;
 
+
     @BeforeEach
-    public void setUp() {
-        // Start the mock server
-        server = MockBukkit.mock();
-
-        // start the mock plugin
-        plugin = MockBukkit.load(PluginMain.class);
-
-        // start file loader
-        fileLoader = new YamlFileLoader(plugin);
-
+    public void setUp()
+    {
+        fileLoader = new YamlFileLoader(pluginMock);
     }
 
-    @AfterEach
-    public void tearDown() {
-        // Stop the mock server
-        MockBukkit.unmock();
-    }
-
-    @Test
-    @DisplayName("file loader not null.")
-    void FileLoaderNotNull() {
-        assertNotNull(fileLoader);
-    }
 
     @Test
     @DisplayName("file loader operational.")
@@ -58,22 +42,22 @@ public class YamlFileLoaderTests {
     @Test
     @DisplayName("file loader get current filename not null.")
     void GetLanguageFilenameTest() {
-        assertNotNull(fileLoader.getLanguageFilename(plugin, "en-US"));
-        assertTrue(fileLoader.getLanguageFilename(plugin, "en-US").endsWith("language" + File.separator + "en-US.yml"));
+        assertNotNull(fileLoader.getLanguageFilename(pluginMock, "en-US"));
+        assertTrue(fileLoader.getLanguageFilename(pluginMock, "en-US").endsWith("language" + File.separator + "en-US.yml"));
     }
 
     @Test
     @DisplayName("file loader get current filename non-existent.")
     void GetLanguageFilenameTest_nonexistent() {
-        assertNotNull(fileLoader.getLanguageFilename(plugin, "not-a-valid-tag"));
-        assertTrue(fileLoader.getLanguageFilename(plugin, "not-a-valid-tag").endsWith("language" + File.separator + "not-a-valid-tag.yml"));
+        assertNotNull(fileLoader.getLanguageFilename(pluginMock, "not-a-valid-tag"));
+        assertTrue(fileLoader.getLanguageFilename(pluginMock, "not-a-valid-tag").endsWith("language" + File.separator + "not-a-valid-tag.yml"));
     }
 
     @Test
     @DisplayName("languageFileExists test")
     void languageFileExistsTests_nonexistent() {
-        assertNotNull(fileLoader.languageFileExists(plugin, "not-a-valid-tag"));
-        assertEquals("en-US", fileLoader.languageFileExists(plugin, "not-a-valid-tag"));
+        assertNotNull(fileLoader.languageFileExists(pluginMock, "not-a-valid-tag"));
+        assertEquals("en-US", fileLoader.languageFileExists(pluginMock, "not-a-valid-tag"));
     }
 
     @Test

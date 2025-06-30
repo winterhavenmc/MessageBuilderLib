@@ -17,56 +17,48 @@
 
 package com.winterhavenmc.util.messagebuilder.macro.processor;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import com.winterhavenmc.util.messagebuilder.LanguageHandler;
-import com.winterhavenmc.util.messagebuilder.PluginMain;
 import com.winterhavenmc.util.messagebuilder.YamlLanguageHandler;
 import com.winterhavenmc.util.messagebuilder.macro.MacroObjectMap;
+
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+@ExtendWith(MockitoExtension.class)
 class EntityProcessorTest {
 
-	ServerMock server;
-	PluginMain plugin;
-	LanguageHandler languageHandler;
+	@Mock Plugin pluginMock;
+	@Mock Player playerMock;
+	@Mock LanguageHandler languageHandlerMock;
+
 	Processor processor;
 
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
-		// Start the mock server
-		server = MockBukkit.mock();
-
-		// start the mock plugin
-		plugin = MockBukkit.load(PluginMain.class);
-
-		languageHandler = new YamlLanguageHandler(plugin);
-		processor = new EntityProcessor(languageHandler);
-	}
-
-	@AfterAll
-	public void tearDown() {
-		// Stop the mock server
-		MockBukkit.unmock();
+		languageHandlerMock = new YamlLanguageHandler(pluginMock);
+		processor = new EntityProcessor(languageHandlerMock);
 	}
 
 	@Disabled
 	@Test
 	void execute() {
 		String key = "SOME_ENTITY";
-
-		PlayerMock player = server.addPlayer("testy");
-		assertNotNull(player);
+		when(playerMock.getName()).thenReturn("testy");
 
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
-		macroObjectMap.put(key, player);
+		macroObjectMap.put(key, playerMock);
 
-		ResultMap resultMap = processor.execute(macroObjectMap, key, player);
+		ResultMap resultMap = processor.execute(macroObjectMap, key, playerMock);
 		assertTrue(resultMap.containsKey("SOME_ENTITY"));
 		assertEquals("testy", resultMap.get("SOME_ENTITY"));
 		assertTrue(resultMap.containsKey("SOME_ENTITY_NAME"));
