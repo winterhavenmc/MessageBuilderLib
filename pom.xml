@@ -56,7 +56,6 @@
 					<id>spigot-repo</id>
 					<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 				</repository>
-
 				<repository>
 					<id>multiverse-repo</id>
 					<url>https://repo.onarandombox.com/content/groups/public/</url>
@@ -78,7 +77,7 @@
 		<dependency>
 			<groupId>com.onarandombox.multiversecore</groupId>
 			<artifactId>multiverse-core</artifactId>
-			<version>4.3.14</version>
+			<version>4.3.16</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -87,6 +86,7 @@
 			<groupId>org.mvplugins.multiverse.core</groupId>
 			<artifactId>multiverse-core</artifactId>
 			<version>5.0.2</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
