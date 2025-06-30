@@ -200,7 +200,6 @@ class MultiverseV5WorldNameResolverTest
 	}
 
 	@Test
-	@Disabled
 	void getWorldName_when_Option_world_returns_valid()
 	{
 		// Arrange
