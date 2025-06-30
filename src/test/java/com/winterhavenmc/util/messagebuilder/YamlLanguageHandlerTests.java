@@ -20,6 +20,8 @@ package com.winterhavenmc.util.messagebuilder;
 import com.winterhavenmc.util.messagebuilder.messages.MessageId;
 
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.*;
@@ -48,6 +50,10 @@ class YamlLanguageHandlerTests
 	@BeforeEach
 	public void setUp()
 	{
+		FileConfiguration messageConfig = new YamlConfiguration();
+		messageConfig.set("ENABLED_MESSAGE", "This is an enabled message");
+
+		when(pluginMock.getConfig()).thenReturn(messageConfig);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 		languageHandler = new YamlLanguageHandler(pluginMock);
 
