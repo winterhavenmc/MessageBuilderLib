@@ -18,13 +18,14 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
 import org.bukkit.World;
-import org.bukkit.plugin.Plugin;
 import org.mvplugins.multiverse.core.MultiverseCore;
 import org.mvplugins.multiverse.core.MultiverseCoreApi;
 import org.mvplugins.multiverse.core.world.MultiverseWorld;
+import org.mvplugins.multiverse.core.world.WorldManager;
 import org.mvplugins.multiverse.external.vavr.control.Option;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 
 /**
@@ -48,7 +49,7 @@ import java.util.Optional;
  */
 public class Multiverse5Retriever implements WorldNameRetriever
 {
-	private final Plugin plugin;
+	private final MultiverseCore plugin;
 
 
 	/**
@@ -56,7 +57,7 @@ public class Multiverse5Retriever implements WorldNameRetriever
 	 *
 	 * @param plugin the active {@link MultiverseCore} plugin instance
 	 */
-	public Multiverse5Retriever(Plugin plugin)
+	public Multiverse5Retriever(MultiverseCore plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -75,19 +76,26 @@ public class Multiverse5Retriever implements WorldNameRetriever
 	@Override
 	public Optional<String> getWorldName(final World world)
 	{
-		if (plugin == null)
+		MultiverseCoreApi multiverseCoreApi;
+
+		try
+		{
+			multiverseCoreApi = MultiverseCoreApi.get();
+		}
+		catch (IllegalStateException e)
+		{
+			Logger.getLogger(this.getClass().getName()).warning(plugin.getName() + " threw an exception while trying to get an instance of its api.");
+			return Optional.empty();
+		}
+
+		WorldManager worldManager = multiverseCoreApi.getWorldManager();
+
+		if (worldManager == null)
 		{
 			return Optional.empty();
 		}
 
-		MultiverseCoreApi multiverseCoreApi = ((MultiverseCore) plugin).getApi();
-
-		if (multiverseCoreApi == null)
-		{
-			return Optional.empty();
-		}
-
-		Option<MultiverseWorld> optionWorld = multiverseCoreApi.getWorldManager().getWorld(world);
+		Option<MultiverseWorld> optionWorld = worldManager.getWorld(world);
 
 		if (optionWorld.isEmpty())
 		{
