@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -44,7 +43,7 @@ import java.util.Optional;
  * @see Multiverse4Retriever
  * @see DefaultResolver
  * @see World
- * @see MultiverseCore
+ * @see org.mvplugins.multiverse.core.MultiverseCore MultiverseCore
  */
 public final class PluginResolver implements WorldNameResolver
 {
@@ -53,7 +52,7 @@ public final class PluginResolver implements WorldNameResolver
 
 	/**
 	 * Constructs a {@code MultiverseV4WorldNameResolver} using the given instance
-	 * of {@link MultiverseCore}.
+	 * of {@link org.mvplugins.multiverse.core.MultiverseCore}.
 	 *
 	 * @param plugin the active Multiverse-Core plugin instance
 	 */
@@ -77,14 +76,24 @@ public final class PluginResolver implements WorldNameResolver
 	{
 		if (world == null) { return "NULL"; }
 
-		WorldNameRetriever retriever = switch (plugin)
-		{
-			case com.onarandombox.MultiverseCore.MultiverseCore mvPlugin -> new Multiverse4Retriever(mvPlugin);
-			case org.mvplugins.multiverse.core.MultiverseCore mvPlugin -> new Multiverse5Retriever(mvPlugin);
-			default -> new DefaultRetriever();
-		};
+		Optional<String> result;
 
-		final Optional<String> result = retriever.getWorldName(world);
+		if (plugin != null
+				&& plugin.getDescription().getVersion().startsWith("4.")
+				&& plugin instanceof com.onarandombox.MultiverseCore.MultiverseCore mvPlugin)
+		{
+			result = new Multiverse4Retriever(mvPlugin).getWorldName(world);
+		}
+		else if (plugin != null
+				&& plugin.getDescription().getVersion().startsWith("5.")
+				&& plugin instanceof org.mvplugins.multiverse.core.MultiverseCore mvPlugin)
+		{
+			result = new Multiverse5Retriever(mvPlugin).getWorldName(world);
+		}
+		else
+		{
+			result = new DefaultRetriever().getWorldName(world);
+		}
 
 		return (result.isPresent() && !result.get().isBlank())
 				? result.get()
