@@ -23,6 +23,7 @@ import com.onarandombox.MultiverseCore.api.MVWorldManager;
 
 import org.bukkit.World;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -34,33 +35,40 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MultiverseWorldNameResolverTest
+class MultiverseV4WorldNameResolverTest
 {
 	@Mock World worldMock;
 	@Mock MultiverseCore multiverseCoreMock;
 	@Mock MVWorldManager mvWorldManagerMock;
 	@Mock MVWorld mvWorldMock;
+	@Mock PluginDescriptionFile descriptionMock;
 
 
 	@Test
 	void testResolveWorldName_null_world()
 	{
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
+		// Act
+		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		String result = resolver.resolve(null);
 
-		String result = resolver.resolveWorldName(null);
-
-		assertEquals("NULL WORLD", result);
+		// Assert
+		assertEquals("NULL", result);
 	}
 
 
 	@Test
 	void testResolveWorldName_valid_world()
 	{
+		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
+		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
+		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 
-		String result = resolver.resolveWorldName(worldMock);
+		// Act
+		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		String result = resolver.resolve(worldMock);
 
+		// Assert
 		assertEquals("test_world", result);
 	}
 
@@ -70,20 +78,21 @@ class MultiverseWorldNameResolverTest
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("world-name");
+		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
+		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
-		when(mvWorldMock.getColoredWorldString()).thenReturn("");
-
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
+		when(mvWorldMock.getAlias()).thenReturn("");
 
 		// Act
-		String result = resolver.resolveWorldName(worldMock);
+		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		String result = resolver.resolve(worldMock);
 
 		// Assert
 		assertEquals("world-name", result);
 
 		// Verify
-		verify(mvWorldMock, atLeastOnce()).getColoredWorldString();
+		verify(mvWorldMock, atLeastOnce()).getAlias();
 	}
 
 
@@ -91,21 +100,21 @@ class MultiverseWorldNameResolverTest
 	void getWorldName_no_alias()
 	{
 		// Arrange
-		when(mvWorldMock.getColoredWorldString()).thenReturn("World Alias");
-		lenient().when(multiverseCoreMock.isEnabled()).thenReturn(true);
+		when(mvWorldMock.getAlias()).thenReturn("World Alias");
+		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
+		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
 
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
-
 		// Act
-		String result = resolver.resolveWorldName(worldMock);
+		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		String result = resolver.resolve(worldMock);
 
 		// Assert
 		assertEquals("World Alias", result);
 
 		// Verify
-		verify(mvWorldMock, atLeastOnce()).getColoredWorldString();
+		verify(mvWorldMock, atLeastOnce()).getAlias();
 	}
 
 }

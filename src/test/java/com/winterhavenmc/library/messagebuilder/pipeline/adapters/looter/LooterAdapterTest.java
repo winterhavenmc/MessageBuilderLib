@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultResolver;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class LooterAdapterTest
 {
-	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock DefaultResolver worldNameResolverMock;
 	@Mock AdapterContextContainer adapterContextContainerMock;
 	@Mock Player playerMock;
 	@Mock World worldMock;

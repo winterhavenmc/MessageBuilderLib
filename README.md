@@ -1,6 +1,6 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b252ef119c624bfb9eb05971e7919726)](https://app.codacy.com/gh/winterhavenmc/MessageBuilderLib/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/b252ef119c624bfb9eb05971e7919726)](https://app.codacy.com/gh/winterhavenmc/MessageBuilderLib/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
-[![Spigot Version](https://badgen.net/static/spigot-api/1.21.5?color=yellow)](https://spigotmc.org)
+[![Spigot Version](https://badgen.net/static/spigot-api/1.21.6?color=yellow)](https://spigotmc.org)
 &nbsp;[![License](https://badgen.net/static/license/GPLv3)](https://www.gnu.org/licenses/gpl-3.0)
 &nbsp;[![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://winterhavenmc.github.io/MessageBuilderLib/javadoc/)
 
@@ -63,7 +63,7 @@ enums as parameterized types:
 ```java
 @Override
 public void onEnable() {
-    messageBuilder<MessageId, Macro> = new MessageBuilder<>(this);
+    messageBuilder = new MessageBuilder.create(this);
 }
 ```
 

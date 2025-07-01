@@ -39,11 +39,11 @@ import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
-
-import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
@@ -67,7 +67,7 @@ class MessageProcessorTest
 {
 	@Mock Player playerMock;
 	@Mock LocaleProvider localeProviderMock;
-	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock DefaultResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
 
 	Recipient.Valid recipient;

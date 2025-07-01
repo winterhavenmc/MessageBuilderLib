@@ -20,10 +20,12 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 
+import java.util.Optional;
+
 
 /**
  * A {@link WorldNameRetriever} implementation that retrieves the alias name of a
- * {@link org.bukkit.World} using the <strong>Multiverse-Core</strong> API.
+ * {@link World} using the <strong>Multiverse-Core</strong> API.
  * <p>
  * This class interacts directly with {@link MultiverseCore} and its {@code MVWorldManager}
  * to look up world metadata, including alias and display formatting.
@@ -31,32 +33,17 @@ import org.bukkit.World;
  * If the world is not managed by Multiverse, or if any part of the plugin's world
  * management system is unavailable, this retriever returns {@code null}.
  * <p>
- * Typically used internally by {@link MultiverseWorldNameResolver}, and not intended
+ * Typically used internally by {@link WorldNameResolver}, and not intended
  * to be used directly unless fine-grained access to Multiverse aliases is needed.
  *
  * @see WorldNameRetriever
- * @see MultiverseWorldNameResolver
  * @see MultiverseCore
- * @see org.bukkit.World
+ * @see World
  */
-public class MultiverseWorldNameRetriever implements WorldNameRetriever
+public class DefaultRetriever implements WorldNameRetriever
 {
-	private final MultiverseCore multiverseCore;
-
-
 	/**
-	 * Constructs a {@code MultiverseWorldNameRetriever} with the given Multiverse-Core instance.
-	 *
-	 * @param multiverseCore the active {@link MultiverseCore} plugin instance
-	 */
-	public MultiverseWorldNameRetriever(MultiverseCore multiverseCore)
-	{
-		this.multiverseCore = multiverseCore;
-	}
-
-
-	/**
-	 * Attempts to retrieve the alias name of the given {@link org.bukkit.World}
+	 * Attempts to retrieve the alias name of the given {@link World}
 	 * using the Multiverse world manager.
 	 * <p>
 	 * If the world is not managed by Multiverse, or if plugin internals are unavailable,
@@ -66,13 +53,11 @@ public class MultiverseWorldNameRetriever implements WorldNameRetriever
 	 * @return the world alias from Multiverse, or {@code null} if unavailable
 	 */
 	@Override
-	public String getWorldName(World world)
+	public Optional<String> getWorldName(World world)
 	{
-		if (world == null || multiverseCore == null || multiverseCore.getMVWorldManager() == null)
-		{
-			return null;
-		}
-		return multiverseCore.getMVWorldManager().getMVWorld(world).getColoredWorldString();
+		return (world != null)
+				? Optional.of(world.getName())
+				: Optional.empty();
 	}
 
 }

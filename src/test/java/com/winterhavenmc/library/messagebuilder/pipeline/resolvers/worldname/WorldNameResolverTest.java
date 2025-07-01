@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
 import org.junit.jupiter.api.Test;
@@ -36,20 +37,22 @@ class WorldNameResolverTest
 {
 	@Mock PluginManager pluginManagerMock;
 	@Mock World worldMock;
-	@Mock MultiverseCore multiverseCoreMock;
+	@Mock MultiverseCore multiverseCoreV4Mock;
+	@Mock org.mvplugins.multiverse.core.MultiverseCore multiverseCoreV5Mock;
+	@Mock PluginDescriptionFile descriptionMock;
 
 
 	@Test
 	void getResolver()
 	{
 		// Arrange
-		WorldNameResolver resolver = WorldNameResolver.getResolver(pluginManagerMock);
+		WorldNameResolver resolver = WorldNameResolver.get(pluginManagerMock);
 
 		// Act
 		assertNotNull(resolver);
 
 		// Assert
-		assertInstanceOf(DefaultWorldNameResolver.class, resolver);
+		assertInstanceOf(DefaultResolver.class, resolver);
 	}
 
 
@@ -58,10 +61,10 @@ class WorldNameResolverTest
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
-		WorldNameResolver resolver = WorldNameResolver.getResolver(pluginManagerMock);
+		WorldNameResolver resolver = WorldNameResolver.get(pluginManagerMock);
 
 		// Act
-		var result = resolver.resolveWorldName(worldMock);
+		var result = resolver.resolve(worldMock);
 
 		// Assert
 		assertEquals("test_world", result);
@@ -72,10 +75,12 @@ class WorldNameResolverTest
 	void resolveWorldName_multiverse_fail()
 	{
 		// Arrange
-		WorldNameResolver resolver = new MultiverseWorldNameResolver(multiverseCoreMock);
+		when(multiverseCoreV4Mock.getDescription()).thenReturn(descriptionMock);
+		when(descriptionMock.getVersion()).thenReturn("4.3.16");
+		WorldNameResolver resolver = new PluginResolver(multiverseCoreV4Mock);
 
 		// Act
-		var result = resolver.resolveWorldName(worldMock);
+		var result = resolver.resolve(worldMock);
 
 		// Assert
 		assertNull(result);
@@ -86,35 +91,52 @@ class WorldNameResolverTest
 	void resolveWorldName_multiverse_succeed()
 	{
 		// Arrange
-		WorldNameResolver resolver = mock(MultiverseWorldNameResolver.class);
-		when(resolver.resolveWorldName(worldMock)).thenReturn("fake alias");
+		WorldNameResolver resolver = mock(PluginResolver.class);
+		when(resolver.resolve(worldMock)).thenReturn("fake alias");
 
 		// Act
-		var result = resolver.resolveWorldName(worldMock);
+		var result = resolver.resolve(worldMock);
 
 		// Assert
 		assertEquals("fake alias", result);
 	}
 
 
-
-
 	@Test
-	void getResolver_multiverse()
+	void getResolver_for_multiverse_4()
 	{
 		// Arrange
-		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreMock);
-		when(multiverseCoreMock.isEnabled()).thenReturn(true);
+		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreV4Mock);
+		when(multiverseCoreV4Mock.isEnabled()).thenReturn(true);
 
 		// Act
-		WorldNameResolver resolver = WorldNameResolver.getResolver(pluginManagerMock);
+		WorldNameResolver resolver = WorldNameResolver.get(pluginManagerMock);
 
 		// Assert
-		assertInstanceOf(MultiverseWorldNameResolver.class, resolver);
+		assertInstanceOf(PluginResolver.class, resolver);
 
 		// Verify
 		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
-		verify(multiverseCoreMock, atLeastOnce()).isEnabled();
+		verify(multiverseCoreV4Mock, atLeastOnce()).isEnabled();
+	}
+
+
+	@Test
+	void getResolver_for_multiverse_5()
+	{
+		// Arrange
+		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreV5Mock);
+		when(multiverseCoreV5Mock.isEnabled()).thenReturn(true);
+
+		// Act
+		WorldNameResolver resolver = WorldNameResolver.get(pluginManagerMock);
+
+		// Assert
+		assertInstanceOf(PluginResolver.class, resolver);
+
+		// Verify
+		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
+		verify(multiverseCoreV5Mock, atLeastOnce()).isEnabled();
 	}
 
 }

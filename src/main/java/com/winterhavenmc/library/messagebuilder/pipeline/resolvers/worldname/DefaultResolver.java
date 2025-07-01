@@ -33,17 +33,18 @@ import org.bukkit.World;
  * @see WorldNameResolver
  * @see org.bukkit.World#getName()
  */
-public class DefaultWorldNameResolver implements WorldNameResolver
+public final class DefaultResolver implements WorldNameResolver
 {
 	/**
-	 * Returns the default Bukkit world name by calling {@link org.bukkit.World#getName()}.
+	 * Returns the default Bukkit world name using an instance of {@link DefaultRetriever}
 	 *
 	 * @param world the {@link org.bukkit.World} to resolve a name for
 	 * @return the world's raw name as defined by Bukkit
 	 */
 	@Override
-	public String resolveWorldName(final World world)
+	public String resolve(final World world)
 	{
-		return world.getName();
+		return new DefaultRetriever().getWorldName(world).orElse(world.getName());
 	}
+
 }

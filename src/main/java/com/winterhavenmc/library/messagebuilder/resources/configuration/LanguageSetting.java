@@ -21,18 +21,22 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * Represents a configured language or locale identifier.
+ * Represents a configured language file identifier.
  * <p>
  * This record encapsulates a string such as {@code en-US} or {@code fr-FR},
  * typically sourced from the plugin's {@code config.yml}. It is used by
  * localization components such as {@link LanguageProvider} and downstream
- * language or formatting tools to select appropriate resource files or
- * locale-sensitive formatters.
+ * language or formatting tools to select appropriate resource files, and may
+ * also be queried for the locale setting. This allows server operators to include
+ * only one setting for both language file and locale in the plugin {@code config.yml}
+ * file, assuming the chosen setting conforms to a valid IETF language tag.
  * </p>
  *
  * <p>
  * The {@code name} field is expected to follow the IETF BCP 47 language tag format
- * (e.g., {@code en-US}, {@code de-DE}), although enforcement is deferred to consumers.
+ * (e.g., {@code en-US}, {@code de-DE}), although enforcement is deferred to consumers,
+ * to allow custom language file names that do not interfere with existing or provided
+ * language file names.
  * </p>
  *
  * @param name the raw language or locale tag string, never {@code null}

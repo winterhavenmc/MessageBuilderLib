@@ -21,7 +21,6 @@ import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
-import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 
 import java.util.Optional;
@@ -38,7 +37,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  * permission or claim to retrieve or interact with an object, such as a container or reward drop.
  * It does not imply that looting has already occurred, only that the looter is authorized to do so.
  *
- * <p>The looter is expected to be resolvable to a name-compatible {@link AnimalTamer}, such as a
+ * <p>The looter is expected to be resolvable to a name-compatible {@link Entity}, such as a
  * {@link org.bukkit.OfflinePlayer OfflinePlayer} or {@link org.bukkit.entity.Player Player}.
  *
  * <p>Macro placeholder resolution supports usage of keys like {@code {OBJECT.LOOTER}}.
@@ -49,7 +48,7 @@ public interface Lootable
 	/**
 	 * Returns the looter or claimant entity who has permission to access the lootable object.
 	 *
-	 * @return the looter as an {@link AnimalTamer}, or {@code null} if unknown
+	 * @return the looter as an {@link Entity}, or {@code null} if unknown
 	 */
 	Entity getLooter();
 

@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.validation;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 
@@ -32,13 +33,17 @@ import java.util.function.Supplier;
  * to ensure that the reported call site accurately reflects the point of failure,
  * rather than the supplier's origin.
  *
- * <p>
- * Typically used via {@link Validator#throwing(ErrorMessageKey, Parameter)}.
+ * <h2>Typical usage:</h2>
+ * {@snippet lang="java":
+ *  validate(value, Predicate, Validator.throwing(ErrorMessageKey, Parameter));
+ * }
  *
  * @param <T> the type of the value being validated
  *
  * @see Validator
- * @see ValidationException
+ * @see Predicate
+ * @see ErrorMessageKey
+ * @see Parameter
  */
 public record Throwing<T>(Supplier<ValidationException> exceptionSupplier) implements Validator<T>
 {

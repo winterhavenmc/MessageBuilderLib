@@ -31,9 +31,9 @@ import static com.winterhavenmc.library.messagebuilder.resources.language.Langua
 
 
 /**
- * This class is responsible for installing localization resources from the language directory of the jar archive,
+ * This class is responsible for installing localization resources from the language directory of the jar archive
  * to the language subdirectory of the plugin data directory.
- * Any files listed in auto_install.txt file with a .yml suffix that are stored as a resource within a /language
+ * Any files listed in an auto_install.txt file with a .yml suffix that are stored as a resource within a /language
  * subdirectory in the plugin jar archive will be copied to the /language subdirectory of the plugin data directory.
  */
 public final class LanguageResourceInstaller implements ResourceInstaller

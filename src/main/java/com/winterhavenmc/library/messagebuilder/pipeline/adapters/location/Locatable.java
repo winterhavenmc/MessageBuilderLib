@@ -121,7 +121,7 @@ public interface Locatable
 	static Optional<String> getLocationWorldName(final Location location, final AdapterContextContainer ctx)
 	{
 		return (location != null && location.getWorld() != null && !location.getWorld().getName().isBlank())
-				? Optional.of(ctx.worldNameResolver().resolveWorldName(location.getWorld()))
+				? Optional.of(ctx.worldNameResolver().resolve(location.getWorld()))
 				: Optional.empty();
 	}
 
