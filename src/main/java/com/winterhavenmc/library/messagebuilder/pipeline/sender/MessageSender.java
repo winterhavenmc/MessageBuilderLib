@@ -21,7 +21,9 @@ import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 
 /**
@@ -30,7 +32,7 @@ import org.bukkit.ChatColor;
  *
  * <p>This implementation handles:
  * <ul>
- *   <li>Chat color translation using {@code '&'} codes</li>
+ *   <li>Kyori Adventure style formatting tags</li>
  *   <li>Empty or disabled messages gracefully</li>
  *   <li>Cooldown tracking via a {@link com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap}</li>
  * </ul>
@@ -44,6 +46,8 @@ import org.bukkit.ChatColor;
 public final class MessageSender implements Sender
 {
 	private final CooldownMap cooldownMap;
+	private final MiniMessage miniMessage;
+	private final BukkitAudiences audiences;
 
 
 	/**
@@ -52,9 +56,11 @@ public final class MessageSender implements Sender
 	 *
 	 * @param cooldownMap the cooldown map used to track and store message cooldowns
 	 */
-	public MessageSender(final CooldownMap cooldownMap)
+	public MessageSender(final CooldownMap cooldownMap, final MiniMessage miniMessage, final BukkitAudiences audiences)
 	{
 		this.cooldownMap = cooldownMap;
+		this.miniMessage = miniMessage;
+		this.audiences = audiences;
 	}
 
 
@@ -74,8 +80,8 @@ public final class MessageSender implements Sender
 				&& messageRecord.finalMessageString().isPresent()
 				&& !messageRecord.finalMessageString().get().isBlank())
 		{
-			recipient.sender().sendMessage(ChatColor.translateAlternateColorCodes('&',
-					messageRecord.finalMessageString().orElse("")));
+			Component component = miniMessage.deserialize(messageRecord.finalMessageString().get());
+			audiences.sender(recipient.sender()).sendMessage(component);
 			cooldownMap.putExpirationTime(recipient, messageRecord);
 		}
 	}
