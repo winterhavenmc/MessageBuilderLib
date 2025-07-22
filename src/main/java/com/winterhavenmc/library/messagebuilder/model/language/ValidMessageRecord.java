@@ -23,6 +23,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.time.Duration;
 import java.util.Optional;
 
+import static com.winterhavenmc.library.messagebuilder.MessageBuilder.TICKS;
+
 
 /**
  * A validated, immutable {@link MessageRecord} representing a single entry from the
@@ -52,9 +54,9 @@ public final class ValidMessageRecord implements MessageRecord
 	private final String message;
 	private final Duration repeatDelay;
 	private final String title;
-	private final int titleFadeIn;
-	private final int titleStay;
-	private final int titleFadeOut;
+	private final Duration titleFadeIn;
+	private final Duration titleStay;
+	private final Duration titleFadeOut;
 	private final String subtitle;
 
 
@@ -78,9 +80,9 @@ public final class ValidMessageRecord implements MessageRecord
 							   String message,
 							   Duration repeatDelay,
 							   String title,
-							   int titleFadeIn,
-							   int titleStay,
-							   int titleFadeOut,
+							   Duration titleFadeIn,
+							   Duration titleStay,
+							   Duration titleFadeOut,
 							   String subtitle)
 	{
 		this.key = key;
@@ -107,15 +109,45 @@ public final class ValidMessageRecord implements MessageRecord
 	 */
 	public static ValidMessageRecord create(final RecordKey key, final ConfigurationSection section)
 	{
-		return new ValidMessageRecord(key,
-				!section.contains(Field.ENABLED.toKey()) || section.getBoolean(Field.ENABLED.toKey()), // default true if missing
-				section.contains(Field.MESSAGE_TEXT.toKey()) ? section.getString(Field.MESSAGE_TEXT.toKey()) : "",
-				Duration.ofSeconds(section.getLong(Field.REPEAT_DELAY.toKey())),
-				section.contains(Field.TITLE_TEXT.toKey()) ? section.getString(Field.TITLE_TEXT.toKey()) : "",
-				section.contains(Field.TITLE_FADE_IN.toKey()) ? section.getInt(Field.TITLE_FADE_IN.toKey()) : 10,
-				section.contains(Field.TITLE_STAY.toKey()) ? section.getInt(Field.TITLE_STAY.toKey()) : 70,
-				section.contains(Field.TITLE_FADE_OUT.toKey()) ? section.getInt(Field.TITLE_FADE_OUT.toKey()) : 20,
-				section.contains(Field.SUBTITLE_TEXT.toKey()) ? section.getString(Field.SUBTITLE_TEXT.toKey()) : "");
+		// enabled defaults to true if not present
+		boolean enabled = !section.contains(Field.ENABLED.toKey()) || section.getBoolean(Field.ENABLED.toKey());
+
+		// defaults to empty string if not present
+		String messageText = section.contains(Field.MESSAGE_TEXT.toKey())
+				? section.getString(Field.MESSAGE_TEXT.toKey())
+				: "";
+
+		// defaults to zero, no ternary operator necessary
+		Duration repeatDelay = Duration.ofSeconds(section.getLong(Field.REPEAT_DELAY.toKey()));
+
+		// defaults to empty string if not present
+		String titleText = section.contains(Field.TITLE_TEXT.toKey())
+				? section.getString(Field.TITLE_TEXT.toKey())
+				: "";
+
+		// default to Bukkit standard 10 ticks if not present
+		Duration titleFadeIn = section.contains(Field.TITLE_FADE_IN.toKey())
+				? Duration.of(section.getLong(Field.TITLE_FADE_IN.toKey()), TICKS)
+				: Duration.of(10, TICKS);
+
+		// default to Bukkit standard 70 ticks if not present
+		Duration titleStay = section.contains(Field.TITLE_STAY.toKey())
+				? Duration.of(section.getLong(Field.TITLE_STAY.toKey()), TICKS)
+				: Duration.of(70, TICKS);
+
+		// default to Bukkit standard 20 ticks if not present
+		Duration titleFadeOut = section.contains(Field.TITLE_FADE_OUT.toKey())
+				? Duration.of(section.getLong(Field.TITLE_FADE_OUT.toKey()), TICKS)
+				: Duration.of(20, TICKS);
+
+		// defaults to empty string if not present
+		String subtitleText = section.contains(Field.SUBTITLE_TEXT.toKey())
+				? section.getString(Field.SUBTITLE_TEXT.toKey())
+				: "";
+
+
+		return new ValidMessageRecord(key, enabled, messageText, repeatDelay,
+				titleText, titleFadeIn, titleStay, titleFadeOut, subtitleText);
 	}
 
 
@@ -181,19 +213,19 @@ public final class ValidMessageRecord implements MessageRecord
 	}
 
 
-	public int titleFadeIn()
+	public Duration titleFadeIn()
 	{
 		return titleFadeIn;
 	}
 
 
-	public int titleStay()
+	public Duration titleStay()
 	{
 		return titleStay;
 	}
 
 
-	public int titleFadeOut()
+	public Duration titleFadeOut()
 	{
 		return titleFadeOut;
 	}
