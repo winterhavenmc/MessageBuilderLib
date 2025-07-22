@@ -21,7 +21,10 @@ import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.title.Title;
 import org.bukkit.entity.Player;
 
 
@@ -44,6 +47,8 @@ import org.bukkit.entity.Player;
 public final class TitleSender implements Sender
 {
 	private final CooldownMap cooldownMap;
+	private final MiniMessage miniMessage;
+	private final BukkitAudiences audiences;
 
 
 	/**
@@ -51,9 +56,11 @@ public final class TitleSender implements Sender
 	 *
 	 * @param cooldownMap an instance of the message cooldown map used to prevent redundant delivery
 	 */
-	public TitleSender(final CooldownMap cooldownMap)
+	public TitleSender(final CooldownMap cooldownMap, final MiniMessage miniMessage, final BukkitAudiences audiences)
 	{
 		this.cooldownMap = cooldownMap;
+		this.miniMessage = miniMessage;
+		this.audiences = audiences;
 	}
 
 
@@ -75,12 +82,13 @@ public final class TitleSender implements Sender
 				&& messageRecord.enabled()
 				&& (messageRecord.finalTitleString().isPresent() || messageRecord.finalSubtitleString().isPresent()))
 		{
-			player.sendTitle(
-					ChatColor.translateAlternateColorCodes('&', messageRecord.finalTitleString().orElse("")),
-					ChatColor.translateAlternateColorCodes('&', messageRecord.finalSubtitleString().orElse("")),
-					messageRecord.titleFadeIn(),
-					messageRecord.titleStay(),
-					messageRecord.titleFadeOut());
+			final Component mainTitle = miniMessage.deserialize(messageRecord.finalTitleString().get());
+			final Component subTitle = miniMessage.deserialize(messageRecord.finalSubtitleString().get());
+			final Title.Times times = Title.Times.times(messageRecord.titleFadeIn(),
+					messageRecord.titleStay(), messageRecord.titleFadeOut());
+			final Title title = Title.title(mainTitle, subTitle, times);
+
+			audiences.sender(recipient.sender()).showTitle(title);
 
 			cooldownMap.putExpirationTime(recipient, messageRecord);
 		}

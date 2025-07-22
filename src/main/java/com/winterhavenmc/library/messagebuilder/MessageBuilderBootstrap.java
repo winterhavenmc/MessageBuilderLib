@@ -45,6 +45,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Loc
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.Plugin;
 
 import org.jetbrains.annotations.NotNull;
@@ -106,12 +108,15 @@ class MessageBuilderBootstrap
 	 */
 	static @NotNull MessagePipeline createMessagePipeline(final QueryHandlerFactory queryHandlerFactory,
 														  final FormatterContainer formatterContainer,
-														  final AdapterContextContainer adapterContextContainer)
+														  final AdapterContextContainer adapterContextContainer,
+														  final MiniMessage miniMessage,
+														  final BukkitAudiences audiences)
 	{
 		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
 		final MessageProcessor messageProcessor = createMacroReplacer(formatterContainer, adapterContextContainer);
 		final CooldownMap cooldownMap = new CooldownMap();
-		final List<Sender> messageSenders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
+		final List<Sender> messageSenders = List.of(new MessageSender(cooldownMap, miniMessage, audiences),
+				new TitleSender(cooldownMap, miniMessage, audiences));
 
 		return new MessagePipeline(messageRetriever, messageProcessor, cooldownMap, messageSenders);
 	}
