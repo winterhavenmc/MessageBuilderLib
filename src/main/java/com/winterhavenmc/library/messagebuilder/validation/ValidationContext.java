@@ -48,9 +48,8 @@ public final class ValidationContext
 {
 	private static LocaleProvider localeProvider;
 
-	private ValidationContext() {
-		// Prevent instantiation
-	}
+	private ValidationContext() { throw new AssertionError(); }
+
 
 	/**
 	 * Initializes the validation context with the provided locale source.
