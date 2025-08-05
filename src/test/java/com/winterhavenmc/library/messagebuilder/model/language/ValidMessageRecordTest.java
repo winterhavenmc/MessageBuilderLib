@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.Optional;
 
+import static com.winterhavenmc.library.messagebuilder.MessageBuilder.TICKS;
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -113,30 +114,30 @@ class ValidMessageRecordTest
 	void testTitleFadeIn()
 	{
 		// Arrange & Act
-		int titleFadeIn = validMessageRecord.titleFadeIn();
+		Duration titleFadeIn = validMessageRecord.titleFadeIn();
 
 		// Assert
-		assertEquals(22, titleFadeIn);
+		assertEquals(Duration.of(22, TICKS), titleFadeIn);
 	}
 
 	@Test
 	void testTitleStay()
 	{
 		// Arrange & Act
-		int titleStay = validMessageRecord.titleStay();
+		Duration titleStay = validMessageRecord.titleStay();
 
 		// Assert
-		assertEquals(33, titleStay);
+		assertEquals(Duration.of(33, TICKS), titleStay);
 	}
 
 	@Test
 	void testTitleFadeOut()
 	{
 		// Arrange & Act
-		int titleFadeOut = validMessageRecord.titleFadeOut();
+		Duration titleFadeOut = validMessageRecord.titleFadeOut();
 
 		// Assert
-		assertEquals(44, titleFadeOut);
+		assertEquals(Duration.of(44, TICKS), titleFadeOut);
 	}
 
 	@Test

@@ -39,6 +39,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.library.messagebuilder.MessageBuilder.TICKS;
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
@@ -83,9 +84,9 @@ class CooldownMapTest
 				"this is a message.",
 				Duration.ofSeconds(3),
 				"this is a title.",
-				20,
-				40,
-				30,
+				Duration.of(20, TICKS),
+				Duration.of(40, TICKS),
+				Duration.of(30, TICKS),
 				"this is a subtitle.",
 				Optional.of("this is a final message string"),
 				Optional.of("this is a final title string"),
