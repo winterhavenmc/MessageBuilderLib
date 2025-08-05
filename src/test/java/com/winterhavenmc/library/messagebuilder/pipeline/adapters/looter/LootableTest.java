@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -47,7 +48,7 @@ class LootableTest
 	class TestObject implements Lootable
 	{
 		@Override
-		public Entity getLooter()
+		public AnimalTamer getLooter()
 		{
 			return playerMock;
 		}
@@ -72,7 +73,7 @@ class LootableTest
 		TestObject testObject = new TestObject();
 
 		// Act
-		Entity result = testObject.getLooter();
+		AnimalTamer result = testObject.getLooter();
 
 		// Assert
 		assertEquals(playerMock, result);

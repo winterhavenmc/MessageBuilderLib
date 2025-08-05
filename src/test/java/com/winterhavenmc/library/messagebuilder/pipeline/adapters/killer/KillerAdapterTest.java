@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.Def
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -52,7 +52,7 @@ public class KillerAdapterTest
 	class TestObject implements Killable
 	{
 		@Override
-		public Entity getKiller()
+		public AnimalTamer getKiller()
 		{
 			return playerMock;
 		}
@@ -67,7 +67,7 @@ public class KillerAdapterTest
 
 		// Act
 		Optional<Killable> adapted = new KillerAdapter().adapt(testObject);
-		Optional<Entity> killer = adapted.map(Killable::getKiller);
+		Optional<AnimalTamer> killer = adapted.map(Killable::getKiller);
 
 		// Assert
 		assertTrue(killer.isPresent());
@@ -82,7 +82,7 @@ public class KillerAdapterTest
 		when(livingEntityMock.getKiller()).thenReturn(playerMock);
 		// Act
 		Optional<Killable> adapted = new KillerAdapter().adapt(livingEntityMock);
-		Optional<Entity> killer = adapted.map(Killable::getKiller);
+		Optional<AnimalTamer> killer = adapted.map(Killable::getKiller);
 
 		// Assert
 		assertTrue(killer.isPresent());
@@ -99,7 +99,7 @@ public class KillerAdapterTest
 
 		// Act
 		Optional<Killable> adapted = new KillerAdapter().adapt(lootContext);
-		Optional<Entity> killer = adapted.map(Killable::getKiller);
+		Optional<AnimalTamer> killer = adapted.map(Killable::getKiller);
 
 		// Assert
 		assertTrue(killer.isPresent());
