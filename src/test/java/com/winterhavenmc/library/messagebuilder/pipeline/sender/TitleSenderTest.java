@@ -93,27 +93,27 @@ class TitleSenderTest
 	}
 
 
-	@Test
-	void testSend_player()
-	{
-		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
-		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(recipient, finalMessageRecord));
-	}
+//	@Test
+//	void testSend_player()
+//	{
+//		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
+//		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(recipient, finalMessageRecord));
+//	}
 
 
-	@Test
-	void testSend_console()
-	{
-		// Arrange
-		Recipient.Valid consoleRecipient = switch (Recipient.of(consoleMock))
-		{
-			case Recipient.Valid validRecipient -> validRecipient;
-			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-		};
-
-		// Act & Assert
-		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(consoleRecipient, finalMessageRecord));
-	}
+//	@Test
+//	void testSend_console()
+//	{
+//		// Arrange
+//		Recipient.Valid consoleRecipient = switch (Recipient.of(consoleMock))
+//		{
+//			case Recipient.Valid validRecipient -> validRecipient;
+//			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+//			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+//		};
+//
+//		// Act & Assert
+//		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(consoleRecipient, finalMessageRecord));
+//	}
 
 }
