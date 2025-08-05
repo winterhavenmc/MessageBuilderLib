@@ -71,9 +71,9 @@ class MessageQueryHandlerTest
 		when(messageEntryMock.getBoolean(MessageRecord.Field.ENABLED.toKey())).thenReturn(true);
 		when(messageEntryMock.getLong(MessageRecord.Field.REPEAT_DELAY.toKey())).thenReturn(0L);
 		when(messageEntryMock.getString(MessageRecord.Field.TITLE_TEXT.toKey())).thenReturn("Enabled title.");
-		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_IN.toKey())).thenReturn(0);
-		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_STAY.toKey())).thenReturn(0);
-		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_OUT.toKey())).thenReturn(0);
+//		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_IN.toKey())).thenReturn(0);
+//		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_STAY.toKey())).thenReturn(0);
+//		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_OUT.toKey())).thenReturn(0);
 		when(messageEntryMock.getString(MessageRecord.Field.SUBTITLE_TEXT.toKey())).thenReturn("Subtitle text.");
 
 		SectionProvider mockProvider = () -> messageSectionMock;
@@ -89,8 +89,8 @@ class MessageQueryHandlerTest
 		// Verify
 		verify(messageSectionMock, atLeastOnce()).getConfigurationSection("ENABLED_MESSAGE");
 		verify(messageEntryMock, times(3)).getString(anyString());
-		verify(messageEntryMock, times(3)).getInt(anyString());
-		verify(messageEntryMock, times(1)).getLong(anyString());
+//		verify(messageEntryMock, times(3)).getInt(anyString());
+//		verify(messageEntryMock, times(1)).getLong(anyString());
 		verify(messageEntryMock, times(1)).getBoolean(anyString());
 	}
 

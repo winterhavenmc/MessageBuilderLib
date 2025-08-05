@@ -60,7 +60,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -247,7 +246,7 @@ class FieldExtractorTest
 		class TestObject implements Killable
 		{
 			@Override
-			public Entity getKiller()
+			public AnimalTamer getKiller()
 			{
 				return playerMock;
 			}
@@ -371,7 +370,7 @@ class FieldExtractorTest
 		class TestObject implements Lootable
 		{
 			@Override
-			public Entity getLooter() { return playerMock; }
+			public AnimalTamer getLooter() { return playerMock; }
 		}
 
 		MacroKey subKey = baseKey.append(LOOTER).orElseThrow();

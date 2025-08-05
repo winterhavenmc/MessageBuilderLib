@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.Optional;
 
+import static com.winterhavenmc.library.messagebuilder.MessageBuilder.TICKS;
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,9 +43,9 @@ class FinalMessageRecordTest
 				"this is a test message",
 				Duration.ofSeconds(11),
 				"this is a test title",
-				22,
-				33,
-				44,
+				Duration.of(22, TICKS),
+				Duration.of(33, TICKS),
+				Duration.of(44, TICKS),
 				"this is a test subtitle",
 				Optional.of("this is a final message string"),
 				Optional.of("this is a final title string"),
@@ -106,30 +107,30 @@ class FinalMessageRecordTest
 	void testTitleFadeIn()
 	{
 		// Arrange & Act
-		int titleFadeIn = validMessageRecord.titleFadeIn();
+		Duration titleFadeIn = validMessageRecord.titleFadeIn();
 
 		// Assert
-		assertEquals(22, titleFadeIn);
+		assertEquals(Duration.of(22, TICKS), titleFadeIn);
 	}
 
 	@Test
 	void testTitleStay()
 	{
 		// Arrange & Act
-		int titleStay = validMessageRecord.titleStay();
+		Duration titleStay = validMessageRecord.titleStay();
 
 		// Assert
-		assertEquals(33, titleStay);
+		assertEquals(Duration.of(33, TICKS), titleStay);
 	}
 
 	@Test
 	void testTitleFadeOut()
 	{
 		// Arrange & Act
-		int titleFadeOut = validMessageRecord.titleFadeOut();
+		Duration titleFadeOut = validMessageRecord.titleFadeOut();
 
 		// Assert
-		assertEquals(44, titleFadeOut);
+		assertEquals(Duration.of(44, TICKS), titleFadeOut);
 	}
 
 	@Test
