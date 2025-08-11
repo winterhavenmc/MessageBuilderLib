@@ -74,7 +74,7 @@ public final class PluginResolver implements WorldNameResolver
 	@Override
 	public String resolve(final World world)
 	{
-		if (world == null) { return "NULL"; }
+		if (world == null) { return "∅"; }
 
 		Optional<String> result;
 
