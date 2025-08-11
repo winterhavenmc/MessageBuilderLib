@@ -68,8 +68,7 @@ class ItemQueryHandlerTest
 
 		when(itemEntryMock.getString(ItemRecord.Field.NAME_SINGULAR.toKey())).thenReturn("Item Name singular");
 		when(itemEntryMock.getString(ItemRecord.Field.NAME_PLURAL.toKey())).thenReturn("Item Name plural");
-		when(itemEntryMock.getString(ItemRecord.Field.INVENTORY_NAME_SINGULAR.toKey())).thenReturn("Inventory Item Name singular");
-		when(itemEntryMock.getString(ItemRecord.Field.INVENTORY_NAME_PLURAL.toKey())).thenReturn("Inventory Item Name plural");
+		when(itemEntryMock.getString(ItemRecord.Field.INVENTORY_NAME.toKey())).thenReturn("Inventory Item Name singular");
 		when(itemEntryMock.getStringList(ItemRecord.Field.LORE.toKey())).thenReturn(List.of("lore line 1", "lore line 2"));
 
 		SectionProvider mockProvider = () -> itemSectionMock;
@@ -83,7 +82,7 @@ class ItemQueryHandlerTest
 
 		// Verify
 		verify(itemSectionMock, atLeastOnce()).getConfigurationSection("TEST_ITEM_1");
-		verify(itemEntryMock, times(4)).getString(anyString());
+		verify(itemEntryMock, times(3)).getString(anyString());
 	}
 
 
