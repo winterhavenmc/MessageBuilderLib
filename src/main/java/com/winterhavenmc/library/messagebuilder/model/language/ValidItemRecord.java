@@ -45,8 +45,7 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	RecordKey key;
 	String nameSingular;
 	String namePlural;
-	String inventoryItemSingular;
-	String inventoryItemPlural;
+	String inventoryName;
 	List<String> itemLore;
 
 
@@ -54,25 +53,22 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	 * Constructs a {@code ValidItemRecord} with parsed item metadata.
 	 * This constructor is private; use {@link #create(RecordKey, ConfigurationSection)} instead.
 	 *
-	 * @param key the key that uniquely identifies this item record
-	 * @param nameSingular the singular item name
-	 * @param namePlural the plural item name
-	 * @param inventoryItemSingular the inventory-specific singular display name
-	 * @param inventoryItemPlural the inventory-specific plural display name
-	 * @param itemLore the list of lore lines (may be empty but not {@code null})
+	 * @param key           the key that uniquely identifies this item record
+	 * @param nameSingular  the singular item name
+	 * @param namePlural    the plural item name
+	 * @param inventoryName the inventory-specific singular display name
+	 * @param itemLore      the list of lore lines (may be empty but not {@code null})
 	 */
 	private ValidItemRecord(RecordKey key,
 							String nameSingular,
 							String namePlural,
-							String inventoryItemSingular,
-							String inventoryItemPlural,
+							String inventoryName,
 							List<String> itemLore)
 	{
 		this.key = key;
 		this.nameSingular = nameSingular;
 		this.namePlural = namePlural;
-		this.inventoryItemSingular = inventoryItemSingular;
-		this.inventoryItemPlural = inventoryItemPlural;
+		this.inventoryName = inventoryName;
 		this.itemLore = itemLore;
 	}
 
@@ -93,8 +89,7 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 		return new ValidItemRecord(key,
 				section.getString(Field.NAME_SINGULAR.toKey()),
 				section.getString(Field.NAME_PLURAL.toKey()),
-				section.getString(Field.INVENTORY_NAME_SINGULAR.toKey()),
-				section.getString(Field.INVENTORY_NAME_PLURAL.toKey()),
+				section.getString(Field.INVENTORY_NAME.toKey()),
 				section.getStringList(Field.LORE.toKey()));
 	}
 
