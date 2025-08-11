@@ -83,9 +83,9 @@ public class FieldResolver implements Resolver
 				.collect(
 						MacroStringMap::new,
 						(map1, map2) -> map2.entrySet()
-								.forEach(e -> map1.putIfAbsent(e.getKey(), e.getValue())),
+								.forEach(entry -> map1.putIfAbsent(entry.getKey(), entry.getValue())),
 						(map3, map4) -> map4.entrySet()
-								.forEach(e -> map3.putIfAbsent(e.getKey(), e.getValue()))
+								.forEach(entry -> map3.putIfAbsent(entry.getKey(), entry.getValue()))
 				);
 	}
 
