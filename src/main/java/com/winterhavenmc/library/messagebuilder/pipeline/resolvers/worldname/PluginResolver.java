@@ -68,8 +68,8 @@ public final class PluginResolver implements WorldNameResolver
 	 * falls back to {@code world.getName()}.
 	 *
 	 * @param world the {@link World} whose alias or name should be returned
-	 * @return the Multiverse alias if available, otherwise the world name;
-	 *         or {@code "NULL WORLD"} if the world is {@code null}
+	 * @return the Multiverse alias if available, otherwise the Bukkit world name,
+	 * or {@code "∅"} (NULL symbol) if the world is {@code null}
 	 */
 	@Override
 	public String resolve(final World world)
