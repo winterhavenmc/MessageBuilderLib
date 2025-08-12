@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 
 import java.util.Optional;
@@ -50,7 +51,7 @@ public interface Lootable
 	 *
 	 * @return the looter as an {@link Entity}, or {@code null} if unknown
 	 */
-	Entity getLooter();
+	AnimalTamer getLooter();
 
 
 	/**
@@ -72,7 +73,8 @@ public interface Lootable
 	/**
 	 * Predicate to validate whether a looter has a valid, non-blank name.
 	 */
-	Predicate<Entity> VALID_LOOTER = looter -> looter != null
+	Predicate<AnimalTamer> VALID_LOOTER = looter -> looter != null
+			&& looter.getName() != null
 			&& !looter.getName().isBlank();
 
 
@@ -82,10 +84,10 @@ public interface Lootable
 	 * @param looter the entity who has permission to loot the object
 	 * @return an {@code Optional<String>} containing the name if valid, otherwise empty
 	 */
-	static Optional<String> formatLooter(final Entity looter)
+	static Optional<String> formatLooter(final AnimalTamer looter)
 	{
 		return (VALID_LOOTER.test(looter))
-				? Optional.of(looter.getName())
+				? Optional.ofNullable(looter.getName())
 				: Optional.empty();
 	}
 

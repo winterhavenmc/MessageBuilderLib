@@ -20,6 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 
 import java.util.Optional;
@@ -49,7 +50,7 @@ public interface Killable
 	 *
 	 * @return the killer as an {@link Entity}, or {@code null} if not available
 	 */
-	Entity getKiller();
+	AnimalTamer getKiller();
 
 
 	/**
@@ -71,7 +72,8 @@ public interface Killable
 	/**
 	 * Predicate that evaluates whether a killer is considered valid and non-blank.
 	 */
-	Predicate<Entity> VALID_KILLER = killer -> killer != null
+	Predicate<AnimalTamer> VALID_KILLER = killer -> killer != null
+			&& killer.getName() != null
 			&& !killer.getName().isBlank();
 
 
@@ -81,10 +83,10 @@ public interface Killable
 	 * @param killer the entity that performed the kill
 	 * @return an {@code Optional<String>} containing the killer's name, if valid
 	 */
-	static Optional<String> formatKiller(final Entity killer)
+	static Optional<String> formatKiller(final AnimalTamer killer)
 	{
 		return (VALID_KILLER.test(killer))
-				? Optional.of(killer.getName())
+				? Optional.ofNullable(killer.getName())
 				: Optional.empty();
 	}
 
