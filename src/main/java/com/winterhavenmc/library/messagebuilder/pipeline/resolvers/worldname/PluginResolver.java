@@ -76,24 +76,12 @@ public final class PluginResolver implements WorldNameResolver
 	{
 		if (world == null) { return "NULL"; }
 
-		Optional<String> result;
-
-		if (plugin != null
-				&& plugin.getDescription().getVersion().startsWith("4.")
-				&& plugin instanceof com.onarandombox.MultiverseCore.MultiverseCore mvPlugin)
+		Optional<String> result = switch (plugin)
 		{
-			result = new Multiverse4Retriever(mvPlugin).getWorldName(world);
-		}
-		else if (plugin != null
-				&& plugin.getDescription().getVersion().startsWith("5.")
-				&& plugin instanceof org.mvplugins.multiverse.core.MultiverseCore mvPlugin)
-		{
-			result = new Multiverse5Retriever(mvPlugin).getWorldName(world);
-		}
-		else
-		{
-			result = new DefaultRetriever().getWorldName(world);
-		}
+			case com.onarandombox.MultiverseCore.MultiverseCore mvPlugin4 -> new Multiverse4Retriever(mvPlugin4).getWorldName(world);
+			case org.mvplugins.multiverse.core.MultiverseCore mvPlugin5 -> new Multiverse5Retriever(mvPlugin5).getWorldName(world);
+			case null, default -> new DefaultRetriever().getWorldName(world);
+		};
 
 		return (result.isPresent() && !result.get().isBlank())
 				? result.get()
