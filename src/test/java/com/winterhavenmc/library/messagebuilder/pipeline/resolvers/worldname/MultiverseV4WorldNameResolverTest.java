@@ -52,7 +52,7 @@ class MultiverseV4WorldNameResolverTest
 		String result = resolver.resolve(null);
 
 		// Assert
-		assertEquals("NULL", result);
+		assertEquals("∅", result);
 	}
 
 
@@ -61,8 +61,8 @@ class MultiverseV4WorldNameResolverTest
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
-		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
-		when(descriptionMock.getVersion()).thenReturn("4.3.16");
+//		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
+//		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 
 		// Act
 		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
@@ -78,8 +78,8 @@ class MultiverseV4WorldNameResolverTest
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("world-name");
-		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
-		when(descriptionMock.getVersion()).thenReturn("4.3.16");
+//		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
+//		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
 		when(mvWorldMock.getAlias()).thenReturn("");
@@ -101,8 +101,8 @@ class MultiverseV4WorldNameResolverTest
 	{
 		// Arrange
 		when(mvWorldMock.getAlias()).thenReturn("World Alias");
-		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
-		when(descriptionMock.getVersion()).thenReturn("4.3.16");
+//		when(multiverseCoreMock.getDescription()).thenReturn(descriptionMock);
+//		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 		when(multiverseCoreMock.getMVWorldManager()).thenReturn(mvWorldManagerMock);
 		when(mvWorldManagerMock.getMVWorld(worldMock)).thenReturn(mvWorldMock);
 

@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -47,7 +48,7 @@ class KillableTest
 	class TestObject implements Killable
 	{
 		@Override
-		public Entity getKiller()
+		public AnimalTamer getKiller()
 		{
 			return playerMock;
 		}
@@ -72,7 +73,7 @@ class KillableTest
 		TestObject testObject = new TestObject();
 
 		// Act
-		Entity result = testObject.getKiller();
+		AnimalTamer result = testObject.getKiller();
 
 		// Assert
 		assertEquals(playerMock, result);

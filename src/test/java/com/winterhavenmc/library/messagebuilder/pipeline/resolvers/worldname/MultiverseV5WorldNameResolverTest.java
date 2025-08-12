@@ -68,7 +68,7 @@ class MultiverseV5WorldNameResolverTest
 		String result = resolver.resolve(null);
 
 		// Assert
-		assertEquals("NULL", result);
+		assertEquals("∅", result);
 	}
 
 
