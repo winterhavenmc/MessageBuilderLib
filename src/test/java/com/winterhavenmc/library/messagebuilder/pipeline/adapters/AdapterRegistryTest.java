@@ -44,7 +44,6 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdA
 
 import org.bukkit.Location;
 import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;

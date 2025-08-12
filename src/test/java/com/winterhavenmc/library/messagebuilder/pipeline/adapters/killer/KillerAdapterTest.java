@@ -23,7 +23,6 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.Def
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
