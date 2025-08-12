@@ -38,8 +38,7 @@ class ItemRecordTest
 		ConfigurationSection itemEntrySection = new MemoryConfiguration();
 		itemEntrySection.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Item Name");
 		itemEntrySection.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Item Names");
-		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME_SINGULAR.toKey(), "Inventory Item Name");
-		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME_PLURAL.toKey(), "Inventory Item Names");
+		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Item Name");
 		itemEntrySection.set(ItemRecord.Field.LORE.toKey(), List.of("Lore Line 1", "Lore Line 2"));
 
 		// Act

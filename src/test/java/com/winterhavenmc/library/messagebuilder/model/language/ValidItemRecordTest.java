@@ -46,8 +46,7 @@ public class ValidItemRecordTest
 		ConfigurationSection itemEntry = new MemoryConfiguration();
 		itemEntry.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Test Item");
 		itemEntry.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Test Items");
-		itemEntry.set(ItemRecord.Field.INVENTORY_NAME_SINGULAR.toKey(), "Inventory Test Item");
-		itemEntry.set(ItemRecord.Field.INVENTORY_NAME_PLURAL.toKey(), "Inventory Test Items");
+		itemEntry.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Test Item");
 		itemEntry.set(ItemRecord.Field.LORE.toKey(), List.of("Lore line 1", "Lore line 2"));
 
 		// create valid item record from record key, item configuration section

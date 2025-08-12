@@ -92,15 +92,14 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	 *
 	 * <p>Example usage:
 	 * {@snippet lang="java":
-	 *  String singularName = section.getString(ItemRecord.Field.NAME_SINGULAR.toKey());
+	 *  String displayName = section.getString(ItemRecord.Field.DISPLAY_NAME.toKey());
 	 * }
 	 */
 	enum Field
 	{
-		NAME_SINGULAR("NAME.SINGULAR"),
-		NAME_PLURAL("NAME.PLURAL"),
-		INVENTORY_NAME_SINGULAR("INVENTORY_NAME.SINGULAR"),
-		INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL"),
+		NAME_SINGULAR("DISPLAY_NAME"),
+		NAME_PLURAL("DISPLAY_NAME_PLURAL"),
+		INVENTORY_NAME("INVENTORY_NAME"),
 		LORE("LORE");
 
 		private final String keyString;
