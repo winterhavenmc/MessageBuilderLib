@@ -101,9 +101,9 @@ public final class MessageBuilder
 						   final ConstantResolver constantResolver,
 	                       final MessagePipeline messagePipeline)
 	{
-		LocaleProvider localeProvider = LocaleProvider.create(plugin);
+//		LocaleProvider localeProvider = LocaleProvider.create(plugin);
 		ValidationContext.initialize(LocaleProvider.create(plugin));
-		ResourceBundle BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, localeProvider.getLocale());
+//		ResourceBundle BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, localeProvider.getLocale());
 
 		this.languageResourceManager = languageResourceManager;
 		this.constantResolver = constantResolver;

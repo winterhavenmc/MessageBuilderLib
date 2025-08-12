@@ -22,6 +22,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContext
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;

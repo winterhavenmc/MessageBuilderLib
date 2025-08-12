@@ -74,8 +74,7 @@ public interface Lootable
 	 * Predicate to validate whether a looter has a valid, non-blank name.
 	 */
 	Predicate<AnimalTamer> VALID_LOOTER = looter -> looter != null
-			&& looter.getName() != null
-			&& !looter.getName().isBlank();
+			&& looter.getName() != null && !looter.getName().isBlank();
 
 
 	/**

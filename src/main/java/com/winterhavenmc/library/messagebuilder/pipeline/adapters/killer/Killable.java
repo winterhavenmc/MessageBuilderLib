@@ -73,8 +73,7 @@ public interface Killable
 	 * Predicate that evaluates whether a killer is considered valid and non-blank.
 	 */
 	Predicate<AnimalTamer> VALID_KILLER = killer -> killer != null
-			&& killer.getName() != null
-			&& !killer.getName().isBlank();
+			&& killer.getName() != null && !killer.getName().isBlank();
 
 
 	/**
