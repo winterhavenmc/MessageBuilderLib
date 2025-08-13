@@ -75,8 +75,6 @@ class WorldNameResolverTest
 	void resolveWorldName_multiverse_fail()
 	{
 		// Arrange
-//		when(multiverseCoreV4Mock.getDescription()).thenReturn(descriptionMock);
-//		when(descriptionMock.getVersion()).thenReturn("4.3.16");
 		WorldNameResolver resolver = new PluginResolver(multiverseCoreV4Mock);
 
 		// Act
