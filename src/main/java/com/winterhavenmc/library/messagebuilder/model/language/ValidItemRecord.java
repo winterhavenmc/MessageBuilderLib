@@ -43,6 +43,7 @@ import java.util.List;
 public final class ValidItemRecord implements ItemRecord, Pluralizable
 {
 	RecordKey key;
+	String material;
 	String nameSingular;
 	String namePlural;
 	String inventoryName;
@@ -60,12 +61,14 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	 * @param itemLore      the list of lore lines (may be empty but not {@code null})
 	 */
 	private ValidItemRecord(RecordKey key,
+							String material,
 							String nameSingular,
 							String namePlural,
 							String inventoryName,
 							List<String> itemLore)
 	{
 		this.key = key;
+		this.material = material;
 		this.nameSingular = nameSingular;
 		this.namePlural = namePlural;
 		this.inventoryName = inventoryName;
@@ -87,6 +90,7 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	public static ValidItemRecord create(RecordKey key, ConfigurationSection section)
 	{
 		return new ValidItemRecord(key,
+				section.getString(Field.MATERIAL.toKey()),
 				section.getString(Field.NAME_SINGULAR.toKey()),
 				section.getString(Field.NAME_PLURAL.toKey()),
 				section.getString(Field.INVENTORY_NAME.toKey()),
@@ -125,6 +129,16 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	public String namePlural()
 	{
 		return namePlural;
+	}
+
+	public List<String> lore()
+	{
+		return itemLore;
+	}
+
+	public String material()
+	{
+		return material;
 	}
 
 }
