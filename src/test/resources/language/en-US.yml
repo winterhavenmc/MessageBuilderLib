@@ -35,6 +35,7 @@ CONSTANTS:
 ##############
 ITEMS:
   DEFAULT:
+    MATERIAL: GOLDEN_PICKAXE
     DISPLAY_NAME: 'Default Item'
     DISPLAY_NAME_PLURAL: 'Default Items'
     INVENTORY_NAME: 'Default Inventory Item'
