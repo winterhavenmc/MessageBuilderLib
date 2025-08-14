@@ -68,7 +68,7 @@ class MessageBuilderBootstrap
 	 * @param plugin an instance of the plugin
 	 * @return an instance of the language resource manager
 	 */
-	static SectionResourceManager createLanguageResourceManager(Plugin plugin)
+	static SectionResourceManager createLanguageResourceManager(final Plugin plugin)
 	{
 		final LanguageResourceInstaller resourceInstaller = new LanguageResourceInstaller(plugin);
 		final LanguageResourceLoader resourceLoader = new LanguageResourceLoader(plugin);
@@ -151,6 +151,24 @@ class MessageBuilderBootstrap
 																 final FormatterContainer formatterContainer)
 	{
 		return new AdapterContextContainer(WorldNameResolver.get(plugin.getServer().getPluginManager()), formatterContainer);
+	}
+
+
+	static QueryHandlerFactory createQueryHandlerFactory(SectionResourceManager languageResourceManager)
+	{
+		return new QueryHandlerFactory(languageResourceManager);
+	}
+
+
+	static ConstantResolver createConstantResolver(final QueryHandlerFactory queryHandlerFactory)
+	{
+		return new ConstantResolver(queryHandlerFactory);
+	}
+
+
+	static ItemForge createItemForge(final Plugin plugin, final QueryHandlerFactory queryHandlerFactory)
+	{
+		return new ItemForge(plugin, queryHandlerFactory);
 	}
 
 }
