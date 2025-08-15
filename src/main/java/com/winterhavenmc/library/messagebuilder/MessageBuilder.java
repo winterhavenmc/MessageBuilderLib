@@ -40,7 +40,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
@@ -87,6 +86,7 @@ public final class MessageBuilder
 	private final SectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
 	private final ConstantResolver constantResolver;
+	private final ItemForge itemForge;
 
 
 	/**
@@ -99,14 +99,14 @@ public final class MessageBuilder
 	private MessageBuilder(final Plugin plugin,
 	                       final SectionResourceManager languageResourceManager,
 						   final ConstantResolver constantResolver,
+						   final ItemForge itemForge,
 	                       final MessagePipeline messagePipeline)
 	{
-//		LocaleProvider localeProvider = LocaleProvider.create(plugin);
 		ValidationContext.initialize(LocaleProvider.create(plugin));
-//		ResourceBundle BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, localeProvider.getLocale());
 
 		this.languageResourceManager = languageResourceManager;
 		this.constantResolver = constantResolver;
+		this.itemForge = itemForge;
 		this.messagePipeline = messagePipeline;
 	}
 
@@ -129,14 +129,15 @@ public final class MessageBuilder
 		final BukkitAudiences audiences = BukkitAudiences.create(plugin);
 
 		final SectionResourceManager languageResourceManager = createLanguageResourceManager(plugin);
-		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
-		final ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactory);
+		final QueryHandlerFactory queryHandlerFactory = createQueryHandlerFactory(languageResourceManager);
+		final ConstantResolver constantResolver = createConstantResolver(queryHandlerFactory);
+		final ItemForge itemForge = createItemForge(plugin, queryHandlerFactory);
 
 		final FormatterContainer formatterContainer = createFormatterContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, formatterContainer);
 		final MessagePipeline messagePipeline = createMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer, miniMessage, audiences);
 
-		return new MessageBuilder(plugin, languageResourceManager, constantResolver, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);
 	}
 
 
@@ -191,19 +192,26 @@ public final class MessageBuilder
 	static MessageBuilder test(final Plugin plugin,
 							   final LanguageResourceManager languageResourceManager,
 							   final ConstantResolver constantResolver,
+							   final ItemForge itemForge,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, constantResolver, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);
 	}
 
 
 	public ConstantResolver getConstantResolver()
 	{
 		return this.constantResolver;
+	}
+
+
+	public ItemForge itemForge()
+	{
+		return this.itemForge;
 	}
 
 }
