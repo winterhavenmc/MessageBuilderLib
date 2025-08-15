@@ -97,6 +97,7 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	 */
 	enum Field
 	{
+		MATERIAL("MATERIAL"),
 		NAME_SINGULAR("DISPLAY_NAME"),
 		NAME_PLURAL("DISPLAY_NAME_PLURAL"),
 		INVENTORY_NAME("INVENTORY_NAME"),
