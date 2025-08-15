@@ -66,6 +66,7 @@ class ItemQueryHandlerTest
 
 		when(itemSectionMock.getConfigurationSection(recordKey.toString())).thenReturn(itemEntryMock);
 
+		when(itemEntryMock.getString(ItemRecord.Field.MATERIAL.toKey())).thenReturn("GOLDEN_PICKAXE");
 		when(itemEntryMock.getString(ItemRecord.Field.NAME_SINGULAR.toKey())).thenReturn("Item Name singular");
 		when(itemEntryMock.getString(ItemRecord.Field.NAME_PLURAL.toKey())).thenReturn("Item Name plural");
 		when(itemEntryMock.getString(ItemRecord.Field.INVENTORY_NAME.toKey())).thenReturn("Inventory Item Name singular");
@@ -82,7 +83,7 @@ class ItemQueryHandlerTest
 
 		// Verify
 		verify(itemSectionMock, atLeastOnce()).getConfigurationSection("TEST_ITEM_1");
-		verify(itemEntryMock, times(3)).getString(anyString());
+		verify(itemEntryMock, times(4)).getString(anyString());
 	}
 
 
