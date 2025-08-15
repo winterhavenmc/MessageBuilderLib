@@ -62,6 +62,7 @@ class MessageBuilderTest
 	@Mock MessagePipeline messagePipelineMock;
 	@Mock ConfigurationSection constantsSectionMock;
 	@Mock ConstantResolver constantResolverMock;
+	@Mock ItemForge itemForgeMock;
 	@Mock PluginDescriptionFile descriptionFileMock;
 
 	FileConfiguration pluginConfiguration;
@@ -77,12 +78,13 @@ class MessageBuilderTest
 		pluginConfiguration = new YamlConfiguration();
 		pluginConfiguration.set("language", "en-US");
 		pluginConfiguration.set("locale", "en-US");
-		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		messageBuilder = MessageBuilder.test(pluginMock,
 				languageResourceManagerMock,
 				constantResolverMock,
+				itemForgeMock,
 				messagePipelineMock);
 	}
 
@@ -153,9 +155,6 @@ class MessageBuilderTest
 	@Test @DisplayName("Exception is not thrown when reload fails.")
 	void reload_fail_does_not_throw_exception()
 	{
-		// Arrange
-//		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-
 		// Act & Assert
 		assertDoesNotThrow(() -> messageBuilder.reload());
 
@@ -203,6 +202,7 @@ class MessageBuilderTest
 				() -> MessageBuilder.test(null,
 						languageResourceManagerMock,
 						constantResolverMock,
+						itemForgeMock,
 						messagePipelineMock));
 
 		// Assert
@@ -218,6 +218,7 @@ class MessageBuilderTest
 				() -> MessageBuilder.test(pluginMock,
 						null,
 						constantResolverMock,
+						itemForgeMock,
 						messagePipelineMock));
 
 		// Assert
@@ -233,6 +234,7 @@ class MessageBuilderTest
 				() -> MessageBuilder.test(pluginMock,
 						languageResourceManagerMock,
 						constantResolverMock,
+						itemForgeMock,
 						null));
 
 		// Assert
