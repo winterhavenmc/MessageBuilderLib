@@ -117,4 +117,12 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 		public String toKey() { return this.keyString; }
 	}
 
+
+	default Optional<ValidItemRecord> isValid()
+	{
+		return (this instanceof ValidItemRecord validItemRecord)
+				? Optional.of(validItemRecord)
+				: Optional.empty();
+	}
+
 }
