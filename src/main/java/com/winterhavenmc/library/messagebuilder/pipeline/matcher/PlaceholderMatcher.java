@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  * macro keys from an input string.
  *
  * <p>This class transforms matching groups into {@link ValidMacroKey}
- * instances using {@code LegacyMacroKey.of(...)}, and silently skips any invalid results.
+ * instances using {@code MacroKey.of(...)}, and silently skips any invalid results.
  *
  * <p>It is designed for use in both the resolution and replacement stages of the pipeline,
  * depending on whether base keys or full macro keys are being matched.

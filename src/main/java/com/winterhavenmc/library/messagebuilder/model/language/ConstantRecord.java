@@ -42,7 +42,7 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
  * through the library once constructed.
  *
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
- * @see ValidConstantKey LegacyRecordKey
+ * @see ValidConstantKey
  */
 public sealed interface ConstantRecord extends SectionRecord permits ValidConstantRecord, InvalidConstantRecord
 {

@@ -21,6 +21,8 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.Optional;
+
 
 /**
  * A sealed interface representing a record loaded from the {@code ITEMS}
@@ -33,10 +35,8 @@ import org.bukkit.configuration.ConfigurationSection;
  *
  * <h2>Implementations</h2>
  * <ul>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord} –
- *       A fully parsed and validated item entry</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord} –
- *       A fallback object representing a missing or invalid item definition</li>
+ *   <li>{@link ValidItemRecord} – A fully parsed and validated item entry</li>
+ *   <li>{@link InvalidItemRecord} – A fallback object representing a missing or invalid item definition</li>
  * </ul>
  *
  * <p>Instances are created using {@link #from(ValidItemKey, ConfigurationSection)},
@@ -48,7 +48,7 @@ import org.bukkit.configuration.ConfigurationSection;
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  * @see com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord ValidItemRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord InvalidItemRecord
- * @see ValidItemKey LegacyRecordKey
+ * @see ValidItemKey ValidRecordKey
  */
 public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {

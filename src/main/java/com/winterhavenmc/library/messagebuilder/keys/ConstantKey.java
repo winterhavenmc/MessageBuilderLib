@@ -22,7 +22,7 @@ import java.util.Optional;
 
 /**
  * A type that represents a validated string for a record. This type guarantees a valid string that has been
- * validated upon creation. The static factory methods return an Optional of the LegacyRecordKey,
+ * validated upon creation. The static factory methods return a Valid or Invalid implementation of the RecordKey,
  * or an empty Optional if the parameter was invalid, as determined by regex pattern and Predicate.
  */
 public sealed interface ConstantKey extends RecordKey permits ValidConstantKey, InvalidConstantKey

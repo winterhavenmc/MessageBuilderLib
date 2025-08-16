@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  *   <li>Locate full placeholder keys to be substituted during rendering</li>
  * </ul>
  *
- * <p>Implementations must return a stream of distinct {@code LegacyMacroKey} instances derived
+ * <p>Implementations must return a stream of distinct {@code ValidMacroKey} instances derived
  * from all matches found in the input string.
  *
  * @see com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher
