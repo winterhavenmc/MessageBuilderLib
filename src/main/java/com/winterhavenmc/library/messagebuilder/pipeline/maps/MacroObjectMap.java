@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.maps;
 
-//import com.winterhavenmc.library.messagebuilder.keys.LegacyMacroKey;
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 
 import java.util.HashMap;
