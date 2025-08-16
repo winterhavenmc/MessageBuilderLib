@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.matcher;
 
-//import com.winterhavenmc.library.messagebuilder.keys.LegacyMacroKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 
 import java.util.regex.Pattern;

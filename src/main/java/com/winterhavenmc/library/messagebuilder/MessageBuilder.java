@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-//import com.winterhavenmc.library.messagebuilder.keys.LegacyRecordKey;
 import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
