@@ -36,7 +36,7 @@ import java.util.Optional;
 /**
  * Adapter for objects that expose a {@link org.bukkit.Location}, either directly or via a {@link Locatable} interface.
  *
- * <p>This adapter provides macro key support for structured location data, including:
+ * <p>This adapter provides macro string support for structured location data, including:
  * <ul>
  *   <li>{@code [OBJECT.LOCATION}} – the full location string, including world and coordinates</li>
  *   <li>{@code [OBJECT.LOCATION.WORLD}}, {@code [OBJECT.LOCATION.X}}, {@code Y}, {@code Z} – individual components</li>

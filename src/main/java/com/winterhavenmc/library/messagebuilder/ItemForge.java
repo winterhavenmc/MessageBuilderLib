@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ItemKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.Section;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord;
@@ -57,19 +58,14 @@ public class ItemForge
 		this.itemFactory = plugin.getServer().getItemFactory();
 		this.itemQueryHandler = queryHandlerFactory.getQueryHandler(Section.ITEMS);
 		this.miniMessage = MiniMessage.miniMessage();
-
 	}
 
 
 	public Optional<ItemStack> createItem(final String key)
 	{
-		Optional<RecordKey> optionalRecordKey = RecordKey.of(key);
-
-		if (optionalRecordKey.isPresent())
+		if (ItemKey.of(key) instanceof ValidItemKey validItemKey)
 		{
-			RecordKey recordKey = optionalRecordKey.get();
-
-			ItemRecord itemRecord = itemQueryHandler.getRecord(recordKey);
+			ItemRecord itemRecord = itemQueryHandler.getRecord(validItemKey);
 
 			if (itemRecord instanceof ValidItemRecord validItemRecord)
 			{

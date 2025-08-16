@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
@@ -30,12 +30,12 @@ import java.util.List;
  * <p>
  * This class attempts to resolve macro values by invoking each resolver in the
  * order provided during construction. Results from earlier resolvers in the
- * chain take precedence—if a macro key has already been mapped, subsequent
+ * chain take precedence—if a macro string has already been mapped, subsequent
  * resolvers will not overwrite it.
  * <p>
  * Typical usage involves registering a {@code CompositeResolver} first, followed by
  * an {@code AtomicResolver}, allowing composite (adapted) values to take priority
- * over simpler atomic ones only if the base key has not already been defined.
+ * over simpler atomic ones only if the base string has not already been defined.
  * {@snippet lang="java":
  * Resolver resolver = new FieldResolver(List.of(
  *     new CompositeResolver(),
@@ -65,18 +65,18 @@ public class FieldResolver implements Resolver
 
 
 	/**
-	 * Resolves a {@link MacroKey} using the available macro objects in the given
+	 * Resolves a {@link ValidMacroKey} using the available macro objects in the given
 	 * {@link MacroObjectMap}, by delegating to each registered resolver in sequence.
 	 * <p>
 	 * Values resolved earlier take precedence—existing keys in the result map will
 	 * not be overwritten by later resolvers.
 	 *
-	 * @param macroKey the base key to resolve values for
+	 * @param macroKey the base string to resolve values for
 	 * @param macroObjectMap the object map containing macro values to be resolved
-	 * @return a {@link MacroStringMap} containing resolved key-value pairs
+	 * @return a {@link MacroStringMap} containing resolved string-value pairs
 	 */
 	@Override
-	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
+	public MacroStringMap resolve(final ValidMacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
 		return resolvers.stream()
 				.map(resolver -> resolver.resolve(macroKey, macroObjectMap))

@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.query;
 
-import com.winterhavenmc.library.messagebuilder.model.language.SectionRecord;
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.model.language.SectionRecord;
 
 
 /**

@@ -18,11 +18,11 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
 import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -84,8 +84,8 @@ class LootableTest
 	void extractLooter_returns_populated_map()
 	{
 		// Arrange
-		MacroKey baseKey = MacroKey.of("TEST").orElseThrow();
-		MacroKey subKey = baseKey.append(LOOTER).orElseThrow();
+		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append(LOOTER).isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Looter");
 
@@ -101,7 +101,7 @@ class LootableTest
 	void formatLooter_returns_optional_string()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Looter");
 
@@ -117,7 +117,7 @@ class LootableTest
 	void formatLooter_with_blank_name_returns_optional_UNKNOWN_VALUE()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("");
 
@@ -133,7 +133,7 @@ class LootableTest
 	void formatLooter_with_null_value_returns_optional_UNKNOWN_VALUE()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 
 		// Act
 		Optional<String> result = Lootable.formatLooter(null);

@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable;
@@ -53,8 +54,8 @@ class CompositeResolverTest
 
 	private CompositeResolver resolver;
 
-	private final MacroKey rootKey = MacroKey.of("ROOT").orElseThrow();
-	private final MacroKey childKey = MacroKey.of("CHILD").orElseThrow();
+	private final ValidMacroKey rootKey = MacroKey.of("ROOT").isValid().orElseThrow();
+	private final ValidMacroKey childKey = MacroKey.of("CHILD").isValid().orElseThrow();
 
 
 	@BeforeEach
@@ -67,7 +68,7 @@ class CompositeResolverTest
 	@Test
 	void testResolve_with_nested_key()
 	{
-		MacroKey macroKey = MacroKey.of("RESOLVED.CHILD").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("RESOLVED.CHILD").isValid().orElseThrow();
 
 		Object rootValue = new Object();
 		Object adaptedValue = new Object();

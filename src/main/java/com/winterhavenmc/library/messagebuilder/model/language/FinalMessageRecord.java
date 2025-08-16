@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -42,7 +42,7 @@ import java.util.Optional;
  * These are provided as {@link Optional} values to distinguish between
  * unresolved and empty content.
  *
- * @param key the original message key
+ * @param key the original message string
  * @param enabled whether this message is active
  * @param message the original raw message string (pre-resolution)
  * @param repeatDelay the repeat delay setting for this message
@@ -60,7 +60,7 @@ import java.util.Optional;
  * @see com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline MessagePipeline
  */
 public record FinalMessageRecord(
-		RecordKey key,
+		ValidMessageKey key,
 		boolean enabled,
 		String message,
 		Duration repeatDelay,

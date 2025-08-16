@@ -17,7 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+//import com.winterhavenmc.library.messagebuilder.keys.LegacyRecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
@@ -155,9 +157,8 @@ public final class MessageBuilder
 	 */
 	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
 	{
-		// exception thrown if null enum constant passed in messageId parameter
-		RecordKey validMessageKey = RecordKey.of(messageId)
-				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
+		// exception thrown if null enum constant passed as messageId parameter
+		ValidMessageKey validMessageKey = MessageKey.of(messageId).isValid().orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
 		// return ValidMessage on valid Recipient, else empty no-op message
 		return switch (Recipient.of(recipient))

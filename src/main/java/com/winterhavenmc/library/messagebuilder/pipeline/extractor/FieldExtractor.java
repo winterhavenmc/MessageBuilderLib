@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.extractor;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameAdapter;
@@ -56,7 +56,7 @@ import java.time.temporal.ChronoUnit;
  * <p>
  * The {@code FieldExtractor} is responsible for mapping adapted objects (e.g., {@link Nameable},
  * {@link Locatable}, {@link Quantifiable}, etc.) to their extracted macro string values.
- * These values are inserted into a {@link MacroStringMap}, keyed by the supplied {@link MacroKey}.
+ * These values are inserted into a {@link MacroStringMap}, keyed by the supplied {@link ValidMacroKey}.
  * <p>
  * This implementation supports all built-in {@link Adapter} types and ensures
  * that the correct extraction method is called based on both the adapter class
@@ -88,14 +88,14 @@ public class FieldExtractor implements Extractor
 	 * If no valid match is found for the adapter/object combination, an empty
 	 * {@link MacroStringMap} is returned.
 	 *
-	 * @param baseKey the base {@link MacroKey} representing the placeholder prefix
+	 * @param baseKey the base {@link ValidMacroKey} representing the placeholder prefix
 	 * @param adapter the adapter that was used to adapt the original object
 	 * @param adapted the adapted object implementing one of the field interfaces
 	 * @param <T>     the type of the adapted object
 	 * @return a {@code MacroStringMap} containing extracted macro values
 	 */
 	@Override
-	public <T> MacroStringMap extract(final MacroKey baseKey, final Adapter adapter, final T adapted)
+	public <T> MacroStringMap extract(final ValidMacroKey baseKey, final Adapter adapter, final T adapted)
 	{
 		MacroStringMap resultMap = new MacroStringMap();
 

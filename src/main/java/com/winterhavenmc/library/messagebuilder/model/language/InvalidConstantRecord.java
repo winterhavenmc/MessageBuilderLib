@@ -17,14 +17,15 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 
 
 /**
  * A {@link ConstantRecord} representing a missing or invalid constant from the
  * {@code CONSTANTS} section of a language YAML file.
  * <p>
- * This record is typically returned by {@link ConstantRecord#from(RecordKey, Object)}
+ * This record is typically returned by {@link ConstantRecord#from(ValidConstantKey, Object)}
  * when a constant entry is {@code null}, missing, or otherwise unusable.
  * <p>
  * The {@code reason} field provides a human-readable description of the failure,
@@ -33,11 +34,11 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
  * <p>This record is safe to return and pass through the message pipeline,
  * and will not result in runtime exceptions when encountered.
  *
- * @param key the {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey} identifying the invalid constant
+ * @param key the {@link ConstantKey} identifying the invalid constant
  * @param reason the explanation for why this record is invalid
  *
  * @see ConstantRecord
  * @see ValidConstantRecord
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  */
-public record InvalidConstantRecord(RecordKey key, String reason) implements ConstantRecord { }
+public record InvalidConstantRecord(com.winterhavenmc.library.messagebuilder.keys.RecordKey key, String reason) implements ConstantRecord { }

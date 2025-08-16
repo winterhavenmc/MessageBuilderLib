@@ -17,6 +17,6 @@
 
 
 /**
- * This package contains the StandardKey interface and implementations
+ * This package contains the LegacyStandardKey interface and implementations
  */
 package com.winterhavenmc.library.messagebuilder.keys;

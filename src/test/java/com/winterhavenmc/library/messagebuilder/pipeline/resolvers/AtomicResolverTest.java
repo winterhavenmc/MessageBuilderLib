@@ -17,12 +17,13 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 
@@ -53,7 +54,7 @@ class AtomicResolverTest
 
 	private AtomicResolver resolver;
 
-	private final MacroKey key = MacroKey.of("TEST").orElseThrow();
+	private final ValidMacroKey key = MacroKey.of("TEST").isValid().orElseThrow();
 
 
 	@BeforeEach

@@ -25,7 +25,7 @@
  * <ul>
  *   <li>All types follow the <em>data-driven design pattern</em>: validation occurs at construction time.</li>
  *   <li>Factory methods such as {@code from(...)} are used to ensure all instances are safe and complete.</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey} is used as a strongly typed identifier
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.keys.RecordKey LegacyRecordKey} is used as a strongly typed identifier
  *       across all sections.</li>
  * </ul>
  *

@@ -17,8 +17,16 @@
 
 package com.winterhavenmc.library.messagebuilder.keys;
 
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+
 
 /**
- * An interface that defines a standard key type.
+ * An interface that defines a standard string type.
  */
-public sealed interface StandardKey permits MacroKey, RecordKey { }
+public sealed interface StandardKey permits MacroKey, RecordKey
+{
+	// valid string must begin with uppercase alpha only and may contain alpha, digits, underscore or period
+	Pattern VALID_KEY = Pattern.compile("^[A-Z][a-zA-Z\\d_.]*$");
+	Predicate<String> IS_INVALID_KEY = string -> !VALID_KEY.matcher(string).matches();
+}

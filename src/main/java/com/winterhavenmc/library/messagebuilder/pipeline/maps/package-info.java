@@ -5,7 +5,7 @@
  * <ul>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap}
  *       — a type-safe map that holds raw object values keyed by
- *       {@link com.winterhavenmc.library.messagebuilder.keys.MacroKey MacroKey}.
+ *       {@link com.winterhavenmc.library.messagebuilder.keys.MacroKey LegacyMacroKey}.
  *       Used during early phases of the message pipeline, especially in adapter chains.</li>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap MacroStringMap}
  *   — a post-processing map that contains validated, formatted string values ready for placeholder substitution.</li>

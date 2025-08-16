@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
@@ -55,8 +56,8 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 {
 	private final DurationFormatter delegate;
 	private final QueryHandlerFactory queryHandlerFactory;
-	private static final RecordKey UNLIMITED_KEY = RecordKey.of("TIME.UNLIMITED").orElseThrow();
-	private static final RecordKey LESS_THAN_KEY = RecordKey.of("TIME.LESS_THAN").orElseThrow();
+	private static final ValidConstantKey UNLIMITED_KEY = ConstantKey.of("TIME.UNLIMITED").isValid().orElseThrow();
+	private static final ValidConstantKey LESS_THAN_KEY = ConstantKey.of("TIME.LESS_THAN").isValid().orElseThrow();
 
 
 	/**
@@ -139,11 +140,11 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 	 * Retrieves a string constant from the language file, falling back to a default
 	 * if the constant is missing or invalid.
 	 *
-	 * @param constantKey the configuration key to fetch
+	 * @param constantKey the configuration string to fetch
 	 * @param durationType the fallback duration type if the constant is unavailable
 	 * @return a localized or fallback string
 	 */
-	String getTimeConstant(final RecordKey constantKey, final DurationType durationType)
+	String getTimeConstant(final ValidConstantKey constantKey, final DurationType durationType)
 	{
 		QueryHandler<ConstantRecord> constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
 		ConstantRecord timeConstant = constantQueryHandler.getRecord(constantKey);

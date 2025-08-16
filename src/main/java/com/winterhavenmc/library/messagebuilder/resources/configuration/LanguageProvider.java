@@ -84,7 +84,7 @@ public class LanguageProvider implements ConfigProvider<LanguageSetting>
 	 * <p>
 	 * Searches for {@code language} or {@code locale} keys in the plugin’s configuration,
 	 * and constructs a {@link LanguageSetting} accordingly. Defaults to {@code en-US}
-	 * if no valid key is found.
+	 * if no valid string is found.
 	 * </p>
 	 *
 	 * @param plugin the plugin providing the configuration

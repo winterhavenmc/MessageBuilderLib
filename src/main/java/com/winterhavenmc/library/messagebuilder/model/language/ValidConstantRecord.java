@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 
 import java.util.Objects;
 
@@ -30,26 +30,26 @@ import java.util.Objects;
  * These values are typically referenced using macros in messages (e.g. {@code %SERVER_NAME%}).
  * <p>
  * This record is considered safe and complete once constructed, and is created
- * via the {@link #create(RecordKey, Object)} static factory method.
+ * via the {@link #create(ValidConstantKey, Object)} static factory method.
  *
  * @see ConstantRecord
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see ValidConstantKey
  */
 public final class ValidConstantRecord implements ConstantRecord
 {
-	private final RecordKey key;
+	private final ValidConstantKey key;
 	private final Object value;
 
 
 	/**
-	 * Constructs a {@code ValidConstantRecord} with the given key and value.
+	 * Constructs a {@code ValidConstantRecord} with the given string and value.
 	 * <p>
-	 * This constructor is private; use {@link #create(RecordKey, Object)} to instantiate.
+	 * This constructor is private; use {@link #create(ValidConstantKey, Object)} to instantiate.
 	 *
-	 * @param key the unique constant key
+	 * @param key the unique constant string
 	 * @param value the constant value as loaded from the configuration
 	 */
-	private ValidConstantRecord(final RecordKey key, final Object value)
+	private ValidConstantRecord(final ValidConstantKey key, final Object value)
 	{
 		this.key = key;
 		this.value = value;
@@ -57,23 +57,23 @@ public final class ValidConstantRecord implements ConstantRecord
 
 
 	/**
-	 * Creates a {@code ValidConstantRecord} from the provided key and value.
+	 * Creates a {@code ValidConstantRecord} from the provided string and value.
 	 * <p>
 	 * This method should be called only after validation, typically from
-	 * {@link ConstantRecord#from(RecordKey, Object)}.
+	 * {@link ConstantRecord#from(ValidConstantKey, Object)}.
 	 *
-	 * @param key the unique constant key
+	 * @param key the unique constant string
 	 * @param value the raw value from the YAML configuration
 	 * @return a validated constant record instance
 	 */
-	public static ValidConstantRecord create(final RecordKey key, final Object value)
+	public static ValidConstantRecord create(final ValidConstantKey key, final Object value)
 	{
 		return new ValidConstantRecord(key, value);
 	}
 
 
 	@Override
-	public RecordKey key()
+	public ValidConstantKey key()
 	{
 		return this.key;
 	}

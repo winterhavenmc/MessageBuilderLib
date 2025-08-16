@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.sender;
 
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -30,10 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
@@ -42,8 +39,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -53,10 +48,9 @@ class TitleSenderTest
 	@Mock ConsoleCommandSender consoleMock;
 
 	Recipient.Valid recipient;
-	RecordKey messageKey;
+	ValidMessageKey messageKey;
 	ValidMessageRecord validMessageRecord;
 	FinalMessageRecord finalMessageRecord;
-	RecordKey recordKey;
 	ConfigurationSection section;
 
 
@@ -70,9 +64,9 @@ class TitleSenderTest
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
-		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+//		recordKey = LegacyRecordKey.of(ENABLED_MESSAGE).orElseThrow();
 
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
@@ -84,7 +78,7 @@ class TitleSenderTest
 		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
 		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
 
-		validMessageRecord = ValidMessageRecord.create(recordKey, section);
+		validMessageRecord = ValidMessageRecord.create(messageKey, section);
 
 		finalMessageRecord = validMessageRecord.withFinalStrings(
 				"this is a final message",

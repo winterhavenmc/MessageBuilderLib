@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.Section;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
@@ -49,10 +50,10 @@ public class ConstantResolver
 	/**
 	 * Retrieves a constant record using the constant query handler
 	 *
-	 * @param key a string to be used as the key for the record to be retrieved
+	 * @param key a string to be used as the string for the record to be retrieved
 	 * @return an Optional constant record, or an empty Optional if no record could be retrieved
 	 */
-	private Optional<ConstantRecord> getConstantRecord(final RecordKey key)
+	private Optional<ConstantRecord> getConstantRecord(final ValidConstantKey key)
 	{
 		return Optional.ofNullable(constantQueryHandler.getRecord(key));
 	}
@@ -61,42 +62,42 @@ public class ConstantResolver
 	/**
 	 * Retrieves an Optional String from the constants section of the language file
 	 *
-	 * @param key a string to be used as the key for the String to be retrieved
+	 * @param key a string to be used as the string for the String to be retrieved
 	 * @return an Optional String, or an empty Optional if no String record could be retrieved
 	 */
 	public Optional<String> getString(final String key)
 	{
-		return RecordKey.of(key)
-				.flatMap(this::getConstantRecord)
-				.flatMap(this::extractStringValue);
+		return (ConstantKey.of(key) instanceof ValidConstantKey validConstantKey)
+				? this.getConstantRecord(validConstantKey).flatMap(this::extractStringValue)
+				: Optional.empty();
 	}
 
 
 	/**
 	 * Retrieves an Optional Integer from the constants section of the language file
 	 *
-	 * @param key a string to be used as the key for the Integer to be retrieved
+	 * @param key a string to be used as the string for the Integer to be retrieved
 	 * @return an Optional Integer, or an empty Optional if no Integer record could be retrieved
 	 */
 	public Optional<Integer> getInteger(final String key)
 	{
-		return RecordKey.of(key)
-				.flatMap(this::getConstantRecord)
-				.flatMap(this::extractIntegerValue);
+		return (ConstantKey.of(key) instanceof ValidConstantKey validConstantKey)
+				? this.getConstantRecord(validConstantKey).flatMap(this::extractIntegerValue)
+				: Optional.empty();
 	}
 
 
 	/**
 	 * Retrieves an Optional Boolean from the constants section of the language file
 	 *
-	 * @param key a string to be used as the key for the Boolean to be retrieved
+	 * @param key a string to be used as the string for the Boolean to be retrieved
 	 * @return an Optional Boolean, or an empty Optional if no Boolean record could be retrieved
 	 */
 	public Optional<Boolean> getBoolean(final String key)
 	{
-		return RecordKey.of(key)
-				.flatMap(this::getConstantRecord)
-				.flatMap(this::extractBooleanValue);
+		return (ConstantKey.of(key) instanceof ValidConstantKey validConstantKey)
+				? this.getConstantRecord(validConstantKey).flatMap(this::extractBooleanValue)
+				: Optional.empty();
 	}
 
 

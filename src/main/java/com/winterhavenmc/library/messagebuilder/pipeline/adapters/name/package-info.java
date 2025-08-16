@@ -4,7 +4,7 @@
  *
  * <p>Objects that implement {@link com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable Nameable}
  * expose a {@code getName()} method used for macro substitution in message templates. The adapter in this package
- * maps such values to a dot-notated macro key (e.g., {@code {OBJECT.NAME}}) that is automatically replaced during
+ * maps such values to a dot-notated macro string (e.g., {@code {OBJECT.NAME}}) that is automatically replaced during
  * message composition.
  *
  * <h2>Plugin Integration</h2>

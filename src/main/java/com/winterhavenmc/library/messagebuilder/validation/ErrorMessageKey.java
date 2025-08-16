@@ -30,7 +30,7 @@ package com.winterhavenmc.library.messagebuilder.validation;
  * {@link Validator#formatMessage(ErrorMessageKey, Parameter)}.
  *
  * <p>
- * Example key in the language file: {@code PARAMETER_NULL=Parameter {0} must not be null.}
+ * Example string in the language file: {@code PARAMETER_NULL=Parameter {0} must not be null.}
  *
  * @see ValidationException
  * @see Validator

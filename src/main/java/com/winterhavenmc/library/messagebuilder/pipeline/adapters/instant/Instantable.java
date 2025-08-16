@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
@@ -60,16 +60,16 @@ public interface Instantable
 	 * Extracts a formatted timestamp field from this {@code Instantable}, based on the given
 	 * {@code FormatStyle} and locale context.
 	 *
-	 * @param baseKey the macro key prefix under which the {@code INSTANT} field will be inserted
+	 * @param baseKey the macro string prefix under which the {@code INSTANT} field will be inserted
 	 * @param formatStyle the {@link FormatStyle} to use for localization
 	 * @param ctx the adapter context container providing a {@link LocaleProvider}
 	 * @return a {@code MacroStringMap} with the formatted timestamp under {@code baseKey.INSTANT}
 	 */
-	default MacroStringMap extractInstant(final MacroKey baseKey,
+	default MacroStringMap extractInstant(final ValidMacroKey baseKey,
 										  final FormatStyle formatStyle,
 										  final AdapterContextContainer ctx)
 	{
-		return baseKey.append(INSTANT)
+		return baseKey.append(INSTANT).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatInstant(this.getInstant(), formatStyle, ctx.formatterContainer()
 						.localeProvider()).orElse(UNKNOWN_VALUE)))

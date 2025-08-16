@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class ConstantRecordTest
 	void of_with_valid_section()
 	{
 		// Arrange
-		RecordKey constantKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
+		ValidConstantKey constantKey = ConstantKey.of("SPAWN.DISPLAY_NAME").isValid().orElseThrow();
 
 		ConfigurationSection constantEntrySection = new MemoryConfiguration();
 		constantEntrySection.set("SPAWN.DISPLAY_NAME", "World Spawn");
@@ -48,7 +49,7 @@ class ConstantRecordTest
 	void of_with_null_section()
 	{
 		// Arrange
-		RecordKey constantKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
+		ValidConstantKey constantKey = ConstantKey.of("SPAWN.DISPLAY_NAME").isValid().orElseThrow();
 
 		// Act
 		ConstantRecord constantRecord = ConstantRecord.from(constantKey, null);

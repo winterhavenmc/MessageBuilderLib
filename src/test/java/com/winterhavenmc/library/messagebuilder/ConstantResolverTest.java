@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.Section;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
@@ -51,7 +52,7 @@ class ConstantResolverTest
 		void getString_returns_optional_String()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, "result string");
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -71,7 +72,7 @@ class ConstantResolverTest
 		void getString_returns_empty_optional()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -91,7 +92,7 @@ class ConstantResolverTest
 		void getString_returns_empty_optional_when_non_string_value_record()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -111,7 +112,7 @@ class ConstantResolverTest
 		void getString_returns_empty_optional_when_null_value_record()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, null);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -131,7 +132,7 @@ class ConstantResolverTest
 		void getString_returns_empty_optional_when_empty_optional_value_record()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -155,7 +156,7 @@ class ConstantResolverTest
 		void getInteger_returns_optional_Integer()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -175,7 +176,7 @@ class ConstantResolverTest
 		void getInteger_returns_empty_optional()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -195,7 +196,7 @@ class ConstantResolverTest
 		void getInteger_returns_empty_optional_when_non_Integer_value_record()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, "string");
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -215,7 +216,7 @@ class ConstantResolverTest
 		void getInteger_returns_empty_optional_when_null_value_record()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, null);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -235,7 +236,7 @@ class ConstantResolverTest
 		void getInteger_returns_empty_optional_when_empty_optional_value_record()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -259,7 +260,7 @@ class ConstantResolverTest
 		void getBoolean_returns_optional_Boolean()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, true);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -279,7 +280,7 @@ class ConstantResolverTest
 		void getBoolean_returns_empty_optional()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -299,7 +300,7 @@ class ConstantResolverTest
 		void getBoolean_returns_empty_optional_when_non_Boolean_value_record()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -319,7 +320,7 @@ class ConstantResolverTest
 		void getBoolean_returns_empty_optional_when_null_value_record()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, null);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
@@ -339,7 +340,7 @@ class ConstantResolverTest
 		void getBoolean_returns_empty_optional_when_empty_optional_value_record()
 		{
 			// Arrange
-			RecordKey recordKey = RecordKey.of("KEY").orElseThrow();
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
 			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);

@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.query;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ItemKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord;
@@ -34,7 +35,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.winterhavenmc.library.messagebuilder.messages.MessageId.NONEXISTENT_ENTRY;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -62,7 +62,7 @@ class ItemQueryHandlerTest
 	void getRecord_with_valid_parameter_returns_ValidItemRecord()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("TEST_ITEM_1").orElseThrow();
+		ValidItemKey recordKey = ItemKey.of("TEST_ITEM_1").isValid().orElseThrow();
 
 		when(itemSectionMock.getConfigurationSection(recordKey.toString())).thenReturn(itemEntryMock);
 
@@ -74,6 +74,7 @@ class ItemQueryHandlerTest
 
 		SectionProvider mockProvider = () -> itemSectionMock;
 		ItemQueryHandler handler = new ItemQueryHandler(mockProvider);
+
 		// Act
 		ValidItemRecord result = (ValidItemRecord) handler.getRecord(recordKey);
 
@@ -91,7 +92,7 @@ class ItemQueryHandlerTest
 	void getRecord_with_non_existent_entry_returns_InvalidItemRecord()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of(NONEXISTENT_ENTRY).orElseThrow();
+		ValidItemKey recordKey = ItemKey.of("NONEXISTENT_ENTRY").isValid().orElseThrow();
 
 		SectionProvider mockProvider = () -> itemSectionMock;
 		ItemQueryHandler handler = new ItemQueryHandler(mockProvider);

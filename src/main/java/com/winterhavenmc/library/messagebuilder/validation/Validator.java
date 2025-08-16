@@ -61,13 +61,13 @@ public interface Validator<T>
 
 
 	/**
-	 * Formats a localized error message using the specified key and parameter.
+	 * Formats a localized error message using the specified string and parameter.
 	 * <p>
 	 * Message templates are retrieved from the {@code exception.messages}
 	 * resource bundle, and parameter placeholders are replaced using
 	 * {@link java.text.MessageFormat}.
 	 *
-	 * @param errorMessageKey the structured error key
+	 * @param errorMessageKey the structured error string
 	 * @param parameter the parameter involved in the validation
 	 * @return the formatted, localized message
 	 */
@@ -94,9 +94,9 @@ public interface Validator<T>
 
 	/**
 	 * Returns a handler that throws a {@link ValidationException}
-	 * using the given error message key and parameter.
+	 * using the given error message string and parameter.
 	 *
-	 * @param messageKey the structured message key
+	 * @param messageKey the structured message string
 	 * @param parameter the parameter that failed validation
 	 * @return a throwing validation handler
 	 * @param <T> the type of the value
@@ -109,10 +109,10 @@ public interface Validator<T>
 
 	/**
 	 * Returns a handler that logs a validation warning or error using
-	 * the specified log level, message key, and parameter.
+	 * the specified log level, message string, and parameter.
 	 *
 	 * @param level the severity level to log
-	 * @param messageKey the structured message key
+	 * @param messageKey the structured message string
 	 * @param parameter the parameter that failed validation
 	 * @return a logging validation handler
 	 * @param <T> the type of the value

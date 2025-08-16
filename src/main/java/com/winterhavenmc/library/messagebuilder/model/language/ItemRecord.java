@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.model.language;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 
@@ -38,7 +39,7 @@ import org.bukkit.configuration.ConfigurationSection;
  *       A fallback object representing a missing or invalid item definition</li>
  * </ul>
  *
- * <p>Instances are created using {@link #from(RecordKey, ConfigurationSection)},
+ * <p>Instances are created using {@link #from(ValidItemKey, ConfigurationSection)},
  * which applies default behavior and validation automatically.
  * <p>
  * This interface extends {@link SectionRecord}, allowing all item records
@@ -47,7 +48,7 @@ import org.bukkit.configuration.ConfigurationSection;
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  * @see com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord ValidItemRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord InvalidItemRecord
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see ValidItemKey LegacyRecordKey
  */
 public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {
@@ -58,11 +59,11 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	 * with a reason indicating the failure. Otherwise, a {@link ValidItemRecord}
 	 * is created using parsed and validated values.
 	 *
-	 * @param itemKey the key identifying this item record
+	 * @param itemKey the string identifying this item record
 	 * @param itemEntry the configuration section associated with this item
 	 * @return a valid or invalid {@code ItemRecord}, depending on input
 	 */
-	static ItemRecord from(final RecordKey itemKey, final ConfigurationSection itemEntry)
+	static ItemRecord from(final ValidItemKey itemKey, final ConfigurationSection itemEntry)
 	{
 		return itemEntry == null
 				? ItemRecord.empty(itemKey)
@@ -73,7 +74,7 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	/**
 	 * Returns an {@link InvalidItemRecord} representing a missing or unresolved item section.
 	 *
-	 * @param itemKey the key that could not be resolved
+	 * @param itemKey the string that could not be resolved
 	 * @return an invalid item record
 	 */
 	static InvalidItemRecord empty(final RecordKey itemKey)
@@ -84,7 +85,7 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 
 	/**
 	 * Enumeration of field keys within an {@code ItemRecord}, mapping enum constants
-	 * to their corresponding YAML key paths.
+	 * to their corresponding YAML string paths.
 	 * <p>
 	 * This enum centralizes all known fields used for parsing and provides
 	 * a stable location for field-to-path mappings. It also allows the YAML
@@ -109,9 +110,9 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 
 
 		/**
-		 * Returns the YAML key path string associated with this field.
+		 * Returns the YAML string path string associated with this field.
 		 *
-		 * @return the raw configuration key string
+		 * @return the raw configuration string
 		 */
 		public String toKey() { return this.keyString; }
 	}

@@ -51,7 +51,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  *
  * <p>Adapters are evaluated in the order they are registered, ensuring predictable
  * precedence when multiple adapters populate the same macro keys. The first adapter to
- * return a value for a given key wins, and later adapters cannot overwrite it.
+ * return a value for a given string wins, and later adapters cannot overwrite it.
  *
  * <p>This allows plugin developers and library consumers to control the resolution order by
  * selectively registering their own adapters before or after the built-in set.

@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.replacer;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher;
@@ -61,8 +62,8 @@ class MacroReplacerTest
 		String input = "Hello {PLAYER.NAME}, welcome to {WORLD.NAME}!";
 		String expected = "Hello Steve, welcome to Earth!";
 
-		MacroKey baseKey1 = MacroKey.of("PLAYER.NAME").orElseThrow();
-		MacroKey baseKey2 = MacroKey.of("WORLD.NAME").orElseThrow();
+		ValidMacroKey baseKey1 = MacroKey.of("PLAYER.NAME").isValid().orElseThrow();
+		ValidMacroKey baseKey2 = MacroKey.of("WORLD.NAME").isValid().orElseThrow();
 		MacroStringMap stringMap = new MacroStringMap();
 		stringMap.put(baseKey1, "Steve");
 		stringMap.put(baseKey2, "Earth");
@@ -92,8 +93,8 @@ class MacroReplacerTest
 		String input = "Hello {PLAYER.NAME}, welcome to {WORLD_NAME}!";
 		String expected = "Hello Steve, welcome to Earth!";
 
-		MacroKey baseKey1 = MacroKey.of("PLAYER.NAME").orElseThrow();
-		MacroKey baseKey2 = MacroKey.of("WORLD_NAME").orElseThrow();
+		ValidMacroKey baseKey1 = MacroKey.of("PLAYER.NAME").isValid().orElseThrow();
+		ValidMacroKey baseKey2 = MacroKey.of("WORLD_NAME").isValid().orElseThrow();
 		MacroStringMap stringMap = new MacroStringMap();
 		stringMap.put(baseKey1, "Steve");
 		stringMap.put(baseKey2, "Earth");
@@ -123,7 +124,7 @@ class MacroReplacerTest
 		String input = "Death chest is owned by {DEATH_CHEST.OWNER}";
 		String expected = "Death chest is owned by Steve";
 
-		MacroKey key1 = MacroKey.of("DEATH_CHEST.OWNER").orElseThrow();
+		ValidMacroKey key1 = MacroKey.of("DEATH_CHEST.OWNER").isValid().orElseThrow();
 		MacroStringMap stringMap = new MacroStringMap();
 		stringMap.put(key1, "Steve");
 
@@ -150,7 +151,7 @@ class MacroReplacerTest
 		String input = "Death chest expires in {DEATH_CHEST.EXPIRATION.DURATION}";
 		String expected = "Death chest expires in 1 hour, 15 minutes";
 
-		MacroKey key1 = MacroKey.of("DEATH_CHEST.EXPIRATION.DURATION").orElseThrow();
+		ValidMacroKey key1 = MacroKey.of("DEATH_CHEST.EXPIRATION.DURATION").isValid().orElseThrow();
 		MacroStringMap stringMap = new MacroStringMap();
 		stringMap.put(key1, "1 hour, 15 minutes");
 
@@ -183,7 +184,7 @@ class MacroReplacerTest
 	void testReplace_with_Missing_Resolved_Values()
 	{
 		String input = "This is {UNKNOWN_KEY}";
-		MacroKey macroKey = MacroKey.of("UNKNOWN_KEY").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("UNKNOWN_KEY").isValid().orElseThrow();
 
 		when(matcherMock.match(input, BASE_KEY_PATTERN)).thenReturn(Stream.of(macroKey));
 		when(matcherMock.match(input, FULL_KEY_PATTERN)).thenReturn(Stream.of(macroKey));

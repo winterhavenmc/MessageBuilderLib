@@ -19,6 +19,7 @@
 package com.winterhavenmc.library.messagebuilder.model.language;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 
@@ -47,12 +48,12 @@ import org.bukkit.configuration.ConfigurationSection;
  * </ul>
  *
  * <h2>Factory Methods</h2>
- * Use {@link #from(RecordKey, ConfigurationSection)} to parse a configuration section,
+ * Use {@link #from(ValidMessageKey, ConfigurationSection)} to parse a configuration section,
  * or {@link #empty(RecordKey)} to create an invalid placeholder when parsing fails.
  *
  * @see com.winterhavenmc.library.messagebuilder.model.language.SectionRecord SectionRecord
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see ValidMessageKey
  */
 public sealed interface MessageRecord extends SectionRecord permits ValidMessageRecord, InvalidMessageRecord, FinalMessageRecord
 {
@@ -61,11 +62,11 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 	 * Returns a {@link ValidMessageRecord} if the section is non-null and valid,
 	 * or an {@link InvalidMessageRecord} if the section is missing.
 	 *
-	 * @param messageKey the unique record key used to identify this message
+	 * @param messageKey the unique record string used to identify this message
 	 * @param messageEntry the corresponding YAML configuration section
 	 * @return a valid or invalid {@code MessageRecord} depending on input
 	 */
-	static MessageRecord from(final RecordKey messageKey, final ConfigurationSection messageEntry)
+	static MessageRecord from(final ValidMessageKey messageKey, final ConfigurationSection messageEntry)
 	{
 		return (messageEntry == null)
 				? MessageRecord.empty(messageKey)
@@ -76,7 +77,7 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 	/**
 	 * Returns an {@link InvalidMessageRecord} representing a missing or invalid message definition.
 	 *
-	 * @param messageKey the key associated with the missing record
+	 * @param messageKey the string associated with the missing record
 	 * @return a placeholder {@code MessageRecord} indicating an empty or unresolved message
 	 */
 	static InvalidMessageRecord empty(RecordKey messageKey)
@@ -88,7 +89,7 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 	/**
 	 * Enum representing the fields defined in a {@link ValidMessageRecord}.
 	 * <p>
-	 * Each constant in this enum maps to a specific key in the YAML configuration.
+	 * Each constant in this enum maps to a specific string in the YAML configuration.
 	 * This enum provides a single source of truth for these keys, which may be
 	 * decoupled from the enum constant names in the future.
 	 *
@@ -113,9 +114,9 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 		}
 
 		/**
-		 * Returns the raw YAML key string associated with this field.
+		 * Returns the raw YAML string string associated with this field.
 		 *
-		 * @return the field key string
+		 * @return the field string string
 		 */
 		public String toKey() {
 			return this.keyString;

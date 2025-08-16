@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,14 +26,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InvalidConstantRecordTest
 {
-	RecordKey constantKey;
+	ValidConstantKey constantKey;
 	InvalidConstantRecord invalidConstantRecord;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		constantKey = RecordKey.of("NON_EXISTENT").orElseThrow();
+		constantKey = ConstantKey.of("NON_EXISTENT").isValid().orElseThrow();
 
 		invalidConstantRecord = ConstantRecord.empty(constantKey);
 	}

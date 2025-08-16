@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,15 +34,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ValidMessageRecordTest
 {
-	RecordKey recordKey;
+	ValidMessageKey recordKey;
 	ValidMessageRecord validMessageRecord;
 	ConfigurationSection section;
 
 	@BeforeEach
 	public void setUp()
 	{
-		// create record key
-		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		// create record string
+		recordKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
 		// create configuration section for message record entry
 		section = new MemoryConfiguration();
@@ -55,7 +55,7 @@ class ValidMessageRecordTest
 		section.set(MessageRecord.Field.TITLE_FADE_OUT.toKey(), 44);
 		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
 
-		// create valid message record from record key, message configuration section
+		// create valid message record from record string, message configuration section
 		validMessageRecord = ValidMessageRecord.create(recordKey, section);
 	}
 
@@ -64,7 +64,7 @@ class ValidMessageRecordTest
 	void testKey()
 	{
 		// Arrange & Act
-		RecordKey key = validMessageRecord.key();
+		ValidMessageKey key = validMessageRecord.key();
 
 		// Assert
 		assertEquals(ENABLED_MESSAGE.name(), key.toString());

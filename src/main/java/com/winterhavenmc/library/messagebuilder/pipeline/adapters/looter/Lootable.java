@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
@@ -57,13 +57,13 @@ public interface Lootable
 	/**
 	 * Extracts the looter's name as a macro replacement field.
 	 *
-	 * @param baseKey the macro key root
+	 * @param baseKey the macro string root
 	 * @param ctx the adapter context with formatting support
-	 * @return a {@link MacroStringMap} containing the looter key and value if resolvable
+	 * @return a {@link MacroStringMap} containing the looter string and value if resolvable
 	 */
-	default MacroStringMap extractLooter(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractLooter(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(LOOTER)
+		return baseKey.append(LOOTER).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatLooter(getLooter()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);

@@ -9,7 +9,7 @@
  * <ul>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.matcher.Matcher}
  *       – A functional interface for extracting
- *       {@link com.winterhavenmc.library.messagebuilder.keys.MacroKey MacroKey}
+ *       {@link com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey LegacyMacroKey}
  *       instances using a regular expression.</li>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher}
  *       – A default implementation using Java’s built-in regex API to transform matches into macro keys.</li>

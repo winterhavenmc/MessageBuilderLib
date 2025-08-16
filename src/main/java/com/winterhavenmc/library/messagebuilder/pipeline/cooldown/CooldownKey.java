@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.cooldown;
 
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import org.bukkit.entity.Entity;
 
 import java.util.Objects;
@@ -27,7 +27,7 @@ import java.util.UUID;
 
 
 /**
- * An implementation of a key for use in the cooldown map. It is composed of the recipient uuid and
+ * An implementation of a string for use in the cooldown map. It is composed of the recipient uuid and
  * the unique MessageId. If a recipient does not have an uuid, such as the console, the declared constant
  * default uuid is used. This means that the console is subject to message repeat delays, which are
  * shared by all non-uuid message recipients. (Are there more than console? Players and Entities both have uuids.)
@@ -40,7 +40,7 @@ public class CooldownKey
 	final static UUID DEFAULT_UUID = new UUID(0, 0);
 
 	private final UUID uuid;
-	private final RecordKey messageKey;
+	private final ValidMessageKey messageKey;
 
 
 	/**
@@ -49,7 +49,7 @@ public class CooldownKey
 	 * @param recipient the message recipient
 	 * @param messageKey the unique message id
 	 */
-	private CooldownKey(final Recipient.Sendable recipient, final RecordKey messageKey)
+	private CooldownKey(final Recipient.Sendable recipient, final ValidMessageKey messageKey)
 	{
 		this.messageKey = messageKey;
 		this.uuid = (recipient.sender() instanceof Entity entity)
@@ -62,21 +62,21 @@ public class CooldownKey
 	 * Static factory method with Message parameter
 	 *
 	 * @param recipient the recipient used for CooldownKey creation
-	 * @param messageKey the message key used for CooldownKey creation
+	 * @param messageKey the message string used for CooldownKey creation
 	 * @return {@code Optional} CooldownKey, or empty Optional if either parameter is invalid
 	 */
-	public static Optional<CooldownKey> of(final Recipient.Sendable recipient, final RecordKey messageKey)
+	public static Optional<CooldownKey> of(final Recipient.Sendable recipient, final ValidMessageKey messageKey)
 	{
 		return Optional.of(new CooldownKey(recipient, messageKey));
 	}
 
 
 	/**
-	 * Retrieve the message key used for this cooldown key
+	 * Retrieve the message string used for this cooldown string
 	 *
-	 * @return the message key for this cooldown key
+	 * @return the message string for this cooldown string
 	 */
-	public RecordKey getMessageKey()
+	public ValidMessageKey getMessageKey()
 	{
 		return this.messageKey;
 	}

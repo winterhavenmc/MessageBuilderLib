@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.maps;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 
 import java.util.*;
@@ -30,7 +30,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
 
 
 /**
- * A specialized map for storing string macro values keyed by {@link MacroKey}.
+ * A specialized map for storing string macro values keyed by {@link ValidMacroKey}.
  * <p>
  * This map is used during the macro resolution phase of the message pipeline
  * to provide string substitution values for placeholders.
@@ -43,7 +43,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  */
 public class MacroStringMap
 {
-	private final Map<MacroKey, String> INTERNAL_MAP;
+	private final Map<ValidMacroKey, String> INTERNAL_MAP;
 	private static final Predicate<String> STRING_IS_NULL = Objects::isNull;
 	private static final Predicate<String> STRING_IS_EMPTY = String::isBlank;
 	private static final Predicate<String> INVALID = STRING_IS_NULL.or(STRING_IS_EMPTY);
@@ -59,13 +59,13 @@ public class MacroStringMap
 
 
 	/**
-	 * Inserts a key-value pair into the map.
+	 * Inserts a string-value pair into the map.
 	 * If the value is {@code null} or blank, a validation warning is logged.
 	 *
-	 * @param macroKey the macro key
+	 * @param macroKey the macro string
 	 * @param value    the string value to associate
 	 */
-	public void put(final MacroKey macroKey, final String value)
+	public void put(final ValidMacroKey macroKey, final String value)
 	{
 		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
 		INTERNAL_MAP.put(macroKey, value);
@@ -73,13 +73,13 @@ public class MacroStringMap
 
 
 	/**
-	 * Inserts a key-value pair into the map only if the key is not already present.
+	 * Inserts a string-value pair into the map only if the string is not already present.
 	 * If the value is {@code null} or blank, a validation warning is logged.
 	 *
-	 * @param macroKey the macro key
+	 * @param macroKey the macro string
 	 * @param value    the string value to associate
 	 */
-	public void putIfAbsent(final MacroKey macroKey, final String value)
+	public void putIfAbsent(final ValidMacroKey macroKey, final String value)
 	{
 		validate(value, INVALID, logging(LogLevel.INFO, PARAMETER_INVALID, VALUE));
 		INTERNAL_MAP.putIfAbsent(macroKey, value);
@@ -87,12 +87,12 @@ public class MacroStringMap
 
 
 	/**
-	 * Returns the value associated with the given key, or {@code null} if not found.
+	 * Returns the value associated with the given string, or {@code null} if not found.
 	 *
-	 * @param key the macro key
+	 * @param key the macro string
 	 * @return the associated value, or {@code null} if not present
 	 */
-	public String get(final MacroKey key)
+	public String get(final ValidMacroKey key)
 	{
 		return INTERNAL_MAP.get(key);
 	}
@@ -106,7 +106,7 @@ public class MacroStringMap
 	 */
 	public void putAll(final MacroStringMap insertionMap)
 	{
-		for (Map.Entry<MacroKey, String> entry : insertionMap.entrySet())
+		for (Map.Entry<ValidMacroKey, String> entry : insertionMap.entrySet())
 		{
 			INTERNAL_MAP.put(entry.getKey(), entry.getValue());
 		}
@@ -114,23 +114,23 @@ public class MacroStringMap
 
 
 	/**
-	 * Returns {@code true} if this map contains the specified key.
+	 * Returns {@code true} if this map contains the specified string.
 	 *
-	 * @param key the key to check
-	 * @return {@code true} if the key is present
+	 * @param key the string to check
+	 * @return {@code true} if the string is present
 	 */
-	public boolean containsKey(final MacroKey key)
+	public boolean containsKey(final ValidMacroKey key)
 	{
 		return INTERNAL_MAP.containsKey(key);
 	}
 
 
 	/**
-	 * Returns the set of key-value entries in this map.
+	 * Returns the set of string-value entries in this map.
 	 *
 	 * @return an iterable view of the map's entries
 	 */
-	public Iterable<? extends Map.Entry<MacroKey, String>> entrySet()
+	public Iterable<? extends Map.Entry<ValidMacroKey, String>> entrySet()
 	{
 		return INTERNAL_MAP.entrySet();
 	}
@@ -141,7 +141,7 @@ public class MacroStringMap
 	 *
 	 * @return a set of macro keys
 	 */
-	public Set<MacroKey> keySet()
+	public Set<ValidMacroKey> keySet()
 	{
 		return INTERNAL_MAP.keySet();
 	}
@@ -181,14 +181,14 @@ public class MacroStringMap
 
 
 	/**
-	 * Adds a key-value pair to this map and returns the map itself.
+	 * Adds a string-value pair to this map and returns the map itself.
 	 * This method is useful for fluent building patterns.
 	 *
-	 * @param key   the macro key
+	 * @param key   the macro string
 	 * @param value the string value to associate
 	 * @return this map, with the new entry included
 	 */
-	public MacroStringMap with(MacroKey key, String value)
+	public MacroStringMap with(ValidMacroKey key, String value)
 	{
 		this.put(key, value);
 		return this;

@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 
@@ -57,18 +58,21 @@ public class ItemQueryHandler implements QueryHandler<ItemRecord>
 	 * Retrieve an item record from the language file for the currently configured language. If a record cannot be
 	 * found for the keyPath, an empty Optional will be returned.
 	 *
-	 * @param key the keyPath for the item record in the language file
+	 * @param recordKey the keyPath for the item record in the language file
 	 * @return an {@code Optional} ValidItemRecord if a matching record was found, or an empty Optional if not.
 	 */
 	@Override
-	public ItemRecord getRecord(final RecordKey key)
+	public ItemRecord getRecord(final RecordKey recordKey)
 	{
 		ConfigurationSection section = sectionProvider.getSection();
-		ConfigurationSection itemEntry = section.getConfigurationSection(key.toString());
+		ConfigurationSection itemEntry = section.getConfigurationSection(recordKey.toString());
 
-		return (itemEntry == null)
-				? ItemRecord.empty(key)
-				: ItemRecord.from(key, itemEntry);
+		if (recordKey instanceof ValidItemKey validItemKey)
+				return (itemEntry != null)
+						? ItemRecord.from(validItemKey, itemEntry)
+						: ItemRecord.empty(validItemKey);
+
+		else return ItemRecord.empty(recordKey);
 	}
 
 }

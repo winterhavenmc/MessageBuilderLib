@@ -18,9 +18,11 @@
 package com.winterhavenmc.library.messagebuilder.model.message;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.messages.Macro;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
@@ -64,7 +66,7 @@ class ValidMessageTest
 	ItemStack itemStack;
 	ValidMessageRecord validMessageRecord;
 	Recipient.Valid recipient;
-	RecordKey messageKey;
+	ValidMessageKey messageKey;
 	ConfigurationSection section;
 
 
@@ -85,7 +87,7 @@ class ValidMessageTest
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 
@@ -114,7 +116,7 @@ class ValidMessageTest
 	void testGetMessageKey()
 	{
 		// Act
-		RecordKey messageKey = message.getMessageKey();
+		ValidMessageKey messageKey = message.getMessageKey();
 
 		// Assert
 		assertEquals(ENABLED_MESSAGE.name(), messageKey.toString());
@@ -136,7 +138,7 @@ class ValidMessageTest
 		{
 			// Arrange
 			Message newMessage = message.setMacro(Macro.TOOL, itemStack);
-			MacroKey macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
+			ValidMacroKey macroKey = MacroKey.of(Macro.TOOL).isValid().orElseThrow();
 			MacroObjectMap macroObjectMap = newMessage.getObjectMap();
 
 			// Act
@@ -169,7 +171,7 @@ class ValidMessageTest
 		{
 			// Arrange
 			Message newMessage = message.setMacro(10, Macro.TOOL, itemStack);
-			MacroKey macroKey = MacroKey.of(Macro.TOOL).orElseThrow();
+			ValidMacroKey macroKey = MacroKey.of(Macro.TOOL).isValid().orElseThrow();
 			MacroObjectMap macroObjectMap = newMessage.getObjectMap();
 
 			// Act
@@ -197,7 +199,7 @@ class ValidMessageTest
 	{
 		// Arrange
 		Message newMessage = message.setMacro(Macro.DURATION, Duration.ofMinutes(5), ChronoUnit.MINUTES);
-		MacroKey macroKey = MacroKey.of(Macro.DURATION).orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of(Macro.DURATION).isValid().orElseThrow();
 		MacroObjectMap macroObjectMap = newMessage.getObjectMap();
 
 		// Act
@@ -215,7 +217,7 @@ class ValidMessageTest
 	{
 		// Arrange
 		Duration duration = Duration.ofSeconds(15);
-		MacroKey macroKey = MacroKey.of(Macro.DURATION).orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of(Macro.DURATION).isValid().orElseThrow();
 
 		// Act
 		Message newMessage = message.setMacro(Macro.DURATION, null, ChronoUnit.MINUTES);
@@ -232,7 +234,7 @@ class ValidMessageTest
 	{
 		// Arrange
 		Duration duration = Duration.ofSeconds(15);
-		MacroKey macroKey = MacroKey.of(Macro.DURATION).orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of(Macro.DURATION).isValid().orElseThrow();
 
 		// Act
 		Message newMessage = message.setMacro(Macro.DURATION, duration, null);

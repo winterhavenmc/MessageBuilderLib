@@ -17,10 +17,12 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ItemKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -32,15 +34,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ValidItemRecordTest
 {
-	RecordKey recordKey;
+	ValidItemKey recordKey;
 	ValidItemRecord testRecord;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		// create record key
-		recordKey = RecordKey.of("TEST_ITEM").orElseThrow();
+		// create record string
+		recordKey = ItemKey.of("TEST_ITEM").isValid().orElseThrow();
 
 		// create configuration section for item record entry
 		ConfigurationSection itemEntry = new MemoryConfiguration();
@@ -49,7 +51,7 @@ public class ValidItemRecordTest
 		itemEntry.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Test Item");
 		itemEntry.set(ItemRecord.Field.LORE.toKey(), List.of("Lore line 1", "Lore line 2"));
 
-		// create valid item record from record key, item configuration section
+		// create valid item record from record string, item configuration section
 		testRecord = ValidItemRecord.create(recordKey, itemEntry);
 	}
 

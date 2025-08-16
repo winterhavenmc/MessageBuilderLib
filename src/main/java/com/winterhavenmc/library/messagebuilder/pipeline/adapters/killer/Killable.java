@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import org.bukkit.entity.AnimalTamer;
@@ -54,15 +54,15 @@ public interface Killable
 
 
 	/**
-	 * Extracts a macro string map with the killer's name, using the given base key and context.
+	 * Extracts a macro string map with the killer's name, using the given base string and context.
 	 *
-	 * @param baseKey the macro key that identifies the root placeholder
+	 * @param baseKey the macro string that identifies the root placeholder
 	 * @param ctx the adapter context container with formatting tools
 	 * @return a {@link MacroStringMap} containing the killer field, or an empty map if not resolvable
 	 */
-	default MacroStringMap extractKiller(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractKiller(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(KILLER)
+		return baseKey.append(KILLER).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatKiller(this.getKiller()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);

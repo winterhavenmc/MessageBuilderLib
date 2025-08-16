@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.query;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -62,7 +63,7 @@ class MessageQueryHandlerTest
 	void getRecord_with_valid_parameter_returns_ValidMessageRecord_type()
 	{
 		// Arrange
-		RecordKey queryKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		ValidMessageKey queryKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
 		when(messageSectionMock.getConfigurationSection(ENABLED_MESSAGE.name())).thenReturn(messageEntryMock);
 
@@ -99,7 +100,7 @@ class MessageQueryHandlerTest
 	void getRecord_with_nonexistent_entry_returns_InvalidMessageRecord_type()
 	{
 		// Arrange
-		RecordKey messageKey = RecordKey.of(NONEXISTENT_ENTRY).orElseThrow();
+		ValidMessageKey messageKey = MessageKey.of(NONEXISTENT_ENTRY).isValid().orElseThrow();
 		when(messageSectionMock.getConfigurationSection(NONEXISTENT_ENTRY.name())).thenReturn(null);
 
 		SectionProvider mockProvider = () -> messageSectionMock;

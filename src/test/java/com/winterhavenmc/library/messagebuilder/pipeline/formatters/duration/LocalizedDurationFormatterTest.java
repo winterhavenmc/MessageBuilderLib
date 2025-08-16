@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import com.winterhavenmc.library.messagebuilder.query.ConstantQueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
@@ -47,8 +48,8 @@ class LocalizedDurationFormatterTest
 	@Mock QueryHandlerFactory queryHandlerFactoryMock;
 
 	LocalizedDurationFormatter formatter;
-	RecordKey timeUnlimitedKey = RecordKey.of("TIME.UNLIMITED").orElseThrow();
-	RecordKey timeLessThanKey = RecordKey.of("TIME.LESS_THAN").orElseThrow();
+	ValidConstantKey timeUnlimitedKey = ConstantKey.of("TIME.UNLIMITED").isValid().orElseThrow();
+	ValidConstantKey timeLessThanKey = ConstantKey.of("TIME.LESS_THAN").isValid().orElseThrow();
 
 
 	@BeforeEach

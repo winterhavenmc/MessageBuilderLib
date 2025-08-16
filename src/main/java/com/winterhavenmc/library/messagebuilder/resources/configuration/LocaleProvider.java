@@ -37,8 +37,8 @@ import java.util.function.Supplier;
  * in the following order:
  * </p>
  * <ul>
- *   <li>{@code locale} key (preferred)</li>
- *   <li>{@code language} key (fallback)</li>
+ *   <li>{@code locale} string (preferred)</li>
+ *   <li>{@code language} string (fallback)</li>
  *   <li>{@link Locale#getDefault()} (system fallback)</li>
  * </ul>
  *

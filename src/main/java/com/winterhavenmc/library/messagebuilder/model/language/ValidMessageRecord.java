@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.time.Duration;
@@ -32,24 +32,24 @@ import static com.winterhavenmc.library.messagebuilder.MessageBuilder.TICKS;
  * <p>
  * This record contains the full structure of a templated message, including:
  * <ul>
- *   <li>A unique {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey}</li>
+ *   <li>A unique {@link ValidMessageKey}</li>
  *   <li>A plain-text message body (with placeholders)</li>
  *   <li>Optional title and subtitle text</li>
  *   <li>Title animation parameters (fade-in, stay, fade-out durations)</li>
  *   <li>An optional repeat delay for scheduled messages</li>
  * </ul>
  * <p>
- * This class is created via the {@link #create(RecordKey, ConfigurationSection)} factory method,
+ * This class is created via the {@link #create(ValidMessageKey, ConfigurationSection)} factory method,
  * which performs all necessary validation and applies default values where appropriate. Once constructed,
  * instances are considered safe and complete and can be used without additional checks.
  *
  * @see MessageRecord
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see ValidMessageKey
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  */
 public final class ValidMessageRecord implements MessageRecord
 {
-	private final RecordKey key;
+	private final ValidMessageKey key;
 	private final boolean enabled;
 	private final String message;
 	private final Duration repeatDelay;
@@ -63,9 +63,9 @@ public final class ValidMessageRecord implements MessageRecord
 	/**
 	 * Constructs a {@code ValidMessageRecord} from fully parsed and validated data fields.
 	 * <p>
-	 * Use {@link #create(RecordKey, ConfigurationSection)} to construct new instances.
+	 * Use {@link #create(ValidMessageKey, ConfigurationSection)} to construct new instances.
 	 *
-	 * @param key the key for the message
+	 * @param key the string for the message
 	 * @param enabled the enabled setting for the message
 	 * @param message the raw message string, with placeholders
 	 * @param repeatDelay the repeat delay setting for the message
@@ -75,7 +75,7 @@ public final class ValidMessageRecord implements MessageRecord
 	 * @param titleFadeOut the title fade out setting for the message
 	 * @param subtitle the subtitle for the message
 	 */
-	private ValidMessageRecord(RecordKey key,
+	private ValidMessageRecord(ValidMessageKey key,
 							   boolean enabled,
 							   String message,
 							   Duration repeatDelay,
@@ -103,11 +103,11 @@ public final class ValidMessageRecord implements MessageRecord
 	 * All expected fields are validated or defaulted according to their definitions
 	 * in {@link MessageRecord.Field}. If a field is missing, a sensible default is applied.
 	 *
-	 * @param key the record key representing this message
+	 * @param key the record string representing this message
 	 * @param section the configuration section containing the message definition
 	 * @return a new, fully validated {@code ValidMessageRecord}
 	 */
-	public static ValidMessageRecord create(final RecordKey key, final ConfigurationSection section)
+	public static ValidMessageRecord create(final ValidMessageKey key, final ConfigurationSection section)
 	{
 		// enabled defaults to true if not present
 		boolean enabled = !section.contains(Field.ENABLED.toKey()) || section.getBoolean(Field.ENABLED.toKey());
@@ -183,7 +183,7 @@ public final class ValidMessageRecord implements MessageRecord
 
 
 	@Override
-	public RecordKey key()
+	public ValidMessageKey key()
 	{
 		return key;
 	}

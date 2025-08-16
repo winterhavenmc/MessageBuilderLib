@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.location;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
@@ -44,7 +44,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  *   <li>{@code {OBJECT.LOCATION.X}}, {@code {OBJECT.LOCATION.Y}, {OBJECT.LOCATION.Z}} – localized coordinate values</li>
  * </ul>
  *
- * <p>The resulting macro values are extracted via {@link #extractLocation(MacroKey, AdapterContextContainer)}.
+ * <p>The resulting macro values are extracted via {@link #extractLocation(ValidMacroKey, AdapterContextContainer)}.
  * This method is used internally by the MessageBuilder pipeline and should not need to be called directly.
  */
 @FunctionalInterface
@@ -69,7 +69,7 @@ public interface Locatable
 
 
 	/**
-	 * Extracts macro key-value pairs representing location data from this object.
+	 * Extracts macro string-value pairs representing location data from this object.
 	 * <p>
 	 * The returned {@link MacroStringMap} may contain:
 	 * <ul>
@@ -78,28 +78,28 @@ public interface Locatable
 	 *   <li>{@code LOCATION.X}, {@code Y}, {@code Z} – localized block coordinates</li>
 	 * </ul>
 	 *
-	 * @param baseKey the top-level macro key associated with this object
+	 * @param baseKey the top-level macro string associated with this object
 	 * @param ctx a container providing access to formatters and world name resolution
 	 * @return a {@code MacroStringMap} containing extracted location-related macro keys
 	 */
-	default MacroStringMap extractLocation(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractLocation(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
 		MacroStringMap resultMap = new MacroStringMap();
 
 		if (getLocation() != null)
 		{
-			MacroKey locationKey = (!baseKey.toString().endsWith("LOCATION"))
-					? baseKey.append(LOCATION).orElseThrow()
+			ValidMacroKey locationKey = (!baseKey.toString().endsWith("LOCATION"))
+					? baseKey.append(LOCATION).isValid().orElseThrow()
 					: baseKey;
 
 			resultMap.put(locationKey, formatLocation(this.getLocation(), ctx).orElse(UNKNOWN_VALUE));
-			locationKey.append(Field.WORLD).ifPresent(worldKey ->
+			locationKey.append(Field.WORLD).isValid().ifPresent(worldKey ->
 					resultMap.put(worldKey, getLocationWorldName(this.getLocation(), ctx).orElse(UNKNOWN_VALUE)));
-			locationKey.append(Field.X).ifPresent(xKey ->
+			locationKey.append(Field.X).isValid().ifPresent(xKey ->
 					resultMap.put(xKey, ctx.formatterContainer().localeNumberFormatter().getFormatted(this.getLocation().getBlockX())));
-			locationKey.append(Field.Y).ifPresent(yKey ->
+			locationKey.append(Field.Y).isValid().ifPresent(yKey ->
 					resultMap.put(yKey, ctx.formatterContainer().localeNumberFormatter().getFormatted(this.getLocation().getBlockY())));
-			locationKey.append(Field.Z).ifPresent(zKey ->
+			locationKey.append(Field.Z).isValid().ifPresent(zKey ->
 					resultMap.put(zKey, ctx.formatterContainer().localeNumberFormatter().getFormatted(this.getLocation().getBlockZ())));
 		}
 

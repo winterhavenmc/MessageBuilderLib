@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.maps;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,7 @@ class MacroStringMapTest
 	{
 		// Arrange
 		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey macroKey = MacroKey.of("ABC").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("ABC").isValid().orElseThrow();
 
 
 		// Act
@@ -45,13 +46,13 @@ class MacroStringMapTest
 	}
 
 
-	@Test @DisplayName("PutIfAbsent inserts key/value pair if not already present in result map.")
+	@Test @DisplayName("PutIfAbsent inserts string/value pair if not already present in result map.")
 	void putIfAbsent_inserts_key_value_pair_if_not_already_present()
 	{
 		// Arrange
 		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey key1 = MacroKey.of("KEY").orElseThrow();
-		MacroKey key2 = MacroKey.of("KEY2").orElseThrow();
+		ValidMacroKey key1 = MacroKey.of("KEY").isValid().orElseThrow();
+		ValidMacroKey key2 = MacroKey.of("KEY2").isValid().orElseThrow();
 
 		// Act
 		macroStringMap.put(key1, "first value");
@@ -68,7 +69,7 @@ class MacroStringMapTest
 	{
 		// Arrange
 		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("KEY").isValid().orElseThrow();
 
 		// Act
 		macroStringMap.putIfAbsent(macroKey, "first value");
@@ -79,12 +80,12 @@ class MacroStringMapTest
 	}
 
 
-	@Test @DisplayName("get retrieves value for key in map.")
+	@Test @DisplayName("get retrieves value for string in map.")
 	void get_retrieves_value_for_key_from_map()
 	{
 		// Arrange
 		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey macroKey = MacroKey.of("ABC").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("ABC").isValid().orElseThrow();
 
 		// Act
 		macroStringMap.put(macroKey, "123");
@@ -95,13 +96,13 @@ class MacroStringMapTest
 	}
 
 
-	@Test @DisplayName("get returns null for key not in map.")
+	@Test @DisplayName("get returns null for string not in map.")
 	void get_returns_null_for_nonexistent_entry_in_map()
 	{
 		// Arrange
 		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey macroKey = MacroKey.of("ABC").orElseThrow();
-		MacroKey macroKey2 = MacroKey.of("ABCD").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("ABC").isValid().orElseThrow();
+		ValidMacroKey macroKey2 = MacroKey.of("ABCD").isValid().orElseThrow();
 
 		// Act
 		macroStringMap.put(macroKey, "123");
@@ -116,9 +117,9 @@ class MacroStringMapTest
 	void putAll_inserts_all_map_entries_into_existing_map()
 	{
 		// Arrange
-		MacroKey macroKey1 = MacroKey.of("ABC").orElseThrow();
-		MacroKey macroKey2 = MacroKey.of("XYZ").orElseThrow();
-		MacroKey macroKey3 = MacroKey.of("JKL").orElseThrow();
+		ValidMacroKey macroKey1 = MacroKey.of("ABC").isValid().orElseThrow();
+		ValidMacroKey macroKey2 = MacroKey.of("XYZ").isValid().orElseThrow();
+		ValidMacroKey macroKey3 = MacroKey.of("JKL").isValid().orElseThrow();
 		MacroStringMap firstMap = new MacroStringMap();
 
 		firstMap.put(macroKey1, "123");
@@ -137,8 +138,8 @@ class MacroStringMapTest
 	void entrySet_returns_set_of_map_entries()
 	{
 		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey macroKey1 = MacroKey.of("ABC").orElseThrow();
-		MacroKey macroKey2 = MacroKey.of("XYZ").orElseThrow();
+		ValidMacroKey macroKey1 = MacroKey.of("ABC").isValid().orElseThrow();
+		ValidMacroKey macroKey2 = MacroKey.of("XYZ").isValid().orElseThrow();
 		macroStringMap.put(macroKey1, "123");
 		macroStringMap.put(macroKey2, "1999");
 
@@ -152,7 +153,7 @@ class MacroStringMapTest
 	void isEmpty_returns_true_if_map_contains_no_entries()
 	{
 		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey macroKey = MacroKey.of("ABC").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("ABC").isValid().orElseThrow();
 		assertTrue(macroStringMap.isEmpty());
 		macroStringMap.put(macroKey, "123");
 		assertFalse(macroStringMap.isEmpty());
@@ -164,14 +165,14 @@ class MacroStringMapTest
 	{
 		// Arrange
 		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey macroKey1 = MacroKey.of("KEY1").orElseThrow();
-		MacroKey macroKey2 = MacroKey.of("KEY2").orElseThrow();
-		MacroKey macroKey3 = MacroKey.of("KEY3").orElseThrow();
+		ValidMacroKey macroKey1 = MacroKey.of("KEY1").isValid().orElseThrow();
+		ValidMacroKey macroKey2 = MacroKey.of("KEY2").isValid().orElseThrow();
+		ValidMacroKey macroKey3 = MacroKey.of("KEY3").isValid().orElseThrow();
 		macroStringMap.put(macroKey1, "red");
 		macroStringMap.put(macroKey2, "blue");
 
 		// Act
-		Set<MacroKey> result = macroStringMap.keySet();
+		Set<ValidMacroKey> result = macroStringMap.keySet();
 
 		// Assert
 		assertTrue(result.contains(macroKey1));
@@ -185,9 +186,9 @@ class MacroStringMapTest
 	{
 		// Arrange
 		MacroStringMap macroStringMap = new MacroStringMap();
-		MacroKey macroKey1 = MacroKey.of("KEY1").orElseThrow();
-		MacroKey macroKey2 = MacroKey.of("KEY2").orElseThrow();
-		MacroKey macroKey3 = MacroKey.of("KEY3").orElseThrow();
+		ValidMacroKey macroKey1 = MacroKey.of("KEY1").isValid().orElseThrow();
+		ValidMacroKey macroKey2 = MacroKey.of("KEY2").isValid().orElseThrow();
+		ValidMacroKey macroKey3 = MacroKey.of("KEY3").isValid().orElseThrow();
 		macroStringMap.put(macroKey1, "red");
 		macroStringMap.put(macroKey2, "green");
 		macroStringMap.put(macroKey3, "blue");
@@ -210,12 +211,12 @@ class MacroStringMapTest
 		assertTrue(result.isEmpty());
 	}
 
-	@Test @DisplayName("with returns existing map with key/value pair added.")
+	@Test @DisplayName("with returns existing map with string/value pair added.")
 	void with_returns_map_with_key_value_pair_added()
 	{
 		// Arrange
-		MacroKey key1 = MacroKey.of("KEY1").orElseThrow();
-		MacroKey key2 = MacroKey.of("KEY2").orElseThrow();
+		ValidMacroKey key1 = MacroKey.of("KEY1").isValid().orElseThrow();
+		ValidMacroKey key2 = MacroKey.of("KEY2").isValid().orElseThrow();
 		MacroStringMap map = new MacroStringMap();
 		map.put(key1, "value");
 

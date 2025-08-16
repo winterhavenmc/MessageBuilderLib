@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
@@ -83,8 +84,8 @@ class IdentifiableTest
 	void extractUniqueId_returns_populated_map()
 	{
 		// Arrange
-		MacroKey baseKey = MacroKey.of("TEST").orElseThrow();
-		MacroKey subKey = baseKey.append(Adapter.BuiltIn.UUID).orElseThrow();
+		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append(Adapter.BuiltIn.UUID).isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act
@@ -99,7 +100,7 @@ class IdentifiableTest
 	void formatUid_returns_optional_string()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act
@@ -114,7 +115,7 @@ class IdentifiableTest
 	void formatUid_with_null_UUID_returns_empty_optional()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act

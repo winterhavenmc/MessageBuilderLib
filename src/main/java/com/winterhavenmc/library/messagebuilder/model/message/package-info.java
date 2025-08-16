@@ -13,7 +13,7 @@
  * <ul>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.model.message.ValidMessage} –
  *       A fully constructed and resolvable message that contains a valid recipient,
- *       a message template key, a macro object map, and a {@code MessagePipeline}</li>
+ *       a message template string, a macro object map, and a {@code MessagePipeline}</li>
  *
  *   <li>{@link com.winterhavenmc.library.messagebuilder.model.message.InvalidMessage} –
  *       A fallback or no-op message representing a failure to compose a valid message,
@@ -29,7 +29,7 @@
  *               .send();
  * }
  * <p>
- * If the recipient or message key is invalid, the library will return an
+ * If the recipient or message string is invalid, the library will return an
  * {@link com.winterhavenmc.library.messagebuilder.model.message.InvalidMessage InvalidMessage}, which safely performs no action when sent.
  *
  * @see com.winterhavenmc.library.messagebuilder.model.message.Message

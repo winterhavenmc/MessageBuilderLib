@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
@@ -38,7 +38,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
 
 /**
  * A {@link Resolver} implementation that handles simple or atomic values,
- * converting them into formatted strings mapped directly to the base {@link MacroKey}.
+ * converting them into formatted strings mapped directly to the base {@link ValidMacroKey}.
  * <p>
  * The {@code AtomicResolver} is typically used as the final step in a resolution chain,
  * after more complex resolvers (such as {@link CompositeResolver}) have had a chance
@@ -51,7 +51,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  *   <li>{@link Duration} and {@link BoundedDuration} values are formatted using a {@link DurationFormatter}</li>
  *   <li>All other values fall back to {@code toString()}</li>
  * </ul>
- * The resolved value is added under the original macro key only if no value already exists for it.
+ * The resolved value is added under the original macro string only if no value already exists for it.
  *
  * @see Resolver
  * @see FieldResolver
@@ -81,17 +81,17 @@ public class AtomicResolver implements Resolver
 
 
 	/**
-	 * Resolves a single value mapped to the provided {@link MacroKey} into a
+	 * Resolves a single value mapped to the provided {@link ValidMacroKey} into a
 	 * string representation, if the object exists and can be formatted.
 	 * <p>
 	 * Only one entry is produced per resolution: a single mapping from the
 	 * {@code macroKey} to the formatted string value.
 	 *
-	 * @param macroKey the key used to retrieve the value from the macro object map
+	 * @param macroKey the string used to retrieve the value from the macro object map
 	 * @param macroObjectMap the object map containing macro values to be resolved
-	 * @return a {@link MacroStringMap} containing at most one resolved key-value pair
+	 * @return a {@link MacroStringMap} containing at most one resolved string-value pair
 	 */
-	public MacroStringMap resolve(final MacroKey macroKey, final MacroObjectMap macroObjectMap)
+	public MacroStringMap resolve(final ValidMacroKey macroKey, final MacroObjectMap macroObjectMap)
 	{
 		MacroStringMap stringMap = new MacroStringMap();
 
