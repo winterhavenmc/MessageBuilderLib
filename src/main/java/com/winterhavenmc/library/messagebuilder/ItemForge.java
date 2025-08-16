@@ -66,11 +66,10 @@ public class ItemForge
 		if (ItemKey.of(key) instanceof ValidItemKey validItemKey)
 		{
 			ItemRecord itemRecord = itemQueryHandler.getRecord(validItemKey);
-
 			if (itemRecord instanceof ValidItemRecord validItemRecord)
 			{
 				Material material = Material.matchMaterial(validItemRecord.material());
-				if (material == null)
+				if (material == null || !material.isItem())
 				{
 					material = DEFAULT_MATERIAL;
 				}
