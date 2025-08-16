@@ -66,8 +66,6 @@ class TitleSenderTest
 
 		messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
-//		recordKey = LegacyRecordKey.of(ENABLED_MESSAGE).orElseThrow();
-
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
 		section.set(MessageRecord.Field.MESSAGE_TEXT.toKey(), "this is a test message");
