@@ -50,6 +50,7 @@ public class ValidItemRecordTest
 		itemEntry.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Test Items");
 		itemEntry.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Test Item");
 		itemEntry.set(ItemRecord.Field.LORE.toKey(), List.of("Lore line 1", "Lore line 2"));
+		itemEntry.set(ItemRecord.Field.MATERIAL.toKey(), "GOLDEN_PICKAXE");
 
 		// create valid item record from record string, item configuration section
 		testRecord = ValidItemRecord.create(recordKey, itemEntry);
@@ -74,11 +75,13 @@ public class ValidItemRecordTest
 		assertEquals("Test Items", testRecord.nameFor(10));
 	}
 
+
 	@Test
 	void testKey()
 	{
 		assertEquals("TEST_ITEM", testRecord.key().toString());
 	}
+
 
 	@Test
 	void nameSingular()
@@ -86,10 +89,24 @@ public class ValidItemRecordTest
 		assertEquals("Test Item", testRecord.nameSingular());
 	}
 
+
 	@Test
 	void namePlural()
 	{
 		assertEquals("Test Items", testRecord.namePlural());
 	}
 
+
+	@Test
+	void getMaterial()
+	{
+		assertEquals("GOLDEN_PICKAXE", testRecord.material());
+	}
+
+
+	@Test
+	void getLore()
+	{
+		assertEquals(List.of("Lore line 1", "Lore line 2"), testRecord.lore());
+	}
 }
