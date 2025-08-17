@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  */
 public final class ValidMacroKey implements MacroKey
 {
-	private static final Pattern VALID_KEY_PATTERN = Pattern.compile("(\\p{Lu}[\\p{Alnum}_]+)[\\p{Alnum}_.]*$");
+	private static final Pattern MATCH_BASE_KEY_PATTERN = Pattern.compile("^(\\p{Lu}[\\p{Alnum}_]+)[\\p{Alnum}_.]*$");
 	private final String string;
 
 
@@ -73,7 +73,7 @@ public final class ValidMacroKey implements MacroKey
 
 	public ValidMacroKey getBase()
 	{
-		Matcher matcher = VALID_MACRO_KEY_PATTERN.matcher(string);
+		Matcher matcher = MATCH_BASE_KEY_PATTERN.matcher(string);
 
 		return (matcher.find())
 				? (ValidMacroKey) MacroKey.of(matcher.group(1))
