@@ -18,9 +18,12 @@
 package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.InvalidConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.InvalidKeyReason;
 import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidConstantRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReason;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
@@ -76,6 +79,30 @@ class ConstantQueryHandlerTest
 
 		// Verify
 		verify(constantSectionMock, atLeastOnce()).get("SPAWN.DISPLAY_NAME");
+	}
+
+
+	@Test
+	void getRecord_with_invalid_key_returns_InvalidConstantRecord()
+	{
+		// Arrange
+		InvalidConstantKey recordKey = new InvalidConstantKey("Invalid", InvalidKeyReason.KEY_INVALID);
+
+		when(constantSectionMock.get(recordKey.toString())).thenReturn("Spawn Display Name");
+
+		SectionProvider mockProvider = () -> constantSectionMock;
+		ConstantQueryHandler handler = new ConstantQueryHandler(mockProvider);
+
+		// Act
+		ConstantRecord result = handler.getRecord(recordKey);
+
+		// Assert
+		assertInstanceOf(InvalidConstantRecord.class, result);
+		assertEquals(recordKey, result.key());
+		assertEquals(InvalidRecordReason.CONSTANT_KEY_INVALID, ((InvalidConstantRecord) result).reason());
+
+		// Verify
+		verify(constantSectionMock, atLeastOnce()).get(recordKey.toString());
 	}
 
 
