@@ -31,10 +31,8 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
  *
  * <h2>Implementations</h2>
  * <ul>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord} –
- *       A successfully parsed constant entry</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.InvalidConstantRecord} –
- *       A fallback constant representing a missing or invalid value</li>
+ *   <li>{@link ValidConstantRecord} – A successfully parsed constant entry</li>
+ *   <li>{@link InvalidConstantRecord} – A fallback constant representing a missing or invalid value</li>
  * </ul>
  *
  * <p>Instances are created via {@link #of(ValidConstantKey, Object)} to ensure proper

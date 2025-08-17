@@ -39,17 +39,14 @@ import org.bukkit.configuration.ConfigurationSection;
  *
  * <h2>Implementations</h2>
  * <ul>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord} –
- *       A fully validated message loaded from configuration</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord} –
- *       A message record representing an invalid or missing configuration</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord} –
- *       An immutable, rendered message derived from a valid record</li>
+ *   <li>{@link ValidMessageRecord} – A fully validated message loaded from configuration</li>
+ *   <li>{@link InvalidMessageRecord} – A message record representing an invalid or missing configuration</li>
+ *   <li>{@link FinalMessageRecord} – An immutable, rendered message derived from a valid record</li>
  * </ul>
  *
  * <h2>Factory Methods</h2>
  * Use {@link #from(ValidMessageKey, ConfigurationSection)} to parse a configuration section,
- * or {@link #empty(RecordKey)} to create an invalid placeholder when parsing fails.
+ * or {@link InvalidMessageRecord#empty(RecordKey, InvalidRecordReason)} to create an invalid placeholder when parsing fails.
  *
  * @see com.winterhavenmc.library.messagebuilder.model.language.SectionRecord SectionRecord
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
@@ -114,9 +111,9 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 		}
 
 		/**
-		 * Returns the raw YAML string string associated with this field.
+		 * Returns the raw YAML string associated with this field.
 		 *
-		 * @return the field string string
+		 * @return the field string
 		 */
 		public String toKey() {
 			return this.keyString;

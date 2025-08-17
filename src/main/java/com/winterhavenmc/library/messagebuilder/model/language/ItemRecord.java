@@ -48,7 +48,7 @@ import java.util.Optional;
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  * @see com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord ValidItemRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord InvalidItemRecord
- * @see ValidItemKey ValidRecordKey
+ * @see ValidItemKey ValidItemKey
  */
 public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {
