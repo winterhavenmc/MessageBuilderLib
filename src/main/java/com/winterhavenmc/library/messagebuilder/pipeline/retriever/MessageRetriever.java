@@ -31,7 +31,7 @@ import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecor
  *
  * <p>This class ensures safety and consistency by always returning a non-null record.
  * If the underlying query handler fails to provide a valid message, a fallback
- * {@linkplain MessageRecord#empty(com.winterhavenmc.library.messagebuilder.keys.RecordKey) empty record}
+ * {@link MessageRecord#empty(com.winterhavenmc.library.messagebuilder.keys.RecordKey, InvalidRecordReason) empty record}
  * is returned instead.
  *
  * <p>This class is typically used as the entry point in a
