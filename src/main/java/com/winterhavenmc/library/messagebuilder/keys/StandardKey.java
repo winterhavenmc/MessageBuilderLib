@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  */
 public sealed interface StandardKey permits MacroKey, RecordKey
 {
-	// valid string must begin with uppercase alpha only and may contain alpha, digits, underscore or period
+	// valid key string must begin with uppercase alpha and then may contain upper/lower alpha, digits, underscores or periods
 	Pattern VALID_KEY_PATTERN = Pattern.compile("^[A-Z][a-zA-Z\\d_.]*$");
 	Predicate<String> IS_INVALID_KEY = string -> !VALID_KEY_PATTERN.matcher(string).matches();
 }
