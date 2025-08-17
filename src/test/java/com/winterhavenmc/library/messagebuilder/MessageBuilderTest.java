@@ -18,31 +18,32 @@
 package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
-import com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.library.messagebuilder.util.MockUtility;
 
-import org.bukkit.Server;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
+import java.util.logging.Logger;
 
 import static com.winterhavenmc.library.messagebuilder.MessageBuilder.TICKS;
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,16 +55,14 @@ class MessageBuilderTest
 {
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
-	@Mock Server serverMock;
-	@Mock PluginManager pluginManagerMock;
 	@Mock ProxiedCommandSender proxiedCommandSenderMock;
 	@Mock LanguageResourceManager languageResourceManagerMock;
-	@Mock MessageProcessor messageProcessorMock;
 	@Mock MessagePipeline messagePipelineMock;
-	@Mock ConfigurationSection constantsSectionMock;
 	@Mock ConstantResolver constantResolverMock;
 	@Mock ItemForge itemForgeMock;
-	@Mock PluginDescriptionFile descriptionFileMock;
+	@Mock QueryHandlerFactory queryHandlerFactoryMock;
+	@Mock FormatterContainer formatterContainerMock;
+	@Mock AdapterContextContainer adapterContextContainerMock;
 
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;
@@ -163,23 +162,25 @@ class MessageBuilderTest
 	}
 
 
-//	@Test @DisplayName("Static factory method (create) returns valid MessageBuilder.")
-//	void static_factory_create_returns_valid_MessageBuilder()
-//	{
-//		// Arrange
-//		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
-//		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-//		when(pluginMock.getServer()).thenReturn(serverMock);
-//		when(serverMock.getPluginManager()).thenReturn(pluginManagerMock);
-//		when(pluginMock.getDescription()).thenReturn(descriptionFileMock);
-//		when(descriptionFileMock.getName()).thenReturn("Test Plugin");
-//
-//		// Act
-//		MessageBuilder messageBuilder1 = MessageBuilder.create(pluginMock);
-//
-//		// Assert
-//		assertNotNull(messageBuilder1);
-//	}
+	@Test @DisplayName("Static factory method (create) returns valid MessageBuilder.")
+	void static_factory_create_returns_valid_MessageBuilder()
+	{
+		// Arrange
+		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+
+		try (MockedStatic<MessageBuilderBootstrap> bootstrapMockedStatic = Mockito.mockStatic(MessageBuilderBootstrap.class))
+		{
+			bootstrapMockedStatic.when(() -> MessageBuilderBootstrap
+					.createMessagePipeline(pluginMock, queryHandlerFactoryMock, formatterContainerMock, adapterContextContainerMock)).thenReturn(messagePipelineMock);
+
+			// Act
+			MessageBuilder messageBuilder = MessageBuilder.create(pluginMock);
+
+			// Assert
+			assertNotNull(messageBuilder);
+		}
+	}
 
 
 	@Test @DisplayName("ValidationException is thrown when plugin parameter is null (create method).")
@@ -251,4 +252,12 @@ class MessageBuilderTest
 		assertInstanceOf(ConstantResolver.class, constantResolver);
 	}
 
+
+	@Test
+	void getItemForge_returns_ItemForge()
+	{
+		ItemForge itemForge = messageBuilder.itemForge();
+
+		assertInstanceOf(ItemForge.class, itemForge);
+	}
 }

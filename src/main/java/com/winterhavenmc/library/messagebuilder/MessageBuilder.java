@@ -34,9 +34,6 @@ import com.winterhavenmc.library.messagebuilder.validation.ValidationContext;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.library.time.Tick;
 
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -126,9 +123,6 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final MiniMessage miniMessage = MiniMessage.miniMessage();
-		final BukkitAudiences audiences = BukkitAudiences.create(plugin);
-
 		final SectionResourceManager languageResourceManager = createLanguageResourceManager(plugin);
 		final QueryHandlerFactory queryHandlerFactory = createQueryHandlerFactory(languageResourceManager);
 		final ConstantResolver constantResolver = createConstantResolver(queryHandlerFactory);
@@ -136,8 +130,7 @@ public final class MessageBuilder
 
 		final FormatterContainer formatterContainer = createFormatterContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, formatterContainer);
-		final MessagePipeline messagePipeline = createMessagePipeline(queryHandlerFactory, formatterContainer,
-				adapterContextContainer, miniMessage, audiences);
+		final MessagePipeline messagePipeline = createMessagePipeline(plugin, queryHandlerFactory, formatterContainer, adapterContextContainer);
 
 		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);
 	}

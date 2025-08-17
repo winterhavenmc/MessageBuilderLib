@@ -106,17 +106,19 @@ class MessageBuilderBootstrap
 	 * @param adapterContextContainer a context container for injecting dependencies into adapters
 	 * @return an instance of the message pipeline
 	 */
-	static @NotNull MessagePipeline createMessagePipeline(final QueryHandlerFactory queryHandlerFactory,
+	static @NotNull MessagePipeline createMessagePipeline(final Plugin plugin,
+														  final QueryHandlerFactory queryHandlerFactory,
 														  final FormatterContainer formatterContainer,
-														  final AdapterContextContainer adapterContextContainer,
-														  final MiniMessage miniMessage,
-														  final BukkitAudiences audiences)
+														  final AdapterContextContainer adapterContextContainer)
 	{
+		final MiniMessage miniMessage = MiniMessage.miniMessage();
+		final BukkitAudiences bukkitAudiences = BukkitAudiences.create(plugin);
+
 		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
 		final MessageProcessor messageProcessor = createMacroReplacer(formatterContainer, adapterContextContainer);
 		final CooldownMap cooldownMap = new CooldownMap();
-		final List<Sender> messageSenders = List.of(new MessageSender(cooldownMap, miniMessage, audiences),
-				new TitleSender(cooldownMap, miniMessage, audiences));
+		final List<Sender> messageSenders = List.of(new MessageSender(cooldownMap, miniMessage, bukkitAudiences),
+				new TitleSender(cooldownMap, miniMessage, bukkitAudiences));
 
 		return new MessagePipeline(messageRetriever, messageProcessor, cooldownMap, messageSenders);
 	}
