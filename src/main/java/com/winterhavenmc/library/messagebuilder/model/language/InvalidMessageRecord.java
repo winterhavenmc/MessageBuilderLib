@@ -18,6 +18,7 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
+import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 
 
@@ -42,4 +43,4 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
  * @see ValidMessageRecord
  * @see ValidMessageKey
  */
-public record InvalidMessageRecord(com.winterhavenmc.library.messagebuilder.keys.RecordKey key, InvalidRecordReason reason) implements MessageRecord { }
+public record InvalidMessageRecord(RecordKey key, InvalidRecordReason reason) implements MessageRecord { }

@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
+import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 
 
@@ -41,4 +42,4 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
  * @see ValidItemRecord
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler
  */
-public record InvalidItemRecord(com.winterhavenmc.library.messagebuilder.keys.RecordKey key, InvalidRecordReason reason) implements ItemRecord { }
+public record InvalidItemRecord(RecordKey key, InvalidRecordReason reason) implements ItemRecord { }
