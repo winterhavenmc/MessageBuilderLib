@@ -38,7 +38,7 @@ class ConstantRecordTest
 		constantEntrySection.set("SPAWN.DISPLAY_NAME", "World Spawn");
 
 		// Act
-		ConstantRecord constantRecord = ConstantRecord.from(constantKey, constantEntrySection);
+		ConstantRecord constantRecord = ConstantRecord.of(constantKey, constantEntrySection);
 
 		// Assert
 		assertInstanceOf(ValidConstantRecord.class, constantRecord);
@@ -52,7 +52,7 @@ class ConstantRecordTest
 		ValidConstantKey constantKey = ConstantKey.of("SPAWN.DISPLAY_NAME").isValid().orElseThrow();
 
 		// Act
-		ConstantRecord constantRecord = ConstantRecord.from(constantKey, null);
+		ConstantRecord constantRecord = ConstantRecord.of(constantKey, null);
 
 		// Assert
 		assertInstanceOf(InvalidConstantRecord.class, constantRecord);

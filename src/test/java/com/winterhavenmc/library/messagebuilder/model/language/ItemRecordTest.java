@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRecordTest
 {
 	@Test
-	void from_valid_section()
+	void of_valid_section()
 	{
 		// Arrange
 		ValidItemKey itemKey = ItemKey.of("TEST_ITEM_1").isValid().orElseThrow();
@@ -46,7 +46,7 @@ class ItemRecordTest
 		itemEntrySection.set(ItemRecord.Field.LORE.toKey(), List.of("Lore Line 1", "Lore Line 2"));
 
 		// Act
-		ItemRecord testRecord = ItemRecord.from(itemKey, itemEntrySection);
+		ItemRecord testRecord = ItemRecord.of(itemKey, itemEntrySection);
 
 		// Assert
 		assertInstanceOf(ValidItemRecord.class, testRecord);
@@ -54,13 +54,13 @@ class ItemRecordTest
 
 
 	@Test
-	void from_null_section()
+	void of_null_section()
 	{
 		// Arrange
 		ValidItemKey itemKey = ItemKey.of("TEST_ITEM_1").isValid().orElseThrow();
 
 		// Act
-		ItemRecord testRecord = ItemRecord.from(itemKey, null);
+		ItemRecord testRecord = ItemRecord.of(itemKey, null);
 
 		// Assert
 		assertInstanceOf(InvalidItemRecord.class, testRecord);

@@ -39,7 +39,7 @@ import java.util.Optional;
  *   <li>{@link InvalidItemRecord} – A fallback object representing a missing or invalid item definition</li>
  * </ul>
  *
- * <p>Instances are created using {@link #from(ValidItemKey, ConfigurationSection)},
+ * <p>Instances are created using {@link #of(ValidItemKey, ConfigurationSection)},
  * which applies default behavior and validation automatically.
  * <p>
  * This interface extends {@link SectionRecord}, allowing all item records
@@ -63,7 +63,7 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	 * @param itemEntry the configuration section associated with this item
 	 * @return a valid or invalid {@code ItemRecord}, depending on input
 	 */
-	static ItemRecord from(final ValidItemKey itemKey, final ConfigurationSection itemEntry)
+	static ItemRecord of(final ValidItemKey itemKey, final ConfigurationSection itemEntry)
 	{
 		return itemEntry == null
 				? ItemRecord.empty(itemKey)

@@ -69,8 +69,8 @@ public class ItemQueryHandler implements QueryHandler<ItemRecord>
 
 		if (recordKey instanceof ValidItemKey validItemKey)
 				return (itemEntry != null)
-						? ItemRecord.from(validItemKey, itemEntry)
-						: ItemRecord.empty(validItemKey);
+						? ItemRecord.of(validItemKey, itemEntry)
+						: ItemRecord.empty(validItemKey, InvalidRecordReason.ITEM_ENTRY_MISSING);
 
 		else return ItemRecord.empty(recordKey);
 	}

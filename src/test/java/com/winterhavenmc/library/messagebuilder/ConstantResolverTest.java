@@ -53,7 +53,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, "result string");
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, "result string");
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -73,7 +73,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, "result string");
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, "result string");
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 
@@ -92,7 +92,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -112,7 +112,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, 42);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -132,7 +132,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, null);
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, null);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -152,7 +152,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -176,7 +176,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, 42);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -196,7 +196,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, 42);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 
@@ -215,7 +215,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -235,7 +235,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, "string");
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, "string");
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -255,7 +255,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, null);
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, null);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -275,7 +275,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -299,7 +299,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, true);
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, true);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -319,7 +319,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, true);
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, true);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 
@@ -338,7 +338,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -358,7 +358,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, 42);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -378,7 +378,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, null);
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, null);
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
@@ -398,7 +398,7 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.from(recordKey, Optional.empty());
+			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
 
 			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
 			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);

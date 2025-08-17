@@ -37,7 +37,7 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
  *       A fallback constant representing a missing or invalid value</li>
  * </ul>
  *
- * <p>Instances are created via {@link #from(ValidConstantKey, Object)} to ensure proper
+ * <p>Instances are created via {@link #of(ValidConstantKey, Object)} to ensure proper
  * validation. This interface extends {@link SectionRecord}, and is safe to pass
  * through the library once constructed.
  *
@@ -56,7 +56,7 @@ public sealed interface ConstantRecord extends SectionRecord permits ValidConsta
 	 * @param constantEntry the raw object value from the configuration
 	 * @return a valid or invalid {@code ConstantRecord}, depending on the input
 	 */
-	static ConstantRecord from(ValidConstantKey constantKey, Object constantEntry)
+	static ConstantRecord of(ValidConstantKey constantKey, Object constantEntry)
 	{
 		return (constantEntry == null)
 				? ConstantRecord.empty(constantKey)

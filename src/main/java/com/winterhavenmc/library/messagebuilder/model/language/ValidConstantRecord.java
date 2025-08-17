@@ -60,7 +60,7 @@ public final class ValidConstantRecord implements ConstantRecord
 	 * Creates a {@code ValidConstantRecord} from the provided string and value.
 	 * <p>
 	 * This method should be called only after validation, typically from
-	 * {@link ConstantRecord#from(ValidConstantKey, Object)}.
+	 * {@link ConstantRecord#of(ValidConstantKey, Object)}.
 	 *
 	 * @param key the unique constant string
 	 * @param value the raw value from the YAML configuration

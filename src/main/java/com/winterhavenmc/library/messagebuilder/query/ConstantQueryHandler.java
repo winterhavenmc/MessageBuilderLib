@@ -109,8 +109,8 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 
 		if (recordKey instanceof ValidConstantKey validConstantKey)
 			return (constantEntry != null)
-					? ConstantRecord.from(validConstantKey, constantEntry)
-					: ConstantRecord.empty(validConstantKey);
+					? ConstantRecord.of(validConstantKey, constantEntry)
+					: ConstantRecord.empty(validConstantKey, InvalidRecordReason.CONSTANT_ENTRY_MISSING);
 
 		else return ConstantRecord.empty(recordKey);
 	}

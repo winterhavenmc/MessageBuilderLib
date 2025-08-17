@@ -65,7 +65,7 @@ class LocalizedDurationFormatterTest
 	void testFormatUnlimited()
 	{
 		// Arrange
-		ConstantRecord constantRecord = ConstantRecord.from(timeUnlimitedKey, "UNLIMITED-TESTING");
+		ConstantRecord constantRecord = ConstantRecord.of(timeUnlimitedKey, "UNLIMITED-TESTING");
 		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
 		when(constantQueryHandlerMock.getRecord(timeUnlimitedKey)).thenReturn(constantRecord);
 
@@ -86,7 +86,7 @@ class LocalizedDurationFormatterTest
 	void testFormatLessThan()
 	{
 		// Arrange
-		ConstantRecord constantRecord = ConstantRecord.from(timeLessThanKey, "less than {DURATION} (TESTING)");
+		ConstantRecord constantRecord = ConstantRecord.of(timeLessThanKey, "less than {DURATION} (TESTING)");
 		when(delegateMock.format(Duration.of(1, ChronoUnit.SECONDS), ChronoUnit.SECONDS)).thenReturn("1 second");
 		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
 		when(constantQueryHandlerMock.getRecord(timeLessThanKey)).thenReturn(constantRecord);
@@ -164,7 +164,7 @@ class LocalizedDurationFormatterTest
 	void format_less_than()
 	{
 		// Arrange
-		ConstantRecord record = ConstantRecord.from(timeLessThanKey, "less than {DURATION}");
+		ConstantRecord record = ConstantRecord.of(timeLessThanKey, "less than {DURATION}");
 		when(delegateMock.format(any(Duration.class), eq(ChronoUnit.MINUTES))).thenReturn("1 minute");
 		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
 		when(constantQueryHandlerMock.getRecord(timeLessThanKey)).thenReturn(record);
@@ -187,7 +187,7 @@ class LocalizedDurationFormatterTest
 	void format_unlimited()
 	{
 		// Arrange
-		ConstantRecord record = ConstantRecord.from(timeUnlimitedKey, "UNLIMITED-TEST");
+		ConstantRecord record = ConstantRecord.of(timeUnlimitedKey, "UNLIMITED-TEST");
 		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
 		when(constantQueryHandlerMock.getRecord(timeUnlimitedKey)).thenReturn(record);
 

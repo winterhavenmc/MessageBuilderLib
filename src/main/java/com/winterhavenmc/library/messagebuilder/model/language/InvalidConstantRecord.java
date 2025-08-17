@@ -25,7 +25,7 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
  * A {@link ConstantRecord} representing a missing or invalid constant from the
  * {@code CONSTANTS} section of a language YAML file.
  * <p>
- * This record is typically returned by {@link ConstantRecord#from(ValidConstantKey, Object)}
+ * This record is typically returned by {@link ConstantRecord#of(ValidConstantKey, Object)}
  * when a constant entry is {@code null}, missing, or otherwise unusable.
  * <p>
  * The {@code reason} field provides a human-readable description of the failure,
