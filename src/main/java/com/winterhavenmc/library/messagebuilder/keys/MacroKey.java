@@ -18,21 +18,15 @@
 package com.winterhavenmc.library.messagebuilder.keys;
 
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
 
 
 public sealed interface MacroKey extends StandardKey permits ValidMacroKey, InvalidKey
 {
-	Pattern VALID_MACRO_KEY_PATTERN = Pattern.compile("(\\p{Lu}[\\p{Alnum}_]+)[\\p{Alnum}_.]*");
-	Predicate<String> IS_INVALID_MACRO_KEY = string -> !VALID_KEY.matcher(string).matches();
-
-
 	static MacroKey of(String key)
 	{
 		if (key == null) return new InvalidKey("∅", InvalidKeyReason.KEY_NULL);
 		else if (key.isBlank()) return new InvalidKey("⬚", InvalidKeyReason.KEY_BLANK);
-		else if (IS_INVALID_MACRO_KEY.test(key)) return new InvalidKey(key, InvalidKeyReason.KEY_INVALID);
+		else if (IS_INVALID_KEY.test(key)) return new InvalidKey(key, InvalidKeyReason.KEY_INVALID);
 		else return new ValidMacroKey(key);
 	}
 
@@ -40,7 +34,7 @@ public sealed interface MacroKey extends StandardKey permits ValidMacroKey, Inva
 	static <E extends Enum<E>> MacroKey of(final E key)
 	{
 		if (key == null) return new InvalidKey("∅", InvalidKeyReason.KEY_NULL);
-		else if (IS_INVALID_MACRO_KEY.test(key.name())) return new InvalidKey(key.name(), InvalidKeyReason.KEY_INVALID);
+		else if (IS_INVALID_KEY.test(key.name())) return new InvalidKey(key.name(), InvalidKeyReason.KEY_INVALID);
 		else return new ValidMacroKey(key.name());
 	}
 
