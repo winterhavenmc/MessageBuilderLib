@@ -117,8 +117,10 @@ class Bootstrap
 		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
 		final MessageProcessor messageProcessor = createMacroReplacer(formatterContainer, adapterContextContainer);
 		final CooldownMap cooldownMap = new CooldownMap();
-		final List<Sender> messageSenders = List.of(new MessageSender(cooldownMap, miniMessage, bukkitAudiences),
-				new TitleSender(cooldownMap, miniMessage, bukkitAudiences));
+
+		final MessageSender messageSender = new MessageSender(cooldownMap, miniMessage, bukkitAudiences);
+		final TitleSender titleSender = new TitleSender(cooldownMap, miniMessage, bukkitAudiences);
+		final List<Sender> messageSenders = List.of(messageSender, titleSender);
 
 		return new MessagePipeline(messageRetriever, messageProcessor, cooldownMap, messageSenders);
 	}
