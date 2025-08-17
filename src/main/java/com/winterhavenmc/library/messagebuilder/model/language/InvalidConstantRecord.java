@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.model.language;
 
 import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 
 
@@ -41,4 +42,4 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
  * @see ValidConstantRecord
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  */
-public record InvalidConstantRecord(com.winterhavenmc.library.messagebuilder.keys.RecordKey key, InvalidRecordReason reason) implements ConstantRecord { }
+public record InvalidConstantRecord(RecordKey key, InvalidRecordReason reason) implements ConstantRecord { }
