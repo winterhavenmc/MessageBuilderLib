@@ -72,6 +72,11 @@ public final class ValidConstantRecord implements ConstantRecord
 	}
 
 
+	/**
+	 * Returns the valid key associated with this record.
+	 *
+	 * @return The valid constant key for this record.
+	 */
 	@Override
 	public ValidConstantKey key()
 	{
