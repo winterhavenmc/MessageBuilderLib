@@ -17,4 +17,50 @@
 
 package com.winterhavenmc.library.messagebuilder.keys;
 
-public record InvalidConstantKey(String string, InvalidKeyReason reason) implements ConstantKey { }
+import java.util.Objects;
+
+
+public final class InvalidConstantKey implements ConstantKey
+{
+	private final String string;
+	private final InvalidKeyReason reason;
+
+
+	public InvalidConstantKey(String string, InvalidKeyReason reason)
+	{
+		this.string = string;
+		this.reason = reason;
+	}
+
+
+	public InvalidKeyReason reason()
+	{
+		return reason;
+	}
+
+
+	@Override
+	public String toString()
+	{
+		return string;
+	}
+
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == this) return true;
+		if (obj == null || obj.getClass() != this.getClass()) return false;
+		var that = (InvalidConstantKey) obj;
+		return Objects.equals(this.string, that.string) &&
+				Objects.equals(this.reason, that.reason);
+	}
+
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(string, reason);
+	}
+
+}
