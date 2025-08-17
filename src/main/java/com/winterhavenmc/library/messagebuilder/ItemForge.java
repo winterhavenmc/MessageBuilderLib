@@ -24,9 +24,11 @@ import com.winterhavenmc.library.messagebuilder.model.language.Section;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFactory;
@@ -49,7 +51,6 @@ public class ItemForge
 	private final QueryHandler<ItemRecord> itemQueryHandler;
 	private final MiniMessage miniMessage;
 	private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
-
 
 
 	ItemForge(final Plugin plugin, final QueryHandlerFactory queryHandlerFactory)
@@ -79,29 +80,10 @@ public class ItemForge
 
 				if (itemMeta != null)
 				{
-					if (validItemRecord.nameSingular() != null && !validItemRecord.nameSingular().isEmpty())
-					{
-						Component nameComponent = miniMessage.deserialize(validItemRecord.nameSingular());
-						itemMeta.setDisplayName(LEGACY_SERIALIZER.serialize(nameComponent));
-					}
-
-					if (validItemRecord.lore() != null && !validItemRecord.lore().isEmpty())
-					{
-						List<String> formattedLore = new ArrayList<>();
-						for (String line : validItemRecord.lore())
-						{
-							Component loreLineComponent = miniMessage.deserialize(line);
-							formattedLore.add(LEGACY_SERIALIZER.serialize(loreLineComponent));
-						}
-						itemMeta.setLore(formattedLore);
-					}
-
-					itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-					itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-					itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-
-					NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, itemRecord.key().toString());
-					itemMeta.getPersistentDataContainer().set(PERSISTENT_KEY, PersistentDataType.BYTE, (byte) 1);
+					setItemDisplayName(validItemRecord, itemMeta);
+					setItemLore(validItemRecord, itemMeta);
+					setItemFlags(itemMeta);
+					setItemPersistentData(itemRecord, itemMeta);
 				}
 
 				itemStack.setItemMeta(itemMeta);
@@ -111,6 +93,46 @@ public class ItemForge
 		}
 
 		return Optional.empty();
+	}
+
+
+	private void setItemDisplayName(ValidItemRecord validItemRecord, ItemMeta itemMeta)
+	{
+		if (validItemRecord.nameSingular() != null && !validItemRecord.nameSingular().isEmpty())
+		{
+			Component nameComponent = miniMessage.deserialize(validItemRecord.nameSingular());
+			itemMeta.setDisplayName(LEGACY_SERIALIZER.serialize(nameComponent));
+		}
+	}
+
+
+	private void setItemLore(ValidItemRecord validItemRecord, ItemMeta itemMeta)
+	{
+		if (validItemRecord.lore() != null && !validItemRecord.lore().isEmpty())
+		{
+			List<String> formattedLore = new ArrayList<>();
+			for (String line : validItemRecord.lore())
+			{
+				Component loreLineComponent = miniMessage.deserialize(line);
+				formattedLore.add(LEGACY_SERIALIZER.serialize(loreLineComponent));
+			}
+			itemMeta.setLore(formattedLore);
+		}
+	}
+
+
+	private void setItemPersistentData(ItemRecord itemRecord, ItemMeta itemMeta)
+	{
+		NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, itemRecord.key().toString());
+		itemMeta.getPersistentDataContainer().set(PERSISTENT_KEY, PersistentDataType.BYTE, (byte) 1);
+	}
+
+
+	private static void setItemFlags(ItemMeta itemMeta)
+	{
+		itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 	}
 
 }
