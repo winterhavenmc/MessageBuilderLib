@@ -78,7 +78,7 @@ class ItemRecordTest
 		itemEntrySection.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Item Names");
 		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Item Name");
 		itemEntrySection.set(ItemRecord.Field.LORE.toKey(), List.of("Lore Line 1", "Lore Line 2"));
-		ItemRecord testRecord = ItemRecord.from(itemKey, itemEntrySection);
+		ItemRecord testRecord = ItemRecord.of(itemKey, itemEntrySection);
 
 		// Act
 		var result = testRecord.isValid();
