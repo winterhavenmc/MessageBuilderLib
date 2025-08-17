@@ -89,12 +89,12 @@ public class MacroStringMap
 	/**
 	 * Returns the value associated with the given string, or {@code null} if not found.
 	 *
-	 * @param key the macro string
+	 * @param macroKey the macro string
 	 * @return the associated value, or {@code null} if not present
 	 */
-	public String get(final ValidMacroKey key)
+	public String get(final ValidMacroKey macroKey)
 	{
-		return INTERNAL_MAP.get(key);
+		return INTERNAL_MAP.get(macroKey);
 	}
 
 
