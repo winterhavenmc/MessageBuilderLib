@@ -57,9 +57,9 @@ import java.util.List;
 /**
  * A companion utility class to facilitate arranging components necessary to initialize the MessageBuilder library.
  */
-class MessageBuilderBootstrap
+class Bootstrap
 {
-	private MessageBuilderBootstrap() { /* Private constructor to prevent instantiation of utility class */ }
+	private Bootstrap() { /* Private constructor to prevent instantiation of utility class */ }
 
 
 	/**

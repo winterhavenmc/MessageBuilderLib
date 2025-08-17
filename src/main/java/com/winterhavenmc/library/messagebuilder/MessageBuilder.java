@@ -40,7 +40,7 @@ import org.bukkit.plugin.Plugin;
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
-import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*;
+import static com.winterhavenmc.library.messagebuilder.Bootstrap.*;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;

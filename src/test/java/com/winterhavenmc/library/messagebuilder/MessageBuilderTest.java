@@ -169,9 +169,9 @@ class MessageBuilderTest
 		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 
-		try (MockedStatic<MessageBuilderBootstrap> bootstrapMockedStatic = Mockito.mockStatic(MessageBuilderBootstrap.class))
+		try (MockedStatic<Bootstrap> bootstrapMockedStatic = Mockito.mockStatic(Bootstrap.class))
 		{
-			bootstrapMockedStatic.when(() -> MessageBuilderBootstrap
+			bootstrapMockedStatic.when(() -> Bootstrap
 					.createMessagePipeline(pluginMock, queryHandlerFactoryMock, formatterContainerMock, adapterContextContainerMock)).thenReturn(messagePipelineMock);
 
 			// Act
