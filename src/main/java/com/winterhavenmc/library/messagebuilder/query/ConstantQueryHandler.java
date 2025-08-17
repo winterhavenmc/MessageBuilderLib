@@ -105,8 +105,8 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 	@Override
 	public ConstantRecord getRecord(final RecordKey recordKey)
 	{
-		ConfigurationSection section = sectionProvider.getSection();
-		Object constantEntry = section.get(recordKey.toString());
+		final ConfigurationSection section = sectionProvider.getSection();
+		final Object constantEntry = section.get(recordKey.toString());
 
 		if (recordKey instanceof ValidConstantKey validConstantKey)
 			return (constantEntry != null)
