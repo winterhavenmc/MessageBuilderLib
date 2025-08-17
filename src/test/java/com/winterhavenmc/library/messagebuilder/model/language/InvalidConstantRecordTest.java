@@ -34,8 +34,7 @@ class InvalidConstantRecordTest
 	void setUp()
 	{
 		constantKey = ConstantKey.of("NON_EXISTENT").isValid().orElseThrow();
-
-		invalidConstantRecord = ConstantRecord.empty(constantKey);
+		invalidConstantRecord = ConstantRecord.empty(constantKey, InvalidRecordReason.CONSTANT_ENTRY_MISSING);
 	}
 
 	@Test
@@ -44,17 +43,17 @@ class InvalidConstantRecordTest
 		assertInstanceOf(InvalidConstantRecord.class, invalidConstantRecord);
 	}
 
+
 	@Test
-	void testKey()
+	void getKey()
 	{
 		assertEquals(constantKey, invalidConstantRecord.key());
-
 	}
 
 	@Test
-	void reason()
+	void getReason()
 	{
-		assertEquals("Missing constant section.", invalidConstantRecord.reason());
+		assertEquals(InvalidRecordReason.CONSTANT_ENTRY_MISSING, invalidConstantRecord.reason());
 	}
 
 }
