@@ -40,31 +40,30 @@ import java.util.Optional;
  * the appropriate implementation.
  *
  * @see WorldNameResolver
- * @see Multiverse4Retriever
  * @see DefaultResolver
  * @see World
  * @see org.mvplugins.multiverse.core.MultiverseCore MultiverseCore
  */
 public final class PluginResolver implements WorldNameResolver
 {
-	private final Plugin plugin;
+	private final Plugin mvPlugin;
 
 
 	/**
 	 * Constructs a {@code MultiverseV4WorldNameResolver} using the given instance
 	 * of {@link org.mvplugins.multiverse.core.MultiverseCore}.
 	 *
-	 * @param plugin the active Multiverse-Core plugin instance
+	 * @param mvPlugin the active Multiverse-Core plugin instance
 	 */
-	public PluginResolver(Plugin plugin)
+	public PluginResolver(Plugin mvPlugin)
 	{
-		this.plugin = plugin;
+		this.mvPlugin = mvPlugin;
 	}
 
 
 	/**
 	 * Attempts to retrieve the alias name of the specified world using
-	 * {@link Multiverse4Retriever}. If the alias is null or blank,
+	 * {@code Multiverse4Retriever}. If the alias is null or blank,
 	 * falls back to {@code world.getName()}.
 	 *
 	 * @param world the {@link World} whose alias or name should be returned
@@ -76,10 +75,9 @@ public final class PluginResolver implements WorldNameResolver
 	{
 		if (world == null) { return "∅"; }
 
-		Optional<String> result = switch (plugin)
+		Optional<String> result = switch (mvPlugin)
 		{
-			case com.onarandombox.MultiverseCore.MultiverseCore mvPlugin4 -> new Multiverse4Retriever(mvPlugin4).getWorldName(world);
-			case org.mvplugins.multiverse.core.MultiverseCore mvPlugin5 -> new Multiverse5Retriever(mvPlugin5).getWorldName(world);
+			case org.mvplugins.multiverse.core.MultiverseCore mvPlugin5 -> new MultiverseRetriever(mvPlugin5).getWorldName(world);
 			case null, default -> new DefaultRetriever().getWorldName(world);
 		};
 
