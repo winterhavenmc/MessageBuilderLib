@@ -51,7 +51,7 @@ public final class ValidMacroKey implements MacroKey
 	{
 		if (subKey == null) return new InvalidKey("∅", InvalidKeyReason.KEY_NULL);
 		if (subKey.isBlank()) return new InvalidKey("⬚", InvalidKeyReason.KEY_BLANK);
-		else if (IS_INVALID_MACRO_KEY.test(subKey)) return new InvalidKey(subKey, InvalidKeyReason.KEY_INVALID);
+		else if (IS_INVALID_KEY.test(subKey)) return new InvalidKey(subKey, InvalidKeyReason.KEY_INVALID);
 		else return MacroKey.of(dotJoin(this, subKey));
 	}
 
@@ -66,7 +66,7 @@ public final class ValidMacroKey implements MacroKey
 	public <E extends Enum<E>> MacroKey append(final E subKey)
 	{
 		if (subKey == null) return new InvalidKey("∅", InvalidKeyReason.KEY_NULL);
-		else if (IS_INVALID_MACRO_KEY.test(subKey.name())) return new InvalidKey(subKey.name(), InvalidKeyReason.KEY_INVALID);
+		else if (IS_INVALID_KEY.test(subKey.name())) return new InvalidKey(subKey.name(), InvalidKeyReason.KEY_INVALID);
 		else return MacroKey.of(dotJoin(this, subKey.name()));
 	}
 
