@@ -68,6 +68,25 @@ class ConstantResolverTest
 		}
 
 
+		@Test @DisplayName("getString returns empty optional when given invalid key.")
+		void getString_returns_empty_optional_when_given_invalid_key()
+		{
+			// Arrange
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, "result string");
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+
+			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+
+			// Act
+			Optional<String> result = constantResolver.getString("invalid-key");
+
+			// Assert
+			assertEquals(Optional.empty(), result);
+		}
+
+
 		@Test @DisplayName("getString returns empty optional when not present.")
 		void getString_returns_empty_optional()
 		{
@@ -172,6 +191,25 @@ class ConstantResolverTest
 		}
 
 
+		@Test @DisplayName("getInteger returns empty optional when given invalid key.")
+		void getInteger_returns_empty_optional_when_given_invalid_key()
+		{
+			// Arrange
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, 42);
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+
+			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+
+			// Act
+			Optional<Integer> result = constantResolver.getInteger("invalid-key");
+
+			// Assert
+			assertEquals(Optional.empty(), result);
+		}
+
+
 		@Test @DisplayName("getInteger() returns empty optional when not present.")
 		void getInteger_returns_empty_optional()
 		{
@@ -273,6 +311,25 @@ class ConstantResolverTest
 
 			// Assert
 			assertEquals(Optional.of(true), result);
+		}
+
+
+		@Test @DisplayName("getBoolean returns empty optional when given invalid key.")
+		void getBoolean_returns_empty_optional_when_given_invalid_key()
+		{
+			// Arrange
+			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
+			ConstantRecord constantRecord = ConstantRecord.from(recordKey, true);
+
+			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
+
+			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+
+			// Act
+			Optional<Boolean> result = constantResolver.getBoolean("invalid-key");
+
+			// Assert
+			assertEquals(Optional.empty(), result);
 		}
 
 
