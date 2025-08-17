@@ -17,11 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import java.text.MessageFormat;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
 
 public enum InvalidRecordReason
 {
@@ -47,35 +42,6 @@ public enum InvalidRecordReason
 	public String getDefaultMessage()
 	{
 		return this.defaultMessage;
-	}
-
-
-	public String getLocalizeMessage(final Locale locale)
-	{
-		try
-		{
-			final ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-			return bundle.getString(name());
-		}
-		catch (MissingResourceException exception)
-		{
-			return this.defaultMessage;
-		}
-	}
-
-
-	public String getLocalizeMessage(final Locale locale, final Object... objects)
-	{
-		try
-		{
-			final ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-			String pattern = bundle.getString(name());
-			return MessageFormat.format(pattern, objects);
-		}
-		catch (MissingResourceException exception)
-		{
-			return this.defaultMessage;
-		}
 	}
 
 }
