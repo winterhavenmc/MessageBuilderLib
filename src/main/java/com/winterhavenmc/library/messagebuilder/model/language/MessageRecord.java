@@ -66,7 +66,7 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 	static MessageRecord from(final ValidMessageKey messageKey, final ConfigurationSection messageEntry)
 	{
 		return (messageEntry == null)
-				? MessageRecord.empty(messageKey)
+				? MessageRecord.empty(messageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING)
 				: ValidMessageRecord.create(messageKey, messageEntry);
 	}
 
@@ -77,9 +77,9 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 	 * @param messageKey the string associated with the missing record
 	 * @return a placeholder {@code MessageRecord} indicating an empty or unresolved message
 	 */
-	static InvalidMessageRecord empty(RecordKey messageKey)
+	static InvalidMessageRecord empty(RecordKey messageKey, InvalidRecordReason reason)
 	{
-		return new InvalidMessageRecord(messageKey, "Missing message section.");
+		return new InvalidMessageRecord(messageKey, reason);
 	}
 
 
