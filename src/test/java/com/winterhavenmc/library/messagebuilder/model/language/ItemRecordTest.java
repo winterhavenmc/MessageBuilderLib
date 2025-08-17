@@ -93,7 +93,7 @@ class ItemRecordTest
 	{
 		// Arrange
 		InvalidItemKey invalidItemKey = new InvalidItemKey("test_key", InvalidKeyReason.KEY_INVALID);
-		InvalidItemRecord invalidItemRecord = new InvalidItemRecord(invalidItemKey, "test invalid");
+		InvalidItemRecord invalidItemRecord = new InvalidItemRecord(invalidItemKey, InvalidRecordReason.ITEM_KEY_INVALID);
 
 		// Act
 		var result = invalidItemRecord.isValid();

@@ -66,7 +66,7 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	static ItemRecord of(final ValidItemKey itemKey, final ConfigurationSection itemEntry)
 	{
 		return itemEntry == null
-				? ItemRecord.empty(itemKey)
+				? ItemRecord.empty(itemKey, InvalidRecordReason.ITEM_ENTRY_MISSING)
 				: ValidItemRecord.create(itemKey, itemEntry);
 	}
 
@@ -77,9 +77,9 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	 * @param itemKey the string that could not be resolved
 	 * @return an invalid item record
 	 */
-	static InvalidItemRecord empty(final RecordKey itemKey)
+	static InvalidItemRecord empty(final RecordKey itemKey, InvalidRecordReason reason)
 	{
-		return new InvalidItemRecord(itemKey, "Missing item section.");
+		return new InvalidItemRecord(itemKey, reason);
 	}
 
 

@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReason;
 import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 
@@ -72,7 +73,7 @@ public class ItemQueryHandler implements QueryHandler<ItemRecord>
 						? ItemRecord.of(validItemKey, itemEntry)
 						: ItemRecord.empty(validItemKey, InvalidRecordReason.ITEM_ENTRY_MISSING);
 
-		else return ItemRecord.empty(recordKey);
+		else return ItemRecord.empty(recordKey, InvalidRecordReason.ITEM_KEY_INVALID);
 	}
 
 }

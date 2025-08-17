@@ -42,4 +42,4 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
  * @see ValidMessageRecord
  * @see ValidMessageKey
  */
-public record InvalidMessageRecord(com.winterhavenmc.library.messagebuilder.keys.RecordKey key, String reason) implements MessageRecord { }
+public record InvalidMessageRecord(com.winterhavenmc.library.messagebuilder.keys.RecordKey key, InvalidRecordReason reason) implements MessageRecord { }

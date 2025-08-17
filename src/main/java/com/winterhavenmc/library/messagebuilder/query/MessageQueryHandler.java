@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReason;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
@@ -68,9 +69,9 @@ public class MessageQueryHandler implements QueryHandler<MessageRecord>
 		if (recordKey instanceof ValidMessageKey validMessageKey)
 			return (messageEntry != null)
 					? MessageRecord.from(validMessageKey, messageEntry)
-					: MessageRecord.empty(validMessageKey);
+					: MessageRecord.empty(validMessageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING);
 
-		else return MessageRecord.empty(recordKey);
+		else return MessageRecord.empty(recordKey, InvalidRecordReason.MESSAGE_KEY_INVALID);
 	}
 
 }

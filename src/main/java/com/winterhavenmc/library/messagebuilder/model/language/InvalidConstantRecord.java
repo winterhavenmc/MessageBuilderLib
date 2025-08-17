@@ -41,4 +41,4 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
  * @see ValidConstantRecord
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  */
-public record InvalidConstantRecord(com.winterhavenmc.library.messagebuilder.keys.RecordKey key, String reason) implements ConstantRecord { }
+public record InvalidConstantRecord(com.winterhavenmc.library.messagebuilder.keys.RecordKey key, InvalidRecordReason reason) implements ConstantRecord { }

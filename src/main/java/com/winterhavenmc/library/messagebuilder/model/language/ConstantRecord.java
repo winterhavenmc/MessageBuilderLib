@@ -59,7 +59,7 @@ public sealed interface ConstantRecord extends SectionRecord permits ValidConsta
 	static ConstantRecord of(ValidConstantKey constantKey, Object constantEntry)
 	{
 		return (constantEntry == null)
-				? ConstantRecord.empty(constantKey)
+				? ConstantRecord.empty(constantKey, InvalidRecordReason.CONSTANT_ENTRY_MISSING)
 				: ValidConstantRecord.create(constantKey, constantEntry);
 	}
 
@@ -70,9 +70,9 @@ public sealed interface ConstantRecord extends SectionRecord permits ValidConsta
 	 * @param constantKey the string associated with the unresolved constant
 	 * @return a fallback {@code ConstantRecord} with a standard failure reason
 	 */
-	static InvalidConstantRecord empty(final RecordKey constantKey)
+	static InvalidConstantRecord empty(final RecordKey constantKey, final InvalidRecordReason reason)
 	{
-		return new InvalidConstantRecord(constantKey, "Missing constant section.");
+		return new InvalidConstantRecord(constantKey, reason);
 	}
 
 }

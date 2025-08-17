@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReason;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -63,7 +64,7 @@ public final class MessageRetriever implements Retriever
 	 * for the given string using the underlying {@link QueryHandler}.
 	 *
 	 * <p>If the result is not an instance of {@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord},
-	 * this method returns an {@linkplain MessageRecord#empty(com.winterhavenmc.library.messagebuilder.keys.RecordKey)
+	 * this method returns an {@linkplain MessageRecord#empty(com.winterhavenmc.library.messagebuilder.keys.RecordKey, InvalidRecordReason)
 	 * empty record} as a safe fallback.
 	 *
 	 * @param messageKey the string used to locate the message record
@@ -74,7 +75,7 @@ public final class MessageRetriever implements Retriever
 	{
 		return (queryHandler.getRecord(messageKey) instanceof ValidMessageRecord validMessageRecord)
 				? validMessageRecord
-				: MessageRecord.empty(messageKey);
+				: MessageRecord.empty(messageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING);
 	}
 
 }

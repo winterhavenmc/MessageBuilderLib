@@ -37,7 +37,7 @@ class InvalidMessageRecordTest
 	void setUp()
 	{
 		messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
-		invalidMessageRecord = MessageRecord.empty(messageKey);
+		invalidMessageRecord = MessageRecord.empty(messageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING);
 	}
 
 
@@ -63,10 +63,10 @@ class InvalidMessageRecordTest
 	void testReason()
 	{
 		// Arrange & Act
-		String reason = invalidMessageRecord.reason();
+		InvalidRecordReason reason = invalidMessageRecord.reason();
 
 		// Assert
-		assertEquals("Missing message section.", reason);
+		assertEquals(InvalidRecordReason.MESSAGE_ENTRY_MISSING, reason);
 	}
 
 }
