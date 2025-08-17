@@ -36,6 +36,7 @@ import com.winterhavenmc.library.time.Tick;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -43,8 +44,7 @@ import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
 import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.RELOAD_FAILED;
+import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;
 
@@ -136,7 +136,8 @@ public final class MessageBuilder
 
 		final FormatterContainer formatterContainer = createFormatterContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, formatterContainer);
-		final MessagePipeline messagePipeline = createMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer, miniMessage, audiences);
+		final MessagePipeline messagePipeline = createMessagePipeline(queryHandlerFactory, formatterContainer,
+				adapterContextContainer, miniMessage, audiences);
 
 		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);
 	}
