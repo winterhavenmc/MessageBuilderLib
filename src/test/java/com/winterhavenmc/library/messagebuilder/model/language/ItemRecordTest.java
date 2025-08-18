@@ -17,12 +17,16 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.InvalidItemKey;
+import com.winterhavenmc.library.messagebuilder.keys.InvalidKeyReason;
+import com.winterhavenmc.library.messagebuilder.keys.ItemKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,20 +34,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRecordTest
 {
 	@Test
-	void from_valid_section()
+	void of_valid_section()
 	{
 		// Arrange
-		RecordKey itemKey = RecordKey.of("TEST_ITEM_1").orElseThrow();
+		ValidItemKey itemKey = ItemKey.of("TEST_ITEM_1").isValid().orElseThrow();
 
 		ConfigurationSection itemEntrySection = new MemoryConfiguration();
 		itemEntrySection.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Item Name");
 		itemEntrySection.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Item Names");
-		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME_SINGULAR.toKey(), "Inventory Item Name");
-		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME_PLURAL.toKey(), "Inventory Item Names");
+		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Item Name");
 		itemEntrySection.set(ItemRecord.Field.LORE.toKey(), List.of("Lore Line 1", "Lore Line 2"));
 
 		// Act
-		ItemRecord testRecord = ItemRecord.from(itemKey, itemEntrySection);
+		ItemRecord testRecord = ItemRecord.of(itemKey, itemEntrySection);
 
 		// Assert
 		assertInstanceOf(ValidItemRecord.class, testRecord);
@@ -51,16 +54,51 @@ class ItemRecordTest
 
 
 	@Test
-	void from_null_section()
+	void of_null_section()
 	{
 		// Arrange
-		RecordKey itemKey = RecordKey.of("TEST_ITEM_1").orElseThrow();
+		ValidItemKey itemKey = ItemKey.of("TEST_ITEM_1").isValid().orElseThrow();
 
 		// Act
-		ItemRecord testRecord = ItemRecord.from(itemKey, null);
+		ItemRecord testRecord = ItemRecord.of(itemKey, null);
 
 		// Assert
 		assertInstanceOf(InvalidItemRecord.class, testRecord);
+	}
+
+
+	@Test
+	void isValid_with_valid_record_returns_optional_wrapped_record()
+	{
+		// Arrange
+		ValidItemKey itemKey = ItemKey.of("TEST_ITEM_1").isValid().orElseThrow();
+
+		ConfigurationSection itemEntrySection = new MemoryConfiguration();
+		itemEntrySection.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Item Name");
+		itemEntrySection.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Item Names");
+		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Item Name");
+		itemEntrySection.set(ItemRecord.Field.LORE.toKey(), List.of("Lore Line 1", "Lore Line 2"));
+		ItemRecord testRecord = ItemRecord.of(itemKey, itemEntrySection);
+
+		// Act
+		var result = testRecord.isValid();
+
+		// Assert
+		assertEquals(Optional.of(testRecord), result);
+	}
+
+
+	@Test
+	void isValid_with_invalid_record_returns_empty_optional()
+	{
+		// Arrange
+		InvalidItemKey invalidItemKey = new InvalidItemKey("test_key", InvalidKeyReason.KEY_INVALID);
+		InvalidItemRecord invalidItemRecord = new InvalidItemRecord(invalidItemKey, InvalidRecordReason.ITEM_KEY_INVALID);
+
+		// Act
+		var result = invalidItemRecord.isValid();
+
+		assertEquals(Optional.empty(), result);
 	}
 
 }

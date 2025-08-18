@@ -52,7 +52,7 @@ public enum Parameter
 	DURATION("duration"),
 	ENTITY("entity"),
 	ITEM_SECTION("itemSection"),
-	KEY("key"),
+	KEY("string"),
 	LANGUAGE_FILE("languageFile"),
 	LANGUAGE_QUERY_HANDLER("languageQueryHandler"),
 	LANGUAGE_RESOURCE_MANAGER("languageResourceManager"),

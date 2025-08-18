@@ -3,7 +3,7 @@
  * {@link com.winterhavenmc.library.messagebuilder.model.language.MessageRecord MessageRecord}
  * instances from a configuration-backed query system.
  *
- * <p>This package encapsulates the "retrieval" stage, where a {@code RecordKey}
+ * <p>This package encapsulates the "retrieval" stage, where a {@code LegacyRecordKey}
  * is used to obtain a structured message definition from a YAML language file or
  * other backing store.
  *

@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter;
@@ -93,10 +94,10 @@ class ExpirableTest
 	void extractExpiration_returns_populated_map()
 	{
 		// Arrange
-		MacroKey baseKey = MacroKey.of("TEST").orElseThrow();
-		MacroKey expirationKey = baseKey.append("EXPIRATION").orElseThrow();
-		MacroKey instantKey = expirationKey.append("INSTANT").orElseThrow();
-		MacroKey durationKey = expirationKey.append("DURATION").orElseThrow();
+		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
+		ValidMacroKey expirationKey = baseKey.append("EXPIRATION").isValid().orElseThrow();
+		ValidMacroKey instantKey = expirationKey.append("INSTANT").isValid().orElseThrow();
+		ValidMacroKey durationKey = expirationKey.append("DURATION").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		when(ctxMock.formatterContainer()).thenReturn(formatterContainerMock);

@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
@@ -38,11 +39,9 @@ import org.bukkit.plugin.Plugin;
 
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
-import static com.winterhavenmc.library.messagebuilder.MessageBuilderBootstrap.*;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.RELOAD_FAILED;
+import static com.winterhavenmc.library.messagebuilder.Bootstrap.*;
+import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.*;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;
 
@@ -85,6 +84,7 @@ public final class MessageBuilder
 	private final SectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
 	private final ConstantResolver constantResolver;
+	private final ItemForge itemForge;
 
 
 	/**
@@ -97,14 +97,14 @@ public final class MessageBuilder
 	private MessageBuilder(final Plugin plugin,
 	                       final SectionResourceManager languageResourceManager,
 						   final ConstantResolver constantResolver,
+						   final ItemForge itemForge,
 	                       final MessagePipeline messagePipeline)
 	{
-		LocaleProvider localeProvider = LocaleProvider.create(plugin);
 		ValidationContext.initialize(LocaleProvider.create(plugin));
-		ResourceBundle BUNDLE = ResourceBundle.getBundle(EXCEPTION_MESSAGES, localeProvider.getLocale());
 
 		this.languageResourceManager = languageResourceManager;
 		this.constantResolver = constantResolver;
+		this.itemForge = itemForge;
 		this.messagePipeline = messagePipeline;
 	}
 
@@ -124,14 +124,15 @@ public final class MessageBuilder
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
 		final SectionResourceManager languageResourceManager = createLanguageResourceManager(plugin);
-		final QueryHandlerFactory queryHandlerFactory = new QueryHandlerFactory(languageResourceManager);
-		final ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactory);
+		final QueryHandlerFactory queryHandlerFactory = createQueryHandlerFactory(languageResourceManager);
+		final ConstantResolver constantResolver = createConstantResolver(queryHandlerFactory);
+		final ItemForge itemForge = createItemForge(plugin, queryHandlerFactory);
 
 		final FormatterContainer formatterContainer = createFormatterContainer(plugin, queryHandlerFactory);
 		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, formatterContainer);
-		final MessagePipeline messagePipeline = createMessagePipeline(queryHandlerFactory, formatterContainer, adapterContextContainer);
+		final MessagePipeline messagePipeline = createMessagePipeline(plugin, queryHandlerFactory, formatterContainer, adapterContextContainer);
 
-		return new MessageBuilder(plugin, languageResourceManager, constantResolver, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);
 	}
 
 
@@ -149,9 +150,8 @@ public final class MessageBuilder
 	 */
 	public <E extends Enum<E>> Message compose(final CommandSender recipient, final E messageId)
 	{
-		// exception thrown if null enum constant passed in messageId parameter
-		RecordKey validMessageKey = RecordKey.of(messageId)
-				.orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
+		// exception thrown if null enum constant passed as messageId parameter
+		ValidMessageKey validMessageKey = MessageKey.of(messageId).isValid().orElseThrow(() -> new ValidationException(PARAMETER_NULL, MESSAGE_ID));
 
 		// return ValidMessage on valid Recipient, else empty no-op message
 		return switch (Recipient.of(recipient))
@@ -186,19 +186,26 @@ public final class MessageBuilder
 	static MessageBuilder test(final Plugin plugin,
 							   final LanguageResourceManager languageResourceManager,
 							   final ConstantResolver constantResolver,
+							   final ItemForge itemForge,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, constantResolver, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);
 	}
 
 
 	public ConstantResolver getConstantResolver()
 	{
 		return this.constantResolver;
+	}
+
+
+	public ItemForge itemForge()
+	{
+		return this.itemForge;
 	}
 
 }

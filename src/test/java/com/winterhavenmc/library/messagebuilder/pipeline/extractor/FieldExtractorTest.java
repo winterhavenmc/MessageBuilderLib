@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.extractor;
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameAdapter;
@@ -42,7 +44,6 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.Quant
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.Identifiable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname.DisplayNameable;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.LocalizedDurationFormatter;
@@ -60,7 +61,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -93,14 +93,14 @@ class FieldExtractorTest
 	@Mock LocaleProvider localeProviderMock;
 
 	FieldExtractor extractor;
-	MacroKey baseKey;
+	ValidMacroKey baseKey;
 
 
 	@BeforeEach
 	void setup()
 	{
 		extractor = new FieldExtractor(adapterContextContainerMock);
-		baseKey = MacroKey.of("TEST").orElseThrow();
+		baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 	}
 
 
@@ -110,7 +110,7 @@ class FieldExtractorTest
 		// Arrange
 		MacroStringMap expected = new MacroStringMap();
 		expected.put(baseKey, "FancyName");
-		expected.put(baseKey.append(Adapter.BuiltIn.DISPLAY_NAME).orElseThrow(), "FancyName_subfield");
+		expected.put(baseKey.append(Adapter.BuiltIn.DISPLAY_NAME).isValid().orElseThrow(), "FancyName_subfield");
 		when(displayNameableMock.getDisplayName()).thenReturn("FancyName");
 		when(displayNameableMock.extractDisplayName(baseKey, adapterContextContainerMock)).thenReturn(expected);
 
@@ -121,7 +121,7 @@ class FieldExtractorTest
 		assertEquals(2, result.size());
 		assertNotNull(result.get(baseKey));
 		assertEquals("FancyName", result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.DISPLAY_NAME).orElseThrow()));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.DISPLAY_NAME).isValid().orElseThrow()));
 
 		// Verify
 		verify(displayNameableMock, atLeastOnce()).extractDisplayName(any(), any());
@@ -143,7 +143,7 @@ class FieldExtractorTest
 
 		DurationAdapter durationAdapter = new DurationAdapter();
 		TestObject testObject = new TestObject();
-		MacroKey subKey = baseKey.append(DURATION).orElseThrow();
+		ValidMacroKey subKey = baseKey.append(DURATION).isValid().orElseThrow();
 
 		when(adapterContextContainerMock.formatterContainer()).thenReturn(formatterContainerMock);
 		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
@@ -156,7 +156,7 @@ class FieldExtractorTest
 		assertEquals(1, result.size());
 		assertNotNull(result.get(subKey));
 		assertEquals("formatted duration", result.get(subKey));
-		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.DURATION).orElseThrow()));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.DURATION).isValid().orElseThrow()));
 
 		// Verify
 		verify(formatterContainerMock, atLeastOnce()).durationFormatter();
@@ -180,9 +180,9 @@ class FieldExtractorTest
 		ExpirationAdapter expirationAdapter = new ExpirationAdapter();
 		TestObject testObject = new TestObject();
 
-		MacroKey subKey = baseKey.append(EXPIRATION).orElseThrow();
-		MacroKey durationKey = subKey.append(DURATION).orElseThrow();
-		MacroKey instantKey = subKey.append(INSTANT).orElseThrow();
+		ValidMacroKey subKey = baseKey.append(EXPIRATION).isValid().orElseThrow();
+		ValidMacroKey durationKey = subKey.append(DURATION).isValid().orElseThrow();
+		ValidMacroKey instantKey = subKey.append(INSTANT).isValid().orElseThrow();
 
 		when(adapterContextContainerMock.formatterContainer()).thenReturn(formatterContainerMock);
 		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
@@ -219,7 +219,7 @@ class FieldExtractorTest
 			}
 		}
 
-		MacroKey subKey = baseKey.append(INSTANT).orElseThrow();
+		ValidMacroKey subKey = baseKey.append(INSTANT).isValid().orElseThrow();
 		InstantAdapter instantAdapter = new InstantAdapter();
 		TestObject testObject = new TestObject();
 
@@ -247,13 +247,13 @@ class FieldExtractorTest
 		class TestObject implements Killable
 		{
 			@Override
-			public Entity getKiller()
+			public AnimalTamer getKiller()
 			{
 				return playerMock;
 			}
 		}
 
-		MacroKey subKey = baseKey.append(KILLER).orElseThrow();
+		ValidMacroKey subKey = baseKey.append(KILLER).isValid().orElseThrow();
 		KillerAdapter killerAdapter = new KillerAdapter();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Killer Name");
@@ -275,14 +275,14 @@ class FieldExtractorTest
 		// Arrange
 		LocationAdapter locationAdapter = new LocationAdapter();
 		Location location = new Location(worldMock, 11, 12,13);
-		MacroKey locationKey = baseKey.append("LOCATION").orElseThrow();
+		ValidMacroKey locationKey = baseKey.append("LOCATION").isValid().orElseThrow();
 		MacroStringMap expected = new MacroStringMap();
 		expected.put(locationKey, "test-world [11, 12, 13]");
-		expected.put(locationKey.append("STRING").orElseThrow(), "test-world [11, 12, 13]");
-		expected.put(locationKey.append("WORLD").orElseThrow(), "test-world");
-		expected.put(locationKey.append("X").orElseThrow(), "11");
-		expected.put(locationKey.append("Y").orElseThrow(), "12");
-		expected.put(locationKey.append("Z").orElseThrow(), "13");
+		expected.put(locationKey.append("STRING").isValid().orElseThrow(), "test-world [11, 12, 13]");
+		expected.put(locationKey.append("WORLD").isValid().orElseThrow(), "test-world");
+		expected.put(locationKey.append("X").isValid().orElseThrow(), "11");
+		expected.put(locationKey.append("Y").isValid().orElseThrow(), "12");
+		expected.put(locationKey.append("Z").isValid().orElseThrow(), "13");
 		when(locatableMock.extractLocation(baseKey, adapterContextContainerMock)).thenReturn(expected);
 
 		// Act
@@ -290,10 +290,10 @@ class FieldExtractorTest
 
 		// Assert
 		assertEquals("test-world [11, 12, 13]", result.get(locationKey));
-		assertEquals("test-world", result.get(locationKey.append("WORLD").orElseThrow()));
-		assertEquals("11", result.get(locationKey.append("X").orElseThrow()));
-		assertEquals("12", result.get(locationKey.append("Y").orElseThrow()));
-		assertEquals("13", result.get(locationKey.append("Z").orElseThrow()));
+		assertEquals("test-world", result.get(locationKey.append("WORLD").isValid().orElseThrow()));
+		assertEquals("11", result.get(locationKey.append("X").isValid().orElseThrow()));
+		assertEquals("12", result.get(locationKey.append("Y").isValid().orElseThrow()));
+		assertEquals("13", result.get(locationKey.append("Z").isValid().orElseThrow()));
 		assertTrue(result.containsKey(locationKey));
 
 		// Verify
@@ -301,20 +301,20 @@ class FieldExtractorTest
 	}
 
 
-	@Test @DisplayName("LocationAdapter adapts location key.")
+	@Test @DisplayName("LocationAdapter adapts location string.")
 	void LocationAdapter_adapts_location_key()
 	{
 		// Arrange
 		LocationAdapter locationAdapter = new LocationAdapter();
 		when(worldMock.getName()).thenReturn("test-world");
 		Location location = new Location(worldMock, 11, 12,13);
-		MacroKey locationKey = MacroKey.of("LOCATION").orElseThrow();
+		ValidMacroKey locationKey = MacroKey.of("LOCATION").isValid().orElseThrow();
 		MacroStringMap expected = new MacroStringMap();
 		expected.put(locationKey, "test-world [11, 12, 13]");
-		expected.put(locationKey.append("WORLD").orElseThrow(), "test-world");
-		expected.put(locationKey.append("X").orElseThrow(), "11");
-		expected.put(locationKey.append("Y").orElseThrow(), "12");
-		expected.put(locationKey.append("Z").orElseThrow(), "13");
+		expected.put(locationKey.append("WORLD").isValid().orElseThrow(), "test-world");
+		expected.put(locationKey.append("X").isValid().orElseThrow(), "11");
+		expected.put(locationKey.append("Y").isValid().orElseThrow(), "12");
+		expected.put(locationKey.append("Z").isValid().orElseThrow(), "13");
 		when(locatableMock.extractLocation(locationKey, adapterContextContainerMock)).thenReturn(expected);
 
 		// Act
@@ -322,10 +322,10 @@ class FieldExtractorTest
 
 		// Assert
 		assertEquals("test-world [11, 12, 13]", result.get(locationKey));
-		assertEquals(worldMock.getName(), result.get(locationKey.append("WORLD").orElseThrow()));
-		assertEquals(String.valueOf(location.getBlockX()), result.get(locationKey.append("X").orElseThrow()));
-		assertEquals(String.valueOf(location.getBlockY()), result.get(locationKey.append("Y").orElseThrow()));
-		assertEquals(String.valueOf(location.getBlockZ()), result.get(locationKey.append("Z").orElseThrow()));
+		assertEquals(worldMock.getName(), result.get(locationKey.append("WORLD").isValid().orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockX()), result.get(locationKey.append("X").isValid().orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockY()), result.get(locationKey.append("Y").isValid().orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockZ()), result.get(locationKey.append("Z").isValid().orElseThrow()));
 		assertTrue(result.containsKey(locationKey));
 
 		// Verify
@@ -339,14 +339,14 @@ class FieldExtractorTest
 		// Arrange
 		LocationAdapter locationAdapter = new LocationAdapter();
 		Location location = new Location(null, 11, 12,13);
-		MacroKey locationKey = MacroKey.of("LOCATION").orElseThrow();
+		ValidMacroKey locationKey = MacroKey.of("LOCATION").isValid().orElseThrow();
 		MacroStringMap expected = new MacroStringMap();
 		expected.put(locationKey, "- [11, 12, 13]");
-		expected.put(locationKey.append("STRING").orElseThrow(), "- [11, 12, 13]");
-		expected.put(locationKey.append("WORLD").orElseThrow(), "-");
-		expected.put(locationKey.append("X").orElseThrow(), "11");
-		expected.put(locationKey.append("Y").orElseThrow(), "12");
-		expected.put(locationKey.append("Z").orElseThrow(), "13");
+		expected.put(locationKey.append("STRING").isValid().orElseThrow(), "- [11, 12, 13]");
+		expected.put(locationKey.append("WORLD").isValid().orElseThrow(), "-");
+		expected.put(locationKey.append("X").isValid().orElseThrow(), "11");
+		expected.put(locationKey.append("Y").isValid().orElseThrow(), "12");
+		expected.put(locationKey.append("Z").isValid().orElseThrow(), "13");
 		when(locatableMock.extractLocation(locationKey, adapterContextContainerMock)).thenReturn(expected);
 
 		// Act
@@ -354,9 +354,9 @@ class FieldExtractorTest
 
 		// Assert
 		assertEquals("- [11, 12, 13]", result.get(locationKey));
-		assertEquals(String.valueOf(location.getBlockX()), result.get(locationKey.append("X").orElseThrow()));
-		assertEquals(String.valueOf(location.getBlockY()), result.get(locationKey.append("Y").orElseThrow()));
-		assertEquals(String.valueOf(location.getBlockZ()), result.get(locationKey.append("Z").orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockX()), result.get(locationKey.append("X").isValid().orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockY()), result.get(locationKey.append("Y").isValid().orElseThrow()));
+		assertEquals(String.valueOf(location.getBlockZ()), result.get(locationKey.append("Z").isValid().orElseThrow()));
 		assertTrue(result.containsKey(locationKey));
 
 		// Verify
@@ -371,10 +371,10 @@ class FieldExtractorTest
 		class TestObject implements Lootable
 		{
 			@Override
-			public Entity getLooter() { return playerMock; }
+			public AnimalTamer getLooter() { return playerMock; }
 		}
 
-		MacroKey subKey = baseKey.append(LOOTER).orElseThrow();
+		ValidMacroKey subKey = baseKey.append(LOOTER).isValid().orElseThrow();
 		LooterAdapter looterAdapter = new LooterAdapter();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Looter Name");
@@ -400,7 +400,7 @@ class FieldExtractorTest
 			public String getName() { return "Test Name"; }
 		}
 
-		MacroKey subKey = baseKey.append(NAME).orElseThrow();
+		ValidMacroKey subKey = baseKey.append(NAME).isValid().orElseThrow();
 		NameAdapter nameAdapter = new NameAdapter();
 		TestObject testObject = new TestObject();
 
@@ -422,7 +422,7 @@ class FieldExtractorTest
 			public AnimalTamer getOwner() { return playerMock; }
 		}
 
-		MacroKey subKey = baseKey.append(OWNER).orElseThrow();
+		ValidMacroKey subKey = baseKey.append(OWNER).isValid().orElseThrow();
 		OwnerAdapter ownerAdapter = new OwnerAdapter();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Owner Name");
@@ -448,9 +448,9 @@ class FieldExtractorTest
 			public Instant getProtection() { return Instant.EPOCH; }
 		}
 
-		MacroKey subKey = baseKey.append(PROTECTION).orElseThrow();
-		MacroKey durationKey = subKey.append(DURATION).orElseThrow();
-		MacroKey instantKey = subKey.append(INSTANT).orElseThrow();
+		ValidMacroKey subKey = baseKey.append(PROTECTION).isValid().orElseThrow();
+		ValidMacroKey durationKey = subKey.append(DURATION).isValid().orElseThrow();
+		ValidMacroKey instantKey = subKey.append(INSTANT).isValid().orElseThrow();
 
 		when(adapterContextContainerMock.formatterContainer()).thenReturn(formatterContainerMock);
 		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
@@ -484,7 +484,7 @@ class FieldExtractorTest
 			public int getQuantity() { return 10; }
 		}
 
-		MacroKey subKey = baseKey.append(QUANTITY).orElseThrow();
+		ValidMacroKey subKey = baseKey.append(QUANTITY).isValid().orElseThrow();
 		QuantityAdapter quantityAdapter = new QuantityAdapter();
 		TestObject testObject = new TestObject();
 
@@ -513,7 +513,7 @@ class FieldExtractorTest
 		UUID uuid = new UUID(42, 42);
 		MacroStringMap expected = new MacroStringMap();
 		expected.put(baseKey, uuid.toString());
-		expected.put(baseKey.append(Adapter.BuiltIn.UUID).orElseThrow(), uuid.toString());
+		expected.put(baseKey.append(Adapter.BuiltIn.UUID).isValid().orElseThrow(), uuid.toString());
 		when(identifiableMock.extractUid(baseKey, adapterContextContainerMock)).thenReturn(expected);
 
 		// Act
@@ -523,7 +523,7 @@ class FieldExtractorTest
 		assertEquals(2, result.size());
 		assertNotNull(result.get(baseKey));
 		assertEquals(uuid.toString(), result.get(baseKey));
-		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.UUID).orElseThrow()));
+		assertTrue(result.containsKey(baseKey.append(Adapter.BuiltIn.UUID).isValid().orElseThrow()));
 
 		// Verify
 		verify(identifiableMock, atLeastOnce()).extractUid(any(), any());

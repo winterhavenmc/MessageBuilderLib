@@ -17,8 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.retriever;
 
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
@@ -56,7 +57,7 @@ class MessageRetrieverTest
 	void getRecord_with_valid_parameters()
 	{
 		// Arrange
-		RecordKey messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		ValidMessageKey messageKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
 		when(queryHandlerMock.getRecord(messageKey)).thenReturn(validMessageRecordMock);
 
 		// Act
@@ -71,7 +72,7 @@ class MessageRetrieverTest
 	void getRecord_nonexistent_entry()
 	{
 		// Arrange
-		RecordKey messageKey = RecordKey.of(MessageId.NONEXISTENT_ENTRY).orElseThrow();
+		ValidMessageKey messageKey = MessageKey.of(MessageId.NONEXISTENT_ENTRY).isValid().orElseThrow();
 		when(queryHandlerMock.getRecord(messageKey)).thenReturn(invalidMessageRecord);
 
 		// Act

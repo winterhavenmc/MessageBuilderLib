@@ -22,84 +22,83 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static com.winterhavenmc.library.messagebuilder.keys.MacroKeyTest.TestEnum.VALID_KEY;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 class MacroKeyTest
 {
-	enum TestEnum
-	{
-		INVALID$KEY,
-		VALID_KEY,
-	}
+	enum TestEnum { VALID_KEY, INVALID$KEY }
 
 
     @Nested
     class TestStaticFactoryMethod
 	{
 		@Test
-		void testOf_valid_key()
+		void of_with_valid_string_returns_ValidMacroKey()
 		{
-			// Assert
-			assertTrue(MacroKey.of("VALID_KEY").isPresent());
-		}
-
-
-		@Test
-		void testOf_valid_compound_key()
-		{
-			// Assert
-			assertTrue(MacroKey.of("BASE.SUB").isPresent());
-		}
-
-
-		@Test
-		void testGetBase_valid_compound_key()
-		{
-			// Arrange
-			MacroKey macroKey = MacroKey.of("BASE.SUB").orElseThrow();
+			// Act
+			var result = MacroKey.of("VALID_KEY");
 
 			// Assert
-			assertEquals("BASE", macroKey.getBase().toString());
+			assertInstanceOf(ValidMacroKey.class, result);
 		}
 
 
 		@Test
-		void testGetBase_valid_simple_key()
+		void of_with_null_string_returns_InvalidMacroKey()
 		{
-			// Arrange
-			MacroKey macroKey = MacroKey.of("BASE_NO_SUB").orElseThrow();
+			// Act
+			var result = MacroKey.of((String) null);
 
 			// Assert
-			assertEquals("BASE_NO_SUB", macroKey.getBase().toString());
+			assertInstanceOf(InvalidKey.class, result);
+			assertTrue(result.isValid().isEmpty());
+			assertEquals(InvalidKeyReason.KEY_NULL, ((InvalidKey) result).Reason());
 		}
 
 
 		@Test
-		void testOf_null_string ()
+		void of_with_blank_string_returns_InvalidMacroKey()
 		{
-			assertTrue(MacroKey.of((String) null).isEmpty());
+			// Act
+			var result = MacroKey.of("");
+
+			// Assert
+			assertInstanceOf(InvalidKey.class, result);
+			assertTrue(result.isValid().isEmpty());
+			assertEquals(InvalidKeyReason.KEY_BLANK, ((InvalidKey) result).Reason());
 		}
 
 
 		@Test
-		void testOf_invalid_strings ()
+		void of_with_valid_dotted_string_returns_ValidMacroKey()
 		{
-			assertTrue(MacroKey.of("123INVALID").isEmpty(), "Should return empty for invalid format.");
-			assertTrue(MacroKey.of("").isEmpty(), "Should return empty for empty string.");
-			assertTrue(MacroKey.of(" ").isEmpty(), "Should return empty for whitespace.");
-			assertTrue(MacroKey.of("Invalid Key").isEmpty(), "Should return empty for whitespace.");
-			assertTrue(MacroKey.of((String) null).isEmpty(), "Should return empty for null.");
-			assertTrue(MacroKey.of((TestEnum) null).isEmpty(), "Should return empty for null.");
+			// Act
+			var result = MacroKey.of("BASE.SUB");
+
+			// Assert
+			assertInstanceOf(ValidMacroKey.class, result);
+			assertEquals("BASE.SUB", result.toString());
 		}
 
 
 		@Test
-		void testOf_valid_enum()
+		void of_with_invalid_string_returns_InvalidKey ()
+		{
+			assertTrue(MacroKey.of("123INVALID").isValid().isEmpty(), "Should return empty for invalid format.");
+			assertTrue(MacroKey.of("").isValid().isEmpty(), "Should return empty for empty string.");
+			assertTrue(MacroKey.of(" ").isValid().isEmpty(), "Should return empty for whitespace.");
+			assertTrue(MacroKey.of("Invalid Key").isValid().isEmpty(), "Should return empty for whitespace.");
+			assertTrue(MacroKey.of((String) null).isValid().isEmpty(), "Should return empty for null.");
+			assertTrue(MacroKey.of((TestEnum) null).isValid().isEmpty(), "Should return empty for null.");
+		}
+
+
+		@Test
+		void of_with_valid_enum_returns_ValidMacroKey()
 		{
 			// Arrange & Act
-			Optional<MacroKey> result = MacroKey.of(VALID_KEY);
+			Optional<ValidMacroKey> result = MacroKey.of(TestEnum.VALID_KEY).isValid();
 
 			// Assert
 			assertTrue(result.isPresent());
@@ -108,87 +107,127 @@ class MacroKeyTest
 
 
 		@Test
-		void testOf_null_enum ()
+		void of_with_null_enum_returns_InvalidKey()
 		{
-			assertTrue(MacroKey.of((TestEnum) null).isEmpty());
+			// Act
+			var result = MacroKey.of((TestEnum) null);
+
+			// Assert
+			assertInstanceOf(InvalidKey.class, result);
+			assertTrue(result.isValid().isEmpty());
+			assertEquals(InvalidKeyReason.KEY_NULL, ((InvalidKey) result).Reason());
 		}
 
 
 		@Test
-		void testOf_invalid_enum ()
+		void of_with_invalid_enum_returns_InvalidKey()
 		{
-			assertTrue(MacroKey.of(TestEnum.INVALID$KEY).isEmpty());
+			// Act
+			var result = MacroKey.of(TestEnum.INVALID$KEY);
+
+			// Assert
+			assertInstanceOf(InvalidKey.class, result);
+			assertTrue(result.isValid().isEmpty());
+			assertEquals(InvalidKeyReason.KEY_INVALID, ((InvalidKey) result).Reason());
+		}
+	}
+
+
+	@Nested
+	class TestGetBase
+	{
+		@Test
+		void getBase_returns_valid_base_component()
+		{
+			// Act
+			ValidMacroKey macroKey = MacroKey.of("BASE.SUB").isValid().orElseThrow();
+
+			// Assert
+			assertEquals("BASE", macroKey.getBase().toString());
 		}
 
+
+		@Test
+		void getBase_returns_valid_simple_key()
+		{
+			// Act
+			ValidMacroKey macroKey = MacroKey.of("BASE_NO_SUB").isValid().orElseThrow();
+
+			// Assert
+			assertEquals("BASE_NO_SUB", macroKey.getBase().toString());
+		}
+	}
+
+
+	@Nested
+	class TestEquality
+	{
+		@Test
+		void MacroKey_equality_true_for_same_key()
+		{
+			MacroKey key1 = MacroKey.of("SAME_KEY");
+			MacroKey key2 = MacroKey.of("SAME_KEY");
+
+			assertEquals(key1, key2);
+		}
+
+
+		@Test
+		void ValidMacroKey_equality_true_for_same_Key()
+		{
+			ValidMacroKey key1 = MacroKey.of("SAME_KEY").isValid().orElseThrow();
+			ValidMacroKey key2 = MacroKey.of("SAME_KEY").isValid().orElseThrow();
+
+			assertEquals(key1, key2);
+		}
+
+
+		@Test
+		void MacroKey_equality_false_for_different_keys()
+		{
+			MacroKey key1 = MacroKey.of("KEY_ONE");
+			MacroKey key2 = MacroKey.of("KEY_TWO");
+
+			assertNotEquals(key1, key2);
+		}
 	}
 
 
 	@Test
-	void macroKeyEquality_ShouldBeTrueForSameKey()
+	void ValidMacroKey_hashCode_consistent_with_equals()
 	{
-		Optional<MacroKey> key1 = MacroKey.of("SAME_KEY");
-		Optional<MacroKey> key2 = MacroKey.of("SAME_KEY");
+		ValidMacroKey key1 = MacroKey.of("HASH_TEST").isValid().orElseThrow();
+		ValidMacroKey key2 = MacroKey.of("HASH_TEST").isValid().orElseThrow();
 
-		assertTrue(key1.isPresent() && key2.isPresent());
-		assertEquals(key1, key2);
+		assertEquals(key1.hashCode(), key2.hashCode());
 	}
 
 
 	@Test
-	void macroKeyEquality_ShouldBeTrueForSameKey_unwrapped()
+	void ValidMacroKey_toString_returns_Key()
 	{
-		Optional<MacroKey> key1 = MacroKey.of("SAME_KEY");
-		Optional<MacroKey> key2 = MacroKey.of("SAME_KEY");
+		ValidMacroKey key = MacroKey.of("TO_STRING_TEST").isValid().orElseThrow();
 
-		assertTrue(key1.isPresent() && key2.isPresent());
-		assertEquals(key1.get(), key2.get());
+		assertEquals("TO_STRING_TEST", key.toString());
 	}
 
-
-	@Test
-	void macroKeyEquality_ShouldBeFalseForDifferentKeys()
-	{
-		Optional<MacroKey> key1 = MacroKey.of("KEY_ONE");
-		Optional<MacroKey> key2 = MacroKey.of("KEY_TWO");
-
-		assertTrue(key1.isPresent() && key2.isPresent());
-		assertNotEquals(key1.get(), key2.get());
-	}
-
-
-	@Test
-	void hashCode_ShouldBeConsistentWithEquals()
-	{
-		Optional<MacroKey> key1 = MacroKey.of("HASH_TEST");
-		Optional<MacroKey> key2 = MacroKey.of("HASH_TEST");
-
-		assertTrue(key1.isPresent() && key2.isPresent());
-		assertEquals(key1.get().hashCode(), key2.get().hashCode());
-	}
-
-
-	@Test
-	void toString_ShouldReturnCorrectKey()
-	{
-		Optional<MacroKey> key = MacroKey.of("TO_STRING_TEST");
-		assertTrue(key.isPresent());
-		assertEquals("TO_STRING_TEST", key.get().toString());
-	}
 
 	@Nested
 	class TestAppend
 	{
 		@Test
-		void testAppend_valid_string_parameter()
+		void append_with_valid_string_returns_ValidMacroKey()
 		{
 			// Arrange
-			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
+			ValidMacroKey macroKey = MacroKey.of("RECORD_KEY").isValid().orElseThrow();
 
 			// Act
-			Optional<MacroKey> macroKey1 = macroKey.append("SUB_KEY");
+			var result = macroKey.append("SUB_KEY");
 
 			// Assert
-			assertTrue(macroKey1.isPresent());
+			assertInstanceOf(ValidMacroKey.class, result);
+			assertTrue(result.isValid().isPresent());
+			assertEquals("RECORD_KEY.SUB_KEY", result.toString());
 		}
 
 
@@ -196,10 +235,10 @@ class MacroKeyTest
 		void append_chained_calls_with_valid_strings()
 		{
 			// Arrange
-			MacroKey macroKey = MacroKey.of("PLAYER").orElseThrow();
+			ValidMacroKey macroKey = MacroKey.of("PLAYER").isValid().orElseThrow();
 
 			// Act
-			MacroKey result = macroKey.append("LOCATION").orElseThrow().append("X").orElseThrow();
+			ValidMacroKey result = macroKey.append("LOCATION").isValid().orElseThrow().append("X").isValid().orElseThrow();
 
 			// Assert
 			assertEquals("PLAYER.LOCATION.X", result.toString());
@@ -210,10 +249,10 @@ class MacroKeyTest
 		void testAppend_with_invalid_string()
 		{
 			// Arrange
-			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
+			ValidMacroKey macroKey = MacroKey.of("RECORD_KEY").isValid().orElseThrow();
 
 			// Act
-			Optional<MacroKey> macroKey1 = macroKey.append("SUB!KEY");
+			Optional<ValidMacroKey> macroKey1 = macroKey.append("SUB!KEY").isValid();
 
 			// Assert
 			assertTrue(macroKey1.isEmpty());
@@ -224,10 +263,24 @@ class MacroKeyTest
 		void testAppend_with_null_string()
 		{
 			// Arrange
-			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
+			ValidMacroKey macroKey = MacroKey.of("RECORD_KEY").isValid().orElseThrow();
 
 			// Act
-			Optional<MacroKey> macroKey1 = macroKey.append((String) null);
+			Optional<ValidMacroKey> macroKey1 = macroKey.append((String) null).isValid();
+
+			// Assert
+			assertTrue(macroKey1.isEmpty());
+		}
+
+
+		@Test
+		void testAppend_with_blank_string()
+		{
+			// Arrange
+			ValidMacroKey macroKey = MacroKey.of("RECORD_KEY").isValid().orElseThrow();
+
+			// Act
+			Optional<ValidMacroKey> macroKey1 = macroKey.append("").isValid();
 
 			// Assert
 			assertTrue(macroKey1.isEmpty());
@@ -238,10 +291,10 @@ class MacroKeyTest
 		void testAppend_with_valid_enum()
 		{
 			// Arrange
-			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
+			ValidMacroKey macroKey = MacroKey.of("RECORD_KEY").isValid().orElseThrow();
 
 			// Act
-			Optional<MacroKey> macroKey1 = macroKey.append(VALID_KEY);
+			Optional<ValidMacroKey> macroKey1 = macroKey.append(TestEnum.VALID_KEY).isValid();
 
 			// Assert
 			assertTrue(macroKey1.isPresent());
@@ -252,10 +305,10 @@ class MacroKeyTest
 		void testAppend_with_invalid_enum()
 		{
 			// Arrange
-			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
+			ValidMacroKey macroKey = MacroKey.of("RECORD_KEY").isValid().orElseThrow();
 
 			// Act
-			Optional<MacroKey> macroKey1 = macroKey.append(TestEnum.INVALID$KEY);
+			Optional<ValidMacroKey> macroKey1 = macroKey.append(TestEnum.INVALID$KEY).isValid();
 
 			// Assert
 			assertTrue(macroKey1.isEmpty());
@@ -266,10 +319,10 @@ class MacroKeyTest
 		void testAppend_with_null_enum()
 		{
 			// Arrange
-			MacroKey macroKey = MacroKey.of("RECORD_KEY").orElseThrow();
+			ValidMacroKey macroKey = MacroKey.of("RECORD_KEY").isValid().orElseThrow();
 
 			// Act
-			Optional<MacroKey> macroKey1 = macroKey.append((Enum) null);
+			Optional<ValidMacroKey> macroKey1 = macroKey.append((Enum) null).isValid();
 
 			// Assert
 			assertTrue(macroKey1.isEmpty());
@@ -282,11 +335,11 @@ class MacroKeyTest
 	void getBase_with_simple_key()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("PLAYER").orElseThrow();
-		MacroKey expected = MacroKey.of("PLAYER").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("PLAYER").isValid().orElseThrow();
+		ValidMacroKey expected = MacroKey.of("PLAYER").isValid().orElseThrow();
 
 		// Act
-		MacroKey result = macroKey.getBase();
+		ValidMacroKey result = macroKey.getBase();
 
 		// Assert
 		assertEquals(expected, result);
@@ -297,13 +350,13 @@ class MacroKeyTest
 	void getBase_with_compound_key()
 	{
 		// Arrange
-		MacroKey macroKey1 = MacroKey.of("PLAYER.NAME").orElseThrow();
-		MacroKey macroKey2 = MacroKey.of("PLAYER.LOCATION.WORLD").orElseThrow();
-		MacroKey expected = MacroKey.of("PLAYER").orElseThrow();
+		ValidMacroKey macroKey1 = MacroKey.of("PLAYER.NAME").isValid().orElseThrow();
+		ValidMacroKey macroKey2 = MacroKey.of("PLAYER.LOCATION.WORLD").isValid().orElseThrow();
+		ValidMacroKey expected = MacroKey.of("PLAYER").isValid().orElseThrow();
 
 		// Act
-		MacroKey result1 = macroKey1.getBase();
-		MacroKey result2 = macroKey2.getBase();
+		ValidMacroKey result1 = macroKey1.getBase();
+		ValidMacroKey result2 = macroKey2.getBase();
 
 		// Assert
 		assertEquals(expected, result1);
@@ -315,7 +368,7 @@ class MacroKeyTest
 	void asPlaceholder_returns_key_with_delimiters()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("PLAYER.NAME").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("PLAYER.NAME").isValid().orElseThrow();
 
 		// Act
 		String placeholder = macroKey.asPlaceholder();

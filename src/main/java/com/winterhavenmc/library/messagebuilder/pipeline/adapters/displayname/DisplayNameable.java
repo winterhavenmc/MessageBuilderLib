@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname;
 
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
@@ -65,16 +65,16 @@ public interface DisplayNameable
 
 	/**
 	 * Extracts a {@link MacroStringMap} containing the formatted display name
-	 * under the {@code DISPLAY_NAME} subkey of the given base key.
+	 * under the {@code DISPLAY_NAME} subkey of the given base string.
 	 *
-	 * @param baseKey the root macro key from which to derive the full macro path
+	 * @param baseKey the root macro string from which to derive the full macro path
 	 * @param ctx     the adapter context containing any contextual helpers
 	 * @return a {@code MacroStringMap} containing a single entry for the display name,
-	 * or an empty map if the name is invalid or the key cannot be derived
+	 * or an empty map if the name is invalid or the string cannot be derived
 	 */
-	default MacroStringMap extractDisplayName(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractDisplayName(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(DISPLAY_NAME)
+		return baseKey.append(DISPLAY_NAME).isValid()
 				.map(macroKey -> new MacroStringMap()
 						.with(macroKey, formatDisplayName(this.getDisplayName()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);

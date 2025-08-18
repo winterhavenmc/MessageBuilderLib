@@ -45,6 +45,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Loc
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.Plugin;
 
 import org.jetbrains.annotations.NotNull;
@@ -55,9 +57,9 @@ import java.util.List;
 /**
  * A companion utility class to facilitate arranging components necessary to initialize the MessageBuilder library.
  */
-class MessageBuilderBootstrap
+class Bootstrap
 {
-	private MessageBuilderBootstrap() { /* Private constructor to prevent instantiation of utility class */ }
+	private Bootstrap() { /* Private constructor to prevent instantiation of utility class */ }
 
 
 	/**
@@ -66,7 +68,7 @@ class MessageBuilderBootstrap
 	 * @param plugin an instance of the plugin
 	 * @return an instance of the language resource manager
 	 */
-	static SectionResourceManager createLanguageResourceManager(Plugin plugin)
+	static SectionResourceManager createLanguageResourceManager(final Plugin plugin)
 	{
 		final LanguageResourceInstaller resourceInstaller = new LanguageResourceInstaller(plugin);
 		final LanguageResourceLoader resourceLoader = new LanguageResourceLoader(plugin);
@@ -104,14 +106,21 @@ class MessageBuilderBootstrap
 	 * @param adapterContextContainer a context container for injecting dependencies into adapters
 	 * @return an instance of the message pipeline
 	 */
-	static @NotNull MessagePipeline createMessagePipeline(final QueryHandlerFactory queryHandlerFactory,
+	static @NotNull MessagePipeline createMessagePipeline(final Plugin plugin,
+														  final QueryHandlerFactory queryHandlerFactory,
 														  final FormatterContainer formatterContainer,
 														  final AdapterContextContainer adapterContextContainer)
 	{
+		final MiniMessage miniMessage = MiniMessage.miniMessage();
+		final BukkitAudiences bukkitAudiences = BukkitAudiences.create(plugin);
+
 		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
 		final MessageProcessor messageProcessor = createMacroReplacer(formatterContainer, adapterContextContainer);
 		final CooldownMap cooldownMap = new CooldownMap();
-		final List<Sender> messageSenders = List.of(new MessageSender(cooldownMap), new TitleSender(cooldownMap));
+
+		final MessageSender messageSender = new MessageSender(cooldownMap, miniMessage, bukkitAudiences);
+		final TitleSender titleSender = new TitleSender(cooldownMap, miniMessage, bukkitAudiences);
+		final List<Sender> messageSenders = List.of(messageSender, titleSender);
 
 		return new MessagePipeline(messageRetriever, messageProcessor, cooldownMap, messageSenders);
 	}
@@ -146,6 +155,24 @@ class MessageBuilderBootstrap
 																 final FormatterContainer formatterContainer)
 	{
 		return new AdapterContextContainer(WorldNameResolver.get(plugin.getServer().getPluginManager()), formatterContainer);
+	}
+
+
+	static QueryHandlerFactory createQueryHandlerFactory(SectionResourceManager languageResourceManager)
+	{
+		return new QueryHandlerFactory(languageResourceManager);
+	}
+
+
+	static ConstantResolver createConstantResolver(final QueryHandlerFactory queryHandlerFactory)
+	{
+		return new ConstantResolver(queryHandlerFactory);
+	}
+
+
+	static ItemForge createItemForge(final Plugin plugin, final QueryHandlerFactory queryHandlerFactory)
+	{
+		return new ItemForge(plugin, queryHandlerFactory);
 	}
 
 }

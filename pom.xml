@@ -39,54 +39,67 @@
 
 	<profiles>
 		<profile>
-			<id>github</id>
+			<id>repsy</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<distributionManagement>
 				<repository>
-					<id>github</id>
-					<name>GitHub winterhavenmc Apache Maven Packages</name>
-					<url>https://maven.pkg.github.com/winterhavenmc/MessageBuilderLib/</url>
+					<id>repsy</id>
+					<name>Repsy.io winterhavenmc Maven Packages</name>
+					<url>https://repo.repsy.io/mvn/winterhavenmc/public/</url>
 				</repository>
 			</distributionManagement>
-
-			<repositories>
-				<repository>
-					<id>spigot-repo</id>
-					<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-				</repository>
-				<repository>
-					<id>multiverse-repo</id>
-					<url>https://repo.onarandombox.com/content/groups/public/</url>
-				</repository>
-			</repositories>
 		</profile>
 	</profiles>
+
+	<repositories>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+
+		<repository>
+			<id>multiverse-repo</id>
+			<url>https://repo.onarandombox.com/content/groups/public/</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<!-- Spigot API -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.21.6-R0.1-SNAPSHOT</version>
+			<version>1.21.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Multiverse-Core 4 -->
-		<dependency>
-			<groupId>com.onarandombox.multiversecore</groupId>
-			<artifactId>multiverse-core</artifactId>
-			<version>4.3.16</version>
-			<scope>provided</scope>
-		</dependency>
+<!--		&lt;!&ndash; Multiverse-Core 4 &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>com.onarandombox.multiversecore</groupId>-->
+<!--			<artifactId>multiverse-core</artifactId>-->
+<!--			<version>4.3.16</version>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
 
 		<!-- Multiverse-Core 5 -->
 		<dependency>
 			<groupId>org.mvplugins.multiverse.core</groupId>
 			<artifactId>multiverse-core</artifactId>
-			<version>5.0.2</version>
+			<version>5.2.0</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-text-minimessage</artifactId>
+			<version>4.23.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-platform-bukkit</artifactId>
+			<version>4.4.0</version>
 		</dependency>
 
 		<dependency>

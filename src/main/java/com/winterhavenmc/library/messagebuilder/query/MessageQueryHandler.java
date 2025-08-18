@@ -18,6 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReason;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import org.bukkit.configuration.ConfigurationSection;
@@ -53,21 +55,23 @@ public class MessageQueryHandler implements QueryHandler<MessageRecord>
 
 
 	/**
-	 * Retrieve a message record from the language file for the provided key
+	 * Retrieve a message record from the language file for the provided string
 	 *
-	 * @param messageKey the MessageId of the message record to be retrieved
+	 * @param recordKey the MessageId of the message record to be retrieved
 	 * @return the message record for the MessageId
 	 */
 	@Override
-	public MessageRecord getRecord(final RecordKey messageKey)
+	public MessageRecord getRecord(final RecordKey recordKey)
 	{
 		ConfigurationSection section = sectionProvider.getSection();
-		ConfigurationSection messageEntry = section.getConfigurationSection(messageKey.toString());
+		ConfigurationSection messageEntry = section.getConfigurationSection(recordKey.toString());
 
-		return (messageEntry == null)
-				? MessageRecord.empty(messageKey)
-				: MessageRecord.from(messageKey, messageEntry);
+		if (recordKey instanceof ValidMessageKey validMessageKey)
+			return (messageEntry != null)
+					? MessageRecord.from(validMessageKey, messageEntry)
+					: MessageRecord.empty(validMessageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING);
 
+		else return MessageRecord.empty(recordKey, InvalidRecordReason.MESSAGE_KEY_INVALID);
 	}
 
 }

@@ -17,8 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.cooldown;
 
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 
 import org.bukkit.command.ConsoleCommandSender;
@@ -53,7 +54,7 @@ class CooldownKeyTest
 	Recipient.Valid recipient;
 	Recipient.Valid recipient2;
 	Recipient.Valid consoleRecipient;
-	RecordKey messageKey;
+	ValidMessageKey messageKey;
 
 
 	@BeforeEach
@@ -71,11 +72,11 @@ class CooldownKeyTest
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 	}
 
 
-	@Test @DisplayName("of() method with valid parameters returns valid key.")
+	@Test @DisplayName("of() method with valid parameters returns valid string.")
 	void static_factory_method_with_valid_parameters_returns_valid_key()
 	{
 		// Arrange
@@ -107,7 +108,7 @@ class CooldownKeyTest
 	}
 
 
-	@Test @DisplayName("toString() returns String representation of key.")
+	@Test @DisplayName("toString() returns String representation of string.")
 	void toString_returns_string_representation_of_key()
 	{
 		// Arrange
@@ -185,8 +186,8 @@ class CooldownKeyTest
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		RecordKey messageKey1 = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
-		RecordKey messageKey2 = RecordKey.of(DISABLED_MESSAGE).orElseThrow();
+		ValidMessageKey messageKey1 = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
+		ValidMessageKey messageKey2 = MessageKey.of(DISABLED_MESSAGE).isValid().orElseThrow();
 
 		// Act
 		CooldownKey key1 = CooldownKey.of(recipient, messageKey1).orElseThrow();
@@ -215,7 +216,7 @@ class CooldownKeyTest
 	}
 
 
-	@Test @DisplayName("An key is not equal to an instance of another class")
+	@Test @DisplayName("An string is not equal to an instance of another class")
 	void objects_of_different_class_are_not_equal()
 	{
 		// Arrange & Act
@@ -272,8 +273,8 @@ class CooldownKeyTest
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		RecordKey messageKey1 = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
-		RecordKey messageKey2 = RecordKey.of(DISABLED_MESSAGE).orElseThrow();
+		ValidMessageKey messageKey1 = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
+		ValidMessageKey messageKey2 = MessageKey.of(DISABLED_MESSAGE).isValid().orElseThrow();
 
 		// Act
 		CooldownKey key1 = CooldownKey.of(recipient, messageKey1).orElseThrow();
@@ -292,7 +293,7 @@ class CooldownKeyTest
 	{
 		// Arrange
 		// Act
-		RecordKey result = CooldownKey.of(recipient, messageKey).orElseThrow().getMessageKey();
+		ValidMessageKey result = CooldownKey.of(recipient, messageKey).orElseThrow().getMessageKey();
 
 		// Assert
 		assertEquals("ENABLED_MESSAGE", result.toString());
@@ -326,7 +327,7 @@ class CooldownKeyTest
 		CooldownKey cooldownKey = CooldownKey.of(recipient, messageKey).orElseThrow();
 
 		// Assert
-        assertNotEquals("not a cooldown key", cooldownKey.getMessageKey().toString());
+        assertNotEquals("not a cooldown string", cooldownKey.getMessageKey().toString());
 
 		// Verify
 		verify(playerMock, atLeastOnce()).getUniqueId();

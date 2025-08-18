@@ -23,6 +23,7 @@ import org.bukkit.Raid;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 
@@ -52,6 +53,7 @@ class LocationAdapterTest
 	@Mock World worldMock;
 	@Mock Inventory inventoryMock;
 	@Mock Raid raidMock;
+	@Mock Chest chestMock;
 
 	Location location;
 
@@ -141,6 +143,25 @@ class LocationAdapterTest
 
 
 	@Test
+	public void testGetLocation_withValidChest()
+	{
+		// Arrange
+		when(chestMock.getLocation()).thenReturn(location);
+
+		// Act
+		Location result = new LocationAdapter()
+				.adapt(chestMock)
+				.map(Locatable::getLocation).orElseThrow();
+
+		// Assert
+		assertEquals(location, result, "The resolver should return the getLocation from the Chest.");
+
+		// Verify
+		verify(chestMock, atLeastOnce()).getLocation();
+	}
+
+
+	@Test
 	public void testGetLocation_withValidDoubleChest()
 	{
 		// Arrange
@@ -153,6 +174,9 @@ class LocationAdapterTest
 
 		// Assert
 		assertEquals(location, result, "The resolver should return the getLocation from the DoubleChest.");
+
+		// Verify
+		verify(doubleChestMock, atLeastOnce()).getLocation();
 	}
 
 

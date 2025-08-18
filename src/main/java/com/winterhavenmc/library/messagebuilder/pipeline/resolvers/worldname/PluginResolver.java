@@ -40,60 +40,46 @@ import java.util.Optional;
  * the appropriate implementation.
  *
  * @see WorldNameResolver
- * @see Multiverse4Retriever
  * @see DefaultResolver
  * @see World
  * @see org.mvplugins.multiverse.core.MultiverseCore MultiverseCore
  */
 public final class PluginResolver implements WorldNameResolver
 {
-	private final Plugin plugin;
+	private final Plugin mvPlugin;
 
 
 	/**
 	 * Constructs a {@code MultiverseV4WorldNameResolver} using the given instance
 	 * of {@link org.mvplugins.multiverse.core.MultiverseCore}.
 	 *
-	 * @param plugin the active Multiverse-Core plugin instance
+	 * @param mvPlugin the active Multiverse-Core plugin instance
 	 */
-	public PluginResolver(Plugin plugin)
+	public PluginResolver(Plugin mvPlugin)
 	{
-		this.plugin = plugin;
+		this.mvPlugin = mvPlugin;
 	}
 
 
 	/**
 	 * Attempts to retrieve the alias name of the specified world using
-	 * {@link Multiverse4Retriever}. If the alias is null or blank,
+	 * {@code Multiverse4Retriever}. If the alias is null or blank,
 	 * falls back to {@code world.getName()}.
 	 *
 	 * @param world the {@link World} whose alias or name should be returned
-	 * @return the Multiverse alias if available, otherwise the world name;
-	 *         or {@code "NULL WORLD"} if the world is {@code null}
+	 * @return the Multiverse alias if available, otherwise the Bukkit world name,
+	 * or {@code "∅"} (NULL symbol) if the world is {@code null}
 	 */
 	@Override
 	public String resolve(final World world)
 	{
-		if (world == null) { return "NULL"; }
+		if (world == null) { return "∅"; }
 
-		Optional<String> result;
-
-		if (plugin != null
-				&& plugin.getDescription().getVersion().startsWith("4.")
-				&& plugin instanceof com.onarandombox.MultiverseCore.MultiverseCore mvPlugin)
+		Optional<String> result = switch (mvPlugin)
 		{
-			result = new Multiverse4Retriever(mvPlugin).getWorldName(world);
-		}
-		else if (plugin != null
-				&& plugin.getDescription().getVersion().startsWith("5.")
-				&& plugin instanceof org.mvplugins.multiverse.core.MultiverseCore mvPlugin)
-		{
-			result = new Multiverse5Retriever(mvPlugin).getWorldName(world);
-		}
-		else
-		{
-			result = new DefaultRetriever().getWorldName(world);
-		}
+			case org.mvplugins.multiverse.core.MultiverseCore mvPlugin5 -> new MultiverseRetriever(mvPlugin5).getWorldName(world);
+			case null, default -> new DefaultRetriever().getWorldName(world);
+		};
 
 		return (result.isPresent() && !result.get().isBlank())
 				? result.get()

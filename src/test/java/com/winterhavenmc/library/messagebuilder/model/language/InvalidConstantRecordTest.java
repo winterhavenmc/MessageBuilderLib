@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,16 +26,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InvalidConstantRecordTest
 {
-	RecordKey constantKey;
+	ValidConstantKey constantKey;
 	InvalidConstantRecord invalidConstantRecord;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		constantKey = RecordKey.of("NON_EXISTENT").orElseThrow();
-
-		invalidConstantRecord = ConstantRecord.empty(constantKey);
+		constantKey = ConstantKey.of("NON_EXISTENT").isValid().orElseThrow();
+		invalidConstantRecord = ConstantRecord.empty(constantKey, InvalidRecordReason.CONSTANT_ENTRY_MISSING);
 	}
 
 	@Test
@@ -44,17 +43,17 @@ class InvalidConstantRecordTest
 		assertInstanceOf(InvalidConstantRecord.class, invalidConstantRecord);
 	}
 
+
 	@Test
-	void testKey()
+	void getKey()
 	{
 		assertEquals(constantKey, invalidConstantRecord.key());
-
 	}
 
 	@Test
-	void reason()
+	void getReason()
 	{
-		assertEquals("Missing constant section.", invalidConstantRecord.reason());
+		assertEquals(InvalidRecordReason.CONSTANT_ENTRY_MISSING, invalidConstantRecord.reason());
 	}
 
 }

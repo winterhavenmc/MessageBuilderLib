@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
@@ -39,7 +39,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.instant
  * interface for adapting expiration timestamps into human-readable macro values.
  * It enables support for both duration-based and instant-based macro replacements.
  *
- * <p>The following macro keys are supported (assuming a macro key prefix of {@code OBJECT}):
+ * <p>The following macro keys are supported (assuming a macro string prefix of {@code OBJECT}):
  * <ul>
  *     <li>{@code [OBJECT.EXPIRATION.DURATION}} — A formatted duration string representing time remaining until expiration</li>
  *     <li>{@code [OBJECT.EXPIRATION.INSTANT}} — A localized date/time string representing the expiration instant</li>
@@ -74,36 +74,36 @@ public interface Expirable
 
 
 	/**
-	 * Extracts macro key-value pairs for this object's expiration, including a formatted duration
+	 * Extracts macro string-value pairs for this object's expiration, including a formatted duration
 	 * and a formatted instant string.
 	 *
-	 * <p>Uses the provided macro key as a base, and appends {@code EXPIRATION.DURATION} and
+	 * <p>Uses the provided macro string as a base, and appends {@code EXPIRATION.DURATION} and
 	 * {@code EXPIRATION.INSTANT} keys, resolving their values using the supplied formatter context.
 	 *
-	 * @param baseKey the top-level macro key associated with this object
+	 * @param baseKey the top-level macro string associated with this object
 	 * @param lowerBound the smallest unit of time to be displayed in the duration (e.g., {@code ChronoUnit.MINUTES})
 	 * @param formatStyle the formatting style for displaying the instant (e.g., {@code FormatStyle.MEDIUM})
 	 * @param ctx the context container with formatters and world resolvers
 	 * @return a {@link MacroStringMap} containing populated expiration macro keys and their string values
 	 */
-	default MacroStringMap extractExpiration(final MacroKey baseKey,
+	default MacroStringMap extractExpiration(final ValidMacroKey baseKey,
 											 final ChronoUnit lowerBound,
 											 final FormatStyle formatStyle,
 											 final AdapterContextContainer ctx)
 	{
 		MacroStringMap resultMap = new MacroStringMap();
 
-		baseKey.append(EXPIRATION).ifPresent(protectionKey ->
+		baseKey.append(EXPIRATION).isValid().ifPresent(protectionKey ->
 		{
 			// formatted duration (with 1/3 of lower bound duration added, to compensate for processing delay)
-			protectionKey.append(DURATION).ifPresent(macroKey ->
+			protectionKey.append(DURATION).isValid().ifPresent(macroKey ->
 					resultMap.put(macroKey,
 							formatDuration(durationUntil(this.getExpiration().plus(lowerBound.getDuration().dividedBy(3))),
 									lowerBound, ctx.formatterContainer().durationFormatter())
 							.orElse(UNKNOWN_VALUE)));
 
 			// formatted date/time from Instant
-			protectionKey.append(INSTANT).ifPresent(macroKey ->
+			protectionKey.append(INSTANT).isValid().ifPresent(macroKey ->
 					resultMap.put(macroKey,
 							formatInstant(this.getExpiration(), formatStyle, ctx.formatterContainer().localeProvider())
 							.orElse(UNKNOWN_VALUE)));

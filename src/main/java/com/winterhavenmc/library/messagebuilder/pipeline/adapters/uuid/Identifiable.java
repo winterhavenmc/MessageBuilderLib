@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
@@ -51,13 +51,13 @@ public interface Identifiable
 	/**
 	 * Extracts a macro string map containing the UUID field.
 	 *
-	 * @param baseKey the top-level macro key
+	 * @param baseKey the top-level macro string
 	 * @param ctx     the adapter context
 	 * @return a {@code MacroStringMap} with the UUID value formatted as a string
 	 */
-	default MacroStringMap extractUid(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractUid(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(Adapter.BuiltIn.UUID)
+		return baseKey.append(Adapter.BuiltIn.UUID).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatUid(this.getUniqueId()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);

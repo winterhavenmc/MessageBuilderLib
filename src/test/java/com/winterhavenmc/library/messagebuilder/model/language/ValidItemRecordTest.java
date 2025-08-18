@@ -17,10 +17,12 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ItemKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -32,25 +34,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ValidItemRecordTest
 {
-	RecordKey recordKey;
+	ValidItemKey recordKey;
 	ValidItemRecord testRecord;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		// create record key
-		recordKey = RecordKey.of("TEST_ITEM").orElseThrow();
+		// create record string
+		recordKey = ItemKey.of("TEST_ITEM").isValid().orElseThrow();
 
 		// create configuration section for item record entry
 		ConfigurationSection itemEntry = new MemoryConfiguration();
 		itemEntry.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Test Item");
 		itemEntry.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Test Items");
-		itemEntry.set(ItemRecord.Field.INVENTORY_NAME_SINGULAR.toKey(), "Inventory Test Item");
-		itemEntry.set(ItemRecord.Field.INVENTORY_NAME_PLURAL.toKey(), "Inventory Test Items");
+		itemEntry.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Test Item");
 		itemEntry.set(ItemRecord.Field.LORE.toKey(), List.of("Lore line 1", "Lore line 2"));
+		itemEntry.set(ItemRecord.Field.MATERIAL.toKey(), "GOLDEN_PICKAXE");
 
-		// create valid item record from record key, item configuration section
+		// create valid item record from record string, item configuration section
 		testRecord = ValidItemRecord.create(recordKey, itemEntry);
 	}
 
@@ -73,11 +75,13 @@ public class ValidItemRecordTest
 		assertEquals("Test Items", testRecord.nameFor(10));
 	}
 
+
 	@Test
 	void testKey()
 	{
 		assertEquals("TEST_ITEM", testRecord.key().toString());
 	}
+
 
 	@Test
 	void nameSingular()
@@ -85,10 +89,24 @@ public class ValidItemRecordTest
 		assertEquals("Test Item", testRecord.nameSingular());
 	}
 
+
 	@Test
 	void namePlural()
 	{
 		assertEquals("Test Items", testRecord.namePlural());
 	}
 
+
+	@Test
+	void getMaterial()
+	{
+		assertEquals("GOLDEN_PICKAXE", testRecord.material());
+	}
+
+
+	@Test
+	void getLore()
+	{
+		assertEquals(List.of("Lore line 1", "Lore line 2"), testRecord.lore());
+	}
 }

@@ -23,7 +23,7 @@
  * <h2>Adapter Registration and Precedence</h2>
  * <p>All adapters are managed by {@link com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry AdapterRegistry},
  * which maintains registration order to enforce resolution precedence. The first adapter to produce a value for
- * a macro key wins; subsequent adapters cannot overwrite that key.
+ * a macro string wins; subsequent adapters cannot overwrite that string.
  *
  * <p>This enables library consumers to override or extend built-in behavior with plugin-defined adapters.
  *

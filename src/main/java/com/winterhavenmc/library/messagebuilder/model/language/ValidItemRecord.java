@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.util.Pluralizable;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -32,47 +32,46 @@ import java.util.List;
  * name overrides, and a list of lore lines. It also implements {@link Pluralizable} to provide
  * dynamic name selection based on quantity.
  *
- * <p>This class is instantiated using the static {@link #create(RecordKey, ConfigurationSection)} method,
+ * <p>This class is instantiated using the static {@link #create(ValidItemKey, ConfigurationSection)} method,
  * which applies YAML-based parsing and normalization of optional fields.
  *
  * @see ItemRecord
  * @see InvalidItemRecord
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see ValidItemKey
  * @see com.winterhavenmc.library.messagebuilder.util.Pluralizable Pluralizable
  */
 public final class ValidItemRecord implements ItemRecord, Pluralizable
 {
-	RecordKey key;
+	ValidItemKey key;
+	String material;
 	String nameSingular;
 	String namePlural;
-	String inventoryItemSingular;
-	String inventoryItemPlural;
+	String inventoryName;
 	List<String> itemLore;
 
 
 	/**
 	 * Constructs a {@code ValidItemRecord} with parsed item metadata.
-	 * This constructor is private; use {@link #create(RecordKey, ConfigurationSection)} instead.
+	 * This constructor is private; use {@link #create(ValidItemKey, ConfigurationSection)} instead.
 	 *
-	 * @param key the key that uniquely identifies this item record
-	 * @param nameSingular the singular item name
-	 * @param namePlural the plural item name
-	 * @param inventoryItemSingular the inventory-specific singular display name
-	 * @param inventoryItemPlural the inventory-specific plural display name
-	 * @param itemLore the list of lore lines (may be empty but not {@code null})
+	 * @param key           the string that uniquely identifies this item record
+	 * @param nameSingular  the singular item name
+	 * @param namePlural    the plural item name
+	 * @param inventoryName the inventory-specific singular display name
+	 * @param itemLore      the list of lore lines (may be empty but not {@code null})
 	 */
-	private ValidItemRecord(RecordKey key,
+	private ValidItemRecord(ValidItemKey key,
+							String material,
 							String nameSingular,
 							String namePlural,
-							String inventoryItemSingular,
-							String inventoryItemPlural,
+							String inventoryName,
 							List<String> itemLore)
 	{
 		this.key = key;
+		this.material = material;
 		this.nameSingular = nameSingular;
 		this.namePlural = namePlural;
-		this.inventoryItemSingular = inventoryItemSingular;
-		this.inventoryItemPlural = inventoryItemPlural;
+		this.inventoryName = inventoryName;
 		this.itemLore = itemLore;
 	}
 
@@ -88,13 +87,13 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	 * @param section the configuration section representing the item
 	 * @return a new validated item record
 	 */
-	public static ValidItemRecord create(RecordKey key, ConfigurationSection section)
+	public static ValidItemRecord create(ValidItemKey key, ConfigurationSection section)
 	{
 		return new ValidItemRecord(key,
+				section.getString(Field.MATERIAL.toKey()),
 				section.getString(Field.NAME_SINGULAR.toKey()),
 				section.getString(Field.NAME_PLURAL.toKey()),
-				section.getString(Field.INVENTORY_NAME_SINGULAR.toKey()),
-				section.getString(Field.INVENTORY_NAME_PLURAL.toKey()),
+				section.getString(Field.INVENTORY_NAME.toKey()),
 				section.getStringList(Field.LORE.toKey()));
 	}
 
@@ -115,7 +114,7 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 
 
 	@Override
-	public RecordKey key()
+	public ValidItemKey key()
 	{
 		return key;
 	}
@@ -130,6 +129,16 @@ public final class ValidItemRecord implements ItemRecord, Pluralizable
 	public String namePlural()
 	{
 		return namePlural;
+	}
+
+	public List<String> lore()
+	{
+		return itemLore;
+	}
+
+	public String material()
+	{
+		return material;
 	}
 
 }

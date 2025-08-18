@@ -47,7 +47,7 @@ import java.util.logging.Logger;
  * @see MultiverseCore
  * @see World
  */
-public class Multiverse5Retriever implements WorldNameRetriever
+public class MultiverseRetriever implements WorldNameRetriever
 {
 	private final MultiverseCore plugin;
 
@@ -57,7 +57,7 @@ public class Multiverse5Retriever implements WorldNameRetriever
 	 *
 	 * @param plugin the active {@link MultiverseCore} plugin instance
 	 */
-	public Multiverse5Retriever(MultiverseCore plugin)
+	public MultiverseRetriever(MultiverseCore plugin)
 	{
 		this.plugin = plugin;
 	}

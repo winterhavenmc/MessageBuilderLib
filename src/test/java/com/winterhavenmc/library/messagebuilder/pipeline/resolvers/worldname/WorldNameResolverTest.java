@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -27,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mvplugins.multiverse.core.MultiverseCore;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -37,8 +37,7 @@ class WorldNameResolverTest
 {
 	@Mock PluginManager pluginManagerMock;
 	@Mock World worldMock;
-	@Mock MultiverseCore multiverseCoreV4Mock;
-	@Mock org.mvplugins.multiverse.core.MultiverseCore multiverseCoreV5Mock;
+	@Mock MultiverseCore multiverseCoreMock;
 	@Mock PluginDescriptionFile descriptionMock;
 
 
@@ -75,9 +74,7 @@ class WorldNameResolverTest
 	void resolveWorldName_multiverse_fail()
 	{
 		// Arrange
-		when(multiverseCoreV4Mock.getDescription()).thenReturn(descriptionMock);
-		when(descriptionMock.getVersion()).thenReturn("4.3.16");
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreV4Mock);
+		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
 
 		// Act
 		var result = resolver.resolve(worldMock);
@@ -103,30 +100,11 @@ class WorldNameResolverTest
 
 
 	@Test
-	void getResolver_for_multiverse_4()
-	{
-		// Arrange
-		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreV4Mock);
-		when(multiverseCoreV4Mock.isEnabled()).thenReturn(true);
-
-		// Act
-		WorldNameResolver resolver = WorldNameResolver.get(pluginManagerMock);
-
-		// Assert
-		assertInstanceOf(PluginResolver.class, resolver);
-
-		// Verify
-		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
-		verify(multiverseCoreV4Mock, atLeastOnce()).isEnabled();
-	}
-
-
-	@Test
 	void getResolver_for_multiverse_5()
 	{
 		// Arrange
-		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreV5Mock);
-		when(multiverseCoreV5Mock.isEnabled()).thenReturn(true);
+		when(pluginManagerMock.getPlugin("Multiverse-Core")).thenReturn(multiverseCoreMock);
+		when(multiverseCoreMock.isEnabled()).thenReturn(true);
 
 		// Act
 		WorldNameResolver resolver = WorldNameResolver.get(pluginManagerMock);
@@ -136,7 +114,7 @@ class WorldNameResolverTest
 
 		// Verify
 		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
-		verify(multiverseCoreV5Mock, atLeastOnce()).isEnabled();
+		verify(multiverseCoreMock, atLeastOnce()).isEnabled();
 	}
 
 }

@@ -17,11 +17,13 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.time.Duration;
 import java.util.Optional;
+
+import static com.winterhavenmc.library.messagebuilder.MessageBuilder.TICKS;
 
 
 /**
@@ -30,40 +32,40 @@ import java.util.Optional;
  * <p>
  * This record contains the full structure of a templated message, including:
  * <ul>
- *   <li>A unique {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey}</li>
+ *   <li>A unique {@link ValidMessageKey}</li>
  *   <li>A plain-text message body (with placeholders)</li>
  *   <li>Optional title and subtitle text</li>
  *   <li>Title animation parameters (fade-in, stay, fade-out durations)</li>
  *   <li>An optional repeat delay for scheduled messages</li>
  * </ul>
  * <p>
- * This class is created via the {@link #create(RecordKey, ConfigurationSection)} factory method,
+ * This class is created via the {@link #create(ValidMessageKey, ConfigurationSection)} factory method,
  * which performs all necessary validation and applies default values where appropriate. Once constructed,
  * instances are considered safe and complete and can be used without additional checks.
  *
  * @see MessageRecord
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see ValidMessageKey
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  */
 public final class ValidMessageRecord implements MessageRecord
 {
-	private final RecordKey key;
+	private final ValidMessageKey key;
 	private final boolean enabled;
 	private final String message;
 	private final Duration repeatDelay;
 	private final String title;
-	private final int titleFadeIn;
-	private final int titleStay;
-	private final int titleFadeOut;
+	private final Duration titleFadeIn;
+	private final Duration titleStay;
+	private final Duration titleFadeOut;
 	private final String subtitle;
 
 
 	/**
 	 * Constructs a {@code ValidMessageRecord} from fully parsed and validated data fields.
 	 * <p>
-	 * Use {@link #create(RecordKey, ConfigurationSection)} to construct new instances.
+	 * Use {@link #create(ValidMessageKey, ConfigurationSection)} to construct new instances.
 	 *
-	 * @param key the key for the message
+	 * @param key the string for the message
 	 * @param enabled the enabled setting for the message
 	 * @param message the raw message string, with placeholders
 	 * @param repeatDelay the repeat delay setting for the message
@@ -73,14 +75,14 @@ public final class ValidMessageRecord implements MessageRecord
 	 * @param titleFadeOut the title fade out setting for the message
 	 * @param subtitle the subtitle for the message
 	 */
-	private ValidMessageRecord(RecordKey key,
+	private ValidMessageRecord(ValidMessageKey key,
 							   boolean enabled,
 							   String message,
 							   Duration repeatDelay,
 							   String title,
-							   int titleFadeIn,
-							   int titleStay,
-							   int titleFadeOut,
+							   Duration titleFadeIn,
+							   Duration titleStay,
+							   Duration titleFadeOut,
 							   String subtitle)
 	{
 		this.key = key;
@@ -101,21 +103,51 @@ public final class ValidMessageRecord implements MessageRecord
 	 * All expected fields are validated or defaulted according to their definitions
 	 * in {@link MessageRecord.Field}. If a field is missing, a sensible default is applied.
 	 *
-	 * @param key the record key representing this message
+	 * @param key the record string representing this message
 	 * @param section the configuration section containing the message definition
 	 * @return a new, fully validated {@code ValidMessageRecord}
 	 */
-	public static ValidMessageRecord create(final RecordKey key, final ConfigurationSection section)
+	public static ValidMessageRecord create(final ValidMessageKey key, final ConfigurationSection section)
 	{
-		return new ValidMessageRecord(key,
-				!section.contains(Field.ENABLED.toKey()) || section.getBoolean(Field.ENABLED.toKey()), // default true if missing
-				section.contains(Field.MESSAGE_TEXT.toKey()) ? section.getString(Field.MESSAGE_TEXT.toKey()) : "",
-				Duration.ofSeconds(section.getLong(Field.REPEAT_DELAY.toKey())),
-				section.contains(Field.TITLE_TEXT.toKey()) ? section.getString(Field.TITLE_TEXT.toKey()) : "",
-				section.contains(Field.TITLE_FADE_IN.toKey()) ? section.getInt(Field.TITLE_FADE_IN.toKey()) : 10,
-				section.contains(Field.TITLE_STAY.toKey()) ? section.getInt(Field.TITLE_STAY.toKey()) : 70,
-				section.contains(Field.TITLE_FADE_OUT.toKey()) ? section.getInt(Field.TITLE_FADE_OUT.toKey()) : 20,
-				section.contains(Field.SUBTITLE_TEXT.toKey()) ? section.getString(Field.SUBTITLE_TEXT.toKey()) : "");
+		// enabled defaults to true if not present
+		boolean enabled = !section.contains(Field.ENABLED.toKey()) || section.getBoolean(Field.ENABLED.toKey());
+
+		// defaults to empty string if not present
+		String messageText = section.contains(Field.MESSAGE_TEXT.toKey())
+				? section.getString(Field.MESSAGE_TEXT.toKey())
+				: "";
+
+		// defaults to zero, no ternary operator necessary
+		Duration repeatDelay = Duration.ofSeconds(section.getLong(Field.REPEAT_DELAY.toKey()));
+
+		// defaults to empty string if not present
+		String titleText = section.contains(Field.TITLE_TEXT.toKey())
+				? section.getString(Field.TITLE_TEXT.toKey())
+				: "";
+
+		// default to Bukkit standard 10 ticks if not present
+		Duration titleFadeIn = section.contains(Field.TITLE_FADE_IN.toKey())
+				? Duration.of(section.getLong(Field.TITLE_FADE_IN.toKey()), TICKS)
+				: Duration.of(10, TICKS);
+
+		// default to Bukkit standard 70 ticks if not present
+		Duration titleStay = section.contains(Field.TITLE_STAY.toKey())
+				? Duration.of(section.getLong(Field.TITLE_STAY.toKey()), TICKS)
+				: Duration.of(70, TICKS);
+
+		// default to Bukkit standard 20 ticks if not present
+		Duration titleFadeOut = section.contains(Field.TITLE_FADE_OUT.toKey())
+				? Duration.of(section.getLong(Field.TITLE_FADE_OUT.toKey()), TICKS)
+				: Duration.of(20, TICKS);
+
+		// defaults to empty string if not present
+		String subtitleText = section.contains(Field.SUBTITLE_TEXT.toKey())
+				? section.getString(Field.SUBTITLE_TEXT.toKey())
+				: "";
+
+
+		return new ValidMessageRecord(key, enabled, messageText, repeatDelay,
+				titleText, titleFadeIn, titleStay, titleFadeOut, subtitleText);
 	}
 
 
@@ -151,7 +183,7 @@ public final class ValidMessageRecord implements MessageRecord
 
 
 	@Override
-	public RecordKey key()
+	public ValidMessageKey key()
 	{
 		return key;
 	}
@@ -181,19 +213,19 @@ public final class ValidMessageRecord implements MessageRecord
 	}
 
 
-	public int titleFadeIn()
+	public Duration titleFadeIn()
 	{
 		return titleFadeIn;
 	}
 
 
-	public int titleStay()
+	public Duration titleStay()
 	{
 		return titleStay;
 	}
 
 
-	public int titleFadeOut()
+	public Duration titleFadeOut()
 	{
 		return titleFadeOut;
 	}

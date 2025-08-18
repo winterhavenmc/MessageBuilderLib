@@ -18,6 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.pipeline;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
@@ -27,7 +29,6 @@ import com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetrie
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -74,7 +75,7 @@ class MessagePipelineTest
 	InvalidMessageRecord invalidMessageRecord;
 	FinalMessageRecord finalMessageRecord;
 	ConfigurationSection section;
-	RecordKey recordKey;
+	ValidMessageKey recordKey;
 	MacroStringMap macroStringMap;
 
 
@@ -94,7 +95,7 @@ class MessagePipelineTest
 				List.of(messageSenderMock, titleSenderMock)
 		);
 
-		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		recordKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
@@ -114,8 +115,8 @@ class MessagePipelineTest
 				"this is a final subtitle");
 
 		macroStringMap = new MacroStringMap();
-		macroStringMap.put(MacroKey.of("RECIPIENT").orElseThrow(), "player name");
-		macroStringMap.put(MacroKey.of("RECIPIENT.NAME").orElseThrow(), "player name");
+		macroStringMap.put(MacroKey.of("RECIPIENT").isValid().orElseThrow(), "player name");
+		macroStringMap.put(MacroKey.of("RECIPIENT.NAME").isValid().orElseThrow(), "player name");
 	}
 
 
@@ -123,10 +124,10 @@ class MessagePipelineTest
 	void testInitiate()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		ValidMessageKey recordKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(validMessageRecord);
-		ValidMessage message = new ValidMessage(recipient, RecordKey.of(ENABLED_MESSAGE).orElseThrow(), messagePipeline);
+		ValidMessage message = new ValidMessage(recipient, MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow(), messagePipeline);
 
 		when(messageProcessorMock.process(validMessageRecord, message.getObjectMap())).thenReturn(finalMessageRecord);
 
@@ -142,10 +143,10 @@ class MessagePipelineTest
 	void testInitiate_non_existent_message()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of(NONEXISTENT_ENTRY).orElseThrow();
+		ValidMessageKey recordKey = MessageKey.of(NONEXISTENT_ENTRY).isValid().orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(invalidMessageRecord);
-		ValidMessage message = new ValidMessage(recipient, RecordKey.of(NONEXISTENT_ENTRY).orElseThrow(), messagePipeline);
+		ValidMessage message = new ValidMessage(recipient, MessageKey.of(NONEXISTENT_ENTRY).isValid().orElseThrow(), messagePipeline);
 
 		// Act & Assert
 		messagePipeline.initiate(message);

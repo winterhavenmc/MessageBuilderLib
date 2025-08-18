@@ -17,9 +17,13 @@
 
 package com.winterhavenmc.library.messagebuilder.query;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.InvalidConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.InvalidKeyReason;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidConstantRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReason;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
@@ -59,7 +63,7 @@ class ConstantQueryHandlerTest
 	void getRecord_with_valid_key_returns_validRecord()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
+		ValidConstantKey recordKey = ConstantKey.of("SPAWN.DISPLAY_NAME").isValid().orElseThrow();
 
 		when(constantSectionMock.get(recordKey.toString())).thenReturn("Spawn Display Name");
 
@@ -79,10 +83,34 @@ class ConstantQueryHandlerTest
 
 
 	@Test
+	void getRecord_with_invalid_key_returns_InvalidConstantRecord()
+	{
+		// Arrange
+		InvalidConstantKey recordKey = new InvalidConstantKey("Invalid", InvalidKeyReason.KEY_INVALID);
+
+		when(constantSectionMock.get(recordKey.toString())).thenReturn("Spawn Display Name");
+
+		SectionProvider mockProvider = () -> constantSectionMock;
+		ConstantQueryHandler handler = new ConstantQueryHandler(mockProvider);
+
+		// Act
+		ConstantRecord result = handler.getRecord(recordKey);
+
+		// Assert
+		assertInstanceOf(InvalidConstantRecord.class, result);
+		assertEquals(recordKey, result.key());
+		assertEquals(InvalidRecordReason.CONSTANT_KEY_INVALID, ((InvalidConstantRecord) result).reason());
+
+		// Verify
+		verify(constantSectionMock, atLeastOnce()).get(recordKey.toString());
+	}
+
+
+	@Test
 	void getString_with_valid_key_returns_valid_string()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("SPAWN.DISPLAY_NAME").orElseThrow();
+		ValidConstantKey recordKey = ConstantKey.of("SPAWN.DISPLAY_NAME").isValid().orElseThrow();
 
 		when(constantSectionMock.getString(recordKey.toString())).thenReturn("Spawn Display Name");
 
@@ -104,7 +132,7 @@ class ConstantQueryHandlerTest
 	void getRecord_with_invalid_key_returns_invalidRecord()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("INVALID_PATH").orElseThrow();
+		ValidConstantKey recordKey = ConstantKey.of("INVALID_PATH").isValid().orElseThrow();
 
 		SectionProvider mockProvider = () -> constantSectionMock;
 		ConstantQueryHandler handler = new ConstantQueryHandler(mockProvider);
@@ -124,7 +152,7 @@ class ConstantQueryHandlerTest
 	void getStringList_with_valid_key_returns_valid_stringList()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("TEST_LIST").orElseThrow();
+		ValidConstantKey recordKey = ConstantKey.of("TEST_LIST").isValid().orElseThrow();
 
 		when(constantSectionMock.getStringList(recordKey.toString())).thenReturn(List.of("string1", "string2"));
 
@@ -146,7 +174,7 @@ class ConstantQueryHandlerTest
 	void getInt_with_valid_key_returns_valid_int()
 	{
 		// Arrange
-		RecordKey recordKey = RecordKey.of("TEST_INT").orElseThrow();
+		ValidConstantKey recordKey = ConstantKey.of("TEST_INT").isValid().orElseThrow();
 
 		when(constantSectionMock.getInt(recordKey.toString())).thenReturn(42);
 

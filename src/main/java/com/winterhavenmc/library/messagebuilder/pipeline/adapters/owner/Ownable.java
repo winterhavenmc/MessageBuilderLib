@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import org.bukkit.entity.AnimalTamer;
@@ -56,16 +56,16 @@ public interface Ownable
 
 	/**
 	 * Extracts the macro value for the owner's name and adds it to a {@link MacroStringMap},
-	 * using the {@code {OBJECT.OWNER}} key.
+	 * using the {@code {OBJECT.OWNER}} string.
 	 *
-	 * @param baseKey the macro key prefix (e.g., {@code OBJECT}) used to construct the full macro key
+	 * @param baseKey the macro string prefix (e.g., {@code OBJECT}) used to construct the full macro string
 	 * @param ctx the adapter context container, which holds formatting dependencies
 	 * @return a {@code MacroStringMap} containing the extracted owner name,
 	 * or an empty map if the owner is null or invalid
 	 */
-	default MacroStringMap extractOwner(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractOwner(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(OWNER)
+		return baseKey.append(OWNER).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatOwner(this.getOwner()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);

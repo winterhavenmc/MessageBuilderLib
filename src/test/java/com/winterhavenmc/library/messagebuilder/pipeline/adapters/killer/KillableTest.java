@@ -18,10 +18,11 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ class KillableTest
 	class TestObject implements Killable
 	{
 		@Override
-		public Entity getKiller()
+		public AnimalTamer getKiller()
 		{
 			return playerMock;
 		}
@@ -72,7 +73,7 @@ class KillableTest
 		TestObject testObject = new TestObject();
 
 		// Act
-		Entity result = testObject.getKiller();
+		AnimalTamer result = testObject.getKiller();
 
 		// Assert
 		assertEquals(playerMock, result);
@@ -83,8 +84,8 @@ class KillableTest
 	void extractKiller_returns_populated_map()
 	{
 		// Arrange
-		MacroKey baseKey = MacroKey.of("TEST").orElseThrow();
-		MacroKey subKey = baseKey.append(KILLER).orElseThrow();
+		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append(KILLER).isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Killer");
 
@@ -100,7 +101,7 @@ class KillableTest
 	void formatKiller_returns_optional_string()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Killer");
 
@@ -116,7 +117,7 @@ class KillableTest
 	void formatKiller_with_blank_name_returns_empty_optional()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("");
 
@@ -132,7 +133,7 @@ class KillableTest
 	void formatKiller_with_null_owner_returns_empty_optional()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act

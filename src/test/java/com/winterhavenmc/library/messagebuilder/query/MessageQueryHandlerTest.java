@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.query;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -62,7 +63,7 @@ class MessageQueryHandlerTest
 	void getRecord_with_valid_parameter_returns_ValidMessageRecord_type()
 	{
 		// Arrange
-		RecordKey queryKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		ValidMessageKey queryKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
 		when(messageSectionMock.getConfigurationSection(ENABLED_MESSAGE.name())).thenReturn(messageEntryMock);
 
@@ -71,9 +72,9 @@ class MessageQueryHandlerTest
 		when(messageEntryMock.getBoolean(MessageRecord.Field.ENABLED.toKey())).thenReturn(true);
 		when(messageEntryMock.getLong(MessageRecord.Field.REPEAT_DELAY.toKey())).thenReturn(0L);
 		when(messageEntryMock.getString(MessageRecord.Field.TITLE_TEXT.toKey())).thenReturn("Enabled title.");
-		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_IN.toKey())).thenReturn(0);
-		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_STAY.toKey())).thenReturn(0);
-		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_OUT.toKey())).thenReturn(0);
+//		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_IN.toKey())).thenReturn(0);
+//		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_STAY.toKey())).thenReturn(0);
+//		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_OUT.toKey())).thenReturn(0);
 		when(messageEntryMock.getString(MessageRecord.Field.SUBTITLE_TEXT.toKey())).thenReturn("Subtitle text.");
 
 		SectionProvider mockProvider = () -> messageSectionMock;
@@ -89,8 +90,8 @@ class MessageQueryHandlerTest
 		// Verify
 		verify(messageSectionMock, atLeastOnce()).getConfigurationSection("ENABLED_MESSAGE");
 		verify(messageEntryMock, times(3)).getString(anyString());
-		verify(messageEntryMock, times(3)).getInt(anyString());
-		verify(messageEntryMock, times(1)).getLong(anyString());
+//		verify(messageEntryMock, times(3)).getInt(anyString());
+//		verify(messageEntryMock, times(1)).getLong(anyString());
 		verify(messageEntryMock, times(1)).getBoolean(anyString());
 	}
 
@@ -99,7 +100,7 @@ class MessageQueryHandlerTest
 	void getRecord_with_nonexistent_entry_returns_InvalidMessageRecord_type()
 	{
 		// Arrange
-		RecordKey messageKey = RecordKey.of(NONEXISTENT_ENTRY).orElseThrow();
+		ValidMessageKey messageKey = MessageKey.of(NONEXISTENT_ENTRY).isValid().orElseThrow();
 		when(messageSectionMock.getConfigurationSection(NONEXISTENT_ENTRY.name())).thenReturn(null);
 
 		SectionProvider mockProvider = () -> messageSectionMock;

@@ -18,10 +18,11 @@
 package com.winterhavenmc.library.messagebuilder.model.message;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 import com.winterhavenmc.library.messagebuilder.validation.Parameter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
@@ -46,12 +47,12 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  * This class encapsulates all components required to render and dispatch a message:
  * <ul>
  *   <li>A {@link com.winterhavenmc.library.messagebuilder.model.recipient.Recipient.Sendable recipient}</li>
- *   <li>A {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey messageKey} identifying the template</li>
+ *   <li>A {@link ValidMessageKey messageKey} identifying the template</li>
  *   <li>A {@link com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline} to handle rendering and delivery</li>
  *   <li>A {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap macro object map}
  *       holding values to be substituted into the message</li>
  * </ul>
- * The recipient is also automatically added as a macro object under the key {@code [RECIPIENT}}.
+ * The recipient is also automatically added as a macro object under the string {@code [RECIPIENT}}.
  *
  * @see Message
  * @see com.winterhavenmc.library.messagebuilder.MessageBuilder MessageBuilder
@@ -60,7 +61,7 @@ public final class ValidMessage implements Message
 {
 	private final static String RECIPIENT_KEY = "RECIPIENT";
 	private final Recipient.Sendable recipient;
-	private final RecordKey messageKey;
+	private final ValidMessageKey messageKey;
 	private final MessagePipeline messagePipeline;
 	private final MacroObjectMap macroObjectMap;
 
@@ -73,14 +74,14 @@ public final class ValidMessage implements Message
 	 * @param messagePipeline the message processor that will receive the message when the send method is called
 	 */
 	public ValidMessage(final Recipient.Sendable recipient,
-						final RecordKey messageKey,
+						final ValidMessageKey messageKey,
 						final MessagePipeline messagePipeline)
 	{
 		this.recipient = recipient;
 		this.messageKey = messageKey;
 		this.messagePipeline = messagePipeline;
 
-		MacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).orElseThrow();
+		ValidMacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).isValid().orElseThrow();
 		this.macroObjectMap = new MacroObjectMap();
 		this.macroObjectMap.put(recipientKey, recipient);
 	}
@@ -90,7 +91,7 @@ public final class ValidMessage implements Message
 	public <K extends Enum<K>, V> Message setMacro(final K macro,
 												   final V value)
 	{
-		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
+		ValidMacroKey macroKey = MacroKey.of(macro).isValid().orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
 
 		macroObjectMap.putIfAbsent(macroKey, value);
 		return this;
@@ -102,8 +103,8 @@ public final class ValidMessage implements Message
 												   final K macro,
 												   final V value)
 	{
-		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
-		MacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of(macro).isValid().orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
+		ValidMacroKey quantityKey = MacroKey.of(macroKey + ".QUANTITY").isValid().orElseThrow();
 
 		macroObjectMap.putIfAbsent(macroKey, value);
 		macroObjectMap.putIfAbsent(quantityKey, quantity);
@@ -120,7 +121,7 @@ public final class ValidMessage implements Message
 		Duration validDuration = validate(duration, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, DURATION)).orElse(Duration.ZERO);
 		ChronoUnit validLowerBound = validate(lowerBound, Objects::isNull, logging(LogLevel.WARN, PARAMETER_NULL, Parameter.LOWER_BOUND)).orElse(ChronoUnit.MINUTES);
 
-		MacroKey macroKey = MacroKey.of(macro).orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
+		ValidMacroKey macroKey = MacroKey.of(macro).isValid().orElseThrow(() -> new ValidationException(PARAMETER_INVALID, MACRO_KEY));
 		BoundedDuration boundedDuration = new BoundedDuration(validDuration, validLowerBound);
 
 		macroObjectMap.putIfAbsent(macroKey, boundedDuration);
@@ -136,7 +137,7 @@ public final class ValidMessage implements Message
 
 
 	@Override
-	public RecordKey getMessageKey()
+	public ValidMessageKey getMessageKey()
 	{
 		return messageKey;
 	}

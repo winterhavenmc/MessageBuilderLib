@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.model.message;
 
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 
 import java.time.Duration;
@@ -93,7 +93,7 @@ public record InvalidMessage(String reason) implements Message
 	}
 
 	@Override
-	public RecordKey getMessageKey()
+	public ValidMessageKey getMessageKey()
 	{
 		return null;
 	}

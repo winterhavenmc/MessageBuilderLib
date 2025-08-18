@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.location;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
@@ -95,8 +96,8 @@ class LocatableTest
 		when(localeNumberFormatterMock.getFormatted(11)).thenReturn("11");
 		when(localeNumberFormatterMock.getFormatted(12)).thenReturn("12");
 		when(localeNumberFormatterMock.getFormatted(13)).thenReturn("13");
-		MacroKey baseKey = MacroKey.of("TEST").orElseThrow();
-		MacroKey locationKey = baseKey.append("LOCATION").orElseThrow();
+		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
+		ValidMacroKey locationKey = baseKey.append("LOCATION").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act
@@ -123,8 +124,8 @@ class LocatableTest
 		when(localeNumberFormatterMock.getFormatted(11)).thenReturn("11");
 		when(localeNumberFormatterMock.getFormatted(12)).thenReturn("12");
 		when(localeNumberFormatterMock.getFormatted(13)).thenReturn("13");
-		MacroKey baseKey = MacroKey.of("TEST").orElseThrow();
-		MacroKey locationKey = baseKey.append("LOCATION").orElseThrow();
+		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
+		ValidMacroKey locationKey = baseKey.append("LOCATION").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act

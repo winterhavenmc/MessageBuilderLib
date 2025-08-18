@@ -17,10 +17,13 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.processor;
 
+import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.messages.Macro;
@@ -33,7 +36,6 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeReso
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.Resolver;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -71,8 +73,8 @@ class MessageProcessorTest
 	@Mock MessagePipeline messagePipelineMock;
 
 	Recipient.Valid recipient;
-	RecordKey messageKey;
-	MacroKey macroKey;
+	ValidMessageKey messageKey;
+	ValidMacroKey macroKey;
 	MessageProcessor messageProcessor;
 	Message message;
 	ConfigurationSection section;
@@ -93,8 +95,8 @@ class MessageProcessorTest
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		messageKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
-		macroKey = MacroKey.of(Macro.OWNER).orElseThrow();
+		messageKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
+		macroKey = MacroKey.of(Macro.OWNER).isValid().orElseThrow();
 
 		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
 
@@ -115,7 +117,7 @@ class MessageProcessorTest
 
 		messageProcessor = new MessageProcessor(fieldResolver, placeholderMatcher);
 
-		messageKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);
@@ -130,8 +132,8 @@ class MessageProcessorTest
 		validMessageRecord = ValidMessageRecord.create(messageKey, section);
 
 		macroStringMap = new MacroStringMap();
-		macroStringMap.put(MacroKey.of("RECIPIENT").orElseThrow(), "player name");
-		macroStringMap.put(MacroKey.of("RECIPIENT.NAME").orElseThrow(), "player name");
+		macroStringMap.put(MacroKey.of("RECIPIENT").isValid().orElseThrow(), "player name");
+		macroStringMap.put(MacroKey.of("RECIPIENT.NAME").isValid().orElseThrow(), "player name");
 	}
 
 

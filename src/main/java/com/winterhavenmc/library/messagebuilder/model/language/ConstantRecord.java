@@ -18,10 +18,11 @@
 package com.winterhavenmc.library.messagebuilder.model.language;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 
 
 /**
- * A sealed interface representing a key–value pair loaded from the {@code CONSTANTS}
+ * A sealed interface representing a string–value pair loaded from the {@code CONSTANTS}
  * section of a language YAML file.
  * <p>
  * Constants are globally accessible static values — such as strings, numbers, or
@@ -30,18 +31,16 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
  *
  * <h2>Implementations</h2>
  * <ul>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord} –
- *       A successfully parsed constant entry</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.InvalidConstantRecord} –
- *       A fallback constant representing a missing or invalid value</li>
+ *   <li>{@link ValidConstantRecord} – A successfully parsed constant entry</li>
+ *   <li>{@link InvalidConstantRecord} – A fallback constant representing a missing or invalid value</li>
  * </ul>
  *
- * <p>Instances are created via {@link #from(RecordKey, Object)} to ensure proper
+ * <p>Instances are created via {@link #of(ValidConstantKey, Object)} to ensure proper
  * validation. This interface extends {@link SectionRecord}, and is safe to pass
  * through the library once constructed.
  *
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see ValidConstantKey
  */
 public sealed interface ConstantRecord extends SectionRecord permits ValidConstantRecord, InvalidConstantRecord
 {
@@ -51,14 +50,14 @@ public sealed interface ConstantRecord extends SectionRecord permits ValidConsta
 	 * If the value is {@code null}, returns an {@link InvalidConstantRecord}.
 	 * Otherwise, attempts to construct a {@link ValidConstantRecord} via validation.
 	 *
-	 * @param constantKey the unique key identifying the constant
+	 * @param constantKey the unique string identifying the constant
 	 * @param constantEntry the raw object value from the configuration
 	 * @return a valid or invalid {@code ConstantRecord}, depending on the input
 	 */
-	static ConstantRecord from(RecordKey constantKey, Object constantEntry)
+	static ConstantRecord of(ValidConstantKey constantKey, Object constantEntry)
 	{
 		return (constantEntry == null)
-				? ConstantRecord.empty(constantKey)
+				? ConstantRecord.empty(constantKey, InvalidRecordReason.CONSTANT_ENTRY_MISSING)
 				: ValidConstantRecord.create(constantKey, constantEntry);
 	}
 
@@ -66,12 +65,12 @@ public sealed interface ConstantRecord extends SectionRecord permits ValidConsta
 	/**
 	 * Returns an {@link InvalidConstantRecord} representing a missing or null constant entry.
 	 *
-	 * @param constantKey the key associated with the unresolved constant
+	 * @param constantKey the string associated with the unresolved constant
 	 * @return a fallback {@code ConstantRecord} with a standard failure reason
 	 */
-	static InvalidConstantRecord empty(final RecordKey constantKey)
+	static InvalidConstantRecord empty(final RecordKey constantKey, final InvalidRecordReason reason)
 	{
-		return new InvalidConstantRecord(constantKey, "Missing constant section.");
+		return new InvalidConstantRecord(constantKey, reason);
 	}
 
 }

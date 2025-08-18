@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.matcher;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -29,22 +30,22 @@ import java.util.stream.Stream;
  * {@link java.util.regex.Pattern} and {@link java.util.regex.MatchResult} APIs to extract
  * macro keys from an input string.
  *
- * <p>This class transforms matching groups into {@link com.winterhavenmc.library.messagebuilder.keys.MacroKey}
+ * <p>This class transforms matching groups into {@link ValidMacroKey}
  * instances using {@code MacroKey.of(...)}, and silently skips any invalid results.
  *
  * <p>It is designed for use in both the resolution and replacement stages of the pipeline,
  * depending on whether base keys or full macro keys are being matched.
  *
  * @see Matcher
- * @see com.winterhavenmc.library.messagebuilder.keys.MacroKey
+ * @see ValidMacroKey
  */
 public class PlaceholderMatcher implements Matcher
 {
 	@Override
-	public Stream<MacroKey> match(final String input, final Pattern pattern)
+	public Stream<ValidMacroKey> match(final String input, final Pattern pattern)
 	{
 		return pattern.matcher(input).results()
-				.map(matchResult -> MacroKey.of(matchResult.group(1)))
+				.map(matchResult -> MacroKey.of(matchResult.group(1)).isValid())
 				.flatMap(Optional::stream);
 	}
 

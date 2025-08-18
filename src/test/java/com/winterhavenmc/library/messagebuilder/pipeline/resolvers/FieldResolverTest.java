@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +55,7 @@ class FieldResolverTest
 	void resolve_for_keys()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("KEY").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("KEY").isValid().orElseThrow();
 		MacroObjectMap objectMap = new MacroObjectMap();
 		when(compositeResolver.resolve(macroKey, objectMap)).thenReturn(stringMap);
 		when(atomicResolver.resolve(macroKey, objectMap)).thenReturn(stringMap);
@@ -73,7 +74,7 @@ class FieldResolverTest
 	void testResolve()
 	{
 		// Arrange
-		MacroKey macroKey1 = MacroKey.of("KEY1").orElseThrow();
+		ValidMacroKey macroKey1 = MacroKey.of("KEY1").isValid().orElseThrow();
 
 		MacroObjectMap objectMap = new MacroObjectMap();
 		objectMap.put(macroKey1, "STRING");

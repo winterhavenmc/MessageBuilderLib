@@ -45,7 +45,6 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
  * @see com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.ItemRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.MessageRecord
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey
  */
 public sealed interface SectionRecord permits ConstantRecord, ItemRecord, MessageRecord
 {

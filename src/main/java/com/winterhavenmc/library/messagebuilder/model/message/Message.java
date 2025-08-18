@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.model.message;
 
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -54,14 +54,14 @@ import java.time.temporal.ChronoUnit;
  * @see com.winterhavenmc.library.messagebuilder.MessageBuilder
  * @see com.winterhavenmc.library.messagebuilder.model.recipient.Recipient
  * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey
+ * @see ValidMessageKey
  */
 public sealed interface Message permits ValidMessage, InvalidMessage
 {
     /**
-     * Associates a macro key with a value for later substitution during message rendering.
+     * Associates a macro string with a value for later substitution during message rendering.
      *
-     * @param macro the macro key to assign
+     * @param macro the macro string to assign
      * @param value the value to associate with the macro
      * @param <K> the enum type of the macro
      * @param <V> the value type
@@ -71,11 +71,11 @@ public sealed interface Message permits ValidMessage, InvalidMessage
 
 
     /**
-     * Associates a macro key with a value and explicit quantity, useful for pluralization or
+     * Associates a macro string with a value and explicit quantity, useful for pluralization or
      * contextual substitution that depends on numeric counts.
      *
      * @param quantity the quantity associated with the value
-     * @param macro the macro key
+     * @param macro the macro string
      * @param value the object to associate
      * @param <K> the enum type of the macro
      * @param <V> the value type
@@ -85,9 +85,9 @@ public sealed interface Message permits ValidMessage, InvalidMessage
 
 
     /**
-     * Associates a duration with the given macro key, using a defined precision.
+     * Associates a duration with the given macro string, using a defined precision.
      *
-     * @param macro the macro key
+     * @param macro the macro string
      * @param duration the {@link Duration} to be formatted and resolved
      * @param precision the {@link ChronoUnit} to control formatting granularity
      * @param <K> the enum type of the macro
@@ -105,11 +105,11 @@ public sealed interface Message permits ValidMessage, InvalidMessage
 
 
     /**
-     * Returns the {@link RecordKey} identifying the message template used in composition.
+     * Returns the {@link ValidMessageKey} identifying the message template used in composition.
      *
-     * @return the message key
+     * @return the message string
      */
-    RecordKey getMessageKey();
+    ValidMessageKey getMessageKey();
 
 
     /**

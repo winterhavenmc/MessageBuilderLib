@@ -17,8 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.name;
 
-
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
@@ -27,6 +26,7 @@ import java.util.function.Predicate;
 
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.BuiltIn.NAME;
 import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter.UNKNOWN_VALUE;
+
 
 /**
  * A functional interface representing an object with a name field, commonly used in
@@ -56,18 +56,18 @@ public interface Nameable
 	/**
 	 * Extracts the name field into a
 	 * {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap},
-	 * using the provided base key to construct a dot-notated macro key (e.g., {@code OBJECT.NAME}).
+	 * using the provided base string to construct a dot-notated macro string (e.g., {@code OBJECT.NAME}).
 	 *
 	 * <p>The name is formatted and validated before being inserted into the map.
-	 * If the base key cannot be extended (e.g., due to a parse error), an empty map is returned.
+	 * If the base string cannot be extended (e.g., due to a parse error), an empty map is returned.
 	 *
-	 * @param baseKey the top-level macro key to use as the namespace for the field
+	 * @param baseKey the top-level macro string to use as the namespace for the field
 	 * @param ctx an unused adapter context container (reserved for future use)
 	 * @return a map containing the extracted name value, or an empty map if the name is invalid
 	 */
-	default MacroStringMap extractName(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractName(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(NAME)
+		return baseKey.append(NAME).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatName(this.getName()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);

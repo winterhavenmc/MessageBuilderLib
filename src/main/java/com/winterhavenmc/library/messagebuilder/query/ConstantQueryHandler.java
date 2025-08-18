@@ -18,6 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.query;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReason;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
@@ -62,7 +64,7 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return an {@code Optional} String containing the String retrieved with keyPath, or an empty Optional if no
 	 * value was found for the keyPath
 	 */
-	public Optional<String> getString(final RecordKey key)
+	public Optional<String> getString(final ValidConstantKey key)
 	{
 		return Optional.ofNullable(sectionProvider.getSection().getString(key.toString()));
 	}
@@ -75,7 +77,7 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return a {@code List} of String containing the values retrieved using keyPath, or an empty List if no
 	 * value was found for the keyPath
 	 */
-	public List<String> getStringList(final RecordKey key)
+	public List<String> getStringList(final ValidConstantKey key)
 	{
 		return sectionProvider.getSection().getStringList(key.toString());
 	}
@@ -88,7 +90,7 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 	 * @return {@code int} containing the values retrieved using keyPath, or zero (0) if no
 	 * value was found for the keyPath
 	 */
-	public int getInt(final RecordKey key)
+	public int getInt(final ValidConstantKey key)
 	{
 		return sectionProvider.getSection().getInt(key.toString());
 	}
@@ -97,18 +99,21 @@ public class ConstantQueryHandler implements QueryHandler<ConstantRecord>
 	/**
 	 * Stub method until implemented
 	 *
-	 * @param key the record key
+	 * @param recordKey the record string
 	 * @return a ConstantRecord
 	 */
 	@Override
-	public ConstantRecord getRecord(final RecordKey key)
+	public ConstantRecord getRecord(final RecordKey recordKey)
 	{
-		ConfigurationSection section = sectionProvider.getSection();
-		Object constantEntry = section.get(key.toString());
+		final ConfigurationSection section = sectionProvider.getSection();
+		final Object constantEntry = section.get(recordKey.toString());
 
-		return (constantEntry == null)
-				? ConstantRecord.empty(key)
-				: ConstantRecord.from(key, constantEntry);
+		if (recordKey instanceof ValidConstantKey validConstantKey)
+			return (constantEntry != null)
+					? ConstantRecord.of(validConstantKey, constantEntry)
+					: ConstantRecord.empty(validConstantKey, InvalidRecordReason.CONSTANT_ENTRY_MISSING);
+
+		else return ConstantRecord.empty(recordKey, InvalidRecordReason.CONSTANT_KEY_INVALID);
 	}
 
 }

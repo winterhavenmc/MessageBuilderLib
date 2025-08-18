@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.maps;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.messages.Macro;
 
 import java.util.Optional;
@@ -34,12 +35,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class MacroObjectMapTest
 {
-	@Test @DisplayName("put inserts key/value pair in map.")
+	@Test @DisplayName("put inserts string/value pair in map.")
 	void put_inserts_key_value_pair_in_map()
 	{
 		// Arrange
 		Integer number = 42;
-		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).isValid().orElseThrow();
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 
 		// Act
@@ -54,7 +55,7 @@ class MacroObjectMapTest
 	void put_inserts_string_NULL_if_parameter_is_null()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("NUMBER").isValid().orElseThrow();
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(macroKey, null);
 
@@ -66,12 +67,12 @@ class MacroObjectMapTest
 	}
 
 
-	@Test @DisplayName("putIfAbsent inserts key/value pair in map when not already present.")
+	@Test @DisplayName("putIfAbsent inserts string/value pair in map when not already present.")
 	void putIfAbsent_inserts_key_value_pair_in_map_when_not_already_present()
 	{
 		// Arrange
 		Integer number = 42;
-		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).isValid().orElseThrow();
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 
 		// Act
@@ -82,13 +83,13 @@ class MacroObjectMapTest
 	}
 
 
-	@Test @DisplayName("putIfAbsent inserts key/value pair in map when not already present.")
+	@Test @DisplayName("putIfAbsent inserts string/value pair in map when not already present.")
 	void putIfAbsent_does_not_insert_key_value_pair_in_map_when_already_present()
 	{
 		// Arrange
 		Integer number1 = 42;
 		Integer number2 = 43;
-		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).isValid().orElseThrow();
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(macroKey, number1);
 
@@ -104,7 +105,7 @@ class MacroObjectMapTest
 	void putIfAbsent_inserts_string_NULL_if_parameter_is_null()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("NUMBER").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("NUMBER").isValid().orElseThrow();
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.putIfAbsent(macroKey, null);
 
@@ -116,12 +117,12 @@ class MacroObjectMapTest
 	}
 
 
-	@Test @DisplayName("get retrieves value for key in map.")
+	@Test @DisplayName("get retrieves value for string in map.")
 	void get_retrieves_value_for_key_in_map()
 	{
 		// Arrange
 		Integer number = 42;
-		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).isValid().orElseThrow();
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 		macroObjectMap.put(macroKey, number);
 
@@ -133,11 +134,11 @@ class MacroObjectMapTest
 	}
 
 
-	@Test @DisplayName("get returns empty optional for key not in map.")
+	@Test @DisplayName("get returns empty optional for string not in map.")
 	void get_retrieves_empty_optional_for_key_not_in_map()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of(Macro.PAGE_NUMBER).isValid().orElseThrow();
 		MacroObjectMap macroObjectMap = new MacroObjectMap();
 
 		// Act

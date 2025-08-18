@@ -16,7 +16,7 @@
  *     <li>{@link java.util.function.Predicate Predicate}
  *     — a funtional predicate passed as a parameter to the {@code validate} method to check against a parameter.</li>
  *     <li>{@link com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey}
- *     — an enum constant that corresponds to an error message key in the {@link java.util.ResourceBundle}</li>
+ *     — an enum constant that corresponds to an error message string in the {@link java.util.ResourceBundle}</li>
  *     <li>{@link com.winterhavenmc.library.messagebuilder.validation.Parameter}
  *     — an enum of symbolic parameter names used to identify invalid arguments in error messages.</li>
  * </ul>

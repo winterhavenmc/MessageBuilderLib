@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
@@ -82,8 +83,8 @@ class OwnableTest
 	void extractOwner_returns_populated_map()
 	{
 		// Arrange
-		MacroKey baseKey = MacroKey.of("TEST").orElseThrow();
-		MacroKey subKey = baseKey.append("OWNER").orElseThrow();
+		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append("OWNER").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Owner");
 
@@ -99,7 +100,7 @@ class OwnableTest
 	void formatOwner_returns_optional_string()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Owner");
 
@@ -115,7 +116,7 @@ class OwnableTest
 	void formatOwner_with_null_name_returns_empty_optional()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn(null);
 
@@ -131,7 +132,7 @@ class OwnableTest
 	void formatOwner_with_blank_name_returns_empty_optional()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("");
 
@@ -147,7 +148,7 @@ class OwnableTest
 	void formatOwner_with_null_owner_returns_empty_optional()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act

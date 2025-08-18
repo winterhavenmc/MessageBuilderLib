@@ -51,7 +51,7 @@ public class ValidationException extends IllegalArgumentException
 	 * The exception message is immediately formatted using the current
 	 * locale returned by {@link ValidationContext#getLocale()}.
 	 *
-	 * @param errorMessageKey a structured key identifying the error message template
+	 * @param errorMessageKey a structured string identifying the error message template
 	 * @param parameter the parameter that failed validation
 	 */
 	public ValidationException(final ErrorMessageKey errorMessageKey, final Parameter parameter)

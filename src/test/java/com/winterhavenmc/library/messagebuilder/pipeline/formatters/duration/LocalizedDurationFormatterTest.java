@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import com.winterhavenmc.library.messagebuilder.query.ConstantQueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
@@ -47,8 +48,8 @@ class LocalizedDurationFormatterTest
 	@Mock QueryHandlerFactory queryHandlerFactoryMock;
 
 	LocalizedDurationFormatter formatter;
-	RecordKey timeUnlimitedKey = RecordKey.of("TIME.UNLIMITED").orElseThrow();
-	RecordKey timeLessThanKey = RecordKey.of("TIME.LESS_THAN").orElseThrow();
+	ValidConstantKey timeUnlimitedKey = ConstantKey.of("TIME.UNLIMITED").isValid().orElseThrow();
+	ValidConstantKey timeLessThanKey = ConstantKey.of("TIME.LESS_THAN").isValid().orElseThrow();
 
 
 	@BeforeEach
@@ -64,7 +65,7 @@ class LocalizedDurationFormatterTest
 	void testFormatUnlimited()
 	{
 		// Arrange
-		ConstantRecord constantRecord = ConstantRecord.from(timeUnlimitedKey, "UNLIMITED-TESTING");
+		ConstantRecord constantRecord = ConstantRecord.of(timeUnlimitedKey, "UNLIMITED-TESTING");
 		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
 		when(constantQueryHandlerMock.getRecord(timeUnlimitedKey)).thenReturn(constantRecord);
 
@@ -85,7 +86,7 @@ class LocalizedDurationFormatterTest
 	void testFormatLessThan()
 	{
 		// Arrange
-		ConstantRecord constantRecord = ConstantRecord.from(timeLessThanKey, "less than {DURATION} (TESTING)");
+		ConstantRecord constantRecord = ConstantRecord.of(timeLessThanKey, "less than {DURATION} (TESTING)");
 		when(delegateMock.format(Duration.of(1, ChronoUnit.SECONDS), ChronoUnit.SECONDS)).thenReturn("1 second");
 		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
 		when(constantQueryHandlerMock.getRecord(timeLessThanKey)).thenReturn(constantRecord);
@@ -163,7 +164,7 @@ class LocalizedDurationFormatterTest
 	void format_less_than()
 	{
 		// Arrange
-		ConstantRecord record = ConstantRecord.from(timeLessThanKey, "less than {DURATION}");
+		ConstantRecord record = ConstantRecord.of(timeLessThanKey, "less than {DURATION}");
 		when(delegateMock.format(any(Duration.class), eq(ChronoUnit.MINUTES))).thenReturn("1 minute");
 		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
 		when(constantQueryHandlerMock.getRecord(timeLessThanKey)).thenReturn(record);
@@ -186,7 +187,7 @@ class LocalizedDurationFormatterTest
 	void format_unlimited()
 	{
 		// Arrange
-		ConstantRecord record = ConstantRecord.from(timeUnlimitedKey, "UNLIMITED-TEST");
+		ConstantRecord record = ConstantRecord.of(timeUnlimitedKey, "UNLIMITED-TEST");
 		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
 		when(constantQueryHandlerMock.getRecord(timeUnlimitedKey)).thenReturn(record);
 

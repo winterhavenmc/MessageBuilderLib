@@ -30,97 +30,60 @@ CONSTANTS:
   TEST_INT: 42
 
 
-################
-# Macro Defaults
-################
-
-
 ##############
 # Item Strings
 ##############
 ITEMS:
   DEFAULT:
-    NAME:
-      SINGULAR: 'Default Item'
-      PLURAL: 'Default Items'
-    INVENTORY_NAME:
-      SINGULAR: 'Default Inventory Item'
-      PLURAL:  'Default Inventory ItemS'
-    ITEM_LORE:
+    MATERIAL: GOLDEN_PICKAXE
+    DISPLAY_NAME: 'Default Item'
+    DISPLAY_NAME_PLURAL: 'Default Items'
+    INVENTORY_NAME: 'Default Inventory Item'
+    LORE:
       - '&edefault lore line 1'
       - '&edefault lore line 2'
 
   TEST_ITEM_1:
-    NAME:
-      SINGULAR: '&aTest Item'
-      PLURAL: '&aTest Items'
-    INVENTORY_NAME:
-      SINGULAR: '&aInventory Item'
-      PLURAL: '&aInventory Item'
-    ITEM_LORE:
+    DISPLAY_NAME: '&aTest Item'
+    DISPLAY_NAME_PLURAL: '&aTest Items'
+    INVENTORY_NAME: '&aInventory Item'
+    LORE:
       - '&etest1 lore line 1'
       - '&etest1 lore line 2'
-    QUANTITY: 1
 
   TEST_ITEM_2:
-    NAME:
-      SINGULAR: '&aTest Item 2'
-      PLURAL: '&aTest Items 2'
-    INVENTORY_NAME:
-      SINGULAR: '&aInventory Item 2'
-      PLURAL: '&aInventory Items 2'
+    DISPLAY_NAME: '&aTest Item 2'
+    DISPLAY_NAME_PLURAL: '&aTest Items 2'
+    INVENTORY_NAME: '&aInventory Item 2'
     LORE:
       - '&etest2 lore line 1'
       - '&etest2 lore line 2'
 
   UNDEFINED_ITEM_NAME:
-    NAME:
-      PLURAL: '&aTest Items'
-    INVENTORY_NAME:
-      SINGULAR: '&aInventory Item'
-      PLURAL: '&aInventory Items'
+    DISPLAY_NAME_PLURAL: '&aTest Items'
+    INVENTORY_NAME: '&aInventory Item'
     LORE:
       - '&elore line 1'
       - '&elore line 2'
 
   UNDEFINED_NAME_PLURAL:
-    NAME:
-      SINGULAR: '&aTest Item'
-      PLURAL: '&aTest Items'
-    INVENTORY_NAME:
-      SINGULAR: '&aInventory Item'
-      PLURAL: '&aInventory ItemS'
+    DISPLAY_NAME: '&aTest Item'
+    INVENTORY_NAME: '&aInventory Item'
     LORE:
       - '&elore line 1'
       - '&elore line 2'
 
   UNDEFINED_INVENTORY_ITEM_NAME:
-    NAME:
-      SINGULAR: '&aTest Item'
-      PLURAL: '&aTest Items'
-    INVENTORY_NAME:
-      PLURAL: '&aInventory ItemS'
-    ITEM_LORE:
-      - '&elore line 1'
-      - '&elore line 2'
-
-  UNDEFINED_INVENTORY_ITEM_NAME_PLURAL:
-    NAME:
-      SINGULAR: '&aTest Item'
-      PLURAL: '&aTest Items'
-    INVENTORY_NAME:
-      SINGULAR: '&aInventory Item'
-    ITEM_LORE:
+    DISPLAY_NAME: '&aTest Item'
+    DISPLAY_NAME_PLURAL: '&aTest Items'
+    LORE:
       - '&elore line 1'
       - '&elore line 2'
 
   UNDEFINED_ITEM_LORE:
-    NAME:
-      SINGULAR: '&aTest Item'
-      PLURAL: '&aTest Items'
-    INVENTORY_NAME:
-      SINGULAR: '&aInventory Item'
-      PLURAL: '&aInventory Item'
+    DISPLAY_NAME: '&aTest Item'
+    DISPLAY_NAME_PLURAL: '&aTest Items'
+    INVENTORY_NAME: '&aInventory Item'
 
 
 ###################

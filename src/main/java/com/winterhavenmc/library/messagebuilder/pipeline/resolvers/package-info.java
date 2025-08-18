@@ -10,19 +10,19 @@
  * {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap}
  * into one or more entries in a
  * {@link com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap MacroStringMap},
- * keyed by {@code MacroKey} placeholders.
+ * keyed by {@code LegacyMacroKey} placeholders.
  *
  * <h2>Design Overview</h2>
  * <ul>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.AtomicResolver}
  *   	handles atomic or primitive values (e.g. {@code Boolean}, {@code String}, {@code Number},
- *      {@code Duration}) and maps them directly to the base macro key.</li>
+ *      {@code Duration}) and maps them directly to the base macro string.</li>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver}
  *   	handles structured or compound values using a registry of
  *      Adapter instances, extracting multiple sub-values mapped to dot-notated subkeys.</li>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver}
  *   	serves as a delegating resolver that applies multiple resolvers in order,
- *      preserving the first-resolved value for each key.</li>
+ *      preserving the first-resolved value for each string.</li>
  * </ul>
  *
  * <h2>Use Case</h2>
@@ -38,7 +38,7 @@
  * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry AdapterRegistry
  * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap MacroObjectMap
  * @see com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap MacroStringMap
- * @see com.winterhavenmc.library.messagebuilder.keys.MacroKey MacroKey
+ * @see com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey ValidMacroKey
  */
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;

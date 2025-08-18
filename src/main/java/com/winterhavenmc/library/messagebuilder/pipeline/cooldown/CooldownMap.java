@@ -58,12 +58,12 @@ public final class CooldownMap implements Cooldown
 
 
 	/**
-	 * Checks whether the message corresponding to the given cooldown key
+	 * Checks whether the message corresponding to the given cooldown string
 	 * is currently cooling down for a recipient.
 	 * <p>
-	 * Returns {@code true} if the key has no cooldown entry or the cooldown has expired.
+	 * Returns {@code true} if the string has no cooldown entry or the cooldown has expired.
 	 *
-	 * @param key the composed cooldown key
+	 * @param key the composed cooldown string
 	 * @return {@code true} if the cooldown has expired or doesn't exist
 	 */
 	public boolean notCooling(final CooldownKey key)

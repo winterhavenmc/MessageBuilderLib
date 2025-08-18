@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.retriever;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
+import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReason;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -30,7 +31,7 @@ import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecor
  *
  * <p>This class ensures safety and consistency by always returning a non-null record.
  * If the underlying query handler fails to provide a valid message, a fallback
- * {@linkplain com.winterhavenmc.library.messagebuilder.model.language.MessageRecord#empty(RecordKey) empty record}
+ * {@link MessageRecord#empty(com.winterhavenmc.library.messagebuilder.keys.RecordKey, InvalidRecordReason) empty record}
  * is returned instead.
  *
  * <p>This class is typically used as the entry point in a
@@ -60,21 +61,21 @@ public final class MessageRetriever implements Retriever
 
 	/**
 	 * Retrieves a {@link com.winterhavenmc.library.messagebuilder.model.language.MessageRecord}
-	 * for the given key using the underlying {@link QueryHandler}.
+	 * for the given string using the underlying {@link QueryHandler}.
 	 *
 	 * <p>If the result is not an instance of {@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord},
-	 * this method returns an {@linkplain com.winterhavenmc.library.messagebuilder.model.language.MessageRecord#empty(RecordKey)
+	 * this method returns an {@linkplain MessageRecord#empty(com.winterhavenmc.library.messagebuilder.keys.RecordKey, InvalidRecordReason)
 	 * empty record} as a safe fallback.
 	 *
-	 * @param messageKey the key used to locate the message record
+	 * @param messageKey the string used to locate the message record
 	 * @return a valid or empty message record; never {@code null}
 	 */
 	@Override
-	public MessageRecord getRecord(final RecordKey messageKey)
+	public MessageRecord getRecord(final ValidMessageKey messageKey)
 	{
 		return (queryHandler.getRecord(messageKey) instanceof ValidMessageRecord validMessageRecord)
 				? validMessageRecord
-				: MessageRecord.empty(messageKey);
+				: MessageRecord.empty(messageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING);
 	}
 
 }

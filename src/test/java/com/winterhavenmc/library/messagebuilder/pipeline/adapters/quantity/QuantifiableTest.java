@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
@@ -82,8 +83,8 @@ class QuantifiableTest
 	void extractQuantity_returns_populated_map()
 	{
 		// Arrange
-		MacroKey baseKey = MacroKey.of("TEST").orElseThrow();
-		MacroKey subKey = baseKey.append("QUANTITY").orElseThrow();
+		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append("QUANTITY").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(ctxMock.formatterContainer()).thenReturn(formatterContainerMock);
 		when(formatterContainerMock.localeNumberFormatter()).thenReturn(numberFormatterMock);
@@ -101,7 +102,7 @@ class QuantifiableTest
 	void formatQuantity_returns_optional_string()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(numberFormatterMock.getFormatted(42)).thenReturn("42");
 
@@ -117,7 +118,7 @@ class QuantifiableTest
 	void formatName_with_null_name_returns_empty_optional()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act
@@ -132,7 +133,7 @@ class QuantifiableTest
 	void formatName_with_blank_name_returns_empty_optional()
 	{
 		// Arrange
-		MacroKey macroKey = MacroKey.of("TEST").orElseThrow();
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act

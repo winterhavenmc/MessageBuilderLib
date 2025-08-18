@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.World;
 
 import java.util.Optional;
@@ -27,7 +26,7 @@ import java.util.Optional;
  * A {@link WorldNameRetriever} implementation that retrieves the alias name of a
  * {@link World} using the <strong>Multiverse-Core</strong> API.
  * <p>
- * This class interacts directly with {@link MultiverseCore} and its {@code MVWorldManager}
+ * This class interacts directly with {@code MultiverseCore} and its {@code MVWorldManager}
  * to look up world metadata, including alias and display formatting.
  * <p>
  * If the world is not managed by Multiverse, or if any part of the plugin's world
@@ -37,7 +36,6 @@ import java.util.Optional;
  * to be used directly unless fine-grained access to Multiverse aliases is needed.
  *
  * @see WorldNameRetriever
- * @see MultiverseCore
  * @see World
  */
 public class DefaultRetriever implements WorldNameRetriever

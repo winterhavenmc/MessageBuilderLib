@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.resolvers;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
@@ -25,10 +25,10 @@ import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
 /**
  * Defines a contract for resolving values from a {@link MacroObjectMap} into a
- * set of string-replaceable entries mapped by {@link MacroKey}s.
+ * set of string-replaceable entries mapped by {@link ValidMacroKey}s.
  * <p>
  * A {@code Resolver} converts one or more input objects associated with a given
- * macro key into a {@link MacroStringMap}, where each entry corresponds to a
+ * macro string into a {@link MacroStringMap}, where each entry corresponds to a
  * placeholder that may be used in a templated message or text.
  * <p>
  * Implementations may vary in complexity:
@@ -41,7 +41,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
  * This interface supports functional-style composition and may be used in lambda
  * form where appropriate.
  *
- * @see MacroKey
+ * @see ValidMacroKey
  * @see MacroObjectMap
  * @see MacroStringMap
  * @see AtomicResolver
@@ -53,15 +53,15 @@ public interface Resolver
 {
 	/**
 	 * Resolves a set of string values from the given {@link MacroObjectMap}
-	 * for the provided {@link MacroKey}. Each resolved value corresponds to
+	 * for the provided {@link ValidMacroKey}. Each resolved value corresponds to
 	 * a macro placeholder that may appear in a templated message.
 	 * <p>
 	 * The resulting {@link MacroStringMap} may contain one or more entries.
 	 * Implementations may also return an empty map if no resolution was possible.
 	 *
-	 * @param key the base macro key used to look up and resolve objects
+	 * @param key the base macro string used to look up and resolve objects
 	 * @param macroObjectMap the map of objects available for macro resolution
-	 * @return a {@link MacroStringMap} containing resolved macro key-value pairs
+	 * @return a {@link MacroStringMap} containing resolved macro string-value pairs
 	 */
-	MacroStringMap resolve(MacroKey key, MacroObjectMap macroObjectMap);
+	MacroStringMap resolve(ValidMacroKey key, MacroObjectMap macroObjectMap);
 }

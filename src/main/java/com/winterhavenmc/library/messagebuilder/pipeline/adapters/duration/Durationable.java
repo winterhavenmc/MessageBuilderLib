@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.duration;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter;
@@ -37,7 +37,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  *
  * <p>Objects implementing this interface can provide a duration value via {@link #getDuration()},
  * and automatically extract localized string representations of that duration through the
- * {@link #extractDuration(MacroKey, ChronoUnit, AdapterContextContainer)} method.
+ * {@link #extractDuration(ValidMacroKey, ChronoUnit, AdapterContextContainer)} method.
  *
  * <p>This interface supports usage in message templates via the {@code [OBJECT.DURATION}} macro.
  * Formatting is handled by the {@link com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter}
@@ -45,7 +45,7 @@ import static com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter
  *
  * <p>Three utility methods are provided:
  * <ul>
- *   <li>{@link #extractDuration(MacroKey, ChronoUnit, AdapterContextContainer)} — generates a
+ *   <li>{@link #extractDuration(ValidMacroKey, ChronoUnit, AdapterContextContainer)} — generates a
  *       {@link MacroStringMap} with the localized string representation of the duration</li>
  *   <li>{@link #formatDuration(Duration, ChronoUnit, DurationFormatter)} — formats a duration using
  *       the configured {@code DurationFormatter}</li>
@@ -79,20 +79,20 @@ public interface Durationable
 
 	/**
 	 * Extracts a {@link MacroStringMap} containing a single entry mapping the provided
-	 * {@link MacroKey} (with {@code .DURATION} appended) to a localized string representation
+	 * {@link ValidMacroKey} (with {@code .DURATION} appended) to a localized string representation
 	 * of this object's duration.
 	 *
-	 * @param baseKey the top-level key to which {@code DURATION} will be appended
+	 * @param baseKey the top-level string to which {@code DURATION} will be appended
 	 * @param lowerBound the smallest {@link ChronoUnit} to display (e.g., {@code MINUTES}, {@code SECONDS})
 	 * @param ctx context container providing the
 	 * {@link com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter}
-	 * @return a {@code MacroStringMap} containing the extracted duration string; empty if the key could not be constructed
+	 * @return a {@code MacroStringMap} containing the extracted duration string; empty if the string could not be constructed
 	 */
-	default MacroStringMap extractDuration(final MacroKey baseKey,
+	default MacroStringMap extractDuration(final ValidMacroKey baseKey,
 										   final ChronoUnit lowerBound,
 										   final AdapterContextContainer ctx)
 	{
-		return baseKey.append(DURATION)
+		return baseKey.append(DURATION).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatDuration(this.getDuration(), lowerBound, ctx.formatterContainer()
 						.durationFormatter()).orElse(UNKNOWN_VALUE)))

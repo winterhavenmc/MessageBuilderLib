@@ -17,14 +17,14 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.retriever;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 
 
 /**
  * A functional interface representing the first stage of the message pipeline:
  * retrieving a {@link com.winterhavenmc.library.messagebuilder.model.language.MessageRecord}
- * associated with a given {@link com.winterhavenmc.library.messagebuilder.keys.RecordKey}.
+ * associated with a given {@link ValidMessageKey}.
  *
  * <p>Implementations of this interface typically fetch records from a pre-parsed
  * data source such as a YAML-backed {@code ConfigurationSection}, returning either
@@ -40,5 +40,5 @@ import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 @FunctionalInterface
 public interface Retriever
 {
-	MessageRecord getRecord(RecordKey key);
+	MessageRecord getRecord(ValidMessageKey key);
 }

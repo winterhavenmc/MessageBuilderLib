@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.NumberFormatter;
@@ -55,15 +55,15 @@ public interface Quantifiable
 
 	/**
 	 * Extracts a {@link MacroStringMap} containing the formatted quantity string.
-	 * This value will be added using the subkey {@code QUANTITY} of the provided macro key.
+	 * This value will be added using the subkey {@code QUANTITY} of the provided macro string.
 	 *
-	 * @param baseKey the macro key under which to store the formatted quantity
+	 * @param baseKey the macro string under which to store the formatted quantity
 	 * @param ctx     the adapter context providing the number formatter
-	 * @return a {@code MacroStringMap} with a formatted quantity string, or an empty map if the key cannot be derived
+	 * @return a {@code MacroStringMap} with a formatted quantity string, or an empty map if the string cannot be derived
 	 */
-	default MacroStringMap extractQuantity(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractQuantity(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(QUANTITY)
+		return baseKey.append(QUANTITY).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatQuantity(getQuantity(), ctx.formatterContainer().localeNumberFormatter()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);

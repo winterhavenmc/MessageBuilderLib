@@ -18,7 +18,10 @@
 package com.winterhavenmc.library.messagebuilder.model.language;
 
 import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import org.bukkit.configuration.ConfigurationSection;
+
+import java.util.Optional;
 
 
 /**
@@ -32,13 +35,11 @@ import org.bukkit.configuration.ConfigurationSection;
  *
  * <h2>Implementations</h2>
  * <ul>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord} –
- *       A fully parsed and validated item entry</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord} –
- *       A fallback object representing a missing or invalid item definition</li>
+ *   <li>{@link ValidItemRecord} – A fully parsed and validated item entry</li>
+ *   <li>{@link InvalidItemRecord} – A fallback object representing a missing or invalid item definition</li>
  * </ul>
  *
- * <p>Instances are created using {@link #from(RecordKey, ConfigurationSection)},
+ * <p>Instances are created using {@link #of(ValidItemKey, ConfigurationSection)},
  * which applies default behavior and validation automatically.
  * <p>
  * This interface extends {@link SectionRecord}, allowing all item records
@@ -47,7 +48,7 @@ import org.bukkit.configuration.ConfigurationSection;
  * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  * @see com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord ValidItemRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord InvalidItemRecord
- * @see com.winterhavenmc.library.messagebuilder.keys.RecordKey RecordKey
+ * @see ValidItemKey ValidItemKey
  */
 public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {
@@ -58,14 +59,14 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	 * with a reason indicating the failure. Otherwise, a {@link ValidItemRecord}
 	 * is created using parsed and validated values.
 	 *
-	 * @param itemKey the key identifying this item record
+	 * @param itemKey the string identifying this item record
 	 * @param itemEntry the configuration section associated with this item
 	 * @return a valid or invalid {@code ItemRecord}, depending on input
 	 */
-	static ItemRecord from(final RecordKey itemKey, final ConfigurationSection itemEntry)
+	static ItemRecord of(final ValidItemKey itemKey, final ConfigurationSection itemEntry)
 	{
 		return itemEntry == null
-				? ItemRecord.empty(itemKey)
+				? ItemRecord.empty(itemKey, InvalidRecordReason.ITEM_ENTRY_MISSING)
 				: ValidItemRecord.create(itemKey, itemEntry);
 	}
 
@@ -73,18 +74,18 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	/**
 	 * Returns an {@link InvalidItemRecord} representing a missing or unresolved item section.
 	 *
-	 * @param itemKey the key that could not be resolved
+	 * @param itemKey the string that could not be resolved
 	 * @return an invalid item record
 	 */
-	static InvalidItemRecord empty(final RecordKey itemKey)
+	static InvalidItemRecord empty(final RecordKey itemKey, InvalidRecordReason reason)
 	{
-		return new InvalidItemRecord(itemKey, "Missing item section.");
+		return new InvalidItemRecord(itemKey, reason);
 	}
 
 
 	/**
 	 * Enumeration of field keys within an {@code ItemRecord}, mapping enum constants
-	 * to their corresponding YAML key paths.
+	 * to their corresponding YAML string paths.
 	 * <p>
 	 * This enum centralizes all known fields used for parsing and provides
 	 * a stable location for field-to-path mappings. It also allows the YAML
@@ -92,15 +93,15 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	 *
 	 * <p>Example usage:
 	 * {@snippet lang="java":
-	 *  String singularName = section.getString(ItemRecord.Field.NAME_SINGULAR.toKey());
+	 *  String displayName = section.getString(ItemRecord.Field.DISPLAY_NAME.toKey());
 	 * }
 	 */
 	enum Field
 	{
-		NAME_SINGULAR("NAME.SINGULAR"),
-		NAME_PLURAL("NAME.PLURAL"),
-		INVENTORY_NAME_SINGULAR("INVENTORY_NAME.SINGULAR"),
-		INVENTORY_NAME_PLURAL("INVENTORY_NAME.PLURAL"),
+		MATERIAL("MATERIAL"),
+		NAME_SINGULAR("DISPLAY_NAME"),
+		NAME_PLURAL("DISPLAY_NAME_PLURAL"),
+		INVENTORY_NAME("INVENTORY_NAME"),
 		LORE("LORE");
 
 		private final String keyString;
@@ -109,11 +110,19 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 
 
 		/**
-		 * Returns the YAML key path string associated with this field.
+		 * Returns the YAML string path string associated with this field.
 		 *
-		 * @return the raw configuration key string
+		 * @return the raw configuration string
 		 */
 		public String toKey() { return this.keyString; }
+	}
+
+
+	default Optional<ValidItemRecord> isValid()
+	{
+		return (this instanceof ValidItemRecord validItemRecord)
+				? Optional.of(validItemRecord)
+				: Optional.empty();
 	}
 
 }

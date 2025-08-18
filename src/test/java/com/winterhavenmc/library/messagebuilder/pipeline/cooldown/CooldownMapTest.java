@@ -17,9 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.cooldown;
 
+import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -39,6 +40,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.library.messagebuilder.MessageBuilder.TICKS;
 import static com.winterhavenmc.library.messagebuilder.messages.MessageId.ENABLED_MESSAGE;
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
@@ -57,12 +59,12 @@ class CooldownMapTest
 	ValidMessageRecord validMessageRecord;
 	FinalMessageRecord finalMessageRecord;
 	ConfigurationSection section;
-	RecordKey recordKey;
+	ValidMessageKey recordKey;
 
 
 	@BeforeEach
 	void setUp() {
-		recordKey = RecordKey.of(ENABLED_MESSAGE).orElseThrow();
+		recordKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 		cooldownMap = new CooldownMap();
 
 		section = new MemoryConfiguration();
@@ -78,14 +80,14 @@ class CooldownMapTest
 		validMessageRecord = ValidMessageRecord.create(recordKey, section);
 
 		finalMessageRecord = new FinalMessageRecord(
-				RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow(),
+				MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow(),
 				true,
 				"this is a message.",
 				Duration.ofSeconds(3),
 				"this is a title.",
-				20,
-				40,
-				30,
+				Duration.of(20, TICKS),
+				Duration.of(40, TICKS),
+				Duration.of(30, TICKS),
 				"this is a subtitle.",
 				Optional.of("this is a final message string"),
 				Optional.of("this is a final title string"),
@@ -108,7 +110,7 @@ class CooldownMapTest
 				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
-			cooldownKey = RecordKey.of(MessageId.ENABLED_MESSAGE)
+			cooldownKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid()
 					.flatMap(recordKey -> CooldownKey.of(recipient, recordKey))
 					.orElseThrow();
 
@@ -141,7 +143,7 @@ class CooldownMapTest
 			cooldownMap.putExpirationTime(recipient, finalMessageRecord);
 
 			// Assert TODO: test that second put did not overwrite first entry
-			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+			ValidMessageKey recordKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
 			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 			assertFalse(cooldownMap.notCooling(cooldownKey));
@@ -153,7 +155,7 @@ class CooldownMapTest
 
 
 	@Test
-	@DisplayName("notCooling() returns false when entry for key exists in map.")
+	@DisplayName("notCooling() returns false when entry for string exists in map.")
 	void notCooling_returns_false_if_entry_with_key_exists_in_map()
 	{
 		// Arrange
@@ -164,7 +166,7 @@ class CooldownMapTest
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		ValidMessageKey recordKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
 		CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 		// Act
@@ -179,7 +181,7 @@ class CooldownMapTest
 
 
 	@Test
-	@DisplayName("notCooling returns true when entry for key does not exist in map.")
+	@DisplayName("notCooling returns true when entry for string does not exist in map.")
 	void notCooling_returns_true_if_entry_with_key_does_not_exist_in_map()
 	{
 		// Arrange
@@ -190,7 +192,7 @@ class CooldownMapTest
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 
-		RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+		ValidMessageKey recordKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
 		CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 		// Act
@@ -230,7 +232,7 @@ class CooldownMapTest
 				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
 
-			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+			ValidMessageKey recordKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
 			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 			cooldownMap.putExpirationTime(recipient, finalMessageRecord);
 
@@ -255,7 +257,7 @@ class CooldownMapTest
 				case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 				case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 			};
-			RecordKey recordKey = RecordKey.of(MessageId.ENABLED_MESSAGE).orElseThrow();
+			ValidMessageKey recordKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
 			CooldownKey cooldownKey = CooldownKey.of(recipient, recordKey).orElseThrow();
 
 			section.set(MessageRecord.Field.REPEAT_DELAY.toKey(), -10);

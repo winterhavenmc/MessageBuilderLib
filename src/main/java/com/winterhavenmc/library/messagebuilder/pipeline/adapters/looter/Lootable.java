@@ -17,10 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
 
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 
 import java.util.Optional;
@@ -50,19 +51,19 @@ public interface Lootable
 	 *
 	 * @return the looter as an {@link Entity}, or {@code null} if unknown
 	 */
-	Entity getLooter();
+	AnimalTamer getLooter();
 
 
 	/**
 	 * Extracts the looter's name as a macro replacement field.
 	 *
-	 * @param baseKey the macro key root
+	 * @param baseKey the macro string root
 	 * @param ctx the adapter context with formatting support
-	 * @return a {@link MacroStringMap} containing the looter key and value if resolvable
+	 * @return a {@link MacroStringMap} containing the looter string and value if resolvable
 	 */
-	default MacroStringMap extractLooter(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractLooter(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(LOOTER)
+		return baseKey.append(LOOTER).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatLooter(getLooter()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);
@@ -72,8 +73,8 @@ public interface Lootable
 	/**
 	 * Predicate to validate whether a looter has a valid, non-blank name.
 	 */
-	Predicate<Entity> VALID_LOOTER = looter -> looter != null
-			&& !looter.getName().isBlank();
+	Predicate<AnimalTamer> VALID_LOOTER = looter -> looter != null
+			&& looter.getName() != null && !looter.getName().isBlank();
 
 
 	/**
@@ -82,10 +83,10 @@ public interface Lootable
 	 * @param looter the entity who has permission to loot the object
 	 * @return an {@code Optional<String>} containing the name if valid, otherwise empty
 	 */
-	static Optional<String> formatLooter(final Entity looter)
+	static Optional<String> formatLooter(final AnimalTamer looter)
 	{
 		return (VALID_LOOTER.test(looter))
-				? Optional.of(looter.getName())
+				? Optional.ofNullable(looter.getName())
 				: Optional.empty();
 	}
 

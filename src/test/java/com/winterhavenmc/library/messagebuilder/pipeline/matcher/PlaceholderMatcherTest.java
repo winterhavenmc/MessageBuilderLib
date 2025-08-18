@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.matcher;
 
 import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import org.junit.jupiter.api.*;
 
 import java.util.Set;
@@ -46,14 +47,14 @@ class PlaceholderMatcherTest
 		String messageString = "This is a {MESSAGE} with {SEVERAL} {PLACE_HOLDERS} and one {INVALID PLACEHOLDER}.";
 
 		// Act
-		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
-		Set<MacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
+		Stream<ValidMacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
+		Set<ValidMacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
 
 		// Assert
-		assertTrue(placeholderSet.contains(MacroKey.of("SEVERAL").orElseThrow()));
-		assertTrue(placeholderSet.contains(MacroKey.of("MESSAGE").orElseThrow()));
-		assertTrue(placeholderSet.contains(MacroKey.of("PLACE_HOLDERS").orElseThrow()));
-		assertFalse(placeholderSet.contains(MacroKey.of("This").orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("SEVERAL").isValid().orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("MESSAGE").isValid().orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("PLACE_HOLDERS").isValid().orElseThrow()));
+		assertFalse(placeholderSet.contains(MacroKey.of("This").isValid().orElseThrow()));
 		assertEquals(3, placeholderSet.size());
 	}
 
@@ -65,8 +66,8 @@ class PlaceholderMatcherTest
 		String messageString = "This {1MESSAGE} contains {only} invalid {PLACE:HOLDERS} including some {INVALID PLACEHOLDERS} like {this}.";
 
 		// Act
-		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
-		Set<MacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
+		Stream<ValidMacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
+		Set<ValidMacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
 
 		// Assert
 		assertEquals(0, placeholderSet.size());
@@ -80,13 +81,13 @@ class PlaceholderMatcherTest
 		String messageString = "This is a {MESSAGE.DISPLAY_NAME} with {SEVERAL} valid {PLACE_HOLDERS}.";
 
 		// Act
-		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
-		Set<MacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
+		Stream<ValidMacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, FULL_KEY_PATTERN);
+		Set<ValidMacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
 
 		// Assert
-		assertTrue(placeholderSet.contains(MacroKey.of("MESSAGE.DISPLAY_NAME").orElseThrow()));
-		assertTrue(placeholderSet.contains(MacroKey.of("SEVERAL").orElseThrow()));
-		assertTrue(placeholderSet.contains(MacroKey.of("PLACE_HOLDERS").orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("MESSAGE.DISPLAY_NAME").isValid().orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("SEVERAL").isValid().orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("PLACE_HOLDERS").isValid().orElseThrow()));
 		assertEquals(3, placeholderSet.size());
 	}
 
@@ -98,15 +99,15 @@ class PlaceholderMatcherTest
 		String messageString = "This is a {MESSAGE.DISPLAY_NAME} with {SEVERAL} {PLACE_HOLDERS} including {INVALID PLACEHOLDERS}.";
 
 		// Act
-		Stream<MacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, BASE_KEY_PATTERN);
-		Set<MacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
+		Stream<ValidMacroKey> placeholderStream = new PlaceholderMatcher().match(messageString, BASE_KEY_PATTERN);
+		Set<ValidMacroKey> placeholderSet = placeholderStream.collect(Collectors.toSet());
 
 		// Assert
-		assertTrue(placeholderSet.contains(MacroKey.of("SEVERAL").orElseThrow()));
-		assertTrue(placeholderSet.contains(MacroKey.of("MESSAGE").orElseThrow()));
-		assertTrue(placeholderSet.contains(MacroKey.of("PLACE_HOLDERS").orElseThrow()));
-		assertFalse(placeholderSet.contains(MacroKey.of("MESSAGE.DISPLAY_NAME").orElseThrow()));
-		assertFalse(placeholderSet.contains(MacroKey.of("This").orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("SEVERAL").isValid().orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("MESSAGE").isValid().orElseThrow()));
+		assertTrue(placeholderSet.contains(MacroKey.of("PLACE_HOLDERS").isValid().orElseThrow()));
+		assertFalse(placeholderSet.contains(MacroKey.of("MESSAGE.DISPLAY_NAME").isValid().orElseThrow()));
+		assertFalse(placeholderSet.contains(MacroKey.of("This").isValid().orElseThrow()));
 		assertEquals(3, placeholderSet.size());
 	}
 

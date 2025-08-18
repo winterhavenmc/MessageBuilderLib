@@ -17,9 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroStringMap;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 
 import java.util.Optional;
@@ -49,19 +50,19 @@ public interface Killable
 	 *
 	 * @return the killer as an {@link Entity}, or {@code null} if not available
 	 */
-	Entity getKiller();
+	AnimalTamer getKiller();
 
 
 	/**
-	 * Extracts a macro string map with the killer's name, using the given base key and context.
+	 * Extracts a macro string map with the killer's name, using the given base string and context.
 	 *
-	 * @param baseKey the macro key that identifies the root placeholder
+	 * @param baseKey the macro string that identifies the root placeholder
 	 * @param ctx the adapter context container with formatting tools
 	 * @return a {@link MacroStringMap} containing the killer field, or an empty map if not resolvable
 	 */
-	default MacroStringMap extractKiller(final MacroKey baseKey, final AdapterContextContainer ctx)
+	default MacroStringMap extractKiller(final ValidMacroKey baseKey, final AdapterContextContainer ctx)
 	{
-		return baseKey.append(KILLER)
+		return baseKey.append(KILLER).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatKiller(this.getKiller()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);
@@ -71,8 +72,8 @@ public interface Killable
 	/**
 	 * Predicate that evaluates whether a killer is considered valid and non-blank.
 	 */
-	Predicate<Entity> VALID_KILLER = killer -> killer != null
-			&& !killer.getName().isBlank();
+	Predicate<AnimalTamer> VALID_KILLER = killer -> killer != null
+			&& killer.getName() != null && !killer.getName().isBlank();
 
 
 	/**
@@ -81,10 +82,10 @@ public interface Killable
 	 * @param killer the entity that performed the kill
 	 * @return an {@code Optional<String>} containing the killer's name, if valid
 	 */
-	static Optional<String> formatKiller(final Entity killer)
+	static Optional<String> formatKiller(final AnimalTamer killer)
 	{
 		return (VALID_KILLER.test(killer))
-				? Optional.of(killer.getName())
+				? Optional.ofNullable(killer.getName())
 				: Optional.empty();
 	}
 

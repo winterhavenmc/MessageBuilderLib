@@ -18,27 +18,28 @@
 package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.model.message.Message;
-import com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.library.messagebuilder.util.MockUtility;
 
-import org.bukkit.Server;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
@@ -54,14 +55,14 @@ class MessageBuilderTest
 {
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
-	@Mock Server serverMock;
-	@Mock PluginManager pluginManagerMock;
 	@Mock ProxiedCommandSender proxiedCommandSenderMock;
 	@Mock LanguageResourceManager languageResourceManagerMock;
-	@Mock MessageProcessor messageProcessorMock;
 	@Mock MessagePipeline messagePipelineMock;
-	@Mock ConfigurationSection constantsSectionMock;
 	@Mock ConstantResolver constantResolverMock;
+	@Mock ItemForge itemForgeMock;
+	@Mock QueryHandlerFactory queryHandlerFactoryMock;
+	@Mock FormatterContainer formatterContainerMock;
+	@Mock AdapterContextContainer adapterContextContainerMock;
 
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;
@@ -76,12 +77,13 @@ class MessageBuilderTest
 		pluginConfiguration = new YamlConfiguration();
 		pluginConfiguration.set("language", "en-US");
 		pluginConfiguration.set("locale", "en-US");
-		when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
+		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		messageBuilder = MessageBuilder.test(pluginMock,
 				languageResourceManagerMock,
 				constantResolverMock,
+				itemForgeMock,
 				messagePipelineMock);
 	}
 
@@ -152,9 +154,6 @@ class MessageBuilderTest
 	@Test @DisplayName("Exception is not thrown when reload fails.")
 	void reload_fail_does_not_throw_exception()
 	{
-		// Arrange
-//		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-
 		// Act & Assert
 		assertDoesNotThrow(() -> messageBuilder.reload());
 
@@ -169,14 +168,18 @@ class MessageBuilderTest
 		// Arrange
 		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-		when(pluginMock.getServer()).thenReturn(serverMock);
-		when(serverMock.getPluginManager()).thenReturn(pluginManagerMock);
 
-		// Act
-		MessageBuilder messageBuilder1 = MessageBuilder.create(pluginMock);
+		try (MockedStatic<Bootstrap> bootstrapMockedStatic = Mockito.mockStatic(Bootstrap.class))
+		{
+			bootstrapMockedStatic.when(() -> Bootstrap
+					.createMessagePipeline(pluginMock, queryHandlerFactoryMock, formatterContainerMock, adapterContextContainerMock)).thenReturn(messagePipelineMock);
 
-		// Assert
-		assertNotNull(messageBuilder1);
+			// Act
+			MessageBuilder messageBuilder = MessageBuilder.create(pluginMock);
+
+			// Assert
+			assertNotNull(messageBuilder);
+		}
 	}
 
 
@@ -200,6 +203,7 @@ class MessageBuilderTest
 				() -> MessageBuilder.test(null,
 						languageResourceManagerMock,
 						constantResolverMock,
+						itemForgeMock,
 						messagePipelineMock));
 
 		// Assert
@@ -215,6 +219,7 @@ class MessageBuilderTest
 				() -> MessageBuilder.test(pluginMock,
 						null,
 						constantResolverMock,
+						itemForgeMock,
 						messagePipelineMock));
 
 		// Assert
@@ -230,6 +235,7 @@ class MessageBuilderTest
 				() -> MessageBuilder.test(pluginMock,
 						languageResourceManagerMock,
 						constantResolverMock,
+						itemForgeMock,
 						null));
 
 		// Assert
@@ -246,4 +252,12 @@ class MessageBuilderTest
 		assertInstanceOf(ConstantResolver.class, constantResolver);
 	}
 
+
+	@Test
+	void getItemForge_returns_ItemForge()
+	{
+		ItemForge itemForge = messageBuilder.itemForge();
+
+		assertInstanceOf(ItemForge.class, itemForge);
+	}
 }

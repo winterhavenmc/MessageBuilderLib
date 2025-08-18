@@ -17,14 +17,14 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.matcher;
 
-import com.winterhavenmc.library.messagebuilder.keys.MacroKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidMacroKey;
 
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 
 /**
- * A functional interface representing a strategy for extracting {@link com.winterhavenmc.library.messagebuilder.keys.MacroKey}
+ * A functional interface representing a strategy for extracting {@link ValidMacroKey}
  * instances from an input string using a specified regular expression pattern.
  *
  * <p>This interface abstracts the placeholder matching logic used throughout the message
@@ -36,11 +36,11 @@ import java.util.stream.Stream;
  *   <li>Locate full placeholder keys to be substituted during rendering</li>
  * </ul>
  *
- * <p>Implementations must return a stream of distinct {@code MacroKey} instances derived
+ * <p>Implementations must return a stream of distinct {@code ValidMacroKey} instances derived
  * from all matches found in the input string.
  *
  * @see com.winterhavenmc.library.messagebuilder.pipeline.matcher.PlaceholderMatcher
- * @see com.winterhavenmc.library.messagebuilder.keys.MacroKey
+ * @see ValidMacroKey
  */
 @FunctionalInterface
 public interface Matcher
@@ -48,12 +48,12 @@ public interface Matcher
 	/**
 	 * Extracts macro keys from the given input string using the specified regular expression pattern.
 	 *
-	 * <p>Each successful match is converted into a {@link com.winterhavenmc.library.messagebuilder.keys.MacroKey}.
+	 * <p>Each successful match is converted into a {@link ValidMacroKey}.
 	 * Implementations may choose to skip invalid or malformed macro segments.
 	 *
-	 * @param input the raw string to search for macros (e.g., a message from the YAML file)
+	 * @param input   the raw string to search for macros (e.g., a message from the YAML file)
 	 * @param pattern the regular expression pattern used to locate macro placeholders
-	 * @return a stream of matched {@code MacroKey} instances (may be empty but never {@code null})
+	 * @return a stream of matched {@code LegacyMacroKey} instances (may be empty but never {@code null})
 	 */
-	Stream<MacroKey> match(String input, Pattern pattern);
+	Stream<ValidMacroKey> match(String input, Pattern pattern);
 }
