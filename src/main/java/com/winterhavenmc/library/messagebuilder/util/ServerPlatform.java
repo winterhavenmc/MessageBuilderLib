@@ -34,7 +34,7 @@ public enum ServerPlatform
 
 	private static ServerPlatform detectPlatform()
 	{
-		String name = Bukkit.getName();
+		final String name = Bukkit.getName();
 		if (name.equalsIgnoreCase("Purpur")) return PURPUR;
 		else if (name.equalsIgnoreCase("Paper")) return PAPER;
 		else if (name.equalsIgnoreCase("Spigot")) return SPIGOT;
