@@ -50,10 +50,12 @@ public enum ServerPlatform
 		return OTHER;
 	}
 
+
 	public static ServerPlatform detect()
 	{
 		return DETECTED;
 	}
+
 
 	public static boolean isPaper()
 	{
