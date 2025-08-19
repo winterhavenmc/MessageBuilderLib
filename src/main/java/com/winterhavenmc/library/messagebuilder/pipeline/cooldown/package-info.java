@@ -25,7 +25,7 @@
  * </ul>
  *
  * <h2>Typical Use Case</h2>
- * Used by the {@code MessageSender} and {@code TitleSender} implementations in the
+ * Used by the {@code MessageSender} and {@code SpigotTitleSender} implementations in the
  * {@code sender} package to throttle message frequency, especially in cases
  * where user interaction may trigger rapid repeated events.
  */

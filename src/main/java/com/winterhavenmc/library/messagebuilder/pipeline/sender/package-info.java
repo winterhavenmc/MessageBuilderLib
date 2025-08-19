@@ -11,12 +11,12 @@
  * <h2>Key Components</h2>
  * <ul>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.sender.Sender}
- *       – A functional interface for sending messages to a recipient using a defined delivery channel.</li>
+ *   – A functional interface for sending messages to a recipient using a defined delivery channel.</li>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender}
- *       - Sends the message string to the chat interface of the recipient.</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender}
- *       - Displays the title and subtitle of the message as an overlay (if the recipient is a
- *       {@link org.bukkit.entity.Player Player}).</li>
+ *   - Sends the message string to the chat interface of the recipient.</li>
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.sender.SpigotTitleSender}
+ *   - Displays the title and subtitle of the message as an overlay (if the recipient is a
+ *   {@link org.bukkit.entity.Player Player}).</li>
  * </ul>
  *
  * <p>All implementations are expected to work with fully processed
@@ -25,6 +25,6 @@
  *
  * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.Sender
  * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender
- * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.SpigotTitleSender
  */
 package com.winterhavenmc.library.messagebuilder.pipeline.sender;
