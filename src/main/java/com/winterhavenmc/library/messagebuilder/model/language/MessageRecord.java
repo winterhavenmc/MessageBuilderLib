@@ -63,7 +63,7 @@ public sealed interface MessageRecord extends SectionRecord permits ValidMessage
 	 * @param messageEntry the corresponding YAML configuration section
 	 * @return a valid or invalid {@code MessageRecord} depending on input
 	 */
-	static MessageRecord from(final ValidMessageKey messageKey, final ConfigurationSection messageEntry)
+	static MessageRecord of(final ValidMessageKey messageKey, final ConfigurationSection messageEntry)
 	{
 		return (messageEntry == null)
 				? MessageRecord.empty(messageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING)
