@@ -29,8 +29,9 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeReso
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender;
+import com.winterhavenmc.library.messagebuilder.pipeline.sender.PaperTitleSender;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.Sender;
-import com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender;
+import com.winterhavenmc.library.messagebuilder.pipeline.sender.SpigotTitleSender;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
@@ -45,12 +46,14 @@ import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Loc
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 
+import com.winterhavenmc.library.messagebuilder.util.ServerPlatform;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.Plugin;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -60,6 +63,39 @@ import java.util.List;
 class Bootstrap
 {
 	private Bootstrap() { /* Private constructor to prevent instantiation of utility class */ }
+
+
+	public static List<Sender> createSenders(final Plugin plugin, final CooldownMap cooldownMap)
+	{
+		final MiniMessage miniMessage = MiniMessage.miniMessage();
+		final BukkitAudiences bukkitAudiences = BukkitAudiences.create(plugin);
+
+		List<Sender> senders = new ArrayList<>();
+
+		// Chat messages are the same everywhere
+		senders.add(new MessageSender(cooldownMap, miniMessage, bukkitAudiences));
+
+		// Titles depend on platform
+		ServerPlatform type = ServerPlatform.detect();
+
+		switch (type)
+		{
+			case PAPER, PURPUR ->
+			{
+				try
+				{
+					senders.add(new PaperTitleSender(cooldownMap, miniMessage, bukkitAudiences));
+				}
+				catch (ReflectiveOperationException e) {
+					// Fallback if Paper API isn't present or changed
+					senders.add(new SpigotTitleSender(cooldownMap, miniMessage, bukkitAudiences));
+				}
+			}
+			case SPIGOT, CRAFTBUKKIT, OTHER -> senders.add(new SpigotTitleSender(cooldownMap, miniMessage, bukkitAudiences));
+		}
+
+		return senders;
+	}
 
 
 	/**
@@ -111,16 +147,10 @@ class Bootstrap
 														  final FormatterContainer formatterContainer,
 														  final AdapterContextContainer adapterContextContainer)
 	{
-		final MiniMessage miniMessage = MiniMessage.miniMessage();
-		final BukkitAudiences bukkitAudiences = BukkitAudiences.create(plugin);
-
 		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
 		final MessageProcessor messageProcessor = createMacroReplacer(formatterContainer, adapterContextContainer);
 		final CooldownMap cooldownMap = new CooldownMap();
-
-		final MessageSender messageSender = new MessageSender(cooldownMap, miniMessage, bukkitAudiences);
-		final TitleSender titleSender = new TitleSender(cooldownMap, miniMessage, bukkitAudiences);
-		final List<Sender> messageSenders = List.of(messageSender, titleSender);
+		final List<Sender> messageSenders = createSenders(plugin, cooldownMap);
 
 		return new MessagePipeline(messageRetriever, messageProcessor, cooldownMap, messageSenders);
 	}
