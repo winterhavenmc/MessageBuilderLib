@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 class MessageRecordTest
 {
 	@Test
-	void from_valid_section()
+	void of_valid_section()
 	{
 		// Arrange
 		ValidMessageKey messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
@@ -46,7 +46,7 @@ class MessageRecordTest
 		section.set(MessageRecord.Field.SUBTITLE_TEXT.toKey(), "this is a test subtitle");
 
 		// Act
-		MessageRecord messageRecord = MessageRecord.from(messageKey, section);
+		MessageRecord messageRecord = MessageRecord.of(messageKey, section);
 
 		// Assert
 		assertInstanceOf(ValidMessageRecord.class, messageRecord);
@@ -54,13 +54,13 @@ class MessageRecordTest
 
 
 	@Test
-	void from_null_section()
+	void of_null_section()
 	{
 		// Arrange
 		ValidMessageKey messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
 		// Act
-		MessageRecord messageRecord = MessageRecord.from(messageKey, null);
+		MessageRecord messageRecord = MessageRecord.of(messageKey, null);
 
 		// Assert
 		assertInstanceOf(InvalidMessageRecord.class, messageRecord);
