@@ -44,7 +44,7 @@ import org.bukkit.entity.Player;
  * @see com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord
  * @see com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap
  */
-public final class TitleSender implements Sender
+public final class SpigotTitleSender implements Sender
 {
 	private final CooldownMap cooldownMap;
 	private final MiniMessage miniMessage;
@@ -52,11 +52,11 @@ public final class TitleSender implements Sender
 
 
 	/**
-	 * Constructs a {@code TitleSender} using the specified cooldown map.
+	 * Constructs a {@code SpigotTitleSender} using the specified cooldown map.
 	 *
 	 * @param cooldownMap an instance of the message cooldown map used to prevent redundant delivery
 	 */
-	public TitleSender(final CooldownMap cooldownMap, final MiniMessage miniMessage, final BukkitAudiences audiences)
+	public SpigotTitleSender(final CooldownMap cooldownMap, final MiniMessage miniMessage, final BukkitAudiences audiences)
 	{
 		this.cooldownMap = cooldownMap;
 		this.miniMessage = miniMessage;
@@ -84,8 +84,7 @@ public final class TitleSender implements Sender
 		{
 			final Component mainTitle = miniMessage.deserialize(messageRecord.finalTitleString().get());
 			final Component subTitle = miniMessage.deserialize(messageRecord.finalSubtitleString().get());
-			final Title.Times times = Title.Times.times(messageRecord.titleFadeIn(),
-					messageRecord.titleStay(), messageRecord.titleFadeOut());
+			final Title.Times times = Title.Times.times(messageRecord.titleFadeIn(), messageRecord.titleStay(), messageRecord.titleFadeOut());
 			final Title title = Title.title(mainTitle, subTitle, times);
 
 			audiences.sender(recipient.sender()).showTitle(title);

@@ -23,18 +23,19 @@ import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecor
 
 /**
  * A functional interface representing a message dispatch strategy responsible for
- * delivering a fully rendered {@link com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord}
- * to a {@link com.winterhavenmc.library.messagebuilder.model.recipient.Recipient.Sendable}.
+ * delivering a fully rendered {@link FinalMessageRecord}
+ * to a {@link Recipient.Sendable}.
  *
  * <p>Implementations of this interface define how a message is transmitted, such as through
  * standard chat output, titles, or other in-game message channels.
  *
  * <p>This is typically the final step of the message delivery lifecycle.
  *
- * @see com.winterhavenmc.library.messagebuilder.model.recipient.Recipient.Sendable
- * @see com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord
- * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender
- * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender
+ * @see Recipient.Sendable
+ * @see FinalMessageRecord
+ * @see MessageSender
+ * @see SpigotTitleSender
+ * @see PaperTitleSender
  */
 @FunctionalInterface
 public interface Sender

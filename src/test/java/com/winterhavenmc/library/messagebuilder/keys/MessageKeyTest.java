@@ -156,6 +156,7 @@ class MessageKeyTest
 			MessageKey key1 = MessageKey.of("SAME_KEY");
 			MessageKey key2 = MessageKey.of("SAME_KEY");
 
+			// Assert
 			assertEquals(key1, key2);
 		}
 
@@ -166,6 +167,7 @@ class MessageKeyTest
 			ValidMessageKey key1 = MessageKey.of("SAME_KEY").isValid().orElseThrow();
 			ValidMessageKey key2 = MessageKey.of("SAME_KEY").isValid().orElseThrow();
 
+			// Assert
 			assertEquals(key1, key2);
 		}
 
@@ -173,9 +175,11 @@ class MessageKeyTest
 		@Test
 		void MessageKey_equality_false_for_different_keys()
 		{
+			// Arrange & Act
 			MessageKey key1 = MessageKey.of("KEY_ONE");
 			MessageKey key2 = MessageKey.of("KEY_TWO");
 
+			// Assert
 			assertNotEquals(key1, key2);
 		}
 	}
@@ -184,9 +188,11 @@ class MessageKeyTest
 	@Test
 	void ValidMessageKey_hashCode_consistent_with_equals()
 	{
+		// Arrange & Act
 		ValidMessageKey key1 = MessageKey.of("HASH_TEST").isValid().orElseThrow();
 		ValidMessageKey key2 = MessageKey.of("HASH_TEST").isValid().orElseThrow();
 
+		// Assert
 		assertEquals(key1.hashCode(), key2.hashCode());
 	}
 }

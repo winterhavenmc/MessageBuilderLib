@@ -42,7 +42,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECI
 
 
 @ExtendWith(MockitoExtension.class)
-class TitleSenderTest
+class SpigotTitleSenderTest
 {
 	@Mock Player playerMock;
 	@Mock ConsoleCommandSender consoleMock;
@@ -89,7 +89,7 @@ class TitleSenderTest
 //	void testSend_player()
 //	{
 //		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
-//		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(recipient, finalMessageRecord));
+//		assertDoesNotThrow(() -> new SpigotTitleSender(new CooldownMap()).send(recipient, finalMessageRecord));
 //	}
 
 
@@ -105,7 +105,7 @@ class TitleSenderTest
 //		};
 //
 //		// Act & Assert
-//		assertDoesNotThrow(() -> new TitleSender(new CooldownMap()).send(consoleRecipient, finalMessageRecord));
+//		assertDoesNotThrow(() -> new SpigotTitleSender(new CooldownMap()).send(consoleRecipient, finalMessageRecord));
 //	}
 
 }

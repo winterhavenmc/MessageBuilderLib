@@ -74,14 +74,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-<!--		&lt;!&ndash; Multiverse-Core 4 &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>com.onarandombox.multiversecore</groupId>-->
-<!--			<artifactId>multiverse-core</artifactId>-->
-<!--			<version>4.3.16</version>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
-
 		<!-- Multiverse-Core 5 -->
 		<dependency>
 			<groupId>org.mvplugins.multiverse.core</groupId>
@@ -93,13 +85,15 @@
 		<dependency>
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-text-minimessage</artifactId>
-			<version>4.23.0</version>
+			<version>4.24.0</version>
+            <scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-platform-bukkit</artifactId>
-			<version>4.4.0</version>
+			<version>4.4.1</version>
+            <scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -112,7 +106,7 @@
 		<dependency>
 			<groupId>net.time4j</groupId>
 			<artifactId>time4j-tzdata</artifactId>
-			<version>5.0-2024a</version>
+			<version>5.0-2025a</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -161,6 +155,7 @@
 			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
 			<version>26.0.1</version>
+            <scope>compile</scope>
 		</dependency>
 
 	</dependencies>
