@@ -74,14 +74,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-<!--		&lt;!&ndash; Multiverse-Core 4 &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>com.onarandombox.multiversecore</groupId>-->
-<!--			<artifactId>multiverse-core</artifactId>-->
-<!--			<version>4.3.16</version>-->
-<!--			<scope>provided</scope>-->
-<!--		</dependency>-->
-
 		<!-- Multiverse-Core 5 -->
 		<dependency>
 			<groupId>org.mvplugins.multiverse.core</groupId>
