@@ -27,7 +27,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProcessor;
 import com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender;
-import com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender;
+import com.winterhavenmc.library.messagebuilder.pipeline.sender.SpigotTitleSender;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
@@ -66,7 +66,7 @@ class MessagePipelineTest
 	MessageProcessor messageProcessorMock;
 	@Mock Player playerMock;
 	@Mock MessageSender messageSenderMock;
-	@Mock TitleSender titleSenderMock;
+	@Mock SpigotTitleSender titleSenderMock;
 
 	Recipient.Valid recipient;
 	CooldownMap cooldownMap;
