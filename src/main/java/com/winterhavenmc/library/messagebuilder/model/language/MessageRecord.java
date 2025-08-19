@@ -45,7 +45,7 @@ import org.bukkit.configuration.ConfigurationSection;
  * </ul>
  *
  * <h2>Factory Methods</h2>
- * Use {@link #from(ValidMessageKey, ConfigurationSection)} to parse a configuration section,
+ * Use {@link #of(ValidMessageKey, ConfigurationSection)} to parse a configuration section,
  * or {@link InvalidMessageRecord#empty(RecordKey, InvalidRecordReason)} to create an invalid placeholder when parsing fails.
  *
  * @see com.winterhavenmc.library.messagebuilder.model.language.SectionRecord SectionRecord
