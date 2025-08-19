@@ -19,6 +19,8 @@ package com.winterhavenmc.library.messagebuilder.util;
 
 import org.bukkit.Bukkit;
 
+import java.util.logging.Logger;
+
 
 public enum ServerPlatform
 {
@@ -45,7 +47,10 @@ public enum ServerPlatform
 			Class.forName("io.papermc.paper.configuration.Configuration", false, serverClassLoader);
 			return PAPER;
 		}
-		catch (ClassNotFoundException ignored) { }
+		catch (ClassNotFoundException ignored)
+		{
+			Logger.getLogger("DetectPlatform").warning("Could not detect server platform.");
+		}
 
 		return OTHER;
 	}
