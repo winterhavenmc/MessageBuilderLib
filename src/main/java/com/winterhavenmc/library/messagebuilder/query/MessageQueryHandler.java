@@ -68,7 +68,7 @@ public class MessageQueryHandler implements QueryHandler<MessageRecord>
 
 		if (recordKey instanceof ValidMessageKey validMessageKey)
 			return (messageEntry != null)
-					? MessageRecord.from(validMessageKey, messageEntry)
+					? MessageRecord.of(validMessageKey, messageEntry)
 					: MessageRecord.empty(validMessageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING);
 
 		else return MessageRecord.empty(recordKey, InvalidRecordReason.MESSAGE_KEY_INVALID);
