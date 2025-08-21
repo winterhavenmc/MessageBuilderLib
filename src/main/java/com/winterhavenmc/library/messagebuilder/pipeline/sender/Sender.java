@@ -34,8 +34,7 @@ import com.winterhavenmc.library.messagebuilder.model.language.FinalMessageRecor
  * @see Recipient.Sendable
  * @see FinalMessageRecord
  * @see MessageSender
- * @see SpigotTitleSender
- * @see PaperTitleSender
+ * @see TitleSender
  */
 @FunctionalInterface
 public interface Sender
