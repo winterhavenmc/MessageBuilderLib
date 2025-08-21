@@ -75,26 +75,21 @@ class Bootstrap
 		// Chat messages are the same everywhere
 		senders.add(new MessageSender(cooldownMap, miniMessage, bukkitAudiences));
 
-		// Titles depend on platform
-		ServerPlatform type = ServerPlatform.detect();
-
-		switch (type)
-		{
-			case PAPER, PURPUR ->
-			{
-				try
-				{
-					senders.add(new PaperTitleSender(cooldownMap, miniMessage, bukkitAudiences));
-				}
-				catch (ReflectiveOperationException e) {
-					// Fallback if Paper API isn't present or changed
-					senders.add(new SpigotTitleSender(cooldownMap, miniMessage, bukkitAudiences));
-				}
-			}
-			case SPIGOT, CRAFTBUKKIT, OTHER -> senders.add(new SpigotTitleSender(cooldownMap, miniMessage, bukkitAudiences));
-		}
-
-		return senders;
+//		List<Sender> senders = new ArrayList<>();
+//
+//		// Chat messages are the same everywhere
+//		senders.add(messageSender);
+//
+//		// Titles depend on platform
+//		ServerPlatform serverPlatform = ServerPlatform.detect();
+//
+//		switch (serverPlatform)
+//		{
+//			case SPIGOT, CRAFTBUKKIT, OTHER -> senders.add(new TitleSender(cooldownMap, miniMessage, bukkitAudiences));
+//			case PAPER, PURPUR -> senders.add(new PaperTitleSender(cooldownMap, miniMessage, bukkitAudiences));
+//		}
+//
+//		return senders;
 	}
 
 
