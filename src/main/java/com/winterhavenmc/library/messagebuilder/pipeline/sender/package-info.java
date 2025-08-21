@@ -14,7 +14,7 @@
  *   – A functional interface for sending messages to a recipient using a defined delivery channel.</li>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender}
  *   - Sends the message string to the chat interface of the recipient.</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.sender.SpigotTitleSender}
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender}
  *   - Displays the title and subtitle of the message as an overlay (if the recipient is a
  *   {@link org.bukkit.entity.Player Player}).</li>
  * </ul>
@@ -25,6 +25,6 @@
  *
  * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.Sender
  * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender
- * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.SpigotTitleSender
+ * @see com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender
  */
 package com.winterhavenmc.library.messagebuilder.pipeline.sender;

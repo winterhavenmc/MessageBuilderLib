@@ -19,6 +19,8 @@ package com.winterhavenmc.library.messagebuilder.util;
 
 import org.bukkit.Bukkit;
 
+import java.util.logging.Logger;
+
 
 public enum ServerPlatform
 {
@@ -34,7 +36,7 @@ public enum ServerPlatform
 
 	private static ServerPlatform detectPlatform()
 	{
-		String name = Bukkit.getName();
+		final String name = Bukkit.getName();
 		if (name.equalsIgnoreCase("Purpur")) return PURPUR;
 		else if (name.equalsIgnoreCase("Paper")) return PAPER;
 		else if (name.equalsIgnoreCase("Spigot")) return SPIGOT;
@@ -45,15 +47,20 @@ public enum ServerPlatform
 			Class.forName("io.papermc.paper.configuration.Configuration", false, serverClassLoader);
 			return PAPER;
 		}
-		catch (ClassNotFoundException ignored) { }
+		catch (ClassNotFoundException ignored)
+		{
+			Logger.getLogger("DetectPlatform").warning("Could not detect server platform.");
+		}
 
 		return OTHER;
 	}
+
 
 	public static ServerPlatform detect()
 	{
 		return DETECTED;
 	}
+
 
 	public static boolean isPaper()
 	{

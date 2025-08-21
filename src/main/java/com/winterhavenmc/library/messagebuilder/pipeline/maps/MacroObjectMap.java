@@ -32,13 +32,11 @@ import java.util.Optional;
  * This class allows both {@code put} and {@code putIfAbsent} insertion behavior.
  * Null values are not permitted; any {@code null} value is automatically replaced
  * with the string literal {@code "NULL"}.
- * </p>
  * <p>
- * <p>Primarily intended for internal use within the message pipeline where macro
+ * Primarily intended for internal use within the message pipeline where macro
  * resolution requires intermediate object capture before string conversion.
  * This class is not thread-safe and uses a {@link HashMap} internally,
  * as message composition typically occurs on the main server thread within a single execution context.
- * </p>
  */
 public class MacroObjectMap
 {
