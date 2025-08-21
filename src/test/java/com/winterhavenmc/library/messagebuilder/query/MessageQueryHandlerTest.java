@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.query;
 
+import com.winterhavenmc.library.messagebuilder.keys.InvalidItemKey;
+import com.winterhavenmc.library.messagebuilder.keys.InvalidKeyReason;
 import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
-import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.model.language.*;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
@@ -115,6 +115,28 @@ class MessageQueryHandlerTest
 
 		// Verify
 		verify(messageSectionMock, atLeastOnce()).getConfigurationSection("NONEXISTENT_ENTRY");
+	}
+
+
+	@Test
+	void getRecord_with_invalid_key_returns_InvalidItemRecord()
+	{
+		// Arrange
+		InvalidItemKey invalidItemKey = new InvalidItemKey("invalid-key", InvalidKeyReason.KEY_INVALID);
+		when(messageSectionMock.getConfigurationSection(invalidItemKey.toString())).thenReturn(null);
+
+		SectionProvider mockProvider = () -> messageSectionMock;
+		ItemQueryHandler handler = new ItemQueryHandler(mockProvider);
+
+		// Act
+		ItemRecord itemRecord = handler.getRecord(invalidItemKey);
+
+		// Assert
+		assertInstanceOf(InvalidItemRecord.class, itemRecord);
+		assertEquals(InvalidRecordReason.ITEM_KEY_INVALID, ((InvalidItemRecord) itemRecord).reason());
+
+		// Verify
+		verify(messageSectionMock, atLeastOnce()).getConfigurationSection(invalidItemKey.toString());
 	}
 
 }
