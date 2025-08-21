@@ -29,9 +29,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeReso
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender;
-import com.winterhavenmc.library.messagebuilder.pipeline.sender.PaperTitleSender;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.Sender;
-import com.winterhavenmc.library.messagebuilder.pipeline.sender.SpigotTitleSender;
+import com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
@@ -46,14 +45,12 @@ import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Loc
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 
-import com.winterhavenmc.library.messagebuilder.util.ServerPlatform;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.Plugin;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -69,27 +66,10 @@ class Bootstrap
 	{
 		final MiniMessage miniMessage = MiniMessage.miniMessage();
 		final BukkitAudiences bukkitAudiences = BukkitAudiences.create(plugin);
+		final MessageSender messageSender = new MessageSender(cooldownMap, miniMessage, bukkitAudiences);
+		final TitleSender titleSender = new TitleSender(cooldownMap, miniMessage, bukkitAudiences);
 
-		List<Sender> senders = new ArrayList<>();
-
-		// Chat messages are the same everywhere
-		senders.add(new MessageSender(cooldownMap, miniMessage, bukkitAudiences));
-
-//		List<Sender> senders = new ArrayList<>();
-//
-//		// Chat messages are the same everywhere
-//		senders.add(messageSender);
-//
-//		// Titles depend on platform
-//		ServerPlatform serverPlatform = ServerPlatform.detect();
-//
-//		switch (serverPlatform)
-//		{
-//			case SPIGOT, CRAFTBUKKIT, OTHER -> senders.add(new TitleSender(cooldownMap, miniMessage, bukkitAudiences));
-//			case PAPER, PURPUR -> senders.add(new PaperTitleSender(cooldownMap, miniMessage, bukkitAudiences));
-//		}
-//
-//		return senders;
+		return List.of(messageSender, titleSender);
 	}
 
 
