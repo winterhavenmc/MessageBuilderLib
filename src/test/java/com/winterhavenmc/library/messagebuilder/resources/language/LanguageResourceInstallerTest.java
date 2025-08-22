@@ -398,7 +398,7 @@ public class LanguageResourceInstallerTest
 		{
 			// Arrange
 			when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
-			when(pluginMock.getResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString())).thenReturn(getClass().getClassLoader().getResourceAsStream(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString()));
+			when(pluginMock.getResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString())).thenReturn(getClass().getClassLoader().getResourceAsStream(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString()));
 			// install resource when saveResource is called
 			doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
 					.when(pluginMock).saveResource(anyString(), eq(false));
@@ -412,7 +412,7 @@ public class LanguageResourceInstallerTest
 
 			// verify
 			verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
-			verify(pluginMock, atLeastOnce()).getResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
+			verify(pluginMock, atLeastOnce()).getResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString());
 		}
 
 		@Test

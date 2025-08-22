@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.resources.ResourceInstaller;
 
+import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -26,8 +27,8 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageSetting.RESOURCE_AUTO_INSTALL;
-import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageSetting.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageConfigConstant.RESOURCE_AUTO_INSTALL;
+import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageConfigConstant.RESOURCE_SUBDIRECTORY;
 
 
 /**
@@ -45,6 +46,7 @@ public final class LanguageResourceInstaller implements ResourceInstaller
 	private static final String YAML_EXTENSION = ".yml";
 
 	private final Plugin plugin;
+	private final LocaleProvider localeProvider;
 
 
 	/**
@@ -55,6 +57,7 @@ public final class LanguageResourceInstaller implements ResourceInstaller
 	public LanguageResourceInstaller(final Plugin plugin)
 	{
 		this.plugin = plugin;
+		this.localeProvider = LocaleProvider.create(plugin);
 	}
 
 
@@ -154,18 +157,21 @@ public final class LanguageResourceInstaller implements ResourceInstaller
 
 			if (installedFile.exists())
 			{
-				plugin.getLogger().info("Installed resource: " + filePath);
+				plugin.getLogger().info(LanguageResourceMessage.LANGUAGE_RESOURCE_INSTALL_SUCCESS
+						.getLocalizedMessage(localeProvider.getLocale(), filePath));
 				return InstallerStatus.SUCCESS;
 			}
 			else
 			{
-				plugin.getLogger().severe("Installation failed. File missing after save: " + filePath);
+				plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_INSTALL_MISSING
+						.getLocalizedMessage(localeProvider.getLocale(), filePath));
 				return InstallerStatus.FAIL;
 			}
 		}
 		catch (Exception exception)
 		{
-			plugin.getLogger().severe("Exception during installation of " + resourceName + ": " + exception.getMessage());
+			plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_INSTALL_EXCEPTION
+					.getLocalizedMessage(localeProvider.getLocale(), resourceName, exception.getLocalizedMessage()));
 			return InstallerStatus.FAIL;
 		}
 	}

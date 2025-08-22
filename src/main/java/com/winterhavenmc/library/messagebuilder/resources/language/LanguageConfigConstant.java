@@ -21,7 +21,7 @@ package com.winterhavenmc.library.messagebuilder.resources.language;
 /**
  * Enum containing constants for various yaml parameters
  */
-public enum LanguageSetting
+public enum LanguageConfigConstant
 {
 	CONFIG_LANGUAGE_KEY("language"),
 	CONFIG_LOCALE_KEY("locale"),
@@ -34,7 +34,7 @@ public enum LanguageSetting
 	private final String value;
 
 
-	LanguageSetting(final String value)
+	LanguageConfigConstant(final String value)
 	{
 		this.value = value;
 	}
