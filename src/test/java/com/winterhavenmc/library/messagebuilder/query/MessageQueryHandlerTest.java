@@ -17,10 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.query;
 
-import com.winterhavenmc.library.messagebuilder.keys.InvalidItemKey;
-import com.winterhavenmc.library.messagebuilder.keys.InvalidKeyReason;
-import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
-import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
+import com.winterhavenmc.library.messagebuilder.keys.*;
 import com.winterhavenmc.library.messagebuilder.model.language.*;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
 
@@ -72,9 +69,6 @@ class MessageQueryHandlerTest
 		when(messageEntryMock.getBoolean(MessageRecord.Field.ENABLED.toKey())).thenReturn(true);
 		when(messageEntryMock.getLong(MessageRecord.Field.REPEAT_DELAY.toKey())).thenReturn(0L);
 		when(messageEntryMock.getString(MessageRecord.Field.TITLE_TEXT.toKey())).thenReturn("Enabled title.");
-//		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_IN.toKey())).thenReturn(0);
-//		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_STAY.toKey())).thenReturn(0);
-//		when(messageEntryMock.getInt(MessageRecord.Field.TITLE_FADE_OUT.toKey())).thenReturn(0);
 		when(messageEntryMock.getString(MessageRecord.Field.SUBTITLE_TEXT.toKey())).thenReturn("Subtitle text.");
 
 		SectionProvider mockProvider = () -> messageSectionMock;
@@ -90,8 +84,6 @@ class MessageQueryHandlerTest
 		// Verify
 		verify(messageSectionMock, atLeastOnce()).getConfigurationSection("ENABLED_MESSAGE");
 		verify(messageEntryMock, times(3)).getString(anyString());
-//		verify(messageEntryMock, times(3)).getInt(anyString());
-//		verify(messageEntryMock, times(1)).getLong(anyString());
 		verify(messageEntryMock, times(1)).getBoolean(anyString());
 	}
 
@@ -119,24 +111,24 @@ class MessageQueryHandlerTest
 
 
 	@Test
-	void getRecord_with_invalid_key_returns_InvalidItemRecord()
+	void getRecord_with_invalid_key_returns_InvalidMessageRecord()
 	{
 		// Arrange
-		InvalidItemKey invalidItemKey = new InvalidItemKey("invalid-key", InvalidKeyReason.KEY_INVALID);
-		when(messageSectionMock.getConfigurationSection(invalidItemKey.toString())).thenReturn(null);
+		InvalidMessageKey invalidMessageKey = new InvalidMessageKey("invalid-key", InvalidKeyReason.KEY_INVALID);
+		when(messageSectionMock.getConfigurationSection(invalidMessageKey.toString())).thenReturn(null);
 
 		SectionProvider mockProvider = () -> messageSectionMock;
-		ItemQueryHandler handler = new ItemQueryHandler(mockProvider);
+		MessageQueryHandler handler = new MessageQueryHandler(mockProvider);
 
 		// Act
-		ItemRecord itemRecord = handler.getRecord(invalidItemKey);
+		MessageRecord messageRecord = handler.getRecord(invalidMessageKey);
 
 		// Assert
-		assertInstanceOf(InvalidItemRecord.class, itemRecord);
-		assertEquals(InvalidRecordReason.ITEM_KEY_INVALID, ((InvalidItemRecord) itemRecord).reason());
+		assertInstanceOf(InvalidMessageRecord.class, messageRecord);
+		assertEquals(InvalidRecordReason.MESSAGE_KEY_INVALID, ((InvalidMessageRecord) messageRecord).reason());
 
 		// Verify
-		verify(messageSectionMock, atLeastOnce()).getConfigurationSection(invalidItemKey.toString());
+		verify(messageSectionMock, atLeastOnce()).getConfigurationSection(invalidMessageKey.toString());
 	}
 
 }
