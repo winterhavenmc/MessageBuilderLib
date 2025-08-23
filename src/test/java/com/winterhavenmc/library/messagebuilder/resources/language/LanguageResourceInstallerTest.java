@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.resources.language;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -43,16 +44,16 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class LanguageResourceInstallerTest
 {
-	@TempDir
-	File tempDataDir;
-	@Mock
-	Plugin pluginMock;
+	@TempDir File tempDataDir;
+	@Mock Plugin pluginMock;
+	@Mock FileConfiguration fileConfigurationMock;
 
 	LanguageResourceInstaller resourceInstaller;
 
 	@BeforeEach
 	public void setUp()
 	{
+		when(pluginMock.getConfig()).thenReturn(fileConfigurationMock);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 

@@ -46,7 +46,7 @@ class ValidatorTest
 	@Test
 	void bundleName_matches_resource_bundle()
 	{
-		assertEquals("exception.messages", Validator.BUNDLE_NAME);
+		assertEquals("ExceptionMessage", Validator.BUNDLE_NAME);
 	}
 
 

@@ -218,6 +218,7 @@ class LanguageResourceLoaderTest
 			void with_valid_fallback()
 			{
 				// Arrange
+				when(pluginMock.getConfig()).thenReturn(fileConfigurationMock);
 				when(pluginMock.getLogger()).thenReturn(loggerMock);
 				when(pluginMock.getResource("language/en-US.yml"))
 						.thenReturn(MockUtility.getResourceStream("language/en-US.yml"));
@@ -240,6 +241,7 @@ class LanguageResourceLoaderTest
 			void fallback_to_resource_when_file_is_missing()
 			{
 				// Arrange
+				when(pluginMock.getConfig()).thenReturn(fileConfigurationMock);
 				when(pluginMock.getLogger()).thenReturn(loggerMock);
 				when(pluginMock.getResource("language/en-US.yml"))
 						.thenReturn(MockUtility.getResourceStream("language/en-US.yml"));
@@ -264,6 +266,7 @@ class LanguageResourceLoaderTest
 			void throws_exception_with_invalid_yaml()
 			{
 				// Arrange: give it a broken YAML input
+				when(pluginMock.getConfig()).thenReturn(fileConfigurationMock);
 				when(pluginMock.getLogger()).thenReturn(loggerMock);
 				InputStream garbage = new ByteArrayInputStream("%%%%%%%".getBytes(StandardCharsets.UTF_8));
 				when(pluginMock.getResource("language/en-US.yml")).thenReturn(garbage);
