@@ -37,7 +37,7 @@ import java.util.function.Predicate;
 @FunctionalInterface
 public interface Validator<T>
 {
-	String BUNDLE_NAME = "exception.messages";
+	String BUNDLE_NAME = "ExceptionMessage";
 
 	/**
 	 * Validates a value using the given predicate and handler.
