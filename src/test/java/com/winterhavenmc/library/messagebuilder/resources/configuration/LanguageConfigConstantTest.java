@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class LanguageSettingTest
+class LanguageConfigConstantTest
 {
 	LanguageSetting languageSetting;
 

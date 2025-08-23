@@ -24,7 +24,7 @@ import org.bukkit.configuration.Configuration;
 
 import java.io.File;
 
-import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageSetting.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.library.messagebuilder.resources.language.LanguageConfigConstant.RESOURCE_SUBDIRECTORY;
 
 
 /**

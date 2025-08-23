@@ -69,7 +69,7 @@ class LanguageResourceManagerTest
 		pluginConfiguration.set("locale", "en-US");
 
 		// create real language configuration
-		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
+		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// instantiate real language resource manager
 		resourceManager = new LanguageResourceManager(languageResourceInstallerMock, languageResourceLoaderMock, languageConfigurationMock);

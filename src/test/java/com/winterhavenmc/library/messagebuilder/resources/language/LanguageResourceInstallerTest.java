@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.resources.language;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -43,16 +44,16 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class LanguageResourceInstallerTest
 {
-	@TempDir
-	File tempDataDir;
-	@Mock
-	Plugin pluginMock;
+	@TempDir File tempDataDir;
+	@Mock Plugin pluginMock;
+	@Mock FileConfiguration fileConfigurationMock;
 
 	LanguageResourceInstaller resourceInstaller;
 
 	@BeforeEach
 	public void setUp()
 	{
+		when(pluginMock.getConfig()).thenReturn(fileConfigurationMock);
 		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 
@@ -398,7 +399,7 @@ public class LanguageResourceInstallerTest
 		{
 			// Arrange
 			when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
-			when(pluginMock.getResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString())).thenReturn(getClass().getClassLoader().getResourceAsStream(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString()));
+			when(pluginMock.getResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString())).thenReturn(getClass().getClassLoader().getResourceAsStream(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString()));
 			// install resource when saveResource is called
 			doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
 					.when(pluginMock).saveResource(anyString(), eq(false));
@@ -412,7 +413,7 @@ public class LanguageResourceInstallerTest
 
 			// verify
 			verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
-			verify(pluginMock, atLeastOnce()).getResource(LanguageSetting.RESOURCE_LANGUAGE_EN_US_YML.toString());
+			verify(pluginMock, atLeastOnce()).getResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString());
 		}
 
 		@Test

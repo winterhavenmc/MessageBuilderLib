@@ -28,9 +28,8 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SectionTest {
-
-
+class SectionTest
+{
 	@ParameterizedTest
 	@EnumSource
 	void getQueryHandler(Section section)
