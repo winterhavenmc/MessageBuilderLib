@@ -401,7 +401,7 @@ class FieldExtractorTest
 		}
 
 		ValidMacroKey subKey = baseKey.append(NAME).isValid().orElseThrow();
-		NameAdapter nameAdapter = new NameAdapter();
+		NameAdapter nameAdapter = new NameAdapter(adapterContextContainerMock);
 		TestObject testObject = new TestObject();
 
 		// Act

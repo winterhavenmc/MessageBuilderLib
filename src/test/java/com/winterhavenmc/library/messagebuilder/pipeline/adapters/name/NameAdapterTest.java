@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.name;
 
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -47,6 +48,8 @@ public class NameAdapterTest
 	@Mock Server serverMock;
 	@Mock World worldMock;
 	@Mock Plugin pluginMock;
+	@Mock AdapterContextContainer adapterContextContainerMock;
+
 
 
 	@Nested
@@ -60,7 +63,7 @@ public class NameAdapterTest
 			String name = "";
 
 			// Act
-			Optional<Nameable> adapter = new NameAdapter().adapt(commandSenderMock);
+			Optional<Nameable> adapter = new NameAdapter(adapterContextContainerMock).adapt(commandSenderMock);
 			if (adapter.isPresent())
 			{
 				name = adapter.get().getName();
@@ -79,7 +82,7 @@ public class NameAdapterTest
 			String name = null;
 
 			// Act
-			Optional<Nameable> adapter = new NameAdapter().adapt(null);
+			Optional<Nameable> adapter = new NameAdapter(adapterContextContainerMock).adapt(null);
 			if (adapter.isPresent())
 			{
 				name = adapter.get().getName();
@@ -99,7 +102,7 @@ public class NameAdapterTest
 		String name = "";
 
 		// Act
-		Optional<Nameable> adapter = new NameAdapter().adapt(offlinePlayerMock);
+		Optional<Nameable> adapter = new NameAdapter(adapterContextContainerMock).adapt(offlinePlayerMock);
 		if (adapter.isPresent())
 		{
 			name = adapter.get().getName();
@@ -120,7 +123,7 @@ public class NameAdapterTest
 		String name = "";
 
 		// Act
-		Optional<Nameable> adapter = new NameAdapter().adapt(playerProfileMock);
+		Optional<Nameable> adapter = new NameAdapter(adapterContextContainerMock).adapt(playerProfileMock);
 		if (adapter.isPresent())
 		{
 			name = adapter.get().getName();
@@ -144,7 +147,7 @@ public class NameAdapterTest
 			String name = "";
 
 			// Act
-			Optional<Nameable> adapter = new NameAdapter().adapt(worldMock);
+			Optional<Nameable> adapter = new NameAdapter(adapterContextContainerMock).adapt(worldMock);
 			if (adapter.isPresent())
 			{
 				name = adapter.get().getName();
@@ -167,7 +170,7 @@ public class NameAdapterTest
 			String name = "";
 
 			// Act
-			Optional<Nameable> adapter = new NameAdapter().adapt(serverMock);
+			Optional<Nameable> adapter = new NameAdapter(adapterContextContainerMock).adapt(serverMock);
 			if (adapter.isPresent())
 			{
 				name = adapter.get().getName();
@@ -190,7 +193,7 @@ public class NameAdapterTest
 			String name = "";
 
 			// Act
-			Optional<Nameable> adapter = new NameAdapter().adapt(pluginMock);
+			Optional<Nameable> adapter = new NameAdapter(adapterContextContainerMock).adapt(pluginMock);
 			if (adapter.isPresent())
 			{
 				name = adapter.get().getName();

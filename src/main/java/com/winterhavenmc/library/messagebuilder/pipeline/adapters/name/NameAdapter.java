@@ -18,10 +18,12 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.name;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.Adapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.profile.PlayerProfile;
 
@@ -56,6 +58,20 @@ import java.util.Optional;
  */
 public class NameAdapter implements Adapter
 {
+	private final AdapterContextContainer ctx;
+
+
+	/**
+	 * Constructs a new {@code DisplayNameAdapter} with the given context container.
+	 *
+	 * @param ctx the adapter context providing services such as world name resolution
+	 */
+	public NameAdapter(final AdapterContextContainer ctx)
+	{
+		this.ctx = ctx;
+	}
+
+
 	/**
 	 * Attempts to adapt the given object to a {@link Nameable}, if it exposes a name field.
 	 *
@@ -78,6 +94,7 @@ public class NameAdapter implements Adapter
 			case World world -> Optional.of(world::getName);
 			case Server server -> Optional.of(server::getName);
 			case Plugin plugin -> Optional.of(plugin::getName);
+			case ItemStack itemStack -> Optional.of(() -> ctx.itemNameResolver().resolve(itemStack));
 			case null, default -> Optional.empty();
 		};
 	}

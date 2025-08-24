@@ -77,7 +77,7 @@ public class AdapterRegistry
 		register(new DurationAdapter());
 		register(new ExpirationAdapter());
 		register(new InstantAdapter());
-		register(new NameAdapter());
+		register(new NameAdapter(ctx));
 		register(new OwnerAdapter());
 		register(new KillerAdapter());
 		register(new LooterAdapter());

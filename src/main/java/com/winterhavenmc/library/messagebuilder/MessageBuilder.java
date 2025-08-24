@@ -129,7 +129,7 @@ public final class MessageBuilder
 		final ItemForge itemForge = createItemForge(plugin, queryHandlerFactory);
 
 		final FormatterContainer formatterContainer = createFormatterContainer(plugin, queryHandlerFactory);
-		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, formatterContainer);
+		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, queryHandlerFactory, formatterContainer);
 		final MessagePipeline messagePipeline = createMessagePipeline(plugin, queryHandlerFactory, formatterContainer, adapterContextContainer);
 
 		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);

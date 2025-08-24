@@ -27,6 +27,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.processor.MessageProces
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.AtomicResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.Sender;
@@ -103,8 +105,8 @@ class Bootstrap
 		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);
 		final AtomicResolver atomicResolver = new AtomicResolver(formatterContainer);
 		final FieldResolver fieldResolver = new FieldResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
-
 		final PlaceholderMatcher placeholderMatcher = new PlaceholderMatcher();
+
 		return new MessageProcessor(fieldResolver, placeholderMatcher);
 	}
 
@@ -157,9 +159,13 @@ class Bootstrap
 	 * @return a populated context container
 	 */
 	static AdapterContextContainer createAdapterContextContainer(final Plugin plugin,
+																 final QueryHandlerFactory queryHandlerFactory,
 																 final FormatterContainer formatterContainer)
 	{
-		return new AdapterContextContainer(WorldNameResolver.get(plugin.getServer().getPluginManager()), formatterContainer);
+		WorldNameResolver worldNameResolver = WorldNameResolver.get(plugin.getServer().getPluginManager());
+		ItemNameResolver itemNameResolver = new ItemNameResolver();
+		ItemDisplayNameResolver itemDisplayNameResolver = new ItemDisplayNameResolver();
+		return new AdapterContextContainer(worldNameResolver, itemNameResolver, itemDisplayNameResolver, formatterContainer);
 	}
 
 

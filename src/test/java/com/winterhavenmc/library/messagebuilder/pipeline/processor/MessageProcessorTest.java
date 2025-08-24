@@ -41,7 +41,10 @@ import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultResolver;
+import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
@@ -71,6 +74,7 @@ class MessageProcessorTest
 	@Mock LocaleProvider localeProviderMock;
 	@Mock DefaultResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
+	@Mock QueryHandlerFactory queryHandlerFactoryMock;
 
 	Recipient.Valid recipient;
 	ValidMessageKey messageKey;
@@ -103,7 +107,8 @@ class MessageProcessorTest
 		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
 		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
 		FormatterContainer formatterContainer = new FormatterContainer(localeProviderMock, time4jDurationFormatter, localeNumberFormatter);
-		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock, formatterContainer);
+		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock,
+				new ItemNameResolver(), new ItemDisplayNameResolver(), formatterContainer);
 		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
 		FieldExtractor fieldExtractor = new FieldExtractor(adapterContextContainer);
 

@@ -18,6 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.WorldNameResolver;
 
 
@@ -40,4 +42,6 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.Wor
  * @see com.winterhavenmc.library.messagebuilder.pipeline.adapters.expiration.Expirable Expirable
  */
 public record AdapterContextContainer(WorldNameResolver worldNameResolver,
+									  ItemNameResolver itemNameResolver,
+									  ItemDisplayNameResolver itemDisplayNameResolver,
 									  FormatterContainer formatterContainer) { }
