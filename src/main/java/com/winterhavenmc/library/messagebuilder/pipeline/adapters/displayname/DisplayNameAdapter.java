@@ -23,6 +23,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContext
 import org.bukkit.Nameable;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
 
@@ -76,6 +77,7 @@ public class DisplayNameAdapter implements Adapter
 			case Player player -> Optional.of(player::getDisplayName);
 			case Nameable nameable -> Optional.of(nameable::getCustomName); // Note: this is bukkit Nameable, NOT MessageBuilder Nameable
 			case World world -> Optional.of(() -> ctx.worldNameResolver().resolve(world));
+			case ItemStack itemStack -> Optional.of(() -> ctx.itemDisplayNameResolver().resolve(itemStack));
 			case null, default -> Optional.empty();
 		};
 	}
