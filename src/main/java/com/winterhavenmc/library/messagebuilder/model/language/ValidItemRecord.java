@@ -103,16 +103,18 @@ public final class ValidItemRecord implements ItemRecord
 		return key;
 	}
 
-	@Override
 	public String nameSingular()
 	{
-		return nameSingular;
+		return (nameSingular != null)
+				? nameSingular
+				: "";
 	}
 
-	@Override
 	public String namePlural()
 	{
-		return namePlural;
+		return (namePlural != null)
+				? namePlural
+				: "";
 	}
 
 	public List<String> lore()
@@ -122,7 +124,9 @@ public final class ValidItemRecord implements ItemRecord
 
 	public String material()
 	{
-		return material;
+		return (material != null)
+				? material
+				: "";
 	}
 
 }
