@@ -100,7 +100,7 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	{
 		MATERIAL("MATERIAL"),
 		NAME_SINGULAR("DISPLAY_NAME"),
-		NAME_PLURAL("DISPLAY_NAME_PLURAL"),
+		NAME_PLURAL("PLURAL_NAME"),
 		INVENTORY_NAME("INVENTORY_NAME"),
 		LORE("LORE");
 
