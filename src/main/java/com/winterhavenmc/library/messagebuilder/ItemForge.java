@@ -157,9 +157,8 @@ public class ItemForge
 
 	public static Optional<String> getItemKeyString(final ItemStack itemStack)
 	{
-		return isCustomItem(itemStack)
-				? Optional.ofNullable(itemStack.getItemMeta()
-				.getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
+		return (isCustomItem(itemStack) && itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
+				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
 				: Optional.empty();
 	}
 
