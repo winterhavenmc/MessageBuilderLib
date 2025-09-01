@@ -38,9 +38,8 @@ import java.util.List;
  * @see ItemRecord
  * @see InvalidItemRecord
  * @see ValidItemKey
- * @see com.winterhavenmc.library.messagebuilder.util.Pluralizable Pluralizable
  */
-public final class ValidItemRecord implements ItemRecord, Pluralizable
+public final class ValidItemRecord implements ItemRecord
 {
 	ValidItemKey key;
 	String material;
