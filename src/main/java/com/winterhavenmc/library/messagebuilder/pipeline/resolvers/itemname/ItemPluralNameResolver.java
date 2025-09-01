@@ -15,31 +15,30 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.pluralized;
+package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname;
 
 import com.winterhavenmc.library.messagebuilder.ItemForge;
-import com.winterhavenmc.library.messagebuilder.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.Section;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
+
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Optional;
 
-
-public class ItemPluralizedResolver
+public class ItemPluralNameResolver
 {
 	private final QueryHandlerFactory queryHandlerFactory;
 
 
-	public ItemPluralizedResolver(final QueryHandlerFactory queryHandlerFactory)
+	public ItemPluralNameResolver(final QueryHandlerFactory queryHandlerFactory)
 	{
 		this.queryHandlerFactory = queryHandlerFactory;
 	}
@@ -48,31 +47,26 @@ public class ItemPluralizedResolver
 	public String resolve(final ItemStack itemStack)
 	{
 		MiniMessage miniMessage = MiniMessage.miniMessage();
+		QueryHandler<ItemRecord> queryHandler = queryHandlerFactory.getQueryHandler(Section.ITEMS);
 
 		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
 		{
 			// check if item is custom item defined in language file, and if so, try to set pluralized name
 			if (ItemForge.isCustomItem(itemStack))
 			{
-				QueryHandler<ItemRecord> queryHandler = queryHandlerFactory.getQueryHandler(Section.ITEMS);
-				Optional<String> itemKeyString = ItemForge.getCustomItemKey(itemStack);
-				if (itemKeyString.isPresent())
+
+				if (ItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey)
 				{
-					ItemKey itemKey = ItemKey.of(itemKeyString.get());
-					if (itemKey instanceof ValidItemKey validItemKey)
+					if (queryHandler.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 					{
-						ItemRecord itemRecord = queryHandler.getRecord(validItemKey);
-						if (itemRecord instanceof ValidItemRecord validItemRecord)
-						{
-							String pluralString = validItemRecord.namePlural().replaceAll("\\{QUANTITY}", String.valueOf(itemStack.getAmount()));
-							Component component = miniMessage.deserialize(pluralString, Formatter.choice("choice", itemStack.getAmount()));
-							return ItemForge.LEGACY_SERIALIZER.serializeOr(component, "");
-						}
+						String pluralString = validItemRecord.namePlural().replaceAll("\\{QUANTITY}", String.valueOf(itemStack.getAmount()));
+						Component component = miniMessage.deserialize(pluralString, Formatter.choice("choice", itemStack.getAmount()));
+						return ItemForge.LEGACY_SERIALIZER.serializeOr(component, "");
 					}
 				}
 			}
 
-			if (itemStack.getItemMeta().hasDisplayName()) return ChatColor.stripColor(itemStack.getItemMeta().getDisplayName());
+			else if (itemStack.getItemMeta().hasDisplayName()) return ChatColor.stripColor(itemStack.getItemMeta().getDisplayName());
 			else if (itemStack.getItemMeta().hasItemName()) return ChatColor.stripColor(itemStack.getItemMeta().getItemName());
 		}
 

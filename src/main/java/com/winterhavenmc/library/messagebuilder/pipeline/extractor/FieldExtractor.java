@@ -38,6 +38,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapt
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.Ownable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.OwnerAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.pluralname.PluralNameable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.pluralname.PluralNameAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.Protectable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.Quantifiable;
@@ -114,6 +116,14 @@ public class FieldExtractor implements Extractor
 			{
 				resultMap.putAll(displayNameable.extractDisplayName(baseKey, ctx));
 				DisplayNameable.formatDisplayName(displayNameable.getDisplayName()).ifPresent(string ->
+						resultMap.putIfAbsent(baseKey, string));
+			}
+
+			// Extract pluralized name as string
+			case PluralNameAdapter __ when adapted instanceof PluralNameable pluralNameable ->
+			{
+				resultMap.putAll(pluralNameable.extractPluralName(baseKey, ctx));
+				PluralNameable.formatPluralName(pluralNameable.getPluralName()).ifPresent(string ->
 						resultMap.putIfAbsent(baseKey, string));
 			}
 

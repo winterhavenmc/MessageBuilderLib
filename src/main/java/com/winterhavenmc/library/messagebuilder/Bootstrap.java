@@ -29,6 +29,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.CompositeReso
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.FieldResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemDisplayNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemPluralNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetriever;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.Sender;
@@ -165,7 +166,10 @@ class Bootstrap
 		WorldNameResolver worldNameResolver = WorldNameResolver.get(plugin.getServer().getPluginManager());
 		ItemNameResolver itemNameResolver = new ItemNameResolver();
 		ItemDisplayNameResolver itemDisplayNameResolver = new ItemDisplayNameResolver();
-		return new AdapterContextContainer(worldNameResolver, itemNameResolver, itemDisplayNameResolver, formatterContainer);
+		ItemPluralNameResolver itemPluralNameResolver = new ItemPluralNameResolver(queryHandlerFactory);
+
+		return new AdapterContextContainer(worldNameResolver, itemNameResolver, itemDisplayNameResolver,
+				itemPluralNameResolver, formatterContainer);
 	}
 
 

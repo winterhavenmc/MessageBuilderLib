@@ -35,6 +35,8 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapt
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.Nameable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.Ownable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.OwnerAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.pluralname.PluralNameable;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.pluralname.PluralNameAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.Protectable;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.Quantifiable;
@@ -97,6 +99,29 @@ class AdapterRegistryTest
 
 		// Act
 		long result = registry.getMatchingAdapters(entity).filter(DisplayNameAdapter.class::isInstance).count();
+
+		// Assert
+		assertEquals(1, result);
+	}
+
+
+	@Test @DisplayName("getMatchingAdapters() streams PluralNameAdapter for PluralNameable types.")
+	void GetMatchingAdapters_streams_PluralizableAdapter()
+	{
+		// Arrange
+		class TestObject implements PluralNameable
+		{
+			@Override
+			public String getPluralName()
+			{
+				return "Plural Name";
+			}
+		}
+
+		TestObject testObject = new TestObject();
+
+		// Act
+		long result = registry.getMatchingAdapters(testObject).filter(PluralNameAdapter.class::isInstance).count();
 
 		// Assert
 		assertEquals(1, result);

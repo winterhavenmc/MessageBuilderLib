@@ -26,6 +26,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.killer.KillerA
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.looter.LooterAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.name.NameAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.owner.OwnerAdapter;
+import com.winterhavenmc.library.messagebuilder.pipeline.adapters.pluralname.PluralNameAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.quantity.QuantityAdapter;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.uuid.UniqueIdAdapter;
@@ -78,6 +79,7 @@ public class AdapterRegistry
 		register(new ExpirationAdapter());
 		register(new InstantAdapter());
 		register(new NameAdapter(ctx));
+		register(new PluralNameAdapter(ctx));
 		register(new OwnerAdapter());
 		register(new KillerAdapter());
 		register(new LooterAdapter());
