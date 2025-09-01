@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
+import com.winterhavenmc.library.messagebuilder.keys.InvalidItemKey;
+import com.winterhavenmc.library.messagebuilder.keys.InvalidKeyReason;
 import com.winterhavenmc.library.messagebuilder.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
@@ -46,16 +48,17 @@ import java.util.Optional;
 public class ItemForge
 {
 	private final static Material DEFAULT_MATERIAL = Material.STICK;
+	private static NamespacedKey namespacedKey;
+
 	private final ItemFactory itemFactory;
-	private final Plugin plugin;
 	private final QueryHandler<ItemRecord> itemQueryHandler;
 	private final MiniMessage miniMessage;
-	private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
+	public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
 
 
 	ItemForge(final Plugin plugin, final QueryHandlerFactory queryHandlerFactory)
 	{
-		this.plugin = plugin;
+		ItemForge.namespacedKey = new NamespacedKey(plugin, "CUSTOM_ITEM");
 		this.itemFactory = plugin.getServer().getItemFactory();
 		this.itemQueryHandler = queryHandlerFactory.getQueryHandler(Section.ITEMS);
 		this.miniMessage = MiniMessage.miniMessage();
@@ -63,6 +66,12 @@ public class ItemForge
 
 
 	public Optional<ItemStack> createItem(final String key)
+	{
+		return createItem(key, 1);
+	}
+
+
+	public Optional<ItemStack> createItem(final String key, final int quantity)
 	{
 		if (ItemKey.of(key) instanceof ValidItemKey validItemKey)
 		{
@@ -75,12 +84,12 @@ public class ItemForge
 					material = DEFAULT_MATERIAL;
 				}
 
-				ItemStack itemStack = new ItemStack(material);
+				ItemStack itemStack = new ItemStack(material, quantity);
 				ItemMeta itemMeta = itemFactory.getItemMeta(material);
 
 				if (itemMeta != null)
 				{
-					setItemDisplayName(validItemRecord, itemMeta);
+					setItemName(validItemRecord, itemMeta);
 					setItemLore(validItemRecord, itemMeta);
 					setItemFlags(itemMeta);
 					setItemPersistentData(itemRecord, itemMeta);
@@ -96,12 +105,14 @@ public class ItemForge
 	}
 
 
-	private void setItemDisplayName(ValidItemRecord validItemRecord, ItemMeta itemMeta)
+	private void setItemName(ValidItemRecord validItemRecord, ItemMeta itemMeta)
 	{
 		if (validItemRecord.nameSingular() != null && !validItemRecord.nameSingular().isEmpty())
 		{
 			Component nameComponent = miniMessage.deserialize(validItemRecord.nameSingular());
-			itemMeta.setDisplayName(LEGACY_SERIALIZER.serialize(nameComponent));
+			String name = LEGACY_SERIALIZER.serialize(nameComponent);
+			itemMeta.setItemName(name);
+			itemMeta.setDisplayName(name);
 		}
 	}
 
@@ -123,16 +134,55 @@ public class ItemForge
 
 	private void setItemPersistentData(ItemRecord itemRecord, ItemMeta itemMeta)
 	{
-		NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, itemRecord.key().toString());
-		itemMeta.getPersistentDataContainer().set(PERSISTENT_KEY, PersistentDataType.BYTE, (byte) 1);
+		itemMeta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, itemRecord.key().toString());
 	}
 
 
-	private static void setItemFlags(ItemMeta itemMeta)
+	private static void setItemFlags(final ItemMeta itemMeta)
 	{
 		itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 	}
 
+
+	public static boolean isCustomItem(final ItemStack itemStack)
+	{
+		return (itemStack != null
+				&& itemStack.hasItemMeta()
+				&& itemStack.getItemMeta() != null
+				&& itemStack.getItemMeta().getPersistentDataContainer().has(namespacedKey));
+	}
+
+
+	public static Optional<String> getItemKeyString(final ItemStack itemStack)
+	{
+		return isCustomItem(itemStack)
+				? Optional.ofNullable(itemStack.getItemMeta()
+				.getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
+				: Optional.empty();
+	}
+
+
+	public static ItemKey getItemKey(final ItemStack itemStack)
+	{
+		return getItemKeyString(itemStack).map(ItemKey::of)
+				.orElseGet(() -> new InvalidItemKey("unknown", InvalidKeyReason.KEY_INVALID));
+	}
+
+
+	public Optional<String> getItemName(final String key)
+	{
+		ItemKey itemKey = ItemKey.of(key);
+		if (itemKey instanceof ValidItemKey)
+		{
+			ItemRecord itemRecord = itemQueryHandler.getRecord(itemKey);
+			if (itemRecord instanceof ValidItemRecord validItemRecord)
+			{
+				return Optional.of(validItemRecord.nameSingular());
+			}
+		}
+
+		return Optional.empty();
+	}
 }
