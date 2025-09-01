@@ -97,21 +97,6 @@ public final class ValidItemRecord implements ItemRecord
 	}
 
 
-	/**
-	 * Returns the appropriate name form (singular or plural) based on quantity.
-	 *
-	 * @param quantity the number of items
-	 * @return {@code nameSingular} if quantity is 1; otherwise {@code namePlural}
-	 */
-	@Override
-	public String nameFor(final int quantity)
-	{
-		return (quantity == 1)
-				? nameSingular
-				: namePlural;
-	}
-
-
 	@Override
 	public ValidItemKey key()
 	{
