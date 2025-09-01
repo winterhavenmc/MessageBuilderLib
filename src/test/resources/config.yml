@@ -1,11 +1,12 @@
 # test configuration file for MessageBuilder
 
-# Locale. If the specified locale can not be found, the en-US locale will be used
-locale: en-US
-timezone: UTC
-
 # language file name. uncomment this if you would like to specify a different language file than your locale.
 #language: en-US
+
+# Locale. If the specified locale can not be found, the en-US locale will be used
+locale: en-US
+
+timezone: UTC
 
 # NOTE: an option may be added to allow for a different language file to be set distinct from
 # the specified locale, to allow server operators more flexibility. For instance, they may want to
