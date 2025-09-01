@@ -43,6 +43,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContext
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemDisplayNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemPluralNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
@@ -53,6 +54,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
 
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -70,6 +72,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class MessageProcessorTest
 {
+	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
 	@Mock LocaleProvider localeProviderMock;
 	@Mock DefaultResolver worldNameResolverMock;
@@ -102,13 +105,13 @@ class MessageProcessorTest
 		messageKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
 		macroKey = MacroKey.of(Macro.OWNER).isValid().orElseThrow();
 
-		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
+		message = new ValidMessage(pluginMock, recipient, messageKey, messagePipelineMock);
 
 		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
 		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
 		FormatterContainer formatterContainer = new FormatterContainer(localeProviderMock, time4jDurationFormatter, localeNumberFormatter);
 		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock,
-				new ItemNameResolver(), new ItemDisplayNameResolver(), formatterContainer);
+				new ItemNameResolver(), new ItemDisplayNameResolver(), new ItemPluralNameResolver(queryHandlerFactoryMock), formatterContainer);
 		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
 		FieldExtractor fieldExtractor = new FieldExtractor(adapterContextContainer);
 

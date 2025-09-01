@@ -38,6 +38,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -57,6 +58,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ValidMessageTest
 {
 	// declare mocks
+	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
 	@Mock MessagePipeline messagePipelineMock;
 
@@ -89,7 +91,7 @@ class ValidMessageTest
 
 		messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
-		message = new ValidMessage(recipient, messageKey, messagePipelineMock);
+		message = new ValidMessage(pluginMock, recipient, messageKey, messagePipelineMock);
 
 		section = new MemoryConfiguration();
 		section.set(MessageRecord.Field.ENABLED.toKey(), true);

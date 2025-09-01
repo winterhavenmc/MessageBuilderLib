@@ -41,6 +41,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,8 +63,8 @@ class MessagePipelineTest
 {
 
 	@Mock MessageRetriever messageRetrieverMock;
-	@Mock
-	MessageProcessor messageProcessorMock;
+	@Mock MessageProcessor messageProcessorMock;
+	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
 	@Mock MessageSender messageSenderMock;
 	@Mock TitleSender titleSenderMock;
@@ -127,7 +128,7 @@ class MessagePipelineTest
 		ValidMessageKey recordKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(validMessageRecord);
-		ValidMessage message = new ValidMessage(recipient, MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow(), messagePipeline);
+		ValidMessage message = new ValidMessage(pluginMock, recipient, MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow(), messagePipeline);
 
 		when(messageProcessorMock.process(validMessageRecord, message.getObjectMap())).thenReturn(finalMessageRecord);
 
@@ -146,7 +147,7 @@ class MessagePipelineTest
 		ValidMessageKey recordKey = MessageKey.of(NONEXISTENT_ENTRY).isValid().orElseThrow();
 		when(playerMock.getUniqueId()).thenReturn(new UUID(42, 42));
 		when(messageRetrieverMock.getRecord(recordKey)).thenReturn(invalidMessageRecord);
-		ValidMessage message = new ValidMessage(recipient, MessageKey.of(NONEXISTENT_ENTRY).isValid().orElseThrow(), messagePipeline);
+		ValidMessage message = new ValidMessage(pluginMock, recipient, MessageKey.of(NONEXISTENT_ENTRY).isValid().orElseThrow(), messagePipeline);
 
 		// Act & Assert
 		messagePipeline.initiate(message);

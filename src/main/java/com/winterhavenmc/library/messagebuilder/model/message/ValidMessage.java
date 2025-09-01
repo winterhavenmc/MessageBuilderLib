@@ -27,6 +27,7 @@ import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 import com.winterhavenmc.library.messagebuilder.validation.Parameter;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
+import org.bukkit.plugin.Plugin;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -60,6 +61,9 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
 public final class ValidMessage implements Message
 {
 	private final static String RECIPIENT_KEY = "RECIPIENT";
+	private final static String PLUGIN_KEY = "PLUGIN";
+
+//	private final Plugin plugin;
 	private final Recipient.Sendable recipient;
 	private final ValidMessageKey messageKey;
 	private final MessagePipeline messagePipeline;
@@ -73,17 +77,24 @@ public final class ValidMessage implements Message
 	 * @param messageKey message identifier
 	 * @param messagePipeline the message processor that will receive the message when the send method is called
 	 */
-	public ValidMessage(final Recipient.Sendable recipient,
+	public ValidMessage(final Plugin plugin,
+						final Recipient.Sendable recipient,
 						final ValidMessageKey messageKey,
 						final MessagePipeline messagePipeline)
 	{
+//		this.plugin = plugin;
 		this.recipient = recipient;
 		this.messageKey = messageKey;
 		this.messagePipeline = messagePipeline;
-
-		ValidMacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).isValid().orElseThrow();
 		this.macroObjectMap = new MacroObjectMap();
-		this.macroObjectMap.put(recipientKey, recipient);
+
+		// put recipient in MacroMap
+		ValidMacroKey recipientKey = MacroKey.of(RECIPIENT_KEY).isValid().orElseThrow();
+		this.macroObjectMap.put(recipientKey, recipient.sender());
+
+		// put plugin in MacroMap
+		ValidMacroKey pluginKey = MacroKey.of(PLUGIN_KEY).isValid().orElseThrow();
+		this.macroObjectMap.put(pluginKey, plugin);
 	}
 
 

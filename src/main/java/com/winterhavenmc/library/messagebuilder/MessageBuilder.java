@@ -81,6 +81,7 @@ public final class MessageBuilder
 	public final static TemporalUnit TICKS = new Tick();
 	private final static String EXCEPTION_MESSAGES = "exception.messages";
 
+	private final Plugin plugin;
 	private final SectionResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
 	private final ConstantResolver constantResolver;
@@ -102,6 +103,7 @@ public final class MessageBuilder
 	{
 		ValidationContext.initialize(LocaleProvider.create(plugin));
 
+		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
 		this.constantResolver = constantResolver;
 		this.itemForge = itemForge;
@@ -156,8 +158,8 @@ public final class MessageBuilder
 		// return ValidMessage on valid Recipient, else empty no-op message
 		return switch (Recipient.of(recipient))
 		{
-			case Recipient.Valid valid -> new ValidMessage(valid, validMessageKey, messagePipeline);
-			case Recipient.Proxied proxied -> new ValidMessage(proxied, validMessageKey, messagePipeline);
+			case Recipient.Valid valid -> new ValidMessage(plugin, valid, validMessageKey, messagePipeline);
+			case Recipient.Proxied proxied -> new ValidMessage(plugin, proxied, validMessageKey, messagePipeline);
 			case Recipient.Invalid ignored -> Message.empty();
 		};
 	}
