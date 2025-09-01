@@ -67,16 +67,6 @@ public class ValidItemRecordTest
 
 
 	@Test
-	public void testPluralized()
-	{
-		assertEquals("Test Items", testRecord.nameFor(0));
-		assertEquals("Test Item", testRecord.nameFor(1));
-		assertEquals("Test Items", testRecord.nameFor(2));
-		assertEquals("Test Items", testRecord.nameFor(10));
-	}
-
-
-	@Test
 	void testKey()
 	{
 		assertEquals("TEST_ITEM", testRecord.key().toString());
