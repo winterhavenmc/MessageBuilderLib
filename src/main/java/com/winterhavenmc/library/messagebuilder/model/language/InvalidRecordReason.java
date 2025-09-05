@@ -20,12 +20,15 @@ package com.winterhavenmc.library.messagebuilder.model.language;
 
 public enum InvalidRecordReason
 {
+	CONSTANT_SECTION_MISSING("Missing constant section."),
 	CONSTANT_ENTRY_MISSING("Missing constant entry."),
 	CONSTANT_KEY_INVALID("Invalid constant key."),
 
+	ITEM_SECTION_MISSING("Missing item section."),
 	ITEM_ENTRY_MISSING("Missing item entry."),
 	ITEM_KEY_INVALID("Invalid item key."),
 
+	MESSAGE_SECTION_MISSING("Missing message section."),
 	MESSAGE_ENTRY_MISSING("Missing message entry."),
 	MESSAGE_KEY_INVALID("Invalid message key."),
 	;

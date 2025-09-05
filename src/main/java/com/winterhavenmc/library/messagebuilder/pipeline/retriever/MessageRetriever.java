@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.retriever;
 
 import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReason;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
 
@@ -27,7 +27,6 @@ import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecor
 /**
  * Default implementation of the {@link Retriever} interface that retrieves
  * a {@link com.winterhavenmc.library.messagebuilder.model.language.MessageRecord}
- * using a {@link com.winterhavenmc.library.messagebuilder.query.QueryHandler}.
  *
  * <p>This class ensures safety and consistency by always returning a non-null record.
  * If the underlying query handler fails to provide a valid message, a fallback
@@ -38,30 +37,26 @@ import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecor
  * {@link com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline MessagePipeline}.
  *
  * @see Retriever
- * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  * @see com.winterhavenmc.library.messagebuilder.model.language.MessageRecord MessageRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord ValidMessageRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord InvalidMessageRecord
  */
 public final class MessageRetriever implements Retriever
 {
-	private final QueryHandler<MessageRecord> queryHandler;
+	private final MessageRepository messageRepository;
 
 
 	/**
 	 * Constructs a {@code MessageRetriever} using the specified query handler.
-	 *
-	 * @param queryHandler a handler responsible for resolving message records from a configuration source
 	 */
-	public MessageRetriever(final QueryHandler<MessageRecord> queryHandler)
+	public MessageRetriever(final MessageRepository messageRepository)
 	{
-		this.queryHandler = queryHandler;
+		this.messageRepository = messageRepository;
 	}
 
 
 	/**
 	 * Retrieves a {@link com.winterhavenmc.library.messagebuilder.model.language.MessageRecord}
-	 * for the given string using the underlying {@link QueryHandler}.
 	 *
 	 * <p>If the result is not an instance of {@link com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord},
 	 * this method returns an {@linkplain MessageRecord#empty(com.winterhavenmc.library.messagebuilder.keys.RecordKey, InvalidRecordReason)
@@ -73,7 +68,7 @@ public final class MessageRetriever implements Retriever
 	@Override
 	public MessageRecord getRecord(final ValidMessageKey messageKey)
 	{
-		return (queryHandler.getRecord(messageKey) instanceof ValidMessageRecord validMessageRecord)
+		return (messageRepository.getMessageRecord(messageKey) instanceof ValidMessageRecord validMessageRecord)
 				? validMessageRecord
 				: MessageRecord.empty(messageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING);
 	}

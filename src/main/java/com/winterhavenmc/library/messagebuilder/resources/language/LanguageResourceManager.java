@@ -17,7 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.Bootstrap;
 import com.winterhavenmc.library.messagebuilder.model.language.Section;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ConstantRepository;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LanguageTag;
 
 import org.bukkit.configuration.Configuration;
@@ -44,6 +48,11 @@ public final class LanguageResourceManager implements SectionResourceManager
 {
 	private final LanguageResourceLoader resourceLoader;
 	private final LanguageResourceInstaller resourceInstaller;
+
+	private final ConstantRepository constantRepository;
+	private final ItemRepository itemRepository;
+	private final MessageRepository messageRepository;
+
 	private Configuration languageConfiguration;
 
 
@@ -60,7 +69,11 @@ public final class LanguageResourceManager implements SectionResourceManager
 		this.resourceLoader = resourceLoader;
 
 		installResources();
-		this.languageConfiguration = resourceLoader.load(); // already includes fallback
+		this.languageConfiguration = resourceLoader.load();
+
+		this.constantRepository = Bootstrap.getConstantRepository(new LanguageSectionProvider(() -> languageConfiguration, Section.CONSTANTS));
+		this.itemRepository = Bootstrap.getItemRepository(new LanguageSectionProvider(() -> languageConfiguration, Section.ITEMS));
+		this.messageRepository = Bootstrap.getMessageRepository(new LanguageSectionProvider(() -> languageConfiguration, Section.MESSAGES));
 	}
 
 
@@ -78,6 +91,10 @@ public final class LanguageResourceManager implements SectionResourceManager
 		this.resourceInstaller = installer;
 		this.resourceLoader = loader;
 		this.languageConfiguration = configuration;
+
+		this.constantRepository = Bootstrap.getConstantRepository(new LanguageSectionProvider(() -> languageConfiguration, Section.CONSTANTS));
+		this.itemRepository = Bootstrap.getItemRepository(new LanguageSectionProvider(() -> languageConfiguration, Section.ITEMS));
+		this.messageRepository = Bootstrap.getMessageRepository(new LanguageSectionProvider(() -> languageConfiguration, Section.MESSAGES));
 	}
 
 
@@ -143,6 +160,24 @@ public final class LanguageResourceManager implements SectionResourceManager
 	public static String getFileName(final LanguageTag languageTag)
 	{
 		return String.join(File.separator, RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()) + ".yml";
+	}
+
+
+	public ConstantRepository constants()
+	{
+		return this.constantRepository;
+	}
+
+
+	public ItemRepository items()
+	{
+		return this.itemRepository;
+	}
+
+
+	public MessageRepository messages()
+	{
+		return this.messageRepository;
 	}
 
 }

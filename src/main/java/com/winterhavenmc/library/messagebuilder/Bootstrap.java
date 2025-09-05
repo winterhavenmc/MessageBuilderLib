@@ -17,6 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
+import com.winterhavenmc.library.messagebuilder.adapters.yaml_language_resource.YamlConstantRepository;
+import com.winterhavenmc.library.messagebuilder.adapters.yaml_language_resource.YamlItemRepository;
+import com.winterhavenmc.library.messagebuilder.adapters.yaml_language_resource.YamlMessageRepository;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
@@ -34,13 +37,11 @@ import com.winterhavenmc.library.messagebuilder.pipeline.retriever.MessageRetrie
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.MessageSender;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.Sender;
 import com.winterhavenmc.library.messagebuilder.pipeline.sender.TitleSender;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ConstantRepository;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
-import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceInstaller;
-import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceLoader;
-import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.model.language.Section;
+import com.winterhavenmc.library.messagebuilder.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.DurationFormatter;
@@ -60,7 +61,7 @@ import java.util.List;
 /**
  * A companion utility class to facilitate arranging components necessary to initialize the MessageBuilder library.
  */
-class Bootstrap
+public class Bootstrap
 {
 	private Bootstrap() { /* Private constructor to prevent instantiation of utility class */ }
 
@@ -82,7 +83,7 @@ class Bootstrap
 	 * @param plugin an instance of the plugin
 	 * @return an instance of the language resource manager
 	 */
-	static SectionResourceManager createLanguageResourceManager(final Plugin plugin)
+	static LanguageResourceManager createLanguageResourceManager(final Plugin plugin)
 	{
 		final LanguageResourceInstaller resourceInstaller = new LanguageResourceInstaller(plugin);
 		final LanguageResourceLoader resourceLoader = new LanguageResourceLoader(plugin);
@@ -115,17 +116,16 @@ class Bootstrap
 	/**
 	 * A static factory method to create the message processing pipeline
 	 *
-	 * @param queryHandlerFactory instance of the query handler factory
 	 * @param formatterContainer a context container which contains instances of string formatters for specific types
 	 * @param adapterContextContainer a context container for injecting dependencies into adapters
 	 * @return an instance of the message pipeline
 	 */
 	static @NotNull MessagePipeline createMessagePipeline(final Plugin plugin,
-														  final QueryHandlerFactory queryHandlerFactory,
+														  final LanguageResourceManager languageResourceManager,
 														  final FormatterContainer formatterContainer,
 														  final AdapterContextContainer adapterContextContainer)
 	{
-		final MessageRetriever messageRetriever = new MessageRetriever(queryHandlerFactory.getQueryHandler(Section.MESSAGES));
+		final MessageRetriever messageRetriever = new MessageRetriever(languageResourceManager.messages());
 		final MessageProcessor messageProcessor = createMacroReplacer(formatterContainer, adapterContextContainer);
 		final CooldownMap cooldownMap = new CooldownMap();
 		final List<Sender> messageSenders = createSenders(plugin, cooldownMap);
@@ -138,16 +138,15 @@ class Bootstrap
 	 * A static factory method to create a context container for dependency injection into resolvers
 	 *
 	 * @param plugin instance of the plugin
-	 * @param queryHandlerFactory instance of the query handler factory
 	 * @return the context container for to be injected into resolvers
 	 */
 	static FormatterContainer createFormatterContainer(final Plugin plugin,
-													   final QueryHandlerFactory queryHandlerFactory)
+													   final LanguageResourceManager languageResourceManager)
 	{
 		final LocaleProvider localeProvider = LocaleProvider.create(plugin);
 		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProvider);
 		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProvider);
-		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, queryHandlerFactory);
+		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, languageResourceManager);
 
 		return new FormatterContainer(localeProvider, durationFormatter, localeNumberFormatter);
 	}
@@ -160,34 +159,46 @@ class Bootstrap
 	 * @return a populated context container
 	 */
 	static AdapterContextContainer createAdapterContextContainer(final Plugin plugin,
-																 final QueryHandlerFactory queryHandlerFactory,
+																 final LanguageResourceManager languageResourceManager,
 																 final FormatterContainer formatterContainer)
 	{
 		WorldNameResolver worldNameResolver = WorldNameResolver.get(plugin.getServer().getPluginManager());
 		ItemNameResolver itemNameResolver = new ItemNameResolver();
 		ItemDisplayNameResolver itemDisplayNameResolver = new ItemDisplayNameResolver();
-		ItemPluralNameResolver itemPluralNameResolver = new ItemPluralNameResolver(queryHandlerFactory);
+		ItemPluralNameResolver itemPluralNameResolver = new ItemPluralNameResolver(languageResourceManager);
 
 		return new AdapterContextContainer(worldNameResolver, itemNameResolver, itemDisplayNameResolver,
 				itemPluralNameResolver, formatterContainer);
 	}
 
 
-	static QueryHandlerFactory createQueryHandlerFactory(SectionResourceManager languageResourceManager)
+	static ConstantResolver createConstantResolver(final LanguageResourceManager languageResourceManager)
 	{
-		return new QueryHandlerFactory(languageResourceManager);
+		return new ConstantResolver(languageResourceManager);
 	}
 
 
-	static ConstantResolver createConstantResolver(final QueryHandlerFactory queryHandlerFactory)
+	static ItemForge createItemForge(final Plugin plugin, final LanguageResourceManager languageResourceManager)
 	{
-		return new ConstantResolver(queryHandlerFactory);
+		return new ItemForge(plugin, languageResourceManager.items());
 	}
 
 
-	static ItemForge createItemForge(final Plugin plugin, final QueryHandlerFactory queryHandlerFactory)
+	public static ConstantRepository getConstantRepository(final SectionProvider sectionProvider)
 	{
-		return new ItemForge(plugin, queryHandlerFactory);
+		return new YamlConstantRepository(sectionProvider);
+	}
+
+
+	public static ItemRepository getItemRepository(final SectionProvider sectionProvider)
+	{
+		return new YamlItemRepository(sectionProvider);
+	}
+
+
+	public static MessageRepository getMessageRepository(final SectionProvider sectionProvider)
+	{
+		return new YamlMessageRepository(sectionProvider);
 	}
 
 }

@@ -37,20 +37,16 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class LanguageSectionProviderTest
 {
-	@Mock
-	private FileConfiguration configuration;
+	@Mock private FileConfiguration configuration;
+	@Mock private ConfigurationSection mockSection;
 
-	@Mock
-	private ConfigurationSection mockSection;
-
-	private Supplier<Configuration> configSupplier;
 	private LanguageSectionProvider provider;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		configSupplier = () -> configuration;
+		Supplier<Configuration> configSupplier = () -> configuration;
 		provider = new LanguageSectionProvider(configSupplier, Section.MESSAGES);
 	}
 

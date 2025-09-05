@@ -23,9 +23,7 @@ import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.resources.language.SectionResourceManager;
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
@@ -82,7 +80,7 @@ public final class MessageBuilder
 	private final static String EXCEPTION_MESSAGES = "exception.messages";
 
 	private final Plugin plugin;
-	private final SectionResourceManager languageResourceManager;
+	private final LanguageResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
 	private final ConstantResolver constantResolver;
 	private final ItemForge itemForge;
@@ -96,7 +94,7 @@ public final class MessageBuilder
 	 * @param languageResourceManager an instance of the language resource manager
 	 */
 	private MessageBuilder(final Plugin plugin,
-	                       final SectionResourceManager languageResourceManager,
+	                       final LanguageResourceManager languageResourceManager,
 						   final ConstantResolver constantResolver,
 						   final ItemForge itemForge,
 	                       final MessagePipeline messagePipeline)
@@ -125,14 +123,13 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
-		final SectionResourceManager languageResourceManager = createLanguageResourceManager(plugin);
-		final QueryHandlerFactory queryHandlerFactory = createQueryHandlerFactory(languageResourceManager);
-		final ConstantResolver constantResolver = createConstantResolver(queryHandlerFactory);
-		final ItemForge itemForge = createItemForge(plugin, queryHandlerFactory);
+		final LanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin);
+		final ConstantResolver constantResolver = createConstantResolver(languageResourceManager);
+		final ItemForge itemForge = createItemForge(plugin, languageResourceManager);
 
-		final FormatterContainer formatterContainer = createFormatterContainer(plugin, queryHandlerFactory);
-		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, queryHandlerFactory, formatterContainer);
-		final MessagePipeline messagePipeline = createMessagePipeline(plugin, queryHandlerFactory, formatterContainer, adapterContextContainer);
+		final FormatterContainer formatterContainer = createFormatterContainer(plugin, languageResourceManager);
+		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, languageResourceManager, formatterContainer);
+		final MessagePipeline messagePipeline = createMessagePipeline(plugin, languageResourceManager, formatterContainer, adapterContextContainer);
 
 		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);
 	}

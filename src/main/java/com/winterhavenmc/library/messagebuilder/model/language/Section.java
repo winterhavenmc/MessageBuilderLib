@@ -17,14 +17,14 @@
 
 package com.winterhavenmc.library.messagebuilder.model.language;
 
-import com.winterhavenmc.library.messagebuilder.query.ConstantQueryHandler;
-import com.winterhavenmc.library.messagebuilder.query.ItemQueryHandler;
-import com.winterhavenmc.library.messagebuilder.query.MessageQueryHandler;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
-
-import java.util.EnumMap;
-import java.util.function.Function;
+//import com.winterhavenmc.library.messagebuilder.query.ConstantQueryHandler;
+//import com.winterhavenmc.library.messagebuilder.query.ItemQueryHandler;
+//import com.winterhavenmc.library.messagebuilder.query.MessageQueryHandler;
+//import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
+//import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
+//
+//import java.util.EnumMap;
+//import java.util.function.Function;
 
 
 /**
@@ -32,39 +32,39 @@ import java.util.function.Function;
  */
 public enum Section
 {
-	CONSTANTS(ConstantQueryHandler::new),
-	ITEMS(ItemQueryHandler::new),
-	MESSAGES(MessageQueryHandler::new),
+	CONSTANTS,
+	ITEMS,
+	MESSAGES,
 	;
 
-	private static final EnumMap<Section, QueryHandler<?>> HANDLER_MAP = new EnumMap<>(Section.class);
-	private final Function<SectionProvider, ? extends QueryHandler<? extends SectionRecord>> handlerFactory;
+//	private static final EnumMap<Section, QueryHandler<?>> HANDLER_MAP = new EnumMap<>(Section.class);
+//	private final Function<SectionProvider, ? extends QueryHandler<? extends SectionRecord>> handlerFactory;
 
 
-	/**
-	 * Constructor for enum constant instances
-	 *
-	 * @param handlerFactory the Class of {@link QueryHandler} that is immutably bound to this enum constant
-	 */
-	<R extends SectionRecord> Section(Function<SectionProvider, QueryHandler<R>> handlerFactory)
-	{
-		this.handlerFactory = handlerFactory;
-	}
+//	/**
+//	 * Constructor for enum constant instances
+//	 *
+//	 * @param handlerFactory the Class of {@link QueryHandler} that is immutably bound to this enum constant
+//	 */
+//	<R extends SectionRecord> Section(Function<SectionProvider, QueryHandler<R>> handlerFactory)
+//	{
+//		this.handlerFactory = handlerFactory;
+//	}
 
 
-	/**
-	 * Retrieve an instance of the section query handler that is bound to this enum constant from the enum map.
-	 * If the map has not been populated with an instance of its query handler, a new instance is created using
-	 * reflection to call the constructor and pass the {@code ConfigurationSupplier} parameter to the constructor,
-	 * which is then placed in the map for future retrievals, and returned to the caller for this use.
-	 *
-	 * @return an instance of the section query handler that is bound to the enum constant
-	 * @param <R> the specific type of the section query handler being returned
-	 */
-	@SuppressWarnings("unchecked")
-	public <R extends SectionRecord> QueryHandler<R> createHandler(SectionProvider provider)
-	{
-		return (QueryHandler<R>) HANDLER_MAP.computeIfAbsent(this, __ -> handlerFactory.apply(provider));
-	}
+//	/**
+//	 * Retrieve an instance of the section query handler that is bound to this enum constant from the enum map.
+//	 * If the map has not been populated with an instance of its query handler, a new instance is created using
+//	 * reflection to call the constructor and pass the {@code ConfigurationSupplier} parameter to the constructor,
+//	 * which is then placed in the map for future retrievals, and returned to the caller for this use.
+//	 *
+//	 * @return an instance of the section query handler that is bound to the enum constant
+//	 * @param <R> the specific type of the section query handler being returned
+//	 */
+//	@SuppressWarnings("unchecked")
+//	public <R extends SectionRecord> QueryHandler<R> createHandler(SectionProvider provider)
+//	{
+//		return (QueryHandler<R>) HANDLER_MAP.computeIfAbsent(this, __ -> handlerFactory.apply(provider));
+//	}
 
 }

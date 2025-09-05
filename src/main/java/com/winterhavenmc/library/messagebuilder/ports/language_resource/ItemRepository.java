@@ -15,18 +15,14 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.query;
+package com.winterhavenmc.library.messagebuilder.ports.language_resource;
 
-import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
-import com.winterhavenmc.library.messagebuilder.model.language.SectionRecord;
+import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
+import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
 
 
-/**
- * An interface that declares a query handler that is typed constrained to
- * implementations of the SectionRecord interface
- */
 @FunctionalInterface
-public interface QueryHandler<T extends SectionRecord>
+public interface ItemRepository
 {
-	T getRecord(RecordKey key);
+	ItemRecord getItemRecord(ValidItemKey key);
 }

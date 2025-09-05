@@ -45,8 +45,9 @@ import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.Item
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemPluralNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultResolver;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
+//import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration.Time4jDurationFormatter;
 
@@ -77,7 +78,7 @@ class MessageProcessorTest
 	@Mock LocaleProvider localeProviderMock;
 	@Mock DefaultResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
-	@Mock QueryHandlerFactory queryHandlerFactoryMock;
+	@Mock LanguageResourceManager languageResourceManagerMock;
 
 	Recipient.Valid recipient;
 	ValidMessageKey messageKey;
@@ -111,7 +112,7 @@ class MessageProcessorTest
 		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
 		FormatterContainer formatterContainer = new FormatterContainer(localeProviderMock, time4jDurationFormatter, localeNumberFormatter);
 		AdapterContextContainer adapterContextContainer = new AdapterContextContainer(worldNameResolverMock,
-				new ItemNameResolver(), new ItemDisplayNameResolver(), new ItemPluralNameResolver(queryHandlerFactoryMock), formatterContainer);
+				new ItemNameResolver(), new ItemDisplayNameResolver(), new ItemPluralNameResolver(languageResourceManagerMock), formatterContainer);
 		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
 		FieldExtractor fieldExtractor = new FieldExtractor(adapterContextContainer);
 

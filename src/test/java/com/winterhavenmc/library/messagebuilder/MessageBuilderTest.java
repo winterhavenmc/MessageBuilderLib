@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContext
 import com.winterhavenmc.library.messagebuilder.pipeline.formatters.FormatterContainer;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
+//import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
 import com.winterhavenmc.library.messagebuilder.util.MockUtility;
@@ -60,7 +60,7 @@ class MessageBuilderTest
 	@Mock MessagePipeline messagePipelineMock;
 	@Mock ConstantResolver constantResolverMock;
 	@Mock ItemForge itemForgeMock;
-	@Mock QueryHandlerFactory queryHandlerFactoryMock;
+//	@Mock QueryHandlerFactory queryHandlerFactoryMock;
 	@Mock FormatterContainer formatterContainerMock;
 	@Mock AdapterContextContainer adapterContextContainerMock;
 
@@ -172,7 +172,8 @@ class MessageBuilderTest
 		try (MockedStatic<Bootstrap> bootstrapMockedStatic = Mockito.mockStatic(Bootstrap.class))
 		{
 			bootstrapMockedStatic.when(() -> Bootstrap
-					.createMessagePipeline(pluginMock, queryHandlerFactoryMock, formatterContainerMock, adapterContextContainerMock)).thenReturn(messagePipelineMock);
+					.createMessagePipeline(pluginMock, languageResourceManagerMock, formatterContainerMock, adapterContextContainerMock))
+					.thenReturn(messagePipelineMock);
 
 			// Act
 			MessageBuilder messageBuilder = MessageBuilder.create(pluginMock);

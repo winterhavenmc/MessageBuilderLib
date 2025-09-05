@@ -15,27 +15,6 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.model.language;
+package com.winterhavenmc.library.messagebuilder.model.destination;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-class SectionTest
-{
-	@Test
-	void values()
-	{
-		Section[] values = Section.values();
-		assertEquals(Section.CONSTANTS, values[0]);
-		assertEquals(Section.ITEMS, values[1]);
-		assertEquals(Section.MESSAGES, values[2]);
-	}
-
-	@Test
-	void valueOf()
-	{
-		assertEquals(Section.CONSTANTS, Section.valueOf("CONSTANTS"));
-		assertEquals(Section.ITEMS, Section.valueOf("ITEMS"));
-		assertEquals(Section.MESSAGES, Section.valueOf("MESSAGES"));
-	}
-}
+public record InvalidDestination(String Reason) implements Destination { }

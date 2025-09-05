@@ -15,7 +15,14 @@
  *
  */
 
-/**
- * This package contains the QueryHandler interface and implementations for the language file sections.
- */
-package com.winterhavenmc.library.messagebuilder.query;
+package com.winterhavenmc.library.messagebuilder.ports.language_resource;
+
+import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
+import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
+
+
+@FunctionalInterface
+public interface MessageRepository
+{
+	MessageRecord getMessageRecord(ValidMessageKey key);
+}

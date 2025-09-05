@@ -19,15 +19,18 @@ package com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration;
 
 import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
-import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.Section;
-import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ConstantRepository;
+import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+
+import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.validation.Parameter.DELEGATE;
+import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LANGUAGE_RESOURCE_MANAGER;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
 /**
@@ -54,22 +57,25 @@ import java.util.Objects;
  */
 public final class LocalizedDurationFormatter implements DurationFormatter
 {
-	private final DurationFormatter delegate;
-	private final QueryHandlerFactory queryHandlerFactory;
 	private static final ValidConstantKey UNLIMITED_KEY = ConstantKey.of("TIME.UNLIMITED").isValid().orElseThrow();
 	private static final ValidConstantKey LESS_THAN_KEY = ConstantKey.of("TIME.LESS_THAN").isValid().orElseThrow();
+
+	private final DurationFormatter delegate;
+	private final ConstantRepository constantRepository;
 
 
 	/**
 	 * Constructs a {@code LocalizedDurationFormatter} with a backing delegate and query handler factory.
 	 *
 	 * @param delegate the base formatter to handle standard durations
-	 * @param queryHandlerFactory factory for retrieving language constants from the configuration
 	 */
-	public LocalizedDurationFormatter(final DurationFormatter delegate, final QueryHandlerFactory queryHandlerFactory)
+	public LocalizedDurationFormatter(final DurationFormatter delegate, final LanguageResourceManager languageResourceManager)
 	{
+		validate(delegate, Objects::isNull, throwing(PARAMETER_NULL, DELEGATE));
+		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
+
 		this.delegate = Objects.requireNonNull(delegate);
-		this.queryHandlerFactory = queryHandlerFactory;
+		this.constantRepository = languageResourceManager.constants();
 	}
 
 
@@ -146,12 +152,7 @@ public final class LocalizedDurationFormatter implements DurationFormatter
 	 */
 	String getTimeConstant(final ValidConstantKey constantKey, final DurationType durationType)
 	{
-		QueryHandler<ConstantRecord> constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
-		ConstantRecord timeConstant = constantQueryHandler.getRecord(constantKey);
-
-		return (timeConstant instanceof ValidConstantRecord validRecord && validRecord.value() instanceof String string)
-				? string
-				: durationType.getFallback();
+		return constantRepository.getString(constantKey).orElseGet(durationType::getFallback);
 	}
 
 }

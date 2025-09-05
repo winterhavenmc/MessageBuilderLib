@@ -19,11 +19,10 @@ package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
-import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.Section;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ConstantRepository;
 
+import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,15 +33,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class ConstantResolverTest
 {
-	@Mock QueryHandlerFactory queryHandlerFactoryMock;
-	@Mock QueryHandler<ConstantRecord> constantQueryHandlerMock;
+	@Mock LanguageResourceManager languageResourceManagerMock;
+	@Mock ConstantRepository constantRepositoryMock;
+
+	ValidConstantKey recordKey;
+
+
+	@BeforeEach
+	void setUp()
+	{
+		recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
+	}
 
 
 	@Nested
@@ -52,19 +59,19 @@ class ConstantResolverTest
 		void getString_returns_optional_String()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, "result string");
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getString(recordKey)).thenReturn(Optional.of("result string"));
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<String> result = constantResolver.getString("KEY");
 
 			// Assert
 			assertEquals(Optional.of("result string"), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getString(recordKey);
 		}
 
 
@@ -72,18 +79,16 @@ class ConstantResolverTest
 		void getString_returns_empty_optional_when_given_invalid_key()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, "result string");
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<String> result = constantResolver.getString("invalid-key");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
 		}
 
 
@@ -91,19 +96,19 @@ class ConstantResolverTest
 		void getString_returns_empty_optional()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getString(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<String> result = constantResolver.getString("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getString(recordKey);
 		}
 
 
@@ -111,19 +116,19 @@ class ConstantResolverTest
 		void getString_returns_empty_optional_when_non_string_value_record()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, 42);
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getString(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<String> result = constantResolver.getString("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getString(recordKey);
 		}
 
 
@@ -131,19 +136,19 @@ class ConstantResolverTest
 		void getString_returns_empty_optional_when_null_value_record()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, null);
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getString(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<String> result = constantResolver.getString("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getString(recordKey);
 		}
 
 
@@ -151,19 +156,19 @@ class ConstantResolverTest
 		void getString_returns_empty_optional_when_empty_optional_value_record()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getString(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<String> result = constantResolver.getString("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getString(recordKey);
 		}
 	}
 
@@ -175,19 +180,19 @@ class ConstantResolverTest
 		void getInteger_returns_optional_Integer()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, 42);
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getInteger(recordKey)).thenReturn(Optional.of(42));
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Integer> result = constantResolver.getInteger("KEY");
 
 			// Assert
 			assertEquals(Optional.of(42), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getInteger(recordKey);
 		}
 
 
@@ -195,18 +200,17 @@ class ConstantResolverTest
 		void getInteger_returns_empty_optional_when_given_invalid_key()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, 42);
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Integer> result = constantResolver.getInteger("invalid-key");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
 		}
 
 
@@ -214,19 +218,17 @@ class ConstantResolverTest
 		void getInteger_returns_empty_optional()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Integer> result = constantResolver.getInteger("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
 		}
 
 
@@ -234,19 +236,17 @@ class ConstantResolverTest
 		void getInteger_returns_empty_optional_when_non_Integer_value_record()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, "string");
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Integer> result = constantResolver.getInteger("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
 		}
 
 
@@ -254,19 +254,19 @@ class ConstantResolverTest
 		void getInteger_returns_empty_optional_when_null_value_record()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, null);
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getInteger(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Integer> result = constantResolver.getInteger("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getInteger(recordKey);
 		}
 
 
@@ -274,19 +274,18 @@ class ConstantResolverTest
 		void getInteger_returns_empty_optional_when_empty_optional_value_record()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getInteger(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Integer> result = constantResolver.getInteger("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
 		}
 	}
 
@@ -298,19 +297,18 @@ class ConstantResolverTest
 		void getBoolean_returns_optional_Boolean()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, true);
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getBoolean(recordKey)).thenReturn(Optional.of(true));
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Boolean> result = constantResolver.getBoolean("KEY");
 
 			// Assert
 			assertEquals(Optional.of(true), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
 		}
 
 
@@ -319,17 +317,18 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, true);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
 
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Boolean> result = constantResolver.getBoolean("invalid-key");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
 		}
 
 
@@ -338,18 +337,18 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getBoolean(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Boolean> result = constantResolver.getBoolean("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
 		}
 
 
@@ -358,18 +357,19 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, 42);
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getBoolean(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Boolean> result = constantResolver.getBoolean("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getBoolean(recordKey);
 		}
 
 
@@ -377,19 +377,19 @@ class ConstantResolverTest
 		void getBoolean_returns_empty_optional_when_null_value_record()
 		{
 			// Arrange
-			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, null);
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getBoolean(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Boolean> result = constantResolver.getBoolean("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getBoolean(recordKey);
 		}
 
 
@@ -398,18 +398,19 @@ class ConstantResolverTest
 		{
 			// Arrange
 			ValidConstantKey recordKey = ConstantKey.of("KEY").isValid().orElseThrow();
-			ConstantRecord constantRecord = ConstantRecord.of(recordKey, Optional.empty());
-
-			doReturn(constantQueryHandlerMock).when(queryHandlerFactoryMock).getQueryHandler(Section.CONSTANTS);
-			when(constantQueryHandlerMock.getRecord(recordKey)).thenReturn(constantRecord);
-
-			ConstantResolver constantResolver = new ConstantResolver(queryHandlerFactoryMock);
+			when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+			when(constantRepositoryMock.getBoolean(recordKey)).thenReturn(Optional.empty());
 
 			// Act
+			ConstantResolver constantResolver = new ConstantResolver(languageResourceManagerMock);
 			Optional<Boolean> result = constantResolver.getBoolean("KEY");
 
 			// Assert
 			assertEquals(Optional.empty(), result);
+
+			// Verify
+			verify(languageResourceManagerMock, atLeastOnce()).constants();
+			verify(constantRepositoryMock, atLeastOnce()).getBoolean(recordKey);
 		}
 	}
 

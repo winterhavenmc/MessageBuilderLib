@@ -19,12 +19,10 @@ package com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname;
 
 import com.winterhavenmc.library.messagebuilder.ItemForge;
 import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
-import com.winterhavenmc.library.messagebuilder.model.language.ItemRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.Section;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ItemRepository;
 
+import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
@@ -35,19 +33,18 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemPluralNameResolver
 {
-	private final QueryHandlerFactory queryHandlerFactory;
+	private final ItemRepository itemRepository;
 
 
-	public ItemPluralNameResolver(final QueryHandlerFactory queryHandlerFactory)
+	public ItemPluralNameResolver(final LanguageResourceManager languageResourceManager)
 	{
-		this.queryHandlerFactory = queryHandlerFactory;
+		this.itemRepository = languageResourceManager.items();
 	}
 
 
 	public String resolve(final ItemStack itemStack)
 	{
 		MiniMessage miniMessage = MiniMessage.miniMessage();
-		QueryHandler<ItemRecord> queryHandler = queryHandlerFactory.getQueryHandler(Section.ITEMS);
 
 		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
 		{
@@ -57,7 +54,7 @@ public class ItemPluralNameResolver
 
 				if (ItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey)
 				{
-					if (queryHandler.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+					if (itemRepository.getItemRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 					{
 						String pluralString = validItemRecord.namePlural().replaceAll("\\{QUANTITY}", String.valueOf(itemStack.getAmount()));
 						Component component = miniMessage.deserialize(pluralString, Formatter.choice("choice", itemStack.getAmount()));

@@ -29,6 +29,7 @@ public class LanguageSectionProvider implements SectionProvider
 	private final Supplier<Configuration> configSupplier;
 	private final Section section;
 
+
 	public LanguageSectionProvider(Supplier<Configuration> configSupplier, Section section)
 	{
 		this.configSupplier = configSupplier;

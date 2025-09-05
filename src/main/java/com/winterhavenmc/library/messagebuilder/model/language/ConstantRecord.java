@@ -39,7 +39,6 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
  * validation. This interface extends {@link SectionRecord}, and is safe to pass
  * through the library once constructed.
  *
- * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  * @see ValidConstantKey
  */
 public sealed interface ConstantRecord extends SectionRecord permits ValidConstantRecord, InvalidConstantRecord

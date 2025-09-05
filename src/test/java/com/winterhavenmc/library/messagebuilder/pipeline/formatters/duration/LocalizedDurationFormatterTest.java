@@ -19,15 +19,13 @@ package com.winterhavenmc.library.messagebuilder.pipeline.formatters.duration;
 
 import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
-import com.winterhavenmc.library.messagebuilder.query.ConstantQueryHandler;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
-import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.Section;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ConstantRepository;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
+import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,63 +42,66 @@ import static org.mockito.Mockito.*;
 class LocalizedDurationFormatterTest
 {
 	@Mock Time4jDurationFormatter delegateMock;
-	@Mock ConstantQueryHandler constantQueryHandlerMock;
-	@Mock QueryHandlerFactory queryHandlerFactoryMock;
+	@Mock LanguageResourceManager languageResourceManagerMock;
+	@Mock ConstantRepository constantRepositoryMock;
 
-	LocalizedDurationFormatter formatter;
-	ValidConstantKey timeUnlimitedKey = ConstantKey.of("TIME.UNLIMITED").isValid().orElseThrow();
+	LocalizedDurationFormatter durationFormatter;
 	ValidConstantKey timeLessThanKey = ConstantKey.of("TIME.LESS_THAN").isValid().orElseThrow();
+	ValidConstantKey timeUnlimitedKey = ConstantKey.of("TIME.UNLIMITED").isValid().orElseThrow();
+
+	String configString = """
+		CONSTANTS:
+		  TIME:
+		    LESS_THAN: "less than {DURATION}"
+		    UNLIMITED: "unlimited"
+		""";
 
 
 	@BeforeEach
 	void setUp()
 	{
-		formatter = new LocalizedDurationFormatter(delegateMock, queryHandlerFactoryMock);
+		when(languageResourceManagerMock.constants()).thenReturn(constantRepositoryMock);
+		durationFormatter = new LocalizedDurationFormatter(delegateMock, languageResourceManagerMock);
 	}
 
 
 	@Test
 	@DisplayName("Should use language file constant for UNLIMITED")
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testFormatUnlimited()
 	{
 		// Arrange
-		ConstantRecord constantRecord = ConstantRecord.of(timeUnlimitedKey, "UNLIMITED-TESTING");
-		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
-		when(constantQueryHandlerMock.getRecord(timeUnlimitedKey)).thenReturn(constantRecord);
+		when(constantRepositoryMock.getString(timeUnlimitedKey)).thenReturn(Optional.of("UNLIMITED-TESTING"));
 
 		// Act
-		String result = formatter.formatUnlimited();
+		String result = durationFormatter.formatUnlimited();
 
 		// Assert
 		assertEquals("UNLIMITED-TESTING", result);
 
 		// Verify
-		verify(queryHandlerFactoryMock, atLeastOnce()).getQueryHandler(Section.CONSTANTS);
+		verify(languageResourceManagerMock, atLeastOnce()).constants();
+		verify(constantRepositoryMock, atLeastOnce()).getString(timeUnlimitedKey);
 	}
 
 
 	@Test
 	@DisplayName("Should use constant and inject {DURATION} for LESS_THAN")
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testFormatLessThan()
 	{
 		// Arrange
-		ConstantRecord constantRecord = ConstantRecord.of(timeLessThanKey, "less than {DURATION} (TESTING)");
 		when(delegateMock.format(Duration.of(1, ChronoUnit.SECONDS), ChronoUnit.SECONDS)).thenReturn("1 second");
-		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
-		when(constantQueryHandlerMock.getRecord(timeLessThanKey)).thenReturn(constantRecord);
+		when(constantRepositoryMock.getString(timeLessThanKey)).thenReturn(Optional.of("less than {DURATION} (TESTING)"));
 
 		// Act
-		String result = formatter.formatLessThan(ChronoUnit.SECONDS);
+		String result = durationFormatter.formatLessThan(ChronoUnit.SECONDS);
 
 		// Assert
 		assertEquals("less than 1 second (TESTING)", result);
 
 		// Verify
 		verify(delegateMock, atLeastOnce()).format(Duration.of(1, ChronoUnit.SECONDS), ChronoUnit.SECONDS);
-		verify(queryHandlerFactoryMock, atLeastOnce()).getQueryHandler(Section.CONSTANTS);
-		verify(constantQueryHandlerMock, atLeastOnce()).getRecord(timeLessThanKey);
+		verify(languageResourceManagerMock, atLeastOnce()).constants();
+		verify(constantRepositoryMock, atLeastOnce()).getString(timeLessThanKey);
 	}
 
 
@@ -113,7 +114,7 @@ class LocalizedDurationFormatterTest
 		when(delegateMock.format(input, ChronoUnit.MINUTES)).thenReturn("5 minutes");
 
 		// Act
-		String result = formatter.formatNormal(input, ChronoUnit.MINUTES);
+		String result = durationFormatter.formatNormal(input, ChronoUnit.MINUTES);
 
 		// Assert
 		assertEquals("5 minutes", result);
@@ -132,7 +133,7 @@ class LocalizedDurationFormatterTest
 		when(delegateMock.format(input, ChronoUnit.MINUTES)).thenReturn("3 minutes");
 
 		// Act
-		String result = formatter.formatNormal(input, ChronoUnit.MINUTES);
+		String result = durationFormatter.formatNormal(input, ChronoUnit.MINUTES);
 
 		// Assert
 		assertEquals("3 minutes", result);
@@ -149,7 +150,7 @@ class LocalizedDurationFormatterTest
 		when(delegateMock.format(any(Duration.class), eq(ChronoUnit.MINUTES))).thenReturn("10 minutes");
 
 		// Act
-		String string = formatter.format(Duration.ofMinutes(10), ChronoUnit.MINUTES);
+		String string = durationFormatter.format(Duration.ofMinutes(10), ChronoUnit.MINUTES);
 
 		// Assert
 		assertEquals("10 minutes", string);
@@ -160,82 +161,75 @@ class LocalizedDurationFormatterTest
 
 
 	@Test
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	void format_less_than()
 	{
 		// Arrange
-		ConstantRecord record = ConstantRecord.of(timeLessThanKey, "less than {DURATION}");
 		when(delegateMock.format(any(Duration.class), eq(ChronoUnit.MINUTES))).thenReturn("1 minute");
-		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
-		when(constantQueryHandlerMock.getRecord(timeLessThanKey)).thenReturn(record);
+		when(constantRepositoryMock.getString(timeLessThanKey)).thenReturn(Optional.of("less than {DURATION}"));
 
 		// Act
-		String result = formatter.format(Duration.ofSeconds(10), ChronoUnit.MINUTES);
+		String result = durationFormatter.format(Duration.ofSeconds(10), ChronoUnit.MINUTES);
 
 		// Assert
 		assertEquals("less than 1 minute", result);
 
 		// Verify
-//		verify(delegateMock.format(any(Duration.class), eq(ChronoUnit.MINUTES)));
-		verify(queryHandlerFactoryMock, atLeastOnce()).getQueryHandler(Section.CONSTANTS);
-		verify(constantQueryHandlerMock, atLeastOnce()).getRecord(timeLessThanKey);
+		verify(languageResourceManagerMock, atLeastOnce()).constants();
+		verify(constantRepositoryMock, atLeastOnce()).getString(timeLessThanKey);
 	}
 
 
 	@Test
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	void format_unlimited()
 	{
 		// Arrange
-		ConstantRecord record = ConstantRecord.of(timeUnlimitedKey, "UNLIMITED-TEST");
-		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
-		when(constantQueryHandlerMock.getRecord(timeUnlimitedKey)).thenReturn(record);
+		when(constantRepositoryMock.getString(timeUnlimitedKey)).thenReturn(Optional.of("UNLIMITED-TEST"));
 
 		// Act
-		String result = formatter.format(Duration.ofSeconds(-1), ChronoUnit.MINUTES);
+		String result = durationFormatter.format(Duration.ofSeconds(-1), ChronoUnit.MINUTES);
 
 		// Assert
 		assertEquals("UNLIMITED-TEST", result);
 
 		// Verify
-		verify(queryHandlerFactoryMock, atLeastOnce()).getQueryHandler(Section.CONSTANTS);
-		verify(constantQueryHandlerMock, atLeastOnce()).getRecord(timeUnlimitedKey);
+		verify(languageResourceManagerMock, atLeastOnce()).constants();
+		verify(constantRepositoryMock, atLeastOnce()).getString(timeUnlimitedKey);
 	}
 
 
 	@Test
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testGetTimeConstant_unlimited()
 	{
 		// Arrange
-		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
+		when(constantRepositoryMock.getString(timeUnlimitedKey)).thenReturn(Optional.of("∞"));
 
 		// Act
-		String result = formatter.getTimeConstant(timeUnlimitedKey, DurationType.UNLIMITED);
+		String result = durationFormatter.getTimeConstant(timeUnlimitedKey, DurationType.UNLIMITED);
 
 		// Assert
 		assertEquals("∞", result);
 
 		// Verify
-		verify(queryHandlerFactoryMock, atLeastOnce()).getQueryHandler(Section.CONSTANTS);
+		verify(languageResourceManagerMock, atLeastOnce()).constants();
+		verify(constantRepositoryMock, atLeastOnce()).getString(timeUnlimitedKey);
 	}
 
 
 	@Test
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	void testGetTimeConstant_less_than()
 	{
 		// Arrange
-		when(queryHandlerFactoryMock.getQueryHandler(Section.CONSTANTS)).thenReturn((QueryHandler) constantQueryHandlerMock);
+		when(constantRepositoryMock.getString(timeUnlimitedKey)).thenReturn(Optional.of("< {DURATION}"));
 
 		// Act
-		String result = formatter.getTimeConstant(timeUnlimitedKey, DurationType.LESS_THAN);
+		String result = durationFormatter.getTimeConstant(timeUnlimitedKey, DurationType.LESS_THAN);
 
 		// Assert
 		assertEquals("< {DURATION}", result);
 
 		// Verify
-		verify(queryHandlerFactoryMock, atLeastOnce()).getQueryHandler(Section.CONSTANTS);
+		verify(languageResourceManagerMock, atLeastOnce()).constants();
+		verify(constantRepositoryMock, atLeastOnce()).getString(timeUnlimitedKey);
 	}
 
 }

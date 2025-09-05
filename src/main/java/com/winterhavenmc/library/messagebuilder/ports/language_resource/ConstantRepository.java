@@ -15,27 +15,19 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.model.language;
+package com.winterhavenmc.library.messagebuilder.ports.language_resource;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-class SectionTest
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
+
+import java.util.List;
+import java.util.Optional;
+
+
+public interface ConstantRepository
 {
-	@Test
-	void values()
-	{
-		Section[] values = Section.values();
-		assertEquals(Section.CONSTANTS, values[0]);
-		assertEquals(Section.ITEMS, values[1]);
-		assertEquals(Section.MESSAGES, values[2]);
-	}
-
-	@Test
-	void valueOf()
-	{
-		assertEquals(Section.CONSTANTS, Section.valueOf("CONSTANTS"));
-		assertEquals(Section.ITEMS, Section.valueOf("ITEMS"));
-		assertEquals(Section.MESSAGES, Section.valueOf("MESSAGES"));
-	}
+	Optional<String> getString(final ValidConstantKey key);
+	Optional<Integer> getInteger(final ValidConstantKey key);
+	Optional<Boolean> getBoolean(final ValidConstantKey key);
+	List<String> getStringList(final ValidConstantKey key);
 }

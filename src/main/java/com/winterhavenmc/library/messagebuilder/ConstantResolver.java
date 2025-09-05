@@ -19,11 +19,8 @@ package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
-import com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord;
-import com.winterhavenmc.library.messagebuilder.model.language.Section;
-import com.winterhavenmc.library.messagebuilder.model.language.ValidConstantRecord;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandlerFactory;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ConstantRepository;
+import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 
 import java.util.Optional;
 
@@ -33,29 +30,15 @@ import java.util.Optional;
  */
 public class ConstantResolver
 {
-	private final QueryHandler<ConstantRecord> constantQueryHandler;
+	private final ConstantRepository constants;
 
 
 	/**
 	 * Class constructor
-	 *
-	 * @param queryHandlerFactory an instance of the query handler factory
 	 */
-	ConstantResolver(final QueryHandlerFactory queryHandlerFactory)
+	ConstantResolver(final LanguageResourceManager languageResourceManager)
 	{
-		this.constantQueryHandler = queryHandlerFactory.getQueryHandler(Section.CONSTANTS);
-	}
-
-
-	/**
-	 * Retrieves a constant record using the constant query handler
-	 *
-	 * @param key a string to be used as the string for the record to be retrieved
-	 * @return an Optional constant record, or an empty Optional if no record could be retrieved
-	 */
-	private Optional<ConstantRecord> getConstantRecord(final ValidConstantKey key)
-	{
-		return Optional.ofNullable(constantQueryHandler.getRecord(key));
+		this.constants = languageResourceManager.constants();
 	}
 
 
@@ -68,7 +51,7 @@ public class ConstantResolver
 	public Optional<String> getString(final String key)
 	{
 		return (ConstantKey.of(key) instanceof ValidConstantKey validConstantKey)
-				? this.getConstantRecord(validConstantKey).flatMap(this::extractStringValue)
+				? constants.getString(validConstantKey)
 				: Optional.empty();
 	}
 
@@ -82,7 +65,7 @@ public class ConstantResolver
 	public Optional<Integer> getInteger(final String key)
 	{
 		return (ConstantKey.of(key) instanceof ValidConstantKey validConstantKey)
-				? this.getConstantRecord(validConstantKey).flatMap(this::extractIntegerValue)
+				? constants.getInteger(validConstantKey)
 				: Optional.empty();
 	}
 
@@ -96,49 +79,7 @@ public class ConstantResolver
 	public Optional<Boolean> getBoolean(final String key)
 	{
 		return (ConstantKey.of(key) instanceof ValidConstantKey validConstantKey)
-				? this.getConstantRecord(validConstantKey).flatMap(this::extractBooleanValue)
-				: Optional.empty();
-	}
-
-
-	/**
-	 * Private helper method to extract a String value from a ConstantRecord
-	 *
-	 * @param record the ConstantRecord to extract a value
-	 * @return an Optional String, or an empty Optional if a String value could not be extracted from the ConstantRecord
-	 */
-	private Optional<String> extractStringValue(final ConstantRecord record)
-	{
-		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof String string)
-				? Optional.of(string)
-				: Optional.empty();
-	}
-
-
-	/**
-	 * Private helper method to extract an Integer value from a ConstantRecord
-	 *
-	 * @param record the ConstantRecord to extract a value
-	 * @return an Optional Integer, or an empty Optional if an Integer value could not be extracted from the ConstantRecord
-	 */
-	private Optional<Integer> extractIntegerValue(final ConstantRecord record)
-	{
-		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof Integer integer)
-				? Optional.of(integer)
-				: Optional.empty();
-	}
-
-
-	/**
-	 * Private helper method to extract a Boolean value from a ConstantRecord
-	 *
-	 * @param record the ConstantRecord to extract a value
-	 * @return an Optional Boolean, or an empty Optional if a Boolean value could not be extracted from the ConstantRecord
-	 */
-	private Optional<Boolean> extractBooleanValue(final ConstantRecord record)
-	{
-		return (record instanceof ValidConstantRecord validRecord && validRecord.value() instanceof Boolean bool)
-				? Optional.of(bool)
+				? constants.getBoolean(validConstantKey)
 				: Optional.empty();
 	}
 

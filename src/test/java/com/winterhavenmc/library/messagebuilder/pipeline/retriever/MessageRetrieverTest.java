@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.pipeline.retriever;
 import com.winterhavenmc.library.messagebuilder.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.messages.MessageId;
-import com.winterhavenmc.library.messagebuilder.query.QueryHandler;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.model.language.InvalidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.model.language.ValidMessageRecord;
@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MessageRetrieverTest
 {
-	@Mock QueryHandler<MessageRecord> queryHandlerMock;
+	@Mock MessageRepository messageRepositoryMock;
 	@Mock ValidMessageRecord validMessageRecordMock;
 	@Mock InvalidMessageRecord invalidMessageRecord;
 
@@ -49,7 +49,7 @@ class MessageRetrieverTest
 	@BeforeEach
 	void setUp()
 	{
-		retriever = new MessageRetriever(queryHandlerMock);
+		retriever = new MessageRetriever(messageRepositoryMock);
 	}
 
 
@@ -58,7 +58,7 @@ class MessageRetrieverTest
 	{
 		// Arrange
 		ValidMessageKey messageKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
-		when(queryHandlerMock.getRecord(messageKey)).thenReturn(validMessageRecordMock);
+		when(messageRepositoryMock.getMessageRecord(messageKey)).thenReturn(validMessageRecordMock);
 
 		// Act
 		MessageRecord messageRecord = retriever.getRecord(messageKey);
@@ -73,7 +73,7 @@ class MessageRetrieverTest
 	{
 		// Arrange
 		ValidMessageKey messageKey = MessageKey.of(MessageId.NONEXISTENT_ENTRY).isValid().orElseThrow();
-		when(queryHandlerMock.getRecord(messageKey)).thenReturn(invalidMessageRecord);
+		when(messageRepositoryMock.getMessageRecord(messageKey)).thenReturn(invalidMessageRecord);
 
 		// Act
 		MessageRecord messageRecord = retriever.getRecord(messageKey);

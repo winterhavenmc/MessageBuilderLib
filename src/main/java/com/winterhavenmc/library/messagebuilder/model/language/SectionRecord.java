@@ -38,8 +38,7 @@ import com.winterhavenmc.library.messagebuilder.keys.RecordKey;
  * constructed, and can be freely passed throughout the library without additional checks.
  *
  * <h2>Usage</h2>
- * These records are typically retrieved through a
- * {@link com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler}
+ * These records are typically retrieved through a repository
  * and form the foundation for macro resolution or dynamic message construction.
  *
  * @see com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord
