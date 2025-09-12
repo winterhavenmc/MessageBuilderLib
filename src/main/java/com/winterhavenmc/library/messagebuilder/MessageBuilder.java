@@ -198,4 +198,17 @@ public final class MessageBuilder
 		return this.itemForge;
 	}
 
+
+	public ConstantRepository constants()
+	{
+		return languageResourceManager.constants();
+	}
+
+
+	//TODO: remove this accessor if/when possible
+	public ItemRepository items()
+	{
+		return languageResourceManager.items();
+	}
+
 }
