@@ -48,11 +48,9 @@ public final class LanguageResourceManager implements SectionResourceManager
 {
 	private final LanguageResourceLoader resourceLoader;
 	private final LanguageResourceInstaller resourceInstaller;
-
 	private final ConstantRepository constantRepository;
 	private final ItemRepository itemRepository;
 	private final MessageRepository messageRepository;
-
 	private Configuration languageConfiguration;
 
 
