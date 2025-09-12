@@ -30,16 +30,18 @@
  * </ul>
  *
  * <h2>Typical Usage</h2>
- * {@snippet lang="java":
+ * {@snippet lang = "java":
  * 	ItemRecord itemRecord = queryHandler.getItemRecord(MY_ITEM_KEY);
  * 	if (itemRecord instanceof ValidItemRecord valid) {
- * 		String name = valid.nameSingular();
+ * 		String name = valid.name();
  * 	}
- *  }
+ *}
  *
- * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  * @see com.winterhavenmc.library.messagebuilder.model.language.MessageRecord MessageRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.ItemRecord ItemRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.ConstantRecord ConstantRecord
+ * @see com.winterhavenmc.library.messagebuilder.ports.language_resource.ConstantRepository ConstantRepository
+ * @see com.winterhavenmc.library.messagebuilder.ports.language_resource.ItemRepository ItemRepository
+ * @see com.winterhavenmc.library.messagebuilder.ports.language_resource.MessageRepository MessageRepository
  */
 package com.winterhavenmc.library.messagebuilder.model.language;

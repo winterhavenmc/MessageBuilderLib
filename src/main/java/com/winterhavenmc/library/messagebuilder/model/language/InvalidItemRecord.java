@@ -40,6 +40,6 @@ import com.winterhavenmc.library.messagebuilder.keys.ValidItemKey;
  *
  * @see ItemRecord
  * @see ValidItemRecord
- * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler
+ * @see com.winterhavenmc.library.messagebuilder.ports.language_resource.ItemRepository ItemRepository
  */
 public record InvalidItemRecord(RecordKey key, InvalidRecordReason reason) implements ItemRecord { }

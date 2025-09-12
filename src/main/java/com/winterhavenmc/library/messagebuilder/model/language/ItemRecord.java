@@ -45,10 +45,10 @@ import java.util.Optional;
  * This interface extends {@link SectionRecord}, allowing all item records
  * to be safely passed through the macro and message systems once constructed.
  *
- * @see com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler
  * @see com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord ValidItemRecord
  * @see com.winterhavenmc.library.messagebuilder.model.language.InvalidItemRecord InvalidItemRecord
  * @see ValidItemKey ValidItemKey
+ * @see com.winterhavenmc.library.messagebuilder.ports.language_resource.ItemRepository ItemRepository
  */
 public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord, InvalidItemRecord
 {
