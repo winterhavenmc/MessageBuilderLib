@@ -40,9 +40,9 @@ class ItemRecordTest
 		ValidItemKey itemKey = ItemKey.of("TEST_ITEM_1").isValid().orElseThrow();
 
 		ConfigurationSection itemEntrySection = new MemoryConfiguration();
-		itemEntrySection.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Item Name");
-		itemEntrySection.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Item Names");
-		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Item Name");
+		itemEntrySection.set(ItemRecord.Field.NAME.toKey(), "Item Name");
+		itemEntrySection.set(ItemRecord.Field.PLURAL_NAME.toKey(), "Item Names");
+		itemEntrySection.set(ItemRecord.Field.DISPLAY_NAME.toKey(), "Inventory Item Name");
 		itemEntrySection.set(ItemRecord.Field.LORE.toKey(), List.of("Lore Line 1", "Lore Line 2"));
 
 		// Act
@@ -74,9 +74,9 @@ class ItemRecordTest
 		ValidItemKey itemKey = ItemKey.of("TEST_ITEM_1").isValid().orElseThrow();
 
 		ConfigurationSection itemEntrySection = new MemoryConfiguration();
-		itemEntrySection.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Item Name");
-		itemEntrySection.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Item Names");
-		itemEntrySection.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Item Name");
+		itemEntrySection.set(ItemRecord.Field.NAME.toKey(), "Item Name");
+		itemEntrySection.set(ItemRecord.Field.PLURAL_NAME.toKey(), "Item Names");
+		itemEntrySection.set(ItemRecord.Field.DISPLAY_NAME.toKey(), "Inventory Item Name");
 		itemEntrySection.set(ItemRecord.Field.LORE.toKey(), List.of("Lore Line 1", "Lore Line 2"));
 		ItemRecord testRecord = ItemRecord.of(itemKey, itemEntrySection);
 

@@ -36,54 +36,54 @@ CONSTANTS:
 ITEMS:
   DEFAULT:
     MATERIAL: GOLDEN_PICKAXE
-    DISPLAY_NAME: 'Default Item'
-    DISPLAY_NAME_PLURAL: 'Default Items'
-    INVENTORY_NAME: 'Default Inventory Item'
+    NAME: 'Default Item'
+    PLURAL_NAME: 'Default Items'
+    DISPLAY_NAME: 'Default Inventory Item'
     LORE:
       - '&edefault lore line 1'
       - '&edefault lore line 2'
 
   TEST_ITEM_1:
-    DISPLAY_NAME: '&aTest Item'
-    DISPLAY_NAME_PLURAL: '&aTest Items'
-    INVENTORY_NAME: '&aInventory Item'
+    NAME: '&aTest Item'
+    PLURAL_NAME: '&aTest Items'
+    DISPLAY_NAME: '&aInventory Item'
     LORE:
       - '&etest1 lore line 1'
       - '&etest1 lore line 2'
 
   TEST_ITEM_2:
-    DISPLAY_NAME: '&aTest Item 2'
-    DISPLAY_NAME_PLURAL: '&aTest Items 2'
-    INVENTORY_NAME: '&aInventory Item 2'
+    NAME: '&aTest Item 2'
+    PLURAL_NAME: '&aTest Items 2'
+    DISPLAY_NAME: '&aInventory Item 2'
     LORE:
       - '&etest2 lore line 1'
       - '&etest2 lore line 2'
 
   UNDEFINED_ITEM_NAME:
-    DISPLAY_NAME_PLURAL: '&aTest Items'
-    INVENTORY_NAME: '&aInventory Item'
+    PLURAL_NAME: '&aTest Items'
+    DISPLAY_NAME: '&aInventory Item'
     LORE:
       - '&elore line 1'
       - '&elore line 2'
 
   UNDEFINED_NAME_PLURAL:
-    DISPLAY_NAME: '&aTest Item'
-    INVENTORY_NAME: '&aInventory Item'
+    NAME: '&aTest Item'
+    DISPLAY_NAME: '&aInventory Item'
     LORE:
       - '&elore line 1'
       - '&elore line 2'
 
   UNDEFINED_INVENTORY_ITEM_NAME:
-    DISPLAY_NAME: '&aTest Item'
-    DISPLAY_NAME_PLURAL: '&aTest Items'
+    NAME: '&aTest Item'
+    PLURAL_NAME: '&aTest Items'
     LORE:
       - '&elore line 1'
       - '&elore line 2'
 
   UNDEFINED_ITEM_LORE:
-    DISPLAY_NAME: '&aTest Item'
-    DISPLAY_NAME_PLURAL: '&aTest Items'
-    INVENTORY_NAME: '&aInventory Item'
+    NAME: '&aTest Item'
+    PLURAL_NAME: '&aTest Items'
+    DISPLAY_NAME: '&aInventory Item'
 
 
 ###################
