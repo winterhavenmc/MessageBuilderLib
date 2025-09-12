@@ -20,14 +20,12 @@ package com.winterhavenmc.library.messagebuilder.adapters.yaml_language_resource
 import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import com.winterhavenmc.library.messagebuilder.ports.language_resource.ConstantRepository;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
-import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.SECTION;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.SECTION_SUPPLIER;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;
 
@@ -40,8 +38,6 @@ public class YamlConstantRepository implements ConstantRepository
 	public YamlConstantRepository(final SectionProvider sectionProvider)
 	{
 		validate(sectionProvider, Objects::isNull, throwing(PARAMETER_NULL, SECTION_SUPPLIER));
-		validate(sectionProvider.getSection(), Objects::isNull, logging(LogLevel.ERROR, PARAMETER_NULL, SECTION));
-
 		this.sectionProvider = sectionProvider;
 	}
 

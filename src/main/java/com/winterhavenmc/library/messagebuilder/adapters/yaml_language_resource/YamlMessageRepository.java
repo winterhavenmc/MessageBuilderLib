@@ -23,12 +23,10 @@ import com.winterhavenmc.library.messagebuilder.model.language.InvalidRecordReas
 import com.winterhavenmc.library.messagebuilder.model.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.ports.language_resource.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.resources.language.SectionProvider;
-import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
 
 import java.util.Objects;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.SECTION;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.SECTION_SUPPLIER;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;
 
@@ -41,8 +39,6 @@ public class YamlMessageRepository implements MessageRepository
 	public YamlMessageRepository(final SectionProvider sectionProvider)
 	{
 		validate(sectionProvider, Objects::isNull, throwing(PARAMETER_NULL, SECTION_SUPPLIER));
-		validate(sectionProvider.getSection(), Objects::isNull, logging(LogLevel.ERROR, PARAMETER_NULL, SECTION));
-
 		this.sectionProvider = sectionProvider;
 	}
 
