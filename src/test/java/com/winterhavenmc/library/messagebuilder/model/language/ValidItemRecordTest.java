@@ -46,9 +46,9 @@ public class ValidItemRecordTest
 
 		// create configuration section for item record entry
 		ConfigurationSection itemEntry = new MemoryConfiguration();
-		itemEntry.set(ItemRecord.Field.NAME_SINGULAR.toKey(), "Test Item");
-		itemEntry.set(ItemRecord.Field.NAME_PLURAL.toKey(), "Test Items");
-		itemEntry.set(ItemRecord.Field.INVENTORY_NAME.toKey(), "Inventory Test Item");
+		itemEntry.set(ItemRecord.Field.NAME.toKey(), "Test Item");
+		itemEntry.set(ItemRecord.Field.PLURAL_NAME.toKey(), "Test Items");
+		itemEntry.set(ItemRecord.Field.DISPLAY_NAME.toKey(), "Inventory Test Item");
 		itemEntry.set(ItemRecord.Field.LORE.toKey(), List.of("Lore line 1", "Lore line 2"));
 		itemEntry.set(ItemRecord.Field.MATERIAL.toKey(), "GOLDEN_PICKAXE");
 
@@ -74,16 +74,16 @@ public class ValidItemRecordTest
 
 
 	@Test
-	void nameSingular()
+	void name()
 	{
-		assertEquals("Test Item", testRecord.nameSingular());
+		assertEquals("Test Item", testRecord.name());
 	}
 
 
 	@Test
-	void namePlural()
+	void pluralName()
 	{
-		assertEquals("Test Items", testRecord.namePlural());
+		assertEquals("Test Items", testRecord.pluralName());
 	}
 
 
