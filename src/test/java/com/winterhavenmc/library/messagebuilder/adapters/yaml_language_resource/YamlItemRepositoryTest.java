@@ -43,9 +43,9 @@ class YamlItemRepositoryTest
 		ITEMS:
 		  TEST_ITEM:
 		    MATERIAL: NETHER_STAR
-		    DISPLAY_NAME: "Test Item"
+		    NAME: "Test Item"
 		    PLURAL_NAME: "Test Items"
-		    INVENTORY_NAME: "Lodestar | {DESTINATION}"
+		    DISPLAY_NAME: "Lodestar | {DESTINATION}"
 		    LORE:
 		      - "test item lore line 1"
 		      - "test item lore line 2"
@@ -91,7 +91,9 @@ class YamlItemRepositoryTest
 
 		// Assert
 		assertInstanceOf(ValidItemRecord.class, result);
-		assertEquals("Test Item", ((ValidItemRecord) result).nameSingular());
+		assertEquals("Test Item", ((ValidItemRecord) result).name());
+		assertEquals("Test Items", ((ValidItemRecord) result).pluralName());
+		assertEquals("Lodestar | {DESTINATION}", ((ValidItemRecord) result).displayName());
 	}
 
 }
