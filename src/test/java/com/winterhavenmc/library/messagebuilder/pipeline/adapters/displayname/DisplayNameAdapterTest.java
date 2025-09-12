@@ -18,12 +18,14 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.displayname;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemDisplayNameResolver;
 import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.worldname.DefaultResolver;
 
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,6 +48,8 @@ public class DisplayNameAdapterTest
 	@Mock Player playerMock;
 	@Mock Entity entityMock;
 	@Mock World worldMock;
+	@Mock ItemStack itemStackMock;
+	@Mock ItemDisplayNameResolver itemDisplayNameResolverMock;
 
 
 	@Test @DisplayName("adapt with valid Player")
@@ -80,11 +84,28 @@ public class DisplayNameAdapterTest
 	}
 
 
+	@Test @DisplayName("adapt with valid ItemStack")
+	void getDisplayName_with_valid_ItemStack()
+	{
+		// Arrange
+		when(adapterContextContainerMock.itemDisplayNameResolver()).thenReturn(itemDisplayNameResolverMock);
+		when(itemDisplayNameResolverMock.resolve(itemStackMock)).thenReturn("Resolved ItemStack Display Name");
+
+		// Act
+		Optional<DisplayNameable> adapter = new DisplayNameAdapter(adapterContextContainerMock).adapt(itemStackMock);
+		Optional<String> displayName = adapter.map(DisplayNameable::getDisplayName);
+
+		// Assert
+		assertTrue(displayName.isPresent());
+		assertEquals("Resolved ItemStack Display Name", displayName.get(), "The adapter should return the displayName from the ItemStack.");
+	}
+
+
 	@Test @DisplayName("adapt with valid World")
 	void getDisplayName_with_valid_world()
 	{
-		when(worldNameResolverMock.resolve(worldMock)).thenReturn("Resolved World Name");
 		when(adapterContextContainerMock.worldNameResolver()).thenReturn(worldNameResolverMock);
+		when(worldNameResolverMock.resolve(worldMock)).thenReturn("Resolved World Name");
 
 		DisplayNameAdapter adapter = new DisplayNameAdapter(adapterContextContainerMock);
 		Optional<DisplayNameable> adapted = adapter.adapt(worldMock);

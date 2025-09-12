@@ -18,13 +18,17 @@
 package com.winterhavenmc.library.messagebuilder.pipeline.adapters.name;
 
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
+import com.winterhavenmc.library.messagebuilder.pipeline.resolvers.itemname.ItemNameResolver;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import org.bukkit.profile.PlayerProfile;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,8 +38,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -49,6 +52,8 @@ public class NameAdapterTest
 	@Mock World worldMock;
 	@Mock Plugin pluginMock;
 	@Mock AdapterContextContainer adapterContextContainerMock;
+	@Mock ItemStack itemStackMock;
+	@Mock ItemNameResolver itemNameResolverMock;
 
 
 
@@ -204,5 +209,23 @@ public class NameAdapterTest
 		}
 
 	}
+
+
+	@Test @DisplayName("adapt with valid ItemStack")
+	void getDisplayName_with_valid_ItemStack()
+	{
+		// Arrange
+		when(adapterContextContainerMock.itemNameResolver()).thenReturn(itemNameResolverMock);
+		when(itemNameResolverMock.resolve(itemStackMock)).thenReturn("Resolved ItemStack Name");
+
+		// Act
+		Optional<Nameable> adapter = new NameAdapter(adapterContextContainerMock).adapt(itemStackMock);
+		Optional<String> displayName = adapter.map(Nameable::getName);
+
+		// Assert
+		assertTrue(displayName.isPresent());
+		assertEquals("Resolved ItemStack Name", displayName.get(), "The adapter should return the name from the ItemStack.");
+	}
+
 
 }
