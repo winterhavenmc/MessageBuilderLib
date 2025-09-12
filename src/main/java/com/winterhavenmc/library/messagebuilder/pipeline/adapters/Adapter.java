@@ -109,8 +109,8 @@ public interface Adapter
 	{
 		// single value fields
 		NAME,
-		DISPLAY_NAME,
 		PLURAL_NAME,
+		DISPLAY_NAME,
 		OWNER,
 		LOOTER,
 		KILLER,
