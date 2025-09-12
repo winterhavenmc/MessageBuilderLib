@@ -23,12 +23,15 @@ import com.winterhavenmc.library.messagebuilder.model.language.ValidItemRecord;
 import com.winterhavenmc.library.messagebuilder.ports.language_resource.ItemRepository;
 
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.util.Delimiter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.regex.Pattern;
 
 
 public class ItemPluralNameResolver
@@ -51,12 +54,12 @@ public class ItemPluralNameResolver
 			// check if item is custom item defined in language file, and if so, try to set pluralized name
 			if (ItemForge.isCustomItem(itemStack))
 			{
-
 				if (ItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey)
 				{
 					if (itemRepository.getItemRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 					{
-						String pluralString = validItemRecord.namePlural().replaceAll("\\{QUANTITY}", String.valueOf(itemStack.getAmount()));
+						String pluralString = validItemRecord.pluralName()
+								.replaceAll(Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE), String.valueOf(itemStack.getAmount()));
 						Component component = miniMessage.deserialize(pluralString, Formatter.choice("choice", itemStack.getAmount()));
 						return ItemForge.LEGACY_SERIALIZER.serializeOr(component, "");
 					}
