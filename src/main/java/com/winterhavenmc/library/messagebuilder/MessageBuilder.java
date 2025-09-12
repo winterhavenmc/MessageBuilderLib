@@ -23,6 +23,8 @@ import com.winterhavenmc.library.messagebuilder.model.message.Message;
 import com.winterhavenmc.library.messagebuilder.model.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.model.recipient.Recipient;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ConstantRepository;
+import com.winterhavenmc.library.messagebuilder.ports.language_resource.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.pipeline.adapters.AdapterContextContainer;
@@ -82,7 +84,6 @@ public final class MessageBuilder
 	private final Plugin plugin;
 	private final LanguageResourceManager languageResourceManager;
 	private final MessagePipeline messagePipeline;
-	private final ConstantResolver constantResolver;
 	private final ItemForge itemForge;
 
 
@@ -95,7 +96,6 @@ public final class MessageBuilder
 	 */
 	private MessageBuilder(final Plugin plugin,
 	                       final LanguageResourceManager languageResourceManager,
-						   final ConstantResolver constantResolver,
 						   final ItemForge itemForge,
 	                       final MessagePipeline messagePipeline)
 	{
@@ -103,7 +103,6 @@ public final class MessageBuilder
 
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
-		this.constantResolver = constantResolver;
 		this.itemForge = itemForge;
 		this.messagePipeline = messagePipeline;
 	}
@@ -124,14 +123,13 @@ public final class MessageBuilder
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
 
 		final LanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin);
-		final ConstantResolver constantResolver = createConstantResolver(languageResourceManager);
 		final ItemForge itemForge = createItemForge(plugin, languageResourceManager);
 
 		final FormatterContainer formatterContainer = createFormatterContainer(plugin, languageResourceManager);
 		final AdapterContextContainer adapterContextContainer = createAdapterContextContainer(plugin, languageResourceManager, formatterContainer);
 		final MessagePipeline messagePipeline = createMessagePipeline(plugin, languageResourceManager, formatterContainer, adapterContextContainer);
 
-		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, itemForge, messagePipeline);
 	}
 
 
@@ -184,7 +182,6 @@ public final class MessageBuilder
 	 */
 	static MessageBuilder test(final Plugin plugin,
 							   final LanguageResourceManager languageResourceManager,
-							   final ConstantResolver constantResolver,
 							   final ItemForge itemForge,
 							   final MessagePipeline messagePipeline)
 	{
@@ -192,13 +189,7 @@ public final class MessageBuilder
 		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, constantResolver, itemForge, messagePipeline);
-	}
-
-
-	public ConstantResolver getConstantResolver()
-	{
-		return this.constantResolver;
+		return new MessageBuilder(plugin, languageResourceManager, itemForge, messagePipeline);
 	}
 
 
