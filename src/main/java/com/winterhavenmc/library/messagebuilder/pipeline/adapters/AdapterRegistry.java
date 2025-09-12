@@ -74,12 +74,12 @@ public class AdapterRegistry
 	public AdapterRegistry(final AdapterContextContainer ctx)
 	{
 		// Register adapters in preferred priority order
+		register(new PluralNameAdapter(ctx));
 		register(new DisplayNameAdapter(ctx));
+		register(new NameAdapter(ctx));
 		register(new DurationAdapter());
 		register(new ExpirationAdapter());
 		register(new InstantAdapter());
-		register(new NameAdapter(ctx));
-		register(new PluralNameAdapter(ctx));
 		register(new OwnerAdapter());
 		register(new KillerAdapter());
 		register(new LooterAdapter());
