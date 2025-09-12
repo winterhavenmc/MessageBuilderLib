@@ -172,12 +172,6 @@ public class Bootstrap
 	}
 
 
-	static ConstantResolver createConstantResolver(final LanguageResourceManager languageResourceManager)
-	{
-		return new ConstantResolver(languageResourceManager);
-	}
-
-
 	static ItemForge createItemForge(final Plugin plugin, final LanguageResourceManager languageResourceManager)
 	{
 		return new ItemForge(plugin, languageResourceManager.items());
