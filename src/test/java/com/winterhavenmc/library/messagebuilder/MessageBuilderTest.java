@@ -58,9 +58,7 @@ class MessageBuilderTest
 	@Mock ProxiedCommandSender proxiedCommandSenderMock;
 	@Mock LanguageResourceManager languageResourceManagerMock;
 	@Mock MessagePipeline messagePipelineMock;
-	@Mock ConstantResolver constantResolverMock;
 	@Mock ItemForge itemForgeMock;
-//	@Mock QueryHandlerFactory queryHandlerFactoryMock;
 	@Mock FormatterContainer formatterContainerMock;
 	@Mock AdapterContextContainer adapterContextContainerMock;
 
@@ -82,7 +80,6 @@ class MessageBuilderTest
 		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		messageBuilder = MessageBuilder.test(pluginMock,
 				languageResourceManagerMock,
-				constantResolverMock,
 				itemForgeMock,
 				messagePipelineMock);
 	}
@@ -203,7 +200,6 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(null,
 						languageResourceManagerMock,
-						constantResolverMock,
 						itemForgeMock,
 						messagePipelineMock));
 
@@ -219,7 +215,6 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(pluginMock,
 						null,
-						constantResolverMock,
 						itemForgeMock,
 						messagePipelineMock));
 
@@ -235,22 +230,11 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(pluginMock,
 						languageResourceManagerMock,
-						constantResolverMock,
 						itemForgeMock,
 						null));
 
 		// Assert
 		assertEquals("The parameter 'messageProcessor' cannot be null.", exception.getMessage());
-	}
-
-
-	@Test @DisplayName("getConstantResolver returns valid ConstantResolver instance.")
-	void getConstantResolver_returns_valid_constantResolver()
-	{
-		ConstantResolver constantResolver = messageBuilder.getConstantResolver();
-
-		assertNotNull(constantResolver);
-		assertInstanceOf(ConstantResolver.class, constantResolver);
 	}
 
 
