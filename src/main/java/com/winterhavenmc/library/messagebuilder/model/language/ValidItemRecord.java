@@ -43,9 +43,9 @@ public final class ValidItemRecord implements ItemRecord
 {
 	ValidItemKey key;
 	String material;
-	String nameSingular;
-	String namePlural;
-	String inventoryName;
+	String name;
+	String pluralName;
+	String displayName;
 	List<String> itemLore;
 
 
@@ -53,24 +53,24 @@ public final class ValidItemRecord implements ItemRecord
 	 * Constructs a {@code ValidItemRecord} with parsed item metadata.
 	 * This constructor is private; use {@link #create(ValidItemKey, ConfigurationSection)} instead.
 	 *
-	 * @param key           the string that uniquely identifies this item record
-	 * @param nameSingular  the singular item name
-	 * @param namePlural    the plural item name
-	 * @param inventoryName the inventory-specific singular display name
-	 * @param itemLore      the list of lore lines (may be empty but not {@code null})
+	 * @param key               the string that uniquely identifies this item record
+	 * @param name        the singular item name
+	 * @param pluralName  the plural item name
+	 * @param displayName       the inventory-specific singular display name
+	 * @param itemLore          the list of lore lines (may be empty but not {@code null})
 	 */
 	private ValidItemRecord(ValidItemKey key,
 							String material,
-							String nameSingular,
-							String namePlural,
-							String inventoryName,
+							String name,
+							String pluralName,
+							String displayName,
 							List<String> itemLore)
 	{
 		this.key = key;
 		this.material = material;
-		this.nameSingular = nameSingular;
-		this.namePlural = namePlural;
-		this.inventoryName = inventoryName;
+		this.name = name;
+		this.pluralName = pluralName;
+		this.displayName = displayName;
 		this.itemLore = itemLore;
 	}
 
@@ -90,9 +90,9 @@ public final class ValidItemRecord implements ItemRecord
 	{
 		return new ValidItemRecord(key,
 				section.getString(Field.MATERIAL.toKey()),
-				section.getString(Field.NAME_SINGULAR.toKey()),
-				section.getString(Field.NAME_PLURAL.toKey()),
-				section.getString(Field.INVENTORY_NAME.toKey()),
+				section.getString(Field.NAME.toKey()),
+				section.getString(Field.PLURAL_NAME.toKey()),
+				section.getString(Field.DISPLAY_NAME.toKey()),
 				section.getStringList(Field.LORE.toKey()));
 	}
 
@@ -103,17 +103,24 @@ public final class ValidItemRecord implements ItemRecord
 		return key;
 	}
 
-	public String nameSingular()
+	public String name()
 	{
-		return (nameSingular != null)
-				? nameSingular
+		return (name != null)
+				? name
 				: "";
 	}
 
-	public String namePlural()
+	public String pluralName()
 	{
-		return (namePlural != null)
-				? namePlural
+		return (pluralName != null)
+				? pluralName
+				: "";
+	}
+
+	public String displayName()
+	{
+		return (displayName != null)
+				? displayName
 				: "";
 	}
 
