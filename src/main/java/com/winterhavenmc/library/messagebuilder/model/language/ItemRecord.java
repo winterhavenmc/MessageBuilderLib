@@ -65,7 +65,7 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 	 */
 	static ItemRecord of(final ValidItemKey itemKey, final ConfigurationSection itemEntry)
 	{
-		return itemEntry == null
+		return (itemEntry == null)
 				? ItemRecord.empty(itemKey, InvalidRecordReason.ITEM_ENTRY_MISSING)
 				: ValidItemRecord.create(itemKey, itemEntry);
 	}
