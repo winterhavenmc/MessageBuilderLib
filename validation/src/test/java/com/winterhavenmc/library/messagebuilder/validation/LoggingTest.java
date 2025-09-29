@@ -23,6 +23,8 @@ import org.junit.jupiter.params.provider.EnumSource;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+
 class LoggingTest
 {
 	@ParameterizedTest

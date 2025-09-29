@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.validation;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,7 @@ class ValidatorTest
 	void formatMessage_retrieves_message_from_resource_bundle()
 	{
 		// Act
-		String result = Validator.formatMessage(PARAMETER_NULL, Parameter.RECIPIENT);
+		String result = formatMessage(PARAMETER_NULL, Parameter.RECIPIENT);
 
 		// Assert
 		assertEquals("The parameter 'recipient' cannot be null.", result);
@@ -46,7 +47,7 @@ class ValidatorTest
 	@Test
 	void bundleName_matches_resource_bundle()
 	{
-		assertEquals("ExceptionMessage", Validator.BUNDLE_NAME);
+		assertEquals("ExceptionMessage", BUNDLE_NAME);
 	}
 
 
@@ -61,7 +62,7 @@ class ValidatorTest
 	@Test
 	void throwing_does_not_throws_with_valid_parameter()
 	{
-		assertDoesNotThrow(() ->
+		Assertions.assertDoesNotThrow(() ->
 				validate("not null", Objects::isNull, throwing(PARAMETER_NULL, MACRO)));
 	}
 
@@ -69,6 +70,6 @@ class ValidatorTest
 	@Test
 	void logging_logs_validation_error()
 	{
-		assertDoesNotThrow(() -> validate("Valid String", String::isBlank, logging(LogLevel.WARN, STRING_BLANK, MACRO)));
+		Assertions.assertDoesNotThrow(() -> validate("Valid String", String::isBlank, logging(LogLevel.WARN, STRING_BLANK, MACRO)));
 	}
 }

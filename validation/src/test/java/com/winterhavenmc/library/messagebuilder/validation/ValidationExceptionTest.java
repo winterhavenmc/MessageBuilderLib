@@ -17,23 +17,25 @@
 
 package com.winterhavenmc.library.messagebuilder.validation;
 
-
 import org.junit.jupiter.api.Test;
 
 import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ValidationExceptionTest {
 
+class ValidationExceptionTest
+{
 	@Test
-	void testConstructor() {
+	void testConstructor()
+	{
 		ValidationException exception = new ValidationException(PARAMETER_NULL, RECIPIENT);
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}
 
 	@Test
-	void getLocalizedMessage() {
+	void getLocalizedMessage()
+	{
 		ValidationException exception = new ValidationException(PARAMETER_NULL, RECIPIENT);
 		assertEquals("The parameter 'recipient' cannot be null.", exception.getMessage());
 	}

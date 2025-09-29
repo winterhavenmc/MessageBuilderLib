@@ -22,16 +22,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ParameterTest {
-
+class ParameterTest
+{
 	@Test
-	void getDisplayName() {
+	void getDisplayName()
+	{
 		assertEquals("recipient", Parameter.RECIPIENT.getDisplayName());
 		assertEquals("contextMap", Parameter.CONTEXT_MAP.getDisplayName());
 	}
 
 	@Test
-	void testToString() {
+	void testToString()
+	{
 		assertEquals("recipient", Parameter.RECIPIENT.toString());
 		assertEquals("contextMap", Parameter.CONTEXT_MAP.toString());
 	}

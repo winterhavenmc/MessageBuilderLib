@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.validation;
 
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;

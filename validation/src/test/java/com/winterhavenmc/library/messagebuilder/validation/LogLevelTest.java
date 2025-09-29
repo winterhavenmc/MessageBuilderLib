@@ -31,9 +31,11 @@ class LogLevelTest
 	@ParameterizedTest(name = "{0} should map to correct java.util.logging.Level")
 	@EnumSource(LogLevel.class)
 	@DisplayName("Test LogLevel toJavaUtilLevel mappings")
-	void testToJavaUtilLevel(LogLevel logLevel) {
+	void testToJavaUtilLevel(LogLevel logLevel)
+	{
 		Level expected;
-		switch (logLevel) {
+		switch (logLevel)
+		{
 			case TRACE -> expected = Level.FINEST;
 			case DEBUG -> expected = Level.FINER;
 			case INFO -> expected = Level.INFO;

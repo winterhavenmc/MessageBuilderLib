@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.validation;
 
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
 
 import java.util.Locale;
 import java.util.Objects;
