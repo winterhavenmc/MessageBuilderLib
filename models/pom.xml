@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>validation</artifactId>
+	<artifactId>models</artifactId>
 
 	<parent>
 		<groupId>com.winterhavenmc.messagebuilder</groupId>
@@ -13,10 +12,10 @@
 	</parent>
 
 	<dependencies>
+		<!-- external -->
 		<dependency>
-			<groupId>com.winterhavenmc.messagebuilder</groupId>
-			<artifactId>configuration</artifactId>
-			<version>${project.version}</version>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-text-minimessage</artifactId>
 		</dependency>
 	</dependencies>
 </project>

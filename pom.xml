@@ -4,18 +4,11 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.winterhaven-mc</groupId>
-	<artifactId>message-builder-lib</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
-
 	<name>MessageBuilder</name>
 
-	<url>https://github.com/winterhavenmc/MessageBuilderLib</url>
-
-	<description>
-		A library for minecraft plugins that manages composing and sending messages to players.
-	</description>
+	<groupId>com.winterhavenmc.messagebuilder</groupId>
+	<artifactId>messagebuilder-parent</artifactId>
+	<version>2.0.0-SNAPSHOT</version>
 
 	<properties>
 		<project.author>Tim Savage</project.author>
@@ -23,6 +16,23 @@
 		<maven.compiler.release>21</maven.compiler.release>
 		<mockito.version>5.14.2</mockito.version>
 	</properties>
+
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>adapters</module>
+		<module>bootstrap</module>
+		<module>core</module>
+		<module>models</module>
+		<module>validation</module>
+		<module>configuration</module>
+	</modules>
+
+	<description>
+		A library for minecraft plugins that manages composing and sending messages to players.
+	</description>
+
+	<url>https://github.com/winterhavenmc/MessageBuilderLib</url>
 
 	<issueManagement>
 		<system>GitHub Issues</system>
@@ -37,21 +47,13 @@
 		</license>
 	</licenses>
 
-	<profiles>
-		<profile>
+	<distributionManagement>
+		<repository>
 			<id>repsy</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<distributionManagement>
-				<repository>
-					<id>repsy</id>
-					<name>Repsy.io winterhavenmc Maven Packages</name>
-					<url>https://repo.repsy.io/mvn/winterhavenmc/public/</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-	</profiles>
+			<name>Repsy.io winterhavenmc Maven Packages</name>
+			<url>https://repo.repsy.io/mvn/winterhavenmc/public/</url>
+		</repository>
+	</distributionManagement>
 
 	<repositories>
 		<repository>
@@ -60,54 +62,118 @@
 		</repository>
 
 		<repository>
+			<id>repsy</id>
+			<name>Repsy.io winterhavenmc Maven Packages</name>
+			<url>https://repo.repsy.io/mvn/winterhavenmc/public/</url>
+		</repository>
+
+		<repository>
 			<id>multiverse-repo</id>
 			<url>https://repo.onarandombox.com/content/groups/public/</url>
 		</repository>
 	</repositories>
 
+	<dependencyManagement>
+		<dependencies>
+			<!-- spigot api -->
+			<dependency>
+				<groupId>org.spigotmc</groupId>
+				<artifactId>spigot-api</artifactId>
+				<version>1.21.8-R0.1-SNAPSHOT</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Multiverse-Core 5 -->
+			<dependency>
+				<groupId>org.mvplugins.multiverse.core</groupId>
+				<artifactId>multiverse-core</artifactId>
+				<version>5.2.0</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.kyori</groupId>
+				<artifactId>adventure-text-minimessage</artifactId>
+				<version>4.24.0</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.kyori</groupId>
+				<artifactId>adventure-platform-bukkit</artifactId>
+				<version>4.4.1</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.time4j</groupId>
+				<artifactId>time4j-base</artifactId>
+				<version>5.9.4</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>net.time4j</groupId>
+				<artifactId>time4j-tzdata</artifactId>
+				<version>5.0-2025a</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<!-- Unit Testing Dependencies -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>5.11.3</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- JUnit parameters -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-params</artifactId>
+				<version>5.11.3</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- Mockito Framework -->
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>5.14.2</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- Mockito/JUnit Integration Module -->
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-junit-jupiter</artifactId>
+				<version>5.14.2</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- Mockito Inline Module -->
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-inline</artifactId>
+				<version>5.2.0</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- JetBrains Annotations -->
+			<dependency>
+				<groupId>org.jetbrains</groupId>
+				<artifactId>annotations</artifactId>
+				<version>26.0.1</version>
+				<scope>provided</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
-		<!-- Spigot API -->
+		<!-- spigot api -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.21.8-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- Multiverse-Core 5 -->
-		<dependency>
-			<groupId>org.mvplugins.multiverse.core</groupId>
-			<artifactId>multiverse-core</artifactId>
-			<version>5.2.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>net.kyori</groupId>
-			<artifactId>adventure-text-minimessage</artifactId>
-			<version>4.24.0</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>net.kyori</groupId>
-			<artifactId>adventure-platform-bukkit</artifactId>
-			<version>4.4.1</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>net.time4j</groupId>
-			<artifactId>time4j-base</artifactId>
-			<version>5.9.4</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>net.time4j</groupId>
-			<artifactId>time4j-tzdata</artifactId>
-			<version>5.0-2025a</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<!-- Unit Testing Dependencies -->
@@ -157,18 +223,16 @@
 			<version>26.0.1</version>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
 		<!-- Resources -->
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>core/src/main/java/com/winterhavenmc/library/messagebuilder/core/resources</directory>
 				<filtering>false</filtering>
 			</resource>
 		</resources>
-
 
 		<!-- Test Resources -->
 		<testResources>
@@ -178,207 +242,249 @@
 			</testResource>
 		</testResources>
 
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.3.1</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.3.1</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
 
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>3.5.0</version>
+					<executions>
+						<execution>
+							<id>ban-bad-log4j-versions</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>enforce</goal>
+							</goals>
+							<configuration>
+								<rules>
+									<bannedDependencies>
+										<excludes>
+											<exclude>org.apache.logging.log4j:log4j-core:(,2.17.0)</exclude>
+										</excludes>
+									</bannedDependencies>
+								</rules>
+								<fail>true</fail>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- Maven shade plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>3.6.0</version>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>shade</goal>
+							</goals>
+							<configuration>
+								<!-- Final shaded JAR name -->
+								<finalName>MessageBuilderLib-${project.version}</finalName>
+
+								<!-- strip out unused services/resources -->
+								<filters>
+									<filter>
+										<artifact>*:*</artifact>
+										<excludes>
+											<exclude>META-INF/*.SF</exclude>
+											<exclude>META-INF/*.DSA</exclude>
+											<exclude>META-INF/*.RSA</exclude>
+											<exclude>META-INF/versions/**</exclude>
+										</excludes>
+									</filter>
+								</filters>
+
+								<!-- Don't let downstream consumers pull in conflicting versions of shaded artifacts -->
+								<createDependencyReducedPom>true</createDependencyReducedPom>
+								<relocations>
+
+									<!-- relocate kyori adventure -->
+									<relocation>
+										<pattern>net.kyori</pattern>
+										<shadedPattern>com.winterhavenmc.library.messagebuilder.shaded.net.kyori</shadedPattern>
+									</relocation>
+
+									<!-- relocate time4j -->
+									<relocation>
+										<pattern>net.time4j</pattern>
+										<shadedPattern>com.winterhavenmc.library.messagebuilder.shaded.net.tim4j</shadedPattern>
+									</relocation>
+								</relocations>
+
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- maven compiler plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.13.0</version>
+				</plugin>
+
+				<!-- maven Javadoc plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>3.11.2</version>
+					<configuration>
+						<source>21</source>
+						<encoding>UTF-8</encoding>
+						<failOnError>false</failOnError>
+						<doclint>all,-missing</doclint>
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- maven sources plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.3.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- maven SureFire plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.5.1</version>
+					<configuration>
+						<junitArtifactName>org.junit.jupiter:junit-jupiter</junitArtifactName>
+						<trimStackTrace>false</trimStackTrace>
+						<argLine>@{argLine} -Xshare:off -javaagent:"${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar"</argLine>
+					</configuration>
+				</plugin>
+
+				<!-- plugin to generate coverage reports -->
+				<plugin>
+					<groupId>org.jetbrains.kotlinx</groupId>
+					<artifactId>kover-maven-plugin</artifactId>
+					<version>0.9.1</version>
+					<executions>
+						<!-- instrument test tasks -->
+						<execution>
+							<id>instr</id>
+							<goals>
+								<goal>instrumentation</goal>
+							</goals>
+						</execution>
+
+						<!-- generate XML report in verify phase -->
+						<execution>
+							<id>kover-xml</id>
+							<goals>
+								<goal>report-xml</goal>
+							</goals>
+						</execution>
+
+						<!-- generate HTML report in verify phase -->
+						<execution>
+							<id>kover-html</id>
+							<goals>
+								<goal>report-html</goal>
+							</goals>
+						</execution>
+
+						<!-- check coverage rules in verify phase -->
+						<execution>
+							<id>kover-verify</id>
+							<goals>
+								<goal>verify</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.7.1</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>properties</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.8.13</version>
+					<configuration>
+						<excludes>
+							<exclude>**/test/*</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<!-- maven enforcer plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.5.0</version>
-				<executions>
-					<execution>
-						<id>ban-bad-log4j-versions</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<bannedDependencies>
-									<excludes>
-										<exclude>org.apache.logging.log4j:log4j-core:(,2.17.0)</exclude>
-									</excludes>
-								</bannedDependencies>
-							</rules>
-							<fail>true</fail>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 
-			<!-- Maven shade plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.6.0</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<!-- strip out unused services/resources -->
-							<filters>
-								<filter>
-									<artifact>*:*</artifact>
-									<excludes>
-										<exclude>META-INF/*.SF</exclude>
-										<exclude>META-INF/*.DSA</exclude>
-										<exclude>META-INF/*.RSA</exclude>
-										<exclude>META-INF/versions/**</exclude>
-									</excludes>
-								</filter>
-							</filters>
-
-							<!-- Don't let downstream consumers pull in conflicting versions of shaded artifacts -->
-							<createDependencyReducedPom>true</createDependencyReducedPom>
-							<relocations>
-
-								<!-- relocate kyori adventure -->
-								<relocation>
-									<pattern>net.kyori</pattern>
-									<shadedPattern>com.winterhavenmc.library.messagebuilder.shaded.net.kyori</shadedPattern>
-								</relocation>
-
-								<!-- relocate time4j -->
-								<relocation>
-									<pattern>net.time4j</pattern>
-									<shadedPattern>com.winterhavenmc.library.messagebuilder.shaded.net.tim4j</shadedPattern>
-								</relocation>
-							</relocations>
-
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- Compile Java jar -->
+			<!-- maven compiler plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.13.0</version>
 			</plugin>
 
-			<!-- Create Javadoc jar -->
+			<!-- maven Javadoc plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.11.2</version>
-				<configuration>
-					<source>21</source>
-					<encoding>UTF-8</encoding>
-					<failOnError>false</failOnError>
-					<doclint>all,-missing</doclint>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 
-			<!-- Create Sources jar -->
+			<!-- maven sources plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.3.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 
-			<!-- Plugin for Unit Tests -->
+			<!-- maven SureFire plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<junitArtifactName>org.junit.jupiter:junit-jupiter</junitArtifactName>
-					<trimStackTrace>false</trimStackTrace>
-					<argLine>@{argLine} -Xshare:off -javaagent:"${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar"</argLine>
-				</configuration>
 			</plugin>
 
-			<!-- plugin to generate coverage reports -->
+			<!-- kover coverage reporting plugin -->
 			<plugin>
 				<groupId>org.jetbrains.kotlinx</groupId>
 				<artifactId>kover-maven-plugin</artifactId>
-				<version>0.9.1</version>
-				<executions>
-					<!-- instrument test tasks -->
-					<execution>
-						<id>instr</id>
-						<goals>
-							<goal>instrumentation</goal>
-						</goals>
-					</execution>
-
-					<!-- generate XML report in verify phase -->
-					<execution>
-						<id>kover-xml</id>
-						<goals>
-							<goal>report-xml</goal>
-						</goals>
-					</execution>
-
-					<!-- generate HTML report in verify phase -->
-					<execution>
-						<id>kover-html</id>
-						<goals>
-							<goal>report-html</goal>
-						</goals>
-					</execution>
-
-					<!-- check coverage rules in verify phase -->
-					<execution>
-						<id>kover-verify</id>
-						<goals>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.7.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>properties</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.13</version>
-				<configuration>
-					<excludes>
-						<exclude>**/test/*</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
 </project>

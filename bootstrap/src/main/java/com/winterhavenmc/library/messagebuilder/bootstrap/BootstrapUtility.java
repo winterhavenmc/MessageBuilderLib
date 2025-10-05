@@ -1,0 +1,179 @@
+/*
+ * Copyright (c) 2025 Tim Savage.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+package com.winterhavenmc.library.messagebuilder.bootstrap;
+
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown.MessageCooldownMap;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.MacroFieldExtractor;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.LocalizedDurationFormatter;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.Time4jDurationFormatter;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number.LocaleNumberFormatter;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers.RegexPlaceholderMatcher;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors.MessageProcessor;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.MacroValueResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.AtomicResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.CompositeResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.LocalizedMessageRetriever;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
+
+import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+
+import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
+import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry;
+import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.*;
+import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.senders.Sender;
+import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
+
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+
+import org.bukkit.plugin.Plugin;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+
+/**
+ * A companion utility class to facilitate arranging components necessary to initialize the MessageBuilder library.
+ */
+public class BootstrapUtility
+{
+	private BootstrapUtility() { /* Private constructor to prevent instantiation of utility class */ }
+
+
+	public static List<Sender> createSenders(final Plugin plugin, final MessageCooldownMap messageCooldownMap)
+	{
+		final MiniMessage miniMessage = MiniMessage.miniMessage();
+		final BukkitAudiences bukkitAudiences = BukkitAudiences.create(plugin);
+		final KyoriMessageSender messageSender = new KyoriMessageSender(messageCooldownMap, miniMessage, bukkitAudiences);
+		final KyoriTitleSender titleSender = new KyoriTitleSender(messageCooldownMap, miniMessage, bukkitAudiences);
+
+		return List.of(messageSender, titleSender);
+	}
+
+
+	/**
+	 * A static factory method to create the language resource manager
+	 *
+	 * @param plugin an instance of the plugin
+	 * @return an instance of the language resource manager
+	 */
+	static LanguageResourceManager createLanguageResourceManager(final Plugin plugin,
+																 final LocaleProvider localeProvider)
+	{
+		final LanguageResourceInstaller resourceInstaller = new LanguageResourceInstaller(plugin, localeProvider);
+		final LanguageResourceLoader resourceLoader = new LanguageResourceLoader(plugin, localeProvider);
+
+		return new LanguageResourceManager(resourceInstaller, resourceLoader);
+	}
+
+
+	/**
+	 * A static factory method to create a macro replacer instance
+	 *
+	 * @param formatterCtx the context container holding formatters
+	 * @param adapterCtx the context container for dependency injection into adapters
+	 * @return an instance of the macro replacer
+	 */
+	private static @NotNull MessageProcessor createMacroReplacer(final FormatterCtx formatterCtx,
+																 final AdapterCtx adapterCtx)
+	{
+		final AdapterRegistry adapterRegistry = new AdapterRegistry(adapterCtx);
+		final MacroFieldExtractor macroFieldExtractor = new MacroFieldExtractor(adapterCtx);
+		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, macroFieldExtractor);
+		final AtomicResolver atomicResolver = new AtomicResolver(formatterCtx);
+		final MacroValueResolver macroValueResolver = new MacroValueResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
+		final RegexPlaceholderMatcher placeholderMatcher = new RegexPlaceholderMatcher();
+
+		return new MessageProcessor(macroValueResolver, placeholderMatcher);
+	}
+
+
+	/**
+	 * A static factory method to create the message processing pipeline
+	 *
+	 * @param formatterCtx a context container which contains instances of string formatters for specific types
+	 * @param adapterCtx a context container for injecting dependencies into adapters
+	 * @return an instance of the message pipeline
+	 */
+	static @NotNull MessagePipeline createMessagePipeline(final Plugin plugin,
+														  final MessageRepository messages,
+														  final FormatterCtx formatterCtx,
+														  final AdapterCtx adapterCtx)
+	{
+		final LocalizedMessageRetriever localizedMessageRetriever = new LocalizedMessageRetriever(messages);
+		final MessageProcessor messageProcessor = createMacroReplacer(formatterCtx, adapterCtx);
+		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
+		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap);
+
+		return new MessagePipeline(localizedMessageRetriever, messageProcessor, messageCooldownMap, messageSenders);
+	}
+
+
+	/**
+	 * A static factory method to create a context container for dependency injection into resolvers
+	 *
+	 * @param plugin instance of the plugin
+	 * @return the context container for to be injected into resolvers
+	 */
+	static FormatterCtx createFormatterContextContainer(final Plugin plugin,
+														final LocaleProvider localeProvider,
+														final ConstantRepository constants)
+	{
+		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProvider);
+		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProvider);
+		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, constants);
+
+		return new FormatterCtx(localeProvider, durationFormatter, localeNumberFormatter);
+	}
+
+
+	/**
+	 * A static factory method to create a context container for dependency injection into adapters
+	 *
+	 * @param plugin instance of the plugin
+	 * @return a populated context container
+	 */
+	static AdapterCtx createAdapterContextContainer(final Plugin plugin,
+													final ItemRepository itemRepository,
+													final FormatterCtx formatterCtx)
+	{
+		WorldNameResolver worldNameResolver = WorldNameResolver.get(plugin.getServer().getPluginManager());
+		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
+		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
+		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRepository);
+
+		return new AdapterCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
+				bukkitItemPluralNameResolver, formatterCtx);
+	}
+
+
+	static ItemForge createItemForge(final Plugin plugin, final ItemRepository items)
+	{
+		return new ItemForge(plugin, items);
+	}
+
+}
