@@ -75,7 +75,7 @@ class WorldNameResolverTest
 	void resolveWorldName_multiverse_fail()
 	{
 		// Arrange
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseResolver(multiverseCoreMock);
 
 		// Act
 		var result = resolver.resolve(worldMock);
@@ -89,7 +89,7 @@ class WorldNameResolverTest
 	void resolveWorldName_multiverse_succeed()
 	{
 		// Arrange
-		WorldNameResolver resolver = mock(PluginResolver.class);
+		WorldNameResolver resolver = mock(MultiverseResolver.class);
 		when(resolver.resolve(worldMock)).thenReturn("fake alias");
 
 		// Act
@@ -111,7 +111,7 @@ class WorldNameResolverTest
 //		WorldNameResolver resolver = WorldNameResolver.get(pluginManagerMock);
 //
 //		// Assert
-//		assertInstanceOf(PluginResolver.class, resolver);
+//		assertInstanceOf(MultiverseResolver.class, resolver);
 //
 //		// Verify
 //		verify(pluginManagerMock, atLeastOnce()).getPlugin("Multiverse-Core");
