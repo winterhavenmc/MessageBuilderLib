@@ -18,8 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname;
 
 import org.bukkit.World;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 
 /**
@@ -39,6 +37,7 @@ import org.bukkit.plugin.PluginManager;
  * @see WorldNameRetriever
  * @see org.bukkit.World
  */
+@FunctionalInterface
 public interface WorldNameResolver
 {
 	/**
@@ -49,26 +48,4 @@ public interface WorldNameResolver
 	 * @return the display or alias name for the world
 	 */
 	String resolve(World world);
-
-
-	/**
-	 * Returns an appropriate {@link WorldNameResolver} implementation based on
-	 * the availability of the {@code Multiverse-Core} plugin.
-	 * <p>
-	 * If Multiverse is installed and enabled, this method returns a
-	 * {@link PluginResolver}; otherwise, it falls back to
-	 * a {@code DefaultResolver}.
-	 *
-	 * @param pluginManager the server's {@link org.bukkit.plugin.PluginManager}
-	 * @return a {@link WorldNameResolver} appropriate for the current server environment
-	 */
-	static WorldNameResolver get(final PluginManager pluginManager)
-	{
-		Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
-
-		return (plugin != null && plugin.isEnabled())
-				? new PluginResolver(plugin)
-				: new DefaultResolver();
-	}
-
 }
