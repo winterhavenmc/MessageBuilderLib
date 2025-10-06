@@ -35,6 +35,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 
+/**
+ * TODO: This test class needs to be refactored and tests moved into MultiverseResolverTest class
+ */
 @ExtendWith(MockitoExtension.class)
 class MultiverseV5WorldNameResolverTest
 {
@@ -52,7 +55,7 @@ class MultiverseV5WorldNameResolverTest
 		when(worldMock.getName()).thenReturn("test_world");
 
 		// Act
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
@@ -64,7 +67,7 @@ class MultiverseV5WorldNameResolverTest
 	void testResolveWorldName_null_world()
 	{
 		// Act
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseResolver(multiverseCoreMock);
 		String result = resolver.resolve(null);
 
 		// Assert
@@ -78,7 +81,7 @@ class MultiverseV5WorldNameResolverTest
 	{
 		// Arrange
 		// Act
-		WorldNameResolver resolver = new PluginResolver(null);
+		WorldNameResolver resolver = new MultiverseResolver(null);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
@@ -99,7 +102,7 @@ class MultiverseV5WorldNameResolverTest
 		when(mvWorldMock.getAliasOrName()).thenReturn("");
 
 		// Act
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
@@ -121,7 +124,7 @@ class MultiverseV5WorldNameResolverTest
 		when(multiverseCoreMock.getApi()).thenReturn(null);
 
 		// Act
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
@@ -141,7 +144,7 @@ class MultiverseV5WorldNameResolverTest
 		when(multiverseCoreApiMock.getWorldManager()).thenReturn(null);
 
 		// Act
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
@@ -163,7 +166,7 @@ class MultiverseV5WorldNameResolverTest
 		when(worldManagerMock.getWorld(worldMock)).thenReturn(Option.none());
 
 		// Act
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
@@ -186,7 +189,7 @@ class MultiverseV5WorldNameResolverTest
 		when(optionWorldMock.getOrNull()).thenReturn(null);
 
 		// Act
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
@@ -211,7 +214,7 @@ class MultiverseV5WorldNameResolverTest
 		when(mvWorldMock.getAliasOrName()).thenReturn("resolved name");
 
 		// Act
-		WorldNameResolver resolver = new PluginResolver(multiverseCoreMock);
+		WorldNameResolver resolver = new MultiverseResolver(multiverseCoreMock);
 		String result = resolver.resolve(worldMock);
 
 		// Assert
