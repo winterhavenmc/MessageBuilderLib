@@ -15,8 +15,10 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameRetriever;
 import org.bukkit.World;
 
 import java.util.Optional;
@@ -38,7 +40,7 @@ import java.util.Optional;
  * @see WorldNameRetriever
  * @see World
  */
-public class DefaultRetriever implements WorldNameRetriever
+public final class DefaultRetriever implements WorldNameRetriever
 {
 	/**
 	 * Attempts to retrieve the alias name of the given {@link World}

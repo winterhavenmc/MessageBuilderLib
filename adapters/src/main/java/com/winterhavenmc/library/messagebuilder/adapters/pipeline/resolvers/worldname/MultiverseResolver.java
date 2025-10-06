@@ -15,11 +15,12 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
+
+import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
 
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 import java.util.Optional;
 
@@ -34,9 +35,10 @@ import java.util.Optional;
  * <p>
  * If the input world is {@code null}, this resolver returns the string
  * {@code "NULL WORLD"}.
- *
+ *<p>
+ * TODO: edit this comment to reflect the removal of the get method
  * <p>This class is only instantiated when <strong>Multiverse-Core</strong> is detected and enabled
- * at runtime. Use {@link WorldNameResolver#get(PluginManager)} to safely select
+ * at runtime. Use {@code WorldNameResolver#get(PluginManager)} to safely select
  * the appropriate implementation.
  *
  * @see WorldNameResolver
@@ -44,7 +46,7 @@ import java.util.Optional;
  * @see World
  * @see org.mvplugins.multiverse.core.MultiverseCore MultiverseCore
  */
-public final class PluginResolver implements WorldNameResolver
+public final class MultiverseResolver implements WorldNameResolver
 {
 	private final Plugin mvPlugin;
 
@@ -55,7 +57,7 @@ public final class PluginResolver implements WorldNameResolver
 	 *
 	 * @param mvPlugin the active Multiverse-Core plugin instance
 	 */
-	public PluginResolver(Plugin mvPlugin)
+	public MultiverseResolver(Plugin mvPlugin)
 	{
 		this.mvPlugin = mvPlugin;
 	}
@@ -77,7 +79,7 @@ public final class PluginResolver implements WorldNameResolver
 
 		Optional<String> result = switch (mvPlugin)
 		{
-			case org.mvplugins.multiverse.core.MultiverseCore mvPlugin5 -> new MultiverseRetriever(mvPlugin5).getWorldName(world);
+			case org.mvplugins.multiverse.core.MultiverseCore mv5Plugin -> new MultiverseRetriever(mv5Plugin).getWorldName(world);
 			case null, default -> new DefaultRetriever().getWorldName(world);
 		};
 
