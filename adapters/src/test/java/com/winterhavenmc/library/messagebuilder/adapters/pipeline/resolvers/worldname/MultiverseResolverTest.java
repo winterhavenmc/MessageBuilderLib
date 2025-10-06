@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class PluginResolverTest
+class MultiverseResolverTest
 {
 	@Mock MultiverseCore mvPluginMock;
 	@Mock MultiverseCoreApi multiverseCoreApiMock;
@@ -24,10 +24,10 @@ class PluginResolverTest
 	void resolve_returns_null_symbol_for_null_world()
 	{
 		// Arrange
-		PluginResolver pluginResolver = new PluginResolver(mvPluginMock);
+		MultiverseResolver multiverseResolver = new MultiverseResolver(mvPluginMock);
 
 		// Act
-		String result = pluginResolver.resolve(null);
+		String result = multiverseResolver.resolve(null);
 
 		// Assert
 		assertEquals("∅", result);
@@ -37,11 +37,11 @@ class PluginResolverTest
 	void resolve_returns_world_name_when_given_null_mvPlugin()
 	{
 		// Arrange
-		PluginResolver pluginResolver = new PluginResolver(null);
+		MultiverseResolver multiverseResolver = new MultiverseResolver(null);
 		when(worldMock.getName()).thenReturn("test-world");
 
 		// Act
-		String result = pluginResolver.resolve(worldMock);
+		String result = multiverseResolver.resolve(worldMock);
 
 		// Assert
 		assertEquals("test-world", result);
