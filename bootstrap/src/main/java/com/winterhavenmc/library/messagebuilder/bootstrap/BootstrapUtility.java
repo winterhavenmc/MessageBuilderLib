@@ -40,6 +40,8 @@ import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
@@ -161,7 +163,7 @@ public class BootstrapUtility
 													final ItemRepository itemRepository,
 													final FormatterCtx formatterCtx)
 	{
-		WorldNameResolver worldNameResolver = WorldNameResolver.get(plugin.getServer().getPluginManager());
+		WorldNameResolver worldNameResolver = getWorldNameResolver(plugin);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
 		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRepository);
@@ -174,6 +176,16 @@ public class BootstrapUtility
 	static ItemForge createItemForge(final Plugin plugin, final ItemRepository items)
 	{
 		return new ItemForge(plugin, items);
+	}
+
+
+	static WorldNameResolver getWorldNameResolver(final Plugin plugin)
+	{
+		Plugin mvPlugin = plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
+
+		return (mvPlugin != null && mvPlugin.isEnabled())
+				? new MultiverseResolver(mvPlugin)
+				: new DefaultResolver();
 	}
 
 }
