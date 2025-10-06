@@ -41,7 +41,7 @@ import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.matchers.PlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.DefaultResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.LanguageResourceManager;
 

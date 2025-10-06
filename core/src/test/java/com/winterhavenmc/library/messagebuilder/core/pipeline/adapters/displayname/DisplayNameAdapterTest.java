@@ -20,7 +20,8 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.displayn
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.itemname.ItemDisplayNameResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.DefaultResolver;
+
+import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class DisplayNameAdapterTest
 {
-	@Mock DefaultResolver worldNameResolverMock;
+	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock AdapterCtx adapterContextContainerMock;
 	@Mock Player playerMock;
 	@Mock Entity entityMock;

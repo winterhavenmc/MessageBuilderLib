@@ -18,7 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.looter;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.DefaultResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.AnimalTamer;
@@ -40,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class LooterAdapterTest
 {
-	@Mock DefaultResolver worldNameResolverMock;
+	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock AdapterCtx adapterContextContainerMock;
 	@Mock Player playerMock;
 	@Mock World worldMock;

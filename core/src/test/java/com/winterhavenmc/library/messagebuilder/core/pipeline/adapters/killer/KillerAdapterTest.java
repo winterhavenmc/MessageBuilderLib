@@ -18,7 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.killer;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.DefaultResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.AnimalTamer;
@@ -42,8 +43,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class KillerAdapterTest
 {
-	@Mock
-	DefaultResolver worldNameResolverMock;
+	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock AdapterCtx adapterContextContainerMock;
 	@Mock Player playerMock;
 	@Mock LivingEntity livingEntityMock;

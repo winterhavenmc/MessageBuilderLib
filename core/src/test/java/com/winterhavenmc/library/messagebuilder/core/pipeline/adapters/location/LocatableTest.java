@@ -21,10 +21,9 @@ import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.formatters.number.NumberFormatter;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.DefaultResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.*;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -46,7 +45,7 @@ class LocatableTest
 {
 	@Mock AdapterCtx ctxMock;
 	@Mock FormatterCtx formatterContainerMock;
-	@Mock DefaultResolver worldNameResolverMock;
+	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock NumberFormatter localeNumberFormatterMock;
 	@Mock Location locationMock;
 	@Mock World worldMock;
