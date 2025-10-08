@@ -18,7 +18,9 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.adapters.util.MockUtility;
+import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
 
 import org.bukkit.configuration.Configuration;
@@ -28,6 +30,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,9 +40,11 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.File;
+import java.util.Locale;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +61,7 @@ class LanguageResourceManagerTest
 	@Mock ConstantRepository constantRepositoryMock;
 	@Mock ItemRepository itemRepositoryMock;
 	@Mock MessageRepository messageRepositoryMock;
+	@Mock LocaleProvider localeProviderMock;
 
 	LanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
@@ -130,55 +136,58 @@ class LanguageResourceManagerTest
 		}
 
 
-//		@Test
-//		void reload_failure_returnsFalse()
-//		{
-//			// Arrange
-//			when(languageSectionProviderMock.getSection()).thenReturn(languageConfiguration);
-//			LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock)
-//			{
-//				@Override
-//				public Configuration load() {
-//					return null; // Simulate failure
-//				}
-//			};
-//
-//			LanguageResourceInstaller installer = new LanguageResourceInstaller(pluginMock);
-//			LanguageResourceManager languageResourceManager = new LanguageResourceManager(installer, loader);
-//
-//			// Act
-//			boolean result = languageResourceManager.reload();
-//
-//			// Assert
-//			assertFalse(result);
-//
-//			// Verify
-//			verify(languageSectionProviderMock, atLeastOnce()).getSection();
-//		}
+		@Test
+		@Disabled
+		void reload_failure_returnsFalse()
+		{
+			// Arrange
+			when(languageSectionProviderMock.getSection()).thenReturn(languageConfiguration);
+			LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock, localeProviderMock)
+			{
+				@Override
+				public Configuration load() {
+					return null; // Simulate failure
+				}
+			};
+
+			LanguageResourceInstaller installer = new LanguageResourceInstaller(pluginMock, localeProviderMock);
+			LanguageResourceManager languageResourceManager = new LanguageResourceManager(installer, loader);
+
+			// Act
+			boolean result = languageResourceManager.reload();
+
+			// Assert
+			assertFalse(result);
+
+			// Verify
+			verify(languageSectionProviderMock, atLeastOnce()).getSection();
+		}
 	}
 
 
-//	@Test
-//	void getResourceName_returns_only_valid_string()
-//	{
-//		// Arrange
-//		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
-//
-//		// Act & Assert
-//		assertEquals("language/en-US.yml", LanguageResourceManager.getResourceName(languageTag));
-//		assertNotEquals("language/fr-FR.yml", LanguageResourceManager.getResourceName(languageTag));
-//	}
+	@Test
+	@Disabled
+	void getResourceName_returns_only_valid_string()
+	{
+		// Arrange
+		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
+
+		// Act & Assert
+		assertEquals("language/en-US.yml", LanguageResourceManager.getResourceName(languageTag));
+		assertNotEquals("language/fr-FR.yml", LanguageResourceManager.getResourceName(languageTag));
+	}
 
 
-//	@Test
-//	void getFileName_returns_only_valid_string()
-//	{
-//		// Arrange
-//		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
-//
-//		// Act & Assert
-//		assertEquals("language" + File.separator + "en-US.yml", LanguageResourceManager.getFileName(languageTag));
-//		assertNotEquals("language" + File.separator + "fr-FR.yml", LanguageResourceManager.getFileName(languageTag));
-//	}
+	@Test
+	@Disabled
+	void getFileName_returns_only_valid_string()
+	{
+		// Arrange
+		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
+
+		// Act & Assert
+		assertEquals("language" + File.separator + "en-US.yml", LanguageResourceManager.getFileName(languageTag));
+		assertNotEquals("language" + File.separator + "fr-FR.yml", LanguageResourceManager.getFileName(languageTag));
+	}
 
 }
