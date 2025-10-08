@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.MacroFieldExtractor;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;

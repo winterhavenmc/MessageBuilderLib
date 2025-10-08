@@ -24,9 +24,9 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.dur
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers.RegexPlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors.MessageProcessor;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.MacroValueResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.AtomicResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.CompositeResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.MacroValueResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.AtomicResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.CompositeResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemDisplayNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemPluralNameResolver;

@@ -15,11 +15,10 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.AtomicResolver;
 import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;

@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
@@ -83,10 +83,8 @@ public class MacroValueResolver implements ValueResolver
 				.map(resolver -> resolver.resolve(macroKey, macroObjectMap))
 				.collect(
 						MacroStringMap::new,
-						(map1, map2) -> map2.entrySet()
-								.forEach(entry -> map1.putIfAbsent(entry.getKey(), entry.getValue())),
-						(map3, map4) -> map4.entrySet()
-								.forEach(entry -> map3.putIfAbsent(entry.getKey(), entry.getValue()))
+						(map1, map2) -> map2.entrySet().forEach(entry -> map1.putIfAbsent(entry.getKey(), entry.getValue())),
+						(map3, map4) -> map4.entrySet().forEach(entry -> map3.putIfAbsent(entry.getKey(), entry.getValue()))
 				);
 	}
 

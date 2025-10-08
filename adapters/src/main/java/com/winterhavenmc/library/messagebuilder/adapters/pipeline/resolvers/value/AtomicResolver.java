@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;

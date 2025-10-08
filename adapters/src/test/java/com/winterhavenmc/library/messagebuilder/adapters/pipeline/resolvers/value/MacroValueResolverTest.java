@@ -15,11 +15,8 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.AtomicResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.CompositeResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.field.MacroValueResolver;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
