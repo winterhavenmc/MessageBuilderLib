@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.util;
+package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.pluralname;
 
 public interface Pluralizable
 {
