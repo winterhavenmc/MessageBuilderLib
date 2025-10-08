@@ -40,7 +40,6 @@ import static com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Ad
  * <p>It is designed for use with {@code Adapter} classes to wrap Bukkit objects or
  * domain models that provide a display name or identifier suitable for macro replacement.
  *
- * @see NameAdapter NameAdapter
  * @see MacroStringMap MacroStringMap
  */
 @FunctionalInterface

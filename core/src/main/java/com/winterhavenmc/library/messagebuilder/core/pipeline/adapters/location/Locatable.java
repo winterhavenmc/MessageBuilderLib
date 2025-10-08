@@ -33,7 +33,7 @@ import static com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Ad
  * Represents an object that has a {@link org.bukkit.Location}, which can be extracted
  * and used for macro substitution in messages.
  *
- * <p>This interface is used by the {@link LocationAdapter}
+ * <p>This interface is used by the {@code LocationAdapter}
  * to extract structured location data for use in messages. It supports both full string representations and
  * granular subfields such as world name and block coordinates.
  *

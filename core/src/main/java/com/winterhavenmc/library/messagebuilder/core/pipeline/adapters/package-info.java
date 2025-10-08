@@ -38,14 +38,14 @@
  * into the message builder.
  *
  * <h2>Adapter Registration and Precedence</h2>
- * <p>All adapters are managed by {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry AdapterRegistry},
+ * <p>All adapters are managed by {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.FieldAdapterRegistry AdapterRegistry},
  * which maintains registration order to enforce resolution precedence. The first adapter to produce a value for
  * a macro string wins; subsequent adapters cannot overwrite that string.
  *
  * <p>This enables library consumers to override or extend built-in behavior with plugin-defined adapters.
  *
  * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter Adapter
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry AdapterRegistry
+ * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.FieldAdapterRegistry AdapterRegistry
  * @see com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx AdapterCtx
  * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.CompositeResolver CompositeResolver
  */

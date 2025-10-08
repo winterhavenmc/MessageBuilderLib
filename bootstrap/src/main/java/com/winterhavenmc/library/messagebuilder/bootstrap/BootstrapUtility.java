@@ -45,6 +45,7 @@ import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRe
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.FieldAdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
@@ -106,7 +107,7 @@ public class BootstrapUtility
 	private static @NotNull MessageProcessor createMacroReplacer(final FormatterCtx formatterCtx,
 																 final AdapterCtx adapterCtx)
 	{
-		final AdapterRegistry adapterRegistry = new AdapterRegistry(adapterCtx);
+		final AdapterRegistry adapterRegistry = new FieldAdapterRegistry(adapterCtx);
 		final MacroFieldExtractor macroFieldExtractor = new MacroFieldExtractor(adapterCtx);
 		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, macroFieldExtractor);
 		final AtomicResolver atomicResolver = new AtomicResolver(formatterCtx);

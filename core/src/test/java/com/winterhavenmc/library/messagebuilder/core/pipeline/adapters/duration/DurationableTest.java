@@ -18,10 +18,12 @@
 package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.duration;
 
 import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -36,7 +38,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.duration.Durationable.durationUntil;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
@@ -145,7 +146,7 @@ class DurationableTest
 		Instant futureInstant = Instant.now().plus(10, ChronoUnit.MINUTES);
 
 		// Act
-		Duration result = durationUntil(futureInstant);
+		Duration result = Durationable.durationUntil(futureInstant);
 
 		// Assert
 		// add millis and truncate to seconds to account for processing time
@@ -157,7 +158,7 @@ class DurationableTest
 	void durationUntil_with_null_parameter_returns_zero_duration()
 	{
 		// Arrange & Act
-		Duration result = durationUntil(null);
+		Duration result = Durationable.durationUntil(null);
 
 		// Assert
 		assertEquals(Duration.ZERO, result);

@@ -46,7 +46,7 @@ import static com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Ad
  *
  * <p>These macros are automatically populated using this interface's
  * {@code extractProtection(...)} method when objects are processed by
- * the {@link ProtectionAdapter}.
+ * the {@code ProtectionAdapter}.
  */
 @FunctionalInterface
 public interface Protectable

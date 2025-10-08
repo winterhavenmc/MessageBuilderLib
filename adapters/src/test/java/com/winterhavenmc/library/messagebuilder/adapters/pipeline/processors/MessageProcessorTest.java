@@ -39,6 +39,7 @@ import com.winterhavenmc.library.messagebuilder.core.message.Message;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.FieldAdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.matchers.PlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
@@ -121,7 +122,7 @@ class MessageProcessorTest
 		AdapterCtx adapterContextContainer = new AdapterCtx(worldNameResolverMock,
 				new BukkitItemNameResolver(), new BukkitItemDisplayNameResolver(),
 				new BukkitItemPluralNameResolver(itemRepositoryMock), formatterContainer);
-		AdapterRegistry adapterRegistry = new AdapterRegistry(adapterContextContainer);
+		AdapterRegistry adapterRegistry = new FieldAdapterRegistry(adapterContextContainer);
 		MacroFieldExtractor fieldExtractor = new MacroFieldExtractor(adapterContextContainer);
 
 		CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, fieldExtractor);

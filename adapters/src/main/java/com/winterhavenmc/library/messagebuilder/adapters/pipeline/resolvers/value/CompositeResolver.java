@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.Mac
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.FieldAdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
@@ -43,13 +44,13 @@ import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
  * <p>Example flow:
  * <ol>
  *   <li>Retrieve the object from the {@link MacroObjectMap} using the given {@code macroKey}.</li>
- *   <li>Find all matching adapters for the object via the {@link AdapterRegistry}.</li>
+ *   <li>Find all matching adapters for the object via the {@link FieldAdapterRegistry}.</li>
  *   <li>For each adapter, adapt the object and extract string-value mappings via the {@link MacroFieldExtractor}.</li>
  *   <li>Aggregate all mappings into a {@link MacroStringMap}.</li>
  * </ol>
  *
  * @see ValueResolver
- * @see AdapterRegistry
+ * @see FieldAdapterRegistry
  * @see Adapter
  * @see MacroFieldExtractor
  */

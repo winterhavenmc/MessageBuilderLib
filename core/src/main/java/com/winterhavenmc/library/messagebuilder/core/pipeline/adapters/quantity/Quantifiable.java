@@ -40,7 +40,6 @@ import static com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Ad
  * <p>Common examples of quantities include item stack sizes, inventory capacities,
  * or collection sizes.
  *
- * @see QuantityAdapter
  * @see Adapter Adapter
  */
 @FunctionalInterface

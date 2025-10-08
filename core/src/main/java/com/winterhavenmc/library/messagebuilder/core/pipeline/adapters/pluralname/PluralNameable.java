@@ -21,7 +21,6 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.pluralna
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.displayname.DisplayNameAdapter;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
 import java.util.Optional;
@@ -38,14 +37,13 @@ import static com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Ad
  * {@code {OBJECT.DISPLAY_NAME}} placeholder replacement in localized message strings.
  * The extracted value is validated to ensure it is non-null and non-blank.
  *
- * <p>This interface is primarily used by the {@link DisplayNameAdapter} and is supported
+ * <p>This interface is primarily used by the {@code PluralNameAdapter} and is supported
  * out of the box for Bukkit {@link org.bukkit.entity.Player}, {@link org.bukkit.Nameable},
  * and {@link org.bukkit.World} types.
  *
  * <p>Plugins can also implement this interface on custom types to enable automatic
  * macro support for display names.
  *
- * @see DisplayNameAdapter
  * @see Adapter Adapter
  */
 @FunctionalInterface
