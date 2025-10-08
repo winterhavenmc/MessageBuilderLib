@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.bootstrap;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlConstantRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlMessageRepository;

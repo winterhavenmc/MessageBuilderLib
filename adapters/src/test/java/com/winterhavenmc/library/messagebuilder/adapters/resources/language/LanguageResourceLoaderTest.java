@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 

@@ -15,9 +15,8 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageSectionProvider;
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;

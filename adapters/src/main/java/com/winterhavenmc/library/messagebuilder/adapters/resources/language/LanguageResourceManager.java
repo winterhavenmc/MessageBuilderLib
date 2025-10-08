@@ -15,8 +15,11 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.SectionProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.SectionResourceManager;
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 
@@ -43,7 +46,7 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.resources.lang
 public final class LanguageResourceManager implements SectionResourceManager
 {
 	private final LanguageResourceLoader resourceLoader;
-	private final LanguageResourceInstaller resourceInstaller;
+	private final ResourceInstaller resourceInstaller;
 	private Configuration languageConfiguration;
 
 
@@ -53,7 +56,7 @@ public final class LanguageResourceManager implements SectionResourceManager
 	 * @param resourceInstaller a LanguageResourceInstaller instance
 	 * @param resourceLoader  a LanguageResourceLoader instance
 	 */
-	public LanguageResourceManager(final LanguageResourceInstaller resourceInstaller,
+	public LanguageResourceManager(final ResourceInstaller resourceInstaller,
 								   final LanguageResourceLoader resourceLoader)
 	{
 		this.resourceInstaller = resourceInstaller;
@@ -71,7 +74,7 @@ public final class LanguageResourceManager implements SectionResourceManager
 	 * @param loader  a LanguageResourceLoader instance
 	 * @param configuration a bukkit Configuration representing the language resource
 	 */
-	public LanguageResourceManager(final LanguageResourceInstaller installer,
+	public LanguageResourceManager(final ResourceInstaller installer,
 								   final LanguageResourceLoader loader,
 								   final Configuration configuration)
 	{

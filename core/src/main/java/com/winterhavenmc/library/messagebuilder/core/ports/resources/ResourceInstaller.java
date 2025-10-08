@@ -18,12 +18,19 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.resources;
 
 
+import java.util.regex.Pattern;
+
 /**
  * An interface that describes classes that are responsible for installing resources
  * from the jar to the plugin data directory.
  */
 public interface ResourceInstaller
 {
+	Pattern WHITESPACE = Pattern.compile("\\s", Pattern.UNICODE_CHARACTER_CLASS);
+	Pattern TWO_OR_MORE_DOTS = Pattern.compile("[.]{2,}");
+	Pattern LEADING_SLASHES = Pattern.compile("^/+");
+	Pattern TWO_OR_MORE_SLASHES = Pattern.compile("/{2,}");
+
 	/**
 	 * Install resources listed in auto_install.txt to the plugin data directory
 	 */

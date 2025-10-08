@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.SectionProvider;
 

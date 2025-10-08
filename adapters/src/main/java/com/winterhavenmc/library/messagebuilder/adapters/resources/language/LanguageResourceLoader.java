@@ -15,9 +15,11 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceMessage;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
 

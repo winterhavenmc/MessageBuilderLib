@@ -15,17 +15,17 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
 
 import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceMessage;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import static com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant.RESOURCE_AUTO_INSTALL;
 import static com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant.RESOURCE_SUBDIRECTORY;
@@ -39,10 +39,6 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.resources.lang
  */
 public final class LanguageResourceInstaller implements ResourceInstaller
 {
-	public static final Pattern WHITESPACE = Pattern.compile("\\s", Pattern.UNICODE_CHARACTER_CLASS);
-	public static final Pattern TWO_OR_MORE_DOTS = Pattern.compile("[.]{2,}");
-	public static final Pattern LEADING_SLASHES = Pattern.compile("^/+");
-	public static final Pattern TWO_OR_MORE_SLASHES = Pattern.compile("/{2,}");
 	private static final String YAML_EXTENSION = ".yml";
 
 	private final Plugin plugin;

@@ -15,11 +15,12 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.adapters.util.MockUtility;
 import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceInstaller;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -40,8 +41,7 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import static com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceInstaller.*;
-import static com.winterhavenmc.library.messagebuilder.core.util.MockUtility.installResource;
+import static com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -68,6 +68,7 @@ public class LanguageResourceInstallerTest
 				.when(pluginMock).getResource(anyString());
 
 		// create real instance of installer
+		//TODO: this needs to be injected? no dependency on module 'adapters'
 		resourceInstaller = new LanguageResourceInstaller(pluginMock, localeProviderMock);
 		resourceInstaller.autoInstall();
 	}
@@ -137,7 +138,7 @@ public class LanguageResourceInstallerTest
 			String filename = "language/en-US.yml";
 
 			// install resource when saveResource is called
-			doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
+			doAnswer(invocation -> MockUtility.installResource(invocation.getArgument(0), tempDataDir.toPath()))
 					.when(pluginMock).saveResource(anyString(), eq(false));
 
 			// Act
@@ -185,21 +186,21 @@ public class LanguageResourceInstallerTest
 		public void success()
 		{
 			// Arrange
-			doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
+			doAnswer(invocation -> MockUtility.installResource(invocation.getArgument(0), tempDataDir.toPath()))
 					.when(pluginMock).saveResource(anyString(), eq(false));
 
 			// Act
-			LanguageResourceInstaller.InstallerStatus status = resourceInstaller.installByName("language/en-US.yml");
+			ResourceInstaller.InstallerStatus status = resourceInstaller.installByName("language/en-US.yml");
 
 			// Assert
-			assertEquals(LanguageResourceInstaller.InstallerStatus.SUCCESS, status);
+			assertEquals(ResourceInstaller.InstallerStatus.SUCCESS, status);
 		}
 
 		@Test
 		public void file_exists()
 		{
 			// Mock
-			doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
+			doAnswer(invocation -> MockUtility.installResource(invocation.getArgument(0), tempDataDir.toPath()))
 					.when(pluginMock).saveResource(anyString(), eq(false));
 
 			// Arrange
@@ -207,10 +208,10 @@ public class LanguageResourceInstallerTest
 			resourceInstaller.installByName(filename);
 
 			// Act
-			LanguageResourceInstaller.InstallerStatus status = resourceInstaller.installIfMissing(filename);
+			ResourceInstaller.InstallerStatus status = resourceInstaller.installIfMissing(filename);
 
 			// Assert
-			assertEquals(LanguageResourceInstaller.InstallerStatus.FILE_EXISTS, status);
+			assertEquals(ResourceInstaller.InstallerStatus.FILE_EXISTS, status);
 		}
 
 
@@ -218,10 +219,10 @@ public class LanguageResourceInstallerTest
 		public void resource_unavailable()
 		{
 			// Act
-			LanguageResourceInstaller.InstallerStatus status = resourceInstaller.installByName("nonexistent-resource");
+			ResourceInstaller.InstallerStatus status = resourceInstaller.installByName("nonexistent-resource");
 
 			// Assert
-			assertEquals(LanguageResourceInstaller.InstallerStatus.UNAVAILABLE, status);
+			assertEquals(ResourceInstaller.InstallerStatus.UNAVAILABLE, status);
 		}
 	}
 
@@ -242,7 +243,7 @@ public class LanguageResourceInstallerTest
 	public void verifyLanguageDirectoryTest_exists() throws IOException
 	{
 		// Arrange
-		installResource("language/en-US.yml", new File(tempDataDir, "language").toPath());
+		MockUtility.installResource("language/en-US.yml", new File(tempDataDir, "language").toPath());
 
 		// Act
 		File languageDir = new File(tempDataDir, "language");
@@ -259,7 +260,7 @@ public class LanguageResourceInstallerTest
 		Path tempDir = Files.createTempDirectory("installer-test");
 
 		// Act: Install a resource into the temporary directory
-		long result = installResource("language/en-US.yml", tempDir);
+		long result = MockUtility.installResource("language/en-US.yml", tempDir);
 
 		// Assert: Verify the file exists and was successfully copied
 		assertTrue(result > 0, "Resource should have been installed successfully.");
@@ -408,7 +409,7 @@ public class LanguageResourceInstallerTest
 			when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
 			when(pluginMock.getResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString())).thenReturn(getClass().getClassLoader().getResourceAsStream(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString()));
 			// install resource when saveResource is called
-			doAnswer(invocation -> installResource(invocation.getArgument(0), tempDataDir.toPath()))
+			doAnswer(invocation -> MockUtility.installResource(invocation.getArgument(0), tempDataDir.toPath()))
 					.when(pluginMock).saveResource(anyString(), eq(false));
 
 			// Act

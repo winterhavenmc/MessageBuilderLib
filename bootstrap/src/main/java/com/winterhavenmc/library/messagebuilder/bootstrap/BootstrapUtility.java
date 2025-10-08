@@ -34,6 +34,9 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Loc
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceInstaller;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceLoader;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;

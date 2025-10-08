@@ -23,7 +23,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
