@@ -49,7 +49,7 @@ public class YamlItemRepository implements ItemRepository
 
 
 	@Override
-	public ItemRecord getItemRecord(ValidItemKey validItemKey)
+	public ItemRecord getItemRecord(final ValidItemKey validItemKey)
 	{
 		// confirm item section is not null
 		if (sectionProvider.getSection() == null) return new InvalidItemRecord(validItemKey, InvalidRecordReason.ITEM_SECTION_MISSING);
