@@ -18,7 +18,7 @@
 /**
  * Provides support for extracting and formatting location-based macro values from objects.
  *
- * <p>This package includes the {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.location.Locatable}
+ * <p>This package includes the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.location.Locatable}
  * interface and its corresponding {@link com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.location.LocationAdapter}
  * implementation. It enables plugin-defined or Bukkit-provided objects to contribute detailed
  * location information for use in macro-based message generation.
@@ -46,8 +46,8 @@
  * <p>This package is part of the MessageBuilder macro adapter framework and contributes to the resolution
  * and substitution of macro placeholders during the message pipeline.
  *
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter Adapter
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.location.Locatable Locatable
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter Adapter
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.location.Locatable Locatable
  * @see com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.location.LocationAdapter LocationAdapter
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver
  */

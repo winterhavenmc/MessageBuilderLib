@@ -18,8 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.version;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.version.Versionable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.version.Versionable;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 

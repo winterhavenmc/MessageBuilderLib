@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.protection;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.protection.Protectable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.protection.Protectable;
 
 import java.util.Optional;
 

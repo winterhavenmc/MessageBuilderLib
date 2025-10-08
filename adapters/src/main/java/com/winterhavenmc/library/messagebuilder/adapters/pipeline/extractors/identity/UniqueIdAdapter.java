@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.identity;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.identity.Identifiable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.identity.Identifiable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;

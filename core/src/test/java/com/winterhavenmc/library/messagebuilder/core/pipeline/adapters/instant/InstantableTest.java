@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.instant.Instantable;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 

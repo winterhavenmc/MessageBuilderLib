@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.killer;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.killer.Killable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.killer.Killable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.loot.LootContext;
 

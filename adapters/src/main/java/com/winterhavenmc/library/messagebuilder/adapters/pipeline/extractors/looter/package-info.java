@@ -1,7 +1,7 @@
 /**
  * Contains support for adapting objects that represent looting permissions or claims.
  *
- * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.looter.Lootable}
+ * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.looter.Lootable}
  * interface, which is used to associate an object with a looter — a player or entity that has
  * permission to retrieve contents or rewards from a container, chest, or drop.
  *

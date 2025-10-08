@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.di
 
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.displayname.DisplayNameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.displayname.DisplayNameable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;

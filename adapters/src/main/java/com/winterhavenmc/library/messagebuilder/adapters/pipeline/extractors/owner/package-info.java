@@ -1,7 +1,7 @@
 /**
  * Provides support for extracting ownership information from objects and applying it to macro placeholders.
  *
- * <p>The {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.owner.Ownable Ownable} interface represents
+ * <p>The {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.owner.Ownable Ownable} interface represents
  * objects that expose an ownership relationship, such as pets, protected containers, or permission-locked
  * regions. Ownership is resolved via {@link org.bukkit.entity.AnimalTamer AnimalTamer}, allowing compatibility with
  * {@link org.bukkit.OfflinePlayer OfflinePlayer} and other tamable or controllable entities.

@@ -18,7 +18,7 @@
 /**
  * Provides support for adapting objects with time-based protection attributes into macro string values.
  *
- * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.protection.Protectable}
+ * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.protection.Protectable}
  * interface, which is used to describe objects that have a protection expiration {@link java.time.Instant}.
  * It also includes an adapter class, {@link com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.protection.ProtectionAdapter},
  * which detects and adapts compatible objects for macro string population.

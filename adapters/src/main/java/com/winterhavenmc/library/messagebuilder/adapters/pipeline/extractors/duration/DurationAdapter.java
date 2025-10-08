@@ -18,8 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.duration;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.FieldAdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.duration.Durationable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.duration.Durationable;
 
 import java.util.Optional;
 

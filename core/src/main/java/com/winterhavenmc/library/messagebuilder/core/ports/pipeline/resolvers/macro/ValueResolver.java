@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;

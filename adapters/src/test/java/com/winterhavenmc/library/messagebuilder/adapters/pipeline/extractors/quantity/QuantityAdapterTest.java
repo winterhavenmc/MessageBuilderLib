@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.quantity;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.quantity.Quantifiable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.quantity.Quantifiable;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

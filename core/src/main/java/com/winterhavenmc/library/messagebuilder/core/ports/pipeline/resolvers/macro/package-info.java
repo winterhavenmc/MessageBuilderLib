@@ -34,7 +34,7 @@
  * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.AtomicResolver AtomicResolver
  * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.CompositeResolver CompositeResolver
  * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.FieldResolver FieldResolver
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter Adapter
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter Adapter
  * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.FieldAdapterRegistry AdapterRegistry
  * @see com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap MacroObjectMap
  * @see com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap MacroStringMap

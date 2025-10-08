@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.url;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.url.UrlAddressable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.url.UrlAddressable;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 

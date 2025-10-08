@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.ex
 import java.time.Instant;
 import java.util.Optional;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.expiration.Expirable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.expiration.Expirable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

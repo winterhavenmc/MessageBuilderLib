@@ -1,7 +1,7 @@
 /**
  * Provides adapter support for objects that expose a timestamp via the {@link java.time.Instant} API.
  *
- * <p>The {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.instant.Instantable}
+ * <p>The {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.instant.Instantable}
  * interface allows plugin-defined objects to participate in macro substitution using
  * instant-based placeholders such as:
  *
@@ -17,7 +17,7 @@
  * <p>This adapter enables the generation of localized, human-readable date and time strings
  * from any object that implements {@code Instantable}.
  *
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.instant.Instantable Instantable
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.instant.Instantable Instantable
  * @see java.time.Instant Instant
  * @see java.time.format.DateTimeFormatter DateTimeFormatter
  */

@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.displayn
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.displayname.DisplayNameable;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import org.junit.jupiter.api.Test;

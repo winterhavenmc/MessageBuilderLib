@@ -2,7 +2,7 @@
  * Provides the {@code Nameable} interface and its corresponding adapter used to extract and format
  * name-related fields from objects passed into the message pipeline.
  *
- * <p>Objects that implement {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.name.Nameable Nameable}
+ * <p>Objects that implement {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.name.Nameable Nameable}
  * expose a {@code getName()} method used for macro substitution in message templates. The adapter in this package
  * maps such values to a dot-notated macro string (e.g., {@code {OBJECT.NAME}}) that is automatically replaced during
  * message composition.
@@ -34,8 +34,8 @@
  *   <li>{@link org.bukkit.plugin.Plugin}</li>
  * </ul>
  *
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.name.Nameable Nameable
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.name.Nameable Nameable
  * @see com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.name.NameAdapter NameAdapter
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter Adapter
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter Adapter
  */
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.name;

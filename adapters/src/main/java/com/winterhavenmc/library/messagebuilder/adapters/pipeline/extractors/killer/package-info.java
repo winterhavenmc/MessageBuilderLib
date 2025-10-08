@@ -1,7 +1,7 @@
 /**
  * Provides support for extracting killer information from entities or plugin-defined objects.
  *
- * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.killer.Killable}
+ * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.killer.Killable}
  * interface, which exposes a method to retrieve the killer of an object—typically a
  * {@link org.bukkit.entity.Player Player}.
  * This is useful in generating messages related to entity death, such as death messages or kill logs.

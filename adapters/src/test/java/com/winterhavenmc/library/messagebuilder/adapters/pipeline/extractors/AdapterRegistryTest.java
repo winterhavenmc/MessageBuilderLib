@@ -32,20 +32,20 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.pro
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.quantity.QuantityAdapter;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.displayname.DisplayNameable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.duration.Durationable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.expiration.Expirable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.instant.Instantable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.killer.Killable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.location.Locatable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.looter.Lootable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.name.Nameable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.owner.Ownable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.pluralname.PluralNameable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.protection.Protectable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.quantity.Quantifiable;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.identity.Identifiable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.AdapterRegistry;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.displayname.DisplayNameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.duration.Durationable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.expiration.Expirable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.instant.Instantable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.killer.Killable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.location.Locatable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.looter.Lootable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.name.Nameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.owner.Ownable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.pluralname.PluralNameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.protection.Protectable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.quantity.Quantifiable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.identity.Identifiable;
 
 import org.bukkit.Location;
 import org.bukkit.entity.AnimalTamer;

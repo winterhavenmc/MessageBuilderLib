@@ -18,7 +18,7 @@
 /**
  * Provides support for macro replacement of quantity-related values.
  *
- * <p>This package includes the {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.quantity.Quantifiable}
+ * <p>This package includes the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.quantity.Quantifiable}
  * interface, which is used to represent objects that can supply a numeric quantity for macro substitution. These
  * quantities are commonly used in messages to represent values such as:
  * <ul>
@@ -34,7 +34,7 @@
  * <p>When an object is adapted as a {@code Quantifiable}, it contributes the {@code {OBJECT.QUANTITY}}
  * macro to the pipeline, populated with a localized, formatted number string based on the current locale.
  *
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.quantity.Quantifiable
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.quantity.Quantifiable
  * @see com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.quantity.QuantityAdapter
  */
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.quantity;

@@ -19,8 +19,8 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.identity.UniqueIdAdapter;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.AdapterRegistry;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.displayname.DisplayNameAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.duration.DurationAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.expiration.ExpirationAdapter;

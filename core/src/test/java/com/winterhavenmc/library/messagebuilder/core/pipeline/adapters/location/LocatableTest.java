@@ -20,6 +20,7 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.location
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.location.Locatable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;

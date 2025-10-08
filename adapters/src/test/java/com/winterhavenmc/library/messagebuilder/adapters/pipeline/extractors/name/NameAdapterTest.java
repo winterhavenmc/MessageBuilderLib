@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.na
 
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.name.Nameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.name.Nameable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;

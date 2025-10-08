@@ -18,9 +18,9 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.displayname;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.displayname.DisplayNameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.displayname.DisplayNameable;
 import org.bukkit.Nameable;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

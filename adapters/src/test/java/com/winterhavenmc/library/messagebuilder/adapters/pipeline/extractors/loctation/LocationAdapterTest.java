@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.loctation;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.location.LocationAdapter;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.location.Locatable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.location.Locatable;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Raid;

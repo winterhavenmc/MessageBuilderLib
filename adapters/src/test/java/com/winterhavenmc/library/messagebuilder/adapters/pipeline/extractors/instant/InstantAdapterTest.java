@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.instant;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.instant.Instantable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.instant.Instantable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

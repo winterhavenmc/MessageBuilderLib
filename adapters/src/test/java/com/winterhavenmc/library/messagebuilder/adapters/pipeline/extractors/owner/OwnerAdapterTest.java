@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.owner;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.owner.Ownable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.owner.Ownable;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Player;
 

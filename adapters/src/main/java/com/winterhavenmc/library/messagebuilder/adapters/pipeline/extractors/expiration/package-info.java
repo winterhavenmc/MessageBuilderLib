@@ -19,7 +19,7 @@
  * Provides adapter and interface support for expiration-based macro replacements.
  *
  * <p>This package enables automatic extraction of expiration-related data from objects that implement
- * the {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.expiration.Expirable} interface.
+ * the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.expiration.Expirable} interface.
  * These data points are used to populate macro placeholders in messages, such as:
  *
  * <ul>

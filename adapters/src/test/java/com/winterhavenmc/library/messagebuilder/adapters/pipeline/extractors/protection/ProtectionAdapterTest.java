@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.pr
 import java.time.Instant;
 import java.util.Optional;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.protection.Protectable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.protection.Protectable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
