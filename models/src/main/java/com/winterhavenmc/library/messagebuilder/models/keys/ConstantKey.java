@@ -19,6 +19,9 @@ package com.winterhavenmc.library.messagebuilder.models.keys;
 
 import java.util.Optional;
 
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.BLANK;
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.NULL;
+
 
 /**
  * A type that represents a validated string for a record. This type guarantees a valid string that has been
@@ -29,8 +32,8 @@ public sealed interface ConstantKey extends RecordKey permits ValidConstantKey, 
 {
 	static ConstantKey of(String key)
 	{
-		if (key == null) return new InvalidConstantKey("∅", InvalidKeyReason.KEY_NULL);
-		else if (key.isBlank()) return new InvalidConstantKey("⬚", InvalidKeyReason.KEY_BLANK);
+		if (key == null) return new InvalidConstantKey(NULL.symbol(), InvalidKeyReason.KEY_NULL);
+		else if (key.isBlank()) return new InvalidConstantKey(BLANK.symbol(), InvalidKeyReason.KEY_BLANK);
 		else if (IS_INVALID_KEY.test(key)) return new InvalidConstantKey(key, InvalidKeyReason.KEY_INVALID);
 		else return new ValidConstantKey(key);
 	}
