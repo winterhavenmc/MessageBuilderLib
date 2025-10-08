@@ -38,7 +38,13 @@ public final class ValidMacroKey implements MacroKey
 	private final String string;
 
 
-	ValidMacroKey(String string)
+	/**
+	 * Create a valid macro key from a given string, or return an invalid macro key if the string
+	 * does not pass validation
+	 *
+	 * @param string the string to be used in creation of a macro key
+	 */
+	ValidMacroKey(final String string)
 	{
 		this.string = string;
 	}
