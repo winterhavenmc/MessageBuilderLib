@@ -66,7 +66,8 @@ public class MessageProcessor implements Processor
 
 	/**
 	 * Processes a {@link com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord}
-	 * by replacing all macros in its fields using the provided {@link MacroObjectMap}.
+	 * by replacing all macros in its fields using the provided {@link MacroObjectMap},
+	 * and return new message record with final string fields added with macro replacements performed.
 	 *
 	 * <p>This includes the {@code message}, {@code title}, and {@code subtitle} fields,
 	 * which are resolved and returned as part of a new {@link FinalMessageRecord}.
@@ -78,7 +79,6 @@ public class MessageProcessor implements Processor
 	@Override
 	public FinalMessageRecord process(final ValidMessageRecord messageRecord, final MacroObjectMap macroObjectMap)
 	{
-		// return new message record with final string fields added with macro replacements performed
 		return messageRecord.withFinalStrings(
 				macroReplacer.replace(macroObjectMap, messageRecord.message()),
 				macroReplacer.replace(macroObjectMap, messageRecord.title()),
