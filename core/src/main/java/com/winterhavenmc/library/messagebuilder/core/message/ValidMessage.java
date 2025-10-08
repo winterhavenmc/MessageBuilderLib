@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.message;
 
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.BoundedDuration;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;

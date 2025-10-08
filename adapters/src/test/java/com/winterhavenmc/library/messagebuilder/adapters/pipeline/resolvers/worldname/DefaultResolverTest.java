@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import org.bukkit.World;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

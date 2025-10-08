@@ -18,7 +18,7 @@
 /**
  * Provides formatting for {@link java.time.Duration} values into localized, human-readable strings.
  *
- * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter}
+ * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter}
  * interface and multiple implementations that support natural-language duration formatting.
  * The formatters are capable of truncating durations to a desired level of precision (e.g., minutes, hours),
  * classifying durations into semantic categories such as normal, unlimited, or less-than-threshold,
@@ -54,7 +54,7 @@
  * </ul>
  * These ensure the output remains meaningful and intelligible even in the absence of localized strings.
  *
- * @see com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter
  * @see com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.DurationType
  */
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration;

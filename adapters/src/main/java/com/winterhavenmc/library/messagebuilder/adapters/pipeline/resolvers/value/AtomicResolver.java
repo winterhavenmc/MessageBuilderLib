@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter;
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.BoundedDuration;
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.number.NumberFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.BoundedDuration;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;

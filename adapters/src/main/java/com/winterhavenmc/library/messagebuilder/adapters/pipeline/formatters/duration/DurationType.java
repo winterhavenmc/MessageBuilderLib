@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;

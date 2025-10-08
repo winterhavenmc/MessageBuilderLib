@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.MessageRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.retrievers.MessageRetriever;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;

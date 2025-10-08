@@ -24,7 +24,7 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.ValidItemRecord;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;

@@ -19,9 +19,9 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.displayn
 
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

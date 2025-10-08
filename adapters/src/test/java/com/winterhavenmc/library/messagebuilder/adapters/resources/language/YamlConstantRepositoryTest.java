@@ -17,12 +17,12 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.models.keys.ConstantKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidConstantKey;
 import com.winterhavenmc.library.messagebuilder.models.language.*;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.LanguageSectionProvider;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.SectionProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageSectionProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.SectionProvider;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;

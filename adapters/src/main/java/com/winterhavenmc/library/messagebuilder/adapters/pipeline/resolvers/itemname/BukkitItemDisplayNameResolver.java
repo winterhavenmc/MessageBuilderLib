@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
 

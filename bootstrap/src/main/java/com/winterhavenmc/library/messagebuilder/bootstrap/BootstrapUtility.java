@@ -42,10 +42,10 @@ import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRe
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.*;
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.senders.Sender;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;
 import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.BoundedDuration;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.BoundedDuration;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;

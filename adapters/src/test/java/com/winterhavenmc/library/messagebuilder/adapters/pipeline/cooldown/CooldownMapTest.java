@@ -18,8 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown;
 
 import com.winterhavenmc.library.messagebuilder.adapters.util.MessageId;
-import com.winterhavenmc.library.messagebuilder.core.ports.cooldown.CooldownKey;
-import com.winterhavenmc.library.messagebuilder.core.ports.cooldown.CooldownMap;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownKey;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;

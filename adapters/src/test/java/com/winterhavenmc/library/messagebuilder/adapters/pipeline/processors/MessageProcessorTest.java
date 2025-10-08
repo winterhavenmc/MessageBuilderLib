@@ -39,11 +39,11 @@ import com.winterhavenmc.library.messagebuilder.core.message.Message;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.core.ports.matchers.PlaceholderMatcher;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.matchers.PlaceholderMatcher;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.ItemRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceManager;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;

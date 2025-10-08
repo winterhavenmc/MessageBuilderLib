@@ -11,7 +11,7 @@
  * implementation that adapts objects implementing {@code Durationable}.
  *
  * <p>Formatting of duration values is handled by the
- * {@link com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter DurationFormatter}
+ * {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter DurationFormatter}
  * chain, allowing for localized and human-readable output.
  *
  * <p>This adapter does not perform adaptation for any Bukkit-provided types by default. Only objects explicitly

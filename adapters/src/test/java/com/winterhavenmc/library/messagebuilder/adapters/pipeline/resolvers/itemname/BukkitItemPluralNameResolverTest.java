@@ -1,7 +1,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.itemname.ItemPluralNameResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;

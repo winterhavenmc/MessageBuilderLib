@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.core.context;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter;
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.number.NumberFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
 
 

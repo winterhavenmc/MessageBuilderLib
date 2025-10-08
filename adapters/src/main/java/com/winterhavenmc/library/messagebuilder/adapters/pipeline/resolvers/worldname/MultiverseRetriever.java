@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameRetriever;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameRetriever;
 import org.bukkit.World;
 import org.mvplugins.multiverse.core.MultiverseCore;
 import org.mvplugins.multiverse.core.MultiverseCoreApi;

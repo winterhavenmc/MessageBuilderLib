@@ -49,6 +49,6 @@
  * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter Adapter
  * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.location.Locatable Locatable
  * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.location.LocationAdapter LocationAdapter
- * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver WorldNameResolver
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver
  */
 package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.location;

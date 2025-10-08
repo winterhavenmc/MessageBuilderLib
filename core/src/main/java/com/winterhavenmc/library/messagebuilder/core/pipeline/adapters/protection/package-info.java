@@ -31,7 +31,7 @@
  * will be automatically populated using the data extracted from the {@code Protectable} object.
  *
  * <p>The {@code DURATION} macro is formatted using the library's configured
- * {@link com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter DurationFormatter},
+ * {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter DurationFormatter},
  * while the {@code INSTANT} macro uses a localized {@link java.time.format.DateTimeFormatter DateTimeFormatter}.
  *
  * <p>Like the {@code Expirable} adapter, this design allows developers to easily annotate domain objects with protection logic,

@@ -2,7 +2,7 @@
  * Provides locale-aware number formatting for use in the message-building pipeline.
  *
  * <p>This package defines the
- * {@link com.winterhavenmc.library.messagebuilder.core.ports.formatters.number.NumberFormatter}
+ * {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter}
  * interface and its implementation
  * {@link com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number.LocaleNumberFormatter}
  * which formats {@link java.lang.Number} instances into human-readable {@link java.lang.String}s

@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.Mac
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.AdapterRegistry;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;

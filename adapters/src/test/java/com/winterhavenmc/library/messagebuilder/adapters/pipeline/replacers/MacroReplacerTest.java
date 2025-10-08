@@ -19,8 +19,8 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.replacers;
 
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.matchers.PlaceholderMatcher;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.matchers.PlaceholderMatcher;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 

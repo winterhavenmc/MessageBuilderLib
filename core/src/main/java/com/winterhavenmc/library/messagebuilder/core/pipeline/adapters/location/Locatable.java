@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import org.bukkit.Location;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 
 import java.util.Optional;
 

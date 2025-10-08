@@ -22,9 +22,9 @@ import com.winterhavenmc.library.messagebuilder.bootstrap.util.MockUtility;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.ConstantRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.LanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.MessageRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 

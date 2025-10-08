@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.core.pipeline;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.cooldown.CooldownMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.cooldown.CooldownKey;
-import com.winterhavenmc.library.messagebuilder.core.ports.processors.Processor;
-import com.winterhavenmc.library.messagebuilder.core.ports.retrievers.MessageRetriever;
-import com.winterhavenmc.library.messagebuilder.core.ports.senders.Sender;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownMap;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownKey;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.processors.Processor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;
 import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;

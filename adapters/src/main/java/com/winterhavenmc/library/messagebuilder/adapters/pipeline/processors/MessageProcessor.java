@@ -19,10 +19,10 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.replacers.RegexMacroReplacer;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.matchers.PlaceholderMatcher;
-import com.winterhavenmc.library.messagebuilder.core.ports.processors.Processor;
-import com.winterhavenmc.library.messagebuilder.core.ports.replacers.MacroReplacer;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.matchers.PlaceholderMatcher;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.processors.Processor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.replacers.MacroReplacer;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 
 import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;

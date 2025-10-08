@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.extractors.FieldExtractor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.FieldExtractor;
 
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.displayname.DisplayNameAdapter;

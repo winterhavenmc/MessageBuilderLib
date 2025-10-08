@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.ValueResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
@@ -38,7 +38,7 @@ import java.util.List;
  * an {@code AtomicResolver}, allowing composite (adapted) values to take priority
  * over simpler atomic ones only if the base string has not already been defined.
  * {@snippet lang = "java":
- * ValueResolver resolver = new MacroValueResolver(List.of(
+ * import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;ValueResolver resolver = new MacroValueResolver(List.of(
  *     new CompositeResolver(),
  *     new AtomicResolver()
  * ));

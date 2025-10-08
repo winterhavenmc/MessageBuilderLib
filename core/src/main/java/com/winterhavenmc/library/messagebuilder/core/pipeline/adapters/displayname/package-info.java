@@ -39,7 +39,7 @@
  *   <em>Note: this references the Bukkit Nameable interface, and not the Nameable interface of the corresponding
  *   adapter found in this library.</em></li>
  *   <li>{@link org.bukkit.World World} — resolves the display name via a
- *       {@link com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver WorldNameResolver}</li>
+ *       {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver}</li>
  * </ul>
  *
  * <p>The macro value is only populated if the display name is non-null and non-blank.

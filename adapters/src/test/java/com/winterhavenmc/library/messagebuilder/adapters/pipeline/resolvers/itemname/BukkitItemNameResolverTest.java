@@ -1,6 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

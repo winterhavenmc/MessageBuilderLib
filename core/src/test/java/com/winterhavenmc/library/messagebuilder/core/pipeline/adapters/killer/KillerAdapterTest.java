@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.killer;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 
 import org.bukkit.Location;
 import org.bukkit.World;

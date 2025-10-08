@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.pluralna
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.Adapter;
 import org.bukkit.inventory.ItemStack;
-import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.itemname.ItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
 
 import java.util.Optional;
 

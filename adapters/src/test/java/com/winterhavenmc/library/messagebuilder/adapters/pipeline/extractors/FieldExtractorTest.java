@@ -47,9 +47,9 @@ import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.protectio
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.uuid.Identifiable;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.uuid.UniqueIdAdapter;
-import com.winterhavenmc.library.messagebuilder.core.ports.extractors.FieldExtractor;
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration.DurationFormatter;
-import com.winterhavenmc.library.messagebuilder.core.ports.formatters.number.NumberFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.FieldExtractor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;

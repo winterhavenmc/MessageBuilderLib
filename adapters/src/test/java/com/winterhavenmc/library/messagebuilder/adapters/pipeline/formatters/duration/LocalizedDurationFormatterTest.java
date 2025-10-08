@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resourcemanagers.language.ConstantRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.ConstantKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidConstantKey;
 
