@@ -18,7 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.bootstrap;
 
 import com.winterhavenmc.library.messagebuilder.bootstrap.util.MessageId;
-import com.winterhavenmc.library.messagebuilder.bootstrap.util.MockUtility;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
@@ -82,7 +81,6 @@ class MessageBuilderTest
 		pluginConfiguration.set("locale", "en-US");
 		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
-		languageConfiguration = MockUtility.loadConfigurationFromResource("language/en-US.yml");
 		messageBuilder = MessageBuilder.test(pluginMock,
 				languageResourceManagerMock,
 				constantRepositoryMock,
