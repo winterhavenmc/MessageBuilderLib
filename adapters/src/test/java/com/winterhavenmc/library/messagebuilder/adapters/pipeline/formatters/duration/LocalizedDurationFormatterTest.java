@@ -44,8 +44,8 @@ class LocalizedDurationFormatterTest
 	@Mock ConstantRepository constantRepositoryMock;
 
 	LocalizedDurationFormatter durationFormatter;
-	ValidConstantKey timeLessThanKey = ConstantKey.of("TIME.LESS_THAN").isValid().orElseThrow();
-	ValidConstantKey timeUnlimitedKey = ConstantKey.of("TIME.UNLIMITED").isValid().orElseThrow();
+	final ValidConstantKey timeLessThanKey = ConstantKey.of("TIME.LESS_THAN").isValid().orElseThrow();
+	final ValidConstantKey timeUnlimitedKey = ConstantKey.of("TIME.UNLIMITED").isValid().orElseThrow();
 
 	String configString = """
 		CONSTANTS:
