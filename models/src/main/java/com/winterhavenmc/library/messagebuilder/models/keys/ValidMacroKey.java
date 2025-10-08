@@ -23,6 +23,9 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.BLANK;
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.NULL;
+
 
 /**
  * A type that represents a validated string for a macro. This type guarantees a valid string that has been
@@ -49,8 +52,8 @@ public final class ValidMacroKey implements MacroKey
 	 */
 	public MacroKey append(final String subKey)
 	{
-		if (subKey == null) return new InvalidKey("∅", InvalidKeyReason.KEY_NULL);
-		if (subKey.isBlank()) return new InvalidKey("⬚", InvalidKeyReason.KEY_BLANK);
+		if (subKey == null) return new InvalidKey(NULL.symbol(), InvalidKeyReason.KEY_NULL);
+		if (subKey.isBlank()) return new InvalidKey(BLANK.symbol(), InvalidKeyReason.KEY_BLANK);
 		else if (IS_INVALID_KEY.test(subKey)) return new InvalidKey(subKey, InvalidKeyReason.KEY_INVALID);
 		else return MacroKey.of(dotJoin(this, subKey));
 	}
@@ -65,7 +68,7 @@ public final class ValidMacroKey implements MacroKey
 	 */
 	public <E extends Enum<E>> MacroKey append(final E subKey)
 	{
-		if (subKey == null) return new InvalidKey("∅", InvalidKeyReason.KEY_NULL);
+		if (subKey == null) return new InvalidKey(NULL.symbol(), InvalidKeyReason.KEY_NULL);
 		else if (IS_INVALID_KEY.test(subKey.name())) return new InvalidKey(subKey.name(), InvalidKeyReason.KEY_INVALID);
 		else return MacroKey.of(dotJoin(this, subKey.name()));
 	}

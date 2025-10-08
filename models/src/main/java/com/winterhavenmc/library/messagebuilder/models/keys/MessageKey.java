@@ -19,6 +19,9 @@ package com.winterhavenmc.library.messagebuilder.models.keys;
 
 import java.util.Optional;
 
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.BLANK;
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.NULL;
+
 
 /**
  * A type that represents a validated string for a record. This type guarantees a valid string that has been
@@ -29,8 +32,8 @@ public sealed interface MessageKey extends RecordKey permits ValidMessageKey, In
 {
 	static MessageKey of(String key)
 	{
-		if (key == null) return new InvalidMessageKey("∅", InvalidKeyReason.KEY_NULL);
-		else if (key.isBlank()) return new InvalidMessageKey("⬚", InvalidKeyReason.KEY_BLANK);
+		if (key == null) return new InvalidMessageKey(NULL.symbol(), InvalidKeyReason.KEY_NULL);
+		else if (key.isBlank()) return new InvalidMessageKey(BLANK.symbol(), InvalidKeyReason.KEY_BLANK);
 		else if (IS_INVALID_KEY.test(key)) return new InvalidMessageKey(key, InvalidKeyReason.KEY_INVALID);
 		else return new ValidMessageKey(key);
 	}
@@ -38,7 +41,7 @@ public sealed interface MessageKey extends RecordKey permits ValidMessageKey, In
 
 	static <E extends Enum<E>> MessageKey of(final E key)
 	{
-		if (key == null) return new InvalidMessageKey("∅", InvalidKeyReason.KEY_NULL);
+		if (key == null) return new InvalidMessageKey(NULL.symbol(), InvalidKeyReason.KEY_NULL);
 		else if (IS_INVALID_KEY.test(key.name())) return new InvalidMessageKey(key.name(), InvalidKeyReason.KEY_INVALID);
 		else return new ValidMessageKey(key.name());
 	}

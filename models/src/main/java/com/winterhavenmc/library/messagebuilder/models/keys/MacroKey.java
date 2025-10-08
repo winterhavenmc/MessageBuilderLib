@@ -19,13 +19,16 @@ package com.winterhavenmc.library.messagebuilder.models.keys;
 
 import java.util.Optional;
 
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.BLANK;
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.NULL;
+
 
 public sealed interface MacroKey extends StandardKey permits ValidMacroKey, InvalidKey
 {
 	static MacroKey of(String key)
 	{
-		if (key == null) return new InvalidKey("∅", InvalidKeyReason.KEY_NULL);
-		else if (key.isBlank()) return new InvalidKey("⬚", InvalidKeyReason.KEY_BLANK);
+		if (key == null) return new InvalidKey(NULL.symbol(), InvalidKeyReason.KEY_NULL);
+		else if (key.isBlank()) return new InvalidKey(BLANK.symbol(), InvalidKeyReason.KEY_BLANK);
 		else if (IS_INVALID_KEY.test(key)) return new InvalidKey(key, InvalidKeyReason.KEY_INVALID);
 		else return new ValidMacroKey(key);
 	}
@@ -33,7 +36,7 @@ public sealed interface MacroKey extends StandardKey permits ValidMacroKey, Inva
 
 	static <E extends Enum<E>> MacroKey of(final E key)
 	{
-		if (key == null) return new InvalidKey("∅", InvalidKeyReason.KEY_NULL);
+		if (key == null) return new InvalidKey(NULL.symbol(), InvalidKeyReason.KEY_NULL);
 		else if (IS_INVALID_KEY.test(key.name())) return new InvalidKey(key.name(), InvalidKeyReason.KEY_INVALID);
 		else return new ValidMacroKey(key.name());
 	}

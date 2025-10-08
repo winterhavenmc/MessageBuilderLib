@@ -19,6 +19,9 @@ package com.winterhavenmc.library.messagebuilder.models.keys;
 
 import java.util.Optional;
 
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.BLANK;
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.NULL;
+
 
 /**
  * A type that represents a validated string for a record. This type guarantees a valid string that has been
@@ -29,8 +32,8 @@ public sealed interface ItemKey extends RecordKey permits ValidItemKey, InvalidI
 {
 	static ItemKey of(String key)
 	{
-		if (key == null) return new InvalidItemKey("∅", InvalidKeyReason.KEY_NULL);
-		else if (key.isBlank()) return new InvalidItemKey("⬚", InvalidKeyReason.KEY_BLANK);
+		if (key == null) return new InvalidItemKey(NULL.symbol(), InvalidKeyReason.KEY_NULL);
+		else if (key.isBlank()) return new InvalidItemKey(BLANK.symbol(), InvalidKeyReason.KEY_BLANK);
 		else if (IS_INVALID_KEY.test(key)) return new InvalidItemKey(key, InvalidKeyReason.KEY_INVALID);
 		else return new ValidItemKey(key);
 	}
