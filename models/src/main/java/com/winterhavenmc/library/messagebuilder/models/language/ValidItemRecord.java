@@ -40,12 +40,12 @@ import java.util.List;
  */
 public final class ValidItemRecord implements ItemRecord
 {
-	final ValidItemKey key;
-	final String material;
-	final String name;
-	final String pluralName;
-	final String displayName;
-	final List<String> itemLore;
+	private final ValidItemKey key;
+	private final String material;
+	private final String name;
+	private final String pluralName;
+	private final String displayName;
+	private final List<String> itemLore;
 
 
 	/**
