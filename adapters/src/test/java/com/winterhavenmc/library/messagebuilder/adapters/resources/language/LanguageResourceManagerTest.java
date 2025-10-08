@@ -17,149 +17,168 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.adapters.util.MockUtility;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
+import com.winterhavenmc.library.messagebuilder.models.language.Section;
+
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class LanguageResourceManagerTest
 {
-//	@Mock LanguageSectionProvider languageSectionProviderMock;
-//	@Mock LanguageResourceInstaller languageResourceInstallerMock;
-//	@Mock LanguageResourceLoader languageResourceLoaderMock;
-//	@Mock ConfigurationSection constantsSectionMock;
-//	@Mock ConfigurationSection itemsSectionMock;
-//	@Mock ConfigurationSection messagesSectionMock;
-//	@Mock Configuration languageConfigurationMock;
-//	@Mock Plugin pluginMock;
-//	@Mock ConstantRepository constantRepositoryMock;
-//	@Mock ItemRepository itemRepositoryMock;
-//	@Mock MessageRepository messageRepositoryMock;
-//
-//	LanguageResourceManager resourceManager;
-//	Configuration languageConfiguration;
-//	FileConfiguration pluginConfiguration;
-//
-//
-//	@BeforeEach
-//	void setUp()
-//	{
-//		// create real plugin config
-//		pluginConfiguration = new YamlConfiguration();
-//		pluginConfiguration.set("language", "en-US");
-//		pluginConfiguration.set("locale", "en-US");
-//
-//		// create real language configuration
-//		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString());
-//
-//		// instantiate real language resource manager
-//		resourceManager = new LanguageResourceManager(languageResourceInstallerMock, languageResourceLoaderMock, languageConfigurationMock,
-//				constantRepositoryMock, itemRepositoryMock, messageRepositoryMock);
-//	}
-//
-//
-//	@ParameterizedTest
-//	@EnumSource(Section.class)
-//	void getSectionProvider(Section section)
-//	{
-//		lenient().when(languageConfigurationMock.getConfigurationSection("MESSAGES")).thenReturn(messagesSectionMock);
-//		lenient().when(languageConfigurationMock.getConfigurationSection("ITEMS")).thenReturn(itemsSectionMock);
-//		lenient().when(languageConfigurationMock.getConfigurationSection("CONSTANTS")).thenReturn(constantsSectionMock);
-//
-//
-//		// Arrange & Act
-//		SectionProvider sectionProvider = resourceManager.getSectionProvider(section);
-//
-//		// Assert
-//		assertNotNull(sectionProvider);
-//		assertInstanceOf(LanguageSectionProvider.class, sectionProvider);
-//		assertNotNull(sectionProvider.getSection());
-//	}
-//
-//
-//	@Nested
-//	class ReloadTests
-//	{
+	@Mock LanguageSectionProvider languageSectionProviderMock;
+	@Mock LanguageResourceInstaller languageResourceInstallerMock;
+	@Mock LanguageResourceLoader languageResourceLoaderMock;
+	@Mock ConfigurationSection constantsSectionMock;
+	@Mock ConfigurationSection itemsSectionMock;
+	@Mock ConfigurationSection messagesSectionMock;
+	@Mock Configuration languageConfigurationMock;
+	@Mock Plugin pluginMock;
+	@Mock ConstantRepository constantRepositoryMock;
+	@Mock ItemRepository itemRepositoryMock;
+	@Mock MessageRepository messageRepositoryMock;
+
+	LanguageResourceManager resourceManager;
+	Configuration languageConfiguration;
+	FileConfiguration pluginConfiguration;
+
+
+	@BeforeEach
+	void setUp()
+	{
+		// create real plugin config
+		pluginConfiguration = new YamlConfiguration();
+		pluginConfiguration.set("language", "en-US");
+		pluginConfiguration.set("locale", "en-US");
+
+		// create real language configuration
+		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString());
+
+		// instantiate real language resource manager
+		resourceManager = new LanguageResourceManager(languageResourceInstallerMock, languageResourceLoaderMock, languageConfigurationMock);
+	}
+
+
+	@ParameterizedTest
+	@EnumSource(Section.class)
+	void getSectionProvider(Section section)
+	{
+		// Arrange
+		lenient().when(languageConfigurationMock.getConfigurationSection("MESSAGES")).thenReturn(messagesSectionMock);
+		lenient().when(languageConfigurationMock.getConfigurationSection("ITEMS")).thenReturn(itemsSectionMock);
+		lenient().when(languageConfigurationMock.getConfigurationSection("CONSTANTS")).thenReturn(constantsSectionMock);
+
+		// Act
+		SectionProvider sectionProvider = resourceManager.getSectionProvider(section);
+
+		// Assert
+		assertNotNull(sectionProvider);
+		assertInstanceOf(LanguageSectionProvider.class, sectionProvider);
+		assertNotNull(sectionProvider.getSection());
+	}
+
+
+	@Nested
+	class ReloadTests
+	{
+		@Test
+		void testReload()
+		{
+			// Arrange
+			when(languageResourceLoaderMock.load()).thenReturn(languageConfiguration);
+
+			// Act
+			boolean success = resourceManager.reload();
+
+			// Assert
+			assertTrue(success);
+		}
+
+
+		@Test
+		void testReload_new_config()
+		{
+			// Arrange
+			FileConfiguration newLanguageConfiguration = new YamlConfiguration();
+			newLanguageConfiguration.set("test_key", "test_value");
+			when(languageResourceLoaderMock.load()).thenReturn(languageConfiguration);
+
+			// Act
+			boolean success = resourceManager.reload();
+
+			// Assert
+			assertTrue(success);
+		}
+
+
 //		@Test
-//		void testReload()
+//		void reload_failure_returnsFalse()
 //		{
 //			// Arrange
-//			when(languageResourceLoaderMock.load()).thenReturn(languageConfiguration);
+//			when(languageSectionProviderMock.getSection()).thenReturn(languageConfiguration);
+//			LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock)
+//			{
+//				@Override
+//				public Configuration load() {
+//					return null; // Simulate failure
+//				}
+//			};
+//
+//			LanguageResourceInstaller installer = new LanguageResourceInstaller(pluginMock);
+//			LanguageResourceManager languageResourceManager = new LanguageResourceManager(installer, loader);
 //
 //			// Act
-//			boolean success = resourceManager.reload();
+//			boolean result = languageResourceManager.reload();
 //
 //			// Assert
-//			assertTrue(success);
+//			assertFalse(result);
+//
+//			// Verify
+//			verify(languageSectionProviderMock, atLeastOnce()).getSection();
 //		}
+	}
+
+
+//	@Test
+//	void getResourceName_returns_only_valid_string()
+//	{
+//		// Arrange
+//		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 //
-//
-//		@Test
-//		void testReload_new_config()
-//		{
-//			// Arrange
-//			FileConfiguration newLanguageConfiguration = new YamlConfiguration();
-//			newLanguageConfiguration.set("test_key", "test_value");
-//			when(languageResourceLoaderMock.load()).thenReturn(languageConfiguration);
-//
-//			// Act
-//			boolean success = resourceManager.reload();
-//
-//			// Assert
-//			assertTrue(success);
-//		}
-//
-//
-////		@Test
-////		void reload_failure_returnsFalse()
-////		{
-////			// Arrange
-////			when(languageSectionProviderMock.getSection()).thenReturn(languageConfiguration);
-////			LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock)
-////			{
-////				@Override
-////				public Configuration load() {
-////					return null; // Simulate failure
-////				}
-////			};
-////
-////			LanguageResourceInstaller installer = new LanguageResourceInstaller(pluginMock);
-////			LanguageResourceManager languageResourceManager = new LanguageResourceManager(installer, loader);
-////
-////			// Act
-////			boolean result = languageResourceManager.reload();
-////
-////			// Assert
-////			assertFalse(result);
-////
-////			// Verify
-////			verify(languageSectionProviderMock, atLeastOnce()).getSection();
-////		}
+//		// Act & Assert
+//		assertEquals("language/en-US.yml", LanguageResourceManager.getResourceName(languageTag));
+//		assertNotEquals("language/fr-FR.yml", LanguageResourceManager.getResourceName(languageTag));
 //	}
+
+
+//	@Test
+//	void getFileName_returns_only_valid_string()
+//	{
+//		// Arrange
+//		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 //
-//
-////	@Test
-////	void getResourceName_returns_only_valid_string()
-////	{
-////		// Arrange
-////		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
-////
-////		// Act & Assert
-////		assertEquals("language/en-US.yml", LanguageResourceManager.getResourceName(languageTag));
-////		assertNotEquals("language/fr-FR.yml", LanguageResourceManager.getResourceName(languageTag));
-////	}
-//
-//
-////	@Test
-////	void getFileName_returns_only_valid_string()
-////	{
-////		// Arrange
-////		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
-////
-////		// Act & Assert
-////		assertEquals("language" + File.separator + "en-US.yml", LanguageResourceManager.getFileName(languageTag));
-////		assertNotEquals("language" + File.separator + "fr-FR.yml", LanguageResourceManager.getFileName(languageTag));
-////	}
+//		// Act & Assert
+//		assertEquals("language" + File.separator + "en-US.yml", LanguageResourceManager.getFileName(languageTag));
+//		assertNotEquals("language" + File.separator + "fr-FR.yml", LanguageResourceManager.getFileName(languageTag));
+//	}
 
 }
