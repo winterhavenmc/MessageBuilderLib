@@ -44,12 +44,12 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.resources.lang
  * result in a new configuration object loaded from the currently configured language file, or the en-US language
  * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
-public final class LanguageResourceLoader implements ResourceLoader
+public class LanguageResourceLoader implements ResourceLoader
 {
 	private final Plugin plugin;
 	private final Supplier<YamlConfiguration> yamlFactory;
 	private final LocaleProvider localeProvider;
-	LanguageTag defaultLanguageTag = LanguageTag.of(DEFAULT_LANGUAGE_TAG.toString()).orElseThrow();
+	final LanguageTag defaultLanguageTag = LanguageTag.of(DEFAULT_LANGUAGE_TAG.toString()).orElseThrow();
 
 
 	/**
