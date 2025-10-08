@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.pipeline;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownKey;
+import com.winterhavenmc.library.messagebuilder.models.keys.CooldownKey;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.processors.Processor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;

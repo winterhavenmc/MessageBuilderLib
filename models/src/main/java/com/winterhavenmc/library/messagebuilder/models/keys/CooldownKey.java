@@ -15,9 +15,8 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown;
+package com.winterhavenmc.library.messagebuilder.models.keys;
 
-import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 
 import org.bukkit.entity.Entity;

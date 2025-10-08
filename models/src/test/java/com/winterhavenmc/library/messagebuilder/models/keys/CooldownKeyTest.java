@@ -15,13 +15,10 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.cooldown;
+package com.winterhavenmc.library.messagebuilder.models.keys;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownKey;
-import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
-import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.library.messagebuilder.models.util.MessageId;
 
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -34,13 +31,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.security.InvalidParameterException;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.winterhavenmc.library.messagebuilder.core.util.MessageId.DISABLED_MESSAGE;
-import static com.winterhavenmc.library.messagebuilder.core.util.MessageId.ENABLED_MESSAGE;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -61,19 +55,21 @@ class CooldownKeyTest
 	@BeforeEach
 	void setUp()
 	{
-		recipient = switch (Recipient.of(playerMock)) {
+		recipient = switch (Recipient.of(playerMock))
+		{
 			case Recipient.Valid valid -> valid;
-			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			case Recipient.Proxied ignored -> throw new InvalidParameterException();
+			case Recipient.Invalid ignored -> throw new InvalidParameterException();
 		};
 
-		recipient2 = switch (Recipient.of(player2Mock)) {
+		recipient2 = switch (Recipient.of(player2Mock))
+		{
 			case Recipient.Valid valid -> valid;
-			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			case Recipient.Proxied ignored -> throw new InvalidParameterException();
+			case Recipient.Invalid ignored -> throw new InvalidParameterException();
 		};
 
-		messageKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
+		messageKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
 	}
 
 
@@ -96,8 +92,8 @@ class CooldownKeyTest
 		consoleRecipient = switch (Recipient.of(consoleMock))
 		{
 			case Recipient.Valid valid -> valid;
-			case Recipient.Proxied ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
-			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
+			case Recipient.Proxied ignored -> throw new InvalidParameterException();
+			case Recipient.Invalid ignored -> throw new InvalidParameterException();
 		};
 
 		//  Act
@@ -187,8 +183,8 @@ class CooldownKeyTest
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		ValidMessageKey messageKey1 = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
-		ValidMessageKey messageKey2 = MessageKey.of(DISABLED_MESSAGE).isValid().orElseThrow();
+		ValidMessageKey messageKey1 = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
+		ValidMessageKey messageKey2 = MessageKey.of(MessageId.DISABLED_MESSAGE).isValid().orElseThrow();
 
 		// Act
 		CooldownKey key1 = CooldownKey.of(recipient, messageKey1).orElseThrow();
@@ -274,8 +270,8 @@ class CooldownKeyTest
 	{
 		// Arrange
 		when(playerMock.getUniqueId()).thenReturn(UUID.randomUUID());
-		ValidMessageKey messageKey1 = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
-		ValidMessageKey messageKey2 = MessageKey.of(DISABLED_MESSAGE).isValid().orElseThrow();
+		ValidMessageKey messageKey1 = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
+		ValidMessageKey messageKey2 = MessageKey.of(MessageId.DISABLED_MESSAGE).isValid().orElseThrow();
 
 		// Act
 		CooldownKey key1 = CooldownKey.of(recipient, messageKey1).orElseThrow();
