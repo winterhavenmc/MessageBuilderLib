@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.configuration;
+package com.winterhavenmc.library.messagebuilder.models.configuration;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ import static java.util.Locale.forLanguageTag;
  *
  * @see Locale
  */
-public class LanguageTag
+public final class LanguageTag
 {
 	private final String wrappedLanguageTag;
 
