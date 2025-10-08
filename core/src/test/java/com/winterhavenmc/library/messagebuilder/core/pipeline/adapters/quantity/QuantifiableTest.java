@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.name.Nameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import org.junit.jupiter.api.Test;
@@ -38,107 +39,107 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class QuantifiableTest
 {
-//	@Mock AdapterCtx ctxMock;
-//	@Mock FormatterCtx formatterContainerMock;
-//	@Mock LocaleNumberFormatter numberFormatterMock;
-//
-//	static class TestObject implements Quantifiable
-//	{
-//		@Override
-//		public int getQuantity()
-//		{
-//			return 42;
-//		}
-//	}
-//
-//
-//	@Test
-//	void object_is_instance_of_Quantifiable()
-//	{
-//		// Arrange & Act
-//		TestObject testObject = new TestObject();
-//
-//		// Assert
-//		assertInstanceOf(Quantifiable.class, testObject);
-//	}
-//
-//
-//	@Test
-//	void getQuantity_returns_int()
-//	{
-//		// Arrange
-//		TestObject testObject = new TestObject();
-//
-//		// Act
-//		int result = testObject.getQuantity();
-//
-//		// Assert
-//		assertEquals(42, result);
-//	}
-//
-//
-//	@Test
-//	void extractQuantity_returns_populated_map()
-//	{
-//		// Arrange
-//		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-//		ValidMacroKey subKey = baseKey.append("QUANTITY").isValid().orElseThrow();
-//		TestObject testObject = new TestObject();
-//		when(ctxMock.formatterContainer()).thenReturn(formatterContainerMock);
-//		when(formatterContainerMock.localeNumberFormatter()).thenReturn(numberFormatterMock);
-//		when(numberFormatterMock.format(42)).thenReturn("42");
-//
-//		// Act
-//		MacroStringMap result = testObject.extractQuantity(baseKey, ctxMock);
-//
-//		// Assert
-//		assertEquals("42", result.get(subKey));
-//	}
-//
-//
-//	@Test
-//	void formatQuantity_returns_optional_string()
-//	{
-//		// Arrange
-//		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
-//		TestObject testObject = new TestObject();
-//		when(numberFormatterMock.format(42)).thenReturn("42");
-//
-//		// Act
-//		Optional<String> result = Quantifiable.formatQuantity(42, numberFormatterMock);
-//
-//		// Assert
-//		assertEquals(Optional.of("42"), result);
-//	}
-//
-//
-//	@Test
-//	void formatName_with_null_name_returns_empty_optional()
-//	{
-//		// Arrange
-//		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
-//		TestObject testObject = new TestObject();
-//
-//		// Act
-//		Optional<String> result = Nameable.formatName(null);
-//
-//		// Assert
-//		assertEquals(Optional.empty(), result);
-//	}
-//
-//
-//	@Test
-//	void formatName_with_blank_name_returns_empty_optional()
-//	{
-//		// Arrange
-//		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
-//		TestObject testObject = new TestObject();
-//
-//		// Act
-//		Optional<String> result = Nameable.formatName("");
-//
-//		// Assert
-//		assertEquals(Optional.empty(), result);
-//	}
+	@Mock AdapterCtx ctxMock;
+	@Mock FormatterCtx formatterContainerMock;
+	@Mock NumberFormatter numberFormatterMock;
+
+	static class TestObject implements Quantifiable
+	{
+		@Override
+		public int getQuantity()
+		{
+			return 42;
+		}
+	}
+
+
+	@Test
+	void object_is_instance_of_Quantifiable()
+	{
+		// Arrange & Act
+		TestObject testObject = new TestObject();
+
+		// Assert
+		assertInstanceOf(Quantifiable.class, testObject);
+	}
+
+
+	@Test
+	void getQuantity_returns_int()
+	{
+		// Arrange
+		TestObject testObject = new TestObject();
+
+		// Act
+		int result = testObject.getQuantity();
+
+		// Assert
+		assertEquals(42, result);
+	}
+
+
+	@Test
+	void extractQuantity_returns_populated_map()
+	{
+		// Arrange
+		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append("QUANTITY").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
+		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
+		when(formatterContainerMock.localeNumberFormatter()).thenReturn(numberFormatterMock);
+		when(numberFormatterMock.format(42)).thenReturn("42");
+
+		// Act
+		MacroStringMap result = testObject.extractQuantity(baseKey, ctxMock);
+
+		// Assert
+		assertEquals("42", result.get(subKey));
+	}
+
+
+	@Test
+	void formatQuantity_returns_optional_string()
+	{
+		// Arrange
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
+		when(numberFormatterMock.format(42)).thenReturn("42");
+
+		// Act
+		Optional<String> result = Quantifiable.formatQuantity(42, numberFormatterMock);
+
+		// Assert
+		assertEquals(Optional.of("42"), result);
+	}
+
+
+	@Test
+	void formatName_with_null_name_returns_empty_optional()
+	{
+		// Arrange
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
+
+		// Act
+		Optional<String> result = Nameable.formatName(null);
+
+		// Assert
+		assertEquals(Optional.empty(), result);
+	}
+
+
+	@Test
+	void formatName_with_blank_name_returns_empty_optional()
+	{
+		// Arrange
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
+
+		// Act
+		Optional<String> result = Nameable.formatName("");
+
+		// Assert
+		assertEquals(Optional.empty(), result);
+	}
 
 }
