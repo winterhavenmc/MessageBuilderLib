@@ -20,6 +20,8 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.wor
 import com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.WorldNameResolver;
 import org.bukkit.World;
 
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.UNKNOWN;
+
 
 /**
  * Default implementation of {@link WorldNameResolver} that returns the raw name
@@ -47,7 +49,7 @@ public final class DefaultResolver implements WorldNameResolver
 	{
 		return (world != null)
 				? new DefaultRetriever().getWorldName(world).orElse(world.getName())
-				: "???";
+				: UNKNOWN.symbol();
 	}
 
 }
