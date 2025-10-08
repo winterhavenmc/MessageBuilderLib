@@ -33,31 +33,31 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class LocaleNumberFormatterTest
 {
-//	@Mock
-//	LocaleProvider localeProviderMock;
-//
-//
-//	@Test
-//	void getFormatted_US()
-//	{
-//		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
-//		LocaleNumberFormatter formatter = new LocaleNumberFormatter(localeProviderMock);
-//
-//		String result = formatter.getFormatted(42000);
-//
-//		assertEquals("42,000", result);
-//	}
-//
-//
-//	@Test
-//	void getFormatted_DE()
-//	{
-//		when(localeProviderMock.getLocale()).thenReturn(Locale.GERMAN);
-//		LocaleNumberFormatter formatter = new LocaleNumberFormatter(localeProviderMock);
-//
-//		String result = formatter.getFormatted(42000);
-//
-//		assertEquals("42.000", result);
-//	}
+	@Mock
+	LocaleProvider localeProviderMock;
+
+
+	@Test
+	void getFormatted_US()
+	{
+		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
+		LocaleNumberFormatter formatter = new LocaleNumberFormatter(localeProviderMock);
+
+		String result = formatter.format(42000);
+
+		assertEquals("42,000", result);
+	}
+
+
+	@Test
+	void getFormatted_DE()
+	{
+		when(localeProviderMock.getLocale()).thenReturn(Locale.GERMAN);
+		LocaleNumberFormatter formatter = new LocaleNumberFormatter(localeProviderMock);
+
+		String result = formatter.format(42000);
+
+		assertEquals("42.000", result);
+	}
 
 }
