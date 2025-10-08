@@ -18,6 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.configuration;
 
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageSetting;
+
 public interface LanguageProvider extends ConfigProvider<LanguageSetting>
 {
 	/**

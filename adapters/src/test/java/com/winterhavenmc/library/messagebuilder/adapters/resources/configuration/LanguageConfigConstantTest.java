@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
-import com.winterhavenmc.library.messagebuilder.configuration.LanguageSetting;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageSetting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

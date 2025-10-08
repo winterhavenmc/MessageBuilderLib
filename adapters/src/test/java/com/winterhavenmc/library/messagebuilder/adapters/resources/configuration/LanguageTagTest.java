@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
-import com.winterhavenmc.library.messagebuilder.configuration.LanguageTag;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
