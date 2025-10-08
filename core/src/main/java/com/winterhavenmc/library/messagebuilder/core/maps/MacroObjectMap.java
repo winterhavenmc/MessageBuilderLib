@@ -38,7 +38,7 @@ import java.util.Optional;
  * This class is not thread-safe and uses a {@link HashMap} internally,
  * as message composition typically occurs on the main server thread within a single execution context.
  */
-public class MacroObjectMap
+public final class MacroObjectMap
 {
 	private final Map<MacroKey, Object> INTERNAL_MAP = new HashMap<>();
 

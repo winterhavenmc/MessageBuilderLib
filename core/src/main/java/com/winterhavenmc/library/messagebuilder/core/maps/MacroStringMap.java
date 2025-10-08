@@ -41,7 +41,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.vali
  * <p>This class is mutable and not thread-safe. It is expected to be used in a
  * single-threaded message construction context.</p>
  */
-public class MacroStringMap
+public final class MacroStringMap
 {
 	private final Map<ValidMacroKey, String> INTERNAL_MAP;
 	private static final Predicate<String> STRING_IS_NULL = Objects::isNull;
