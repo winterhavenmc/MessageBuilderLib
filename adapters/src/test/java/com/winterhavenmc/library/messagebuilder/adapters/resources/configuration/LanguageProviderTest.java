@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.configuration;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
 import com.winterhavenmc.library.messagebuilder.configuration.LanguageProvider;
 import com.winterhavenmc.library.messagebuilder.configuration.LanguageSetting;

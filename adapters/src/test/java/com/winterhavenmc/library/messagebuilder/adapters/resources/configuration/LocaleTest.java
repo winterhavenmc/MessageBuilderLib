@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.configuration;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
