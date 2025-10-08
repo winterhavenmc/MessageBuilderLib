@@ -45,7 +45,9 @@ public final class DefaultResolver implements WorldNameResolver
 	@Override
 	public String resolve(final World world)
 	{
-		return new DefaultRetriever().getWorldName(world).orElse(world.getName());
+		return (world != null)
+				? new DefaultRetriever().getWorldName(world).orElse(world.getName())
+				: "???";
 	}
 
 }
