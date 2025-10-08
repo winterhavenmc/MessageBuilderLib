@@ -68,7 +68,6 @@ public class LanguageResourceInstallerTest
 				.when(pluginMock).getResource(anyString());
 
 		// create real instance of installer
-		//TODO: this needs to be injected? no dependency on module 'adapters'
 		resourceInstaller = new LanguageResourceInstaller(pluginMock, localeProviderMock);
 		resourceInstaller.autoInstall();
 	}
@@ -171,6 +170,7 @@ public class LanguageResourceInstallerTest
 			String filename = null;
 
 			// Act
+			@SuppressWarnings("ConstantValue")
 			boolean result = resourceInstaller.isInstalled(filename);
 
 			// Assert
@@ -267,6 +267,7 @@ public class LanguageResourceInstallerTest
 		assertTrue(Files.exists(tempDir.resolve("language/en-US.yml")));
 
 		// Cleanup: Delete the temporary directory and its contents
+		//noinspection resource,ResultOfMethodCallIgnored
 		Files.walk(tempDir)
 				.sorted(Comparator.reverseOrder())
 				.forEach(path -> path.toFile().delete());
