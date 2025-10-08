@@ -23,7 +23,6 @@ import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Player;
 
 import org.bukkit.entity.ZombieVillager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -41,10 +40,6 @@ class RecipientTest
 	@Mock BlockCommandSender blockCommandSenderMock;
 	@Mock ZombieVillager zombieVillagerMock;
 
-	@BeforeEach
-	void setUp()
-	{
-	}
 
 	@Test
 	void testOf_null()
