@@ -34,7 +34,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.thro
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
-public class YamlConstantRepository implements ConstantRepository
+public final class YamlConstantRepository implements ConstantRepository
 {
 	private final SectionProvider sectionProvider;
 

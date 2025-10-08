@@ -35,7 +35,7 @@ import java.util.Objects;
 import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
 
 
-public class YamlItemRepository implements ItemRepository
+public final class YamlItemRepository implements ItemRepository
 {
 	private final SectionProvider sectionProvider;
 
