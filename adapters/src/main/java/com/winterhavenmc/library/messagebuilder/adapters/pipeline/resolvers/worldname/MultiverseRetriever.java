@@ -50,17 +50,17 @@ import java.util.logging.Logger;
  */
 public final class MultiverseRetriever implements WorldNameRetriever
 {
-	private final MultiverseCore plugin;
+	private final MultiverseCore mvPlugin;
 
 
 	/**
 	 * Constructs a {@code Multiverse4Retriever} with the given Multiverse-Core instance.
 	 *
-	 * @param plugin the active {@link MultiverseCore} plugin instance
+	 * @param mvPlugin the active {@link MultiverseCore} plugin instance
 	 */
-	public MultiverseRetriever(MultiverseCore plugin)
+	public MultiverseRetriever(MultiverseCore mvPlugin)
 	{
-		this.plugin = plugin;
+		this.mvPlugin = mvPlugin;
 	}
 
 
@@ -85,7 +85,7 @@ public final class MultiverseRetriever implements WorldNameRetriever
 		}
 		catch (IllegalStateException e)
 		{
-			Logger.getLogger(this.getClass().getName()).warning(plugin.getName() + " threw an exception while trying to get an instance of its api.");
+			Logger.getLogger(this.getClass().getName()).warning(mvPlugin.getName() + " threw an exception while trying to get an instance of its api.");
 			return Optional.empty();
 		}
 
