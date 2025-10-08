@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public class ItemForge
+public final class ItemForge
 {
 	private final static Material DEFAULT_MATERIAL = Material.STICK;
 	private static Plugin plugin;
