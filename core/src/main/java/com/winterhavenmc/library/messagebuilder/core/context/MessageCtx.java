@@ -1,7 +1,7 @@
 package com.winterhavenmc.library.messagebuilder.core.context;
 
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import org.bukkit.plugin.Plugin;
 

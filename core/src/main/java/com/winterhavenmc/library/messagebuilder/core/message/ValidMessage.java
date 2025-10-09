@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.message;
 
-import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
@@ -48,7 +48,7 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;
  * <ul>
  *   <li>A {@link Recipient.Sendable recipient}</li>
  *   <li>A {@link ValidMessageKey messageKey} identifying the template</li>
- *   <li>A {@link com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline} to handle rendering and delivery</li>
+ *   <li>A {@link MessagePipeline} to handle rendering and delivery</li>
  *   <li>A {@code com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap macro object map}
  *       holding values to be substituted into the message</li>
  * </ul>

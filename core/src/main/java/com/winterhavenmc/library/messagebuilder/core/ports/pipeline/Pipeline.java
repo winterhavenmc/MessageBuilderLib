@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline;
 
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 

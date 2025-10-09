@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.message;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.util.Macro;
 import com.winterhavenmc.library.messagebuilder.core.util.MessageId;
 

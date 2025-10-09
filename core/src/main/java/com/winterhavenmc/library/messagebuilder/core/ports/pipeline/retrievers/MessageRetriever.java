@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 
 
 /**

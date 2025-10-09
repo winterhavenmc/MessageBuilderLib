@@ -60,9 +60,9 @@ public class LanguageResourceInstallerTest
 	@BeforeEach
 	public void setUp()
 	{
-		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
-		when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
+		lenient().when(localeProviderMock.getLocale()).thenReturn(Locale.US);
+		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+		lenient().when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 
 		doAnswer(invocation -> getClass().getClassLoader().getResourceAsStream(invocation.getArgument(0)))
 				.when(pluginMock).getResource(anyString());

@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors.Mes
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;

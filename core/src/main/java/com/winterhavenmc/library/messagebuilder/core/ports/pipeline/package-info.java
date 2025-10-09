@@ -5,4 +5,4 @@
  * formatting, resolution, delivery, and support logic. These components work together
  * as part of a loosely coupled processing chain that forms the message pipeline.
  **/
- package com.winterhavenmc.library.messagebuilder.core.pipeline;
+ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline;

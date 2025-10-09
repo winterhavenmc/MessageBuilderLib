@@ -42,7 +42,7 @@ import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.AdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.core.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.FieldAdapterRegistry;
