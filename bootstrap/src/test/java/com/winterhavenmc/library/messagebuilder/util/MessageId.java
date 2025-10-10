@@ -1,4 +1,4 @@
-package com.winterhavenmc.library.messagebuilder.bootstrap.util;
+package com.winterhavenmc.library.messagebuilder.util;
 
 
 /**

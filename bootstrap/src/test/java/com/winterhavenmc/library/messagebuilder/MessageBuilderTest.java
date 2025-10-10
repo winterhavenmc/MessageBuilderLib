@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.bootstrap;
+package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.bootstrap.util.MessageId;
+import com.winterhavenmc.library.messagebuilder.util.MessageId;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
@@ -46,7 +46,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Duration;
 import java.util.logging.Logger;
 
-import static com.winterhavenmc.library.messagebuilder.bootstrap.MessageBuilder.TICKS;
+import static com.winterhavenmc.library.messagebuilder.MessageBuilder.TICKS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

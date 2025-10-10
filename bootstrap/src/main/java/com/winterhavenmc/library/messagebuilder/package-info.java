@@ -8,7 +8,7 @@
  *
  * <h2>Key Concepts</h2>
  * <ul>
- *   <li><strong>{@link com.winterhavenmc.library.messagebuilder.bootstrap.MessageBuilder}</strong> –
+ *   <li><strong>{@link com.winterhavenmc.library.messagebuilder.MessageBuilder}</strong> –
  *       The primary entry point into the library, providing the fluent API used to construct and send messages.</li>
  *   <li><strong>{@code com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler}</strong> –
  *       A customizable source for message templates and item definitions, often backed by YAML files.</li>
@@ -29,7 +29,7 @@
  * </ul>
  *
  * <h2>Typical Usage</h2>
- * Messages are composed fluently using the {@link com.winterhavenmc.library.messagebuilder.bootstrap.MessageBuilder} API:
+ * Messages are composed fluently using the {@link com.winterhavenmc.library.messagebuilder.MessageBuilder} API:
  * {@snippet lang="java":
  * messageBuilder.compose(sender, MessageId.WELCOME)
  *               .setMacro(Macro.PLAYER, player)
@@ -40,8 +40,8 @@
  * This will retrieve the message template for {@code WELCOME}, substitute relevant
  * macro values, and send the result to the message recipient derived from the {@code sender} parameter.
  *
- * @see com.winterhavenmc.library.messagebuilder.bootstrap.MessageBuilder MessageBuilder
+ * @see com.winterhavenmc.library.messagebuilder.MessageBuilder MessageBuilder
  * @see com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap MacroObjectMap
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers resolvers
  */
-package com.winterhavenmc.library.messagebuilder.bootstrap;
+package com.winterhavenmc.library.messagebuilder;

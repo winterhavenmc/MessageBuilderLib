@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.bootstrap;
+package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown.MessageCooldownMap;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.MacroFieldExtractor;

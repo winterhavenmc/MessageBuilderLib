@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.bootstrap;
+package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
@@ -46,7 +46,7 @@ import org.bukkit.plugin.Plugin;
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
-import static com.winterhavenmc.library.messagebuilder.bootstrap.BootstrapUtility.*;
+import static com.winterhavenmc.library.messagebuilder.BootstrapUtility.*;
 import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
