@@ -25,13 +25,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.function.Supplier;
 
 
-public final class LanguageSectionProvider implements SectionProvider
+public final class YamlLanguageSectionProvider implements SectionProvider
 {
 	private final Supplier<Configuration> configSupplier;
 	private final Section section;
 
 
-	public LanguageSectionProvider(Supplier<Configuration> configSupplier, Section section)
+	public YamlLanguageSectionProvider(Supplier<Configuration> configSupplier, Section section)
 	{
 		this.configSupplier = configSupplier;
 		this.section = section;

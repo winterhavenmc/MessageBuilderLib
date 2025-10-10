@@ -40,7 +40,7 @@ public final class YamlItemRepository implements ItemRepository
 	private final SectionProvider sectionProvider;
 
 
-	public YamlItemRepository(final LanguageResourceManager languageResourceManager)
+	public YamlItemRepository(final YamlLanguageResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
 		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS);

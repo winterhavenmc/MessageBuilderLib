@@ -37,7 +37,7 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.resources.lang
  * Any files listed in an auto_install.txt file with a .yml suffix that are stored as a resource within a /language
  * subdirectory in the plugin jar archive will be copied to the /language subdirectory of the plugin data directory.
  */
-public final class LanguageResourceInstaller implements ResourceInstaller
+public final class YamlLanguageResourceInstaller implements ResourceInstaller
 {
 	private static final String YAML_EXTENSION = ".yml";
 
@@ -50,7 +50,7 @@ public final class LanguageResourceInstaller implements ResourceInstaller
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public LanguageResourceInstaller(final Plugin plugin, final LocaleProvider localeProvider)
+	public YamlLanguageResourceInstaller(final Plugin plugin, final LocaleProvider localeProvider)
 	{
 		this.plugin = plugin;
 		this.localeProvider = localeProvider;

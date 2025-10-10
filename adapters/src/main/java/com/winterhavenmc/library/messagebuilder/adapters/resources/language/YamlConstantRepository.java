@@ -39,7 +39,7 @@ public final class YamlConstantRepository implements ConstantRepository
 	private final SectionProvider sectionProvider;
 
 
-	public YamlConstantRepository(final LanguageResourceManager languageResourceManager)
+	public YamlConstantRepository(final YamlLanguageResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
 		this.sectionProvider = languageResourceManager.getSectionProvider(Section.CONSTANTS);

@@ -44,7 +44,7 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.resources.lang
  * result in a new configuration object loaded from the currently configured language file, or the en-US language
  * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
-public class LanguageResourceLoader implements ResourceLoader
+public class YamlLanguageResourceLoader implements ResourceLoader
 {
 	private final Plugin plugin;
 	private final Supplier<YamlConfiguration> yamlFactory;
@@ -57,7 +57,7 @@ public class LanguageResourceLoader implements ResourceLoader
 	 *
 	 * @param plugin an instance of the plugin main class
 	 */
-	public LanguageResourceLoader(final Plugin plugin, final LocaleProvider localeProvider)
+	public YamlLanguageResourceLoader(final Plugin plugin, final LocaleProvider localeProvider)
 	{
 		this(plugin, YamlConfiguration::new, localeProvider);
 	}
@@ -69,7 +69,7 @@ public class LanguageResourceLoader implements ResourceLoader
 	 * @param plugin      an instance of the plugin main class
 	 * @param yamlFactory factory for creating YamlConfiguration instances
 	 */
-	public LanguageResourceLoader(final Plugin plugin, Supplier<YamlConfiguration> yamlFactory, LocaleProvider localeProvider)
+	public YamlLanguageResourceLoader(final Plugin plugin, Supplier<YamlConfiguration> yamlFactory, LocaleProvider localeProvider)
 	{
 		this.plugin = plugin;
 		this.yamlFactory = yamlFactory;
@@ -123,7 +123,7 @@ public class LanguageResourceLoader implements ResourceLoader
 	 */
 	public Configuration loadWithFallback(LanguageTag preferred, LanguageTag fallback)
 	{
-		File languageFile = new File(plugin.getDataFolder(), LanguageResourceManager.getFileName(preferred));
+		File languageFile = new File(plugin.getDataFolder(), YamlLanguageResourceManager.getFileName(preferred));
 		YamlConfiguration config = yamlFactory.get();
 		boolean success = false;
 
@@ -176,7 +176,7 @@ public class LanguageResourceLoader implements ResourceLoader
 	 */
 	public Configuration loadFromResource(LanguageTag fallback)
 	{
-		String resourcePath = LanguageResourceManager.getResourceName(fallback);
+		String resourcePath = YamlLanguageResourceManager.getResourceName(fallback);
 		try (InputStream stream = plugin.getResource(resourcePath))
 		{
 			if (stream != null)

@@ -43,9 +43,9 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.resources.lang
  * globally, anywhere within this library using this static method.
  * 
  */
-public final class LanguageResourceManager implements SectionResourceManager
+public final class YamlLanguageResourceManager implements SectionResourceManager
 {
-	private final LanguageResourceLoader resourceLoader;
+	private final YamlLanguageResourceLoader resourceLoader;
 	private final ResourceInstaller resourceInstaller;
 	private Configuration languageConfiguration;
 
@@ -53,11 +53,11 @@ public final class LanguageResourceManager implements SectionResourceManager
 	/**
 	 * Class constructor
 	 *
-	 * @param resourceInstaller a LanguageResourceInstaller instance
-	 * @param resourceLoader  a LanguageResourceLoader instance
+	 * @param resourceInstaller a YamlLanguageResourceInstaller instance
+	 * @param resourceLoader  a YamlLanguageResourceLoader instance
 	 */
-	public LanguageResourceManager(final ResourceInstaller resourceInstaller,
-								   final LanguageResourceLoader resourceLoader)
+	public YamlLanguageResourceManager(final ResourceInstaller resourceInstaller,
+									   final YamlLanguageResourceLoader resourceLoader)
 	{
 		this.resourceInstaller = resourceInstaller;
 		this.resourceLoader = resourceLoader;
@@ -70,13 +70,13 @@ public final class LanguageResourceManager implements SectionResourceManager
 	/**
 	 * package-private constructor for testing purposes
 	 *
-	 * @param installer a LanguageResourceInstaller instance
-	 * @param loader  a LanguageResourceLoader instance
+	 * @param installer a YamlLanguageResourceInstaller instance
+	 * @param loader  a YamlLanguageResourceLoader instance
 	 * @param configuration a bukkit Configuration representing the language resource
 	 */
-	public LanguageResourceManager(final ResourceInstaller installer,
-								   final LanguageResourceLoader loader,
-								   final Configuration configuration)
+	public YamlLanguageResourceManager(final ResourceInstaller installer,
+									   final YamlLanguageResourceLoader loader,
+									   final Configuration configuration)
 	{
 		this.resourceInstaller = installer;
 		this.resourceLoader = loader;
@@ -116,7 +116,7 @@ public final class LanguageResourceManager implements SectionResourceManager
 	@Override
 	public SectionProvider getSectionProvider(Section section)
 	{
-		return new LanguageSectionProvider(() -> languageConfiguration, section);
+		return new YamlLanguageSectionProvider(() -> languageConfiguration, section);
 	}
 
 

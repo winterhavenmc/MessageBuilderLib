@@ -40,7 +40,7 @@ public final class YamlMessageRepository implements MessageRepository
 	private final SectionProvider sectionProvider;
 
 
-	public YamlMessageRepository(final LanguageResourceManager languageResourceManager)
+	public YamlMessageRepository(final YamlLanguageResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
 		this.sectionProvider = languageResourceManager.getSectionProvider(Section.MESSAGES);
