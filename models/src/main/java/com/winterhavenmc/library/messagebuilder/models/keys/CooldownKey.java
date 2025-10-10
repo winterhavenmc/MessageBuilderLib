@@ -35,7 +35,7 @@ import java.util.UUID;
  * This behavior could be adapted by generating random uuids, or specific uuids for various non-uuid
  * message recipient types.
  */
-public class CooldownKey
+public final class CooldownKey
 {
 	final static UUID DEFAULT_UUID = new UUID(0, 0);
 
