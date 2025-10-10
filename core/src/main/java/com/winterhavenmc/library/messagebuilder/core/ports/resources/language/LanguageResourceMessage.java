@@ -30,14 +30,15 @@ public enum LanguageResourceMessage
 	LANGUAGE_RESOURCE_UNREADABLE("Language file ''{0}'' could not be read. Falling back to default."),
 	LANGUAGE_RESOURCE_INVALID_YAML("Language file ''{0}'' is not valid YAML. Falling back to default."),
 	LANGUAGE_RESOURCE_INVALID_FILE("Language file ''{0}'' is invalid: {1}"),
-	LANGUAGE_RESOURCE_EXCEPTION("Unexpected exception loading language file ''{0}''"),
 	LANGUAGE_RESOURCE_FALLBACK_SUCCESS("Loaded fallback language resource ''{0}'' from plugin JAR."),
 	LANGUAGE_RESOURCE_FALLBACK_MISSING("Fallback language resource ''{0}'' is missing from plugin JAR."),
 	LANGUAGE_RESOURCE_FALLBACK_FAILED("Failed to load fallback language resource ''{0}'' from JAR."),
 
+	LANGUAGE_RESOURCE_EXCEPTION("An exception occurred while attempting to load language file ''{0}''."),
+
 	LANGUAGE_RESOURCE_INSTALL_SUCCESS("Installed resource: {0}"),
 	LANGUAGE_RESOURCE_INSTALL_MISSING("Installation failed. File missing after save: {0}"),
-	LANGUAGE_RESOURCE_INSTALL_EXCEPTION("Exception during installation of {0}: {1}")
+	LANGUAGE_RESOURCE_INSTALL_EXCEPTION("An exception occurred while attempting to install language file ''{0}'': {1}")
 	;
 
 	private final String defaultMessage;
