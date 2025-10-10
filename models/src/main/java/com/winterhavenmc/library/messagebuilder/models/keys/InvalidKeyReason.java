@@ -19,9 +19,9 @@ package com.winterhavenmc.library.messagebuilder.models.keys;
 
 public enum InvalidKeyReason
 {
-	KEY_NULL("The key parameter was null."),
-	KEY_BLANK("The key parameter was blank."),
-	KEY_INVALID("The key parameter was invalid."),
+	KEY_NULL("The parameter 'key' was null."),
+	KEY_BLANK("The parameter 'key' was blank."),
+	KEY_INVALID("The parameter 'key' was invalid."),
 	;
 
 	private final String defaultMessage;

@@ -44,7 +44,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.matchers.Pla
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
@@ -85,7 +85,8 @@ class MessageProcessorTest
 	@Mock LocaleProvider localeProviderMock;
 	@Mock DefaultResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
-	@Mock LanguageResourceManager languageResourceManagerMock;
+	@Mock
+	YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock ItemRepository itemRepositoryMock;
 
 	Recipient.Valid recipient;

@@ -28,8 +28,8 @@ class InvalidKeyReasonTest
 	@Test
 	void getDefaultMessage()
 	{
-		assertEquals("The key parameter was null.", InvalidKeyReason.KEY_NULL.getDefaultMessage());
-		assertEquals("The key parameter was blank.", InvalidKeyReason.KEY_BLANK.getDefaultMessage());
-		assertEquals("The key parameter was invalid.", InvalidKeyReason.KEY_INVALID.getDefaultMessage());
+		assertEquals("The parameter 'key' was null.", InvalidKeyReason.KEY_NULL.getDefaultMessage());
+		assertEquals("The parameter 'key' was blank.", InvalidKeyReason.KEY_BLANK.getDefaultMessage());
+		assertEquals("The parameter 'key' was invalid.", InvalidKeyReason.KEY_INVALID.getDefaultMessage());
 	}
 }

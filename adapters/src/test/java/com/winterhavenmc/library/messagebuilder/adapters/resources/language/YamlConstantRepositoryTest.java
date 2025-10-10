@@ -45,8 +45,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class YamlConstantRepositoryTest
 {
-	@Mock LanguageResourceManager languageResourceManagerMock;
-	@Mock LanguageSectionProvider languageSectionProviderMock;
+	@Mock
+	YamlLanguageResourceManager languageResourceManagerMock;
+	@Mock
+	YamlLanguageSectionProvider languageSectionProviderMock;
 
 	FileConfiguration languageConfig;
 	SectionProvider languageSectionProvider;

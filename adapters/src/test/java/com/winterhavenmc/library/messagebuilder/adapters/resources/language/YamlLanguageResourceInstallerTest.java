@@ -48,14 +48,14 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class LanguageResourceInstallerTest
+public class YamlLanguageResourceInstallerTest
 {
 	@TempDir File tempDataDir;
 	@Mock Plugin pluginMock;
 	@Mock LocaleProvider localeProviderMock;
 	@Mock FileConfiguration fileConfigurationMock;
 
-	LanguageResourceInstaller resourceInstaller;
+	YamlLanguageResourceInstaller resourceInstaller;
 
 	@BeforeEach
 	public void setUp()
@@ -68,7 +68,7 @@ public class LanguageResourceInstallerTest
 				.when(pluginMock).getResource(anyString());
 
 		// create real instance of installer
-		resourceInstaller = new LanguageResourceInstaller(pluginMock, localeProviderMock);
+		resourceInstaller = new YamlLanguageResourceInstaller(pluginMock, localeProviderMock);
 		resourceInstaller.autoInstall();
 	}
 

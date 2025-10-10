@@ -41,7 +41,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class YamlItemRepositoryTest
 {
-	@Mock LanguageResourceManager languageResourceManagerMock;
+	@Mock
+	YamlLanguageResourceManager languageResourceManagerMock;
 
 	FileConfiguration languageConfig;
 	SectionProvider languageSectionProvider;
@@ -65,7 +66,7 @@ class YamlItemRepositoryTest
 		languageConfig.loadFromString(configString);
 
 		Supplier<Configuration> configurationSupplier = () -> languageConfig;
-		languageSectionProvider = new LanguageSectionProvider(configurationSupplier, Section.ITEMS);
+		languageSectionProvider = new YamlLanguageSectionProvider(configurationSupplier, Section.ITEMS);
 
 		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(languageSectionProvider);
 	}

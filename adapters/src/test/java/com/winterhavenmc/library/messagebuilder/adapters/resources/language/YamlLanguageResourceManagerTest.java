@@ -48,11 +48,14 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class LanguageResourceManagerTest
+class YamlLanguageResourceManagerTest
 {
-	@Mock LanguageSectionProvider languageSectionProviderMock;
-	@Mock LanguageResourceInstaller languageResourceInstallerMock;
-	@Mock LanguageResourceLoader languageResourceLoaderMock;
+	@Mock
+	YamlLanguageSectionProvider languageSectionProviderMock;
+	@Mock
+	YamlLanguageResourceInstaller languageResourceInstallerMock;
+	@Mock
+	YamlLanguageResourceLoader languageResourceLoaderMock;
 	@Mock ConfigurationSection constantsSectionMock;
 	@Mock ConfigurationSection itemsSectionMock;
 	@Mock ConfigurationSection messagesSectionMock;
@@ -63,7 +66,7 @@ class LanguageResourceManagerTest
 	@Mock MessageRepository messageRepositoryMock;
 	@Mock LocaleProvider localeProviderMock;
 
-	LanguageResourceManager resourceManager;
+	YamlLanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
 	FileConfiguration pluginConfiguration;
 
@@ -80,7 +83,7 @@ class LanguageResourceManagerTest
 		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString());
 
 		// instantiate real language resource manager
-		resourceManager = new LanguageResourceManager(languageResourceInstallerMock, languageResourceLoaderMock, languageConfigurationMock);
+		resourceManager = new YamlLanguageResourceManager(languageResourceInstallerMock, languageResourceLoaderMock, languageConfigurationMock);
 	}
 
 
@@ -98,7 +101,7 @@ class LanguageResourceManagerTest
 
 		// Assert
 		assertNotNull(sectionProvider);
-		assertInstanceOf(LanguageSectionProvider.class, sectionProvider);
+		assertInstanceOf(YamlLanguageSectionProvider.class, sectionProvider);
 		assertNotNull(sectionProvider.getSection());
 	}
 
@@ -142,7 +145,7 @@ class LanguageResourceManagerTest
 		{
 			// Arrange
 			when(languageSectionProviderMock.getSection()).thenReturn(languageConfiguration);
-			LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock, localeProviderMock)
+			YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock)
 			{
 				@Override
 				public Configuration load() {
@@ -150,8 +153,8 @@ class LanguageResourceManagerTest
 				}
 			};
 
-			LanguageResourceInstaller installer = new LanguageResourceInstaller(pluginMock, localeProviderMock);
-			LanguageResourceManager languageResourceManager = new LanguageResourceManager(installer, loader);
+			YamlLanguageResourceInstaller installer = new YamlLanguageResourceInstaller(pluginMock, localeProviderMock);
+			YamlLanguageResourceManager languageResourceManager = new YamlLanguageResourceManager(installer, loader);
 
 			// Act
 			boolean result = languageResourceManager.reload();
@@ -173,8 +176,8 @@ class LanguageResourceManagerTest
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act & Assert
-		assertEquals("language/en-US.yml", LanguageResourceManager.getResourceName(languageTag));
-		assertNotEquals("language/fr-FR.yml", LanguageResourceManager.getResourceName(languageTag));
+		assertEquals("language/en-US.yml", YamlLanguageResourceManager.getResourceName(languageTag));
+		assertNotEquals("language/fr-FR.yml", YamlLanguageResourceManager.getResourceName(languageTag));
 	}
 
 
@@ -186,8 +189,8 @@ class LanguageResourceManagerTest
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
 		// Act & Assert
-		assertEquals("language" + File.separator + "en-US.yml", LanguageResourceManager.getFileName(languageTag));
-		assertNotEquals("language" + File.separator + "fr-FR.yml", LanguageResourceManager.getFileName(languageTag));
+		assertEquals("language" + File.separator + "en-US.yml", YamlLanguageResourceManager.getFileName(languageTag));
+		assertNotEquals("language" + File.separator + "fr-FR.yml", YamlLanguageResourceManager.getFileName(languageTag));
 	}
 
 }

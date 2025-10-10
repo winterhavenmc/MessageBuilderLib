@@ -44,20 +44,20 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class LanguageResourceLoaderTest
+class YamlLanguageResourceLoaderTest
 {
 	@Mock Plugin pluginMock;
 	@Mock FileConfiguration fileConfigurationMock;
 	@Mock Logger loggerMock;
 	@Mock LocaleProvider localeProviderMock;
 
-	private LanguageResourceLoader loader;
+	private YamlLanguageResourceLoader loader;
 
 
 	@BeforeEach
 	void setUp()
 	{
-		loader = new LanguageResourceLoader(pluginMock, localeProviderMock);
+		loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock);
 	}
 
 
@@ -223,7 +223,7 @@ class LanguageResourceLoaderTest
 				when(pluginMock.getLogger()).thenReturn(loggerMock);
 				when(pluginMock.getResource("language/en-US.yml"))
 						.thenReturn(MockUtility.getResourceStream("language/en-US.yml"));
-				LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock, localeProviderMock);
+				YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock);
 
 				// Act
 				Configuration config = loader.loadFromResource(LanguageTag.of("en-US").orElseThrow());
@@ -246,7 +246,7 @@ class LanguageResourceLoaderTest
 				when(pluginMock.getLogger()).thenReturn(loggerMock);
 				when(pluginMock.getResource("language/en-US.yml"))
 						.thenReturn(MockUtility.getResourceStream("language/en-US.yml"));
-				LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock, localeProviderMock);
+				YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock);
 				LanguageTag preferred = LanguageTag.of("ru-RU").orElseThrow();
 				LanguageTag fallback = LanguageTag.of("en-US").orElseThrow();
 
@@ -271,7 +271,7 @@ class LanguageResourceLoaderTest
 				when(pluginMock.getLogger()).thenReturn(loggerMock);
 				InputStream garbage = new ByteArrayInputStream("%%%%%%%".getBytes(StandardCharsets.UTF_8));
 				when(pluginMock.getResource("language/en-US.yml")).thenReturn(garbage);
-				LanguageResourceLoader loader = new LanguageResourceLoader(pluginMock, localeProviderMock);
+				YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock);
 				LanguageTag preferred = LanguageTag.of("ru-RU").orElseThrow();
 				LanguageTag fallback = LanguageTag.of("en-US").orElseThrow();
 
@@ -309,9 +309,9 @@ class LanguageResourceLoaderTest
 //		writeLanguageFile(pluginDataFolder, localeString, "placeholder: value");
 //	}
 
-//	private LanguageResourceLoader createFaultyLoader(Supplier<YamlConfiguration> yamlSupplier)
+//	private YamlLanguageResourceLoader createFaultyLoader(Supplier<YamlConfiguration> yamlSupplier)
 //	{
-//		return new LanguageResourceLoader(pluginMock, yamlSupplier);
+//		return new YamlLanguageResourceLoader(pluginMock, yamlSupplier);
 //	}
 
 }

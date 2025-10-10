@@ -43,7 +43,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class YamlMessageRepositoryTest
 {
-	@Mock LanguageResourceManager languageResourceManagerMock;
+	@Mock
+	YamlLanguageResourceManager languageResourceManagerMock;
 
 	FileConfiguration languageConfig;
 	SectionProvider languageSectionProvider;
@@ -61,7 +62,7 @@ class YamlMessageRepositoryTest
 		languageConfig.loadFromString(configString);
 
 		Supplier<Configuration> configurationSupplier = () -> languageConfig;
-		languageSectionProvider = new LanguageSectionProvider(configurationSupplier, Section.MESSAGES);
+		languageSectionProvider = new YamlLanguageSectionProvider(configurationSupplier, Section.MESSAGES);
 	}
 
 

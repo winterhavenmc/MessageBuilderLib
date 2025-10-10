@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
@@ -57,7 +57,8 @@ class MessageBuilderTest
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
 	@Mock ProxiedCommandSender proxiedCommandSenderMock;
-	@Mock LanguageResourceManager languageResourceManagerMock;
+	@Mock
+	YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock MessagePipeline messagePipelineMock;
 	@Mock ItemForge itemForgeMock;
 	@Mock ConstantRepository constantRepositoryMock;

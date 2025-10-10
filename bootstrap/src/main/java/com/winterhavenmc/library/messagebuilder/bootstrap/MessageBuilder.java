@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.bootstrap;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlConstantRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlMessageRepository;
@@ -86,7 +86,7 @@ public final class MessageBuilder
 	private final static String EXCEPTION_MESSAGES = "exception.messages";
 
 	private final Plugin plugin;
-	private final LanguageResourceManager languageResourceManager;
+	private final YamlLanguageResourceManager languageResourceManager;
 	private final ConstantRepository constants;
 	private final ItemForge itemForge;
 	private final MessagePipeline messagePipeline;
@@ -100,7 +100,7 @@ public final class MessageBuilder
 	 * @param languageResourceManager an instance of the language resource manager
 	 */
 	private MessageBuilder(final Plugin plugin,
-	                       final LanguageResourceManager languageResourceManager,
+	                       final YamlLanguageResourceManager languageResourceManager,
 						   final ConstantRepository constants,
 						   final ItemForge itemForge,
 	                       final MessagePipeline messagePipeline)
@@ -129,7 +129,7 @@ public final class MessageBuilder
 
 		final LocaleProvider localeProvider = BukkitLocaleProvider.create(plugin);
 
-		final LanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, localeProvider);
+		final YamlLanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, localeProvider);
 
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
 		final ItemRepository itemRepository = new YamlItemRepository(languageResourceManager);
@@ -194,7 +194,7 @@ public final class MessageBuilder
 	 * @return an instance of this class, instantiated with the mock objects
 	 */
 	static MessageBuilder test(final Plugin plugin,
-							   final LanguageResourceManager languageResourceManager,
+							   final YamlLanguageResourceManager languageResourceManager,
 							   final ConstantRepository constantRepository,
 							   final ItemForge itemForge,
 							   final MessagePipeline messagePipeline)

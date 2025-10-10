@@ -34,9 +34,9 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Loc
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceInstaller;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceLoader;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
@@ -87,13 +87,13 @@ public final class BootstrapUtility
 	 * @param plugin an instance of the plugin
 	 * @return an instance of the language resource manager
 	 */
-	static LanguageResourceManager createLanguageResourceManager(final Plugin plugin,
-																 final LocaleProvider localeProvider)
+	static YamlLanguageResourceManager createLanguageResourceManager(final Plugin plugin,
+																	 final LocaleProvider localeProvider)
 	{
-		final LanguageResourceInstaller resourceInstaller = new LanguageResourceInstaller(plugin, localeProvider);
-		final LanguageResourceLoader resourceLoader = new LanguageResourceLoader(plugin, localeProvider);
+		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin, localeProvider);
+		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin, localeProvider);
 
-		return new LanguageResourceManager(resourceInstaller, resourceLoader);
+		return new YamlLanguageResourceManager(resourceInstaller, resourceLoader);
 	}
 
 
