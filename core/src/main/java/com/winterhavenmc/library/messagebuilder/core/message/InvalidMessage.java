@@ -20,14 +20,14 @@ package com.winterhavenmc.library.messagebuilder.core.message;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
+import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.logging;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.logging;
 
 
 /**

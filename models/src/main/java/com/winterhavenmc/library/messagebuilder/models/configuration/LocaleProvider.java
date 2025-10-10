@@ -15,10 +15,8 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.configuration;
+package com.winterhavenmc.library.messagebuilder.models.configuration;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleSetting;
 import org.bukkit.plugin.Plugin;
 
 import java.time.ZoneId;

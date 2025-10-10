@@ -26,4 +26,4 @@
  * to easily configure language and formatting behavior while retaining safe defaults.
  * </p>
  */
-package com.winterhavenmc.library.messagebuilder.configuration;
+package com.winterhavenmc.library.messagebuilder.models.configuration;

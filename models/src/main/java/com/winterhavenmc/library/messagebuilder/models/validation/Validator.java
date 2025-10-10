@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.validation;
+package com.winterhavenmc.library.messagebuilder.models.validation;
 
 import java.text.MessageFormat;
 import java.util.Optional;

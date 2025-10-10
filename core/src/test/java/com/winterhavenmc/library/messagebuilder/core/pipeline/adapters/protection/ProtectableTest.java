@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.protection;
 
-import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;

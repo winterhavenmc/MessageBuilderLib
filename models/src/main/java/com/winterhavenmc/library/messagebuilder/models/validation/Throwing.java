@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.validation;
+package com.winterhavenmc.library.messagebuilder.models.validation;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -34,9 +34,9 @@ import java.util.function.Supplier;
  * rather than the supplier's origin.
  *
  * <h2>Typical usage:</h2>
- * {@snippet lang="java":
- *  validate(value, Predicate, Validator.throwing(ErrorMessageKey, Parameter));
- * }
+ * {@snippet lang = "java":
+ *  import com.winterhavenmc.library.messagebuilder.models.validation.Validator;validate(value, Predicate, Validator.throwing(ErrorMessageKey, Parameter));
+ *}
  *
  * @param <T> the type of the value being validated
  *

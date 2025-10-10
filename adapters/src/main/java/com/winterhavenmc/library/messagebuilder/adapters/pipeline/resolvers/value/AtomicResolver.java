@@ -33,10 +33,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.FORMATTER_CONTAINER;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.FORMATTER_CONTAINER;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
 /**

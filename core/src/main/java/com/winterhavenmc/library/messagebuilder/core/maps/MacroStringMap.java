@@ -18,15 +18,15 @@
 package com.winterhavenmc.library.messagebuilder.core.maps;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
+import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;
 
 import java.util.*;
 import java.util.function.Predicate;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.VALUE;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.logging;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.VALUE;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.logging;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
 /**

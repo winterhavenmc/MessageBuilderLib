@@ -15,17 +15,17 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.validation;
+package com.winterhavenmc.library.messagebuilder.models.validation;
 
-import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import java.util.Locale;
 import java.util.Objects;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.LOCALE_PROVIDER;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.LOCALE_PROVIDER;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 /**
  * Provides global access to the plugin-configured locale used

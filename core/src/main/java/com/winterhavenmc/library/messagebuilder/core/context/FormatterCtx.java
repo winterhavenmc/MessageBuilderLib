@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.context;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
-import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 
 public record FormatterCtx(LocaleProvider localeProvider,

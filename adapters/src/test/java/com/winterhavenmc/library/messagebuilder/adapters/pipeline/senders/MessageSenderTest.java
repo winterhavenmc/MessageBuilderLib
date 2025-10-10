@@ -24,7 +24,7 @@ import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -36,8 +36,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.RECIPIENT;
 
 
 @ExtendWith(MockitoExtension.class)

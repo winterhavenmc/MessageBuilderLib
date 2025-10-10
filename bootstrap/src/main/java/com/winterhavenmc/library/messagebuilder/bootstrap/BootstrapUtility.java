@@ -37,7 +37,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriT
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;

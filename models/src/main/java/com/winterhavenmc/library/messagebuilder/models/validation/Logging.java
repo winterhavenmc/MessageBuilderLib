@@ -15,13 +15,13 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.validation;
+package com.winterhavenmc.library.messagebuilder.models.validation;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.formatMessage;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.formatMessage;
 
 
 /**
@@ -39,9 +39,9 @@ import static com.winterhavenmc.library.messagebuilder.validation.Validator.form
  * {@link java.util.logging.Level} for improved readability and intent.
  *
  * <h2>Typical usage:</h2>
- * {@snippet lang="java":
- *  validate(value, Predicate, Validator.logging(logLevel, ErrorMessageKey, Parameter));
- * }
+ * {@snippet lang = "java":
+ *  import com.winterhavenmc.library.messagebuilder.models.validation.Validator;validate(value, Predicate, Validator.logging(logLevel, ErrorMessageKey, Parameter));
+ *}
  *
  * @param <T> the type of the value being validated
  *

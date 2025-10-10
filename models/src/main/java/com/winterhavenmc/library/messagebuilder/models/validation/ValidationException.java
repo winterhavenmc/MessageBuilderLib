@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.validation;
+package com.winterhavenmc.library.messagebuilder.models.validation;
 
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.formatMessage;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.formatMessage;
 
 
 /**

@@ -30,7 +30,7 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -50,8 +50,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 

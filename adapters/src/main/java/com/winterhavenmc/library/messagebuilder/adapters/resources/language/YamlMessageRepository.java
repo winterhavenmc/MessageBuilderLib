@@ -26,13 +26,13 @@ import com.winterhavenmc.library.messagebuilder.models.language.InvalidRecordRea
 import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
 
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
-import com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey;
-import com.winterhavenmc.library.messagebuilder.validation.Parameter;
-import com.winterhavenmc.library.messagebuilder.validation.Validator;
+import com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey;
+import com.winterhavenmc.library.messagebuilder.models.validation.Parameter;
+import com.winterhavenmc.library.messagebuilder.models.validation.Validator;
 
 import java.util.Objects;
 
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
 public final class YamlMessageRepository implements MessageRepository

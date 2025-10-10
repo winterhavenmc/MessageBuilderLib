@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.configuration;
+package com.winterhavenmc.library.messagebuilder.models.configuration;
 
 
 /**

@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration;
 
-import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
-import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
+import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;
 
 import net.time4j.CalendarUnit;
 import net.time4j.ClockUnit;
@@ -30,10 +30,10 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.logging;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.*;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.logging;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
 /**

@@ -9,7 +9,7 @@
  * according to a {@link java.util.Locale}.
  *
  * <p>The formatting behavior is defined by the injected
- * {@link com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider LocaleProvider},
+ * {@link com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider LocaleProvider},
  * enabling integration with user or server-defined localization preferences.
  *
  * <p>Typical use cases include formatting coordinates, quantities, and other numerical values

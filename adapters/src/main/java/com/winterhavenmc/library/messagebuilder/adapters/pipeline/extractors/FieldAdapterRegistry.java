@@ -39,10 +39,10 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.ver
 import java.util.*;
 import java.util.stream.Stream;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.ADAPTER;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.ADAPTER;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
 /**

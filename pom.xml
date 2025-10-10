@@ -24,8 +24,6 @@
 		<module>bootstrap</module>
 		<module>core</module>
 		<module>models</module>
-		<module>validation</module>
-		<module>configuration</module>
 	</modules>
 
 	<description>

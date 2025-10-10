@@ -23,7 +23,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.Yaml
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlMessageRepository;
 
-import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
@@ -38,7 +38,7 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.models.time.Tick;
 
-import com.winterhavenmc.library.messagebuilder.validation.*;
+import com.winterhavenmc.library.messagebuilder.models.validation.*;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -47,7 +47,7 @@ import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
 import static com.winterhavenmc.library.messagebuilder.bootstrap.BootstrapUtility.*;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
 /**

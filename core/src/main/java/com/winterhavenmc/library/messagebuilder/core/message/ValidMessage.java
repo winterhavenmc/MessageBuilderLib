@@ -25,19 +25,19 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 
-import com.winterhavenmc.library.messagebuilder.validation.LogLevel;
-import com.winterhavenmc.library.messagebuilder.validation.Parameter;
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;
+import com.winterhavenmc.library.messagebuilder.models.validation.Parameter;
+import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
 import org.bukkit.plugin.Plugin;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.*;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.*;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.*;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.*;
 
 
 /**

@@ -30,7 +30,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.item
 import com.winterhavenmc.library.messagebuilder.adapters.util.Macro;
 import com.winterhavenmc.library.messagebuilder.adapters.util.MessageId;
 
-import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
@@ -55,7 +55,7 @@ import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -72,8 +72,8 @@ import org.mockito.Mock;
 import java.util.List;
 
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_INVALID;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RECIPIENT;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_INVALID;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.RECIPIENT;
 import static org.junit.jupiter.api.Assertions.*;
 
 

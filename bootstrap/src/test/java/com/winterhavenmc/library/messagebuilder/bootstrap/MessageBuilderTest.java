@@ -27,7 +27,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.Me
 import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 
-import com.winterhavenmc.library.messagebuilder.validation.ValidationException;
+import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;

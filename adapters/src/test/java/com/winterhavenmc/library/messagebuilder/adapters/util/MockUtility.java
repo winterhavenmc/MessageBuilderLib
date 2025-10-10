@@ -27,12 +27,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.PARAMETER_NULL;
-import static com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey.STRING_BLANK;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.RESOURCE_NAME;
-import static com.winterhavenmc.library.messagebuilder.validation.Parameter.TARGET_DIR_PATH;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.STRING_BLANK;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.RESOURCE_NAME;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.TARGET_DIR_PATH;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
 public final class MockUtility

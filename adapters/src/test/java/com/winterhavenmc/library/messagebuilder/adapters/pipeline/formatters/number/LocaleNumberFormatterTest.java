@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.nu
 
 import java.util.Locale;
 
-import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

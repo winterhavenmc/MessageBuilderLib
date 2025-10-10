@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoa
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceMessage;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
-import com.winterhavenmc.library.messagebuilder.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;

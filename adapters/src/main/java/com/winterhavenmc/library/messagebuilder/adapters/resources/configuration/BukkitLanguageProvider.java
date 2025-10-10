@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
-import com.winterhavenmc.library.messagebuilder.configuration.ConfigProvider;
-import com.winterhavenmc.library.messagebuilder.configuration.LanguageProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageProvider;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageSetting;
 
 import org.bukkit.plugin.Plugin;

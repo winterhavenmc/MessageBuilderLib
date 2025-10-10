@@ -23,15 +23,15 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.Se
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidConstantKey;
 
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
-import com.winterhavenmc.library.messagebuilder.validation.ErrorMessageKey;
-import com.winterhavenmc.library.messagebuilder.validation.Parameter;
+import com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey;
+import com.winterhavenmc.library.messagebuilder.models.validation.Parameter;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.throwing;
-import static com.winterhavenmc.library.messagebuilder.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
 public final class YamlConstantRepository implements ConstantRepository
