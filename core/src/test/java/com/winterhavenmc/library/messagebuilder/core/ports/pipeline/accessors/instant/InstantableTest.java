@@ -15,49 +15,43 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.protection;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.instant;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.protection.Protectable;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-
-import org.bukkit.plugin.Plugin;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.FormatStyle;
-import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class ProtectableTest
+class InstantableTest
 {
-	@Mock Plugin pluginMock;
 	@Mock AdapterCtx ctxMock;
 	@Mock FormatterCtx formatterContainerMock;
-	@Mock DurationFormatter durationFormatterMock;
 	@Mock LocaleProvider localeProviderMock;
 
-
-	static class TestObject implements Protectable
+	static class TestObject implements Instantable
 	{
 		@Override
-		public Instant getProtection()
+		public Instant getInstant()
 		{
 			return Instant.EPOCH;
 		}
@@ -65,24 +59,24 @@ class ProtectableTest
 
 
 	@Test
-	void object_is_instance_of_Expirable()
+	void object_is_instance_of_Instantable()
 	{
 		// Arrange & Act
 		TestObject testObject = new TestObject();
 
 		// Assert
-		assertInstanceOf(Protectable.class, testObject);
+		assertInstanceOf(Instantable.class, testObject);
 	}
 
 
 	@Test
-	void getExpiration_returns_Instant()
+	void getInstant_returns_Instant()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
-		Instant result = testObject.getProtection();
+		Instant result = testObject.getInstant();
 
 		// Assert
 		assertEquals(Instant.EPOCH, result);
@@ -90,27 +84,52 @@ class ProtectableTest
 
 
 	@Test
-	void extractExpiration_returns_populated_map()
+	void extractInstant_returns_populated_map()
 	{
 		// Arrange
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-		ValidMacroKey expirationKey = baseKey.append("PROTECTION").isValid().orElseThrow();
-		ValidMacroKey instantKey = expirationKey.append("INSTANT").isValid().orElseThrow();
-		ValidMacroKey durationKey = expirationKey.append("DURATION").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append("INSTANT").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-
 		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
-		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
 		when(formatterContainerMock.localeProvider()).thenReturn(localeProviderMock);
 		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
-		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("valid duration string");
 
 		// Act
-		MacroStringMap result = testObject.extractProtection(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, ctxMock);
+		MacroStringMap result = testObject.extractInstant(baseKey, FormatStyle.MEDIUM, ctxMock);
 
 		// Assert
-		assertEquals("Jan 1, 1970, 12:00:00 AM", result.get(instantKey));
-		assertEquals("valid duration string", result.get(durationKey));
+		assertEquals("Jan 1, 1970, 12:00:00 AM", result.get(subKey));
+	}
+
+
+	@Test
+	void formatInstant_returns_optional_string()
+	{
+		// Arrange
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
+		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
+
+		// Act
+		Optional<String> result = Instantable.formatInstant(testObject.getInstant(), FormatStyle.MEDIUM, localeProviderMock);
+
+		// Assert
+		assertEquals(Optional.of("Jan 1, 1970, 12:00:00 AM"), result);
+	}
+
+
+	@Test
+	void formatInstant_with_null_name_returns_empty_optional()
+	{
+		// Arrange
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
+
+		// Act
+		Optional<String> result = Instantable.formatInstant(null, FormatStyle.MEDIUM, localeProviderMock);
+
+		// Assert
+		assertEquals(Optional.empty(), result);
 	}
 
 }

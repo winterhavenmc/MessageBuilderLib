@@ -15,14 +15,14 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.expiration;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.protection;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.expiration.Expirable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class ExpirableTest
+class ProtectableTest
 {
 	@Mock Plugin pluginMock;
 	@Mock AdapterCtx ctxMock;
@@ -56,10 +56,10 @@ class ExpirableTest
 	@Mock LocaleProvider localeProviderMock;
 
 
-	static class TestObject implements Expirable
+	static class TestObject implements Protectable
 	{
 		@Override
-		public Instant getExpiration()
+		public Instant getProtection()
 		{
 			return Instant.EPOCH;
 		}
@@ -73,7 +73,7 @@ class ExpirableTest
 		TestObject testObject = new TestObject();
 
 		// Assert
-		assertInstanceOf(Expirable.class, testObject);
+		assertInstanceOf(Protectable.class, testObject);
 	}
 
 
@@ -84,7 +84,7 @@ class ExpirableTest
 		TestObject testObject = new TestObject();
 
 		// Act
-		Instant result = testObject.getExpiration();
+		Instant result = testObject.getProtection();
 
 		// Assert
 		assertEquals(Instant.EPOCH, result);
@@ -96,7 +96,7 @@ class ExpirableTest
 	{
 		// Arrange
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-		ValidMacroKey expirationKey = baseKey.append("EXPIRATION").isValid().orElseThrow();
+		ValidMacroKey expirationKey = baseKey.append("PROTECTION").isValid().orElseThrow();
 		ValidMacroKey instantKey = expirationKey.append("INSTANT").isValid().orElseThrow();
 		ValidMacroKey durationKey = expirationKey.append("DURATION").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
@@ -108,7 +108,7 @@ class ExpirableTest
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("valid duration string");
 
 		// Act
-		MacroStringMap result = testObject.extractExpiration(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, ctxMock);
+		MacroStringMap result = testObject.extractProtection(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, ctxMock);
 
 		// Assert
 		assertEquals("Jan 1, 1970, 12:00:00 AM", result.get(instantKey));

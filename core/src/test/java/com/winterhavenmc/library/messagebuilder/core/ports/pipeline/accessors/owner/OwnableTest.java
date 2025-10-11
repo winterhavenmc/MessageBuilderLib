@@ -15,16 +15,18 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.killer;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.owner;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.killer.Killable;
+
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,24 +34,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.KILLER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class KillableTest
+class OwnableTest
 {
 	@Mock AdapterCtx ctxMock;
 	@Mock Player playerMock;
 
-	class TestObject implements Killable
+	class TestObject implements Ownable
 	{
 		@Override
-		public AnimalTamer getKiller()
+		public AnimalTamer getOwner()
 		{
 			return playerMock;
 		}
@@ -57,24 +56,24 @@ class KillableTest
 
 
 	@Test
-	void object_is_instance_of_Killable()
+	void object_is_instance_of_Ownable()
 	{
 		// Arrange & Act
 		TestObject testObject = new TestObject();
 
 		// Assert
-		assertInstanceOf(Killable.class, testObject);
+		assertInstanceOf(Ownable.class, testObject);
 	}
 
 
 	@Test
-	void getKiller_returns_Entity()
+	void getOwner_returns_Entity()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
-		AnimalTamer result = testObject.getKiller();
+		AnimalTamer result = testObject.getOwner();
 
 		// Assert
 		assertEquals(playerMock, result);
@@ -82,48 +81,48 @@ class KillableTest
 
 
 	@Test
-	void extractKiller_returns_populated_map()
+	void extractOwner_returns_populated_map()
 	{
 		// Arrange
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-		ValidMacroKey subKey = baseKey.append(KILLER).isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append("OWNER").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn("Killer");
+		when(playerMock.getName()).thenReturn("Owner");
 
 		// Act
-		MacroStringMap result = testObject.extractKiller(baseKey, ctxMock);
+		MacroStringMap result = testObject.extractOwner(baseKey, ctxMock);
 
 		// Assert
-		assertEquals("Killer", result.get(subKey));
+		assertEquals("Owner", result.get(subKey));
 	}
 
 
 	@Test
-	void formatKiller_returns_optional_string()
+	void formatOwner_returns_optional_string()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn("Killer");
+		when(playerMock.getName()).thenReturn("Owner");
 
 		// Act
-		Optional<String> result = Killable.formatKiller(testObject.getKiller());
+		Optional<String> result = Ownable.formatOwner(testObject.getOwner());
 
 		// Assert
-		assertEquals(Optional.of("Killer"), result);
+		assertEquals(Optional.of("Owner"), result);
 	}
 
 
 	@Test
-	void formatKiller_with_blank_name_returns_empty_optional()
+	void formatOwner_with_null_name_returns_empty_optional()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn("");
+		when(playerMock.getName()).thenReturn(null);
 
 		// Act
-		Optional<String> result = Killable.formatKiller(playerMock);
+		Optional<String> result = Ownable.formatOwner(playerMock);
 
 		// Assert
 		assertEquals(Optional.empty(), result);
@@ -131,14 +130,30 @@ class KillableTest
 
 
 	@Test
-	void formatKiller_with_null_owner_returns_empty_optional()
+	void formatOwner_with_blank_name_returns_empty_optional()
+	{
+		// Arrange
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
+		when(playerMock.getName()).thenReturn("");
+
+		// Act
+		Optional<String> result = Ownable.formatOwner(playerMock);
+
+		// Assert
+		assertEquals(Optional.empty(), result);
+	}
+
+
+	@Test
+	void formatOwner_with_null_owner_returns_empty_optional()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act
-		Optional<String> result = Killable.formatKiller(null);
+		Optional<String> result = Ownable.formatOwner(null);
 
 		// Assert
 		assertEquals(Optional.empty(), result);

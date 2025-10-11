@@ -15,16 +15,14 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.duration;
-
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.duration;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.duration.Durationable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 

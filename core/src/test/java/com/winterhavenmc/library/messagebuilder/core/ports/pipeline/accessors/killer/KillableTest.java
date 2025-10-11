@@ -15,11 +15,11 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.looter;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.killer;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.looter.Lootable;
+
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -34,22 +34,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.LOOTER;
+import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.KILLER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class LootableTest
+class KillableTest
 {
 	@Mock AdapterCtx ctxMock;
 	@Mock Player playerMock;
 
-	class TestObject implements Lootable
+	class TestObject implements Killable
 	{
 		@Override
-		public AnimalTamer getLooter()
+		public AnimalTamer getKiller()
 		{
 			return playerMock;
 		}
@@ -57,24 +57,24 @@ class LootableTest
 
 
 	@Test
-	void object_is_instance_of_Lootable()
+	void object_is_instance_of_Killable()
 	{
 		// Arrange & Act
 		TestObject testObject = new TestObject();
 
 		// Assert
-		assertInstanceOf(Lootable.class, testObject);
+		assertInstanceOf(Killable.class, testObject);
 	}
 
 
 	@Test
-	void getLooter_returns_Entity()
+	void getKiller_returns_Entity()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
-		AnimalTamer result = testObject.getLooter();
+		AnimalTamer result = testObject.getKiller();
 
 		// Assert
 		assertEquals(playerMock, result);
@@ -82,40 +82,40 @@ class LootableTest
 
 
 	@Test
-	void extractLooter_returns_populated_map()
+	void extractKiller_returns_populated_map()
 	{
 		// Arrange
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-		ValidMacroKey subKey = baseKey.append(LOOTER).isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append(KILLER).isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn("Looter");
+		when(playerMock.getName()).thenReturn("Killer");
 
 		// Act
-		MacroStringMap result = testObject.extractLooter(baseKey, ctxMock);
+		MacroStringMap result = testObject.extractKiller(baseKey, ctxMock);
 
 		// Assert
-		assertEquals("Looter", result.get(subKey));
+		assertEquals("Killer", result.get(subKey));
 	}
 
 
 	@Test
-	void formatLooter_returns_optional_string()
+	void formatKiller_returns_optional_string()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn("Looter");
+		when(playerMock.getName()).thenReturn("Killer");
 
 		// Act
-		Optional<String> result = Lootable.formatLooter(testObject.getLooter());
+		Optional<String> result = Killable.formatKiller(testObject.getKiller());
 
 		// Assert
-		assertEquals(Optional.of("Looter"), result);
+		assertEquals(Optional.of("Killer"), result);
 	}
 
 
 	@Test
-	void formatLooter_with_blank_name_returns_optional_UNKNOWN_VALUE()
+	void formatKiller_with_blank_name_returns_empty_optional()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
@@ -123,7 +123,7 @@ class LootableTest
 		when(playerMock.getName()).thenReturn("");
 
 		// Act
-		Optional<String> result = Lootable.formatLooter(playerMock);
+		Optional<String> result = Killable.formatKiller(playerMock);
 
 		// Assert
 		assertEquals(Optional.empty(), result);
@@ -131,13 +131,14 @@ class LootableTest
 
 
 	@Test
-	void formatLooter_with_null_value_returns_optional_UNKNOWN_VALUE()
+	void formatKiller_with_null_owner_returns_empty_optional()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
 
 		// Act
-		Optional<String> result = Lootable.formatLooter(null);
+		Optional<String> result = Killable.formatKiller(null);
 
 		// Assert
 		assertEquals(Optional.empty(), result);

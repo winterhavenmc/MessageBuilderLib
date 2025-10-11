@@ -15,16 +15,13 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.owner;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.owner.Ownable;
+
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-
-import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
@@ -36,93 +33,88 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class OwnableTest
+class NameableTest
 {
 	@Mock AdapterCtx ctxMock;
-	@Mock Player playerMock;
 
-	class TestObject implements Ownable
+	static class TestObject implements Nameable
 	{
 		@Override
-		public AnimalTamer getOwner()
+		public String getName()
 		{
-			return playerMock;
+			return "Name";
 		}
 	}
 
 
 	@Test
-	void object_is_instance_of_Ownable()
+	void object_is_instance_of_Nameable()
 	{
 		// Arrange & Act
 		TestObject testObject = new TestObject();
 
 		// Assert
-		assertInstanceOf(Ownable.class, testObject);
+		assertInstanceOf(Nameable.class, testObject);
 	}
 
 
 	@Test
-	void getOwner_returns_Entity()
+	void getName_returns_string()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
-		AnimalTamer result = testObject.getOwner();
+		String result = testObject.getName();
 
 		// Assert
-		assertEquals(playerMock, result);
+		assertEquals("Name", result);
 	}
 
 
 	@Test
-	void extractOwner_returns_populated_map()
+	void extractName_returns_populated_map()
 	{
 		// Arrange
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-		ValidMacroKey subKey = baseKey.append("OWNER").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append("NAME").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn("Owner");
 
 		// Act
-		MacroStringMap result = testObject.extractOwner(baseKey, ctxMock);
+		MacroStringMap result = testObject.extractName(baseKey, ctxMock);
 
 		// Assert
-		assertEquals("Owner", result.get(subKey));
+		assertEquals("Name", result.get(subKey));
 	}
 
 
 	@Test
-	void formatOwner_returns_optional_string()
+	void formatName_returns_optional_string()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn("Owner");
 
 		// Act
-		Optional<String> result = Ownable.formatOwner(testObject.getOwner());
+		Optional<String> result = Nameable.formatName(testObject.getName());
 
 		// Assert
-		assertEquals(Optional.of("Owner"), result);
+		assertEquals(Optional.of("Name"), result);
 	}
 
 
 	@Test
-	void formatOwner_with_null_name_returns_empty_optional()
+	void formatName_with_null_name_returns_empty_optional()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn(null);
 
 		// Act
-		Optional<String> result = Ownable.formatOwner(playerMock);
+		Optional<String> result = Nameable.formatName(null);
 
 		// Assert
 		assertEquals(Optional.empty(), result);
@@ -130,30 +122,14 @@ class OwnableTest
 
 
 	@Test
-	void formatOwner_with_blank_name_returns_empty_optional()
-	{
-		// Arrange
-		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
-		TestObject testObject = new TestObject();
-		when(playerMock.getName()).thenReturn("");
-
-		// Act
-		Optional<String> result = Ownable.formatOwner(playerMock);
-
-		// Assert
-		assertEquals(Optional.empty(), result);
-	}
-
-
-	@Test
-	void formatOwner_with_null_owner_returns_empty_optional()
+	void formatName_with_blank_name_returns_empty_optional()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act
-		Optional<String> result = Ownable.formatOwner(null);
+		Optional<String> result = Nameable.formatName("");
 
 		// Assert
 		assertEquals(Optional.empty(), result);

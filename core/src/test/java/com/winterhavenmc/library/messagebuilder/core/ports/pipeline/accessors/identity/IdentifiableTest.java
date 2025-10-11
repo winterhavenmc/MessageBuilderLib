@@ -15,20 +15,19 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.instant;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.identity;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.instant.Instantable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
+
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.FormatStyle;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,95 +37,91 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class InstantableTest
+class IdentifiableTest
 {
-	@Mock AdapterCtx ctxMock;
+	@Mock
+	AdapterCtx ctxMock;
 	@Mock FormatterCtx formatterContainerMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock NumberFormatter numberFormatterMock;
 
-	static class TestObject implements Instantable
+	static class TestObject implements Identifiable
 	{
 		@Override
-		public Instant getInstant()
+		public UUID getUniqueId()
 		{
-			return Instant.EPOCH;
+			return new UUID(42, 42);
 		}
 	}
 
 
 	@Test
-	void object_is_instance_of_Instantable()
+	void object_is_instance_of_Identifiable()
 	{
 		// Arrange & Act
 		TestObject testObject = new TestObject();
 
 		// Assert
-		assertInstanceOf(Instantable.class, testObject);
+		assertInstanceOf(Identifiable.class, testObject);
 	}
 
 
 	@Test
-	void getInstant_returns_Instant()
+	void getUniqueId_returns_UUID()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
-		Instant result = testObject.getInstant();
+		UUID result = testObject.getUniqueId();
 
 		// Assert
-		assertEquals(Instant.EPOCH, result);
+		assertEquals(new UUID(42, 42), result);
 	}
 
 
 	@Test
-	void extractInstant_returns_populated_map()
+	void extractUniqueId_returns_populated_map()
 	{
 		// Arrange
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-		ValidMacroKey subKey = baseKey.append("INSTANT").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append(Accessor.BuiltIn.UUID).isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
-		when(formatterContainerMock.localeProvider()).thenReturn(localeProviderMock);
-		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
 
 		// Act
-		MacroStringMap result = testObject.extractInstant(baseKey, FormatStyle.MEDIUM, ctxMock);
+		MacroStringMap result = testObject.extractUid(baseKey, ctxMock);
 
 		// Assert
-		assertEquals("Jan 1, 1970, 12:00:00 AM", result.get(subKey));
+		assertEquals(new UUID(42, 42).toString(), result.get(subKey));
 	}
 
 
 	@Test
-	void formatInstant_returns_optional_string()
-	{
-		// Arrange
-		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
-		TestObject testObject = new TestObject();
-		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
-
-		// Act
-		Optional<String> result = Instantable.formatInstant(testObject.getInstant(), FormatStyle.MEDIUM, localeProviderMock);
-
-		// Assert
-		assertEquals(Optional.of("Jan 1, 1970, 12:00:00 AM"), result);
-	}
-
-
-	@Test
-	void formatInstant_with_null_name_returns_empty_optional()
+	void formatUid_returns_optional_string()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act
-		Optional<String> result = Instantable.formatInstant(null, FormatStyle.MEDIUM, localeProviderMock);
+		Optional<String> result = Identifiable.formatUid(new UUID(42, 42));
+
+		// Assert
+		assertEquals(Optional.of(new UUID(42,42).toString()), result);
+	}
+
+
+	@Test
+	void formatUid_with_null_UUID_returns_empty_optional()
+	{
+		// Arrange
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
+
+		// Act
+		Optional<String> result = Identifiable.formatUid(null);
 
 		// Assert
 		assertEquals(Optional.empty(), result);

@@ -15,103 +15,115 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.displayname;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.looter;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname.DisplayNameable;
+
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.LOOTER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class DisplayNameableTest
+class LootableTest
 {
 	@Mock AdapterCtx ctxMock;
+	@Mock Player playerMock;
 
-	static class TestObject implements DisplayNameable
+	class TestObject implements Lootable
 	{
 		@Override
-		public String getDisplayName()
+		public AnimalTamer getLooter()
 		{
-			return "Display Name";
+			return playerMock;
 		}
 	}
 
 
 	@Test
-	void object_is_instance_of_DisplayNameable()
+	void object_is_instance_of_Lootable()
 	{
 		// Arrange & Act
 		TestObject testObject = new TestObject();
 
 		// Assert
-		assertInstanceOf(DisplayNameable.class, testObject);
+		assertInstanceOf(Lootable.class, testObject);
 	}
 
 
 	@Test
-	void getDisplayName_returns_string()
+	void getLooter_returns_Entity()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
-		String result = testObject.getDisplayName();
+		AnimalTamer result = testObject.getLooter();
 
 		// Assert
-		assertEquals("Display Name", result);
+		assertEquals(playerMock, result);
 	}
 
 
 	@Test
-	void extractDisplayName_returns_populated_map()
+	void extractLooter_returns_populated_map()
 	{
 		// Arrange
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-		ValidMacroKey subKey = baseKey.append("DISPLAY_NAME").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append(LOOTER).isValid().orElseThrow();
 		TestObject testObject = new TestObject();
+		when(playerMock.getName()).thenReturn("Looter");
 
 		// Act
-		MacroStringMap result = testObject.extractDisplayName(baseKey, ctxMock);
+		MacroStringMap result = testObject.extractLooter(baseKey, ctxMock);
 
 		// Assert
-		assertEquals("Display Name", result.get(subKey));
+		assertEquals("Looter", result.get(subKey));
 	}
 
 
 	@Test
-	void formatDisplayName_returns_optional_string()
+	void formatLooter_returns_optional_string()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
+		when(playerMock.getName()).thenReturn("Looter");
 
 		// Act
-		Optional<String> result = DisplayNameable.formatDisplayName(testObject.getDisplayName());
+		Optional<String> result = Lootable.formatLooter(testObject.getLooter());
 
 		// Assert
-		assertEquals(Optional.of("Display Name"), result);
+		assertEquals(Optional.of("Looter"), result);
 	}
 
 
 	@Test
-	void formatDisplayName_with_null_displayName_returns_empty_optional()
+	void formatLooter_with_blank_name_returns_optional_UNKNOWN_VALUE()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
+		when(playerMock.getName()).thenReturn("");
 
 		// Act
-		Optional<String> result = DisplayNameable.formatDisplayName(null);
+		Optional<String> result = Lootable.formatLooter(playerMock);
 
 		// Assert
 		assertEquals(Optional.empty(), result);
@@ -119,14 +131,13 @@ class DisplayNameableTest
 
 
 	@Test
-	void formatDisplayName_with_blank_displayName_returns_empty_optional()
+	void formatLooter_with_null_value_returns_optional_UNKNOWN_VALUE()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
-		TestObject testObject = new TestObject();
 
 		// Act
-		Optional<String> result = DisplayNameable.formatDisplayName("");
+		Optional<String> result = Lootable.formatLooter(null);
 
 		// Assert
 		assertEquals(Optional.empty(), result);

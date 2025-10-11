@@ -15,114 +15,105 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.quantity;
+package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name.Nameable;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.quantity.Quantifiable;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
+
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class QuantifiableTest
+class DisplayNameableTest
 {
 	@Mock AdapterCtx ctxMock;
-	@Mock FormatterCtx formatterContainerMock;
-	@Mock NumberFormatter numberFormatterMock;
 
-	static class TestObject implements Quantifiable
+	static class TestObject implements DisplayNameable
 	{
 		@Override
-		public int getQuantity()
+		public String getDisplayName()
 		{
-			return 42;
+			return "Display Name";
 		}
 	}
 
 
 	@Test
-	void object_is_instance_of_Quantifiable()
+	void object_is_instance_of_DisplayNameable()
 	{
 		// Arrange & Act
 		TestObject testObject = new TestObject();
 
 		// Assert
-		assertInstanceOf(Quantifiable.class, testObject);
+		assertInstanceOf(DisplayNameable.class, testObject);
 	}
 
 
 	@Test
-	void getQuantity_returns_int()
+	void getDisplayName_returns_string()
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
 
 		// Act
-		int result = testObject.getQuantity();
+		String result = testObject.getDisplayName();
 
 		// Assert
-		assertEquals(42, result);
+		assertEquals("Display Name", result);
 	}
 
 
 	@Test
-	void extractQuantity_returns_populated_map()
+	void extractDisplayName_returns_populated_map()
 	{
 		// Arrange
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-		ValidMacroKey subKey = baseKey.append("QUANTITY").isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append("DISPLAY_NAME").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
-		when(formatterContainerMock.localeNumberFormatter()).thenReturn(numberFormatterMock);
-		when(numberFormatterMock.format(42)).thenReturn("42");
 
 		// Act
-		MacroStringMap result = testObject.extractQuantity(baseKey, ctxMock);
+		MacroStringMap result = testObject.extractDisplayName(baseKey, ctxMock);
 
 		// Assert
-		assertEquals("42", result.get(subKey));
+		assertEquals("Display Name", result.get(subKey));
 	}
 
 
 	@Test
-	void formatQuantity_returns_optional_string()
-	{
-		// Arrange
-		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
-		TestObject testObject = new TestObject();
-		when(numberFormatterMock.format(42)).thenReturn("42");
-
-		// Act
-		Optional<String> result = Quantifiable.formatQuantity(42, numberFormatterMock);
-
-		// Assert
-		assertEquals(Optional.of("42"), result);
-	}
-
-
-	@Test
-	void formatName_with_null_name_returns_empty_optional()
+	void formatDisplayName_returns_optional_string()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act
-		Optional<String> result = Nameable.formatName(null);
+		Optional<String> result = DisplayNameable.formatDisplayName(testObject.getDisplayName());
+
+		// Assert
+		assertEquals(Optional.of("Display Name"), result);
+	}
+
+
+	@Test
+	void formatDisplayName_with_null_displayName_returns_empty_optional()
+	{
+		// Arrange
+		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
+		TestObject testObject = new TestObject();
+
+		// Act
+		Optional<String> result = DisplayNameable.formatDisplayName(null);
 
 		// Assert
 		assertEquals(Optional.empty(), result);
@@ -130,14 +121,14 @@ class QuantifiableTest
 
 
 	@Test
-	void formatName_with_blank_name_returns_empty_optional()
+	void formatDisplayName_with_blank_displayName_returns_empty_optional()
 	{
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act
-		Optional<String> result = Nameable.formatName("");
+		Optional<String> result = DisplayNameable.formatDisplayName("");
 
 		// Assert
 		assertEquals(Optional.empty(), result);
