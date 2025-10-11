@@ -47,7 +47,7 @@ public class QuantityAccessorTest
 
 			// Act
 			int quantity = -888;
-			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(collection);
+			Optional<Quantifiable> resolver = new BukkitQuantityAccessor().adapt(collection);
 			if (resolver.isPresent())
 			{
 				quantity = resolver.get().getQuantity();
@@ -65,7 +65,7 @@ public class QuantityAccessorTest
 
 			// Act
 			int quantity = -777;
-			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(collection);
+			Optional<Quantifiable> resolver = new BukkitQuantityAccessor().adapt(collection);
 			if (resolver.isPresent())
 			{
 				quantity = resolver.get().getQuantity();
@@ -82,7 +82,7 @@ public class QuantityAccessorTest
 			// Act & Assert
 			int quantity = -999;
 			Collection<String> collection = null;
-			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(collection);
+			Optional<Quantifiable> resolver = new BukkitQuantityAccessor().adapt(collection);
 			if (resolver.isPresent())
 			{
 				quantity = resolver.get().getQuantity();
@@ -104,7 +104,7 @@ public class QuantityAccessorTest
 
 			// Act
 			int quantity = -888;
-			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(itemStackMock);
+			Optional<Quantifiable> resolver = new BukkitQuantityAccessor().adapt(itemStackMock);
 			if (resolver.isPresent())
 			{
 				quantity = resolver.get().getQuantity();
@@ -124,7 +124,7 @@ public class QuantityAccessorTest
 
 			// Act
 			int quantity = -777;
-			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(itemStackMock);
+			Optional<Quantifiable> resolver = new BukkitQuantityAccessor().adapt(itemStackMock);
 			if (resolver.isPresent())
 			{
 				quantity = resolver.get().getQuantity();
@@ -140,7 +140,7 @@ public class QuantityAccessorTest
 		{
 			// Act & Assert
 			int quantity = -999;
-			Optional<Quantifiable> resolver = new QuantityAdapter().adapt(null);
+			Optional<Quantifiable> resolver = new BukkitQuantityAccessor().adapt(null);
 			if (resolver.isPresent())
 			{
 				quantity = resolver.get().getQuantity();
@@ -161,7 +161,7 @@ public class QuantityAccessorTest
 
 		// Act
 		int quantity = -888;
-		Optional<Quantifiable> resolver = new QuantityAdapter().adapt(chest);
+		Optional<Quantifiable> resolver = new BukkitQuantityAccessor().adapt(chest);
 		if (resolver.isPresent())
 		{
 			quantity = resolver.get().getQuantity();
@@ -181,7 +181,7 @@ public class QuantityAccessorTest
 
 		// Act
 		int quantity = -888;
-		Optional<Quantifiable> resolver = new QuantityAdapter().adapt(inventory);
+		Optional<Quantifiable> resolver = new BukkitQuantityAccessor().adapt(inventory);
 		if (resolver.isPresent())
 		{
 			quantity = resolver.get().getQuantity();

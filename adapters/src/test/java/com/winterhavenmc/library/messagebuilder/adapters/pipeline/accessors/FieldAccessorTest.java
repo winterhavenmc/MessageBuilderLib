@@ -43,7 +43,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.na
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.owner.Ownable;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.owner.OwnerAdapter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.quantity.Quantifiable;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.QuantityAdapter;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.BukkitQuantityAccessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.protection.Protectable;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.identity.Identifiable;
@@ -487,7 +487,7 @@ class FieldAccessorTest
 	}
 
 
-	@Test @DisplayName("QuantityAdapter adapts Quantifiable objects.")
+	@Test @DisplayName("BukkitQuantityAccessor adapts Quantifiable objects.")
 	void QuantityAdapter_adapts_Quantifiable_objects()
 	{
 		// Arrange
@@ -498,7 +498,7 @@ class FieldAccessorTest
 		}
 
 		ValidMacroKey subKey = baseKey.append(QUANTITY).isValid().orElseThrow();
-		QuantityAdapter quantityAdapter = new QuantityAdapter();
+		BukkitQuantityAccessor quantityAdapter = new BukkitQuantityAccessor();
 		TestObject testObject = new TestObject();
 
 		when(adapterContextContainerMock.formatterCtx()).thenReturn(formatterContainerMock);

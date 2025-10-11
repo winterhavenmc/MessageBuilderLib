@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.BukkitQuantityAccessor;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.FieldAccessor;
 
@@ -44,7 +45,6 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.plur
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.protection.Protectable;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.quantity.Quantifiable;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.QuantityAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.url.UrlAdapter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.url.UrlAddressable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.identity.Identifiable;
@@ -168,7 +168,7 @@ public class MacroFieldAccessor implements FieldAccessor
 					resultMap.putAll(identifiable.extractUid(baseKey, ctx));
 
 			// Extract quantity field as string
-			case QuantityAdapter __ when adapted instanceof Quantifiable quantifiable ->
+			case BukkitQuantityAccessor __ when adapted instanceof Quantifiable quantifiable ->
 					resultMap.putAll(quantifiable.extractQuantity(baseKey, ctx));
 
 			// Extract duration field as string

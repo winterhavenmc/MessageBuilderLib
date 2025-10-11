@@ -20,9 +20,11 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.qua
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.quantity.Quantifiable;
+
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.Collection;
 import java.util.Optional;
 
@@ -46,7 +48,7 @@ import java.util.Optional;
  * @see Quantifiable
  * @see Accessor
  */
-public class QuantityAdapter implements Accessor
+public class BukkitQuantityAccessor implements Accessor
 {
 	/**
 	 * Attempts to adapt the given object into a {@link Quantifiable} instance.

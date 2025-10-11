@@ -29,7 +29,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.name
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.owner.OwnerAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.pluralname.PluralNameAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.protection.ProtectionAdapter;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.QuantityAdapter;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.BukkitQuantityAccessor;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
@@ -338,7 +338,7 @@ class AccessorRegistryTest
 	}
 
 
-	@Test @DisplayName("getMatchingAdapters() streams QuantityAdapter for Quantifiable types.")
+	@Test @DisplayName("getMatchingAdapters() streams BukkitQuantityAccessor for Quantifiable types.")
 	void getMatchingAdapters_streams_QuantityAdapter()
 	{
 		// Arrange
@@ -354,7 +354,7 @@ class AccessorRegistryTest
 		SampleEntity entity = new SampleEntity();
 
 		// Act
-		long result = registry.getMatchingAdapters(entity).filter(QuantityAdapter.class::isInstance).count();
+		long result = registry.getMatchingAdapters(entity).filter(BukkitQuantityAccessor.class::isInstance).count();
 
 		// Assert
 		assertEquals(1, result);

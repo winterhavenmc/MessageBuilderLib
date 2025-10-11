@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.identity.UniqueIdAdapter;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.BukkitQuantityAccessor;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
@@ -32,7 +33,6 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.name
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.owner.OwnerAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.pluralname.PluralNameAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.protection.ProtectionAdapter;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.QuantityAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.url.UrlAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.version.VersionAdapter;
 
@@ -88,7 +88,7 @@ public class FieldAccessorRegistry implements AccessorRegistry
 		register(new KillerAdapter());
 		register(new LooterAdapter());
 		register(new LocationAdapter());
-		register(new QuantityAdapter());
+		register(new BukkitQuantityAccessor());
 		register(new ProtectionAdapter());
 		register(new UniqueIdAdapter());
 		register(new UrlAdapter(ctx));
