@@ -18,9 +18,10 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceMessage;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceMessage;
+
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
