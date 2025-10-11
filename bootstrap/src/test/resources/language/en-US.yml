@@ -1,0 +1,236 @@
+# Language configuration file for ${project.name} v${project.version}
+
+#################################
+# Constant Strings
+#################################
+CONSTANTS:
+  BOOLEAN:
+    TRUE: 'true'
+    FALSE: 'false'
+
+  TIME:
+    LESS_THAN: "less than {DURATION}"
+    UNLIMITED: "unlimited"
+    EXPIRED: "expired"
+
+  SPAWN:
+    DISPLAY_NAME: '&aSpawn'
+  HOME:
+    DISPLAY_NAME: '&aHome'
+
+  DEFAULTS:
+    WORLD.NAME: "unknown world"
+    PLAYER.NAME: "a player"
+
+  TEST_LIST:
+    - item 1
+    - item 2
+    - item 3
+
+  TEST_INT: 42
+
+
+##############
+# Item Strings
+##############
+ITEMS:
+  DEFAULT:
+    MATERIAL: GOLDEN_PICKAXE
+    NAME: 'Default Item'
+    PLURAL_NAME: 'Default Items'
+    DISPLAY_NAME: 'Default Inventory Item'
+    LORE:
+      - '&edefault lore line 1'
+      - '&edefault lore line 2'
+
+  TEST_ITEM_1:
+    NAME: '&aTest Item'
+    PLURAL_NAME: '&aTest Items'
+    DISPLAY_NAME: '&aInventory Item'
+    LORE:
+      - '&etest1 lore line 1'
+      - '&etest1 lore line 2'
+
+  TEST_ITEM_2:
+    NAME: '&aTest Item 2'
+    PLURAL_NAME: '&aTest Items 2'
+    DISPLAY_NAME: '&aInventory Item 2'
+    LORE:
+      - '&etest2 lore line 1'
+      - '&etest2 lore line 2'
+
+  UNDEFINED_ITEM_NAME:
+    PLURAL_NAME: '&aTest Items'
+    DISPLAY_NAME: '&aInventory Item'
+    LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_NAME_PLURAL:
+    NAME: '&aTest Item'
+    DISPLAY_NAME: '&aInventory Item'
+    LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_INVENTORY_ITEM_NAME:
+    NAME: '&aTest Item'
+    PLURAL_NAME: '&aTest Items'
+    LORE:
+      - '&elore line 1'
+      - '&elore line 2'
+
+  UNDEFINED_ITEM_LORE:
+    NAME: '&aTest Item'
+    PLURAL_NAME: '&aTest Items'
+    DISPLAY_NAME: '&aInventory Item'
+
+
+###################
+# Arbitrary Strings
+###################
+ARBITRARY_STRING: 'an arbitrary string'
+
+ARBITRARY_STRING_LIST:
+  - "item 1"
+  - "item 2"
+  - "item 3"
+
+
+##########
+# Messages
+##########
+MESSAGES:
+  ENABLED_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT: "This is an enabled message"
+
+  DISABLED_MESSAGE:
+    ENABLED: false
+    MESSAGE_TEXT: "This is a disabled message"
+
+  REPEAT_DELAYED_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT: "this is a repeat delayed message"
+    REPEAT_DELAY: 10
+
+  CONSTANT_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a constant replacement {CONSTANT:SPAWN.DISPLAY_NAME}."
+
+  ITEM_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a constant replacement {ITEM:TEST_ITEM_1}."
+
+  TIME_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a constant replacement {TIME:DURATION}."
+
+  MACRO_MESSAGE_ITEM:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM}."
+
+  MACRO_MESSAGE_ITEM_NAME:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM.NAME}."
+
+  MACRO_MESSAGE_ITEM_NAME_QUANTITY:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM.QUANTITY}."
+
+  MACRO_MESSAGE_ITEM_ALT:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:DEFAULT}."
+
+  MACRO_MESSAGE_ITEM_NAME_ALT:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME}."
+
+  MACRO_MESSAGE_ITEM_NAME_SINGULAR:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.SINGULAR}."
+
+  MACRO_MESSAGE_ITEM_NAME_PLURAL:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:TEST_ITEM_1.NAME.PLURAL}."
+
+  MACRO_MESSAGE_ITEM_NAME_QUANTITY_ALT:
+    ENABLED: true
+    MESSAGE_TEXT: "This is a message with a macro replacement {ITEM:ITEM.QUANTITY}."
+
+  ENABLED_TITLE:
+    ENABLED: true
+    TITLE_TEXT: "This is an enabled title"
+
+  DISABLED_TITLE:
+    ENABLED: false
+    TITLE_TEXT: "This is a disabled title"
+
+  ENABLED_SUBTITLE:
+    ENABLED: true
+    subTITLE_TEXT: "This is an enabled subtitle"
+
+  DISABLED_SUBTITLE:
+    ENABLED: false
+    subTITLE_TEXT: "This is a disabled subtitle"
+
+  CUSTOM_FADE_TITLE:
+    ENABLED: true
+    TITLE_TEXT: "This is a title with custom fade values"
+    TITLE_FADE_IN: 20
+    TITLE_STAY: 140
+    TITLE_FADE_OUT: 40
+
+  NON_INT_TITLE_FADE_VALUES:
+    ENABLED: true
+    TITLE_TEXT: "This is a title with non-integer fade values"
+    TITLE_FADE_IN: "STRING"
+    TITLE_STAY: "STRING"
+    TITLE_FADE_OUT: "STRING"
+
+  DURATION_MESSAGE:
+    ENABLED: true
+    MESSAGE_TEXT: "Duration is [DURATION}"
+
+
+  # all number fields are present and unique from each other and the bukkit defaults (20, 70, 10)
+  ALL_FIELDS_PRESENT:
+    MESSAGE_TEXT: "This entry has all fields present - message"
+    REPEAT_DELAY: 14
+    TITLE_TEXT: "This entry has all fields present - title"
+    TITLE_FADE_IN: 24
+    TITLE_STAY: 34
+    TITLE_FADE_OUT: 44
+    SUBTITLE_TEXT: "This entry has all fields present - subtitle"
+
+
+  UNDEFINED_FIELD_ENABLED:
+    MESSAGE_TEXT: "This entry has no enabled field"
+
+  UNDEFINED_FIELD_MESSAGE:
+    ENABLED: true
+    TITLE_TEXT: "This entry has no message field"
+
+  UNDEFINED_FIELD_REPEAT_DELAY:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no repeat-delay field"
+
+  UNDEFINED_FIELD_TITLE:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title field"
+
+  UNDEFINED_FIELD_TITLE_FADE_IN:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title-fade-in field"
+
+  UNDEFINED_FIELD_TITLE_STAY:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title-stay field"
+
+  UNDEFINED_FIELD_TITLE_FADE_OUT:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no title-fade-out field"
+
+  UNDEFINED_FIELD_SUBTITLE:
+    ENABLED: true
+    MESSAGE_TEXT: "This entry has no subtitle field"
