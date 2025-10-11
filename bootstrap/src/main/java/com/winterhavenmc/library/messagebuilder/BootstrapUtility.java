@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.MacroFieldAccessor;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown.MessageCooldownMap;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.MacroFieldExtractor;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.Time4jDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number.LocaleNumberFormatter;
@@ -41,11 +41,11 @@ import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvi
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.AdapterRegistry;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.FieldAdapterRegistry;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
@@ -107,9 +107,9 @@ public final class BootstrapUtility
 	private static @NotNull MessageProcessor createMacroReplacer(final FormatterCtx formatterCtx,
 																 final AdapterCtx adapterCtx)
 	{
-		final AdapterRegistry adapterRegistry = new FieldAdapterRegistry(adapterCtx);
-		final MacroFieldExtractor macroFieldExtractor = new MacroFieldExtractor(adapterCtx);
-		final CompositeResolver compositeResolver = new CompositeResolver(adapterRegistry, macroFieldExtractor);
+		final AccessorRegistry accessorRegistry = new FieldAccessorRegistry(adapterCtx);
+		final MacroFieldAccessor macroFieldAccessor = new MacroFieldAccessor(adapterCtx);
+		final CompositeResolver compositeResolver = new CompositeResolver(accessorRegistry, macroFieldAccessor);
 		final AtomicResolver atomicResolver = new AtomicResolver(formatterCtx);
 		final MacroValueResolver macroValueResolver = new MacroValueResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
 		final RegexPlaceholderMatcher placeholderMatcher = new RegexPlaceholderMatcher();

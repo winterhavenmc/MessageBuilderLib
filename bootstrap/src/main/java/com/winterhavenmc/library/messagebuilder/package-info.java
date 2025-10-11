@@ -24,7 +24,7 @@
  *   <li>Supports localization and per-player language settings</li>
  *   <li>Allows multiple macros to be resolved from a single object via adapters</li>
  *   <li>Built-in support for standard Bukkit types like {@code Player}, {@code Location}, {@code ItemStack}, etc.</li>
- *   <li>Extensible via custom {@code MacroProcessor}, {@code ValueResolver}, or {@code Adapter} implementations
+ *   <li>Extensible via custom {@code MacroProcessor}, {@code ValueResolver}, or {@code Accessor} implementations
  *   <em>(planned for a future version)</em></li>
  * </ul>
  *

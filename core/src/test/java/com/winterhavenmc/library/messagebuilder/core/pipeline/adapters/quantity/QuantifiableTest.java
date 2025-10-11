@@ -20,8 +20,8 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.quantity
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.name.Nameable;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.quantity.Quantifiable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name.Nameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.quantity.Quantifiable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;

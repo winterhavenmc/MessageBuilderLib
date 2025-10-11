@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.owner;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.owner.Ownable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.owner.Ownable;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 

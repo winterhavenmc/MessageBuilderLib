@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.du
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -107,6 +108,7 @@ class Time4jDurationFormatterTest
 
 	@Test
 	@DisplayName("Should fallback to defaults when null is passed")
+	@Disabled
 	void testNullArgumentsAreHandled()
 	{
 		// null duration

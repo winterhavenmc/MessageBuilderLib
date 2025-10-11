@@ -27,11 +27,6 @@
 			<artifactId>models</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.winterhavenmc.messagebuilder</groupId>
-			<artifactId>configuration</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
 		<!-- external -->
 		<dependency>

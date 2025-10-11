@@ -19,7 +19,7 @@
  *      {@code Duration}) and maps them directly to the base macro string.</li>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.CompositeResolver}
  *   	handles structured or compound values using a registry of
- *      Adapter instances, extracting multiple sub-values mapped to dot-notated subkeys.</li>
+ *      Accessor instances, extracting multiple sub-values mapped to dot-notated subkeys.</li>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.FieldResolver}
  *   	serves as a delegating resolver that applies multiple resolvers in order,
  *      preserving the first-resolved value for each string.</li>
@@ -34,8 +34,8 @@
  * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.AtomicResolver AtomicResolver
  * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.CompositeResolver CompositeResolver
  * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.FieldResolver FieldResolver
- * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter Adapter
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.FieldAdapterRegistry AdapterRegistry
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor Accessor
+ * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.FieldAdapterRegistry AccessorRegistry
  * @see com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap MacroObjectMap
  * @see com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap MacroStringMap
  * @see com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey ValidMacroKey

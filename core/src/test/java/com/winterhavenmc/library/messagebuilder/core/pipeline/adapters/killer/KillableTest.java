@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.killer;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.killer.Killable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.killer.Killable;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -34,7 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter.BuiltIn.KILLER;
+import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.KILLER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.when;

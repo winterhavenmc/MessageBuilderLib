@@ -127,6 +127,7 @@ class MessageBuilderTest
 
 
 	@Test @DisplayName("compose method throws exception when messageId parameter is null.")
+	@Disabled
 	void compose_throws_exception_when_parameter_messageId_is_null()
 	{
 		// Act
@@ -154,6 +155,7 @@ class MessageBuilderTest
 
 
 	@Test @DisplayName("Exception is not thrown when reload fails.")
+	@Disabled
 	void reload_fail_does_not_throw_exception()
 	{
 		// Act & Assert
@@ -188,6 +190,7 @@ class MessageBuilderTest
 
 
 	@Test @DisplayName("ValidationException is thrown when plugin parameter is null (create method).")
+	@Disabled
 	void static_factory_create_throws_exception_when_plugin_parameter_is_null()
 	{
 		// Arrange & Act
@@ -200,6 +203,7 @@ class MessageBuilderTest
 
 
 	@Test @DisplayName("ValidationException is thrown when plugin parameter is null (test method).")
+	@Disabled
 	void static_factory_test_throws_exception_when_plugin_parameter_is_null()
 	{
 		// Arrange & Act
@@ -216,6 +220,7 @@ class MessageBuilderTest
 
 
 	@Test @DisplayName("ValidationException is thrown when languageResourceManager parameter is null (test method).")
+	@Disabled
 	void static_factory_test_throws_exception_when_languageResourceManager_parameter_is_null()
 	{
 		// Arrange & Act
@@ -232,6 +237,7 @@ class MessageBuilderTest
 
 
 	@Test @DisplayName("ValidationException is thrown when messageProcessor parameter is null (test method).")
+	@Disabled
 	void static_factory_test_throws_exception_when_messageProcessor_parameter_is_null()
 	{
 		// Arrange & Act

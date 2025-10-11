@@ -17,13 +17,13 @@
 
 package com.winterhavenmc.library.messagebuilder.core.context;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.location.Locatable;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.name.Nameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.location.Locatable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name.Nameable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.expiration.Expirable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.expiration.Expirable;
 
 
 /**

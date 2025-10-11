@@ -17,13 +17,13 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.MacroFieldExtractor;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.MacroFieldAccessor;
 
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.AdapterRegistry;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.name.NameAdapter;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.name.Nameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.name.NameAdapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name.Nameable;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
@@ -49,8 +49,10 @@ class CompositeResolverTest
 {
 	@Mock Player playerMock;
 	@Mock NameAdapter adapterMock;
-	@Mock AdapterRegistry adapterRegistryMock;
-	@Mock MacroFieldExtractor fieldExtractorMock;
+	@Mock
+	AccessorRegistry accessorRegistryMock;
+	@Mock
+	MacroFieldAccessor fieldExtractorMock;
 	@Mock MacroObjectMap macroObjectMapMock;
 	@Mock Nameable nameableMock;
 
@@ -63,7 +65,7 @@ class CompositeResolverTest
 	@BeforeEach
 	void setUp()
 	{
-		resolver = new CompositeResolver(adapterRegistryMock, fieldExtractorMock);
+		resolver = new CompositeResolver(accessorRegistryMock, fieldExtractorMock);
 	}
 
 
@@ -81,7 +83,7 @@ class CompositeResolverTest
 		CompositeResolver spyResolver = spy(resolver);
 
 		when(macroObjectMapMock.get(rootKey)).thenReturn(Optional.of(rootValue));
-		when(adapterRegistryMock.getMatchingAdapters(rootValue)).thenReturn(Stream.of(adapterMock));
+		when(accessorRegistryMock.getMatchingAdapters(rootValue)).thenReturn(Stream.of(adapterMock));
 
 		when(adapterMock.adapt(rootValue)).thenReturn((Optional) Optional.of(adaptedValue));
 
@@ -116,7 +118,7 @@ class CompositeResolverTest
 	{
 		// Arrange
 		when(macroObjectMapMock.get(rootKey)).thenReturn(Optional.of("test"));
-		when(adapterRegistryMock.getMatchingAdapters("test")).thenReturn(Stream.empty());
+		when(accessorRegistryMock.getMatchingAdapters("test")).thenReturn(Stream.empty());
 
 		// Act
 		MacroStringMap resultMap = resolver.resolve(rootKey, macroObjectMapMock);
@@ -131,7 +133,7 @@ class CompositeResolverTest
 	{
 		// Arrange
 		when(macroObjectMapMock.get(rootKey)).thenReturn(Optional.of("test"));
-		when(adapterRegistryMock.getMatchingAdapters("test")).thenReturn(Stream.of(adapterMock));
+		when(accessorRegistryMock.getMatchingAdapters("test")).thenReturn(Stream.of(adapterMock));
 		when(adapterMock.adapt("test")).thenReturn(Optional.empty());
 
 		// Act

@@ -17,11 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.MacroFieldExtractor;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.AdapterRegistry;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.MacroFieldAccessor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.extractors.FieldAdapterRegistry;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
@@ -30,7 +30,7 @@ import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
 /**
  * A {@link ValueResolver} implementation that handles complex or structured objects
- * by applying one or more matching {@link Adapter} instances.
+ * by applying one or more matching {@link Accessor} instances.
  * <p>
  * The {@code CompositeResolver} delegates the resolution process to registered
  * adapters that know how to transform an object into a set of string values,
@@ -44,43 +44,43 @@ import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
  * <p>Example flow:
  * <ol>
  *   <li>Retrieve the object from the {@link MacroObjectMap} using the given {@code macroKey}.</li>
- *   <li>Find all matching adapters for the object via the {@link FieldAdapterRegistry}.</li>
- *   <li>For each adapter, adapt the object and extract string-value mappings via the {@link MacroFieldExtractor}.</li>
+ *   <li>Find all matching adapters for the object via the {@link FieldAccessorRegistry}.</li>
+ *   <li>For each adapter, adapt the object and extract string-value mappings via the {@link MacroFieldAccessor}.</li>
  *   <li>Aggregate all mappings into a {@link MacroStringMap}.</li>
  * </ol>
  *
  * @see ValueResolver
- * @see FieldAdapterRegistry
- * @see Adapter
- * @see MacroFieldExtractor
+ * @see FieldAccessorRegistry
+ * @see Accessor
+ * @see MacroFieldAccessor
  */
 public class CompositeResolver implements ValueResolver
 {
-	private final AdapterRegistry adapterRegistry;
-	private final MacroFieldExtractor macroFieldExtractor;
+	private final AccessorRegistry accessorRegistry;
+	private final MacroFieldAccessor macroFieldAccessor;
 
 
 	/**
 	 * Constructs a {@code CompositeResolver} with the given adapter registry
 	 * and field extractor.
 	 *
-	 * @param adapterRegistry an instance that manages and matches {@link Adapter} objects
-	 * @param macroFieldExtractor an instance used to extract field values from adapted objects
+	 * @param accessorRegistry an instance that manages and matches {@link Accessor} objects
+	 * @param macroFieldAccessor an instance used to extract field values from adapted objects
 	 */
-	public CompositeResolver(final AdapterRegistry adapterRegistry,
-							 final MacroFieldExtractor macroFieldExtractor)
+	public CompositeResolver(final AccessorRegistry accessorRegistry,
+							 final MacroFieldAccessor macroFieldAccessor)
 	{
-		this.adapterRegistry = adapterRegistry;
-		this.macroFieldExtractor = macroFieldExtractor;
+		this.accessorRegistry = accessorRegistry;
+		this.macroFieldAccessor = macroFieldAccessor;
 	}
 
 
 	/**
 	 * Resolves a {@link ValidMacroKey} by attempting to adapt the associated object
-	 * from the {@link MacroObjectMap} using applicable {@link Adapter} instances.
+	 * from the {@link MacroObjectMap} using applicable {@link Accessor} instances.
 	 * <p>
 	 * For each adapter that supports the object, this method invokes the adapter’s
-	 * {@code adapt} method, then extracts sub-string mappings via the {@link MacroFieldExtractor}.
+	 * {@code adapt} method, then extracts sub-string mappings via the {@link MacroFieldAccessor}.
 	 * <p>
 	 * The resulting {@link MacroStringMap} contains mappings for the derived sub-keys.
 	 * The base string may also be included if provided by the adapter and extractor.
@@ -94,12 +94,12 @@ public class CompositeResolver implements ValueResolver
 	{
 		MacroStringMap macroStringMap = new MacroStringMap();
 
-		macroObjectMap.get(macroKey).ifPresent(object -> adapterRegistry
+		macroObjectMap.get(macroKey).ifPresent(object -> accessorRegistry
 				.getMatchingAdapters(object)
 				.forEach(adapter -> adapter
 						.adapt(object)
 						.ifPresent(adapted -> macroStringMap
-								.putAll(macroFieldExtractor.extract(macroKey, adapter, adapted)))));
+								.putAll(macroFieldAccessor.extract(macroKey, adapter, adapted)))));
 
 		return macroStringMap;
 	}

@@ -20,8 +20,8 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.identity
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.identity.Identifiable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.identity.Identifiable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
@@ -88,7 +88,7 @@ class IdentifiableTest
 	{
 		// Arrange
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
-		ValidMacroKey subKey = baseKey.append(Adapter.BuiltIn.UUID).isValid().orElseThrow();
+		ValidMacroKey subKey = baseKey.append(Accessor.BuiltIn.UUID).isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
 		// Act

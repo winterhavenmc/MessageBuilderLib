@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
@@ -36,7 +36,7 @@ import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
  * <ul>
  *   <li>{@code AtomicResolver} handles single, directly formattable values.</li>
  *   <li>{@code CompositeResolver} handles structured or composite values using
- *       {@link Adapter}s to produce multiple sub-entries.</li>
+ *       {@link Accessor}s to produce multiple sub-entries.</li>
  *   <li>{@code FieldResolver} combines multiple resolvers in a prioritized chain.</li>
  * </ul>
  * This interface supports functional-style composition and may be used in lambda

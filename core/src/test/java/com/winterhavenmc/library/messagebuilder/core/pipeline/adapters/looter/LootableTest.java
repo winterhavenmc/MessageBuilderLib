@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.looter;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.looter.Lootable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.looter.Lootable;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -34,7 +34,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.extractors.Adapter.BuiltIn.LOOTER;
+import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.LOOTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.when;
