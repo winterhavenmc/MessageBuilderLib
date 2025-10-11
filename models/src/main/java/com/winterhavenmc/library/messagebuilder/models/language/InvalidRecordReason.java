@@ -57,7 +57,7 @@ public enum InvalidRecordReason
 	{
 		try
 		{
-			ResourceBundle bundle = ResourceBundle.getBundle(getClass().getSimpleName(), locale);
+			final ResourceBundle bundle = ResourceBundle.getBundle(getClass().getSimpleName(), locale);
 			return bundle.getString(name());
 		}
 		catch (MissingResourceException exception)
@@ -72,7 +72,7 @@ public enum InvalidRecordReason
 		try
 		{
 			final ResourceBundle bundle = ResourceBundle.getBundle(getClass().getSimpleName(), locale);
-			String pattern = bundle.getString(name());
+			final String pattern = bundle.getString(name());
 			return MessageFormat.format(pattern, objects);
 		}
 		catch (MissingResourceException exception)
