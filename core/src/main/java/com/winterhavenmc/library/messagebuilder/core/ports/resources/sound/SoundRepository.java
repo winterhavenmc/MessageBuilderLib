@@ -29,6 +29,8 @@ import java.util.Collection;
  */
 public interface SoundRepository
 {
+	SoundRecord getSoundRecord(Enum<?> soundId);
+
 	/**
 	 * get all keys from the sound configuration
 	 *
@@ -60,8 +62,6 @@ public interface SoundRepository
 	 */
 	void playSound(final Location location, final Enum<?> soundId);
 
-
-	SoundRecord getSoundRecord(Enum<?> soundId);
 
 	/**
 	 * Test string is valid bukkit sound name
