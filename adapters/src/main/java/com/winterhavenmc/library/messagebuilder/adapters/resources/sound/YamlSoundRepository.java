@@ -90,24 +90,7 @@ public class YamlSoundRepository implements SoundRepository
 
 
 	@Override
-	public Set<String> getKeys()
-	{
-		return this.soundsConfig.getKeys(false);
-	}
-
-
-	ValidSoundRecord getEntry(final Enum<?> soundId)
-	{
-		return new ValidSoundRecord(soundId.name(),
-				soundsConfig.getBoolean(soundId + "." + Field.ENABLED),
-				soundsConfig.getBoolean(soundId + "." + Field.PLAYER_ONLY),
-				soundsConfig.getString(soundId + "." + Field.SOUND_NAME),
-				(float) soundsConfig.getDouble(soundId + "." + Field.VOLUME),
-				(float) soundsConfig.getDouble(soundId + "." + Field.PITCH));
-	}
-
-
-	SoundRecord getSoundEntry(final Enum<?> soundId)
+	public SoundRecord getSoundRecord(final Enum<?> soundId)
 	{
 		return SoundRecord.of(soundId.name(),
 				soundsConfig.getBoolean(soundId + "." + Field.ENABLED),
@@ -115,6 +98,13 @@ public class YamlSoundRepository implements SoundRepository
 				soundsConfig.getString(soundId + "." + Field.SOUND_NAME),
 				(float) soundsConfig.getDouble(soundId + "." + Field.VOLUME),
 				(float) soundsConfig.getDouble(soundId + "." + Field.PITCH));
+	}
+
+
+	@Override
+	public Set<String> getKeys()
+	{
+		return this.soundsConfig.getKeys(false);
 	}
 
 
@@ -154,7 +144,6 @@ public class YamlSoundRepository implements SoundRepository
 	/**
 	 * Load sound configuration from yaml file in plugin data folder
 	 */
-	@Override
 	public void reload()
 	{
 		// get File object for sound file
@@ -169,13 +158,10 @@ public class YamlSoundRepository implements SoundRepository
 		{
 			soundsConfig.load(soundFile);
 		}
-		catch (IOException ioException)
+		catch (IllegalArgumentException | IOException | InvalidConfigurationException exception)
 		{
-			plugin.getLogger().severe(ioException.getLocalizedMessage());
-		}
-		catch (InvalidConfigurationException invalidConfigurationException)
-		{
-			throw new RuntimeException(invalidConfigurationException);
+			plugin.getLogger().severe(exception.getLocalizedMessage());
+			throw new RuntimeException(exception);
 		}
 	}
 
@@ -201,7 +187,7 @@ public class YamlSoundRepository implements SoundRepository
 			return;
 		}
 
-		if (getSoundEntry(soundId) instanceof ValidSoundRecord validSoundRecord
+		if (getSoundRecord(soundId) instanceof ValidSoundRecord validSoundRecord
 				&& validSoundRecord.enabled())
 		{
 			// check that sound name is valid
@@ -252,7 +238,7 @@ public class YamlSoundRepository implements SoundRepository
 			return;
 		}
 
-		if (getSoundEntry(soundId) instanceof ValidSoundRecord validSoundRecord && validSoundRecord.enabled())
+		if (getSoundRecord(soundId) instanceof ValidSoundRecord validSoundRecord && validSoundRecord.enabled())
 		{
 			// check that sound name is valid
 			if (validSoundRecord.soundName() != null && Registry.SOUNDS.match(validSoundRecord.soundName()) != null)
@@ -274,6 +260,7 @@ public class YamlSoundRepository implements SoundRepository
 			}
 		}
 	}
+
 
 	boolean soundEffectsDisabled()
 	{

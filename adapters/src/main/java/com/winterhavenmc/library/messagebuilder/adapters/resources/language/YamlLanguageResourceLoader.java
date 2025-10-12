@@ -44,7 +44,7 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.resources.lang
  * result in a new configuration object loaded from the currently configured language file, or the en-US language
  * file if a file for the currently configured language cannot be found in the plugin data directory.
  */
-public class YamlLanguageResourceLoader implements ResourceLoader
+public final class YamlLanguageResourceLoader implements ResourceLoader
 {
 	private final Plugin plugin;
 	private final Supplier<YamlConfiguration> yamlFactory;
@@ -69,7 +69,9 @@ public class YamlLanguageResourceLoader implements ResourceLoader
 	 * @param plugin      an instance of the plugin main class
 	 * @param yamlFactory factory for creating YamlConfiguration instances
 	 */
-	public YamlLanguageResourceLoader(final Plugin plugin, Supplier<YamlConfiguration> yamlFactory, LocaleProvider localeProvider)
+	public YamlLanguageResourceLoader(final Plugin plugin,
+									  final Supplier<YamlConfiguration> yamlFactory,
+									  final LocaleProvider localeProvider)
 	{
 		this.plugin = plugin;
 		this.yamlFactory = yamlFactory;

@@ -62,7 +62,7 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 	 * Install resources listed in auto_install.txt to the plugin data directory
 	 */
 	@Override
-	public void autoInstall()
+	public void install()
 	{
 		Set<String> resourceNames = getAutoInstallSet(getAutoInstallResourceName());
 		for (String resourceName : resourceNames)

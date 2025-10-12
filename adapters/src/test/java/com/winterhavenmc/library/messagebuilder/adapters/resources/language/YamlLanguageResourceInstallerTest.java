@@ -69,7 +69,7 @@ public class YamlLanguageResourceInstallerTest
 
 		// create real instance of installer
 		resourceInstaller = new YamlLanguageResourceInstaller(pluginMock, localeProviderMock);
-		resourceInstaller.autoInstall();
+		resourceInstaller.install();
 	}
 
 
@@ -414,7 +414,7 @@ public class YamlLanguageResourceInstallerTest
 					.when(pluginMock).saveResource(anyString(), eq(false));
 
 			// Act
-			resourceInstaller.autoInstall();
+			resourceInstaller.install();
 
 			// Assert
 			assertTrue(resourceInstaller.isInstalled("language/en-US.yml"));

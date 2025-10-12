@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.*;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.SectionProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;

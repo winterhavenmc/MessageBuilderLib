@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.resources.sound;
 
+import com.winterhavenmc.library.messagebuilder.models.sound.SoundRecord;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
@@ -59,6 +60,8 @@ public interface SoundRepository
 	 */
 	void playSound(final Location location, final Enum<?> soundId);
 
+
+	SoundRecord getSoundRecord(Enum<?> soundId);
 
 	/**
 	 * Test string is valid bukkit sound name

@@ -15,11 +15,10 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
+package com.winterhavenmc.library.messagebuilder.core.ports.resources;
 
 
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 
 
 public interface SectionResourceManager extends ResourceManager

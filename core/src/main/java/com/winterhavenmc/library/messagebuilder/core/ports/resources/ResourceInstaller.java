@@ -34,7 +34,7 @@ public interface ResourceInstaller
 	/**
 	 * Install resources listed in auto_install.txt to the plugin data directory
 	 */
-	void autoInstall();
+	void install();
 
 
 	enum InstallerStatus
