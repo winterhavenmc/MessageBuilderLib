@@ -24,5 +24,5 @@ import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;
 @FunctionalInterface
 public interface ItemRepository
 {
-	ItemRecord getItemRecord(ValidItemKey key);
+	ItemRecord getRecord(ValidItemKey key);
 }
