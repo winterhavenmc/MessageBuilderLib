@@ -51,7 +51,7 @@ import java.util.stream.Stream;
  * be included in the language file name setting of the {@code config.yml} file.
  * </p>
  */
-public class BukkitLanguageProvider implements LanguageProvider
+public final class BukkitLanguageProvider implements LanguageProvider
 {
 	private final static String FALLBACK_NAME = "en-US";
 	private final Supplier<LanguageSetting> languageSettingSupplier;

@@ -17,18 +17,18 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ConfigurationProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionResourceManager;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
-import com.winterhavenmc.library.messagebuilder.models.language.Section;
 
 import org.bukkit.configuration.Configuration;
 
 import java.io.File;
 
-import static com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageConfigConstant.RESOURCE_SUBDIRECTORY;
 
 
 /**
@@ -44,7 +44,7 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.resources.lang
  * globally, anywhere within this library using this static method.
  * 
  */
-public final class YamlLanguageResourceManager implements SectionResourceManager
+public final class YamlLanguageResourceManager implements ResourceManager
 {
 	private final YamlLanguageResourceLoader resourceLoader;
 	private final ResourceInstaller resourceInstaller;
@@ -109,15 +109,23 @@ public final class YamlLanguageResourceManager implements SectionResourceManager
 		return false; // keep the old config if reload failed
 	}
 
+
 	/**
 	 * Retrieve the configuration provider, a container that carries the current configuration
 	 *
 	 * @return the configuration provider
 	 */
 	@Override
-	public SectionProvider getSectionProvider(Section section)
+	public SectionProvider getSectionProvider(String sectionName)
 	{
-		return new YamlLanguageSectionProvider(() -> languageConfiguration, section);
+		return new YamlLanguageSectionProvider(() -> languageConfiguration, sectionName);
+	}
+
+
+	@Override
+	public ConfigurationProvider getConfigurationProvider()
+	{
+		return new YamlLanguageConfigurationProvider(() -> languageConfiguration);
 	}
 
 
@@ -140,9 +148,9 @@ public final class YamlLanguageResourceManager implements SectionResourceManager
 
 
 	/**
-	 * Retrieve the name of the potential language resource file as installed in the plugin data directory, as a String.
+	 * Retrieve the name of the potential language resource file as installed in the plugin data directory, as a Section.
 	 *
-	 * @return {@code String} representation of the potential language resource file installed in the plugin data directory
+	 * @return {@code Section} representation of the potential language resource file installed in the plugin data directory
 	 */
 	public static String getFileName(final LanguageTag languageTag)
 	{

@@ -105,7 +105,10 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 
 		private final String keyString;
 
-		Field(String keyString) { this.keyString = keyString; }
+		Field(final String keyString)
+		{
+			this.keyString = keyString;
+		}
 
 
 		/**
@@ -114,6 +117,9 @@ public sealed interface ItemRecord extends SectionRecord permits ValidItemRecord
 		 * @return the raw configuration string
 		 */
 		public String toKey() { return this.keyString; }
+
+		@Override
+		public String toString() { return this.keyString; }
 	}
 
 

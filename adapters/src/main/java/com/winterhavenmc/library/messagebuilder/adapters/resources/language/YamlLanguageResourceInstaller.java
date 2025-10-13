@@ -18,7 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceMessage;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
@@ -28,8 +27,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.*;
 
-import static com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant.RESOURCE_AUTO_INSTALL;
-import static com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant.RESOURCE_SUBDIRECTORY;
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageConfigConstant.RESOURCE_AUTO_INSTALL;
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageConfigConstant.RESOURCE_SUBDIRECTORY;
 
 
 /**
@@ -62,20 +61,23 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 	 * Install resources listed in auto_install.txt to the plugin data directory
 	 */
 	@Override
-	public void install()
+	public InstallerStatus install()
 	{
+		InstallerStatus installerStatus = InstallerStatus.FAIL;
 		Set<String> resourceNames = getAutoInstallSet(getAutoInstallResourceName());
 		for (String resourceName : resourceNames)
 		{
 			installIfMissing(resourceName);
+			installerStatus = InstallerStatus.SUCCESS;
 		}
+		return installerStatus;
 	}
 
 
 	/**
 	 * Get path name of the auto install resource
 	 *
-	 * @return String path of the auto install resource
+	 * @return Section path of the auto install resource
 	 */
 	public String getAutoInstallResourceName()
 	{
@@ -87,7 +89,7 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 	 * Retrieve a {@code Set} of resources to be copied into the plugin data directory by reading resource names
 	 * from the auto-install.txt resource.
 	 *
-	 * @param autoInstallPathName a {@code String} containing the resource path of the auto install plain text resource
+	 * @param autoInstallPathName a {@code Section} containing the resource path of the auto install plain text resource
 	 * @return the set of filenames to be autoinstalled into the plugin data directory
 	 */
 	public Set<String> getAutoInstallSet(final String autoInstallPathName)
@@ -130,7 +132,7 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 	/**
 	 * Install resource from plugin jar to plugin data directory.
 	 *
-	 * @param resourceName {@code String} the path name of the resource to be installed
+	 * @param resourceName {@code Section} the path name of the resource to be installed
 	 * @return a {@code Boolean} indicating the success or failure result of the resource installation
 	 */
 	public InstallerStatus installByName(final String resourceName)
@@ -201,8 +203,8 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 	 *     </ol>
 	 *
 	 *
-	 * @param resourcePath the {@code String} path name to be sanitized
-	 * @return The sanitized resource path {@code String}
+	 * @param resourcePath the {@code Section} path name to be sanitized
+	 * @return The sanitized resource path {@code Section}
 	 */
 	String sanitizeResourcePath(final String resourcePath)
 	{

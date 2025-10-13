@@ -35,15 +35,17 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.SoundResourceConstant.RESOURCE_NAME;
+
 
 /**
  * A class that implements SoundRepository interface
  */
-public class YamlSoundRepository implements SoundRepository
+public final class YamlSoundRepository implements SoundRepository
 {
 	private final Plugin plugin;
 	private final YamlConfiguration soundsConfig;
-	private final String soundFileName = "sounds.yml";
+//	private final Section soundFileName = "sounds.yml";
 
 	enum Field
 	{
@@ -63,13 +65,13 @@ public class YamlSoundRepository implements SoundRepository
 	public YamlSoundRepository(final Plugin plugin)
 	{
 		this.plugin = plugin;
-		File soundFile = new File(plugin.getDataFolder(), soundFileName);
+		File soundFile = new File(plugin.getDataFolder(), RESOURCE_NAME.toString());
 
 		// install sounds.yml if not already present and resource exists
 		// this is only wrapped in a conditional to prevent log message when file already exists
-		if (!soundFile.exists() && plugin.getResource(soundFileName) != null)
+		if (!soundFile.exists() && plugin.getResource(RESOURCE_NAME.toString()) != null)
 		{
-			plugin.saveResource(soundFileName, false);
+			plugin.saveResource(RESOURCE_NAME.toString(), false);
 		}
 
 		this.soundsConfig = new YamlConfiguration();
@@ -90,7 +92,7 @@ public class YamlSoundRepository implements SoundRepository
 
 
 	@Override
-	public SoundRecord getSoundRecord(final Enum<?> soundId)
+	public SoundRecord getRecord(final Enum<?> soundId)
 	{
 		return SoundRecord.of(soundId.name(),
 				soundsConfig.getBoolean(soundId + "." + Field.ENABLED),
@@ -132,7 +134,7 @@ public class YamlSoundRepository implements SoundRepository
 	 * Get bukkit sound name for sound config file key
 	 *
 	 * @param key sound config file key
-	 * @return String - the bukkit sound name for key
+	 * @return Section - the bukkit sound name for key
 	 */
 	@Override
 	public String getBukkitSoundName(final String key)
@@ -147,12 +149,12 @@ public class YamlSoundRepository implements SoundRepository
 	public void reload()
 	{
 		// get File object for sound file
-		File soundFile = new File(plugin.getDataFolder().getPath(), soundFileName);
+		File soundFile = new File(plugin.getDataFolder().getPath(), RESOURCE_NAME.toString());
 
 		// copy resource to plugin data directory if it does not already exist there
 		if (!soundFile.exists())
 		{
-			plugin.saveResource(soundFileName, false);
+			plugin.saveResource(RESOURCE_NAME.toString(), false);
 		}
 		try
 		{
@@ -187,7 +189,7 @@ public class YamlSoundRepository implements SoundRepository
 			return;
 		}
 
-		if (getSoundRecord(soundId) instanceof ValidSoundRecord validSoundRecord
+		if (getRecord(soundId) instanceof ValidSoundRecord validSoundRecord
 				&& validSoundRecord.enabled())
 		{
 			// check that sound name is valid
@@ -210,7 +212,7 @@ public class YamlSoundRepository implements SoundRepository
 			{
 				plugin.getLogger().warning("An error occurred while trying to play the sound '"
 						+ validSoundRecord.soundName() + "'. You probably need to update the sound name in your "
-						+ soundFileName + " file.");
+						+ RESOURCE_NAME + " file.");
 			}
 		}
 	}
@@ -238,7 +240,7 @@ public class YamlSoundRepository implements SoundRepository
 			return;
 		}
 
-		if (getSoundRecord(soundId) instanceof ValidSoundRecord validSoundRecord && validSoundRecord.enabled())
+		if (getRecord(soundId) instanceof ValidSoundRecord validSoundRecord && validSoundRecord.enabled())
 		{
 			// check that sound name is valid
 			if (validSoundRecord.soundName() != null && Registry.SOUNDS.match(validSoundRecord.soundName()) != null)
@@ -256,7 +258,7 @@ public class YamlSoundRepository implements SoundRepository
 			{
 				plugin.getLogger().warning("An error occurred while trying to play the sound '"
 						+ validSoundRecord.soundName() + "'. You probably need to update the sound name in your "
-						+ soundFileName + " file.");
+						+ RESOURCE_NAME + " file.");
 			}
 		}
 	}

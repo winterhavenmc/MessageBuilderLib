@@ -19,9 +19,9 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ConstantKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidConstantKey;
-import com.winterhavenmc.library.messagebuilder.models.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
+import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -54,7 +54,7 @@ class YamlConstantRepositoryTest
 	SectionProvider languageSectionProvider;
 	YamlConstantRepository constantRepository;
 
-	String configString = """
+	java.lang.String configString = """
 		CONSTANTS:
 		  TIME:
 		    LESS_THAN: "less than {DURATION}"
@@ -82,7 +82,7 @@ class YamlConstantRepositoryTest
 		languageConfig.loadFromString(configString);
 
 		Supplier<Configuration> configurationSupplier = () -> languageConfig;
-		when(languageResourceManagerMock.getSectionProvider(Section.CONSTANTS)).thenReturn(languageSectionProviderMock);
+		when(languageResourceManagerMock.getSectionProvider(Section.CONSTANTS.name())).thenReturn(languageSectionProviderMock);
 		ConfigurationSection section = languageConfig.getConfigurationSection(Section.CONSTANTS.name());
 		when(languageSectionProviderMock.getSection()).thenReturn(section);
 		constantRepository = new YamlConstantRepository(languageResourceManagerMock);
@@ -96,7 +96,7 @@ class YamlConstantRepositoryTest
 		ValidConstantKey validConstantKey = ConstantKey.of("KEY").isValid().orElseThrow();
 
 		// Act
-		Optional<String> result = constantRepository.getString(validConstantKey);
+		Optional<java.lang.String> result = constantRepository.getString(validConstantKey);
 
 		// Assert
 		assertEquals(Optional.empty(), result);
@@ -110,7 +110,7 @@ class YamlConstantRepositoryTest
 		ValidConstantKey validConstantKey = ConstantKey.of("LOCATION.SPAWN").isValid().orElseThrow();
 
 		// Act
-		Optional<String> result = constantRepository.getString(validConstantKey);
+		Optional<java.lang.String> result = constantRepository.getString(validConstantKey);
 
 		// Assert
 		assertEquals(Optional.of("Spawn"), result);
@@ -124,7 +124,7 @@ class YamlConstantRepositoryTest
 		ValidConstantKey validConstantKey = ConstantKey.of("STRING_LIST").isValid().orElseThrow();
 
 		// Act
-		List<String> result = constantRepository.getStringList(validConstantKey);
+		List<java.lang.String> result = constantRepository.getStringList(validConstantKey);
 
 		// Assert
 		assertEquals(List.of("one", "two", "three"), result);
@@ -138,7 +138,7 @@ class YamlConstantRepositoryTest
 		ValidConstantKey validConstantKey = ConstantKey.of("NON_EXISTENT").isValid().orElseThrow();
 
 		// Act
-		List<String> result = constantRepository.getStringList(validConstantKey);
+		List<java.lang.String> result = constantRepository.getStringList(validConstantKey);
 
 		// Assert
 		assertEquals(List.of(), result);

@@ -17,8 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.CustomItemForge;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
 import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
 
@@ -37,12 +38,12 @@ import java.util.regex.Pattern;
 
 public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 {
-	private final ItemRepository itemRepository;
+	private final ItemRecordRepository itemRecordRepository;
 
 
-	public BukkitItemPluralNameResolver(final ItemRepository itemRepository)
+	public BukkitItemPluralNameResolver(final ItemRecordRepository itemRecordRepository)
 	{
-		this.itemRepository = itemRepository;
+		this.itemRecordRepository = itemRecordRepository;
 	}
 
 
@@ -53,11 +54,11 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
 		{
 			// check if item is custom item defined in language file, and if so, try to set pluralized name
-			if (ItemForge.isCustomItem(itemStack))
+			if (CustomItemForge.isCustomItem(itemStack))
 			{
-				if (ItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey)
+				if (CustomItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey)
 				{
-					if (itemRepository.getItemRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+					if (itemRecordRepository.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 					{
 						String pluralString = validItemRecord.pluralName()
 								.replaceAll(Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE), String.valueOf(itemStack.getAmount()));

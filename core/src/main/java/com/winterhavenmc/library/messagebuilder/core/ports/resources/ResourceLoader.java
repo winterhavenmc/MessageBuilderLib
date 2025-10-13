@@ -17,12 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.resources;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
-
 import org.bukkit.configuration.Configuration;
-
-import java.util.Locale;
-import java.util.Optional;
 
 
 /**
@@ -32,29 +27,10 @@ import java.util.Optional;
 public interface ResourceLoader
 {
 	/**
-	 * Gets language tag specified in config.yml.
-	 * <p>
-	 * it is recommended, but not required, that languages should be specified by their ISO-639 codes,
-	 * with two letter lowercase language code and two letter uppercase country code separated by a hyphen.
-	 * <p>
-	 * <i>example:</i> en-US
-	 * <p>
-	 * The language yaml file must match the specified tag, with a .yml extension appended.
-	 *
-	 * @return Optional {@code LanguageTag} or an empty Optional if config setting is null or empty
-	 */
-	Optional<LanguageTag> getConfiguredLanguageTag();
-
-
-	Locale getConfiguredLocale();
-
-
-	/**
 	 * Load the language configuration object for the configured language from file and return it. The returned
 	 * configuration object contains no default values loaded, by design
 	 *
 	 * @return {@link Configuration} containing the configuration loaded from the language file
 	 */
 	Configuration load();
-
 }

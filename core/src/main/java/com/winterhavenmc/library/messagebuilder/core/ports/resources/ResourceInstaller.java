@@ -31,10 +31,11 @@ public interface ResourceInstaller
 	Pattern LEADING_SLASHES = Pattern.compile("^/+");
 	Pattern TWO_OR_MORE_SLASHES = Pattern.compile("/{2,}");
 
+
 	/**
 	 * Install resources listed in auto_install.txt to the plugin data directory
 	 */
-	void install();
+	InstallerStatus install();
 
 
 	enum InstallerStatus

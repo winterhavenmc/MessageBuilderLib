@@ -153,7 +153,7 @@ class LocatableTest
 	}
 
 
-	// 	static Optional<String> getLocationWorldName(final Location location, final AdapterContextContainer ctx)
+	// 	static Optional<Section> getLocationWorldName(final Location location, final AdapterContextContainer ctx)
 	@Test
 	void getLocationWorldName_with_null_world_returns_empty_optional()
 	{

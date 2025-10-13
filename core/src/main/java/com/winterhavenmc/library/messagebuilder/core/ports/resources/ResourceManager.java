@@ -31,4 +31,8 @@ public interface ResourceManager
 	 * @return true if successful, false if not
 	 */
 	boolean reload();
+
+	ConfigurationProvider getConfigurationProvider();
+
+	SectionProvider getSectionProvider(final String sectionName);
 }

@@ -81,7 +81,7 @@ public interface Lootable
 	 * Formats the looter name for placeholder substitution.
 	 *
 	 * @param looter the entity who has permission to loot the object
-	 * @return an {@code Optional<String>} containing the name if valid, otherwise empty
+	 * @return an {@code Optional<Section>} containing the name if valid, otherwise empty
 	 */
 	static Optional<String> formatLooter(final AnimalTamer looter)
 	{

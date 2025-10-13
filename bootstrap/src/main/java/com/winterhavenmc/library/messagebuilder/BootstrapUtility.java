@@ -37,6 +37,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriT
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.CustomItemForge;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
@@ -164,22 +165,22 @@ public final class BootstrapUtility
 	 * @return a populated context container
 	 */
 	static AdapterCtx createAdapterContextContainer(final Plugin plugin,
-													final ItemRepository itemRepository,
+													final ItemRecordRepository itemRecordRepository,
 													final FormatterCtx formatterCtx)
 	{
 		WorldNameResolver worldNameResolver = getWorldNameResolver(plugin);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
-		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRepository);
+		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRecordRepository);
 
 		return new AdapterCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
 				bukkitItemPluralNameResolver, formatterCtx);
 	}
 
 
-	static ItemForge createItemForge(final Plugin plugin, final ItemRepository items)
+	static ItemForge createItemForge(final Plugin plugin, final ItemRecordRepository items)
 	{
-		return new ItemForge(plugin, items);
+		return new CustomItemForge(plugin, items);
 	}
 
 

@@ -49,7 +49,7 @@
  * {@snippet lang = "java":
  * 	ItemRecord itemRecord = queryHandler.getItemRecord(MY_ITEM_KEY);
  * 	if (itemRecord instanceof ValidItemRecord valid) {
- * 		String name = valid.name();
+ * 		Section name = valid.name();
  * 	}
  *}
  *

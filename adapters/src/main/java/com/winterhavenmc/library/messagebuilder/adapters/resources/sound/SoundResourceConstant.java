@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2025 Tim Savage.
+ * Copyright (c) 2025 Tim Savage.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,13 +15,30 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
 
-import com.winterhavenmc.library.messagebuilder.models.language.Section;
-
-
-public interface SectionResourceManager extends ResourceManager
+/**
+ * Enum containing constants for various yaml parameters
+ */
+public enum SoundResourceConstant
 {
-	SectionProvider getSectionProvider(Section section);
+	RESOURCE_NAME("sounds.yml"),
+	;
+
+	private final String value;
+
+
+	SoundResourceConstant(final String value)
+	{
+		this.value = value;
+	}
+
+
+	@Override
+	public String toString()
+	{
+		return value;
+	}
+
 }

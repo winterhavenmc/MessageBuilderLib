@@ -11,7 +11,7 @@
  * <ul>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever}
  *       – A functional interface that abstracts the retrieval of message records.</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.core.pipeline.retrievers.MessageRetriever}
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever}
  *       – Default implementation that uses a
  *       {@code com.winterhavenmc.library.messagebuilder.query.QueryHandler QueryHandler}
  *       and guarantees a non-null fallback result.</li>
@@ -22,7 +22,7 @@
  * missing or malformed entries.
  *
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever MessageRetriever
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.retrievers.MessageRetriever MessageRetriever
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever MessageRetriever
  * @see com.winterhavenmc.library.messagebuilder.models.language.MessageRecord MessageRecord
  */
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers;

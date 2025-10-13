@@ -3,10 +3,11 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
 import org.bukkit.plugin.Plugin;
 
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.SoundResourceConstant.RESOURCE_NAME;
 
-public class YamlSoundResourceInstaller
+
+public final class YamlSoundResourceInstaller implements ResourceInstaller
 {
-	static final String FILE_NAME = "sounds.yml";
 
 	private final Plugin plugin;
 
@@ -21,7 +22,7 @@ public class YamlSoundResourceInstaller
 	{
 		try
 		{
-			plugin.saveResource(FILE_NAME, false);
+			plugin.saveResource(RESOURCE_NAME.toString(), false);
 			return ResourceInstaller.InstallerStatus.SUCCESS;
 		}
 		catch (IllegalArgumentException exception)

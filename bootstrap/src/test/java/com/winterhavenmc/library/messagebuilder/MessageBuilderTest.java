@@ -260,4 +260,5 @@ class MessageBuilderTest
 
 		assertInstanceOf(ItemForge.class, itemForge);
 	}
+
 }

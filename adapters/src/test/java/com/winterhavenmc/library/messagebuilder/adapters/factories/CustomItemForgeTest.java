@@ -1,7 +1,9 @@
-package com.winterhavenmc.library.messagebuilder.core.util;
+package com.winterhavenmc.library.messagebuilder.adapters.factories;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.CustomItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 
+import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
 import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 
@@ -22,10 +24,11 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class ItemForgeTest
+class CustomItemForgeTest
 {
 	@Mock Plugin pluginMock;
-	@Mock ItemRepository itemRepositoryMock;
+	@Mock
+	ItemRecordRepository itemRecordRepositoryMock;
 
 
 	@Test
@@ -33,7 +36,7 @@ class ItemForgeTest
 	void createItem()
 	{
 		when(pluginMock.getName()).thenReturn("test-plugin");
-		ItemForge itemForge = new ItemForge(pluginMock, itemRepositoryMock);
+		ItemForge itemForge = new CustomItemForge(pluginMock, itemRecordRepositoryMock);
 
 		ValidItemKey validItemKey = ItemKey.of("KEY").isValid().orElseThrow();
 		Optional<ItemStack> result = itemForge.createItem(validItemKey);

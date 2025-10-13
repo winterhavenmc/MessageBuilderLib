@@ -29,12 +29,13 @@ import java.util.Collection;
  */
 public interface SoundRepository
 {
-	SoundRecord getSoundRecord(Enum<?> soundId);
+	SoundRecord getRecord(Enum<?> soundId);
+
 
 	/**
 	 * get all keys from the sound configuration
 	 *
-	 * @return a Collection of String of sound configuration keys
+	 * @return a Collection of Section of sound configuration keys
 	 */
 	Collection<String> getKeys();
 
@@ -51,7 +52,7 @@ public interface SoundRepository
 	 * @param sender  the command sender (player) to play sound
 	 * @param soundId the sound identifier enum member
 	 */
-	void playSound(final CommandSender sender, final Enum<?> soundId);
+	void playSound(CommandSender sender, Enum<?> soundId);
 
 
 	/**
@@ -60,7 +61,7 @@ public interface SoundRepository
 	 * @param location the location at which to play sound
 	 * @param soundId  the sound identifier enum member
 	 */
-	void playSound(final Location location, final Enum<?> soundId);
+	void playSound(Location location, Enum<?> soundId);
 
 
 	/**
@@ -70,7 +71,7 @@ public interface SoundRepository
 	 * @return true if passed string is contained in the bukkit sounds enum; false if not
 	 */
 	@Deprecated
-	boolean isValidBukkitSoundName(final String name);
+	boolean isValidBukkitSoundName(String name);
 
 
 	/**
@@ -79,15 +80,15 @@ public interface SoundRepository
 	 * @param key the string to test
 	 * @return true if passed string is a valid key in sounds.yml file; false if not
 	 */
-	boolean isValidSoundConfigKey(final String key);
+	boolean isValidSoundConfigKey(String key);
 
 
 	/**
 	 * Get bukkit sound name for sound config file key
 	 *
 	 * @param key sound config file key
-	 * @return String - the bukkit sound name for key
+	 * @return Section - the bukkit sound name for key
 	 */
-	String getBukkitSoundName(final String key);
+	String getBukkitSoundName(String key);
 
 }

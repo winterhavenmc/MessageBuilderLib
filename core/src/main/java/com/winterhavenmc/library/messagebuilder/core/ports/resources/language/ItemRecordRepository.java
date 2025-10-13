@@ -15,27 +15,14 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.models.language;
+package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
+import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;
 
-class SectionTest
+
+@FunctionalInterface
+public interface ItemRecordRepository
 {
-	@Test
-	void values()
-	{
-		Section[] values = Section.values();
-		assertEquals(Section.CONSTANTS, values[0]);
-		assertEquals(Section.ITEMS, values[1]);
-		assertEquals(Section.MESSAGES, values[2]);
-	}
-
-	@Test
-	void valueOf()
-	{
-		assertEquals(Section.CONSTANTS, Section.valueOf("CONSTANTS"));
-		assertEquals(Section.ITEMS, Section.valueOf("ITEMS"));
-		assertEquals(Section.MESSAGES, Section.valueOf("MESSAGES"));
-	}
+	ItemRecord getRecord(ValidItemKey key);
 }

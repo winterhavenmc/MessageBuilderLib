@@ -19,10 +19,10 @@ package com.winterhavenmc.library.messagebuilder.models.sound;
 
 /**
  * A class that contains the key and fields of a sound entry in the sound configuration
- * @param key {@code String} the key for the sound entry
+ * @param key {@code Section} the key for the sound entry
  * @param enabled {@code boolean} if the sound entry is enabled for playback
  * @param playerOnly {@code boolean} if the sound entry should be played for an individual or for a location
- * @param soundName {@code String} the bukkit Sound constant name, formerly an enum but now contained in the bukkit registry
+ * @param soundName {@code Section} the bukkit Sound constant name, formerly an enum but now contained in the bukkit registry
  * @param volume {@code float} the volume of playback for the sound entry
  * @param pitch {@code float} the pitch of playback for the sound entry
  */

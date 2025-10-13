@@ -22,6 +22,7 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
+import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -48,7 +49,7 @@ class YamlMessageRepositoryTest
 
 	FileConfiguration languageConfig;
 	SectionProvider languageSectionProvider;
-	String configString = """
+	java.lang.String configString = """
 		MESSAGES:
 		  TEST_MESSAGE:
 		    MESSAGE_TEXT: "This is a test message."
@@ -62,7 +63,7 @@ class YamlMessageRepositoryTest
 		languageConfig.loadFromString(configString);
 
 		Supplier<Configuration> configurationSupplier = () -> languageConfig;
-		languageSectionProvider = new YamlLanguageSectionProvider(configurationSupplier, Section.MESSAGES);
+		languageSectionProvider = new YamlLanguageSectionProvider(configurationSupplier, Section.MESSAGES.name());
 	}
 
 
@@ -70,12 +71,12 @@ class YamlMessageRepositoryTest
 	void getMessageRecord_returns_invalid_record_when_no_entry_for_key()
 	{
 		// Arrange
-		when(languageResourceManagerMock.getSectionProvider(Section.MESSAGES)).thenReturn(languageSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.MESSAGES.name())).thenReturn(languageSectionProvider);
 		ValidMessageKey validMessageKey = MessageKey.of("KEY").isValid().orElseThrow();
 
 		// Act
 		YamlMessageRepository messageRepository = new YamlMessageRepository(languageResourceManagerMock);
-		MessageRecord result = messageRepository.getMessageRecord(validMessageKey);
+		MessageRecord result = messageRepository.getRecord(validMessageKey);
 
 		// Assert
 		assertInstanceOf(InvalidMessageRecord.class, result);
@@ -87,12 +88,12 @@ class YamlMessageRepositoryTest
 	void getMessageRecord_with_valid_parameter_returns_ValidMessageRecord()
 	{
 		// Arrange
-		when(languageResourceManagerMock.getSectionProvider(Section.MESSAGES)).thenReturn(languageSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.MESSAGES.name())).thenReturn(languageSectionProvider);
 		ValidMessageKey validMessageKey = MessageKey.of("TEST_MESSAGE").isValid().orElseThrow();
 
 		// Act
 		YamlMessageRepository messageRepository = new YamlMessageRepository(languageResourceManagerMock);
-		MessageRecord result = messageRepository.getMessageRecord(validMessageKey);
+		MessageRecord result = messageRepository.getRecord(validMessageKey);
 
 		// Assert
 		assertInstanceOf(ValidMessageRecord.class, result);

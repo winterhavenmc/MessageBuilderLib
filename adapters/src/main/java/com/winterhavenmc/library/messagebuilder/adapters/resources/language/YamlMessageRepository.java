@@ -43,12 +43,12 @@ public final class YamlMessageRepository implements MessageRepository
 	public YamlMessageRepository(final YamlLanguageResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
-		this.sectionProvider = languageResourceManager.getSectionProvider(Section.MESSAGES);
+		this.sectionProvider = languageResourceManager.getSectionProvider(Section.MESSAGES.name());
 	}
 
 
 	@Override
-	public MessageRecord getMessageRecord(final ValidMessageKey validMessageKey)
+	public MessageRecord getRecord(final ValidMessageKey validMessageKey)
 	{
 		// confirm message section is not null
 		if (sectionProvider.getSection() == null) return new InvalidMessageRecord(validMessageKey, InvalidRecordReason.MESSAGE_SECTION_MISSING);

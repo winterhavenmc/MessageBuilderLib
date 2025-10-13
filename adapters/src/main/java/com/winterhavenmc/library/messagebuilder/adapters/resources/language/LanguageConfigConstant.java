@@ -15,14 +15,34 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
-
-import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
-import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 
-@FunctionalInterface
-public interface ItemRepository
+/**
+ * Enum containing constants for various yaml parameters
+ */
+public enum LanguageConfigConstant
 {
-	ItemRecord getRecord(ValidItemKey key);
+	CONFIG_LANGUAGE_KEY("language"),
+	CONFIG_LOCALE_KEY("locale"),
+	DEFAULT_LANGUAGE_TAG("en-US"),
+	RESOURCE_AUTO_INSTALL("auto_install.txt"),
+	RESOURCE_SUBDIRECTORY("language"),
+	;
+
+	private final String value;
+
+
+	LanguageConfigConstant(final String value)
+	{
+		this.value = value;
+	}
+
+
+	@Override
+	public String toString()
+	{
+		return value;
+	}
+
 }

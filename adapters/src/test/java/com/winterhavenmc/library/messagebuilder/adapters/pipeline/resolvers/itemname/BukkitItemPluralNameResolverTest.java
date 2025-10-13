@@ -1,7 +1,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;
@@ -28,7 +28,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class BukkitItemPluralNameResolverTest
 {
-	@Mock ItemRepository itemRepositoryMock;
+	@Mock
+	ItemRecordRepository itemRecordRepositoryMock;
 	@Mock ItemStack itemStackMock;
 	@Mock ItemMeta itemMetaMock;
 	@Mock PersistentDataContainer persistentDataContainerMock;
@@ -50,7 +51,7 @@ class BukkitItemPluralNameResolverTest
 	void resolve_with_null_parameter_returns_empty_string()
 	{
 		// Arrange
-		ItemPluralNameResolver resolver = new BukkitItemPluralNameResolver(itemRepositoryMock);
+		ItemPluralNameResolver resolver = new BukkitItemPluralNameResolver(itemRecordRepositoryMock);
 
 		// Act
 		String result = resolver.resolve(null);
@@ -79,14 +80,14 @@ class BukkitItemPluralNameResolverTest
 
 		ItemRecord itemRecord = ItemRecord.of(itemKey, itemEntry);
 
-		ItemPluralNameResolver resolver = new BukkitItemPluralNameResolver(itemRepositoryMock);
+		ItemPluralNameResolver resolver = new BukkitItemPluralNameResolver(itemRecordRepositoryMock);
 
 		when(itemStackMock.hasItemMeta()).thenReturn(true);
 		when(itemStackMock.getItemMeta()).thenReturn(itemMetaMock);
 		when(itemMetaMock.getPersistentDataContainer()).thenReturn(persistentDataContainerMock);
 		// when(itemStackMock.getAmount()).thenReturn(1);
 		// when(persistentDataContainerMock.has(namespacedKey)).thenReturn(true);
-		// when(itemRepositoryMock.getItemRecord(itemKey)).thenReturn(itemRecord);
+		// when(itemRecordRepositoryMock.getItemRecord(itemKey)).thenReturn(itemRecord);
 
 
 		// Act

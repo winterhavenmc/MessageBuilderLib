@@ -22,6 +22,7 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
+import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -39,14 +40,14 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class YamlItemRepositoryTest
+class YamlItemRecordRepositoryTest
 {
 	@Mock
 	YamlLanguageResourceManager languageResourceManagerMock;
 
 	FileConfiguration languageConfig;
 	SectionProvider languageSectionProvider;
-	String configString = """
+	java.lang.String configString = """
 		ITEMS:
 		  TEST_ITEM:
 		    MATERIAL: NETHER_STAR
@@ -66,9 +67,9 @@ class YamlItemRepositoryTest
 		languageConfig.loadFromString(configString);
 
 		Supplier<Configuration> configurationSupplier = () -> languageConfig;
-		languageSectionProvider = new YamlLanguageSectionProvider(configurationSupplier, Section.ITEMS);
+		languageSectionProvider = new YamlLanguageSectionProvider(configurationSupplier, Section.ITEMS.name());
 
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(languageSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS.name())).thenReturn(languageSectionProvider);
 	}
 
 
@@ -80,7 +81,7 @@ class YamlItemRepositoryTest
 
 		// Act
 		YamlItemRepository itemRepository = new YamlItemRepository(languageResourceManagerMock);
-		ItemRecord result = itemRepository.getItemRecord(validItemKey);
+		ItemRecord result = itemRepository.getRecord(validItemKey);
 
 		// Assert
 		assertInstanceOf(InvalidItemRecord.class, result);
@@ -96,7 +97,7 @@ class YamlItemRepositoryTest
 
 		// Act
 		YamlItemRepository itemRepository = new YamlItemRepository(languageResourceManagerMock);
-		ItemRecord result = itemRepository.getItemRecord(recordKey);
+		ItemRecord result = itemRepository.getRecord(recordKey);
 
 		// Assert
 		assertInstanceOf(ValidItemRecord.class, result);

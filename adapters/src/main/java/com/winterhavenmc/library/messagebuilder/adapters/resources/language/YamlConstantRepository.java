@@ -42,12 +42,12 @@ public final class YamlConstantRepository implements ConstantRepository
 	public YamlConstantRepository(final YamlLanguageResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
-		this.sectionProvider = languageResourceManager.getSectionProvider(Section.CONSTANTS);
+		this.sectionProvider = languageResourceManager.getSectionProvider(Section.CONSTANTS.name());
 	}
 
 
 	@Override
-	public Optional<String> getString(ValidConstantKey validConstantKey)
+	public Optional<java.lang.String> getString(ValidConstantKey validConstantKey)
 	{
 		return (sectionProvider.getSection() != null && sectionProvider.getSection().contains(validConstantKey.toString()))
 				? Optional.ofNullable(sectionProvider.getSection().getString(validConstantKey.toString()))
@@ -56,7 +56,7 @@ public final class YamlConstantRepository implements ConstantRepository
 
 
 	@Override
-	public List<String> getStringList(ValidConstantKey validConstantKey)
+	public List<java.lang.String> getStringList(ValidConstantKey validConstantKey)
 	{
 		return (sectionProvider.getSection() != null && sectionProvider.getSection().contains(validConstantKey.toString()))
 				? sectionProvider.getSection().getStringList(validConstantKey.toString())

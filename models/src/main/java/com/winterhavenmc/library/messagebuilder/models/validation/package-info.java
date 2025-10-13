@@ -45,7 +45,7 @@
  *}
  * Logging error and returning default value:
  * {@snippet lang = "java":
- *     import com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey;import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;import com.winterhavenmc.library.messagebuilder.models.validation.Parameter;String validName = validate(name, String::isBlank, logging(LogLevel.INFO, ErrorMessageKey.STRING_BLANK, Parameter.NAME)).orElse("Steve");
+ *     import com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey;import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;import com.winterhavenmc.library.messagebuilder.models.validation.Parameter;Section validName = validate(name, Section::isBlank, logging(LogLevel.INFO, ErrorMessageKey.STRING_BLANK, Parameter.NAME)).orElse("Steve");
  *}
  * <h2>Localization</h2>
  * <p>

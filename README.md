@@ -88,7 +88,7 @@ runs when the MessageBuilder is instantiated in the plugin onEnable method, and 
 Retrieve message data from the `MESSAGES` section of the YAML configuration:
 
 ```java
-Optional<MessageRecord> messageRecord = queryHandler.getMessageRecord("WELCOME_MESSAGE");
+Optional<MessageRecord> messageRecord = queryHandler.getRecord("WELCOME_MESSAGE");
 ```
 
 #### Fetching Item Records

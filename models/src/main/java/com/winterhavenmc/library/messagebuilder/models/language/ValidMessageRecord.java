@@ -112,39 +112,39 @@ public final class ValidMessageRecord implements MessageRecord
 	public static ValidMessageRecord create(final ValidMessageKey key, final ConfigurationSection section)
 	{
 		// enabled defaults to true if not present
-		boolean enabled = !section.contains(Field.ENABLED.toKey()) || section.getBoolean(Field.ENABLED.toKey());
+		boolean enabled = !section.contains(Field.ENABLED.toString()) || section.getBoolean(Field.ENABLED.toString());
 
 		// defaults to empty string if not present
-		String messageText = section.contains(Field.MESSAGE_TEXT.toKey())
-				? section.getString(Field.MESSAGE_TEXT.toKey())
+		String messageText = section.contains(Field.MESSAGE_TEXT.toString())
+				? section.getString(Field.MESSAGE_TEXT.toString())
 				: "";
 
 		// defaults to zero, no ternary operator necessary
-		Duration repeatDelay = Duration.ofSeconds(section.getLong(Field.REPEAT_DELAY.toKey()));
+		Duration repeatDelay = Duration.ofSeconds(section.getLong(Field.REPEAT_DELAY.toString()));
 
 		// defaults to empty string if not present
-		String titleText = section.contains(Field.TITLE_TEXT.toKey())
-				? section.getString(Field.TITLE_TEXT.toKey())
+		String titleText = section.contains(Field.TITLE_TEXT.toString())
+				? section.getString(Field.TITLE_TEXT.toString())
 				: "";
 
 		// default to Bukkit standard 10 ticks if not present
-		Duration titleFadeIn = section.contains(Field.TITLE_FADE_IN.toKey())
-				? Duration.of(section.getLong(Field.TITLE_FADE_IN.toKey()), TICKS)
+		Duration titleFadeIn = section.contains(Field.TITLE_FADE_IN.toString())
+				? Duration.of(section.getLong(Field.TITLE_FADE_IN.toString()), TICKS)
 				: Duration.of(10, TICKS);
 
 		// default to Bukkit standard 70 ticks if not present
-		Duration titleStay = section.contains(Field.TITLE_STAY.toKey())
-				? Duration.of(section.getLong(Field.TITLE_STAY.toKey()), TICKS)
+		Duration titleStay = section.contains(Field.TITLE_STAY.toString())
+				? Duration.of(section.getLong(Field.TITLE_STAY.toString()), TICKS)
 				: Duration.of(70, TICKS);
 
 		// default to Bukkit standard 20 ticks if not present
-		Duration titleFadeOut = section.contains(Field.TITLE_FADE_OUT.toKey())
-				? Duration.of(section.getLong(Field.TITLE_FADE_OUT.toKey()), TICKS)
+		Duration titleFadeOut = section.contains(Field.TITLE_FADE_OUT.toString())
+				? Duration.of(section.getLong(Field.TITLE_FADE_OUT.toString()), TICKS)
 				: Duration.of(20, TICKS);
 
 		// defaults to empty string if not present
-		String subtitleText = section.contains(Field.SUBTITLE_TEXT.toKey())
-				? section.getString(Field.SUBTITLE_TEXT.toKey())
+		String subtitleText = section.contains(Field.SUBTITLE_TEXT.toString())
+				? section.getString(Field.SUBTITLE_TEXT.toString())
 				: "";
 
 

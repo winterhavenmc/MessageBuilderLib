@@ -134,7 +134,7 @@ public interface Locatable
 	 *
 	 * @param location the location to format
 	 * @param ctx the context container with the number formatter and world name resolver
-	 * @return an {@code Optional<String>} containing the formatted location, or empty if the location is {@code null}
+	 * @return an {@code Optional<Section>} containing the formatted location, or empty if the location is {@code null}
 	 */
 	static Optional<String> formatLocation(final Location location, final AdapterCtx ctx)
 	{

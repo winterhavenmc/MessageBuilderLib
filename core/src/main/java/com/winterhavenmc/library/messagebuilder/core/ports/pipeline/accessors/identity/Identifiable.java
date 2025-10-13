@@ -69,7 +69,7 @@ public interface Identifiable
 	 * Returns an optional string representation of a UUID.
 	 *
 	 * @param uniqueId the UUID to format
-	 * @return an {@code Optional<String>} if the UUID is non-null
+	 * @return an {@code Optional<Section>} if the UUID is non-null
 	 */
 	static Optional<String> formatUid(final UUID uniqueId)
 	{

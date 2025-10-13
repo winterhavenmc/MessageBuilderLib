@@ -19,7 +19,7 @@
  * and {@code Expirable}, allowing macro replacements to reflect user-friendly and linguistically
  * appropriate representations.
  *
- * @see com.winterhavenmc.library.messagebuilder.core.ports.formatters.number
- * @see com.winterhavenmc.library.messagebuilder.core.ports.formatters.duration
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration
  */
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters;

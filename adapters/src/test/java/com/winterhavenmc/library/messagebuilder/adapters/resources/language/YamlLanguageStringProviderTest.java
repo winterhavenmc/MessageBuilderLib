@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class YamlLanguageSectionProviderTest
+class YamlLanguageStringProviderTest
 {
 	@Mock private FileConfiguration configuration;
 	@Mock private ConfigurationSection mockSection;
@@ -47,7 +47,7 @@ class YamlLanguageSectionProviderTest
 	void setUp()
 	{
 		Supplier<Configuration> configSupplier = () -> configuration;
-		provider = new YamlLanguageSectionProvider(configSupplier, Section.MESSAGES);
+		provider = new YamlLanguageSectionProvider(configSupplier, Section.MESSAGES.toString());
 	}
 
 	@Test

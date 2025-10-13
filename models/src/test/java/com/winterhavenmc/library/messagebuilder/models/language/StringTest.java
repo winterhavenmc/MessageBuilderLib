@@ -15,13 +15,27 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources;
+package com.winterhavenmc.library.messagebuilder.models.language;
 
-import org.bukkit.configuration.ConfigurationSection;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-@FunctionalInterface
-public interface SectionProvider
+class StringTest
 {
-	ConfigurationSection getSection();
+	@Test
+	void values()
+	{
+		Section[] values = Section.values();
+		assertEquals(Section.CONSTANTS, values[0]);
+		assertEquals(Section.ITEMS, values[1]);
+		assertEquals(Section.MESSAGES, values[2]);
+	}
+
+	@Test
+	void valueOf()
+	{
+		assertEquals(Section.CONSTANTS, Section.valueOf("CONSTANTS"));
+		assertEquals(Section.ITEMS, Section.valueOf("ITEMS"));
+		assertEquals(Section.MESSAGES, Section.valueOf("MESSAGES"));
+	}
 }

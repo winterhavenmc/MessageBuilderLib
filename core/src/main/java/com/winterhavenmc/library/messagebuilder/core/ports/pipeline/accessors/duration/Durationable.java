@@ -106,7 +106,7 @@ public interface Durationable
 	 * @param duration the duration to format
 	 * @param lowerBound the lowest precision unit to include in the result (e.g., seconds, minutes)
 	 * @param durationFormatter the formatter to use for localization
-	 * @return an {@code Optional<String>} containing the formatted result, or empty if input is {@code null}
+	 * @return an {@code Optional<Section>} containing the formatted result, or empty if input is {@code null}
 	 */
 	static Optional<String> formatDuration(final Duration duration,
 										   final ChronoUnit lowerBound,

@@ -88,11 +88,11 @@ public final class ValidItemRecord implements ItemRecord
 	public static ValidItemRecord create(final ValidItemKey key, final ConfigurationSection section)
 	{
 		return new ValidItemRecord(key,
-				section.getString(Field.MATERIAL.toKey()),
-				section.getString(Field.NAME.toKey()),
-				section.getString(Field.PLURAL_NAME.toKey()),
-				section.getString(Field.DISPLAY_NAME.toKey()),
-				section.getStringList(Field.LORE.toKey()));
+				section.getString(Field.MATERIAL.toString()),
+				section.getString(Field.NAME.toString()),
+				section.getString(Field.PLURAL_NAME.toString()),
+				section.getString(Field.DISPLAY_NAME.toString()),
+				section.getStringList(Field.LORE.toString()));
 	}
 
 

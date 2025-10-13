@@ -105,7 +105,7 @@ class CooldownKeyTest
 	}
 
 
-	@Test @DisplayName("toString() returns String representation of string.")
+	@Test @DisplayName("toString() returns Section representation of string.")
 	void toString_returns_string_representation_of_key()
 	{
 		// Arrange

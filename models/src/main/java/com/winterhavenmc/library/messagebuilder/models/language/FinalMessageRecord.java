@@ -28,7 +28,7 @@ import java.util.Optional;
  * ready for delivery to a recipient.
  * <p>
  * This record is typically derived from a {@link ValidMessageRecord} using the
- * {@link ValidMessageRecord#withFinalStrings(String, String, String)} method.
+ * {@code ValidMessageRecord#withFinalStrings(Section, Section, Section)} method.
  * It retains all original message metadata while attaching resolved versions of
  * the chat message, title, and subtitle strings.
  *
@@ -55,7 +55,6 @@ import java.util.Optional;
  * @param finalTitleString the resolved title string, if available
  * @param finalSubtitleString the resolved subtitle string, if available
  *
- * @see ValidMessageRecord#withFinalStrings(String, String, String)
  * @see MessageRecord
  */
 public record FinalMessageRecord(

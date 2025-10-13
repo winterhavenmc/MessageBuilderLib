@@ -96,7 +96,7 @@ class Time4jDurationFormatterTest
 //		Duration input = Duration.ZERO;
 //
 //		// Act
-//		String result = formatter.format(input, ChronoUnit.MINUTES);
+//		Section result = formatter.format(input, ChronoUnit.MINUTES);
 //
 //		System.out.println(result);
 //		// Assert

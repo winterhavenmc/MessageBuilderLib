@@ -15,35 +15,13 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
+package com.winterhavenmc.library.messagebuilder.core.ports.resources;
+
+import org.bukkit.configuration.Configuration;
 
 
-/**
- * Enum containing constants for various yaml parameters
- */
-public enum LanguageConfigConstant
+@FunctionalInterface
+public interface ConfigurationProvider
 {
-	CONFIG_LANGUAGE_KEY("language"),
-	CONFIG_LOCALE_KEY("locale"),
-	DEFAULT_LANGUAGE_TAG("en-US"),
-	RESOURCE_AUTO_INSTALL("auto_install.txt"),
-	RESOURCE_SUBDIRECTORY("language"),
-	RESOURCE_LANGUAGE_EN_US_YML("language/en-US.yml"),
-	;
-
-	private final String value;
-
-
-	LanguageConfigConstant(final String value)
-	{
-		this.value = value;
-	}
-
-
-	@Override
-	public String toString()
-	{
-		return value;
-	}
-
+	Configuration getConfiguration();
 }

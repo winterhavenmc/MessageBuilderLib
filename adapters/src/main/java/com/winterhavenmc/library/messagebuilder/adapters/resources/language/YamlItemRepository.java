@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
@@ -35,7 +35,7 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
 import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
-public final class YamlItemRepository implements ItemRepository
+public final class YamlItemRepository implements ItemRecordRepository
 {
 	private final SectionProvider sectionProvider;
 
@@ -43,7 +43,7 @@ public final class YamlItemRepository implements ItemRepository
 	public YamlItemRepository(final YamlLanguageResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
-		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS);
+		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS.name());
 	}
 
 

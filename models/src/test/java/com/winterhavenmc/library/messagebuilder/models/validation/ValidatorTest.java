@@ -70,6 +70,6 @@ class ValidatorTest
 	@Test
 	void logging_logs_validation_error()
 	{
-		Assertions.assertDoesNotThrow(() -> validate("Valid String", String::isBlank, logging(LogLevel.WARN, STRING_BLANK, MACRO)));
+		Assertions.assertDoesNotThrow(() -> validate("Valid Section", String::isBlank, logging(LogLevel.WARN, STRING_BLANK, MACRO)));
 	}
 }

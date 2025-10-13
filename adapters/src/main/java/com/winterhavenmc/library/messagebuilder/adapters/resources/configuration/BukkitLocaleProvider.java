@@ -57,7 +57,7 @@ import java.util.function.Supplier;
  * @see Locale
  * @see ZoneId
  */
-public class BukkitLocaleProvider implements LocaleProvider
+public final class BukkitLocaleProvider implements LocaleProvider
 {
 	private final Supplier<LocaleSetting> localeSettingSupplier;
 	private final Supplier<ZoneId> zoneIdSupplier;

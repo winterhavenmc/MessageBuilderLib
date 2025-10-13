@@ -14,13 +14,13 @@
  *
  * <h2>Design Overview</h2>
  * <ul>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.AtomicResolver}
- *   	handles atomic or primitive values (e.g. {@code Boolean}, {@code String}, {@code Number},
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver}
+ *   	handles atomic or primitive values (e.g. {@code Boolean}, {@code Section}, {@code Number},
  *      {@code Duration}) and maps them directly to the base macro string.</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.CompositeResolver}
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver}
  *   	handles structured or compound values using a registry of
  *      Accessor instances, extracting multiple sub-values mapped to dot-notated subkeys.</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.FieldResolver}
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver}
  *   	serves as a delegating resolver that applies multiple resolvers in order,
  *      preserving the first-resolved value for each string.</li>
  * </ul>
@@ -31,11 +31,7 @@
  * Implementers can add custom resolvers or extend the registry of adapters to support new types.
  *
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver ValueResolver
- * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.AtomicResolver AtomicResolver
- * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.CompositeResolver CompositeResolver
- * @see com.winterhavenmc.library.messagebuilder.core.ports.resolvers.macro.FieldResolver FieldResolver
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor Accessor
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.FieldAdapterRegistry AccessorRegistry
  * @see com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap MacroObjectMap
  * @see com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap MacroStringMap
  * @see com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey ValidMacroKey

@@ -58,7 +58,7 @@ class LocalizedMessageRetrieverTest
 	{
 		// Arrange
 		ValidMessageKey messageKey = MessageKey.of(MessageId.ENABLED_MESSAGE).isValid().orElseThrow();
-		when(messageRepositoryMock.getMessageRecord(messageKey)).thenReturn(validMessageRecordMock);
+		when(messageRepositoryMock.getRecord(messageKey)).thenReturn(validMessageRecordMock);
 
 		// Act
 		MessageRecord messageRecord = retriever.getRecord(messageKey);
@@ -73,7 +73,7 @@ class LocalizedMessageRetrieverTest
 	{
 		// Arrange
 		ValidMessageKey messageKey = MessageKey.of(MessageId.NONEXISTENT_ENTRY).isValid().orElseThrow();
-		when(messageRepositoryMock.getMessageRecord(messageKey)).thenReturn(invalidMessageRecord);
+		when(messageRepositoryMock.getRecord(messageKey)).thenReturn(invalidMessageRecord);
 
 		// Act
 		MessageRecord messageRecord = retriever.getRecord(messageKey);
