@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.SectionProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.language.InvalidMessageRecord;
@@ -43,12 +43,12 @@ public final class YamlMessageRepository implements MessageRepository
 	public YamlMessageRepository(final YamlLanguageResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
-		this.sectionProvider = languageResourceManager.getSectionProvider(Section.MESSAGES);
+		this.sectionProvider = languageResourceManager.getSectionProvider(Section.MESSAGES.name());
 	}
 
 
 	@Override
-	public MessageRecord getMessageRecord(final ValidMessageKey validMessageKey)
+	public MessageRecord getRecord(final ValidMessageKey validMessageKey)
 	{
 		// confirm message section is not null
 		if (sectionProvider.getSection() == null) return new InvalidMessageRecord(validMessageKey, InvalidRecordReason.MESSAGE_SECTION_MISSING);

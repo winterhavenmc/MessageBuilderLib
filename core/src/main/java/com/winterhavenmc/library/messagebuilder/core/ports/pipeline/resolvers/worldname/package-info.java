@@ -32,9 +32,9 @@
  *
  * <h2>Runtime Integration</h2>
  * If <code>Multiverse-Core</code> is detected and enabled at runtime, the resolver system will use
- * {@link com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.PluginResolver MultiverseV4WorldNameResolver}
+ * {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver WorldNameResolver}
  * to obtain world aliases. Otherwise, it falls back to
- * {@link com.winterhavenmc.library.messagebuilder.core.ports.resolvers.worldname.DefaultResolver DefaultResolver},
+ * {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver DefaultResolver},
  * which uses the world’s raw Bukkit name.
  *
  * <h2>Usage</h2>

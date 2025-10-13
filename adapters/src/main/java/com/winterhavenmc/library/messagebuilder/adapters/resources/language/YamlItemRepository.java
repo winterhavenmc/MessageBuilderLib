@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.SectionProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.InvalidItemRecord;
@@ -28,27 +28,27 @@ import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.validation.Parameter;
-import com.winterhavenmc.library.messagebuilder.models.validation.Validator;
 
 import java.util.Objects;
 
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.throwing;
 import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
-public final class YamlItemRepository implements ItemRepository
+public final class YamlItemRepository implements ItemRecordRepository
 {
 	private final SectionProvider sectionProvider;
 
 
 	public YamlItemRepository(final YamlLanguageResourceManager languageResourceManager)
 	{
-		validate(languageResourceManager, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
-		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS);
+		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
+		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS.name());
 	}
 
 
 	@Override
-	public ItemRecord getItemRecord(final ValidItemKey validItemKey)
+	public ItemRecord getRecord(final ValidItemKey validItemKey)
 	{
 		// confirm item section is not null
 		if (sectionProvider.getSection() == null) return new InvalidItemRecord(validItemKey, InvalidRecordReason.ITEM_SECTION_MISSING);

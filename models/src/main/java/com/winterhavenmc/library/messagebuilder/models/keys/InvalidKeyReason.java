@@ -17,6 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.models.keys;
 
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 public enum InvalidKeyReason
 {
 	KEY_NULL("The parameter 'key' was null."),
@@ -36,6 +41,35 @@ public enum InvalidKeyReason
 	public String getDefaultMessage()
 	{
 		return this.defaultMessage;
+	}
+
+
+	public String getLocalizedMessage(final Locale locale)
+	{
+		try
+		{
+			final ResourceBundle bundle = ResourceBundle.getBundle(getClass().getSimpleName(), locale);
+			return bundle.getString(name());
+		}
+		catch (MissingResourceException exception)
+		{
+			return this.defaultMessage;
+		}
+	}
+
+
+	public String getLocalizeMessage(final Locale locale, final Object... objects)
+	{
+		try
+		{
+			final ResourceBundle bundle = ResourceBundle.getBundle(getClass().getSimpleName(), locale);
+			final String pattern = bundle.getString(name());
+			return MessageFormat.format(pattern, objects);
+		}
+		catch (MissingResourceException exception)
+		{
+			return MessageFormat.format(this.defaultMessage, objects);
+		}
 	}
 
 }

@@ -20,7 +20,6 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 import com.winterhavenmc.library.messagebuilder.adapters.util.MockUtility;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -56,6 +55,7 @@ public class YamlLanguageResourceInstallerTest
 	@Mock FileConfiguration fileConfigurationMock;
 
 	YamlLanguageResourceInstaller resourceInstaller;
+	String defaultLanguageResource = "language/en-US.yml";
 
 	@BeforeEach
 	public void setUp()
@@ -69,7 +69,7 @@ public class YamlLanguageResourceInstallerTest
 
 		// create real instance of installer
 		resourceInstaller = new YamlLanguageResourceInstaller(pluginMock, localeProviderMock);
-		resourceInstaller.autoInstall();
+		resourceInstaller.install();
 	}
 
 
@@ -408,13 +408,13 @@ public class YamlLanguageResourceInstallerTest
 		{
 			// Arrange
 			when(pluginMock.getResource(resourceInstaller.getAutoInstallResourceName())).thenReturn(getClass().getClassLoader().getResourceAsStream(resourceInstaller.getAutoInstallResourceName()));
-			when(pluginMock.getResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString())).thenReturn(getClass().getClassLoader().getResourceAsStream(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString()));
+			when(pluginMock.getResource(defaultLanguageResource)).thenReturn(getClass().getClassLoader().getResourceAsStream(defaultLanguageResource));
 			// install resource when saveResource is called
 			doAnswer(invocation -> MockUtility.installResource(invocation.getArgument(0), tempDataDir.toPath()))
 					.when(pluginMock).saveResource(anyString(), eq(false));
 
 			// Act
-			resourceInstaller.autoInstall();
+			resourceInstaller.install();
 
 			// Assert
 			assertTrue(resourceInstaller.isInstalled("language/en-US.yml"));
@@ -422,7 +422,7 @@ public class YamlLanguageResourceInstallerTest
 
 			// verify
 			verify(pluginMock, atLeastOnce()).getResource(resourceInstaller.getAutoInstallResourceName());
-			verify(pluginMock, atLeastOnce()).getResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString());
+			verify(pluginMock, atLeastOnce()).getResource(defaultLanguageResource);
 		}
 
 		@Test

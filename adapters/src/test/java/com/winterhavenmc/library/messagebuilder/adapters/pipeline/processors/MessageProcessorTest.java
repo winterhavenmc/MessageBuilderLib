@@ -43,7 +43,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.Fiel
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.matchers.PlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
@@ -87,7 +87,8 @@ class MessageProcessorTest
 	@Mock MessagePipeline messagePipelineMock;
 	@Mock
 	YamlLanguageResourceManager languageResourceManagerMock;
-	@Mock ItemRepository itemRepositoryMock;
+	@Mock
+	ItemRecordRepository itemRecordRepositoryMock;
 
 	Recipient.Valid recipient;
 	ValidMessageKey messageKey;
@@ -122,7 +123,7 @@ class MessageProcessorTest
 		FormatterCtx formatterContainer = new FormatterCtx(localeProviderMock, time4jDurationFormatter, localeNumberFormatter);
 		AdapterCtx adapterContextContainer = new AdapterCtx(worldNameResolverMock,
 				new BukkitItemNameResolver(), new BukkitItemDisplayNameResolver(),
-				new BukkitItemPluralNameResolver(itemRepositoryMock), formatterContainer);
+				new BukkitItemPluralNameResolver(itemRecordRepositoryMock), formatterContainer);
 		AccessorRegistry accessorRegistry = new FieldAccessorRegistry(adapterContextContainer);
 		MacroFieldAccessor fieldExtractor = new MacroFieldAccessor(adapterContextContainer);
 

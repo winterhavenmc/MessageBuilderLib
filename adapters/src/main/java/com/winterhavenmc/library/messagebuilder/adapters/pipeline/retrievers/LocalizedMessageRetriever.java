@@ -71,7 +71,7 @@ public final class LocalizedMessageRetriever implements MessageRetriever
 	@Override
 	public MessageRecord getRecord(final ValidMessageKey messageKey)
 	{
-		return (messageRepository.getMessageRecord(messageKey) instanceof ValidMessageRecord validMessageRecord)
+		return (messageRepository.getRecord(messageKey) instanceof ValidMessageRecord validMessageRecord)
 				? validMessageRecord
 				: MessageRecord.empty(messageKey, InvalidRecordReason.MESSAGE_ENTRY_MISSING);
 	}

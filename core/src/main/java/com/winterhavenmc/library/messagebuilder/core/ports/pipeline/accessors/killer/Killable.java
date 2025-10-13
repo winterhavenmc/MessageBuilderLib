@@ -80,7 +80,7 @@ public interface Killable
 	 * Formats the killer name for use in placeholder replacement.
 	 *
 	 * @param killer the entity that performed the kill
-	 * @return an {@code Optional<String>} containing the killer's name, if valid
+	 * @return an {@code Optional<Section>} containing the killer's name, if valid
 	 */
 	static Optional<String> formatKiller(final AnimalTamer killer)
 	{

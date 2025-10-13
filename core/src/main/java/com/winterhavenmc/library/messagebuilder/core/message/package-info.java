@@ -39,7 +39,7 @@
  *
  * <h2>Usage</h2>
  * Developers do not typically instantiate message types directly. Instead, messages are created
- * via the fluent API exposed by {@link com.winterhavenmc.library.messagebuilder.MessageBuilder}:
+ * via the fluent API exposed by {@code com.winterhavenmc.library.messagebuilder.MessageBuilder}:
  * {@snippet lang="java":
  * messageBuilder.compose(sender, MessageId.LOGIN_SUCCESS)
  *               .setMacro(Macro.PLAYER, player)
@@ -52,7 +52,7 @@
  * @see com.winterhavenmc.library.messagebuilder.core.message.Message
  * @see com.winterhavenmc.library.messagebuilder.core.message.ValidMessage
  * @see com.winterhavenmc.library.messagebuilder.core.message.InvalidMessage
+ * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline Pipeline
  * @see com.winterhavenmc.library.messagebuilder.models.recipient.Recipient Recipient
- * @see com.winterhavenmc.library.messagebuilder.pipeline.MessagePipeline MessagePipeline
  */
 package com.winterhavenmc.library.messagebuilder.core.message;

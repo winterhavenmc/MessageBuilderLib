@@ -24,5 +24,5 @@ import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
 @FunctionalInterface
 public interface MessageRepository
 {
-	MessageRecord getMessageRecord(ValidMessageKey key);
+	MessageRecord getRecord(ValidMessageKey key);
 }

@@ -50,9 +50,9 @@ public final class LanguageTag
 
 
 	/**
-	 * Class constructor that takes a String language tag as a parameter
+	 * Class constructor that takes a Section language tag as a parameter
 	 *
-	 * @param languageTag a {@code String} representing a potential language resource
+	 * @param languageTag a {@code Section} representing a potential language resource
 	 */
 	private LanguageTag(@NotNull final String languageTag)
 	{
@@ -76,7 +76,7 @@ public final class LanguageTag
 
 
 	/**
-	 * Static factory method that creates a new validated LanguageTag from a String
+	 * Static factory method that creates a new validated LanguageTag from a Section
 	 *
 	 * @param string the string to use in the creation of a new LanguageTag
 	 * @return Optional of a LanguageTag if valid, otherwise an empty Optional
@@ -132,9 +132,9 @@ public final class LanguageTag
 
 
 	/**
-	 * Retrieve the IETF language tag associated with a potential language resource, as a String
+	 * Retrieve the IETF language tag associated with a potential language resource, as a Section
 	 *
-	 * @return {@code String} representing the IETF language tag associated with a potential language resource
+	 * @return {@code Section} representing the IETF language tag associated with a potential language resource
 	 */
 	@Override @NotNull @Contract(pure = true)
 	public String toString()

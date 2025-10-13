@@ -83,7 +83,7 @@ public interface Instantable
 	 * @param instant the instant to format
 	 * @param formatStyle the formatting style to use
 	 * @param localeProvider a provider of the current locale and timezone
-	 * @return an {@code Optional<String>} containing the formatted timestamp, or empty if the instant is {@code null}
+	 * @return an {@code Optional<Section>} containing the formatted timestamp, or empty if the instant is {@code null}
 	 */
 	static Optional<String> formatInstant(final Instant instant,
 										  final FormatStyle formatStyle,

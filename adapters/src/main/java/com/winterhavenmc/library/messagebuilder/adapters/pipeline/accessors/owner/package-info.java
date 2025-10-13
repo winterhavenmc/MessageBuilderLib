@@ -6,7 +6,7 @@
  * regions. Ownership is resolved via {@link org.bukkit.entity.AnimalTamer AnimalTamer}, allowing compatibility with
  * {@link org.bukkit.OfflinePlayer OfflinePlayer} and other tamable or controllable entities.
  *
- * <p>The {@link com.winterhavenmc.library.messagebuilder.core.pipeline.adapters.owner.OwnerAdapter} binds to objects
+ * <p>The {@code com.winterhavenmc.library.messagebuilder.core.pipeline.accessors.owner.OwnerAdapter} binds to objects
  * that either implement {@code Ownable} or are {@link org.bukkit.entity.Tameable}. This allows server operators
  * to use macros such as {@code {OBJECT.OWNER}} in their messages, which are populated with the name of the owner.
  *

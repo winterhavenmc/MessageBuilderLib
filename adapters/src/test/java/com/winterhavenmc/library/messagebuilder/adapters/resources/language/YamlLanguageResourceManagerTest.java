@@ -18,8 +18,11 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.adapters.util.MockUtility;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
 
@@ -50,37 +53,38 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class YamlLanguageResourceManagerTest
 {
-	@Mock
-	YamlLanguageSectionProvider languageSectionProviderMock;
-	@Mock
-	YamlLanguageResourceInstaller languageResourceInstallerMock;
-	@Mock
-	YamlLanguageResourceLoader languageResourceLoaderMock;
+	@Mock YamlLanguageSectionProvider languageSectionProviderMock;
+	@Mock YamlLanguageResourceInstaller languageResourceInstallerMock;
+	@Mock YamlLanguageResourceLoader languageResourceLoaderMock;
 	@Mock ConfigurationSection constantsSectionMock;
 	@Mock ConfigurationSection itemsSectionMock;
 	@Mock ConfigurationSection messagesSectionMock;
 	@Mock Configuration languageConfigurationMock;
 	@Mock Plugin pluginMock;
 	@Mock ConstantRepository constantRepositoryMock;
-	@Mock ItemRepository itemRepositoryMock;
+	@Mock ItemRecordRepository itemRecordRepositoryMock;
 	@Mock MessageRepository messageRepositoryMock;
 	@Mock LocaleProvider localeProviderMock;
 
 	YamlLanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
 	FileConfiguration pluginConfiguration;
+	java.lang.String defaultLanguageResource;
 
 
 	@BeforeEach
 	void setUp()
 	{
+		// set required default language resource name
+		defaultLanguageResource = "language/en-US.yml";
+
 		// create real plugin config
 		pluginConfiguration = new YamlConfiguration();
 		pluginConfiguration.set("language", "en-US");
 		pluginConfiguration.set("locale", "en-US");
 
 		// create real language configuration
-		languageConfiguration = MockUtility.loadConfigurationFromResource(LanguageConfigConstant.RESOURCE_LANGUAGE_EN_US_YML.toString());
+		languageConfiguration = MockUtility.loadConfigurationFromResource(defaultLanguageResource);
 
 		// instantiate real language resource manager
 		resourceManager = new YamlLanguageResourceManager(languageResourceInstallerMock, languageResourceLoaderMock, languageConfigurationMock);
@@ -89,7 +93,7 @@ class YamlLanguageResourceManagerTest
 
 	@ParameterizedTest
 	@EnumSource(Section.class)
-	void getSectionProvider(Section section)
+	void getSectionProvider(Section string)
 	{
 		// Arrange
 		lenient().when(languageConfigurationMock.getConfigurationSection("MESSAGES")).thenReturn(messagesSectionMock);
@@ -97,7 +101,7 @@ class YamlLanguageResourceManagerTest
 		lenient().when(languageConfigurationMock.getConfigurationSection("CONSTANTS")).thenReturn(constantsSectionMock);
 
 		// Act
-		SectionProvider sectionProvider = resourceManager.getSectionProvider(section);
+		SectionProvider sectionProvider = resourceManager.getSectionProvider(string.name());
 
 		// Assert
 		assertNotNull(sectionProvider);

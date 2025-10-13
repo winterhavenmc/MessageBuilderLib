@@ -29,7 +29,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
-import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 
@@ -132,14 +132,14 @@ public final class MessageBuilder
 		final YamlLanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, localeProvider);
 
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
-		final ItemRepository itemRepository = new YamlItemRepository(languageResourceManager);
+		final ItemRecordRepository itemRecordRepository = new YamlItemRepository(languageResourceManager);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 
 		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, localeProvider, constantRepository);
-		final AdapterCtx adapterCtx = createAdapterContextContainer(plugin, itemRepository, formatterCtx);
+		final AdapterCtx adapterCtx = createAdapterContextContainer(plugin, itemRecordRepository, formatterCtx);
 		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, formatterCtx, adapterCtx);
 
-		final ItemForge itemForge = createItemForge(plugin, itemRepository);
+		final ItemForge itemForge = createItemForge(plugin, itemRecordRepository);
 
 		return new MessageBuilder(plugin, languageResourceManager, constantRepository, itemForge, messagePipeline);
 	}

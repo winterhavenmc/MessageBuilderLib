@@ -84,7 +84,7 @@ public interface Ownable
 	 * Returns a formatted string representing the owner's name, if available and valid.
 	 *
 	 * @param owner the {@link AnimalTamer} to format
-	 * @return an {@code Optional<String>} containing the owner's name, or empty if not valid
+	 * @return an {@code Optional<Section>} containing the owner's name, or empty if not valid
 	 */
 	static Optional<String> formatOwner(final AnimalTamer owner)
 	{

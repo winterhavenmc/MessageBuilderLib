@@ -88,7 +88,7 @@ public final class ValidConstantRecord implements ConstantRecord
 	 * Returns the raw constant value associated with this record.
 	 * <p>
 	 * The type may vary depending on what was stored in the language configuration.
-	 * It is typically expected to be a {@link String}, {@link Number}, or {@link Boolean}.
+	 * It is typically expected to be a {@link Section}, {@link Number}, or {@link Boolean}.
 	 *
 	 * @return the constant value
 	 */

@@ -10,12 +10,12 @@
  * <h2>Key Components</h2>
  * <ul>
  *   <li>LanguageProvider – Retrieves the server's configured language tag (e.g., {@code en-US}).</li>
- *   <li>{@link LocaleProvider} –
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider} –
  *       Retrieves both the locale and timezone, used for date/time and number formatting.</li>
- *   <li>{@link LanguageSetting} and
- *       {@link LocaleSetting} –
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.models.configuration.LanguageSetting} and
+ *       {@link com.winterhavenmc.library.messagebuilder.models.configuration.LocaleSetting} –
  *       Simple record types that wrap parsed configuration values.</li>
- *   <li>{@link LanguageTag} –
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag} –
  *       A utility class for parsing and validating IETF BCP 47 language tags.</li>
  * </ul>
  *

@@ -290,7 +290,7 @@ class YamlLanguageResourceLoaderTest
 
 	// --- Helpers ---
 
-//	private File writeLanguageFile(final File pluginDataFolder, final String localeString, final String yamlContent) throws IOException
+//	private File writeLanguageFile(final File pluginDataFolder, final Section localeString, final Section yamlContent) throws IOException
 //	{
 //		File languageDir = new File(pluginDataFolder, "language");
 //		if (!languageDir.exists()) {
@@ -304,7 +304,7 @@ class YamlLanguageResourceLoaderTest
 //		return langFile;
 //	}
 
-//	private void createLanguageFile(File pluginDataFolder, String localeString) throws IOException
+//	private void createLanguageFile(File pluginDataFolder, Section localeString) throws IOException
 //	{
 //		writeLanguageFile(pluginDataFolder, localeString, "placeholder: value");
 //	}

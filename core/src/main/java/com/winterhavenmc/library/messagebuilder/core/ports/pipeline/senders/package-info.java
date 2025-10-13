@@ -12,9 +12,9 @@
  * <ul>
  *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender}
  *   – A functional interface for sending messages to a recipient using a defined delivery channel.</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.core.pipeline.sender.MessageSender}
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender}
  *   - Sends the message string to the chat interface of the recipient.</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.core.pipeline.sender.TitleSender}
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender}
  *   - Displays the title and subtitle of the message as an overlay (if the recipient is a
  *   {@link org.bukkit.entity.Player Player}).</li>
  * </ul>
@@ -24,7 +24,5 @@
  * and should not perform macro resolution or placeholder detection themselves.
  *
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.sender.MessageSender
- * @see com.winterhavenmc.library.messagebuilder.core.pipeline.sender.TitleSender
  */
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders;

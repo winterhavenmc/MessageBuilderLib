@@ -19,7 +19,7 @@
  * Provides support for macro replacement of UUID values from objects.
  *
  * <p>This package contains the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.identity.Identifiable}
- * interface and its corresponding adapter {@link UniqueIdAdapter}.
+ * interface and its corresponding adapter {@link com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.identity.UniqueIdAdapter}.
  * These components enable automatic extraction and macro substitution of UUIDs for objects such as:
  * <ul>
  *     <li>Entities</li>

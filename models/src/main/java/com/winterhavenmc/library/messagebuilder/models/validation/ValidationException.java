@@ -38,7 +38,7 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
  * @see Parameter
  * @see Validator
  */
-public class ValidationException extends IllegalArgumentException
+public final class ValidationException extends IllegalArgumentException
 {
 	private final ErrorMessageKey errorMessageKey;
 	private final Parameter parameter;

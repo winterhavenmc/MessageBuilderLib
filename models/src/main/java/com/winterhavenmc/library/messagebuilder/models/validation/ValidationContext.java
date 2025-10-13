@@ -27,6 +27,7 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Paramet
 import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.throwing;
 import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
+
 /**
  * Provides global access to the plugin-configured locale used
  * during validation message formatting.
@@ -48,7 +49,10 @@ public final class ValidationContext
 {
 	private static LocaleProvider localeProvider;
 
-	private ValidationContext() { throw new AssertionError(); }
+	private ValidationContext()
+	{
+		throw new AssertionError();
+	}
 
 
 	/**
@@ -92,7 +96,8 @@ public final class ValidationContext
 	 * This method allows tests to reinitialize the context with different
 	 * locale providers without restarting the plugin.
 	 */
-	static void reset() {
+	static void reset()
+	{
 		localeProvider = null;
 	}
 

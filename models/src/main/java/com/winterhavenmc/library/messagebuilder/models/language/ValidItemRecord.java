@@ -58,12 +58,12 @@ public final class ValidItemRecord implements ItemRecord
 	 * @param displayName       the inventory-specific singular display name
 	 * @param itemLore          the list of lore lines (may be empty but not {@code null})
 	 */
-	private ValidItemRecord(ValidItemKey key,
-							String material,
-							String name,
-							String pluralName,
-							String displayName,
-							List<String> itemLore)
+	private ValidItemRecord(final ValidItemKey key,
+							final String material,
+							final String name,
+							final String pluralName,
+							final String displayName,
+							final List<String> itemLore)
 	{
 		this.key = key;
 		this.material = material;
@@ -85,14 +85,14 @@ public final class ValidItemRecord implements ItemRecord
 	 * @param section the configuration section representing the item
 	 * @return a new validated item record
 	 */
-	public static ValidItemRecord create(ValidItemKey key, ConfigurationSection section)
+	public static ValidItemRecord create(final ValidItemKey key, final ConfigurationSection section)
 	{
 		return new ValidItemRecord(key,
-				section.getString(Field.MATERIAL.toKey()),
-				section.getString(Field.NAME.toKey()),
-				section.getString(Field.PLURAL_NAME.toKey()),
-				section.getString(Field.DISPLAY_NAME.toKey()),
-				section.getStringList(Field.LORE.toKey()));
+				section.getString(Field.MATERIAL.toString()),
+				section.getString(Field.NAME.toString()),
+				section.getString(Field.PLURAL_NAME.toString()),
+				section.getString(Field.DISPLAY_NAME.toString()),
+				section.getStringList(Field.LORE.toString()));
 	}
 
 

@@ -14,7 +14,7 @@
  * public class CustomNPC implements Nameable {
  *
  *     @Override
- *     public String getName() {
+ *     public Section getName() {
  *         return this.name;
  *     }
  * }

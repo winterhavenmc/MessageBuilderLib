@@ -18,8 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceMessage;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
@@ -34,7 +32,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageConfigConstant.DEFAULT_LANGUAGE_TAG;
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageConfigConstant.DEFAULT_LANGUAGE_TAG;
 
 
 /**
@@ -69,7 +67,9 @@ public class YamlLanguageResourceLoader implements ResourceLoader
 	 * @param plugin      an instance of the plugin main class
 	 * @param yamlFactory factory for creating YamlConfiguration instances
 	 */
-	public YamlLanguageResourceLoader(final Plugin plugin, Supplier<YamlConfiguration> yamlFactory, LocaleProvider localeProvider)
+	public YamlLanguageResourceLoader(final Plugin plugin,
+									  final Supplier<YamlConfiguration> yamlFactory,
+									  final LocaleProvider localeProvider)
 	{
 		this.plugin = plugin;
 		this.yamlFactory = yamlFactory;
@@ -82,7 +82,6 @@ public class YamlLanguageResourceLoader implements ResourceLoader
 	 *
 	 * @return Optional {@code LanguageTag} or an empty Optional if config setting is null or empty
 	 */
-	@Override
 	public Optional<LanguageTag> getConfiguredLanguageTag()
 	{
 		String configLanguageTag = plugin.getConfig().getString(LanguageConfigConstant.CONFIG_LANGUAGE_KEY.toString());
@@ -92,7 +91,6 @@ public class YamlLanguageResourceLoader implements ResourceLoader
 	}
 
 
-	@Override
 	public Locale getConfiguredLocale()
 	{
 		return getConfiguredLanguageTag()

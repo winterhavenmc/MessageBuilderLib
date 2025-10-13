@@ -22,7 +22,7 @@
  * <pre>{@code
  * AccessorEngine engine = new AccessorEngine();
  * Accessor<Location> accessor = new LocationAccessor(player.getLocation());
- * Map<String, String> values = engine.extractValues(accessor);
+ * Map<Section, Section> values = engine.extractValues(accessor);
  * }</pre>
  *
  * <p>
