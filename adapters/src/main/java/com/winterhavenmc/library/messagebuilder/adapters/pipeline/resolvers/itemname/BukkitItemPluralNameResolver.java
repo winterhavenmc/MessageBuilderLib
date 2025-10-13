@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.Cust
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
-import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.ValidItemRecord;

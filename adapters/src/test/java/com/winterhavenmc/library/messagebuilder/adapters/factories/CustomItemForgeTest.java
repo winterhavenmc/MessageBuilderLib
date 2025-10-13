@@ -3,7 +3,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.factories;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.CustomItemForge;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 
-import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
 import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 

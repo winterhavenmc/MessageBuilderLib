@@ -24,7 +24,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipel
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
-import com.winterhavenmc.library.messagebuilder.core.util.ItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 
 import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;

@@ -1,4 +1,4 @@
-package com.winterhavenmc.library.messagebuilder.core.util;
+package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;
