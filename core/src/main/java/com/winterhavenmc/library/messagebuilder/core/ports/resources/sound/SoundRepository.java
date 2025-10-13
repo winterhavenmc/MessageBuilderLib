@@ -74,6 +74,8 @@ public interface SoundRepository
 	boolean isValidBukkitSoundName(String name);
 
 
+	boolean isRegistrySound(String name);
+
 	/**
 	 * Test string is valid sound config key in sounds.yml file
 	 *
@@ -91,4 +93,6 @@ public interface SoundRepository
 	 */
 	String getBukkitSoundName(String key);
 
+
+	boolean soundEffectsDisabled();
 }

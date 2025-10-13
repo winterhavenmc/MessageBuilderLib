@@ -116,6 +116,7 @@ public final class YamlSoundRepository implements SoundRepository
 	}
 
 
+	@Override
 	public boolean isRegistrySound(final String name)
 	{
 		return Registry.SOUNDS.match(name) != null;
@@ -145,6 +146,7 @@ public final class YamlSoundRepository implements SoundRepository
 	/**
 	 * Load sound configuration from yaml file in plugin data folder
 	 */
+	@Override
 	public void reload()
 	{
 		// get File object for sound file
@@ -263,7 +265,8 @@ public final class YamlSoundRepository implements SoundRepository
 	}
 
 
-	boolean soundEffectsDisabled()
+	@Override
+	public boolean soundEffectsDisabled()
 	{
 		return !plugin.getConfig().getBoolean("sound-effects");
 	}
