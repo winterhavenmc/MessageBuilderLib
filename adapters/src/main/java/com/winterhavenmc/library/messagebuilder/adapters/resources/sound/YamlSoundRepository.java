@@ -45,7 +45,6 @@ public final class YamlSoundRepository implements SoundRepository
 {
 	private final Plugin plugin;
 	private final YamlConfiguration soundsConfig;
-//	private final Section soundFileName = "sounds.yml";
 
 	enum Field
 	{
