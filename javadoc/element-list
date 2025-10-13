@@ -28,6 +28,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders
 com.winterhavenmc.library.messagebuilder.adapters.resources.configuration
 com.winterhavenmc.library.messagebuilder.adapters.resources.language
+com.winterhavenmc.library.messagebuilder.adapters.resources.sound
 com.winterhavenmc.library.messagebuilder.core.context
 com.winterhavenmc.library.messagebuilder.core.maps
 com.winterhavenmc.library.messagebuilder.core.message
@@ -62,11 +63,12 @@ com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders
 com.winterhavenmc.library.messagebuilder.core.ports.resources
 com.winterhavenmc.library.messagebuilder.core.ports.resources.language
-com.winterhavenmc.library.messagebuilder.core.util
+com.winterhavenmc.library.messagebuilder.core.ports.resources.sound
 com.winterhavenmc.library.messagebuilder.models
 com.winterhavenmc.library.messagebuilder.models.configuration
 com.winterhavenmc.library.messagebuilder.models.keys
 com.winterhavenmc.library.messagebuilder.models.language
 com.winterhavenmc.library.messagebuilder.models.recipient
+com.winterhavenmc.library.messagebuilder.models.sound
 com.winterhavenmc.library.messagebuilder.models.time
 com.winterhavenmc.library.messagebuilder.models.validation
