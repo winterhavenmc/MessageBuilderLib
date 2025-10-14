@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.CustomItemForge;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemForge;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
@@ -54,9 +54,9 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
 		{
 			// check if item is custom item defined in language file, and if so, try to set pluralized name
-			if (CustomItemForge.isCustomItem(itemStack))
+			if (YamlItemForge.isCustomItem(itemStack))
 			{
-				if (CustomItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey)
+				if (YamlItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey)
 				{
 					if (itemRecordRepository.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 					{

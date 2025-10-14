@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public final class CustomItemForge implements ItemForge
+public final class YamlItemForge implements ItemForge
 {
 	private final static Material DEFAULT_MATERIAL = Material.STICK;
 	private static Plugin plugin;
@@ -54,10 +54,10 @@ public final class CustomItemForge implements ItemForge
 	private final MiniMessage miniMessage;
 
 
-	public CustomItemForge(final Plugin plugin, final ItemRecordRepository itemRecordRepository)
+	public YamlItemForge(final Plugin plugin, final ItemRecordRepository itemRecordRepository)
 	{
-		CustomItemForge.plugin = plugin;
-		CustomItemForge.ITEM_KEY = new NamespacedKey(plugin, "ITEM_KEY");
+		YamlItemForge.plugin = plugin;
+		YamlItemForge.ITEM_KEY = new NamespacedKey(plugin, "ITEM_KEY");
 		this.itemRecordRepository = itemRecordRepository;
 		this.miniMessage = MiniMessage.miniMessage();
 	}
@@ -300,7 +300,7 @@ public final class CustomItemForge implements ItemForge
 		return (itemStack != null
 				&& itemStack.hasItemMeta()
 				&& itemStack.getItemMeta() != null
-				&& itemStack.getItemMeta().getPersistentDataContainer().has(CustomItemForge.ITEM_KEY));
+				&& itemStack.getItemMeta().getPersistentDataContainer().has(YamlItemForge.ITEM_KEY));
 	}
 
 
@@ -309,15 +309,15 @@ public final class CustomItemForge implements ItemForge
 		return (itemStack != null
 				&& itemStack.hasItemMeta()
 				&& itemStack.getItemMeta() != null
-				&& itemStack.getItemMeta().getPersistentDataContainer().has(CustomItemForge.ITEM_KEY)
-				&& itemKey.equals(itemStack.getItemMeta().getPersistentDataContainer().get(CustomItemForge.ITEM_KEY, PersistentDataType.STRING)));
+				&& itemStack.getItemMeta().getPersistentDataContainer().has(YamlItemForge.ITEM_KEY)
+				&& itemKey.equals(itemStack.getItemMeta().getPersistentDataContainer().get(YamlItemForge.ITEM_KEY, PersistentDataType.STRING)));
 	}
 
 
 	static Optional<String> getItemKeyString(ItemStack itemStack)
 	{
 		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
-				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(CustomItemForge.ITEM_KEY, PersistentDataType.STRING))
+				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(YamlItemForge.ITEM_KEY, PersistentDataType.STRING))
 				: Optional.empty();
 	}
 

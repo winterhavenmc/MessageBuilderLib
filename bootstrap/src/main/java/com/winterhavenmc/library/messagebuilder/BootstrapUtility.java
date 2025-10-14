@@ -37,7 +37,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriT
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.CustomItemForge;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemForge;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
@@ -180,7 +180,7 @@ public final class BootstrapUtility
 
 	static ItemForge createItemForge(final Plugin plugin, final ItemRecordRepository items)
 	{
-		return new CustomItemForge(plugin, items);
+		return new YamlItemForge(plugin, items);
 	}
 
 
