@@ -18,13 +18,14 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
+
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
+import org.bukkit.plugin.Plugin;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
