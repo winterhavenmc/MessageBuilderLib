@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ConfigurationProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
@@ -46,7 +47,7 @@ import static com.winterhavenmc.library.messagebuilder.adapters.resources.langua
  */
 public final class YamlLanguageResourceManager implements ResourceManager
 {
-	private final YamlLanguageResourceLoader resourceLoader;
+	private final ResourceLoader resourceLoader;
 	private final ResourceInstaller resourceInstaller;
 	private Configuration languageConfiguration;
 
@@ -58,7 +59,7 @@ public final class YamlLanguageResourceManager implements ResourceManager
 	 * @param resourceLoader  a YamlLanguageResourceLoader instance
 	 */
 	public YamlLanguageResourceManager(final ResourceInstaller resourceInstaller,
-									   final YamlLanguageResourceLoader resourceLoader)
+									   final ResourceLoader resourceLoader)
 	{
 		this.resourceInstaller = resourceInstaller;
 		this.resourceLoader = resourceLoader;
@@ -76,7 +77,7 @@ public final class YamlLanguageResourceManager implements ResourceManager
 	 * @param configuration a bukkit Configuration representing the language resource
 	 */
 	public YamlLanguageResourceManager(final ResourceInstaller installer,
-									   final YamlLanguageResourceLoader loader,
+									   final ResourceLoader loader,
 									   final Configuration configuration)
 	{
 		this.resourceInstaller = installer;
