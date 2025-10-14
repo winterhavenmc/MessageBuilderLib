@@ -8,7 +8,6 @@ import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.
 
 public final class YamlSoundResourceInstaller implements ResourceInstaller
 {
-
 	private final Plugin plugin;
 
 
