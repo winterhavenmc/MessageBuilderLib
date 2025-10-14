@@ -64,27 +64,6 @@ public final class BukkitLocaleProvider implements LocaleProvider
 	private final Supplier<ZoneId> zoneIdSupplier;
 
 	/**
-	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
-	 * <p>
-	 * If the {@code timezone} value is present in the configuration and matches
-	 * one of the available {@link ZoneId} recoginized by the JVM, it is used.
-	 * Otherwise, this method falls back to the system default time zone.
-	 * </p>
-	 *
-	 * @param plugin the plugin whose configuration is queried for the timezone
-	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
-	 */
-	public static ZoneId getValidZoneId(Plugin plugin)
-	{
-		String timezone = plugin.getConfig().getString(TIME_ZONE_SETTING_KEY);
-
-		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
-				? ZoneId.of(timezone)
-				: ZoneId.systemDefault();
-	}
-
-
-	/**
 	 * Enum representing the recognized configuration keys for language settings.
 	 */
 	enum LocaleField
@@ -182,5 +161,25 @@ public final class BukkitLocaleProvider implements LocaleProvider
 		return zoneIdSupplier.get();
 	}
 
+
+	/**
+	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
+	 * <p>
+	 * If the {@code timezone} value is present in the configuration and matches
+	 * one of the available {@link ZoneId} recognized by the JVM, it is used.
+	 * Otherwise, this method falls back to the system default time zone.
+	 * </p>
+	 *
+	 * @param plugin the plugin whose configuration is queried for the timezone
+	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
+	 */
+	public static ZoneId getValidZoneId(Plugin plugin)
+	{
+		String timezone = plugin.getConfig().getString(TIME_ZONE_SETTING_KEY);
+
+		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
+				? ZoneId.of(timezone)
+				: ZoneId.systemDefault();
+	}
 
 }
