@@ -125,7 +125,7 @@ public final class MessageBuilder
 	 */
 	public static MessageBuilder create(final Plugin plugin)
 	{
-		validate(plugin, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
+		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
 
 		final LocaleProvider localeProvider = BukkitLocaleProvider.create(plugin);
 
@@ -179,7 +179,7 @@ public final class MessageBuilder
 	public void reload()
 	{
 		boolean result = languageResourceManager.reload();
-		validate(result, bool -> bool.equals(false), Validator.logging(LogLevel.WARN, ErrorMessageKey.RELOAD_FAILED, Parameter.LANGUAGE_FILE));
+		validate(result, bool -> bool.equals(false), logging(LogLevel.WARN, ErrorMessageKey.RELOAD_FAILED, Parameter.LANGUAGE_FILE));
 	}
 
 
@@ -199,9 +199,9 @@ public final class MessageBuilder
 							   final ItemForge itemForge,
 							   final MessagePipeline messagePipeline)
 	{
-		validate(plugin, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
-		validate(languageResourceManager, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
-		validate(messagePipeline, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.MESSAGE_PROCESSOR));
+		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
+		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
+		validate(messagePipeline, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.MESSAGE_PROCESSOR));
 
 		return new MessageBuilder(plugin, languageResourceManager, constantRepository, itemForge, messagePipeline);
 	}
