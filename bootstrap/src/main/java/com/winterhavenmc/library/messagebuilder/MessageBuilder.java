@@ -23,16 +23,15 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.Yaml
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlMessageRepository;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
-
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
@@ -47,7 +46,7 @@ import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
 import static com.winterhavenmc.library.messagebuilder.BootstrapUtility.*;
-import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.*;
 
 
 /**
@@ -86,7 +85,7 @@ public final class MessageBuilder
 	private final static String EXCEPTION_MESSAGES = "exception.messages";
 
 	private final Plugin plugin;
-	private final YamlLanguageResourceManager languageResourceManager;
+	private final ResourceManager languageResourceManager;
 	private final ConstantRepository constants;
 	private final ItemForge itemForge;
 	private final MessagePipeline messagePipeline;
@@ -100,7 +99,7 @@ public final class MessageBuilder
 	 * @param languageResourceManager an instance of the language resource manager
 	 */
 	private MessageBuilder(final Plugin plugin,
-	                       final YamlLanguageResourceManager languageResourceManager,
+	                       final ResourceManager languageResourceManager,
 						   final ConstantRepository constants,
 						   final ItemForge itemForge,
 	                       final MessagePipeline messagePipeline)
@@ -125,7 +124,7 @@ public final class MessageBuilder
 	 */
 	public static MessageBuilder create(final Plugin plugin)
 	{
-		validate(plugin, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
+		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
 
 		final LocaleProvider localeProvider = BukkitLocaleProvider.create(plugin);
 
@@ -179,7 +178,7 @@ public final class MessageBuilder
 	public void reload()
 	{
 		boolean result = languageResourceManager.reload();
-		validate(result, bool -> bool.equals(false), Validator.logging(LogLevel.WARN, ErrorMessageKey.RELOAD_FAILED, Parameter.LANGUAGE_FILE));
+		validate(result, bool -> bool.equals(false), logging(LogLevel.WARN, ErrorMessageKey.RELOAD_FAILED, Parameter.LANGUAGE_FILE));
 	}
 
 
@@ -194,14 +193,14 @@ public final class MessageBuilder
 	 * @return an instance of this class, instantiated with the mock objects
 	 */
 	static MessageBuilder test(final Plugin plugin,
-							   final YamlLanguageResourceManager languageResourceManager,
+							   final ResourceManager languageResourceManager,
 							   final ConstantRepository constantRepository,
 							   final ItemForge itemForge,
 							   final MessagePipeline messagePipeline)
 	{
-		validate(plugin, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
-		validate(languageResourceManager, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
-		validate(messagePipeline, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.MESSAGE_PROCESSOR));
+		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
+		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
+		validate(messagePipeline, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.MESSAGE_PROCESSOR));
 
 		return new MessageBuilder(plugin, languageResourceManager, constantRepository, itemForge, messagePipeline);
 	}

@@ -23,9 +23,7 @@ public interface ItemForge
 
 	Optional<ItemStack> createItem(ValidItemKey validItemKey, int quantity);
 
-	Optional<ItemStack> createItem(ValidItemKey validItemKey,
-								   int quantity,
-								   Map<String, String> replacements);
+	Optional<ItemStack> createItem(ValidItemKey validItemKey, int quantity, Map<String, String> replacements);
 
 	Optional<String> getItemName(String key);
 

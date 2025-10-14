@@ -203,7 +203,7 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 	 *     </ol>
 	 *
 	 *
-	 * @param resourcePath the {@code Section} path name to be sanitized
+	 * @param resourcePath the {@code resource path name to be sanitized
 	 * @return The sanitized resource path {@code Section}
 	 */
 	String sanitizeResourcePath(final String resourcePath)
