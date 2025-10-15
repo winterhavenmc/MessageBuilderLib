@@ -117,6 +117,7 @@ public final class BukkitLanguageProvider implements LanguageProvider
 		return languageSettingSupplier.get().name();
 	}
 
+
 	/**
 	 * Enum representing the recognized configuration keys for language settings.
 	 */
@@ -131,6 +132,7 @@ public final class BukkitLanguageProvider implements LanguageProvider
 		{
 			this.key = key;
 		}
+
 
 		@Override
 		public String toString()
