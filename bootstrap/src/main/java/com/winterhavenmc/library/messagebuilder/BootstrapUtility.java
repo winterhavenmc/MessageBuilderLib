@@ -34,10 +34,14 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Loc
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemForge;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceInstaller;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceLoader;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
@@ -97,6 +101,14 @@ public final class BootstrapUtility
 		return new YamlLanguageResourceManager(resourceInstaller, resourceLoader);
 	}
 
+	static YamlSoundResourceManager createSoundResourceManager(final Plugin plugin,
+															   final LocaleProvider localeProvider)
+	{
+		final YamlSoundResourceInstaller resourceInstaller = new YamlSoundResourceInstaller(plugin);
+		final YamlSoundResourceLoader resourceLoader = new YamlSoundResourceLoader(plugin, localeProvider);
+
+		return new YamlSoundResourceManager(plugin, resourceLoader, resourceInstaller);
+	}
 
 	/**
 	 * A static factory method to create a macro replacer instance
@@ -191,6 +203,12 @@ public final class BootstrapUtility
 		return (mvPlugin != null && mvPlugin.isEnabled())
 				? new MultiverseResolver(mvPlugin)
 				: new DefaultResolver();
+	}
+
+
+	static LocaleProvider createLocaleProvider(final Plugin plugin)
+	{
+		return BukkitLocaleProvider.create(plugin);
 	}
 
 }
