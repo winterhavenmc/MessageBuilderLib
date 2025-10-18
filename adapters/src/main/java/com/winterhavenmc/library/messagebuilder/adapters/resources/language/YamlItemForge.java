@@ -48,7 +48,7 @@ import java.util.Optional;
 public final class YamlItemForge implements ItemForge
 {
 	public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
-	private final static Material DEFAULT_MATERIAL = Material.STICK;
+	private static final Material DEFAULT_MATERIAL = Material.STICK;
 	private static Plugin plugin;
 	private static NamespacedKey ITEM_KEY;
 
