@@ -34,16 +34,21 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Loc
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.CustomItemForge;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemForge;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceInstaller;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceLoader;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
@@ -71,11 +76,11 @@ public final class BootstrapUtility
 	private BootstrapUtility() { /* Private constructor to prevent instantiation of utility class */ }
 
 
-	public static List<Sender> createSenders(final Plugin plugin, final MessageCooldownMap messageCooldownMap)
+	public static List<Sender> createSenders(final Plugin plugin, final MessageCooldownMap messageCooldownMap, final SoundRepository sounds)
 	{
 		final MiniMessage miniMessage = MiniMessage.miniMessage();
 		final BukkitAudiences bukkitAudiences = BukkitAudiences.create(plugin);
-		final KyoriMessageSender messageSender = new KyoriMessageSender(messageCooldownMap, miniMessage, bukkitAudiences);
+		final KyoriMessageSender messageSender = new KyoriMessageSender(messageCooldownMap, miniMessage, bukkitAudiences, sounds);
 		final KyoriTitleSender titleSender = new KyoriTitleSender(messageCooldownMap, miniMessage, bukkitAudiences);
 
 		return List.of(messageSender, titleSender);
@@ -97,19 +102,27 @@ public final class BootstrapUtility
 		return new YamlLanguageResourceManager(resourceInstaller, resourceLoader);
 	}
 
+	static YamlSoundResourceManager createSoundResourceManager(final Plugin plugin,
+															   final LocaleProvider localeProvider)
+	{
+		final YamlSoundResourceInstaller resourceInstaller = new YamlSoundResourceInstaller(plugin);
+		final YamlSoundResourceLoader resourceLoader = new YamlSoundResourceLoader(plugin, localeProvider);
+
+		return new YamlSoundResourceManager(plugin, resourceLoader, resourceInstaller);
+	}
 
 	/**
 	 * A static factory method to create a macro replacer instance
 	 *
 	 * @param formatterCtx the context container holding formatters
-	 * @param adapterCtx the context container for dependency injection into adapters
+	 * @param accessorCtx the context container for dependency injection into adapters
 	 * @return an instance of the macro replacer
 	 */
 	private static @NotNull MessageProcessor createMacroReplacer(final FormatterCtx formatterCtx,
-																 final AdapterCtx adapterCtx)
+																 final AccessorCtx accessorCtx)
 	{
-		final AccessorRegistry accessorRegistry = new FieldAccessorRegistry(adapterCtx);
-		final MacroFieldAccessor macroFieldAccessor = new MacroFieldAccessor(adapterCtx);
+		final AccessorRegistry accessorRegistry = new FieldAccessorRegistry(accessorCtx);
+		final MacroFieldAccessor macroFieldAccessor = new MacroFieldAccessor(accessorCtx);
 		final CompositeResolver compositeResolver = new CompositeResolver(accessorRegistry, macroFieldAccessor);
 		final AtomicResolver atomicResolver = new AtomicResolver(formatterCtx);
 		final MacroValueResolver macroValueResolver = new MacroValueResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
@@ -123,18 +136,19 @@ public final class BootstrapUtility
 	 * A static factory method to create the message processing pipeline
 	 *
 	 * @param formatterCtx a context container which contains instances of string formatters for specific types
-	 * @param adapterCtx a context container for injecting dependencies into adapters
+	 * @param accessorCtx a context container for injecting dependencies into adapters
 	 * @return an instance of the message pipeline
 	 */
 	static @NotNull MessagePipeline createMessagePipeline(final Plugin plugin,
 														  final MessageRepository messages,
+														  final SoundRepository sounds,
 														  final FormatterCtx formatterCtx,
-														  final AdapterCtx adapterCtx)
+														  final AccessorCtx accessorCtx)
 	{
 		final LocalizedMessageRetriever localizedMessageRetriever = new LocalizedMessageRetriever(messages);
-		final MessageProcessor messageProcessor = createMacroReplacer(formatterCtx, adapterCtx);
+		final MessageProcessor messageProcessor = createMacroReplacer(formatterCtx, accessorCtx);
 		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
-		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap);
+		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap, sounds);
 
 		return new MessagePipeline(localizedMessageRetriever, messageProcessor, messageCooldownMap, messageSenders);
 	}
@@ -164,23 +178,23 @@ public final class BootstrapUtility
 	 * @param plugin instance of the plugin
 	 * @return a populated context container
 	 */
-	static AdapterCtx createAdapterContextContainer(final Plugin plugin,
-													final ItemRecordRepository itemRecordRepository,
-													final FormatterCtx formatterCtx)
+	static AccessorCtx createAccessorContextContainer(final Plugin plugin,
+													  final ItemRecordRepository itemRecordRepository,
+													  final FormatterCtx formatterCtx)
 	{
 		WorldNameResolver worldNameResolver = getWorldNameResolver(plugin);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
 		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRecordRepository);
 
-		return new AdapterCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
+		return new AccessorCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
 				bukkitItemPluralNameResolver, formatterCtx);
 	}
 
 
 	static ItemForge createItemForge(final Plugin plugin, final ItemRecordRepository items)
 	{
-		return new CustomItemForge(plugin, items);
+		return new YamlItemForge(plugin, items);
 	}
 
 
@@ -191,6 +205,12 @@ public final class BootstrapUtility
 		return (mvPlugin != null && mvPlugin.isEnabled())
 				? new MultiverseResolver(mvPlugin)
 				: new DefaultResolver();
+	}
+
+
+	static LocaleProvider createLocaleProvider(final Plugin plugin)
+	{
+		return BukkitLocaleProvider.create(plugin);
 	}
 
 }

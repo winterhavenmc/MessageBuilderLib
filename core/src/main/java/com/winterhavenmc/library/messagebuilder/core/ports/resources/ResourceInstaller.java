@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.resources;
 
-
 import java.util.regex.Pattern;
+
 
 /**
  * An interface that describes classes that are responsible for installing resources

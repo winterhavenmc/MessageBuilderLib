@@ -55,7 +55,7 @@
  *
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor Accessor
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry AccessorRegistry
- * @see com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx AdapterCtx
+ * @see com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx AccessorCtx
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver ValueResolver
  */
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors;

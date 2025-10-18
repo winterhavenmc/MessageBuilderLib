@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.version;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.version.Versionable;
 import org.bukkit.Server;
@@ -28,7 +28,7 @@ import java.util.Optional;
 
 public class VersionAdapter implements Accessor
 {
-	public VersionAdapter(final AdapterCtx ctx) { }
+	public VersionAdapter(final AccessorCtx ctx) { }
 
 
 	@Override

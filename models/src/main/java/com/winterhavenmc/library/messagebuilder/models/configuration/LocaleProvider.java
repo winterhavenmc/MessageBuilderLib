@@ -17,37 +17,12 @@
 
 package com.winterhavenmc.library.messagebuilder.models.configuration;
 
-import org.bukkit.plugin.Plugin;
-
 import java.time.ZoneId;
 import java.util.Locale;
 
 
 public interface LocaleProvider extends ConfigProvider<LocaleSetting>
 {
-	String TIME_ZONE_SETTING_KEY = "timezone";
-
-
-	/**
-	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
-	 * <p>
-	 * If the {@code timezone} value is present in the configuration and matches
-	 * one of the available {@link ZoneId} recoginized by the JVM, it is used.
-	 * Otherwise, this method falls back to the system default time zone.
-	 * </p>
-	 *
-	 * @param plugin the plugin whose configuration is queried for the timezone
-	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
-	 */
-	static ZoneId getValidZoneId(Plugin plugin)
-	{
-		String timezone = plugin.getConfig().getString(TIME_ZONE_SETTING_KEY);
-
-		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
-				? ZoneId.of(timezone)
-				: ZoneId.systemDefault();
-	}
-
 	/**
 	 * Returns the resolved {@link LocaleSetting} based on the plugin configuration.
 	 *

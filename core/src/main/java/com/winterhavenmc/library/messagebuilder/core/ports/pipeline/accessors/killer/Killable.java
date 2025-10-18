@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.killer;
 
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
@@ -60,7 +60,7 @@ public interface Killable
 	 * @param ctx the adapter context container with formatting tools
 	 * @return a {@link MacroStringMap} containing the killer field, or an empty map if not resolvable
 	 */
-	default MacroStringMap extractKiller(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractKiller(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(KILLER).isValid()
 				.map(macroKey -> new MacroStringMap()

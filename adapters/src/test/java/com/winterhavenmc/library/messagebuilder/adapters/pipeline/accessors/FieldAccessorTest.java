@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Ac
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.FieldAccessor;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.displayname.DisplayNameAdapter;
@@ -98,7 +98,7 @@ class FieldAccessorTest
 	@Mock Identifiable identifiableMock;
 	@Mock Locatable locatableMock;
 
-	@Mock AdapterCtx adapterContextContainerMock;
+	@Mock AccessorCtx adapterContextContainerMock;
 	@Mock FormatterCtx formatterContainerMock;
 	@Mock DurationFormatter durationFormatterMock;
 	@Mock NumberFormatter numberFormatterMock;

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.identity;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
@@ -42,8 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 @ExtendWith(MockitoExtension.class)
 class IdentifiableTest
 {
-	@Mock
-	AdapterCtx ctxMock;
+	@Mock AccessorCtx ctxMock;
 	@Mock FormatterCtx formatterContainerMock;
 	@Mock NumberFormatter numberFormatterMock;
 

@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.message;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
 import com.winterhavenmc.library.messagebuilder.core.util.Macro;
 import com.winterhavenmc.library.messagebuilder.core.util.MessageId;
 
@@ -61,7 +61,7 @@ class ValidMessageTest
 	// declare mocks
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
-	@Mock MessagePipeline messagePipelineMock;
+	@Mock Pipeline messagePipelineMock;
 
 	// declare real objects
 	FileConfiguration pluginConfiguration;

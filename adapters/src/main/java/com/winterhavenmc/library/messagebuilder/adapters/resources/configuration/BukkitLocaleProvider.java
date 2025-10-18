@@ -59,9 +59,9 @@ import java.util.function.Supplier;
  */
 public final class BukkitLocaleProvider implements LocaleProvider
 {
+	public static final String TIME_ZONE_SETTING_KEY = "timezone";
 	private final Supplier<LocaleSetting> localeSettingSupplier;
 	private final Supplier<ZoneId> zoneIdSupplier;
-
 
 	/**
 	 * Enum representing the recognized configuration keys for language settings.
@@ -110,7 +110,7 @@ public final class BukkitLocaleProvider implements LocaleProvider
 				() -> new LocaleSetting(LanguageTag.of(plugin.getConfig().getString(BukkitLocaleProvider.LocaleField.LOCALE.toString()))
 						.orElse(LanguageTag.of(plugin.getConfig().getString(BukkitLocaleProvider.LocaleField.LANGUAGE.toString()))
 								.orElse(LanguageTag.getSystemDefault()))),
-				() -> LocaleProvider.getValidZoneId(plugin));
+				() -> getValidZoneId(plugin));
 	}
 
 
@@ -161,5 +161,25 @@ public final class BukkitLocaleProvider implements LocaleProvider
 		return zoneIdSupplier.get();
 	}
 
+
+	/**
+	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
+	 * <p>
+	 * If the {@code timezone} value is present in the configuration and matches
+	 * one of the available {@link ZoneId} recognized by the JVM, it is used.
+	 * Otherwise, this method falls back to the system default time zone.
+	 * </p>
+	 *
+	 * @param plugin the plugin whose configuration is queried for the timezone
+	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
+	 */
+	public static ZoneId getValidZoneId(Plugin plugin)
+	{
+		String timezone = plugin.getConfig().getString(TIME_ZONE_SETTING_KEY);
+
+		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
+				? ZoneId.of(timezone)
+				: ZoneId.systemDefault();
+	}
 
 }

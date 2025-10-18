@@ -19,12 +19,16 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown.MessageCooldownMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
+import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+
+import java.util.Optional;
 
 
 /**
@@ -49,6 +53,7 @@ public final class KyoriMessageSender implements Sender
 	private final MessageCooldownMap messageCooldownMap;
 	private final MiniMessage miniMessage;
 	private final BukkitAudiences audiences;
+	private final SoundRepository sounds;
 
 
 	/**
@@ -57,11 +62,15 @@ public final class KyoriMessageSender implements Sender
 	 *
 	 * @param messageCooldownMap the cooldown map used to track and store message cooldowns
 	 */
-	public KyoriMessageSender(final MessageCooldownMap messageCooldownMap, final MiniMessage miniMessage, final BukkitAudiences audiences)
+	public KyoriMessageSender(final MessageCooldownMap messageCooldownMap,
+							  final MiniMessage miniMessage,
+							  final BukkitAudiences audiences,
+							  final SoundRepository sounds)
 	{
 		this.messageCooldownMap = messageCooldownMap;
 		this.miniMessage = miniMessage;
 		this.audiences = audiences;
+		this.sounds = sounds;
 	}
 
 
@@ -84,7 +93,32 @@ public final class KyoriMessageSender implements Sender
 			Component component = miniMessage.deserialize(messageRecord.finalMessageString().get());
 			audiences.sender(recipient.sender()).sendMessage(component);
 			messageCooldownMap.putExpirationTime(recipient, messageRecord);
+			playMatchingSound(recipient, messageRecord.key());
 		}
+	}
+
+
+	void playMatchingSound(Recipient.Sendable recipient, final ValidMessageKey messageKey)
+	{
+		matchLongest(messageKey).ifPresent(keyString -> sounds.play(recipient.sender(), keyString));
+	}
+
+
+	Optional<String> matchLongest(final ValidMessageKey messageKey)
+	{
+		int longest = 0;
+		String result = null;
+
+		for (String soundId : sounds.getKeys())
+		{
+			if (soundId.length() > longest && messageKey.toString().startsWith(soundId))
+			{
+				longest = soundId.length();
+				result = soundId;
+			}
+		}
+
+		return Optional.ofNullable(result);
 	}
 
 }

@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.owner;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import org.bukkit.entity.AnimalTamer;
 
@@ -63,7 +63,7 @@ public interface Ownable
 	 * @return a {@code MacroStringMap} containing the extracted owner name,
 	 * or an empty map if the owner is null or invalid
 	 */
-	default MacroStringMap extractOwner(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractOwner(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(OWNER).isValid()
 				.map(macroKey -> new MacroStringMap()

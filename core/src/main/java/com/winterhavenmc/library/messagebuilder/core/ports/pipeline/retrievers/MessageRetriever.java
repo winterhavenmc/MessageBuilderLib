@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
 
 
 /**
@@ -32,7 +32,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipel
  * a valid or invalid message record.
  *
  * <p>This interface abstracts retrieval behavior for flexibility and testability,
- * and is typically used by {@link MessagePipeline}.
+ * and is typically used by {@link Pipeline}.
  *
  * @see com.winterhavenmc.library.messagebuilder.models.language.MessageRecord MessageRecord
  */

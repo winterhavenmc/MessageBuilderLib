@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.name;
 
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name.Nameable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
@@ -59,7 +59,7 @@ import java.util.Optional;
  */
 public class NameAdapter implements Accessor
 {
-	private final AdapterCtx ctx;
+	private final AccessorCtx ctx;
 
 
 	/**
@@ -67,7 +67,7 @@ public class NameAdapter implements Accessor
 	 *
 	 * @param ctx the adapter context providing services such as world name resolution
 	 */
-	public NameAdapter(final AdapterCtx ctx)
+	public NameAdapter(final AccessorCtx ctx)
 	{
 		this.ctx = ctx;
 	}

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.expiration;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
@@ -50,7 +50,7 @@ import static org.mockito.Mockito.when;
 class ExpirableTest
 {
 	@Mock Plugin pluginMock;
-	@Mock AdapterCtx ctxMock;
+	@Mock AccessorCtx ctxMock;
 	@Mock FormatterCtx formatterContainerMock;
 	@Mock DurationFormatter durationFormatterMock;
 	@Mock LocaleProvider localeProviderMock;

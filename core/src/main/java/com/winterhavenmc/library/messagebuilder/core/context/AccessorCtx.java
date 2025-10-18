@@ -44,8 +44,8 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.ex
  * @see Locatable Locatable
  * @see Expirable Expirable
  */
-public record AdapterCtx(WorldNameResolver worldNameResolver,
-						 ItemNameResolver itemNameResolver,
-						 ItemDisplayNameResolver itemDisplayNameResolver,
-						 ItemPluralNameResolver itemPluralNameResolver,
-						 FormatterCtx formatterCtx) { }
+public record AccessorCtx(WorldNameResolver worldNameResolver,
+						  ItemNameResolver itemNameResolver,
+						  ItemDisplayNameResolver itemDisplayNameResolver,
+						  ItemPluralNameResolver itemPluralNameResolver,
+						  FormatterCtx formatterCtx) { }

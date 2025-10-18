@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.duration;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
@@ -37,15 +37,15 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.acces
  *
  * <p>Objects implementing this interface can provide a duration value via {@link #getDuration()},
  * and automatically extract localized string representations of that duration through the
- * {@link #extractDuration(ValidMacroKey, ChronoUnit, AdapterCtx)} method.
+ * {@link #extractDuration(ValidMacroKey, ChronoUnit, AccessorCtx)} method.
  *
  * <p>This interface supports usage in message templates via the {@code [OBJECT.DURATION}} macro.
  * Formatting is handled by the {@link DurationFormatter}
- * implementation provided in the {@link AdapterCtx}.
+ * implementation provided in the {@link AccessorCtx}.
  *
  * <p>Three utility methods are provided:
  * <ul>
- *   <li>{@link #extractDuration(ValidMacroKey, ChronoUnit, AdapterCtx)} — generates a
+ *   <li>{@link #extractDuration(ValidMacroKey, ChronoUnit, AccessorCtx)} — generates a
  *       {@link MacroStringMap} with the localized string representation of the duration</li>
  *   <li>{@link #formatDuration(Duration, ChronoUnit, DurationFormatter)} — formats a duration using
  *       the configured {@code DurationFormatter}</li>
@@ -89,7 +89,7 @@ public interface Durationable
 	 */
 	default MacroStringMap extractDuration(final ValidMacroKey baseKey,
 										   final ChronoUnit lowerBound,
-										   final AdapterCtx ctx)
+										   final AccessorCtx ctx)
 	{
 		return baseKey.append(DURATION).isValid()
 				.map(macroKey -> new MacroStringMap()

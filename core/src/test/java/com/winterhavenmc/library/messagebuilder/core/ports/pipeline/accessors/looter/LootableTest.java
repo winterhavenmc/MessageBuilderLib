@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.looter;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class LootableTest
 {
-	@Mock AdapterCtx ctxMock;
+	@Mock AccessorCtx ctxMock;
 	@Mock Player playerMock;
 
 	class TestObject implements Lootable

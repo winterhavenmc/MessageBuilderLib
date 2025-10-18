@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.BukkitQuantityAccessor;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.FieldAccessor;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
@@ -74,7 +74,7 @@ import java.time.temporal.ChronoUnit;
  */
 public class MacroFieldAccessor implements FieldAccessor
 {
-	private final AdapterCtx ctx;
+	private final AccessorCtx ctx;
 
 
 	/**
@@ -82,7 +82,7 @@ public class MacroFieldAccessor implements FieldAccessor
 	 *
 	 * @param ctx the context container holding formatter and configuration dependencies
 	 */
-	public MacroFieldAccessor(final AdapterCtx ctx)
+	public MacroFieldAccessor(final AccessorCtx ctx)
 	{
 		this.ctx = ctx;
 	}

@@ -22,6 +22,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collection;
+import java.util.Optional;
 
 
 /**
@@ -52,7 +53,7 @@ public interface SoundRepository
 	 * @param sender  the command sender (player) to play sound
 	 * @param soundId the sound identifier enum member
 	 */
-	void playSound(CommandSender sender, Enum<?> soundId);
+	void play(CommandSender sender, Enum<?> soundId);
 
 
 	/**
@@ -61,7 +62,7 @@ public interface SoundRepository
 	 * @param location the location at which to play sound
 	 * @param soundId  the sound identifier enum member
 	 */
-	void playSound(Location location, Enum<?> soundId);
+	void play(Location location, Enum<?> soundId);
 
 
 	/**
@@ -75,6 +76,7 @@ public interface SoundRepository
 
 
 	boolean isRegistrySound(String name);
+
 
 	/**
 	 * Test string is valid sound config key in sounds.yml file
@@ -95,4 +97,10 @@ public interface SoundRepository
 
 
 	boolean soundEffectsDisabled();
+
+
+	Optional<String> matchLongest(Enum<?> messageId);
+
+
+	void play(CommandSender sender, String keyString);
 }

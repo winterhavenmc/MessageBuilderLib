@@ -152,7 +152,7 @@ class BukkitLocaleProviderTest
 		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
 
 		// Act
-		ZoneId result = LocaleProvider.getValidZoneId(pluginMock);
+		ZoneId result = BukkitLocaleProvider.getValidZoneId(pluginMock);
 
 		// Assert
 		assertEquals(ZoneId.of("UTC"), result);
@@ -170,7 +170,7 @@ class BukkitLocaleProviderTest
 		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
 
 		// Act
-		ZoneId result = LocaleProvider.getValidZoneId(pluginMock);
+		ZoneId result = BukkitLocaleProvider.getValidZoneId(pluginMock);
 
 		// Assert
 		assertEquals(ZoneId.systemDefault(), result);

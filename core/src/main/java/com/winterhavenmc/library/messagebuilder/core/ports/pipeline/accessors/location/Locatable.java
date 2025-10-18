@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.location;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import org.bukkit.Location;
@@ -44,7 +44,7 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.acces
  *   <li>{@code {OBJECT.LOCATION.X}}, {@code {OBJECT.LOCATION.Y}, {OBJECT.LOCATION.Z}} – localized coordinate values</li>
  * </ul>
  *
- * <p>The resulting macro values are extracted via {@link #extractLocation(ValidMacroKey, AdapterCtx)}.
+ * <p>The resulting macro values are extracted via {@link #extractLocation(ValidMacroKey, AccessorCtx)}.
  * This method is used internally by the MessageBuilder pipeline and should not need to be called directly.
  */
 @FunctionalInterface
@@ -82,7 +82,7 @@ public interface Locatable
 	 * @param ctx a container providing access to formatters and world name resolution
 	 * @return a {@code MacroStringMap} containing extracted location-related macro keys
 	 */
-	default MacroStringMap extractLocation(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractLocation(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		MacroStringMap resultMap = new MacroStringMap();
 
@@ -118,7 +118,7 @@ public interface Locatable
 	 * {@link WorldNameResolver WorldNameResolver}
 	 * @return an optional world name, or empty if it could not be resolved
 	 */
-	static Optional<String> getLocationWorldName(final Location location, final AdapterCtx ctx)
+	static Optional<String> getLocationWorldName(final Location location, final AccessorCtx ctx)
 	{
 		return (location != null && location.getWorld() != null && !location.getWorld().getName().isBlank())
 				? Optional.of(ctx.worldNameResolver().resolve(location.getWorld()))
@@ -136,7 +136,7 @@ public interface Locatable
 	 * @param ctx the context container with the number formatter and world name resolver
 	 * @return an {@code Optional<Section>} containing the formatted location, or empty if the location is {@code null}
 	 */
-	static Optional<String> formatLocation(final Location location, final AdapterCtx ctx)
+	static Optional<String> formatLocation(final Location location, final AccessorCtx ctx)
 	{
 		return (location != null)
 				? Optional.of(getLocationWorldName(location, ctx).orElse(UNKNOWN_VALUE) +

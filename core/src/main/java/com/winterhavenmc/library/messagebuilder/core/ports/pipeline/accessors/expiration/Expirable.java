@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.expiration;
 
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 
@@ -92,7 +92,7 @@ public interface Expirable
 	default MacroStringMap extractExpiration(final ValidMacroKey baseKey,
 											 final ChronoUnit lowerBound,
 											 final FormatStyle formatStyle,
-											 final AdapterCtx ctx)
+											 final AccessorCtx ctx)
 	{
 		MacroStringMap resultMap = new MacroStringMap();
 

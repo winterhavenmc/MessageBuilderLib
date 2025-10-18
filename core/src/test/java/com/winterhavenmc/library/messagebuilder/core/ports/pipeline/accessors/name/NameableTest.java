@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
@@ -38,7 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 @ExtendWith(MockitoExtension.class)
 class NameableTest
 {
-	@Mock AdapterCtx ctxMock;
+	@Mock AccessorCtx ctxMock;
+
 
 	static class TestObject implements Nameable
 	{
