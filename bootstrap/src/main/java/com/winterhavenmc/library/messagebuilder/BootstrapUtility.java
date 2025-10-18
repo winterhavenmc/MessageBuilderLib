@@ -42,6 +42,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.Yaml
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
@@ -75,11 +76,11 @@ public final class BootstrapUtility
 	private BootstrapUtility() { /* Private constructor to prevent instantiation of utility class */ }
 
 
-	public static List<Sender> createSenders(final Plugin plugin, final MessageCooldownMap messageCooldownMap)
+	public static List<Sender> createSenders(final Plugin plugin, final MessageCooldownMap messageCooldownMap, final SoundRepository sounds)
 	{
 		final MiniMessage miniMessage = MiniMessage.miniMessage();
 		final BukkitAudiences bukkitAudiences = BukkitAudiences.create(plugin);
-		final KyoriMessageSender messageSender = new KyoriMessageSender(messageCooldownMap, miniMessage, bukkitAudiences);
+		final KyoriMessageSender messageSender = new KyoriMessageSender(messageCooldownMap, miniMessage, bukkitAudiences, sounds);
 		final KyoriTitleSender titleSender = new KyoriTitleSender(messageCooldownMap, miniMessage, bukkitAudiences);
 
 		return List.of(messageSender, titleSender);
@@ -140,13 +141,14 @@ public final class BootstrapUtility
 	 */
 	static @NotNull MessagePipeline createMessagePipeline(final Plugin plugin,
 														  final MessageRepository messages,
+														  final SoundRepository sounds,
 														  final FormatterCtx formatterCtx,
 														  final AccessorCtx accessorCtx)
 	{
 		final LocalizedMessageRetriever localizedMessageRetriever = new LocalizedMessageRetriever(messages);
 		final MessageProcessor messageProcessor = createMacroReplacer(formatterCtx, accessorCtx);
 		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
-		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap);
+		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap, sounds);
 
 		return new MessagePipeline(localizedMessageRetriever, messageProcessor, messageCooldownMap, messageSenders);
 	}
