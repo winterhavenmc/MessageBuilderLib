@@ -1,4 +1,5 @@
 com.winterhavenmc.library.messagebuilder
+com.winterhavenmc.library.messagebuilder.adapters.pipeline
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.displayname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.duration
