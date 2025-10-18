@@ -1,6 +1,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceMessage;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import org.bukkit.configuration.Configuration;
@@ -20,7 +21,7 @@ import java.util.function.Supplier;
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.SoundResourceConstant.RESOURCE_NAME;
 
 
-public final class YamlSoundResourceLoader
+public final class YamlSoundResourceLoader implements ResourceLoader
 {
 	private final Plugin plugin;
 	private final Supplier<YamlConfiguration> yamlFactory;
@@ -53,6 +54,12 @@ public final class YamlSoundResourceLoader
 			if (soundConfigFile.exists())
 			{
 				configuration.load(soundConfigFile);
+				plugin.getLogger().info("Sound file '" + RESOURCE_NAME + "' successfully loaded.");
+			}
+			else
+			{
+				//TODO: provide translations for error messages in this class
+				plugin.getLogger().warning("The file '" + RESOURCE_NAME + "' does not exist in the plugin data folder.");
 			}
 		}
 		catch (IOException | InvalidConfigurationException e)

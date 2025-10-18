@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.util.MessageId;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
@@ -57,11 +59,12 @@ class MessageBuilderTest
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
 	@Mock ProxiedCommandSender proxiedCommandSenderMock;
-	@Mock
-	YamlLanguageResourceManager languageResourceManagerMock;
+	@Mock YamlLanguageResourceManager languageResourceManagerMock;
+	@Mock YamlSoundResourceManager soundResourceManagerMock;
 	@Mock MessagePipeline messagePipelineMock;
 	@Mock ItemForge itemForgeMock;
 	@Mock ConstantRepository constantRepositoryMock;
+	@Mock SoundRepository soundRepositoryMock;
 	@Mock MessageRepository messageRepositoryMock;
 
 	@Mock FormatterCtx formatterCtx;
@@ -84,7 +87,9 @@ class MessageBuilderTest
 
 		messageBuilder = MessageBuilder.test(pluginMock,
 				languageResourceManagerMock,
+				soundResourceManagerMock,
 				constantRepositoryMock,
+				soundRepositoryMock,
 				itemForgeMock,
 				messagePipelineMock);
 	}
@@ -210,7 +215,9 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(null,
 						languageResourceManagerMock,
+						soundResourceManagerMock,
 						constantRepositoryMock,
+						soundRepositoryMock,
 						itemForgeMock,
 						messagePipelineMock));
 
@@ -227,7 +234,9 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(pluginMock,
 						null,
+						soundResourceManagerMock,
 						constantRepositoryMock,
+						soundRepositoryMock,
 						itemForgeMock,
 						messagePipelineMock));
 
@@ -244,7 +253,9 @@ class MessageBuilderTest
 		ValidationException exception = assertThrows(ValidationException.class,
 				() -> MessageBuilder.test(pluginMock,
 						languageResourceManagerMock,
+						soundResourceManagerMock,
 						constantRepositoryMock,
+						soundRepositoryMock,
 						itemForgeMock,
 						null));
 

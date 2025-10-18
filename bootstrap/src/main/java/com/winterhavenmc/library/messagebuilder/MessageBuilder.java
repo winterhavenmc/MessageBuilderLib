@@ -17,12 +17,13 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlConstantRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlMessageRepository;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
@@ -31,6 +32,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceMan
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
@@ -86,7 +88,9 @@ public final class MessageBuilder
 
 	private final Plugin plugin;
 	private final ResourceManager languageResourceManager;
+	private final ResourceManager soundResourceManager;
 	private final ConstantRepository constants;
+	private final SoundRepository sounds;
 	private final ItemForge itemForge;
 	private final MessagePipeline messagePipeline;
 
@@ -100,13 +104,17 @@ public final class MessageBuilder
 	 */
 	private MessageBuilder(final Plugin plugin,
 	                       final ResourceManager languageResourceManager,
+						   final ResourceManager soundResourceManager,
 						   final ConstantRepository constants,
+						   final SoundRepository sounds,
 						   final ItemForge itemForge,
 	                       final MessagePipeline messagePipeline)
 	{
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
+		this.soundResourceManager = soundResourceManager;
 		this.constants = constants;
+		this.sounds = sounds;
 		this.itemForge = itemForge;
 		this.messagePipeline = messagePipeline;
 	}
@@ -126,11 +134,14 @@ public final class MessageBuilder
 	{
 		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
 
-		final LocaleProvider localeProvider = BukkitLocaleProvider.create(plugin);
+		final LocaleProvider localeProvider = createLocaleProvider(plugin);
 
 		final YamlLanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, localeProvider);
-
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
+
+		final YamlSoundResourceManager soundResourceManager = createSoundResourceManager(plugin, localeProvider);
+		final SoundRepository soundRepository = new YamlSoundRepository(plugin, localeProvider);
+
 		final ItemRecordRepository itemRecordRepository = new YamlItemRepository(languageResourceManager);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 
@@ -140,7 +151,7 @@ public final class MessageBuilder
 
 		final ItemForge itemForge = createItemForge(plugin, itemRecordRepository);
 
-		return new MessageBuilder(plugin, languageResourceManager, constantRepository, itemForge, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, itemForge, messagePipeline);
 	}
 
 
@@ -177,8 +188,11 @@ public final class MessageBuilder
 	 */
 	public void reload()
 	{
-		boolean result = languageResourceManager.reload();
-		validate(result, bool -> bool.equals(false), logging(LogLevel.WARN, ErrorMessageKey.RELOAD_FAILED, Parameter.LANGUAGE_FILE));
+		boolean languageResource = languageResourceManager.reload();
+		boolean soundResource = soundResourceManager.reload();
+
+		validate(languageResource, bool -> bool.equals(false), logging(LogLevel.WARN, ErrorMessageKey.RELOAD_FAILED, Parameter.LANGUAGE_RESOURCE));
+		validate(soundResource, bool -> bool.equals(false), logging(LogLevel.WARN, ErrorMessageKey.RELOAD_FAILED, Parameter.SOUND_RESOURCE));
 	}
 
 
@@ -194,15 +208,18 @@ public final class MessageBuilder
 	 */
 	static MessageBuilder test(final Plugin plugin,
 							   final ResourceManager languageResourceManager,
+							   final ResourceManager soundResourceManager,
 							   final ConstantRepository constantRepository,
+							   final SoundRepository soundRepository,
 							   final ItemForge itemForge,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
+		validate(soundResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.SOUND_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, constantRepository, itemForge, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, itemForge, messagePipeline);
 	}
 
 
@@ -218,6 +235,15 @@ public final class MessageBuilder
 	public ConstantRepository constants()
 	{
 		return constants;
+	}
+
+
+	/**
+	 * Provides external access to the sound repository
+	 */
+	public SoundRepository sounds()
+	{
+		return sounds;
 	}
 
 }

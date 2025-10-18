@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.sound.SoundRecord;
 import com.winterhavenmc.library.messagebuilder.models.sound.ValidSoundRecord;
 
@@ -59,9 +60,10 @@ public final class YamlSoundRepository implements SoundRepository
 	/**
 	 * Class constructor
 	 *
-	 * @param plugin reference to plugin main class
+	 * @param plugin         reference to plugin main class
+	 * @param localeProvider a provider of the currently configured locale
 	 */
-	public YamlSoundRepository(final Plugin plugin)
+	public YamlSoundRepository(final Plugin plugin, LocaleProvider localeProvider)
 	{
 		this.plugin = plugin;
 		File soundFile = new File(plugin.getDataFolder(), RESOURCE_NAME.toString());
@@ -176,7 +178,7 @@ public final class YamlSoundRepository implements SoundRepository
 	 * @param soundId the sound identifier enum member
 	 */
 	@Override
-	public void playSound(final CommandSender sender, final Enum<?> soundId)
+	public void play(final CommandSender sender, final Enum<?> soundId)
 	{
 		// if sound effects are configured false, do nothing and return
 		if (soundEffectsDisabled())
@@ -201,6 +203,7 @@ public final class YamlSoundRepository implements SoundRepository
 				{
 					player.playSound(player.getLocation(), Objects.requireNonNull(Registry.SOUNDS
 							.match(validSoundRecord.soundName())), validSoundRecord.volume(), validSoundRecord.pitch());
+					plugin.getLogger().info("played sound '" + validSoundRecord.soundName() + "' for player " + player.getName() + ".");
 				}
 				// else use world.playSound() so other players in vicinity can hear
 				else
@@ -212,7 +215,7 @@ public final class YamlSoundRepository implements SoundRepository
 			else
 			{
 				plugin.getLogger().warning("An error occurred while trying to play the sound '"
-						+ validSoundRecord.soundName() + "'. You probably need to update the sound name in your "
+						+ validSoundRecord.soundName() + "'. You may need to update the sound name in your "
 						+ RESOURCE_NAME + " file.");
 			}
 		}
@@ -226,7 +229,7 @@ public final class YamlSoundRepository implements SoundRepository
 	 * @param soundId  the sound identifier enum member
 	 */
 	@Override
-	public void playSound(final Location location, final Enum<?> soundId)
+	public void play(final Location location, final Enum<?> soundId)
 	{
 
 		// if location is null, do nothing and return
@@ -258,7 +261,7 @@ public final class YamlSoundRepository implements SoundRepository
 			else
 			{
 				plugin.getLogger().warning("An error occurred while trying to play the sound '"
-						+ validSoundRecord.soundName() + "'. You probably need to update the sound name in your "
+						+ validSoundRecord.soundName() + "'. You may need to update the sound name in your "
 						+ RESOURCE_NAME + " file.");
 			}
 		}

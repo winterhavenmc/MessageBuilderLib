@@ -21,7 +21,6 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.Yaml
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.ValidItemRecord;
@@ -63,7 +62,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 						String pluralString = validItemRecord.pluralName()
 								.replaceAll(Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE), String.valueOf(itemStack.getAmount()));
 						Component component = miniMessage.deserialize(pluralString, Formatter.choice("choice", itemStack.getAmount()));
-						return ItemForge.LEGACY_SERIALIZER.serializeOr(component, "");
+						return YamlItemForge.LEGACY_SERIALIZER.serializeOr(component, "");
 					}
 				}
 			}

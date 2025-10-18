@@ -30,6 +30,7 @@ import com.winterhavenmc.library.messagebuilder.models.language.ValidItemRecord;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -46,6 +47,7 @@ import java.util.Optional;
 
 public final class YamlItemForge implements ItemForge
 {
+	public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
 	private final static Material DEFAULT_MATERIAL = Material.STICK;
 	private static Plugin plugin;
 	private static NamespacedKey ITEM_KEY;

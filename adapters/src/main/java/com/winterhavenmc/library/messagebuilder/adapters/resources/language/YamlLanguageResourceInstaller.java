@@ -182,7 +182,7 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 	 * @param filename the name of the file being verified
 	 * @return {@code true} if a file with the filename exists in the plugin data directory, {@code false} if not
 	 */
-	public boolean isInstalled(final String filename)
+	boolean isInstalled(final String filename)
 	{
 		return filename != null && new File(plugin.getDataFolder(), filename).exists();
 	}

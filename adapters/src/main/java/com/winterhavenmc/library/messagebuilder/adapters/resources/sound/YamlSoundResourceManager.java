@@ -19,9 +19,9 @@ public final class YamlSoundResourceManager implements ResourceManager
 	private Configuration soundConfiguration;
 
 
-	YamlSoundResourceManager(final Plugin plugin,
-							 final ResourceLoader resourceLoader,
-							 final ResourceInstaller resourceInstaller)
+	public YamlSoundResourceManager(final Plugin plugin,
+									final ResourceLoader resourceLoader,
+									final ResourceInstaller resourceInstaller)
 	{
 		this.plugin = plugin;
 		this.resourceInstaller = resourceInstaller;
