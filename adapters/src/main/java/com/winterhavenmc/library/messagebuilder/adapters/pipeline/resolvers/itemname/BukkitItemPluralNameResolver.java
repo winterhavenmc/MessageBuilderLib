@@ -55,15 +55,13 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 			// check if item is custom item defined in language file, and if so, try to set pluralized name
 			if (YamlItemForge.isCustomItem(itemStack))
 			{
-				if (YamlItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey)
+				if (YamlItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey
+						&& itemRecordRepository.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 				{
-					if (itemRecordRepository.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
-					{
-						String pluralString = validItemRecord.pluralName()
-								.replaceAll(Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE), String.valueOf(itemStack.getAmount()));
-						Component component = miniMessage.deserialize(pluralString, Formatter.choice("choice", itemStack.getAmount()));
-						return YamlItemForge.LEGACY_SERIALIZER.serializeOr(component, "");
-					}
+					String pluralString = validItemRecord.pluralName()
+							.replaceAll(Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE), String.valueOf(itemStack.getAmount()));
+					Component component = miniMessage.deserialize(pluralString, Formatter.choice("choice", itemStack.getAmount()));
+					return YamlItemForge.LEGACY_SERIALIZER.serializeOr(component, "");
 				}
 			}
 
