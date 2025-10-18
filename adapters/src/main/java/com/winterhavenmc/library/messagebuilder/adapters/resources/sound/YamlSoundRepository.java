@@ -34,6 +34,7 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.SoundResourceConstant.RESOURCE_NAME;
@@ -96,6 +97,17 @@ public final class YamlSoundRepository implements SoundRepository
 	public SoundRecord getRecord(final Enum<?> soundId)
 	{
 		return SoundRecord.of(soundId.name(),
+				soundsConfig.getBoolean(soundId + "." + Field.ENABLED),
+				soundsConfig.getBoolean(soundId + "." + Field.PLAYER_ONLY),
+				soundsConfig.getString(soundId + "." + Field.SOUND_NAME),
+				(float) soundsConfig.getDouble(soundId + "." + Field.VOLUME),
+				(float) soundsConfig.getDouble(soundId + "." + Field.PITCH));
+	}
+
+
+	public SoundRecord getRecord(final String soundId)
+	{
+		return SoundRecord.of(soundId,
 				soundsConfig.getBoolean(soundId + "." + Field.ENABLED),
 				soundsConfig.getBoolean(soundId + "." + Field.PLAYER_ONLY),
 				soundsConfig.getString(soundId + "." + Field.SOUND_NAME),
@@ -223,6 +235,56 @@ public final class YamlSoundRepository implements SoundRepository
 
 
 	/**
+	 * Play sound effect for player
+	 *
+	 * @param sender  the command sender (player) to play sound
+	 * @param soundId the sound identifier enum member
+	 */
+	public void play(final CommandSender sender, final String soundId)
+	{
+		// if sound effects are configured false, do nothing and return
+		if (soundEffectsDisabled())
+		{
+			return;
+		}
+
+		// if sender is not a player do nothing and return
+		if (!(sender instanceof Player player))
+		{
+			return;
+		}
+
+		if (getRecord(soundId) instanceof ValidSoundRecord validSoundRecord
+				&& validSoundRecord.enabled())
+		{
+			// check that sound name is valid
+			if (Registry.SOUNDS.match(validSoundRecord.soundName()) != null)
+			{
+				// if sound is set player only, use player.playSound()
+				if (validSoundRecord.playerOnly())
+				{
+					player.playSound(player.getLocation(), Objects.requireNonNull(Registry.SOUNDS
+							.match(validSoundRecord.soundName())), validSoundRecord.volume(), validSoundRecord.pitch());
+					plugin.getLogger().info("played sound '" + validSoundRecord.soundName() + "' for player " + player.getName() + ".");
+				}
+				// else use world.playSound() so other players in vicinity can hear
+				else
+				{
+					player.getWorld().playSound(player.getLocation(), Objects.requireNonNull(Registry.SOUNDS
+							.match(validSoundRecord.soundName())), validSoundRecord.volume(), validSoundRecord.pitch());
+				}
+			}
+			else
+			{
+				plugin.getLogger().warning("An error occurred while trying to play the sound '"
+						+ validSoundRecord.soundName() + "'. You may need to update the sound name in your "
+						+ RESOURCE_NAME + " file.");
+			}
+		}
+	}
+
+
+	/**
 	 * Play sound effect for location
 	 *
 	 * @param location the location at which to play sound
@@ -272,6 +334,25 @@ public final class YamlSoundRepository implements SoundRepository
 	public boolean soundEffectsDisabled()
 	{
 		return !plugin.getConfig().getBoolean("sound-effects");
+	}
+
+
+	@Override
+	public Optional<String> matchLongest(final Enum<?> messageId)
+	{
+		int longest = 0;
+		String result = null;
+
+		for (String soundId : getKeys())
+		{
+			if (messageId.name().startsWith(soundId) && soundId.length() > longest)
+			{
+				longest = soundId.length();
+				result = soundId;
+			}
+		}
+
+		return Optional.ofNullable(result);
 	}
 
 }
