@@ -135,16 +135,16 @@ public final class BootstrapUtility
 	 * A static factory method to create the message processing pipeline
 	 *
 	 * @param formatterCtx a context container which contains instances of string formatters for specific types
-	 * @param adapterCtx a context container for injecting dependencies into adapters
+	 * @param accessorCtx a context container for injecting dependencies into adapters
 	 * @return an instance of the message pipeline
 	 */
 	static @NotNull MessagePipeline createMessagePipeline(final Plugin plugin,
 														  final MessageRepository messages,
 														  final FormatterCtx formatterCtx,
-														  final AdapterCtx adapterCtx)
+														  final AccessorCtx accessorCtx)
 	{
 		final LocalizedMessageRetriever localizedMessageRetriever = new LocalizedMessageRetriever(messages);
-		final MessageProcessor messageProcessor = createMacroReplacer(formatterCtx, adapterCtx);
+		final MessageProcessor messageProcessor = createMacroReplacer(formatterCtx, accessorCtx);
 		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
 		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap);
 
@@ -176,16 +176,16 @@ public final class BootstrapUtility
 	 * @param plugin instance of the plugin
 	 * @return a populated context container
 	 */
-	static AdapterCtx createAdapterContextContainer(final Plugin plugin,
-													final ItemRecordRepository itemRecordRepository,
-													final FormatterCtx formatterCtx)
+	static AccessorCtx createAccessorContextContainer(final Plugin plugin,
+													  final ItemRecordRepository itemRecordRepository,
+													  final FormatterCtx formatterCtx)
 	{
 		WorldNameResolver worldNameResolver = getWorldNameResolver(plugin);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
 		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRecordRepository);
 
-		return new AdapterCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
+		return new AccessorCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
 				bukkitItemPluralNameResolver, formatterCtx);
 	}
 
