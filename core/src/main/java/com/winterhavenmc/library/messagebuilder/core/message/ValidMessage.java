@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.message;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.BoundedDuration;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
@@ -48,7 +48,7 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
  * <ul>
  *   <li>A {@link Recipient.Sendable recipient}</li>
  *   <li>A {@link ValidMessageKey messageKey} identifying the template</li>
- *   <li>A {@link MessagePipeline} to handle rendering and delivery</li>
+ *   <li>A {@link Pipeline} to handle rendering and delivery</li>
  *   <li>A {@code com.winterhavenmc.library.messagebuilder.pipeline.maps.MacroObjectMap macro object map}
  *       holding values to be substituted into the message</li>
  * </ul>
@@ -64,7 +64,7 @@ public final class ValidMessage implements Message
 //	private final Plugin plugin;
 	private final Recipient.Sendable recipient;
 	private final ValidMessageKey messageKey;
-	private final MessagePipeline messagePipeline;
+	private final Pipeline messagePipeline;
 	private final MacroObjectMap macroObjectMap;
 
 
@@ -78,7 +78,7 @@ public final class ValidMessage implements Message
 	public ValidMessage(final Plugin plugin,
 						final Recipient.Sendable recipient,
 						final ValidMessageKey messageKey,
-						final MessagePipeline messagePipeline)
+						final Pipeline messagePipeline)
 	{
 //		this.plugin = plugin;
 		this.recipient = recipient;

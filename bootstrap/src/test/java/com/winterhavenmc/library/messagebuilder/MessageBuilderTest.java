@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.util.MessageId;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
@@ -182,7 +182,7 @@ class MessageBuilderTest
 		try (MockedStatic<BootstrapUtility> bootstrapMockedStatic = Mockito.mockStatic(BootstrapUtility.class))
 		{
 			bootstrapMockedStatic.when(() -> BootstrapUtility
-					.createMessagePipeline(pluginMock, messageRepositoryMock, formatterCtx, adapterCtx))
+					.createMessagePipeline(pluginMock, messageRepositoryMock, soundRepositoryMock, formatterCtx, accessorCtx))
 					.thenReturn(messagePipelineMock);
 
 			// Act

@@ -93,7 +93,7 @@ public final class MessageBuilder
 	private final ConstantRepository constants;
 	private final SoundRepository sounds;
 	private final ItemForge itemForge;
-	private final MessagePipeline messagePipeline;
+	private final Pipeline messagePipeline;
 
 
 	/**
