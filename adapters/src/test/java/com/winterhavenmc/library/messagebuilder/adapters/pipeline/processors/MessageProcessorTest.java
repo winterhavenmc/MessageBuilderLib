@@ -30,10 +30,10 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.item
 import com.winterhavenmc.library.messagebuilder.adapters.util.Macro;
 import com.winterhavenmc.library.messagebuilder.adapters.util.MessageId;
 
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
@@ -121,7 +121,7 @@ class MessageProcessorTest
 		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
 		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
 		FormatterCtx formatterContainer = new FormatterCtx(localeProviderMock, time4jDurationFormatter, localeNumberFormatter);
-		AdapterCtx adapterContextContainer = new AdapterCtx(worldNameResolverMock,
+		AccessorCtx adapterContextContainer = new AccessorCtx(worldNameResolverMock,
 				new BukkitItemNameResolver(), new BukkitItemDisplayNameResolver(),
 				new BukkitItemPluralNameResolver(itemRecordRepositoryMock), formatterContainer);
 		AccessorRegistry accessorRegistry = new FieldAccessorRegistry(adapterContextContainer);

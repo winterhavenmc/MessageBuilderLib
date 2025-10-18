@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.identity;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
@@ -56,7 +56,7 @@ public interface Identifiable
 	 * @param ctx     the adapter context
 	 * @return a {@code MacroStringMap} with the UUID value formatted as a string
 	 */
-	default MacroStringMap extractUid(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractUid(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(Accessor.BuiltIn.UUID).isValid()
 				.map(macroKey -> new MacroStringMap()

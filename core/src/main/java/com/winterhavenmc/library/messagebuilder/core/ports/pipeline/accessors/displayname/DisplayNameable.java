@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname;
 
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
@@ -72,7 +72,7 @@ public interface DisplayNameable
 	 * @return a {@code MacroStringMap} containing a single entry for the display name,
 	 * or an empty map if the name is invalid or the string cannot be derived
 	 */
-	default MacroStringMap extractDisplayName(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractDisplayName(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(DISPLAY_NAME).isValid()
 				.map(macroKey -> new MacroStringMap()

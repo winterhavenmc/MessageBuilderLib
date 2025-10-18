@@ -18,9 +18,9 @@
 package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.util.MessageId;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
@@ -68,7 +68,7 @@ class MessageBuilderTest
 	@Mock MessageRepository messageRepositoryMock;
 
 	@Mock FormatterCtx formatterCtx;
-	@Mock AdapterCtx adapterCtx;
+	@Mock AccessorCtx accessorCtx;
 
 	FileConfiguration pluginConfiguration;
 	Configuration languageConfiguration;

@@ -31,7 +31,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.plur
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.BukkitQuantityAccessor;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname.DisplayNameable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.duration.Durationable;
@@ -69,7 +69,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AccessorRegistryTest
 {
 	@Mock Expirable expirableMock;
-	@Mock AdapterCtx adapterContextContainerMock;
+	@Mock AccessorCtx adapterContextContainerMock;
 	@Mock Player playerMock;
 	@Mock Location locationMock;
 

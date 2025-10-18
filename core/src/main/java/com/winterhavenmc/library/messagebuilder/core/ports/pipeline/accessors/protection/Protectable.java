@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.protection;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.duration.Durationable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.instant.Instantable;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
@@ -74,7 +74,7 @@ public interface Protectable
 	default MacroStringMap extractProtection(final ValidMacroKey baseKey,
 											 final ChronoUnit lowerBound,
 											 final FormatStyle formatStyle,
-											 final AdapterCtx ctx)
+											 final AccessorCtx ctx)
 	{
 		MacroStringMap resultMap = new MacroStringMap();
 

@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.version;
 
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
@@ -35,7 +35,7 @@ public interface Versionable
 	String getVersion();
 
 
-	default MacroStringMap extractVersion(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractVersion(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(VERSION).isValid()
 				.map(macroKey -> new MacroStringMap()

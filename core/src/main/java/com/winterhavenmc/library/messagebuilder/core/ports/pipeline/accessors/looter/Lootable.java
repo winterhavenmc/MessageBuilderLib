@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.looter;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
 import org.bukkit.entity.AnimalTamer;
@@ -61,7 +61,7 @@ public interface Lootable
 	 * @param ctx the adapter context with formatting support
 	 * @return a {@link MacroStringMap} containing the looter string and value if resolvable
 	 */
-	default MacroStringMap extractLooter(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractLooter(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(LOOTER).isValid()
 				.map(macroKey -> new MacroStringMap()

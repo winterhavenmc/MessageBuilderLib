@@ -44,7 +44,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSou
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;

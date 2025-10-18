@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.killer;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.killer.Killable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 
@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 public class KillerAccessorTest
 {
 	@Mock WorldNameResolver worldNameResolverMock;
-	@Mock AdapterCtx adapterContextContainerMock;
+	@Mock AccessorCtx adapterContextContainerMock;
 	@Mock Player playerMock;
 	@Mock LivingEntity livingEntityMock;
 	@Mock World worldMock;

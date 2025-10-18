@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.url;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.url.UrlAddressable;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
@@ -28,7 +28,7 @@ import java.util.Optional;
 
 public class UrlAdapter implements Accessor
 {
-	public UrlAdapter(final AdapterCtx ctx) { }
+	public UrlAdapter(final AccessorCtx ctx) { }
 
 
 	@Override

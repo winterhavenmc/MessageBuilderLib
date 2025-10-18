@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class DisplayNameableTest
 {
-	@Mock AdapterCtx ctxMock;
+	@Mock AccessorCtx ctxMock;
 
 	static class TestObject implements DisplayNameable
 	{

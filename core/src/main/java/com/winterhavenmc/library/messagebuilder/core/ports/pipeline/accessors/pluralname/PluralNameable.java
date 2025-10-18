@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.p
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
 import java.util.Optional;
@@ -72,7 +72,7 @@ public interface PluralNameable
 	 * @return a {@code MacroStringMap} containing a single entry for the plural name,
 	 * or an empty map if the name is invalid or the string cannot be derived
 	 */
-	default MacroStringMap extractPluralName(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractPluralName(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(PLURAL_NAME).isValid()
 				.map(macroKey -> new MacroStringMap()

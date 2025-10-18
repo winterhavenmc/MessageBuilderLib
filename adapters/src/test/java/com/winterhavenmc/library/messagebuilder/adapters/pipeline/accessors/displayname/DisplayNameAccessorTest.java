@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.displayname;
 
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname.DisplayNameable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
 
@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 public class DisplayNameAccessorTest
 {
 	@Mock WorldNameResolver worldNameResolverMock;
-	@Mock AdapterCtx adapterContextContainerMock;
+	@Mock AccessorCtx adapterContextContainerMock;
 	@Mock Player playerMock;
 	@Mock Entity entityMock;
 	@Mock World worldMock;

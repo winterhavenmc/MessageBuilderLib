@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.identity.UniqueIdAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.BukkitQuantityAccessor;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.displayname.DisplayNameAdapter;
@@ -63,7 +63,7 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
  * selectively registering their own accessors before or after the built-in set.
  *
  * @see Accessor
- * @see AdapterCtx
+ * @see AccessorCtx
  */
 public class FieldAccessorRegistry implements AccessorRegistry
 {
@@ -75,7 +75,7 @@ public class FieldAccessorRegistry implements AccessorRegistry
 	 *
 	 * @param ctx a context container providing shared utilities to each adapter
 	 */
-	public FieldAccessorRegistry(final AdapterCtx ctx)
+	public FieldAccessorRegistry(final AccessorCtx ctx)
 	{
 		// Register accessors in preferred priority order
 		register(new PluralNameAdapter(ctx));

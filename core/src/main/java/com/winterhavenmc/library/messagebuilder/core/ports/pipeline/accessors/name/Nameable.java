@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.n
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
 import java.util.Optional;
@@ -65,7 +65,7 @@ public interface Nameable
 	 * @param ctx an unused adapter context container (reserved for future use)
 	 * @return a map containing the extracted name value, or an empty map if the name is invalid
 	 */
-	default MacroStringMap extractName(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractName(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(NAME).isValid()
 				.map(macroKey -> new MacroStringMap()

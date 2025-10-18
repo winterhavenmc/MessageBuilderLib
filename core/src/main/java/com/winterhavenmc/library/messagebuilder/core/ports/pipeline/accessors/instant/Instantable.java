@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.instant;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
@@ -67,7 +67,7 @@ public interface Instantable
 	 */
 	default MacroStringMap extractInstant(final ValidMacroKey baseKey,
 										  final FormatStyle formatStyle,
-										  final AdapterCtx ctx)
+										  final AccessorCtx ctx)
 	{
 		return baseKey.append(INSTANT).isValid()
 				.map(macroKey -> new MacroStringMap()

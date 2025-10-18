@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.u
 
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
 import java.util.Optional;
@@ -35,7 +35,7 @@ public interface UrlAddressable
 	String getUrl();
 
 
-	default MacroStringMap extractUrl(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractUrl(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(URL).isValid()
 				.map(macroKey -> new MacroStringMap()

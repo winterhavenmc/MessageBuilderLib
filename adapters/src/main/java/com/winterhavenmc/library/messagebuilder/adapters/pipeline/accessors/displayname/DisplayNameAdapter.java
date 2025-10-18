@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.displayname;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname.DisplayNameable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
@@ -50,7 +50,7 @@ import java.util.Optional;
  */
 public class DisplayNameAdapter implements Accessor
 {
-	private final AdapterCtx ctx;
+	private final AccessorCtx ctx;
 
 
 	/**
@@ -58,7 +58,7 @@ public class DisplayNameAdapter implements Accessor
 	 *
 	 * @param ctx the adapter context providing services such as world name resolution
 	 */
-	public DisplayNameAdapter(final AdapterCtx ctx)
+	public DisplayNameAdapter(final AccessorCtx ctx)
 	{
 		this.ctx = ctx;
 	}

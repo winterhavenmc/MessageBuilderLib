@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.looter;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.looter.Lootable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 
@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LooterAccessorTest
 {
 	@Mock WorldNameResolver worldNameResolverMock;
-	@Mock AdapterCtx adapterContextContainerMock;
+	@Mock AccessorCtx adapterContextContainerMock;
 	@Mock Player playerMock;
 	@Mock World worldMock;
 

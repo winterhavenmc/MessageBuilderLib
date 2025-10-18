@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.name;
 
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name.Nameable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
 import org.bukkit.OfflinePlayer;
@@ -52,7 +52,7 @@ public class NameAccessorTest
 	@Mock Server serverMock;
 	@Mock World worldMock;
 	@Mock Plugin pluginMock;
-	@Mock AdapterCtx adapterContextContainerMock;
+	@Mock AccessorCtx adapterContextContainerMock;
 	@Mock ItemStack itemStackMock;
 	@Mock ItemNameResolver itemNameResolverMock;
 

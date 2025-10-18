@@ -24,9 +24,10 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.Yaml
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
@@ -146,8 +147,8 @@ public final class MessageBuilder
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 
 		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, localeProvider, constantRepository);
-		final AdapterCtx adapterCtx = createAdapterContextContainer(plugin, itemRecordRepository, formatterCtx);
-		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, formatterCtx, adapterCtx);
+		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRecordRepository, formatterCtx);
+		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
 
 		final ItemForge itemForge = createItemForge(plugin, itemRecordRepository);
 

@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.pluralname;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.pluralname.PluralNameable;
 import org.bukkit.inventory.ItemStack;
@@ -44,7 +44,7 @@ import java.util.Optional;
  */
 public class PluralNameAdapter implements Accessor
 {
-	private final AdapterCtx ctx;
+	private final AccessorCtx ctx;
 
 
 	/**
@@ -52,7 +52,7 @@ public class PluralNameAdapter implements Accessor
 	 *
 	 * @param ctx the adapter context providing services such as world name resolution
 	 */
-	public PluralNameAdapter(final AdapterCtx ctx)
+	public PluralNameAdapter(final AccessorCtx ctx)
 	{
 		this.ctx = ctx;
 	}

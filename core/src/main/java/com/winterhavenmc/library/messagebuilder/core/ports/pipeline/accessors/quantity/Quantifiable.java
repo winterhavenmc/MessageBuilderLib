@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.quantity;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
@@ -61,7 +61,7 @@ public interface Quantifiable
 	 * @param ctx     the adapter context providing the number formatter
 	 * @return a {@code MacroStringMap} with a formatted quantity string, or an empty map if the string cannot be derived
 	 */
-	default MacroStringMap extractQuantity(final ValidMacroKey baseKey, final AdapterCtx ctx)
+	default MacroStringMap extractQuantity(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(QUANTITY).isValid()
 				.map(macroKey -> new MacroStringMap()

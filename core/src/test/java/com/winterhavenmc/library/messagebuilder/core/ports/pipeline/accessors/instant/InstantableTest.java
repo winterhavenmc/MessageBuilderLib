@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.instant;
 
-import com.winterhavenmc.library.messagebuilder.core.context.AdapterCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class InstantableTest
 {
-	@Mock AdapterCtx ctxMock;
+	@Mock AccessorCtx ctxMock;
 	@Mock FormatterCtx formatterContainerMock;
 	@Mock LocaleProvider localeProviderMock;
 
