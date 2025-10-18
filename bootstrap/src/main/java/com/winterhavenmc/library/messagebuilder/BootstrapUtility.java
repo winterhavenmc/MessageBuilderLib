@@ -47,7 +47,7 @@ import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvi
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.MessagePipeline;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
@@ -114,14 +114,14 @@ public final class BootstrapUtility
 	 * A static factory method to create a macro replacer instance
 	 *
 	 * @param formatterCtx the context container holding formatters
-	 * @param adapterCtx the context container for dependency injection into adapters
+	 * @param accessorCtx the context container for dependency injection into adapters
 	 * @return an instance of the macro replacer
 	 */
 	private static @NotNull MessageProcessor createMacroReplacer(final FormatterCtx formatterCtx,
-																 final AdapterCtx adapterCtx)
+																 final AccessorCtx accessorCtx)
 	{
-		final AccessorRegistry accessorRegistry = new FieldAccessorRegistry(adapterCtx);
-		final MacroFieldAccessor macroFieldAccessor = new MacroFieldAccessor(adapterCtx);
+		final AccessorRegistry accessorRegistry = new FieldAccessorRegistry(accessorCtx);
+		final MacroFieldAccessor macroFieldAccessor = new MacroFieldAccessor(accessorCtx);
 		final CompositeResolver compositeResolver = new CompositeResolver(accessorRegistry, macroFieldAccessor);
 		final AtomicResolver atomicResolver = new AtomicResolver(formatterCtx);
 		final MacroValueResolver macroValueResolver = new MacroValueResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
