@@ -22,6 +22,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collection;
+import java.util.Optional;
 
 
 /**
@@ -96,4 +97,10 @@ public interface SoundRepository
 
 
 	boolean soundEffectsDisabled();
+
+
+	Optional<String> matchLongest(Enum<?> messageId);
+
+
+	void play(CommandSender sender, String keyString);
 }
