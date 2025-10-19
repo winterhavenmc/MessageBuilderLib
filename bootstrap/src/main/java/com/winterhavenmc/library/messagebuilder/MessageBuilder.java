@@ -21,25 +21,25 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.Yaml
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlConstantRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlMessageRepository;
-
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
+
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
-
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
+
+import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.models.time.Tick;
-
 import com.winterhavenmc.library.messagebuilder.models.validation.*;
 
 import org.bukkit.command.CommandSender;
@@ -92,6 +92,7 @@ public final class MessageBuilder
 	private final ResourceManager soundResourceManager;
 	private final ConstantRepository constants;
 	private final SoundRepository sounds;
+	private final EnabledWorldsProvider worlds;
 	private final ItemForge itemForge;
 	private final Pipeline messagePipeline;
 
@@ -100,22 +101,24 @@ public final class MessageBuilder
 	 * A private constructor for the class that can only be called from within this class.
 	 * Use the static factory method {@code create} to instantiate an instance of this class.
 	 *
-	 * @param plugin an instance of the plugin
+	 * @param plugin                  an instance of the plugin
 	 * @param languageResourceManager an instance of the language resource manager
 	 */
 	private MessageBuilder(final Plugin plugin,
-	                       final ResourceManager languageResourceManager,
+						   final ResourceManager languageResourceManager,
 						   final ResourceManager soundResourceManager,
 						   final ConstantRepository constants,
 						   final SoundRepository sounds,
+						   final EnabledWorldsProvider worlds,
 						   final ItemForge itemForge,
-	                       final MessagePipeline messagePipeline)
+						   final MessagePipeline messagePipeline)
 	{
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
 		this.soundResourceManager = soundResourceManager;
 		this.constants = constants;
 		this.sounds = sounds;
+		this.worlds = worlds;
 		this.itemForge = itemForge;
 		this.messagePipeline = messagePipeline;
 	}
@@ -152,7 +155,9 @@ public final class MessageBuilder
 
 		final ItemForge itemForge = createItemForge(plugin, itemRecordRepository);
 
-		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, itemForge, messagePipeline);
+		final EnabledWorldsProvider enabledWorldsProvider = createEnabledWorldsProvider(plugin);
+
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, enabledWorldsProvider, itemForge, messagePipeline);
 	}
 
 
@@ -212,6 +217,7 @@ public final class MessageBuilder
 							   final ResourceManager soundResourceManager,
 							   final ConstantRepository constantRepository,
 							   final SoundRepository soundRepository,
+							   final EnabledWorldsProvider enabledWorlds,
 							   final ItemForge itemForge,
 							   final MessagePipeline messagePipeline)
 	{
@@ -220,7 +226,7 @@ public final class MessageBuilder
 		validate(soundResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.SOUND_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, itemForge, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, enabledWorlds, itemForge, messagePipeline);
 	}
 
 
@@ -245,6 +251,12 @@ public final class MessageBuilder
 	public SoundRepository sounds()
 	{
 		return sounds;
+	}
+
+
+	public EnabledWorldsProvider worlds()
+	{
+		return worlds;
 	}
 
 }

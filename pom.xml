@@ -89,6 +89,7 @@
 				<scope>provided</scope>
 			</dependency>
 
+			<!-- Kyori MiniMessage -->
 			<dependency>
 				<groupId>net.kyori</groupId>
 				<artifactId>adventure-text-minimessage</artifactId>
@@ -96,6 +97,7 @@
 				<scope>compile</scope>
 			</dependency>
 
+			<!-- Kyori Adventure bukkit platform -->
 			<dependency>
 				<groupId>net.kyori</groupId>
 				<artifactId>adventure-platform-bukkit</artifactId>
@@ -103,6 +105,7 @@
 				<scope>compile</scope>
 			</dependency>
 
+			<!-- time4j base -->
 			<dependency>
 				<groupId>net.time4j</groupId>
 				<artifactId>time4j-base</artifactId>
@@ -110,6 +113,7 @@
 				<scope>compile</scope>
 			</dependency>
 
+			<!-- time4j timezone data -->
 			<dependency>
 				<groupId>net.time4j</groupId>
 				<artifactId>time4j-tzdata</artifactId>
@@ -117,7 +121,7 @@
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- Unit Testing Dependencies -->
+			<!-- JUnit Jupiter -->
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-api</artifactId>
