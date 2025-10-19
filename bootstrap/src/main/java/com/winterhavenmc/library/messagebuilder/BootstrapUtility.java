@@ -34,6 +34,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Loc
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitEnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
@@ -43,6 +44,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSou
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
+import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
@@ -211,6 +213,12 @@ public final class BootstrapUtility
 	static LocaleProvider createLocaleProvider(final Plugin plugin)
 	{
 		return BukkitLocaleProvider.create(plugin);
+	}
+
+
+	static EnabledWorldsProvider createEnabledWorldsProvider(final Plugin plugin)
+	{
+		return new BukkitEnabledWorldsProvider(plugin);
 	}
 
 }
