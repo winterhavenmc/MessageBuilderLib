@@ -215,7 +215,6 @@ public final class YamlSoundRepository implements SoundRepository
 				{
 					player.playSound(player.getLocation(), Objects.requireNonNull(Registry.SOUNDS
 							.match(validSoundRecord.soundName())), validSoundRecord.volume(), validSoundRecord.pitch());
-					plugin.getLogger().info("played sound '" + validSoundRecord.soundName() + "' for player " + player.getName() + ".");
 				}
 				// else use world.playSound() so other players in vicinity can hear
 				else
@@ -265,7 +264,6 @@ public final class YamlSoundRepository implements SoundRepository
 				{
 					player.playSound(player.getLocation(), Objects.requireNonNull(Registry.SOUNDS
 							.match(validSoundRecord.soundName())), validSoundRecord.volume(), validSoundRecord.pitch());
-					plugin.getLogger().info("played sound '" + validSoundRecord.soundName() + "' for player " + player.getName() + ".");
 				}
 				// else use world.playSound() so other players in vicinity can hear
 				else
