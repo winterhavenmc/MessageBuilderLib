@@ -23,6 +23,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.replacers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers
@@ -59,6 +60,7 @@ com.winterhavenmc.library.messagebuilder.core.ports.pipeline.processors
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.replacers
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro
+com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders

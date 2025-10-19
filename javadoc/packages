@@ -6,6 +6,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.expiration
@@ -38,6 +39,7 @@ com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.matchers
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname
+com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.processors
