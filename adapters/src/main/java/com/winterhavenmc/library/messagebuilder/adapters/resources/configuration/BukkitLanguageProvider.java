@@ -79,7 +79,7 @@ public final class BukkitLanguageProvider implements LanguageProvider
 	 * @param plugin the plugin providing the configuration
 	 * @return a new {@code LanguageProvider} instance
 	 */
-	public static LanguageProvider create(Plugin plugin)
+	public static LanguageProvider create(final Plugin plugin)
 	{
 		return new BukkitLanguageProvider(() -> {
 			var config = plugin.getConfig();
