@@ -144,7 +144,7 @@ class BukkitLocaleProviderTest
 
 
 	@Test
-	void getValidZoneId_returns_configured_timezone()
+	void getZoneId_returns_configured_timezone()
 	{
 		// Arrange
 		configuration.set("timezone", "UTC");
@@ -152,7 +152,7 @@ class BukkitLocaleProviderTest
 		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
 
 		// Act
-		ZoneId result = BukkitLocaleProvider.getValidZoneId(pluginMock);
+		ZoneId result = BukkitLocaleProvider.getZoneId(pluginMock);
 
 		// Assert
 		assertEquals(ZoneId.of("UTC"), result);
@@ -163,14 +163,14 @@ class BukkitLocaleProviderTest
 
 
 	@Test
-	void getValidZoneId_returns_configured_system_default_timezone_when_not_set()
+	void getZoneId_returns_configured_system_default_timezone_when_not_set()
 	{
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(configuration);
 		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
 
 		// Act
-		ZoneId result = BukkitLocaleProvider.getValidZoneId(pluginMock);
+		ZoneId result = BukkitLocaleProvider.getZoneId(pluginMock);
 
 		// Assert
 		assertEquals(ZoneId.systemDefault(), result);
