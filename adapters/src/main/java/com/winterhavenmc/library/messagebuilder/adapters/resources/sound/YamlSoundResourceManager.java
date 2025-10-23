@@ -57,14 +57,14 @@ public final class YamlSoundResourceManager implements ResourceManager
 	@Override
 	public ConfigurationProvider getConfigurationProvider()
 	{
-		return () -> soundConfiguration;
+		return new YamlSoundConfigurationProvider(() -> soundConfiguration);
 	}
 
 
 	@Override
-	public SectionProvider getSectionProvider(String stringName)
+	public SectionProvider getSectionProvider(String sectionName)
 	{
-		return () -> soundConfiguration.getConfigurationSection(stringName);
+		return new YamlSoundSectionProvider(() -> soundConfiguration, sectionName);
 	}
 
 }
