@@ -13,10 +13,14 @@ public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetti
 	String CONSOLE_SENDER = "console";
 
 	/**
-	 * update enabledWorlds collection from plugin config.yml file
+	 * Returns the current {@link EnabledWorldsSetting}.
+	 *
+	 * @return the current enabled worlds setting
 	 */
-	@SuppressWarnings("WeakerAccess")
-	void reload();
+	@Override
+	EnabledWorldsSetting get();
+
+	List<UUID> getEnabledWorldUids();
 
 	/**
 	 * get collection of enabled world names from registry
