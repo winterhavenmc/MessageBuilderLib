@@ -51,4 +51,7 @@ public interface LocaleProvider extends ConfigProvider<LocaleSetting>
 	 * @return the applicable time zone as represented by a {@code ZoneId} object.
 	 */
 	ZoneId getZoneId();
+
+
+	String getLanguage();
 }
