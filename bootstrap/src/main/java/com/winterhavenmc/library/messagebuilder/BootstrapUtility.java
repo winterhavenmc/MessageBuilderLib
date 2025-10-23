@@ -218,7 +218,7 @@ public final class BootstrapUtility
 
 	static EnabledWorldsProvider createEnabledWorldsProvider(final Plugin plugin)
 	{
-		return new BukkitEnabledWorldsProvider(plugin);
+		return BukkitEnabledWorldsProvider.create(plugin);
 	}
 
 }
