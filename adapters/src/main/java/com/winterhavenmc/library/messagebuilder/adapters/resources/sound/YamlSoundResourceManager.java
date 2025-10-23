@@ -6,24 +6,19 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoa
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
-import org.bukkit.plugin.Plugin;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 
 
 public final class YamlSoundResourceManager implements ResourceManager
 {
-	private final Plugin plugin;
 	private final ResourceLoader resourceLoader;
 	private final ResourceInstaller resourceInstaller;
 	private Configuration soundConfiguration;
 
 
-	public YamlSoundResourceManager(final Plugin plugin,
-									final ResourceLoader resourceLoader,
-									final ResourceInstaller resourceInstaller)
+	public YamlSoundResourceManager(final ResourceInstaller resourceInstaller, final ResourceLoader resourceLoader)
 	{
-		this.plugin = plugin;
 		this.resourceInstaller = resourceInstaller;
 		this.resourceLoader = resourceLoader;
 
@@ -31,12 +26,10 @@ public final class YamlSoundResourceManager implements ResourceManager
 	}
 
 
-	YamlSoundResourceManager(final Plugin plugin,
-							 final ResourceLoader resourceLoader,
+	YamlSoundResourceManager(final ResourceLoader resourceLoader,
 							 final ResourceInstaller resourceInstaller,
 							 final FileConfiguration configuration)
 	{
-		this.plugin = plugin;
 		this.resourceInstaller = resourceInstaller;
 		this.resourceLoader = resourceLoader;
 		this.soundConfiguration = configuration;
