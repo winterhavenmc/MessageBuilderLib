@@ -1,0 +1,46 @@
+/*
+ * Copyright (c) 2025 Tim Savage.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
+
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
+
+import java.util.function.Supplier;
+
+
+public final class YamlSoundSectionProvider implements SectionProvider
+{
+	private final Supplier<Configuration> configurationSupplier;
+	private final String sectionName;
+
+
+	public YamlSoundSectionProvider(final Supplier<Configuration> configurationSupplier, final String sectionName)
+	{
+		this.configurationSupplier = configurationSupplier;
+		this.sectionName = sectionName;
+	}
+
+
+	@Override
+	public ConfigurationSection getSection()
+	{
+		return configurationSupplier.get().getConfigurationSection(sectionName);
+	}
+
+}
