@@ -6,7 +6,8 @@ import org.jetbrains.annotations.Contract;
 import java.util.List;
 import java.util.UUID;
 
-public interface EnabledWorldsProvider
+
+public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetting>
 {
 	String UNKNOWN_WORLD = "\uD83C\uDF10";
 	String CONSOLE_SENDER = "console";
