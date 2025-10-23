@@ -17,27 +17,29 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ConfigurationProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.sound.SoundRecord;
 import com.winterhavenmc.library.messagebuilder.models.sound.ValidSoundRecord;
 
 import org.bukkit.Location;
 import org.bukkit.Registry;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.SoundResourceConstant.RESOURCE_NAME;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.SOUND_RESOURCE_MANAGER;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.throwing;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
 
 /**
@@ -46,7 +48,8 @@ import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.
 public final class YamlSoundRepository implements SoundRepository
 {
 	private final Plugin plugin;
-	private final YamlConfiguration soundsConfig;
+	private final ConfigurationProvider configurationProvider;
+
 
 	enum Field
 	{
@@ -60,66 +63,46 @@ public final class YamlSoundRepository implements SoundRepository
 
 	/**
 	 * Class constructor
-	 *
-	 * @param plugin         reference to plugin main class
-	 * @param localeProvider a provider of the currently configured locale
 	 */
-	public YamlSoundRepository(final Plugin plugin, LocaleProvider localeProvider)
+	public YamlSoundRepository(final Plugin plugin, final YamlSoundResourceManager soundResourceManager)
 	{
+		validate(soundResourceManager, Objects::isNull, throwing(PARAMETER_NULL, SOUND_RESOURCE_MANAGER));
+		this.configurationProvider = soundResourceManager.getConfigurationProvider();
 		this.plugin = plugin;
-		File soundFile = new File(plugin.getDataFolder(), RESOURCE_NAME.toString());
-
-		// install sounds.yml if not already present and resource exists
-		// this is only wrapped in a conditional to prevent log message when file already exists
-		if (!soundFile.exists() && plugin.getResource(RESOURCE_NAME.toString()) != null)
-		{
-			plugin.saveResource(RESOURCE_NAME.toString(), false);
-		}
-
-		this.soundsConfig = new YamlConfiguration();
-
-		try
-		{
-			this.soundsConfig.load(soundFile);
-		}
-		catch (IOException ioException)
-		{
-			plugin.getLogger().severe(ioException.getLocalizedMessage());
-		}
-		catch (InvalidConfigurationException invalidConfigurationException)
-		{
-			throw new RuntimeException(invalidConfigurationException);
-		}
 	}
 
 
 	@Override
 	public SoundRecord getRecord(final Enum<?> soundId)
 	{
+		final Configuration soundConfiguration = this.configurationProvider.getConfiguration();
+
 		return SoundRecord.of(soundId.name(),
-				soundsConfig.getBoolean(soundId + "." + Field.ENABLED),
-				soundsConfig.getBoolean(soundId + "." + Field.PLAYER_ONLY),
-				soundsConfig.getString(soundId + "." + Field.SOUND_NAME),
-				(float) soundsConfig.getDouble(soundId + "." + Field.VOLUME),
-				(float) soundsConfig.getDouble(soundId + "." + Field.PITCH));
+				soundConfiguration.getBoolean(soundId + "." + Field.ENABLED),
+				soundConfiguration.getBoolean(soundId + "." + Field.PLAYER_ONLY),
+				soundConfiguration.getString(soundId + "." + Field.SOUND_NAME),
+				(float) soundConfiguration.getDouble(soundId + "." + Field.VOLUME),
+				(float) soundConfiguration.getDouble(soundId + "." + Field.PITCH));
 	}
 
 
 	public SoundRecord getRecord(final String soundId)
 	{
+		final Configuration soundConfiguration = this.configurationProvider.getConfiguration();
+
 		return SoundRecord.of(soundId,
-				soundsConfig.getBoolean(soundId + "." + Field.ENABLED),
-				soundsConfig.getBoolean(soundId + "." + Field.PLAYER_ONLY),
-				soundsConfig.getString(soundId + "." + Field.SOUND_NAME),
-				(float) soundsConfig.getDouble(soundId + "." + Field.VOLUME),
-				(float) soundsConfig.getDouble(soundId + "." + Field.PITCH));
+				soundConfiguration.getBoolean(soundId + "." + Field.ENABLED),
+				soundConfiguration.getBoolean(soundId + "." + Field.PLAYER_ONLY),
+				soundConfiguration.getString(soundId + "." + Field.SOUND_NAME),
+				(float) soundConfiguration.getDouble(soundId + "." + Field.VOLUME),
+				(float) soundConfiguration.getDouble(soundId + "." + Field.PITCH));
 	}
 
 
 	@Override
 	public Set<String> getKeys()
 	{
-		return this.soundsConfig.getKeys(false);
+		return this.configurationProvider.getConfiguration().getKeys(false);
 	}
 
 
@@ -140,7 +123,7 @@ public final class YamlSoundRepository implements SoundRepository
 	@Override
 	public boolean isValidSoundConfigKey(final String key)
 	{
-		return this.soundsConfig.getKeys(false).contains(key);
+		return this.configurationProvider.getConfiguration().getKeys(false).contains(key);
 	}
 
 
@@ -153,33 +136,7 @@ public final class YamlSoundRepository implements SoundRepository
 	@Override
 	public String getBukkitSoundName(final String key)
 	{
-		return this.soundsConfig.getString(key + ".sound");
-	}
-
-
-	/**
-	 * Load sound configuration from yaml file in plugin data folder
-	 */
-	@Override
-	public void reload()
-	{
-		// get File object for sound file
-		File soundFile = new File(plugin.getDataFolder().getPath(), RESOURCE_NAME.toString());
-
-		// copy resource to plugin data directory if it does not already exist there
-		if (!soundFile.exists())
-		{
-			plugin.saveResource(RESOURCE_NAME.toString(), false);
-		}
-		try
-		{
-			soundsConfig.load(soundFile);
-		}
-		catch (IllegalArgumentException | IOException | InvalidConfigurationException exception)
-		{
-			plugin.getLogger().severe(exception.getLocalizedMessage());
-			throw new RuntimeException(exception);
-		}
+		return this.configurationProvider.getConfiguration().getString(key + ".sound");
 	}
 
 
@@ -225,7 +182,7 @@ public final class YamlSoundRepository implements SoundRepository
 			}
 			else
 			{
-				plugin.getLogger().warning("An error occurred while trying to play the sound '"
+				Logger.getLogger(this.getClass().getName()).warning("An error occurred while trying to play the sound '"
 						+ validSoundRecord.soundName() + "'. You may need to update the sound name in your "
 						+ RESOURCE_NAME + " file.");
 			}
@@ -274,7 +231,7 @@ public final class YamlSoundRepository implements SoundRepository
 			}
 			else
 			{
-				plugin.getLogger().warning("An error occurred while trying to play the sound '"
+				Logger.getLogger(this.getClass().getName()).warning("An error occurred while trying to play the sound '"
 						+ validSoundRecord.soundName() + "'. You may need to update the sound name in your "
 						+ RESOURCE_NAME + " file.");
 			}
