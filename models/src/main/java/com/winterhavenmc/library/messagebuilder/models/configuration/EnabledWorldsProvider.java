@@ -3,7 +3,7 @@ package com.winterhavenmc.library.messagebuilder.models.configuration;
 import org.bukkit.World;
 import org.jetbrains.annotations.Contract;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public interface EnabledWorldsProvider
@@ -22,7 +22,7 @@ public interface EnabledWorldsProvider
 	 *
 	 * @return a Collection of String containing enabled world names
 	 */
-	Collection<String> getEnabledWorldNames();
+	List<String> getEnabledWorldNames();
 
 	/**
 	 * Check if a world is enabled by bukkit world UID
