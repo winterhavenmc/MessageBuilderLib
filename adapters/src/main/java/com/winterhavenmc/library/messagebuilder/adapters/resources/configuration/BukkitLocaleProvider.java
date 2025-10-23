@@ -17,15 +17,13 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigProvider;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleSetting;
+import com.winterhavenmc.library.messagebuilder.models.configuration.*;
 
 import org.bukkit.plugin.Plugin;
 
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 
@@ -59,21 +57,24 @@ import java.util.function.Supplier;
  */
 public final class BukkitLocaleProvider implements LocaleProvider
 {
-	public static final String TIME_ZONE_SETTING_KEY = "timezone";
+	private final Supplier<LanguageSetting> languageSettingSupplier;
 	private final Supplier<LocaleSetting> localeSettingSupplier;
 	private final Supplier<ZoneId> zoneIdSupplier;
+	private final static String FALLBACK_NAME = "en-US";
 
 	/**
-	 * Enum representing the recognized configuration keys for language settings.
+	 * Enum representing the recognized configuration keys for locale setting, in order of preference.
 	 */
-	enum LocaleField
+	enum ConfigKey
 	{
 		LOCALE("locale"),
-		LANGUAGE("language");
+		LANGUAGE("language"),
+		TIME_ZONE("timezone");
 
-		private final String string;
-		LocaleField(String string) { this.string = string; }
-		@Override public String toString() { return this.string; }
+		private final String key;
+		ConfigKey(String key) { this.key = key; }
+		public String key() { return this.key; }
+		@Override public String toString() { return this.key; }
 	}
 
 
@@ -83,8 +84,11 @@ public final class BukkitLocaleProvider implements LocaleProvider
 	 * @param localeSettingSupplier supplies the current {@link LocaleSetting}
 	 * @param zoneIdSupplier supplies the current {@link ZoneId}
 	 */
-	private BukkitLocaleProvider(final Supplier<LocaleSetting> localeSettingSupplier, final Supplier<ZoneId> zoneIdSupplier)
+	private BukkitLocaleProvider(final Supplier<LanguageSetting> languageSettingSupplier,
+								 final Supplier<LocaleSetting> localeSettingSupplier,
+								 final Supplier<ZoneId> zoneIdSupplier)
 	{
+		this.languageSettingSupplier = languageSettingSupplier;
 		this.localeSettingSupplier = localeSettingSupplier;
 		this.zoneIdSupplier = zoneIdSupplier;
 	}
@@ -107,10 +111,46 @@ public final class BukkitLocaleProvider implements LocaleProvider
 	public static LocaleProvider create(Plugin plugin)
 	{
 		return new BukkitLocaleProvider(
-				() -> new LocaleSetting(LanguageTag.of(plugin.getConfig().getString(BukkitLocaleProvider.LocaleField.LOCALE.toString()))
-						.orElse(LanguageTag.of(plugin.getConfig().getString(BukkitLocaleProvider.LocaleField.LANGUAGE.toString()))
-								.orElse(LanguageTag.getSystemDefault()))),
-				() -> getValidZoneId(plugin));
+				() -> getLanguageSetting(plugin),
+				() -> getLocaleSetting(plugin),
+				() -> getZoneId(plugin));
+	}
+
+
+	static LanguageSetting getLanguageSetting(final Plugin plugin)
+	{
+		return new LanguageSetting(Optional.ofNullable(plugin.getConfig().getString(ConfigKey.LANGUAGE.key()))
+				.orElse(Optional.ofNullable(plugin.getConfig().getString(ConfigKey.LOCALE.key()))
+						.orElse(FALLBACK_NAME)));
+	}
+
+
+	static LocaleSetting getLocaleSetting(final Plugin plugin)
+	{
+		return new LocaleSetting(LanguageTag.of(plugin.getConfig().getString(ConfigKey.LOCALE.key()))
+				.orElse(LanguageTag.of(plugin.getConfig().getString(ConfigKey.LANGUAGE.key()))
+						.orElse(LanguageTag.getSystemDefault())));
+	}
+
+
+	/**
+	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
+	 * <p>
+	 * If the {@code timezone} value is present in the configuration and matches
+	 * one of the available {@link ZoneId} recognized by the JVM, it is used.
+	 * Otherwise, this method falls back to the system default time zone.
+	 * </p>
+	 *
+	 * @param plugin the plugin whose configuration is queried for the timezone
+	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
+	 */
+	static ZoneId getZoneId(final Plugin plugin)
+	{
+		String timezone = plugin.getConfig().getString(ConfigKey.TIME_ZONE.key());
+
+		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
+				? ZoneId.of(timezone)
+				: ZoneId.systemDefault();
 	}
 
 
@@ -139,7 +179,7 @@ public final class BukkitLocaleProvider implements LocaleProvider
 
 
 	/**
-	 * Returns the {@link Locale} object derived from the configuration.
+	 * Returns the resolved {@link Locale} object derived from the configuration.
 	 *
 	 * @return a Java {@code Locale}
 	 */
@@ -162,24 +202,22 @@ public final class BukkitLocaleProvider implements LocaleProvider
 	}
 
 
-	/**
-	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
-	 * <p>
-	 * If the {@code timezone} value is present in the configuration and matches
-	 * one of the available {@link ZoneId} recognized by the JVM, it is used.
-	 * Otherwise, this method falls back to the system default time zone.
-	 * </p>
-	 *
-	 * @param plugin the plugin whose configuration is queried for the timezone
-	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
-	 */
-	public static ZoneId getValidZoneId(Plugin plugin)
+	@Override
+	public String getLanguage()
 	{
-		String timezone = plugin.getConfig().getString(TIME_ZONE_SETTING_KEY);
-
-		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
-				? ZoneId.of(timezone)
-				: ZoneId.systemDefault();
+		//TODO: sanitize file name?
+		return languageSettingSupplier.get().name();
 	}
+
+
+//	public static String getLanguage(final Plugin plugin)
+//	{
+//		String language = plugin.getConfig().getString(ConfigKey.LANGUAGE.key());
+//		String locale = plugin.getConfig().getString(ConfigKey.LOCALE.key());
+//
+//		if (language != null) { return language; }
+//		else if (locale != null) { return locale; }
+//		else return FALLBACK_NAME;
+//	}
 
 }
