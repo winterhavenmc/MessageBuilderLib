@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Supplier;
 
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.SoundResourceConstant.RESOURCE_NAME;
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.SoundResourceMessage.*;
 
 
 public final class YamlSoundResourceLoader implements ResourceLoader
@@ -55,17 +56,16 @@ public final class YamlSoundResourceLoader implements ResourceLoader
 			if (soundConfigFile.exists())
 			{
 				configuration.load(soundConfigFile);
-				plugin.getLogger().info("Sound file '" + RESOURCE_NAME + "' successfully loaded.");
+				plugin.getLogger().info(SOUND_RESOURCE_LOAD_SUCCESS.getLocalizedMessage(localeProvider.getLocale(), RESOURCE_NAME.toString()));
 			}
 			else
 			{
-				//TODO: provide translations for error messages in this class
-				plugin.getLogger().warning("The file '" + RESOURCE_NAME + "' does not exist in the plugin data folder.");
+				plugin.getLogger().warning(SOUND_RESOURCE_LOAD_MISSING.getLocalizedMessage(localeProvider.getLocale(), RESOURCE_NAME.toString()));
 			}
 		}
 		catch (IOException | InvalidConfigurationException e)
 		{
-			plugin.getLogger().warning("The file '" + RESOURCE_NAME + "' in the plugin data folder could not be read.");
+			plugin.getLogger().warning(SOUND_RESOURCE_UNREADABLE.getLocalizedMessage(localeProvider.getLocale(), RESOURCE_NAME.toString()));
 		}
 
 		return configuration;
