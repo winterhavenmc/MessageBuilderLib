@@ -24,7 +24,7 @@ import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.
 public final class YamlSoundResourceLoader implements ResourceLoader
 {
 	private final Plugin plugin;
-	private final Supplier<YamlConfiguration> yamlFactory;
+	private final Supplier<YamlConfiguration> configurationSupplier;
 	private final LocaleProvider localeProvider;
 
 
@@ -35,18 +35,19 @@ public final class YamlSoundResourceLoader implements ResourceLoader
 
 
 	public YamlSoundResourceLoader(final Plugin plugin,
-								   final Supplier<YamlConfiguration> yamlFactory,
+								   final Supplier<YamlConfiguration> configurationSupplier,
 								   final LocaleProvider localeProvider)
 	{
 		this.plugin = plugin;
-		this.yamlFactory = yamlFactory;
+		this.configurationSupplier = configurationSupplier;
 		this.localeProvider = localeProvider;
 	}
 
 
+	@Override
 	public FileConfiguration load()
 	{
-		YamlConfiguration configuration = yamlFactory.get();
+		YamlConfiguration configuration = configurationSupplier.get();
 
 		try
 		{
@@ -80,7 +81,7 @@ public final class YamlSoundResourceLoader implements ResourceLoader
 		{
 			if (stream != null)
 			{
-				YamlConfiguration config = yamlFactory.get();
+				YamlConfiguration config = configurationSupplier.get();
 				config.load(new InputStreamReader(stream, StandardCharsets.UTF_8));
 				plugin.getLogger().info(LanguageResourceMessage.LANGUAGE_RESOURCE_FALLBACK_SUCCESS
 						.getLocalizedMessage(localeProvider.getLocale(), RESOURCE_NAME));
