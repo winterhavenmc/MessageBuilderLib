@@ -181,25 +181,6 @@ class BukkitLocaleProviderTest
 
 
 	@Test
-	void getZoneId_returns_configured_timezone()
-	{
-		// Arrange
-		configuration.set("timezone", "UTC");
-		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
-
-		// Act
-		ZoneId result = localeProvider.getZoneId();
-
-		// Assert
-		assertEquals(ZoneId.of("UTC"), result);
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
-	}
-
-
-	@Test
 	void getZoneId_returns_configured_timezone_when_valid()
 	{
 		// Arrange
