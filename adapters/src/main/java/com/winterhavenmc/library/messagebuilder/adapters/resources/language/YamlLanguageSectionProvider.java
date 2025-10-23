@@ -27,21 +27,21 @@ import java.util.function.Supplier;
 
 public final class YamlLanguageSectionProvider implements SectionProvider
 {
-	private final Supplier<Configuration> configSupplier;
-	private final String stringName;
+	private final Supplier<Configuration> configurationSupplier;
+	private final String sectionName;
 
 
-	public YamlLanguageSectionProvider(Supplier<Configuration> configSupplier, String stringName)
+	public YamlLanguageSectionProvider(final Supplier<Configuration> configurationSupplier, final String sectionName)
 	{
-		this.configSupplier = configSupplier;
-		this.stringName = stringName;
+		this.configurationSupplier = configurationSupplier;
+		this.sectionName = sectionName;
 	}
 
 
 	@Override
 	public ConfigurationSection getSection()
 	{
-		return configSupplier.get().getConfigurationSection(stringName);
+		return configurationSupplier.get().getConfigurationSection(sectionName);
 	}
 
 }
