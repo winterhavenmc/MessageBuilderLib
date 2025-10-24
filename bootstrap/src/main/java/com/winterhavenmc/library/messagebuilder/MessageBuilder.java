@@ -239,7 +239,8 @@ public final class MessageBuilder
 		validate(soundResourceManager, Objects::isNull, throwing(PARAMETER_NULL, SOUND_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, localeProvider, enabledWorlds, itemForge, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,
+				constantRepository, soundRepository, localeProvider, enabledWorlds, itemForge, messagePipeline);
 	}
 
 

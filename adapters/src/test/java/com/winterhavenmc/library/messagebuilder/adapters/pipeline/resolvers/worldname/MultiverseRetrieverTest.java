@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.MultiverseRetriever;
 import org.bukkit.World;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
