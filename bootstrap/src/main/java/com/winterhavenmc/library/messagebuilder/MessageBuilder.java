@@ -243,6 +243,7 @@ public final class MessageBuilder
 	}
 
 
+	//TODO: incorporate ItemForge into ItemRepository
 	public ItemForge itemForge()
 	{
 		return this.itemForge;
@@ -267,6 +268,7 @@ public final class MessageBuilder
 	}
 
 
+	//TODO: rename type -> WorldRepository; relocate alias/name resolver to class
 	public EnabledWorldsProvider worlds()
 	{
 		return worlds;
