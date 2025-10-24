@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation;
 
 import org.bukkit.Location;
 import org.bukkit.World;
