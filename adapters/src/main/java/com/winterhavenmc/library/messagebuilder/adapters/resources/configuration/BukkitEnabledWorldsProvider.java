@@ -57,17 +57,19 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	 */
 	public static EnabledWorldsProvider create(final Plugin plugin)
 	{
-		plugin.getLogger().info("Config enabled worlds: " + getConfigEnabledWorldUids(plugin));
-		plugin.getLogger().info("Server enabled worlds: " + getServerWorldUids(plugin));
-		plugin.getLogger().info("Config disabled worlds: " + getConfigDisabledWorldUids(plugin));
+		return new BukkitEnabledWorldsProvider(plugin, () -> getEnabledWorldsSetting(plugin));
+	}
 
-		final List<UUID> enabledWorldUids = (plugin.getConfig().contains(ENABLED_WORLDS_KEY))
-				? getConfigEnabledWorldUids(plugin)
-				: getServerWorldUids(plugin);
+
+	static EnabledWorldsSetting getEnabledWorldsSetting(final Plugin plugin)
+	{
+		final List<UUID> enabledWorldUids = (!getConfigEnabledWorldUids(plugin).isEmpty())
+					? getConfigEnabledWorldUids(plugin)
+					: getServerWorldUids(plugin);
 
 		enabledWorldUids.removeAll(getConfigDisabledWorldUids(plugin));
 
-		return new BukkitEnabledWorldsProvider(plugin, () -> new EnabledWorldsSetting(enabledWorldUids));
+		return new EnabledWorldsSetting(enabledWorldUids);
 	}
 
 
@@ -115,22 +117,8 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 
 	static List<UUID> getServerWorldUids(final Plugin plugin)
 	{
-		return plugin.getServer().getWorlds().stream().map(WorldInfo::getUID).toList();
+		return new ArrayList<>(plugin.getServer().getWorlds().stream().map(WorldInfo::getUID).toList());
 	}
-
-
-//	/**
-//	 * get collection of enabled world names from registry
-//	 *
-//	 * @return a Collection of String containing enabled world names
-//	 */
-//	@Override
-//	public Collection<String> getEnabledWorldNames()
-//	{
-//		return this.get().worldUids().stream()
-//				.map(uuid -> plugin.getServer().getWorld(uuid))
-//				.filter(Objects::nonNull).map(WorldInfo::getName).sorted().toList();
-//	}
 
 
 	/**

@@ -14,12 +14,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitEnabledWorldsProvider.DISABLED_WORLDS_KEY;
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitEnabledWorldsProvider.ENABLED_WORLDS_KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -37,38 +36,84 @@ class BukkitEnabledWorldsProviderTest
 	UUID world3Uid = new UUID(3, 3);
 	UUID world4Uid = new UUID(4, 4);
 
+	List<String> serverWorldsNames = List.of("world", "world_nether", "world_the_end", "test_world");
+
+
 	@Test
-	void create()
+	void create_with_enabled_worlds_config()
 	{
-		List<String> serverWorlds = List.of("world", "world_nether", "world_the_end", "test_world");
+		// Arrange
 		FileConfiguration configuration = new YamlConfiguration();
 		configuration.set(ENABLED_WORLDS_KEY, List.of("world", "world_nether", "world_the_end"));
 		configuration.set(DISABLED_WORLDS_KEY, List.of());
+
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 		when(pluginMock.getServer()).thenReturn(serverMock);
 
 		when(serverMock.getWorld("world")).thenReturn(world1Mock);
 		when(serverMock.getWorld("world_nether")).thenReturn(world2Mock);
 		when(serverMock.getWorld("world_the_end")).thenReturn(world3Mock);
-//		when(serverMock.getWorld("test_world")).thenReturn(world4Mock);
 
 		when(world1Mock.getUID()).thenReturn(world1Uid);
 		when(world2Mock.getUID()).thenReturn(world2Uid);
 		when(world3Mock.getUID()).thenReturn(world3Uid);
-//		when(world4Mock.getUID()).thenReturn(world4Uid);
 
+		// Act
 		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
-
 		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
 
+		// Assert
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid), uuids);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+		verify(pluginMock, atLeastOnce()).getServer();
+		verify(serverMock, atLeast(3)).getWorld(anyString());
+		verify(world1Mock, atLeastOnce()).getUID();
+		verify(world2Mock, atLeastOnce()).getUID();
+		verify(world3Mock, atLeastOnce()).getUID();
+	}
+
+
+	@Test
+	void create_with_empty_enabled_worlds_config()
+	{
+		// Arrange
+		FileConfiguration configuration = new YamlConfiguration();
+		configuration.set(ENABLED_WORLDS_KEY, List.of());
+		configuration.set(DISABLED_WORLDS_KEY, List.of());
+
+		when(pluginMock.getConfig()).thenReturn(configuration);
+		when(pluginMock.getServer()).thenReturn(serverMock);
+		when(serverMock.getWorlds()).thenReturn(List.of(world1Mock, world2Mock, world3Mock, world4Mock));
+
+		when(world1Mock.getUID()).thenReturn(world1Uid);
+		when(world2Mock.getUID()).thenReturn(world2Uid);
+		when(world3Mock.getUID()).thenReturn(world3Uid);
+		when(world4Mock.getUID()).thenReturn(world4Uid);
+
+		// Act
+		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
+		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
+
+		// Assert
+		assertEquals(List.of(world1Uid, world2Uid, world3Uid, world4Uid), uuids);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+		verify(pluginMock, atLeastOnce()).getServer();
+
+		verify(world1Mock, atLeastOnce()).getUID();
+		verify(world2Mock, atLeastOnce()).getUID();
+		verify(world3Mock, atLeastOnce()).getUID();
+		verify(world4Mock, atLeastOnce()).getUID();
 	}
 
 
 	@Test
 	void get()
 	{
+
 	}
 
 	@Test
@@ -86,7 +131,7 @@ class BukkitEnabledWorldsProviderTest
 		configuration.set(ENABLED_WORLDS_KEY, List.of("world", "world_nether", "world_the_end"));
 		configuration.set(DISABLED_WORLDS_KEY, List.of());
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+//		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 		when(pluginMock.getServer()).thenReturn(serverMock);
 
 		when(serverMock.getWorld("world")).thenReturn(world1Mock);
@@ -145,6 +190,39 @@ class BukkitEnabledWorldsProviderTest
 	@Test
 	void isEnabled()
 	{
+//		// Arrange
+//		FileConfiguration configuration = new YamlConfiguration();
+//		configuration.set(ENABLED_WORLDS_KEY, List.of("world", "world_nether", "world_the_end"));
+//		configuration.set(DISABLED_WORLDS_KEY, List.of());
+//
+//		when(pluginMock.getConfig()).thenReturn(configuration);
+////		when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
+//		when(pluginMock.getServer()).thenReturn(serverMock);
+//
+//		when(serverMock.getWorld("world")).thenReturn(world1Mock);
+//		when(serverMock.getWorld("world_nether")).thenReturn(world2Mock);
+//		when(serverMock.getWorld("world_the_end")).thenReturn(world3Mock);
+////		when(serverMock.getWorld("test_world")).thenReturn(world4Mock);
+//
+//		when(world1Mock.getUID()).thenReturn(world1Uid);
+//		when(world2Mock.getUID()).thenReturn(world2Uid);
+//		when(world3Mock.getUID()).thenReturn(world3Uid);
+////		when(world4Mock.getUID()).thenReturn(world4Uid);
+//
+//		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
+//
+//		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
+//
+//		// Assert
+//		assertEquals(List.of(world1Uid, world2Uid, world3Uid), uuids);
+//
+//		// Verify
+//		verify(pluginMock, atLeastOnce()).getConfig();
+//		verify(pluginMock, atLeastOnce()).getServer();
+//		verify(serverMock, atLeastOnce()).getWorld(anyString());
+//		verify(world1Mock, atLeastOnce()).getUID();
+//		verify(world2Mock, atLeastOnce()).getUID();
+//		verify(world3Mock, atLeastOnce()).getUID();
 	}
 
 	@Test
