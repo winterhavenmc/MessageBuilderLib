@@ -42,12 +42,6 @@ public interface SoundRepository
 
 
 	/**
-	 * Reload sound configuration
-	 */
-	void reload();
-
-
-	/**
 	 * Play sound effect for player
 	 *
 	 * @param sender  the command sender (player) to play sound

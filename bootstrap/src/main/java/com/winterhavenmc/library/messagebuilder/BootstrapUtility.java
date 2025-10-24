@@ -110,7 +110,7 @@ public final class BootstrapUtility
 		final YamlSoundResourceInstaller resourceInstaller = new YamlSoundResourceInstaller(plugin);
 		final YamlSoundResourceLoader resourceLoader = new YamlSoundResourceLoader(plugin, localeProvider);
 
-		return new YamlSoundResourceManager(plugin, resourceLoader, resourceInstaller);
+		return new YamlSoundResourceManager(resourceInstaller, resourceLoader);
 	}
 
 	/**
@@ -218,7 +218,7 @@ public final class BootstrapUtility
 
 	static EnabledWorldsProvider createEnabledWorldsProvider(final Plugin plugin)
 	{
-		return new BukkitEnabledWorldsProvider(plugin);
+		return BukkitEnabledWorldsProvider.create(plugin);
 	}
 
 }

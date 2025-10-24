@@ -47,7 +47,7 @@ public final class YamlConstantRepository implements ConstantRepository
 
 
 	@Override
-	public Optional<java.lang.String> getString(ValidConstantKey validConstantKey)
+	public Optional<java.lang.String> getString(final ValidConstantKey validConstantKey)
 	{
 		return (sectionProvider.getSection() != null && sectionProvider.getSection().contains(validConstantKey.toString()))
 				? Optional.ofNullable(sectionProvider.getSection().getString(validConstantKey.toString()))
@@ -56,7 +56,7 @@ public final class YamlConstantRepository implements ConstantRepository
 
 
 	@Override
-	public List<java.lang.String> getStringList(ValidConstantKey validConstantKey)
+	public List<java.lang.String> getStringList(final ValidConstantKey validConstantKey)
 	{
 		return (sectionProvider.getSection() != null && sectionProvider.getSection().contains(validConstantKey.toString()))
 				? sectionProvider.getSection().getStringList(validConstantKey.toString())
@@ -65,7 +65,7 @@ public final class YamlConstantRepository implements ConstantRepository
 
 
 	@Override
-	public Optional<Integer> getInteger(ValidConstantKey validConstantKey)
+	public Optional<Integer> getInteger(final ValidConstantKey validConstantKey)
 	{
 		return (sectionProvider.getSection() != null && sectionProvider.getSection().contains(validConstantKey.toString()))
 				? Optional.of(sectionProvider.getSection().getInt(validConstantKey.toString()))
@@ -74,7 +74,7 @@ public final class YamlConstantRepository implements ConstantRepository
 
 
 	@Override
-	public Optional<Boolean> getBoolean(ValidConstantKey validConstantKey)
+	public Optional<Boolean> getBoolean(final ValidConstantKey validConstantKey)
 	{
 		return (sectionProvider.getSection() != null && sectionProvider.getSection().contains(validConstantKey.toString()))
 				? Optional.of(sectionProvider.getSection().getBoolean((validConstantKey.toString())))

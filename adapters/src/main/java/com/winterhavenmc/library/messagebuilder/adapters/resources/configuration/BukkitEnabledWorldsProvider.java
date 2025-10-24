@@ -17,170 +17,120 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation.BukkitSpawnLocationResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsSetting;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Contract;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Supplier;
 
 
-@SuppressWarnings("unused")
 public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 {
 	private final Plugin plugin;
+	private final Supplier<EnabledWorldsSetting> enabledWorldsSupplier;
 
-	// collection of enabled world names
-	private final Collection<UUID> enabledWorldRegistry = new HashSet<>();
-
-	private static final String ENABLED_WORLDS_KEY = "enabled-worlds";
-	private static final String DISABLED_WORLDS_KEY = "disabled-worlds";
+	static final String ENABLED_WORLDS_KEY = "enabled-worlds";
+	static final String DISABLED_WORLDS_KEY = "disabled-worlds";
 
 
 	/**
-	 * Class constructor
-	 *
-	 * @param plugin passed reference to the plugin main class
+	 * private constructor, use {@code #create(plugin)} to instantiate
 	 */
-	public BukkitEnabledWorldsProvider(final Plugin plugin)
+	private BukkitEnabledWorldsProvider(final Plugin plugin,
+										final Supplier<EnabledWorldsSetting> enabledWorldsSupplier)
 	{
-		// set reference to main class
 		this.plugin = plugin;
-
-		// populate enabled world UID list field
-		this.reload();
+		this.enabledWorldsSupplier = enabledWorldsSupplier;
 	}
 
 
 	/**
-	 * update enabledWorlds collection from plugin config.yml file
-	 */
-	@SuppressWarnings("WeakerAccess")
-	@Override
-	public void reload()
-	{
-		// remove all worlds from registry
-		this.enabledWorldRegistry.clear();
-
-		// if server.getWorlds() is empty, return without adding any worlds to registry and log warning
-		if (plugin.getServer().getWorlds().stream().map(WorldInfo::getName).toList().isEmpty())
-		{
-			plugin.getLogger().warning("the server has no worlds.");
-			return;
-		}
-
-		// if config list of enabled worlds is empty, add all server worlds to registry
-		if (plugin.getConfig().getStringList(ENABLED_WORLDS_KEY).isEmpty())
-		{
-			addAllServerWorlds();
-		}
-
-		// otherwise, add only the worlds in the config enabled worlds list that are also server worlds
-		else
-		{
-			addAllEnabledConfigWorlds();
-		}
-
-		// remove all disabled worlds from registry
-		removeAllDisabledConfigWorlds();
-	}
-
-
-	/**
-	 * Reload helper method adds all server worlds to the registry
-	 */
-	@SuppressWarnings("UnusedReturnValue")
-	private int addAllServerWorlds()
-	{
-		int count = 0;
-		for (World world : plugin.getServer().getWorlds())
-		{
-			if (world != null)
-			{
-				this.enabledWorldRegistry.add(world.getUID());
-				count++;
-			}
-		}
-		return count;
-	}
-
-
-	/**
-	 * Reload helper method adds all worlds to registry whose names are
-	 * contained in the config enabled-worlds string list and are also current server worlds
-	 */
-	@SuppressWarnings("UnusedReturnValue")
-	private int addAllEnabledConfigWorlds()
-	{
-		int count = 0;
-
-		for (String worldName : plugin.getConfig().getStringList(ENABLED_WORLDS_KEY))
-		{
-			World world = plugin.getServer().getWorld(worldName);
-
-			if (world != null)
-			{
-				this.enabledWorldRegistry.add(world.getUID());
-				count++;
-			}
-		}
-		return count;
-	}
-
-
-	/**
-	 * Reload helper method removes all worlds from registry whose names are
-	 * contained in the config disabled-worlds string list
-	 */
-	@SuppressWarnings("UnusedReturnValue")
-	private int removeAllDisabledConfigWorlds()
-	{
-		int count = 0;
-
-		for (String worldName : plugin.getConfig().getStringList(DISABLED_WORLDS_KEY))
-		{
-			World world = plugin.getServer().getWorld(worldName);
-
-			if (world != null)
-			{
-				this.enabledWorldRegistry.remove(world.getUID());
-				count++;
-			}
-		}
-		return count;
-	}
-
-
-	/**
-	 * get collection of enabled world names from registry
+	 * Static factory method creates instance of EnabledWorldsProvider
 	 *
-	 * @return a Collection of String containing enabled world names
+	 * @param plugin an instance of the plugin
+	 * @return an EnabledWorldsProvider
 	 */
-	@Override
-	public Collection<String> getEnabledWorldNames()
+	public static EnabledWorldsProvider create(final Plugin plugin)
 	{
-		Set<String> resultCollection = new HashSet<>();
+		plugin.getLogger().info("Config enabled worlds: " + getConfigEnabledWorldUids(plugin));
+		plugin.getLogger().info("Server enabled worlds: " + getServerWorldUids(plugin));
+		plugin.getLogger().info("Config disabled worlds: " + getConfigDisabledWorldUids(plugin));
 
-		for (UUID worldUID : enabledWorldRegistry)
-		{
-			World world = plugin.getServer().getWorld(worldUID);
+		final List<UUID> enabledWorldUids = (plugin.getConfig().contains(ENABLED_WORLDS_KEY))
+				? getConfigEnabledWorldUids(plugin)
+				: getServerWorldUids(plugin);
 
-			if (world != null)
-			{
-				resultCollection.add(world.getName());
-			}
-		}
+		enabledWorldUids.removeAll(getConfigDisabledWorldUids(plugin));
 
-		return resultCollection;
+		return new BukkitEnabledWorldsProvider(plugin, () -> new EnabledWorldsSetting(enabledWorldUids));
 	}
+
+
+	@Override
+	public EnabledWorldsSetting get()
+	{
+		return enabledWorldsSupplier.get();
+	}
+
+
+	@Override
+	public List<UUID> getEnabledWorldUids()
+	{
+		return enabledWorldsSupplier.get().worldUids();
+	}
+
+
+	@Override
+	public List<String> getEnabledWorldNames()
+	{
+		return enabledWorldsSupplier.get().worldUids().stream()
+				.map(uid -> plugin.getServer().getWorld(uid))
+				.filter(Objects::nonNull)
+				.map(WorldInfo::getName).toList();
+	}
+
+
+	static List<UUID> getConfigEnabledWorldUids(final Plugin plugin)
+	{
+		return new ArrayList<>(plugin.getConfig().getStringList(ENABLED_WORLDS_KEY).stream()
+				.map(worldName -> plugin.getServer().getWorld(worldName))
+				.filter(Objects::nonNull)
+				.map(WorldInfo::getUID).toList());
+	}
+
+
+	static List<UUID> getConfigDisabledWorldUids(final Plugin plugin)
+	{
+		return plugin.getConfig().getStringList(DISABLED_WORLDS_KEY).stream()
+				.map(worldName -> plugin.getServer().getWorld(worldName))
+				.filter(Objects::nonNull)
+				.map(WorldInfo::getUID).toList();
+	}
+
+
+	static List<UUID> getServerWorldUids(final Plugin plugin)
+	{
+		return plugin.getServer().getWorlds().stream().map(WorldInfo::getUID).toList();
+	}
+
+
+//	/**
+//	 * get collection of enabled world names from registry
+//	 *
+//	 * @return a Collection of String containing enabled world names
+//	 */
+//	@Override
+//	public Collection<String> getEnabledWorldNames()
+//	{
+//		return this.get().worldUids().stream()
+//				.map(uuid -> plugin.getServer().getWorld(uuid))
+//				.filter(Objects::nonNull).map(WorldInfo::getName).sorted().toList();
+//	}
 
 
 	/**
@@ -192,7 +142,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	@Override
 	public boolean isEnabled(final UUID worldUID)
 	{
-		return worldUID != null && this.enabledWorldRegistry.contains(worldUID);
+		return worldUID != null && this.get().worldUids().contains(worldUID);
 	}
 
 
@@ -205,7 +155,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	@Override
 	public boolean isEnabled(final World world)
 	{
-		return world != null && this.enabledWorldRegistry.contains(world.getUID());
+		return world != null && this.get().worldUids().contains(world.getUID());
 	}
 
 
@@ -225,20 +175,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 
 		World world = plugin.getServer().getWorld(worldName);
 
-		return world != null && this.enabledWorldRegistry.contains(world.getUID());
-	}
-
-
-	/**
-	 * get world spawn location, preferring Multiverse spawn location if available
-	 *
-	 * @param world bukkit world object to retrieve spawn location
-	 * @return spawn location, or null if world is null
-	 */
-	public Location getSpawnLocation(final World world)
-	{
-		SpawnLocationResolver resolver = BukkitSpawnLocationResolver.get(plugin.getServer().getPluginManager());
-		return resolver.resolve(world);
+		return world != null && this.get().worldUids().contains(world.getUID());
 	}
 
 
@@ -250,7 +187,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	@Contract(pure = true)
 	int size()
 	{
-		return this.enabledWorldRegistry.size();
+		return this.get().worldUids().size();
 	}
 
 
@@ -264,7 +201,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	@Override
 	public boolean contains(final UUID uuid)
 	{
-		return this.enabledWorldRegistry.contains(uuid);
+		return this.get().worldUids().contains(uuid);
 	}
 
 }

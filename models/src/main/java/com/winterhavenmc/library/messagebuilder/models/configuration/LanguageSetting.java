@@ -41,4 +41,4 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param name the raw language or locale tag string, never {@code null}
  */
-public record LanguageSetting(@NotNull String name) { }
+public record LanguageSetting(String name) { }

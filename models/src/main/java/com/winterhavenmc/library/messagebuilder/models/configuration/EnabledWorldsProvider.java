@@ -3,26 +3,31 @@ package com.winterhavenmc.library.messagebuilder.models.configuration;
 import org.bukkit.World;
 import org.jetbrains.annotations.Contract;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
-public interface EnabledWorldsProvider
+
+public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetting>
 {
 	String UNKNOWN_WORLD = "\uD83C\uDF10";
 	String CONSOLE_SENDER = "console";
 
 	/**
-	 * update enabledWorlds collection from plugin config.yml file
+	 * Returns the current {@link EnabledWorldsSetting}.
+	 *
+	 * @return the current enabled worlds setting
 	 */
-	@SuppressWarnings("WeakerAccess")
-	void reload();
+	@Override
+	EnabledWorldsSetting get();
+
+	List<UUID> getEnabledWorldUids();
 
 	/**
 	 * get collection of enabled world names from registry
 	 *
 	 * @return a Collection of String containing enabled world names
 	 */
-	Collection<String> getEnabledWorldNames();
+	List<String> getEnabledWorldNames();
 
 	/**
 	 * Check if a world is enabled by bukkit world UID

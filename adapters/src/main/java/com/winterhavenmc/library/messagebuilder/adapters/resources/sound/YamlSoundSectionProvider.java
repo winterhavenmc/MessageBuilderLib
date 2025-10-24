@@ -15,23 +15,22 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
+package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
-
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.function.Supplier;
 
 
-public final class YamlLanguageSectionProvider implements SectionProvider
+public final class YamlSoundSectionProvider implements SectionProvider
 {
 	private final Supplier<Configuration> configurationSupplier;
 	private final String sectionName;
 
 
-	public YamlLanguageSectionProvider(final Supplier<Configuration> configurationSupplier, final String sectionName)
+	public YamlSoundSectionProvider(final Supplier<Configuration> configurationSupplier, final String sectionName)
 	{
 		this.configurationSupplier = configurationSupplier;
 		this.sectionName = sectionName;

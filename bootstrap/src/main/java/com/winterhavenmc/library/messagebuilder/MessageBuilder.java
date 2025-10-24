@@ -49,6 +49,9 @@ import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
 import static com.winterhavenmc.library.messagebuilder.BootstrapUtility.*;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.RELOAD_FAILED;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.*;
 import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.*;
 
 
@@ -92,6 +95,7 @@ public final class MessageBuilder
 	private final ResourceManager soundResourceManager;
 	private final ConstantRepository constants;
 	private final SoundRepository sounds;
+	private final LocaleProvider localeProvider;
 	private final EnabledWorldsProvider worlds;
 	private final ItemForge itemForge;
 	private final Pipeline messagePipeline;
@@ -109,6 +113,7 @@ public final class MessageBuilder
 						   final ResourceManager soundResourceManager,
 						   final ConstantRepository constants,
 						   final SoundRepository sounds,
+						   final LocaleProvider localeProvider,
 						   final EnabledWorldsProvider worlds,
 						   final ItemForge itemForge,
 						   final MessagePipeline messagePipeline)
@@ -118,6 +123,7 @@ public final class MessageBuilder
 		this.soundResourceManager = soundResourceManager;
 		this.constants = constants;
 		this.sounds = sounds;
+		this.localeProvider = localeProvider;
 		this.worlds = worlds;
 		this.itemForge = itemForge;
 		this.messagePipeline = messagePipeline;
@@ -136,28 +142,34 @@ public final class MessageBuilder
 	 */
 	public static MessageBuilder create(final Plugin plugin)
 	{
-		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
+		// validate parameter
+		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, Parameter.PLUGIN));
 
+		// create configuration setting providers
 		final LocaleProvider localeProvider = createLocaleProvider(plugin);
-
-		final YamlLanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, localeProvider);
-		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
-
-		final YamlSoundResourceManager soundResourceManager = createSoundResourceManager(plugin, localeProvider);
-		final SoundRepository soundRepository = new YamlSoundRepository(plugin, localeProvider);
-
-		final ItemRecordRepository itemRecordRepository = new YamlItemRepository(languageResourceManager);
-		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
-
-		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, localeProvider, constantRepository);
-		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRecordRepository, formatterCtx);
-		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
-
-		final ItemForge itemForge = createItemForge(plugin, itemRecordRepository);
-
 		final EnabledWorldsProvider enabledWorldsProvider = createEnabledWorldsProvider(plugin);
 
-		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, enabledWorldsProvider, itemForge, messagePipeline);
+		// create resource file managers
+		final YamlLanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, localeProvider);
+		final YamlSoundResourceManager soundResourceManager = createSoundResourceManager(plugin, localeProvider);
+
+		// create repositories
+		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
+		final ItemRecordRepository itemRecordRepository = new YamlItemRepository(languageResourceManager);
+		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
+		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
+		final ItemForge itemForge = createItemForge(plugin, itemRecordRepository); //TODO: incorporate into item repository
+
+		// create context containers
+		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, localeProvider, constantRepository);
+		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRecordRepository, formatterCtx);
+
+		// create pipeline
+		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
+
+		// return instantiation of MessageBuilder library
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,
+				constantRepository, soundRepository, localeProvider, enabledWorldsProvider, itemForge, messagePipeline);
 	}
 
 
@@ -177,7 +189,7 @@ public final class MessageBuilder
 	{
 		// exception thrown if null enum constant passed as messageId parameter
 		ValidMessageKey validMessageKey = MessageKey.of(messageId).isValid().orElseThrow(() ->
-				new ValidationException(ErrorMessageKey.PARAMETER_NULL, Parameter.MESSAGE_ID));
+				new ValidationException(PARAMETER_NULL, Parameter.MESSAGE_ID));
 
 		// return ValidMessage on valid Recipient, else empty no-op message
 		return switch (Recipient.of(recipient))
@@ -190,15 +202,15 @@ public final class MessageBuilder
 
 
 	/**
-	 * Reload messages from configured language file
+	 * Reload resources
 	 */
 	public void reload()
 	{
-		boolean languageResource = languageResourceManager.reload();
-		boolean soundResource = soundResourceManager.reload();
+		boolean languageResourceResult = languageResourceManager.reload();
+		boolean soundResourceResult = soundResourceManager.reload();
 
-		validate(languageResource, bool -> bool.equals(false), logging(LogLevel.WARN, ErrorMessageKey.RELOAD_FAILED, Parameter.LANGUAGE_RESOURCE));
-		validate(soundResource, bool -> bool.equals(false), logging(LogLevel.WARN, ErrorMessageKey.RELOAD_FAILED, Parameter.SOUND_RESOURCE));
+		validate(languageResourceResult, bool -> bool.equals(false), logging(LogLevel.WARN, RELOAD_FAILED, LANGUAGE_RESOURCE));
+		validate(soundResourceResult, bool -> bool.equals(false), logging(LogLevel.WARN, RELOAD_FAILED, SOUND_RESOURCE));
 	}
 
 
@@ -217,16 +229,17 @@ public final class MessageBuilder
 							   final ResourceManager soundResourceManager,
 							   final ConstantRepository constantRepository,
 							   final SoundRepository soundRepository,
+							   final LocaleProvider localeProvider,
 							   final EnabledWorldsProvider enabledWorlds,
 							   final ItemForge itemForge,
 							   final MessagePipeline messagePipeline)
 	{
-		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
-		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
-		validate(soundResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.SOUND_RESOURCE_MANAGER));
-		validate(messagePipeline, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.MESSAGE_PROCESSOR));
+		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, Parameter.PLUGIN));
+		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
+		validate(soundResourceManager, Objects::isNull, throwing(PARAMETER_NULL, SOUND_RESOURCE_MANAGER));
+		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, enabledWorlds, itemForge, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, localeProvider, enabledWorlds, itemForge, messagePipeline);
 	}
 
 
@@ -257,6 +270,12 @@ public final class MessageBuilder
 	public EnabledWorldsProvider worlds()
 	{
 		return worlds;
+	}
+
+
+	public LocaleProvider localeProvider()
+	{
+		return localeProvider;
 	}
 
 }

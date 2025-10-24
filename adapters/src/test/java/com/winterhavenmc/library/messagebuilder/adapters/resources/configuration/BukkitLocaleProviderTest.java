@@ -144,43 +144,6 @@ class BukkitLocaleProviderTest
 
 
 	@Test
-	void getValidZoneId_returns_configured_timezone()
-	{
-		// Arrange
-		configuration.set("timezone", "UTC");
-		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
-
-		// Act
-		ZoneId result = BukkitLocaleProvider.getValidZoneId(pluginMock);
-
-		// Assert
-		assertEquals(ZoneId.of("UTC"), result);
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
-	}
-
-
-	@Test
-	void getValidZoneId_returns_configured_system_default_timezone_when_not_set()
-	{
-		// Arrange
-		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
-
-		// Act
-		ZoneId result = BukkitLocaleProvider.getValidZoneId(pluginMock);
-
-		// Assert
-		assertEquals(ZoneId.systemDefault(), result);
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
-	}
-
-
-	@Test
 	void getZoneId_returns_configured_timezone()
 	{
 		// Arrange
@@ -189,10 +152,28 @@ class BukkitLocaleProviderTest
 		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
 
 		// Act
-		ZoneId result = localeProvider.getZoneId();
+		ZoneId result = BukkitLocaleProvider.getZoneId(pluginMock);
 
 		// Assert
 		assertEquals(ZoneId.of("UTC"), result);
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getConfig();
+	}
+
+
+	@Test
+	void getZoneId_returns_configured_system_default_timezone_when_not_set()
+	{
+		// Arrange
+		when(pluginMock.getConfig()).thenReturn(configuration);
+		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
+
+		// Act
+		ZoneId result = BukkitLocaleProvider.getZoneId(pluginMock);
+
+		// Assert
+		assertEquals(ZoneId.systemDefault(), result);
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getConfig();
@@ -234,5 +215,89 @@ class BukkitLocaleProviderTest
 		// Verify
 		verify(pluginMock, atLeastOnce()).getConfig();
 	}
+
+
+//	@Mock Plugin pluginMock;
+//	@Mock FileConfiguration configurationMock;
+//
+//
+//	@BeforeEach
+//	void setUp()
+//	{
+//		when(pluginMock.getConfig()).thenReturn(configurationMock);
+//	}
+//
+//
+//	@Test
+//	void returns_language_setting_when_present()
+//	{
+//		// Arrange
+//		when(configurationMock.getString("language")).thenReturn("custom");
+//
+//		// Act
+//		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
+//		LanguageSetting setting = provider.get();
+//
+//		// Assert
+//		assertEquals("custom", setting.name());
+//
+//		// Verify
+//		verify(configurationMock, atLeastOnce()).getString("language");
+//	}
+//
+//
+//	@Test
+//	void falls_back_to_locale_setting_when_language_setting_missing()
+//	{
+//		// Arrange
+//		when(configurationMock.getString("language")).thenReturn(null);
+//		when(configurationMock.getString("locale")).thenReturn("fr-FR");
+//
+//		// Act
+//		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
+//		LanguageSetting setting = provider.get();
+//
+//		// Assert
+//		assertEquals("fr-FR", setting.name());
+//
+//		// Verify
+//		verify(configurationMock, atLeast(2)).getString(anyString());
+//	}
+//
+//
+//	@Test
+//	void falls_back_to_system_default_if_both_settings_missing()
+//	{
+//		// Arrange
+//		when(configurationMock.getString("language")).thenReturn(null);
+//		when(configurationMock.getString("locale")).thenReturn(null);
+//
+//		// Act
+//		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
+//		LanguageSetting setting = provider.get();
+//
+//		// Assert
+//		assertEquals("en-US", setting.name()); // The hardcoded fallback
+//
+//		// Verify
+//		verify(configurationMock, atLeast(2)).getString(anyString());
+//	}
+//
+//
+//	@Test
+//	void getName_when_language_setting_present()
+//	{
+//		// Arrange
+//		when(configurationMock.getString("language")).thenReturn("custom");
+//
+//		// Act
+//		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
+//
+//		// Assert
+//		assertEquals("custom", provider.getName());
+//
+//		// Verify
+//		verify(configurationMock, atLeastOnce()).getString("language");
+//	}
 
 }

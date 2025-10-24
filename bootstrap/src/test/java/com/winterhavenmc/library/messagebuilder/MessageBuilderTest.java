@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSou
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.util.MessageId;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
@@ -68,6 +69,7 @@ class MessageBuilderTest
 	@Mock SoundRepository soundRepositoryMock;
 	@Mock MessageRepository messageRepositoryMock;
 	@Mock EnabledWorldsProvider enabledWorldsProviderMock;
+	@Mock LocaleProvider localeProviderMock;
 
 	@Mock FormatterCtx formatterCtx;
 	@Mock AccessorCtx accessorCtx;
@@ -92,6 +94,7 @@ class MessageBuilderTest
 				soundResourceManagerMock,
 				constantRepositoryMock,
 				soundRepositoryMock,
+				localeProviderMock,
 				enabledWorldsProviderMock,
 				itemForgeMock,
 				messagePipelineMock);
@@ -221,6 +224,7 @@ class MessageBuilderTest
 						soundResourceManagerMock,
 						constantRepositoryMock,
 						soundRepositoryMock,
+						localeProviderMock,
 						enabledWorldsProviderMock,
 						itemForgeMock,
 						messagePipelineMock));
@@ -241,6 +245,7 @@ class MessageBuilderTest
 						soundResourceManagerMock,
 						constantRepositoryMock,
 						soundRepositoryMock,
+						localeProviderMock,
 						enabledWorldsProviderMock,
 						itemForgeMock,
 						messagePipelineMock));
@@ -261,6 +266,7 @@ class MessageBuilderTest
 						soundResourceManagerMock,
 						constantRepositoryMock,
 						soundRepositoryMock,
+						localeProviderMock,
 						enabledWorldsProviderMock,
 						itemForgeMock,
 						null));

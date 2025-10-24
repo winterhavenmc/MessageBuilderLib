@@ -50,6 +50,7 @@ public enum Parameter
 	DELEGATE("delegate"),
 	DEPENDENCY_CONTEXT("dependencyContext"),
 	DURATION("duration"),
+	ENABLED_WORLDS_PROVIDER("enabledWorldsProvider"),
 	ENTITY("entity"),
 	ITEM_SECTION("itemSection"),
 	KEY("string"),
