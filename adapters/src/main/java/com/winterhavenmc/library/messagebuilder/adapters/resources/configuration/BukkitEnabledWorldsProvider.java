@@ -61,18 +61,6 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	}
 
 
-	static EnabledWorldsSetting getEnabledWorldsSetting(final Plugin plugin)
-	{
-		final List<UUID> enabledWorldUids = (!getConfigEnabledWorldUids(plugin).isEmpty())
-					? getConfigEnabledWorldUids(plugin)
-					: getServerWorldUids(plugin);
-
-		enabledWorldUids.removeAll(getConfigDisabledWorldUids(plugin));
-
-		return new EnabledWorldsSetting(enabledWorldUids);
-	}
-
-
 	@Override
 	public EnabledWorldsSetting get()
 	{
@@ -94,6 +82,18 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 				.map(uid -> plugin.getServer().getWorld(uid))
 				.filter(Objects::nonNull)
 				.map(WorldInfo::getName).toList();
+	}
+
+
+	static EnabledWorldsSetting getEnabledWorldsSetting(final Plugin plugin)
+	{
+		final List<UUID> enabledWorldUids = (!getConfigEnabledWorldUids(plugin).isEmpty())
+				? getConfigEnabledWorldUids(plugin)
+				: getServerWorldUids(plugin);
+
+		enabledWorldUids.removeAll(getConfigDisabledWorldUids(plugin));
+
+		return new EnabledWorldsSetting(enabledWorldUids);
 	}
 
 
