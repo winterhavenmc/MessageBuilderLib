@@ -1,0 +1,452 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 4,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   BukkitItemPluralNameResolver685434620[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitItemPluralNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   itemRepository: ItemRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ConstantRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConstantRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(constantKey: RecordKey, reason: InvalidRecordReason): InvalidConstantRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(constantKey: ValidConstantKey, constantEntry: Object): ConstantRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+InvalidItemKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InvalidItemKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   reason: InvalidKeyReason [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   string: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ reason(): InvalidKeyReason</TD></TR>
+<TR><TD ALIGN="LEFT" >+ string(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InvalidItemRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InvalidItemRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   key: RecordKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   reason: InvalidRecordReason [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reason(): InvalidRecordReason</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ItemKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidItemKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: String): ItemKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ItemRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(itemKey: RecordKey, reason: InvalidRecordReason): InvalidItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(itemKey: ValidItemKey, itemEntry: ConfigurationSection): ItemRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ItemRepository1152281911[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createItem(key: String): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(key: String, quantity: int): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(key: String, quantity: int, replacements: Map&lt;String, String&gt;): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int, replacements: Map&lt;String, String&gt;): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemDisplayName(key: String): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemName(key: String): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemRecord(key: String): Optional&lt;ItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemRecord(validItemKey: ValidItemKey): Optional&lt;ItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(validItemKey: ValidItemKey): ItemRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MessageBuilder103479893[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemRepository: ItemRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sounds: SoundRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worlds: EnabledWorldsProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ compose(recipient: CommandSender, messageId: E): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ constants(): ConstantRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ items(): ItemRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): LocaleProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sounds(): SoundRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># test(plugin: Plugin, languageResourceManager: ResourceManager, soundResourceManager: ResourceManager, constantRepository: ConstantRepository, soundRepository: SoundRepository, localeProvider: LocaleProvider, enabledWorlds: EnabledWorldsProvider, itemRepository: ItemRepository, messagePipeline: MessagePipeline): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worlds(): EnabledWorldsProvider</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)MessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(messageKey: RecordKey, reason: InvalidRecordReason): InvalidMessageRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(messageKey: ValidMessageKey, messageEntry: ConfigurationSection): MessageRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+RecordKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)RecordKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SectionProvider1859949731[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SectionProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getSection(): ConfigurationSection</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SectionRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SectionRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ValidConstantRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidConstantRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   key: ValidConstantKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   value: Object [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(key: ValidConstantKey, value: Object): ValidConstantRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ValidConstantKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ value(): Object</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidItemKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidItemKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   string: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidItemRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidItemRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   displayName: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemLore: List&lt;String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: ValidItemKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   material: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pluralName: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(key: ValidItemKey, section: ConfigurationSection): ValidItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ displayName(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ValidItemKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ lore(): List&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ material(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ name(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ pluralName(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidMessageRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidMessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   enabled: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   message: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   repeatDelay: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   subtitle: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   title: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeIn: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeOut: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleStay: Duration [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(key: ValidMessageKey, section: ConfigurationSection): ValidMessageRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ enabled(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ValidMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ message(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ repeatDelay(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ subtitle(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ title(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeIn(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeOut(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleStay(): Duration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlItemRepository312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlItemRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   miniMessage: MiniMessage [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sectionProvider: SectionProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createItem(key: String): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(key: String, quantity: int): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(key: String, quantity: int, replacements: Map&lt;String, String&gt;): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int, replacements: Map&lt;String, String&gt;): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemDisplayName(key: String): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemKey(itemStack: ItemStack): ItemKey</TD></TR>
+<TR><TD ALIGN="LEFT" ># getItemKeyString(itemStack: ItemStack): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemName(key: String): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemRecord(key: String): Optional&lt;ItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemRecord(validItemKey: ValidItemKey): Optional&lt;ItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(validItemKey: ValidItemKey): ItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isCustomItem(itemStack: ItemStack): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" ># isItem(itemKey: String, itemStack: ItemStack): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlLanguageSectionProvider312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlLanguageSectionProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configurationSupplier: Supplier&lt;Configuration&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sectionName: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlSoundSectionProvider1058105345[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlSoundSectionProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configurationSupplier: Supplier&lt;Configuration&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sectionName: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+BukkitItemPluralNameResolver685434620 -> ItemRepository1152281911[label="itemRepository
+[0..1]"];
+InvalidItemRecord1572118503 -> RecordKey1959363381[label="key
+[0..1]"];
+ItemKey1959363381 -> InvalidItemKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
+ItemKey1959363381 -> ValidItemKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
+ItemRecord1572118503 -> InvalidItemRecord1572118503[arrowhead=none, arrowtail=empty, dir=both];
+ItemRecord1572118503 -> ValidItemRecord1572118503[arrowhead=none, arrowtail=empty, dir=both];
+ItemRepository1152281911 -> YamlItemRepository312533400[arrowhead=none, arrowtail=empty, dir=both];
+MessageBuilder103479893 -> ItemRepository1152281911[label="itemRepository
+[0..1]"];
+RecordKey1959363381 -> ItemKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
+SectionProvider1859949731 -> YamlLanguageSectionProvider312533400[arrowhead=none, arrowtail=empty, dir=both];
+SectionProvider1859949731 -> YamlSoundSectionProvider1058105345[arrowhead=none, arrowtail=empty, dir=both];
+SectionRecord1572118503 -> ConstantRecord1572118503[arrowhead=none, arrowtail=empty, dir=both];
+SectionRecord1572118503 -> ItemRecord1572118503[arrowhead=none, arrowtail=empty, dir=both];
+SectionRecord1572118503 -> MessageRecord1572118503[arrowhead=none, arrowtail=empty, dir=both];
+SectionRecord1572118503 -> ValidConstantRecord1572118503[label="key() -> key()"];
+SectionRecord1572118503 -> ValidItemRecord1572118503[label="key() -> key()"];
+SectionRecord1572118503 -> ValidMessageRecord1572118503[label="key() -> key()"];
+ValidItemRecord1572118503 -> ValidItemKey1959363381[label="key
+[0..1]"];
+YamlItemRepository312533400 -> SectionProvider1859949731[label="sectionProvider
+[0..1]"];
+    
+}
+@enduml
