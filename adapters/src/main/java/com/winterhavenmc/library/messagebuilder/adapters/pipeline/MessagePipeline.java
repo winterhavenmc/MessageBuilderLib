@@ -17,17 +17,15 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline;
 
+import com.winterhavenmc.library.messagebuilder.core.context.MessagePipelineCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownMap;
+
 import com.winterhavenmc.library.messagebuilder.models.keys.CooldownKey;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.processors.Processor;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;
 import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
+
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -35,21 +33,12 @@ import java.util.function.Function;
 
 public final class MessagePipeline implements Pipeline
 {
-	private final MessageRetriever messageRetriever;
-	private final Processor messageProcessor;
-	private final CooldownMap cooldownMap;
-	private final List<Sender> senders;
+	private final MessagePipelineCtx ctx;
 
 
-	public MessagePipeline(final MessageRetriever messageRetriever,
-						   final Processor messageProcessor,
-						   final CooldownMap cooldownMap,
-						   final List<Sender> senders)
+	public MessagePipeline(final MessagePipelineCtx ctx)
 	{
-		this.messageRetriever = messageRetriever;
-		this.messageProcessor = messageProcessor;
-		this.cooldownMap = cooldownMap;
-		this.senders = senders;
+		this.ctx = ctx;
 	}
 
 
@@ -58,22 +47,22 @@ public final class MessagePipeline implements Pipeline
 	{
 		// queries CooldownMap, returns ValidMessageRecord
 		Function<CooldownKey, Optional<ValidMessageRecord>> retrieveMessageRecord = key ->
-				(messageRetriever.getRecord(message.getMessageKey()) instanceof ValidMessageRecord validMessageRecord)
+				(ctx.messageRetriever().getRecord(message.getMessageKey()) instanceof ValidMessageRecord validMessageRecord)
 						? Optional.of(validMessageRecord)
 						: Optional.empty();
 
 		// transforms ValidMessageRecord into FinalMessageRecord
-		Function<ValidMessageRecord, FinalMessageRecord> processMessageRecord =messageRecord -> messageProcessor
+		Function<ValidMessageRecord, FinalMessageRecord> processMessageRecord =messageRecord -> ctx.messageProcessor()
 				.process(messageRecord, message.getObjectMap());
 
 		// consumes FinalMessageRecord
-		Consumer<FinalMessageRecord> sendMessageRecord = processed -> senders
+		Consumer<FinalMessageRecord> sendMessageRecord = processed -> ctx.senders()
 				.forEach(sender -> sender.send(message.getRecipient(), processed));
 
 
 		// process message through pipeline
 		CooldownKey.of(message.getRecipient(), message.getMessageKey())
-				.filter(cooldownMap::notCooling)
+				.filter(ctx.cooldownMap()::notCooling)
 				.flatMap(retrieveMessageRecord)
 				.map(processMessageRecord)
 				.ifPresent(sendMessageRecord);

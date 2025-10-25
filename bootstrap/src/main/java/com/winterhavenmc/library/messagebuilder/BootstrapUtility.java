@@ -43,6 +43,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.Yaml
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.context.MessagePipelineCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
@@ -152,7 +153,8 @@ public final class BootstrapUtility
 		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
 		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap, sounds);
 
-		return new MessagePipeline(localizedMessageRetriever, messageProcessor, messageCooldownMap, messageSenders);
+		final MessagePipelineCtx pipelineCtx = new MessagePipelineCtx(localizedMessageRetriever, messageProcessor, messageCooldownMap, messageSenders);
+		return new MessagePipeline(pipelineCtx);
 	}
 
 
@@ -181,13 +183,13 @@ public final class BootstrapUtility
 	 * @return a populated context container
 	 */
 	static AccessorCtx createAccessorContextContainer(final Plugin plugin,
-													  final ItemRecordRepository itemRecordRepository,
+													  final ItemRepository itemRepository,
 													  final FormatterCtx formatterCtx)
 	{
 		WorldNameResolver worldNameResolver = getWorldNameResolver(plugin);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
-		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRecordRepository);
+		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRepository);
 
 		return new AccessorCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
 				bukkitItemPluralNameResolver, formatterCtx);
