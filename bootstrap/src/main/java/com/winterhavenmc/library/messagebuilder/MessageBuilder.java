@@ -97,7 +97,7 @@ public final class MessageBuilder
 	private final SoundRepository sounds;
 	private final LocaleProvider localeProvider;
 	private final EnabledWorldsProvider worlds;
-	private final ItemForge itemForge;
+	private final ItemRepository itemRepository;
 	private final Pipeline messagePipeline;
 
 
@@ -115,7 +115,7 @@ public final class MessageBuilder
 						   final SoundRepository sounds,
 						   final LocaleProvider localeProvider,
 						   final EnabledWorldsProvider worlds,
-						   final ItemForge itemForge,
+						   final ItemRepository itemRepository,
 						   final MessagePipeline messagePipeline)
 	{
 		this.plugin = plugin;
@@ -125,7 +125,7 @@ public final class MessageBuilder
 		this.sounds = sounds;
 		this.localeProvider = localeProvider;
 		this.worlds = worlds;
-		this.itemForge = itemForge;
+		this.itemRepository = itemRepository;
 		this.messagePipeline = messagePipeline;
 	}
 
@@ -158,7 +158,7 @@ public final class MessageBuilder
 		final ItemRecordRepository itemRecordRepository = new YamlItemRepository(languageResourceManager);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
-		final ItemForge itemForge = createItemForge(plugin, itemRecordRepository); //TODO: incorporate into item repository
+		final ItemRepository itemRepository = createItemForge(plugin, itemRecordRepository); //TODO: incorporate into item repository
 
 		// create context containers
 		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, localeProvider, constantRepository);
@@ -169,7 +169,7 @@ public final class MessageBuilder
 
 		// return instantiation of MessageBuilder library
 		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,
-				constantRepository, soundRepository, localeProvider, enabledWorldsProvider, itemForge, messagePipeline);
+				constantRepository, soundRepository, localeProvider, enabledWorldsProvider, itemRepository, messagePipeline);
 	}
 
 
@@ -231,7 +231,7 @@ public final class MessageBuilder
 							   final SoundRepository soundRepository,
 							   final LocaleProvider localeProvider,
 							   final EnabledWorldsProvider enabledWorlds,
-							   final ItemForge itemForge,
+							   final ItemRepository itemRepository,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, Parameter.PLUGIN));
@@ -240,14 +240,14 @@ public final class MessageBuilder
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
 		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,
-				constantRepository, soundRepository, localeProvider, enabledWorlds, itemForge, messagePipeline);
+				constantRepository, soundRepository, localeProvider, enabledWorlds, itemRepository, messagePipeline);
 	}
 
 
-	//TODO: incorporate ItemForge into ItemRepository
-	public ItemForge itemForge()
+	//TODO: incorporate ItemRepository into ItemRepository
+	public ItemRepository itemForge()
 	{
-		return this.itemForge;
+		return this.itemRepository;
 	}
 
 

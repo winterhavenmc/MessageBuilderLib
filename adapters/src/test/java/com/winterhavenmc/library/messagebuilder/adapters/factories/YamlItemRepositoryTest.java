@@ -3,7 +3,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.factories;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemForge;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class YamlItemForgeTest
+class YamlItemRepositoryTest
 {
 	@Mock Plugin pluginMock;
 	@Mock
@@ -36,10 +36,10 @@ class YamlItemForgeTest
 	void createItem()
 	{
 		when(pluginMock.getName()).thenReturn("test-plugin");
-		ItemForge itemForge = new YamlItemForge(pluginMock, itemRecordRepositoryMock);
+		ItemRepository itemRepository = new YamlItemForge(pluginMock, itemRecordRepositoryMock);
 
 		ValidItemKey validItemKey = ItemKey.of("KEY").isValid().orElseThrow();
-		Optional<ItemStack> result = itemForge.createItem(validItemKey);
+		Optional<ItemStack> result = itemRepository.createItem(validItemKey);
 
 		assertTrue(result.isPresent());
 	}

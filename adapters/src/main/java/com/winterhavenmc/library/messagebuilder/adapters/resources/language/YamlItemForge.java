@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
 import com.winterhavenmc.library.messagebuilder.models.keys.InvalidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.InvalidKeyReason;
@@ -45,7 +45,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public final class YamlItemForge implements ItemForge
+public final class YamlItemForge implements ItemRepository
 {
 	public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
 	private static final Material DEFAULT_MATERIAL = Material.STICK;

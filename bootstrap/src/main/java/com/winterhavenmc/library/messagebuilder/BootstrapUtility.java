@@ -58,7 +58,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -194,7 +194,7 @@ public final class BootstrapUtility
 	}
 
 
-	static ItemForge createItemForge(final Plugin plugin, final ItemRecordRepository items)
+	static ItemRepository createItemForge(final Plugin plugin, final ItemRecordRepository items)
 	{
 		return new YamlItemForge(plugin, items);
 	}

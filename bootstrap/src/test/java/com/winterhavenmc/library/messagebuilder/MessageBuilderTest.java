@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
@@ -28,7 +29,6 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipelin
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 
 import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
@@ -64,7 +64,8 @@ class MessageBuilderTest
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock YamlSoundResourceManager soundResourceManagerMock;
 	@Mock MessagePipeline messagePipelineMock;
-	@Mock ItemForge itemForgeMock;
+	@Mock
+	ItemRepository itemRepositoryMock;
 	@Mock ConstantRepository constantRepositoryMock;
 	@Mock SoundRepository soundRepositoryMock;
 	@Mock MessageRepository messageRepositoryMock;
@@ -96,7 +97,7 @@ class MessageBuilderTest
 				soundRepositoryMock,
 				localeProviderMock,
 				enabledWorldsProviderMock,
-				itemForgeMock,
+				itemRepositoryMock,
 				messagePipelineMock);
 	}
 
@@ -226,7 +227,7 @@ class MessageBuilderTest
 						soundRepositoryMock,
 						localeProviderMock,
 						enabledWorldsProviderMock,
-						itemForgeMock,
+						itemRepositoryMock,
 						messagePipelineMock));
 
 		// Assert
@@ -247,7 +248,7 @@ class MessageBuilderTest
 						soundRepositoryMock,
 						localeProviderMock,
 						enabledWorldsProviderMock,
-						itemForgeMock,
+						itemRepositoryMock,
 						messagePipelineMock));
 
 		// Assert
@@ -268,7 +269,7 @@ class MessageBuilderTest
 						soundRepositoryMock,
 						localeProviderMock,
 						enabledWorldsProviderMock,
-						itemForgeMock,
+						itemRepositoryMock,
 						null));
 
 		// Assert
@@ -279,9 +280,9 @@ class MessageBuilderTest
 	@Test
 	void getItemForge_returns_ItemForge()
 	{
-		ItemForge itemForge = messageBuilder.itemForge();
+		ItemRepository itemRepository = messageBuilder.itemForge();
 
-		assertInstanceOf(ItemForge.class, itemForge);
+		assertInstanceOf(ItemRepository.class, itemRepository);
 	}
 
 }

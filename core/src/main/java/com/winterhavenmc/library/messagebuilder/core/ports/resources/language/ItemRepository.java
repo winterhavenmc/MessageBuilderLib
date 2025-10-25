@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public interface ItemForge
+public interface ItemRepository
 {
 	Optional<ItemStack> createItem(String key);
 
