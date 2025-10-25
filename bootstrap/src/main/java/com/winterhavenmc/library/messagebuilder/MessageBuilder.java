@@ -17,10 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlConstantRepository;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlMessageRepository;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
@@ -28,8 +25,8 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipelin
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
@@ -116,7 +113,7 @@ public final class MessageBuilder
 						   final LocaleProvider localeProvider,
 						   final EnabledWorldsProvider worlds,
 						   final ItemRepository itemRepository,
-						   final MessagePipeline messagePipeline)
+						   final Pipeline messagePipeline)
 	{
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
