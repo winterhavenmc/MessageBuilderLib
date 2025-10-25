@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface ItemRepository
 {
+	ItemRecord getRecord(ValidItemKey validItemKey);
+
 	Optional<ItemStack> createItem(String key);
 
 	Optional<ItemStack> createItem(String key, int quantity);
