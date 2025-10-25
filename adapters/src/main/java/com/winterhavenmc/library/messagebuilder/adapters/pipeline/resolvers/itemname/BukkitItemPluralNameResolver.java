@@ -17,9 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemForge;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
@@ -37,12 +37,12 @@ import java.util.regex.Pattern;
 
 public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 {
-	private final ItemRecordRepository itemRecordRepository;
+	private final ItemRepository itemRepository;
 
 
-	public BukkitItemPluralNameResolver(final ItemRecordRepository itemRecordRepository)
+	public BukkitItemPluralNameResolver(final ItemRepository itemRepository)
 	{
-		this.itemRecordRepository = itemRecordRepository;
+		this.itemRepository = itemRepository;
 	}
 
 
@@ -53,15 +53,15 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
 		{
 			// check if item is custom item defined in language file, and if so, try to set pluralized name
-			if (YamlItemForge.isCustomItem(itemStack))
+			if (YamlItemRepository.isCustomItem(itemStack))
 			{
-				if (YamlItemForge.getItemKey(itemStack) instanceof ValidItemKey validItemKey
-						&& itemRecordRepository.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+				if (YamlItemRepository.getItemKey(itemStack) instanceof ValidItemKey validItemKey
+						&& itemRepository.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 				{
 					String pluralString = validItemRecord.pluralName()
 							.replaceAll(Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE), String.valueOf(itemStack.getAmount()));
 					Component component = miniMessage.deserialize(pluralString, Formatter.choice("choice", itemStack.getAmount()));
-					return YamlItemForge.LEGACY_SERIALIZER.serializeOr(component, "");
+					return YamlItemRepository.LEGACY_SERIALIZER.serializeOr(component, "");
 				}
 			}
 

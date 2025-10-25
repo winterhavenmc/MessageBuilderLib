@@ -278,9 +278,9 @@ class MessageBuilderTest
 
 
 	@Test
-	void getItemForge_returns_ItemForge()
+	void getItemForge_returns_item_repository()
 	{
-		ItemRepository itemRepository = messageBuilder.itemForge();
+		ItemRepository itemRepository = messageBuilder.items();
 
 		assertInstanceOf(ItemRepository.class, itemRepository);
 	}

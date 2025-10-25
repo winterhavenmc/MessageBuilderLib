@@ -155,14 +155,13 @@ public final class MessageBuilder
 
 		// create repositories
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
-		final ItemRecordRepository itemRecordRepository = new YamlItemRepository(languageResourceManager);
+		final ItemRepository itemRepository = new YamlItemRepository(languageResourceManager);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
-		final ItemRepository itemRepository = createItemForge(plugin, itemRecordRepository); //TODO: incorporate into item repository
 
 		// create context containers
 		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, localeProvider, constantRepository);
-		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRecordRepository, formatterCtx);
+		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRepository, formatterCtx);
 
 		// create pipeline
 		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
@@ -244,19 +243,30 @@ public final class MessageBuilder
 	}
 
 
-	//TODO: incorporate ItemRepository into ItemRepository
-	public ItemRepository itemForge()
-	{
-		return this.itemRepository;
-	}
-
-
 	/**
 	 * Provides external access to the constant repository
 	 */
 	public ConstantRepository constants()
 	{
 		return constants;
+	}
+
+
+	/**
+	 * Provides external access to the item repository
+	 */
+	public ItemRepository items()
+	{
+		return this.itemRepository;
+	}
+
+
+	/**
+	 * Provides external access to the locale provider
+	 */
+	public LocaleProvider locale()
+	{
+		return localeProvider;
 	}
 
 
@@ -269,16 +279,13 @@ public final class MessageBuilder
 	}
 
 
-	//TODO: rename type -> WorldRepository; relocate alias/name resolver to class
+	/**
+	 * Provides external access to the enabled worlds provider
+	 */
+	//TODO: rename type -> WorldRepository?; relocate alias/name resolver to class
 	public EnabledWorldsProvider worlds()
 	{
 		return worlds;
-	}
-
-
-	public LocaleProvider localeProvider()
-	{
-		return localeProvider;
 	}
 
 }

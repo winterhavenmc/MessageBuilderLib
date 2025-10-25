@@ -36,10 +36,10 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriT
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitEnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemForge;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
@@ -194,9 +194,9 @@ public final class BootstrapUtility
 	}
 
 
-	static ItemRepository createItemForge(final Plugin plugin, final ItemRecordRepository items)
+	static ItemRepository createItemRepository(final Plugin plugin, final LocaleProvider localeProvider)
 	{
-		return new YamlItemForge(plugin, items);
+		return new YamlItemRepository(createLanguageResourceManager(plugin, localeProvider));
 	}
 
 
