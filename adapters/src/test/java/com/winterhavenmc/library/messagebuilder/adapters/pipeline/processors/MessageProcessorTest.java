@@ -32,6 +32,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.util.MessageId;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
@@ -43,7 +44,6 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.Fiel
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.matchers.PlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
@@ -85,10 +85,8 @@ class MessageProcessorTest
 	@Mock LocaleProvider localeProviderMock;
 	@Mock DefaultResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
-	@Mock
-	YamlLanguageResourceManager languageResourceManagerMock;
-	@Mock
-	ItemRecordRepository itemRecordRepositoryMock;
+	@Mock YamlLanguageResourceManager languageResourceManagerMock;
+	@Mock ItemRepository itemRepositoryMock;
 
 	Recipient.Valid recipient;
 	ValidMessageKey messageKey;
@@ -123,7 +121,7 @@ class MessageProcessorTest
 		FormatterCtx formatterContainer = new FormatterCtx(localeProviderMock, time4jDurationFormatter, localeNumberFormatter);
 		AccessorCtx adapterContextContainer = new AccessorCtx(worldNameResolverMock,
 				new BukkitItemNameResolver(), new BukkitItemDisplayNameResolver(),
-				new BukkitItemPluralNameResolver(itemRecordRepositoryMock), formatterContainer);
+				new BukkitItemPluralNameResolver(itemRepositoryMock), formatterContainer);
 		AccessorRegistry accessorRegistry = new FieldAccessorRegistry(adapterContextContainer);
 		MacroFieldAccessor fieldExtractor = new MacroFieldAccessor(adapterContextContainer);
 
