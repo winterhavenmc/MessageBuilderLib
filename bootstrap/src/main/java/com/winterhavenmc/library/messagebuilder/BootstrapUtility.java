@@ -225,7 +225,8 @@ public final class BootstrapUtility
 
 	static EnabledWorldsProvider createEnabledWorldsProvider(final Plugin plugin)
 	{
-		return BukkitEnabledWorldsProvider.create(plugin);
+		SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.get(plugin.getServer().getPluginManager());
+		return BukkitEnabledWorldsProvider.create(plugin, spawnLocationResolver);
 	}
 
 }
