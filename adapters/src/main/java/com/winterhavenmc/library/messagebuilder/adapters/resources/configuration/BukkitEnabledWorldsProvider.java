@@ -85,39 +85,10 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	}
 
 
-	static EnabledWorldsSetting getEnabledWorldsSetting(final Plugin plugin)
+	@Override
+	public Optional<String> aliasOrName()
 	{
-		final List<UUID> enabledWorldUids = (!getConfigEnabledWorldUids(plugin).isEmpty())
-				? getConfigEnabledWorldUids(plugin)
-				: getServerWorldUids(plugin);
-
-		enabledWorldUids.removeAll(getConfigDisabledWorldUids(plugin));
-
-		return new EnabledWorldsSetting(enabledWorldUids);
-	}
-
-
-	static List<UUID> getConfigEnabledWorldUids(final Plugin plugin)
-	{
-		return new ArrayList<>(plugin.getConfig().getStringList(ENABLED_WORLDS_KEY).stream()
-				.map(worldName -> plugin.getServer().getWorld(worldName))
-				.filter(Objects::nonNull)
-				.map(WorldInfo::getUID).toList());
-	}
-
-
-	static List<UUID> getConfigDisabledWorldUids(final Plugin plugin)
-	{
-		return plugin.getConfig().getStringList(DISABLED_WORLDS_KEY).stream()
-				.map(worldName -> plugin.getServer().getWorld(worldName))
-				.filter(Objects::nonNull)
-				.map(WorldInfo::getUID).toList();
-	}
-
-
-	static List<UUID> getServerWorldUids(final Plugin plugin)
-	{
-		return new ArrayList<>(plugin.getServer().getWorlds().stream().map(WorldInfo::getUID).toList());
+		return Optional.empty();
 	}
 
 
@@ -168,6 +139,20 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 
 
 	/**
+	 * check if uuid is present in the registry
+	 *
+	 * @param uuid the uuid of a world
+	 * @return {@code boolean} true if the world uuid is present in the registry, or false if not
+	 */
+	@Contract(pure = true)
+	@Override
+	public boolean contains(final UUID uuid)
+	{
+		return enabledWorldsSupplier.get().worldUids().contains(uuid);
+	}
+
+
+	/**
 	 * get the current size of the registry. used for testing
 	 *
 	 * @return {@code int} the size of the registry
@@ -179,17 +164,39 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	}
 
 
-	/**
-	 * check if uuid is present in the registry
-	 *
-	 * @param uuid the uuid of a world
-	 * @return {@code boolean} true if the world uuid is present in the registry, or false if not
-	 */
-	@Contract(pure = true)
-	@Override
-	public boolean contains(final UUID uuid)
+	static EnabledWorldsSetting getEnabledWorldsSetting(final Plugin plugin)
 	{
-		return enabledWorldsSupplier.get().worldUids().contains(uuid);
+		final List<UUID> enabledWorldUids = (!getConfigEnabledWorldUids(plugin).isEmpty())
+				? getConfigEnabledWorldUids(plugin)
+				: getServerWorldUids(plugin);
+
+		enabledWorldUids.removeAll(getConfigDisabledWorldUids(plugin));
+
+		return new EnabledWorldsSetting(enabledWorldUids);
+	}
+
+
+	static List<UUID> getConfigEnabledWorldUids(final Plugin plugin)
+	{
+		return new ArrayList<>(plugin.getConfig().getStringList(ENABLED_WORLDS_KEY).stream()
+				.map(worldName -> plugin.getServer().getWorld(worldName))
+				.filter(Objects::nonNull)
+				.map(WorldInfo::getUID).toList());
+	}
+
+
+	static List<UUID> getConfigDisabledWorldUids(final Plugin plugin)
+	{
+		return plugin.getConfig().getStringList(DISABLED_WORLDS_KEY).stream()
+				.map(worldName -> plugin.getServer().getWorld(worldName))
+				.filter(Objects::nonNull)
+				.map(WorldInfo::getUID).toList();
+	}
+
+
+	static List<UUID> getServerWorldUids(final Plugin plugin)
+	{
+		return new ArrayList<>(plugin.getServer().getWorlds().stream().map(WorldInfo::getUID).toList());
 	}
 
 }
