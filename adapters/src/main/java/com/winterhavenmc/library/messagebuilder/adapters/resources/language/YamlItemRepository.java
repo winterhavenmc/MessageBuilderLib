@@ -235,6 +235,7 @@ public final class YamlItemRepository implements ItemRepository
 
 	private static void setItemPersistentData(final Plugin plugin, final ValidItemRecord itemRecord, final ItemMeta itemMeta)
 	{
+		NamespacedKey itemKey = new NamespacedKey(plugin, ITEM_KEY_STRING);
 		NamespacedKey nsk = new NamespacedKey(plugin, itemRecord.key().toString());
 		itemMeta.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, itemRecord.key().toString());
 		itemMeta.getPersistentDataContainer().set(nsk, PersistentDataType.STRING, itemRecord.key().toString());
