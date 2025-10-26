@@ -141,7 +141,7 @@ public final class YamlItemRepository implements ItemRepository
 				setItemName(validItemRecord, itemMeta, replacements);
 				setItemDisplayName(validItemRecord, itemMeta, replacements);
 				setItemLore(validItemRecord, itemMeta, replacements);
-				setItemPersistentData(validItemRecord, itemMeta);
+				setItemPersistentData(plugin, validItemRecord, itemMeta);
 				setItemFlags(itemMeta);
 			}
 			itemStack.setItemMeta(itemMeta);
@@ -233,7 +233,7 @@ public final class YamlItemRepository implements ItemRepository
 	}
 
 
-	private static void setItemPersistentData(final ValidItemRecord itemRecord, final ItemMeta itemMeta)
+	private static void setItemPersistentData(final Plugin plugin, final ValidItemRecord itemRecord, final ItemMeta itemMeta)
 	{
 		NamespacedKey nsk = new NamespacedKey(plugin, itemRecord.key().toString());
 		itemMeta.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, itemRecord.key().toString());
