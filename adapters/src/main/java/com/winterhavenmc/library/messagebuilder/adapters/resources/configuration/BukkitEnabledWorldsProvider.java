@@ -17,9 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsSetting;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.plugin.Plugin;
@@ -32,6 +34,7 @@ import java.util.function.Supplier;
 public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 {
 	private final Plugin plugin;
+	private final SpawnLocationResolver spawnLocationResolver;
 	private final Supplier<EnabledWorldsSetting> enabledWorldsSupplier;
 
 	static final String ENABLED_WORLDS_KEY = "enabled-worlds";
@@ -42,9 +45,11 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	 * private constructor, use {@code #create(plugin)} to instantiate
 	 */
 	private BukkitEnabledWorldsProvider(final Plugin plugin,
+										final SpawnLocationResolver spawnLocationResolver,
 										final Supplier<EnabledWorldsSetting> enabledWorldsSupplier)
 	{
 		this.plugin = plugin;
+		this.spawnLocationResolver = spawnLocationResolver;
 		this.enabledWorldsSupplier = enabledWorldsSupplier;
 	}
 
@@ -55,9 +60,9 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	 * @param plugin an instance of the plugin
 	 * @return an EnabledWorldsProvider
 	 */
-	public static EnabledWorldsProvider create(final Plugin plugin)
+	public static EnabledWorldsProvider create(final Plugin plugin, SpawnLocationResolver spawnLocationResolver)
 	{
-		return new BukkitEnabledWorldsProvider(plugin, () -> getEnabledWorldsSetting(plugin));
+		return new BukkitEnabledWorldsProvider(plugin, spawnLocationResolver, () -> getEnabledWorldsSetting(plugin));
 	}
 
 
@@ -151,6 +156,22 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 		return enabledWorldsSupplier.get().worldUids().contains(uuid);
 	}
 
+
+	@Override
+	public Optional<Location> spawnLocation(final UUID worldUid)
+	{
+		if (worldUid != null)
+		{
+			World world = plugin.getServer().getWorld(worldUid);
+
+			if (world != null)
+			{
+				return Optional.of(spawnLocationResolver.resolve(world));
+			}
+		}
+
+		return Optional.empty();
+	}
 
 	/**
 	 * get the current size of the registry. used for testing
