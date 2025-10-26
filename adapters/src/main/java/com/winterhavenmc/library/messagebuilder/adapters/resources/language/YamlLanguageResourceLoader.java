@@ -153,7 +153,7 @@ public class YamlLanguageResourceLoader implements ResourceLoader
 		}
 		catch (Exception exception)
 		{
-			plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_EXCEPTION
+			plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_LOAD_EXCEPTION
 					.getLocalizedMessage(localeProvider.getLocale(), languageFile.getName()));
 		}
 
