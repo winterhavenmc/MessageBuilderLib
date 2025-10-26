@@ -70,15 +70,15 @@ public final class YamlItemRepository implements ItemRepository
 
 	@Override
 	public ItemRecord getRecord(final ValidItemKey validItemKey)
-		{
-			// confirm item section is not null
-			if (sectionProvider.getSection() == null) return new InvalidItemRecord(validItemKey, InvalidRecordReason.ITEM_SECTION_MISSING);
+	{
+		// confirm item section is not null
+		if (sectionProvider.getSection() == null) return new InvalidItemRecord(validItemKey, InvalidRecordReason.ITEM_SECTION_MISSING);
 
-			// confirm item entry in section is valid
-			else return (sectionProvider.getSection().isConfigurationSection(validItemKey.toString()))
-					? ItemRecord.of(validItemKey, sectionProvider.getSection().getConfigurationSection(validItemKey.toString()))
-					: ItemRecord.empty(validItemKey, InvalidRecordReason.ITEM_ENTRY_MISSING);
-		}
+		// confirm item entry in section is valid
+		else return (sectionProvider.getSection().isConfigurationSection(validItemKey.toString()))
+				? ItemRecord.of(validItemKey, sectionProvider.getSection().getConfigurationSection(validItemKey.toString()))
+				: ItemRecord.empty(validItemKey, InvalidRecordReason.ITEM_ENTRY_MISSING);
+	}
 
 
 	@Override @Deprecated
