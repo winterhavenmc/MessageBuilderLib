@@ -62,16 +62,9 @@ public final class YamlItemRepository implements ItemRepository
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
 		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS.name());
 		this.miniMessage = MiniMessage.miniMessage();
+		this.plugin = plugin;
+		this.namespacedKey = new NamespacedKey(plugin, ITEM_KEY_STRING);
 	}
-
-
-//	public YamlItemRepository(final Plugin plugin, final ItemRecordRepository itemRecordRepository)
-//	{
-//		YamlItemRepository.plugin = plugin;
-//		YamlItemRepository.ITEM_KEY = new NamespacedKey(plugin, "ITEM_KEY");
-////		this.itemRecordRepository = itemRecordRepository;
-//		this.miniMessage = MiniMessage.miniMessage();
-//	}
 
 
 	@Override
@@ -242,7 +235,7 @@ public final class YamlItemRepository implements ItemRepository
 	private static void setItemPersistentData(final ValidItemRecord itemRecord, final ItemMeta itemMeta)
 	{
 		NamespacedKey nsk = new NamespacedKey(plugin, itemRecord.key().toString());
-		itemMeta.getPersistentDataContainer().set(ITEM_KEY, PersistentDataType.STRING, itemRecord.key().toString());
+		itemMeta.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, itemRecord.key().toString());
 		itemMeta.getPersistentDataContainer().set(nsk, PersistentDataType.STRING, itemRecord.key().toString());
 	}
 
