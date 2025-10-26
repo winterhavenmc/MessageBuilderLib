@@ -159,7 +159,7 @@ public class YamlLanguageResourceLoader implements ResourceLoader
 
 		if (success)
 		{
-			plugin.getLogger().info(LanguageResourceMessage.LANGUAGE_RESOURCE_READ_SUCCESS
+			plugin.getLogger().info(LanguageResourceMessage.LANGUAGE_RESOURCE_LOAD_SUCCESS
 					.getLocalizedMessage(localeProvider.getLocale(), languageFile.getName()));
 			return config;
 		}

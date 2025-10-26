@@ -24,8 +24,9 @@ import java.util.ResourceBundle;
 
 public enum LanguageResourceMessage
 {
+	LANGUAGE_RESOURCE_LOAD_SUCCESS("Language file ''{0}'' was successfully loaded."),
+
 	LANGUAGE_RESOURCE_TAG_MISSING("No valid language tag could be resolved from config or default."),
-	LANGUAGE_RESOURCE_READ_SUCCESS("Language file ''{0}'' successfully loaded."),
 	LANGUAGE_RESOURCE_NOT_FOUND("Language file ''{0}'' not found. Falling back to default."),
 	LANGUAGE_RESOURCE_UNREADABLE("Language file ''{0}'' could not be read. Falling back to default."),
 	LANGUAGE_RESOURCE_INVALID_YAML("Language file ''{0}'' is not valid YAML. Falling back to default."),
