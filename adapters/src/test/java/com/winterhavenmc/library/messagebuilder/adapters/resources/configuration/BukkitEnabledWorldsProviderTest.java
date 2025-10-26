@@ -1,5 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -60,7 +61,7 @@ class BukkitEnabledWorldsProviderTest
 		when(world3Mock.getUID()).thenReturn(world3Uid);
 
 		// Act
-		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
+		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock, spawnLocationResolverMock);
 		List<UUID> uuids = enabledWorldsProvider.enabledUids();
 
 		// Assert
