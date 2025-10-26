@@ -39,8 +39,8 @@ public enum SoundResourceMessage
 	SOUND_RESOURCE_INVALID_FILE("Language file ''{0}'' is invalid: {1}"),
 	SOUND_RESOURCE_INVALID_YAML("Language file ''{0}'' is not valid YAML. Falling back to default."),
 	SOUND_RESOURCE_NOT_FOUND("Language file ''{0}'' not found. Falling back to default."),
-	SOUND_RESOURCE_UNREADABLE("Language file ''{0}'' could not be read. Falling back to default."),
 	SOUND_RESOURCE_TAG_MISSING("No valid language tag could be resolved from config or default."),
+	SOUND_RESOURCE_UNREADABLE("Language file ''{0}'' could not be read. Falling back to default."),
 	;
 
 	private final String defaultMessage;
