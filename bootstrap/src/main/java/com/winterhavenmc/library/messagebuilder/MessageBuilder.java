@@ -279,7 +279,6 @@ public final class MessageBuilder
 	/**
 	 * Provides external access to the enabled worlds provider
 	 */
-	//TODO: rename type -> WorldRepository?; relocate alias/name resolver to class
 	public EnabledWorldsProvider worlds()
 	{
 		return worlds;
