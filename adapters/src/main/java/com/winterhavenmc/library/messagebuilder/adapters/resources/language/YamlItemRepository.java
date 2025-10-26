@@ -87,8 +87,7 @@ public final class YamlItemRepository implements ItemRepository
 		}
 
 
-
-	@Override
+	@Override @Deprecated
 	public Optional<ItemStack> createItem(final String key)
 	{
 		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
@@ -97,7 +96,7 @@ public final class YamlItemRepository implements ItemRepository
 	}
 
 
-	@Override
+	@Override @Deprecated
 	public Optional<ItemStack> createItem(final String key, final int quantity)
 	{
 		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
@@ -106,7 +105,7 @@ public final class YamlItemRepository implements ItemRepository
 	}
 
 
-	@Override
+	@Override @Deprecated
 	public Optional<ItemStack> createItem(final String key, final int quantity, final Map<String, String> replacements)
 	{
 		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
