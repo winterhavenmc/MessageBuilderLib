@@ -64,4 +64,8 @@ public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetti
 	 */
 	@Contract(pure = true)
 	boolean contains(UUID uuid);
+
+
+	Optional<Location> spawnLocation(UUID worldUid);
+
 }
