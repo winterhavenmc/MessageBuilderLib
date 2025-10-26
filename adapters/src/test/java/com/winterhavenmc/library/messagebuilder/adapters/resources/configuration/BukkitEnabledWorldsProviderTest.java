@@ -30,6 +30,7 @@ class BukkitEnabledWorldsProviderTest
 	@Mock World world2Mock;
 	@Mock World world3Mock;
 	@Mock World world4Mock;
+	@Mock SpawnLocationResolver spawnLocationResolverMock;
 
 	UUID world1Uid = new UUID(1, 1);
 	UUID world2Uid = new UUID(2, 2);
@@ -93,7 +94,7 @@ class BukkitEnabledWorldsProviderTest
 		when(world4Mock.getUID()).thenReturn(world4Uid);
 
 		// Act
-		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
+		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock, spawnLocationResolverMock);
 		List<UUID> uuids = enabledWorldsProvider.enabledUids();
 
 		// Assert
@@ -144,7 +145,7 @@ class BukkitEnabledWorldsProviderTest
 		when(world3Mock.getUID()).thenReturn(world3Uid);
 //		when(world4Mock.getUID()).thenReturn(world4Uid);
 
-		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
+		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock, spawnLocationResolverMock);
 
 		List<UUID> uuids = enabledWorldsProvider.enabledUids();
 
