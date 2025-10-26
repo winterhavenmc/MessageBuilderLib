@@ -27,6 +27,8 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocati
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders
 com.winterhavenmc.library.messagebuilder.adapters.resources.configuration
 com.winterhavenmc.library.messagebuilder.adapters.resources.language
