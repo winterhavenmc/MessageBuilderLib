@@ -140,7 +140,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	 * @param world bukkit world object
 	 * @return {@code true} if world is enabled, {@code false} if disabled
 	 */
-	@Override
+	@Override @Deprecated
 	public boolean isEnabled(final World world)
 	{
 		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
