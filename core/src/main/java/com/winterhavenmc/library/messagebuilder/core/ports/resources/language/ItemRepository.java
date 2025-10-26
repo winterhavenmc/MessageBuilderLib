@@ -1,5 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;
 import org.bukkit.inventory.ItemStack;
@@ -31,4 +32,8 @@ public interface ItemRepository
 	Optional<ItemRecord> getItemRecord(String key);
 
 	Optional<ItemRecord> getItemRecord(ValidItemKey validItemKey);
+
+	boolean isItem(ItemStack itemStack);
+
+	ItemKey getItemKey(ItemStack itemStack);
 }

@@ -53,9 +53,9 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
 		{
 			// check if item is custom item defined in language file, and if so, try to set pluralized name
-			if (YamlItemRepository.isCustomItem(itemStack))
+			if (itemRepository.isItem(itemStack))
 			{
-				if (YamlItemRepository.getItemKey(itemStack) instanceof ValidItemKey validItemKey
+				if (itemRepository.getItemKey(itemStack) instanceof ValidItemKey validItemKey
 						&& itemRepository.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 				{
 					String pluralString = validItemRecord.pluralName()

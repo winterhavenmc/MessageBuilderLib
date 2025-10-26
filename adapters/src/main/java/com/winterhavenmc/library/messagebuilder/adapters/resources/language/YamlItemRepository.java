@@ -320,34 +320,26 @@ public final class YamlItemRepository implements ItemRepository
 	}
 
 
-	public static boolean isCustomItem(ItemStack itemStack)
+	@Override
+	public boolean isItem(ItemStack itemStack)
 	{
 		return (itemStack != null
 				&& itemStack.hasItemMeta()
 				&& itemStack.getItemMeta() != null
-				&& itemStack.getItemMeta().getPersistentDataContainer().has(ITEM_KEY));
+				&& itemStack.getItemMeta().getPersistentDataContainer().has(namespacedKey));
 	}
 
 
-	static boolean isItem(String itemKey, ItemStack itemStack)
-	{
-		return (itemStack != null
-				&& itemStack.hasItemMeta()
-				&& itemStack.getItemMeta() != null
-				&& itemStack.getItemMeta().getPersistentDataContainer().has(ITEM_KEY)
-				&& itemKey.equals(itemStack.getItemMeta().getPersistentDataContainer().get(ITEM_KEY, PersistentDataType.STRING)));
-	}
-
-
-	static Optional<String> getItemKeyString(ItemStack itemStack)
+	public Optional<String> getItemKeyString(ItemStack itemStack)
 	{
 		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
-				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(ITEM_KEY, PersistentDataType.STRING))
+				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
 				: Optional.empty();
 	}
 
 
-	public static ItemKey getItemKey(ItemStack itemStack)
+	@Override
+	public ItemKey getItemKey(ItemStack itemStack)
 	{
 		return getItemKeyString(itemStack).map(ItemKey::of)
 				.orElseGet(() -> new InvalidItemKey("unknown", InvalidKeyReason.KEY_INVALID));
