@@ -60,7 +60,7 @@ class BukkitEnabledWorldsProviderTest
 
 		// Act
 		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
-		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
+		List<UUID> uuids = enabledWorldsProvider.enabledUids();
 
 		// Assert
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid), uuids);
@@ -94,7 +94,7 @@ class BukkitEnabledWorldsProviderTest
 
 		// Act
 		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
-		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
+		List<UUID> uuids = enabledWorldsProvider.enabledUids();
 
 		// Assert
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid, world4Uid), uuids);
@@ -124,7 +124,7 @@ class BukkitEnabledWorldsProviderTest
 
 
 	@Test
-	void getEnabledWorldUids()
+	void enabledUids()
 	{
 		List<String> serverWorlds = List.of("world", "world_nether", "world_the_end", "test_world");
 		FileConfiguration configuration = new YamlConfiguration();
@@ -146,13 +146,13 @@ class BukkitEnabledWorldsProviderTest
 
 		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
 
-		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
+		List<UUID> uuids = enabledWorldsProvider.enabledUids();
 
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid), uuids);
 	}
 
 	@Test
-	void getEnabledWorldNames()
+	void enabledNames()
 	{
 //		List<String> serverWorldsNames = List.of("world", "world_nether", "world_the_end", "test_world");
 //		List<World> serverWorlds = List.of(world1Mock, world2Mock, world3Mock, world4Mock);

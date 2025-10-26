@@ -4,6 +4,7 @@ import org.bukkit.World;
 import org.jetbrains.annotations.Contract;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -20,14 +21,16 @@ public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetti
 	@Override
 	EnabledWorldsSetting get();
 
-	List<UUID> getEnabledWorldUids();
+	List<UUID> enabledUids();
 
 	/**
 	 * get collection of enabled world names from registry
 	 *
 	 * @return a Collection of String containing enabled world names
 	 */
-	List<String> getEnabledWorldNames();
+	List<String> enabledNames();
+
+	Optional<String> aliasOrName();
 
 	/**
 	 * Check if a world is enabled by bukkit world UID

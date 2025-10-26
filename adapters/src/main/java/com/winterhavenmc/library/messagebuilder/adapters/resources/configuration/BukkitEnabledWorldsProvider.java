@@ -69,14 +69,14 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 
 
 	@Override
-	public List<UUID> getEnabledWorldUids()
+	public List<UUID> enabledUids()
 	{
 		return enabledWorldsSupplier.get().worldUids();
 	}
 
 
 	@Override
-	public List<String> getEnabledWorldNames()
+	public List<String> enabledNames()
 	{
 		return enabledWorldsSupplier.get().worldUids().stream()
 				.map(uid -> plugin.getServer().getWorld(uid))
