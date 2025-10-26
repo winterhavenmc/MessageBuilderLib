@@ -1,0 +1,523 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 4,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "*Ctx",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   CooldownKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CooldownKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   messageKey: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   uuid: UUID [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ of(recipient: Sendable, messageKey: ValidMessageKey): Optional&lt;CooldownKey&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CooldownMap518579601[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)CooldownMap</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ notCooling(cooldownKey: CooldownKey): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ putExpirationTime(recipient: Sendable, messageRecord: FinalMessageRecord)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ removeExpired(): int</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+FinalMessageRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FinalMessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   enabled: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   finalMessageString: Optional&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   finalSubtitleString: Optional&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   finalTitleString: Optional&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   message: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   repeatDelay: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   subtitle: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   title: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeIn: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeOut: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleStay: Duration [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ enabled(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ finalMessageString(): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ finalSubtitleString(): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ finalTitleString(): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ValidMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ message(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ repeatDelay(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ subtitle(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ title(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeIn(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeOut(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleStay(): Duration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+KyoriMessageSender850956473[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)KyoriMessageSender</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   audiences: BukkitAudiences [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageCooldownMap: MessageCooldownMap [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   miniMessage: MiniMessage [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sounds: SoundRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># matchLongest(messageKey: ValidMessageKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" ># playMatchingSound(recipient: Sendable, messageKey: ValidMessageKey)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ send(recipient: Sendable, messageRecord: FinalMessageRecord)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+KyoriTitleSender850956473[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)KyoriTitleSender</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   audiences: BukkitAudiences [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageCooldownMap: MessageCooldownMap [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   miniMessage: MiniMessage [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ send(recipient: Sendable, messageRecord: FinalMessageRecord)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LocalizedMessageRetriever641369662[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocalizedMessageRetriever</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   messageRepository: MessageRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getRecord(messageKey: ValidMessageKey): MessageRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MacroReplacer398012785[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)MacroReplacer</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ replace(macroObjectMap: MacroObjectMap, messageString: String): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MessageBuilder103479893[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemRepository: ItemRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sounds: SoundRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worlds: EnabledWorldsProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ compose(recipient: CommandSender, messageId: E): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ constants(): ConstantRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ items(): ItemRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): LocaleProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sounds(): SoundRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># test(plugin: Plugin, languageResourceManager: ResourceManager, soundResourceManager: ResourceManager, constantRepository: ConstantRepository, soundRepository: SoundRepository, localeProvider: LocaleProvider, enabledWorlds: EnabledWorldsProvider, itemRepository: ItemRepository, messagePipeline: MessagePipeline): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worlds(): EnabledWorldsProvider</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageCooldownMap1184227600[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageCooldownMap</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   COOLDOWN_MAP: Map&lt;CooldownKey, Instant&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ notCooling(key: CooldownKey): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ putExpirationTime(recipient: Sendable, messageRecord: FinalMessageRecord)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ removeExpired(): int</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)MessageKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidMessageKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: String): MessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: E): MessageKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MessagePipeline1433414857[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessagePipeline</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: MessagePipelineCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ initiate(message: ValidMessage)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageProcessor1371115622[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageProcessor</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   macroReplacer: MacroReplacer [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ process(messageRecord: ValidMessageRecord, macroObjectMap: MacroObjectMap): FinalMessageRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)MessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(messageKey: RecordKey, reason: InvalidRecordReason): InvalidMessageRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(messageKey: ValidMessageKey, messageEntry: ConfigurationSection): MessageRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MessageRepository1152281911[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)MessageRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getRecord(key: ValidMessageKey): MessageRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MessageRetriever903769727[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)MessageRetriever</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getRecord(key: ValidMessageKey): MessageRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Pipeline47543914[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Pipeline</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ initiate(message: ValidMessage)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Processor1108715557[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Processor</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ process(messageRecord: ValidMessageRecord, macroObjectMap: MacroObjectMap): FinalMessageRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Sendable632050429[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Sendable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ sender(): CommandSender</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Sender1842260314[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Sender</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ send(recipient: Sendable, messageRecord: FinalMessageRecord)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SoundRepository1303222466[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SoundRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBukkitSoundName(key: String): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getKeys(): Collection&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(soundId: Enum&lt;?&gt;): SoundRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isRegistrySound(name: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValidBukkitSoundName(name: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValidSoundConfigKey(key: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ matchLongest(messageId: Enum&lt;?&gt;): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(sender: CommandSender, soundId: Enum&lt;?&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(location: Location, soundId: Enum&lt;?&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(sender: CommandSender, keyString: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ soundEffectsDisabled(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ValidMessage735945755[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidMessage</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   macroObjectMap: MacroObjectMap [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageKey: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   recipient: Sendable [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ send()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(quantity: int, macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, duration: Duration, lowerBound: ChronoUnit): Message</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidMessageKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidMessageKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   string: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidMessageRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidMessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   enabled: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   message: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   repeatDelay: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   subtitle: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   title: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeIn: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeOut: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleStay: Duration [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(key: ValidMessageKey, section: ConfigurationSection): ValidMessageRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ enabled(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ValidMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ message(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ repeatDelay(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ subtitle(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ title(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeIn(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeOut(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleStay(): Duration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+CooldownKey1959363381 -> ValidMessageKey1959363381[label="messageKey
+[0..1]"];
+CooldownMap518579601 -> MessageCooldownMap1184227600[arrowhead=none, arrowtail=empty, dir=both];
+KyoriMessageSender850956473 -> MessageCooldownMap1184227600[label="messageCooldownMap
+[0..1]"];
+KyoriMessageSender850956473 -> SoundRepository1303222466[label="sounds
+[0..1]"];
+KyoriTitleSender850956473 -> MessageCooldownMap1184227600[label="messageCooldownMap
+[0..1]"];
+LocalizedMessageRetriever641369662 -> MessageRecord1572118503[label="getRecord() -> empty()"];
+LocalizedMessageRetriever641369662 -> MessageRepository1152281911[label="messageRepository
+[0..1]"];
+MessageBuilder103479893 -> Pipeline47543914[label="messagePipeline
+[0..1]"];
+MessageKey1959363381 -> ValidMessageKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
+MessagePipeline1433414857 -> CooldownKey1959363381[label="initiate() -> of()"];
+MessagePipeline1433414857 -> CooldownMap518579601[label="cooldownMap
+[0..1]", arrowhead=none];
+MessagePipeline1433414857 -> MessageRetriever903769727[label="initiate() -> getRecord()"];
+MessagePipeline1433414857 -> MessageRetriever903769727[label="messageRetriever
+[0..1]", arrowhead=none];
+MessagePipeline1433414857 -> Processor1108715557[label="initiate() -> process()"];
+MessagePipeline1433414857 -> Processor1108715557[label="messageProcessor
+[0..1]", arrowhead=none];
+MessagePipeline1433414857 -> Sender1842260314[label="initiate() -> send()"];
+MessagePipeline1433414857 -> Sender1842260314[label="senders
+[0..*]", arrowhead=none];
+MessageProcessor1371115622 -> MacroReplacer398012785[label="macroReplacer
+[0..1]"];
+MessageRetriever903769727 -> LocalizedMessageRetriever641369662[arrowhead=none, arrowtail=empty, dir=both];
+Pipeline47543914 -> MessagePipeline1433414857[arrowhead=none, arrowtail=empty, dir=both];
+Processor1108715557 -> MessageProcessor1371115622[arrowhead=none, arrowtail=empty, dir=both];
+Sender1842260314 -> KyoriMessageSender850956473[arrowhead=none, arrowtail=empty, dir=both];
+Sender1842260314 -> KyoriTitleSender850956473[arrowhead=none, arrowtail=empty, dir=both];
+ValidMessage735945755 -> Pipeline47543914[label="messagePipeline
+[0..1]"];
+    
+}
+@enduml

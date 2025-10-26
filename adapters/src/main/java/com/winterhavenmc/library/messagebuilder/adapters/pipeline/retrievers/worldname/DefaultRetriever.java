@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameRetriever;

@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.DefaultRetriever;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import org.bukkit.World;
 

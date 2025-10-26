@@ -36,13 +36,14 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriT
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitEnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemForge;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceLoader;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.context.MessagePipelineCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
@@ -58,7 +59,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemForge;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -152,7 +153,8 @@ public final class BootstrapUtility
 		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
 		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap, sounds);
 
-		return new MessagePipeline(localizedMessageRetriever, messageProcessor, messageCooldownMap, messageSenders);
+		final MessagePipelineCtx pipelineCtx = new MessagePipelineCtx(localizedMessageRetriever, messageProcessor, messageCooldownMap, messageSenders);
+		return new MessagePipeline(pipelineCtx);
 	}
 
 
@@ -181,22 +183,22 @@ public final class BootstrapUtility
 	 * @return a populated context container
 	 */
 	static AccessorCtx createAccessorContextContainer(final Plugin plugin,
-													  final ItemRecordRepository itemRecordRepository,
+													  final ItemRepository itemRepository,
 													  final FormatterCtx formatterCtx)
 	{
 		WorldNameResolver worldNameResolver = getWorldNameResolver(plugin);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
-		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRecordRepository);
+		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRepository);
 
 		return new AccessorCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
 				bukkitItemPluralNameResolver, formatterCtx);
 	}
 
 
-	static ItemForge createItemForge(final Plugin plugin, final ItemRecordRepository items)
+	static ItemRepository createItemRepository(final Plugin plugin, final LocaleProvider localeProvider)
 	{
-		return new YamlItemForge(plugin, items);
+		return new YamlItemRepository(plugin, createLanguageResourceManager(plugin, localeProvider));
 	}
 
 

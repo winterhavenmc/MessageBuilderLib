@@ -1,0 +1,381 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 4,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   BukkitLocaleProvider169038822[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitLocaleProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   languageSettingSupplier: Supplier&lt;LanguageSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   zoneIdSupplier: Supplier&lt;ZoneId&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): LocaleProvider</TD></TR>
+<TR><TD ALIGN="LEFT" ># getLanguageSetting(plugin: Plugin): LanguageSetting</TD></TR>
+<TR><TD ALIGN="LEFT" ># getLocaleSetting(plugin: Plugin): LocaleSetting</TD></TR>
+<TR><TD ALIGN="LEFT" ># getZoneId(plugin: Plugin): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ConfigProvider1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConfigProvider&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(): T</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+EnabledWorldsProvider1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)EnabledWorldsProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ contains(uuid: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(): EnabledWorldsSetting</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getEnabledWorldNames(): List&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getEnabledWorldUids(): List&lt;UUID&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldUID: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(world: World): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldName: String): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+FormatterCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FormatterCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   durationFormatter: DurationFormatter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeNumberFormatter: NumberFormatter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ durationFormatter(): DurationFormatter</TD></TR>
+<TR><TD ALIGN="LEFT" >+ localeNumberFormatter(): NumberFormatter</TD></TR>
+<TR><TD ALIGN="LEFT" >+ localeProvider(): LocaleProvider</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LanguageProvider1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)LanguageProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(): LanguageSetting</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getName(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+LanguageSetting1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LanguageSetting</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ name(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LanguageTag1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LanguageTag</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   wrappedLanguageTag: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ of(locale: Locale): Optional&lt;LanguageTag&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(string: String): Optional&lt;LanguageTag&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LocaleNumberFormatter1184662007[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocaleNumberFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(number: Number): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LocaleProvider1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)LocaleProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(): LocaleSetting</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getLanguage(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getLanguageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getZoneId(): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+LocaleSetting1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocaleSetting</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   languageTag: LanguageTag [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageBuilder103479893[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemRepository: ItemRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sounds: SoundRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worlds: EnabledWorldsProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ compose(recipient: CommandSender, messageId: E): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ constants(): ConstantRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ items(): ItemRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): LocaleProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sounds(): SoundRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># test(plugin: Plugin, languageResourceManager: ResourceManager, soundResourceManager: ResourceManager, constantRepository: ConstantRepository, soundRepository: SoundRepository, localeProvider: LocaleProvider, enabledWorlds: EnabledWorldsProvider, itemRepository: ItemRepository, messagePipeline: MessagePipeline): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worlds(): EnabledWorldsProvider</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Time4jDurationFormatter399425452[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Time4jDurationFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlLanguageResourceInstaller312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlLanguageResourceInstaller</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getAutoInstallSet(autoInstallPathName: String): Set&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ install(): InstallerStatus</TD></TR>
+<TR><TD ALIGN="LEFT" >+ installByName(resourceName: String): InstallerStatus</TD></TR>
+<TR><TD ALIGN="LEFT" >+ installIfMissing(resourceName: String): InstallerStatus</TD></TR>
+<TR><TD ALIGN="LEFT" ># isInstalled(filename: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" ># sanitizeResourcePath(resourcePath: String): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlLanguageResourceLoader312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlLanguageResourceLoader</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   defaultLanguageTag: LanguageTag [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   yamlFactory: Supplier&lt;YamlConfiguration&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ load(): Configuration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ loadFromResource(fallback: LanguageTag): Configuration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ loadWithFallback(preferred: LanguageTag, fallback: LanguageTag): Configuration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlSoundResourceLoader1058105345[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlSoundResourceLoader</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configurationSupplier: Supplier&lt;YamlConfiguration&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ load(): FileConfiguration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ loadFromResource(fallback: LanguageTag): Configuration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+BukkitLocaleProvider169038822 -> LanguageSetting1582204715[label="languageSettingSupplier
+[0..1]"];
+BukkitLocaleProvider169038822 -> LocaleSetting1582204715[label="localeSettingSupplier
+[0..1]"];
+ConfigProvider1582204715 -> EnabledWorldsProvider1582204715[arrowhead=none, arrowtail=empty, dir=both];
+ConfigProvider1582204715 -> LanguageProvider1582204715[arrowhead=none, arrowtail=empty, dir=both];
+ConfigProvider1582204715 -> LocaleProvider1582204715[arrowhead=none, arrowtail=empty, dir=both];
+FormatterCtx732551619 -> LocaleProvider1582204715[label="localeProvider
+[0..1]"];
+LocaleNumberFormatter1184662007 -> LocaleProvider1582204715[label="localeProvider
+[0..1]"];
+LocaleProvider1582204715 -> BukkitLocaleProvider169038822[arrowhead=none, arrowtail=empty, dir=both];
+LocaleSetting1582204715 -> LanguageTag1582204715[label="languageTag
+[0..1]"];
+MessageBuilder103479893 -> LocaleProvider1582204715[label="localeProvider
+[0..1]"];
+Time4jDurationFormatter399425452 -> LocaleProvider1582204715[label="localeProvider
+[0..1]"];
+YamlLanguageResourceInstaller312533400 -> LocaleProvider1582204715[label="localeProvider
+[0..1]"];
+YamlLanguageResourceLoader312533400 -> LocaleProvider1582204715[label="localeProvider
+[0..1]"];
+YamlSoundResourceLoader1058105345 -> LocaleProvider1582204715[label="localeProvider
+[0..1]"];
+    
+}
+@enduml

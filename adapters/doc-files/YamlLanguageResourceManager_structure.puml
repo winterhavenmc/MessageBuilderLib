@@ -1,0 +1,222 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 4,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   MessageBuilder103479893[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemRepository: ItemRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sounds: SoundRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worlds: EnabledWorldsProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ compose(recipient: CommandSender, messageId: E): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ constants(): ConstantRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ items(): ItemRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): LocaleProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sounds(): SoundRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># test(plugin: Plugin, languageResourceManager: ResourceManager, soundResourceManager: ResourceManager, constantRepository: ConstantRepository, soundRepository: SoundRepository, localeProvider: LocaleProvider, enabledWorlds: EnabledWorldsProvider, itemRepository: ItemRepository, messagePipeline: MessagePipeline): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worlds(): EnabledWorldsProvider</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ResourceInstaller1859949731[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ResourceInstaller</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ install(): InstallerStatus</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ResourceLoader1859949731[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ResourceLoader</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ load(): Configuration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ResourceManager1859949731[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ResourceManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getConfigurationProvider(): ConfigurationProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getSectionProvider(sectionName: String): SectionProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+YamlLanguageResourceManager312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlLanguageResourceManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   languageConfiguration: Configuration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   resourceInstaller: ResourceInstaller [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   resourceLoader: ResourceLoader [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getFileName(languageTag: LanguageTag): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getResourceName(languageTag: LanguageTag): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getSectionProvider(sectionName: String): SectionProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >- installResources()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlSoundResourceManager1058105345[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlSoundResourceManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   resourceInstaller: ResourceInstaller [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   resourceLoader: ResourceLoader [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundConfiguration: Configuration [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getSectionProvider(sectionName: String): SectionProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+MessageBuilder103479893 -> ResourceManager1859949731[label="languageResourceManager
+[0..1]"];
+MessageBuilder103479893 -> ResourceManager1859949731[label="soundResourceManager
+[0..1]"];
+ResourceManager1859949731 -> YamlLanguageResourceManager312533400[arrowhead=none, arrowtail=empty, dir=both];
+ResourceManager1859949731 -> YamlSoundResourceManager1058105345[arrowhead=none, arrowtail=empty, dir=both];
+YamlLanguageResourceManager312533400 -> ResourceInstaller1859949731[label="resourceInstaller
+[0..1]"];
+YamlLanguageResourceManager312533400 -> ResourceLoader1859949731[label="resourceLoader
+[0..1]"];
+YamlSoundResourceManager1058105345 -> ResourceInstaller1859949731[label="resourceInstaller
+[0..1]"];
+YamlSoundResourceManager1058105345 -> ResourceLoader1859949731[label="resourceLoader
+[0..1]"];
+    
+}
+@enduml

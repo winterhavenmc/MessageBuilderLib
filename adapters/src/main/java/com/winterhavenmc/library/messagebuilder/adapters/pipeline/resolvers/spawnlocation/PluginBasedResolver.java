@@ -17,6 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.DefaultRetriever;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.MultiverseRetriever;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;

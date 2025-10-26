@@ -108,7 +108,7 @@ public final class BukkitLocaleProvider implements LocaleProvider
 	 * @param plugin the plugin whose configuration will be consulted
 	 * @return a new {@code LocaleProvider} with dynamic access to locale and time zone settings
 	 */
-	public static LocaleProvider create(Plugin plugin)
+	public static LocaleProvider create(final Plugin plugin)
 	{
 		return new BukkitLocaleProvider(
 				() -> getLanguageSetting(plugin),
@@ -208,16 +208,5 @@ public final class BukkitLocaleProvider implements LocaleProvider
 		//TODO: sanitize file name?
 		return languageSettingSupplier.get().name();
 	}
-
-
-//	public static String getLanguage(final Plugin plugin)
-//	{
-//		String language = plugin.getConfig().getString(ConfigKey.LANGUAGE.key());
-//		String locale = plugin.getConfig().getString(ConfigKey.LOCALE.key());
-//
-//		if (language != null) { return language; }
-//		else if (locale != null) { return locale; }
-//		else return FALLBACK_NAME;
-//	}
 
 }

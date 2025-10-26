@@ -1,0 +1,200 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsSetting",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   BukkitEnabledWorldsProvider169038822[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitEnabledWorldsProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   enabledWorldsSupplier: Supplier&lt;EnabledWorldsSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ contains(uuid: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): EnabledWorldsProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldUID: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(world: World): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldName: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" ># size(): int</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ConfigProvider1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConfigProvider&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(): T</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+EnabledWorldsProvider1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)EnabledWorldsProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ contains(uuid: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(): EnabledWorldsSetting</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getEnabledWorldNames(): Collection&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldUID: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(world: World): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldName: String): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+EnabledWorldsSetting1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EnabledWorldsSetting</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   worldNames: List&lt;UUID&gt; [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ worldNames(): List&lt;UUID&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageBuilder103479893[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemForge: ItemForge [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sounds: SoundRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worlds: EnabledWorldsProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ compose(recipient: CommandSender, messageId: E): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ constants(): ConstantRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemForge(): ItemForge</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sounds(): SoundRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># test(plugin: Plugin, languageResourceManager: ResourceManager, soundResourceManager: ResourceManager, constantRepository: ConstantRepository, soundRepository: SoundRepository, enabledWorlds: EnabledWorldsProvider, itemForge: ItemForge, messagePipeline: MessagePipeline): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worlds(): EnabledWorldsProvider</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+BukkitEnabledWorldsProvider169038822 -> EnabledWorldsSetting1582204715[label="enabledWorldsSupplier
+[0..1]"];
+ConfigProvider1582204715 -> EnabledWorldsProvider1582204715[arrowhead=none, arrowtail=empty, dir=both];
+EnabledWorldsProvider1582204715 -> BukkitEnabledWorldsProvider169038822[arrowhead=none, arrowtail=empty, dir=both];
+MessageBuilder103479893 -> EnabledWorldsProvider1582204715[label="worlds
+[0..1]"];
+    
+}
+@enduml

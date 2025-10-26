@@ -61,18 +61,6 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	}
 
 
-	static EnabledWorldsSetting getEnabledWorldsSetting(final Plugin plugin)
-	{
-		final List<UUID> enabledWorldUids = (!getConfigEnabledWorldUids(plugin).isEmpty())
-					? getConfigEnabledWorldUids(plugin)
-					: getServerWorldUids(plugin);
-
-		enabledWorldUids.removeAll(getConfigDisabledWorldUids(plugin));
-
-		return new EnabledWorldsSetting(enabledWorldUids);
-	}
-
-
 	@Override
 	public EnabledWorldsSetting get()
 	{
@@ -94,6 +82,18 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 				.map(uid -> plugin.getServer().getWorld(uid))
 				.filter(Objects::nonNull)
 				.map(WorldInfo::getName).toList();
+	}
+
+
+	static EnabledWorldsSetting getEnabledWorldsSetting(final Plugin plugin)
+	{
+		final List<UUID> enabledWorldUids = (!getConfigEnabledWorldUids(plugin).isEmpty())
+				? getConfigEnabledWorldUids(plugin)
+				: getServerWorldUids(plugin);
+
+		enabledWorldUids.removeAll(getConfigDisabledWorldUids(plugin));
+
+		return new EnabledWorldsSetting(enabledWorldUids);
 	}
 
 
@@ -130,7 +130,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	@Override
 	public boolean isEnabled(final UUID worldUID)
 	{
-		return worldUID != null && this.get().worldUids().contains(worldUID);
+		return worldUID != null && enabledWorldsSupplier.get().worldUids().contains(worldUID);
 	}
 
 
@@ -143,7 +143,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	@Override
 	public boolean isEnabled(final World world)
 	{
-		return world != null && this.get().worldUids().contains(world.getUID());
+		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
 	}
 
 
@@ -163,7 +163,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 
 		World world = plugin.getServer().getWorld(worldName);
 
-		return world != null && this.get().worldUids().contains(world.getUID());
+		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
 	}
 
 
@@ -175,7 +175,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	@Contract(pure = true)
 	int size()
 	{
-		return this.get().worldUids().size();
+		return enabledWorldsSupplier.get().worldUids().size();
 	}
 
 
@@ -189,7 +189,7 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	@Override
 	public boolean contains(final UUID uuid)
 	{
-		return this.get().worldUids().contains(uuid);
+		return enabledWorldsSupplier.get().worldUids().contains(uuid);
 	}
 
 }

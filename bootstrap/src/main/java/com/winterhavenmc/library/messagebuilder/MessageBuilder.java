@@ -17,10 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlConstantRepository;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlMessageRepository;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
@@ -28,8 +25,8 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipelin
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
@@ -97,7 +94,7 @@ public final class MessageBuilder
 	private final SoundRepository sounds;
 	private final LocaleProvider localeProvider;
 	private final EnabledWorldsProvider worlds;
-	private final ItemForge itemForge;
+	private final ItemRepository itemRepository;
 	private final Pipeline messagePipeline;
 
 
@@ -115,8 +112,8 @@ public final class MessageBuilder
 						   final SoundRepository sounds,
 						   final LocaleProvider localeProvider,
 						   final EnabledWorldsProvider worlds,
-						   final ItemForge itemForge,
-						   final MessagePipeline messagePipeline)
+						   final ItemRepository itemRepository,
+						   final Pipeline messagePipeline)
 	{
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
@@ -125,7 +122,7 @@ public final class MessageBuilder
 		this.sounds = sounds;
 		this.localeProvider = localeProvider;
 		this.worlds = worlds;
-		this.itemForge = itemForge;
+		this.itemRepository = itemRepository;
 		this.messagePipeline = messagePipeline;
 	}
 
@@ -155,21 +152,20 @@ public final class MessageBuilder
 
 		// create repositories
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
-		final ItemRecordRepository itemRecordRepository = new YamlItemRepository(languageResourceManager);
+		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
-		final ItemForge itemForge = createItemForge(plugin, itemRecordRepository); //TODO: incorporate into item repository
 
 		// create context containers
 		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, localeProvider, constantRepository);
-		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRecordRepository, formatterCtx);
+		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRepository, formatterCtx);
 
 		// create pipeline
 		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
 
 		// return instantiation of MessageBuilder library
 		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,
-				constantRepository, soundRepository, localeProvider, enabledWorldsProvider, itemForge, messagePipeline);
+				constantRepository, soundRepository, localeProvider, enabledWorldsProvider, itemRepository, messagePipeline);
 	}
 
 
@@ -231,7 +227,7 @@ public final class MessageBuilder
 							   final SoundRepository soundRepository,
 							   final LocaleProvider localeProvider,
 							   final EnabledWorldsProvider enabledWorlds,
-							   final ItemForge itemForge,
+							   final ItemRepository itemRepository,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, Parameter.PLUGIN));
@@ -239,13 +235,8 @@ public final class MessageBuilder
 		validate(soundResourceManager, Objects::isNull, throwing(PARAMETER_NULL, SOUND_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, constantRepository, soundRepository, localeProvider, enabledWorlds, itemForge, messagePipeline);
-	}
-
-
-	public ItemForge itemForge()
-	{
-		return this.itemForge;
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,
+				constantRepository, soundRepository, localeProvider, enabledWorlds, itemRepository, messagePipeline);
 	}
 
 
@@ -259,6 +250,24 @@ public final class MessageBuilder
 
 
 	/**
+	 * Provides external access to the item repository
+	 */
+	public ItemRepository items()
+	{
+		return this.itemRepository;
+	}
+
+
+	/**
+	 * Provides external access to the locale provider
+	 */
+	public LocaleProvider locale()
+	{
+		return localeProvider;
+	}
+
+
+	/**
 	 * Provides external access to the sound repository
 	 */
 	public SoundRepository sounds()
@@ -267,15 +276,13 @@ public final class MessageBuilder
 	}
 
 
+	/**
+	 * Provides external access to the enabled worlds provider
+	 */
+	//TODO: rename type -> WorldRepository?; relocate alias/name resolver to class
 	public EnabledWorldsProvider worlds()
 	{
 		return worlds;
-	}
-
-
-	public LocaleProvider localeProvider()
-	{
-		return localeProvider;
 	}
 
 }

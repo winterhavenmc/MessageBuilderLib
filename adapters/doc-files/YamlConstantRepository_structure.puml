@@ -1,0 +1,231 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 4,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlConstantRepository",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   ConstantRepository1152281911[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConstantRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBoolean(key: ValidConstantKey): Optional&lt;Boolean&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getInteger(key: ValidConstantKey): Optional&lt;Integer&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getString(key: ValidConstantKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getStringList(key: ValidConstantKey): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+LocalizedDurationFormatter399425452[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocalizedDurationFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   delegate: DurationFormatter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># formatLessThan(lowerBound: ChronoUnit): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># formatNormal(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># formatUnlimited(): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># getTimeConstant(constantKey: ValidConstantKey, durationType: DurationType): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageBuilder103479893[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemRepository: ItemRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeProvider: LocaleProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sounds: SoundRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worlds: EnabledWorldsProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ compose(recipient: CommandSender, messageId: E): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ constants(): ConstantRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ items(): ItemRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): LocaleProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sounds(): SoundRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># test(plugin: Plugin, languageResourceManager: ResourceManager, soundResourceManager: ResourceManager, constantRepository: ConstantRepository, soundRepository: SoundRepository, localeProvider: LocaleProvider, enabledWorlds: EnabledWorldsProvider, itemRepository: ItemRepository, messagePipeline: MessagePipeline): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worlds(): EnabledWorldsProvider</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SectionProvider1859949731[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SectionProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getSection(): ConfigurationSection</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+YamlConstantRepository312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlConstantRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   sectionProvider: SectionProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBoolean(validConstantKey: ValidConstantKey): Optional&lt;Boolean&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getInteger(validConstantKey: ValidConstantKey): Optional&lt;Integer&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getString(validConstantKey: ValidConstantKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getStringList(validConstantKey: ValidConstantKey): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlLanguageSectionProvider312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlLanguageSectionProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configurationSupplier: Supplier&lt;Configuration&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sectionName: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlSoundSectionProvider1058105345[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlSoundSectionProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configurationSupplier: Supplier&lt;Configuration&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sectionName: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+ConstantRepository1152281911 -> YamlConstantRepository312533400[arrowhead=none, arrowtail=empty, dir=both];
+LocalizedDurationFormatter399425452 -> ConstantRepository1152281911[label="constants
+[0..1]"];
+MessageBuilder103479893 -> ConstantRepository1152281911[label="constants
+[0..1]"];
+SectionProvider1859949731 -> YamlLanguageSectionProvider312533400[arrowhead=none, arrowtail=empty, dir=both];
+SectionProvider1859949731 -> YamlSoundSectionProvider1058105345[arrowhead=none, arrowtail=empty, dir=both];
+YamlConstantRepository312533400 -> SectionProvider1859949731[label="sectionProvider
+[0..1]"];
+    
+}
+@enduml

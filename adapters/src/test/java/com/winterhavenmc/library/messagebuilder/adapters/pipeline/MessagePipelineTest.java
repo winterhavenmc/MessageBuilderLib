@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown.Messa
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors.MessageProcessor;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
+import com.winterhavenmc.library.messagebuilder.core.context.MessagePipelineCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.CooldownMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever;
@@ -68,6 +69,7 @@ class MessagePipelineTest
 	ConfigurationSection section;
 	ValidMessageKey recordKey;
 	MacroStringMap macroStringMap;
+	MessagePipelineCtx pipelineCtx;
 
 
 	@BeforeEach
@@ -79,12 +81,10 @@ class MessagePipelineTest
 			case Recipient.Invalid ignored -> throw new ValidationException(PARAMETER_INVALID, RECIPIENT);
 		};
 		cooldownMap = new MessageCooldownMap();
-		messagePipeline = new MessagePipeline(
-				messageRetrieverMock,
-				messageProcessorMock,
-				cooldownMap,
-				List.of(messageSenderMock, titleSenderMock)
-		);
+
+		MessagePipelineCtx messagePipelineCtx = new MessagePipelineCtx(messageRetrieverMock, messageProcessorMock, cooldownMap, List.of(messageSenderMock, titleSenderMock));
+
+		messagePipeline = new MessagePipeline(messagePipelineCtx);
 
 		recordKey = MessageKey.of(ENABLED_MESSAGE).isValid().orElseThrow();
 
