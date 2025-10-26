@@ -57,7 +57,7 @@ public final class YamlItemRepository implements ItemRepository
 	private final MiniMessage miniMessage;
 
 
-	public YamlItemRepository(final YamlLanguageResourceManager languageResourceManager)
+	public YamlItemRepository(final Plugin plugin, final YamlLanguageResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
 		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS.name());

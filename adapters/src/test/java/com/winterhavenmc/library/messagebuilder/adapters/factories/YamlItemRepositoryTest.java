@@ -37,7 +37,7 @@ class YamlItemRepositoryTest
 	void createItem()
 	{
 		when(pluginMock.getName()).thenReturn("test-plugin");
-		ItemRepository itemRepository = new YamlItemRepository(yamlLanguageResourceManager);
+		ItemRepository itemRepository = new YamlItemRepository(pluginMock, yamlLanguageResourceManager);
 
 		ValidItemKey validItemKey = ItemKey.of("KEY").isValid().orElseThrow();
 		Optional<ItemStack> result = itemRepository.createItem(validItemKey);

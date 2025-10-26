@@ -198,7 +198,7 @@ public final class BootstrapUtility
 
 	static ItemRepository createItemRepository(final Plugin plugin, final LocaleProvider localeProvider)
 	{
-		return new YamlItemRepository(createLanguageResourceManager(plugin, localeProvider));
+		return new YamlItemRepository(plugin, createLanguageResourceManager(plugin, localeProvider));
 	}
 
 

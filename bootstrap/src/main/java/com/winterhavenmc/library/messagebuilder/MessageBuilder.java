@@ -152,7 +152,7 @@ public final class MessageBuilder
 
 		// create repositories
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
-		final ItemRepository itemRepository = new YamlItemRepository(languageResourceManager);
+		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
 
