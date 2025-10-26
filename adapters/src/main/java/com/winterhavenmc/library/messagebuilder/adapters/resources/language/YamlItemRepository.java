@@ -47,11 +47,12 @@ public final class YamlItemRepository implements ItemRepository
 {
 	//TODO: review visibility and finality of these fields
 	public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
+	private static final String ITEM_KEY_STRING = "ITEM_KEY";
 	private static final Material DEFAULT_MATERIAL = Material.STICK;
-	private static Plugin plugin;
-	private static NamespacedKey ITEM_KEY;
 
+	private final Plugin plugin;
 	private final SectionProvider sectionProvider;
+	private final NamespacedKey namespacedKey;
 
 
 	private final MiniMessage miniMessage;
