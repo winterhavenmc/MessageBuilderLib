@@ -1,9 +1,11 @@
 package com.winterhavenmc.library.messagebuilder.models.configuration;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.Contract;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -11,6 +13,7 @@ public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetti
 {
 	String UNKNOWN_WORLD = "\uD83C\uDF10";
 	String CONSOLE_SENDER = "console";
+
 
 	/**
 	 * Returns the current {@link EnabledWorldsSetting}.
@@ -20,14 +23,20 @@ public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetti
 	@Override
 	EnabledWorldsSetting get();
 
-	List<UUID> getEnabledWorldUids();
+
+	List<UUID> enabledUids();
+
 
 	/**
 	 * get collection of enabled world names from registry
 	 *
 	 * @return a Collection of String containing enabled world names
 	 */
-	List<String> getEnabledWorldNames();
+	List<String> enabledNames();
+
+
+	Optional<String> aliasOrName();
+
 
 	/**
 	 * Check if a world is enabled by bukkit world UID
@@ -37,6 +46,7 @@ public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetti
 	 */
 	boolean isEnabled(UUID worldUID);
 
+
 	/**
 	 * Check if a world is enabled by bukkit world object
 	 *
@@ -44,6 +54,7 @@ public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetti
 	 * @return {@code true} if world is enabled, {@code false} if disabled
 	 */
 	boolean isEnabled(World world);
+
 
 	/**
 	 * Check if a world is enabled by name
@@ -53,6 +64,7 @@ public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetti
 	 */
 	boolean isEnabled(String worldName);
 
+
 	/**
 	 * check if uuid is present in the registry
 	 *
@@ -61,4 +73,8 @@ public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetti
 	 */
 	@Contract(pure = true)
 	boolean contains(UUID uuid);
+
+
+	Optional<Location> spawnLocation(UUID worldUid);
+
 }

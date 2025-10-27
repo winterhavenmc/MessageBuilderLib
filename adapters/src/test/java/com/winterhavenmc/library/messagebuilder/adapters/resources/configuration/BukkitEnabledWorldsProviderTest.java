@@ -1,5 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -30,6 +31,7 @@ class BukkitEnabledWorldsProviderTest
 	@Mock World world2Mock;
 	@Mock World world3Mock;
 	@Mock World world4Mock;
+	@Mock SpawnLocationResolver spawnLocationResolverMock;
 
 	UUID world1Uid = new UUID(1, 1);
 	UUID world2Uid = new UUID(2, 2);
@@ -59,8 +61,8 @@ class BukkitEnabledWorldsProviderTest
 		when(world3Mock.getUID()).thenReturn(world3Uid);
 
 		// Act
-		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
-		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
+		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock, spawnLocationResolverMock);
+		List<UUID> uuids = enabledWorldsProvider.enabledUids();
 
 		// Assert
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid), uuids);
@@ -93,8 +95,8 @@ class BukkitEnabledWorldsProviderTest
 		when(world4Mock.getUID()).thenReturn(world4Uid);
 
 		// Act
-		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
-		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
+		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock, spawnLocationResolverMock);
+		List<UUID> uuids = enabledWorldsProvider.enabledUids();
 
 		// Assert
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid, world4Uid), uuids);
@@ -124,7 +126,7 @@ class BukkitEnabledWorldsProviderTest
 
 
 	@Test
-	void getEnabledWorldUids()
+	void enabledUids()
 	{
 		List<String> serverWorlds = List.of("world", "world_nether", "world_the_end", "test_world");
 		FileConfiguration configuration = new YamlConfiguration();
@@ -144,15 +146,15 @@ class BukkitEnabledWorldsProviderTest
 		when(world3Mock.getUID()).thenReturn(world3Uid);
 //		when(world4Mock.getUID()).thenReturn(world4Uid);
 
-		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
+		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock, spawnLocationResolverMock);
 
-		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
+		List<UUID> uuids = enabledWorldsProvider.enabledUids();
 
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid), uuids);
 	}
 
 	@Test
-	void getEnabledWorldNames()
+	void enabledNames()
 	{
 //		List<String> serverWorldsNames = List.of("world", "world_nether", "world_the_end", "test_world");
 //		List<World> serverWorlds = List.of(world1Mock, world2Mock, world3Mock, world4Mock);

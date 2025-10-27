@@ -17,9 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsSetting;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.plugin.Plugin;
@@ -32,6 +34,7 @@ import java.util.function.Supplier;
 public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 {
 	private final Plugin plugin;
+	private final SpawnLocationResolver spawnLocationResolver;
 	private final Supplier<EnabledWorldsSetting> enabledWorldsSupplier;
 
 	static final String ENABLED_WORLDS_KEY = "enabled-worlds";
@@ -42,9 +45,11 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	 * private constructor, use {@code #create(plugin)} to instantiate
 	 */
 	private BukkitEnabledWorldsProvider(final Plugin plugin,
+										final SpawnLocationResolver spawnLocationResolver,
 										final Supplier<EnabledWorldsSetting> enabledWorldsSupplier)
 	{
 		this.plugin = plugin;
+		this.spawnLocationResolver = spawnLocationResolver;
 		this.enabledWorldsSupplier = enabledWorldsSupplier;
 	}
 
@@ -55,9 +60,9 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	 * @param plugin an instance of the plugin
 	 * @return an EnabledWorldsProvider
 	 */
-	public static EnabledWorldsProvider create(final Plugin plugin)
+	public static EnabledWorldsProvider create(final Plugin plugin, SpawnLocationResolver spawnLocationResolver)
 	{
-		return new BukkitEnabledWorldsProvider(plugin, () -> getEnabledWorldsSetting(plugin));
+		return new BukkitEnabledWorldsProvider(plugin, spawnLocationResolver, () -> getEnabledWorldsSetting(plugin));
 	}
 
 
@@ -69,19 +74,114 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 
 
 	@Override
-	public List<UUID> getEnabledWorldUids()
+	public List<UUID> enabledUids()
 	{
 		return enabledWorldsSupplier.get().worldUids();
 	}
 
 
 	@Override
-	public List<String> getEnabledWorldNames()
+	public List<String> enabledNames()
 	{
 		return enabledWorldsSupplier.get().worldUids().stream()
 				.map(uid -> plugin.getServer().getWorld(uid))
 				.filter(Objects::nonNull)
 				.map(WorldInfo::getName).toList();
+	}
+
+
+	@Override
+	public Optional<String> aliasOrName()
+	{
+		return Optional.empty();
+	}
+
+
+	/**
+	 * Check if a world is enabled by bukkit world UID
+	 *
+	 * @param worldUID Unique Identifier for world
+	 * @return {@code true} if world is enabled, {@code false} if disabled
+	 */
+	@Override
+	public boolean isEnabled(final UUID worldUID)
+	{
+		return worldUID != null && enabledWorldsSupplier.get().worldUids().contains(worldUID);
+	}
+
+
+	/**
+	 * Check if a world is enabled by bukkit world object
+	 *
+	 * @param world bukkit world object
+	 * @return {@code true} if world is enabled, {@code false} if disabled
+	 */
+	@Override @Deprecated
+	public boolean isEnabled(final World world)
+	{
+		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
+	}
+
+
+	/**
+	 * Check if a world is enabled by name
+	 *
+	 * @param worldName name of world as string to check
+	 * @return {@code true} if world is enabled, {@code false} if disabled
+	 */
+	@Override
+	public boolean isEnabled(final String worldName)
+	{
+		if (worldName == null || worldName.isBlank())
+		{
+			return false;
+		}
+
+		World world = plugin.getServer().getWorld(worldName);
+
+		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
+	}
+
+
+	/**
+	 * check if uuid is present in the registry
+	 *
+	 * @param uuid the uuid of a world
+	 * @return {@code boolean} true if the world uuid is present in the registry, or false if not
+	 */
+	@Contract(pure = true)
+	@Override
+	public boolean contains(final UUID uuid)
+	{
+		return enabledWorldsSupplier.get().worldUids().contains(uuid);
+	}
+
+
+	@Override
+	public Optional<Location> spawnLocation(final UUID worldUid)
+	{
+		if (worldUid != null)
+		{
+			World world = plugin.getServer().getWorld(worldUid);
+
+			if (world != null)
+			{
+				return Optional.of(spawnLocationResolver.resolve(world));
+			}
+		}
+
+		return Optional.empty();
+	}
+
+	/**
+	 * get the current size of the registry. used for testing
+	 *
+	 * @return {@code int} the size of the registry
+	 */
+	@Contract(pure = true)
+	int size()
+	{
+		return enabledWorldsSupplier.get().worldUids().size();
 	}
 
 
@@ -118,78 +218,6 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	static List<UUID> getServerWorldUids(final Plugin plugin)
 	{
 		return new ArrayList<>(plugin.getServer().getWorlds().stream().map(WorldInfo::getUID).toList());
-	}
-
-
-	/**
-	 * Check if a world is enabled by bukkit world UID
-	 *
-	 * @param worldUID Unique Identifier for world
-	 * @return {@code true} if world is enabled, {@code false} if disabled
-	 */
-	@Override
-	public boolean isEnabled(final UUID worldUID)
-	{
-		return worldUID != null && enabledWorldsSupplier.get().worldUids().contains(worldUID);
-	}
-
-
-	/**
-	 * Check if a world is enabled by bukkit world object
-	 *
-	 * @param world bukkit world object
-	 * @return {@code true} if world is enabled, {@code false} if disabled
-	 */
-	@Override
-	public boolean isEnabled(final World world)
-	{
-		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
-	}
-
-
-	/**
-	 * Check if a world is enabled by name
-	 *
-	 * @param worldName name of world as string to check
-	 * @return {@code true} if world is enabled, {@code false} if disabled
-	 */
-	@Override
-	public boolean isEnabled(final String worldName)
-	{
-		if (worldName == null || worldName.isBlank())
-		{
-			return false;
-		}
-
-		World world = plugin.getServer().getWorld(worldName);
-
-		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
-	}
-
-
-	/**
-	 * get the current size of the registry. used for testing
-	 *
-	 * @return {@code int} the size of the registry
-	 */
-	@Contract(pure = true)
-	int size()
-	{
-		return enabledWorldsSupplier.get().worldUids().size();
-	}
-
-
-	/**
-	 * check if uuid is present in the registry
-	 *
-	 * @param uuid the uuid of a world
-	 * @return {@code boolean} true if the world uuid is present in the registry, or false if not
-	 */
-	@Contract(pure = true)
-	@Override
-	public boolean contains(final UUID uuid)
-	{
-		return enabledWorldsSupplier.get().worldUids().contains(uuid);
 	}
 
 }
