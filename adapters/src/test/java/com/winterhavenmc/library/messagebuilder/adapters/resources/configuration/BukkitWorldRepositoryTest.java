@@ -1,7 +1,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
-import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,14 +16,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.UUID;
 
-import static com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitEnabledWorldsProvider.DISABLED_WORLDS_KEY;
-import static com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitEnabledWorldsProvider.ENABLED_WORLDS_KEY;
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository.DISABLED_WORLDS_KEY;
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository.ENABLED_WORLDS_KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class BukkitEnabledWorldsProviderTest
+class BukkitWorldRepositoryTest
 {
 	@Mock Plugin pluginMock;
 	@Mock Server serverMock;
@@ -61,8 +61,8 @@ class BukkitEnabledWorldsProviderTest
 		when(world3Mock.getUID()).thenReturn(world3Uid);
 
 		// Act
-		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock, spawnLocationResolverMock);
-		List<UUID> uuids = enabledWorldsProvider.enabledUids();
+		WorldRepository worldRepository = BukkitWorldRepository.create(pluginMock, spawnLocationResolverMock);
+		List<UUID> uuids = worldRepository.enabledUids();
 
 		// Assert
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid), uuids);
@@ -95,8 +95,8 @@ class BukkitEnabledWorldsProviderTest
 		when(world4Mock.getUID()).thenReturn(world4Uid);
 
 		// Act
-		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock, spawnLocationResolverMock);
-		List<UUID> uuids = enabledWorldsProvider.enabledUids();
+		WorldRepository worldRepository = BukkitWorldRepository.create(pluginMock, spawnLocationResolverMock);
+		List<UUID> uuids = worldRepository.enabledUids();
 
 		// Assert
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid, world4Uid), uuids);
@@ -121,7 +121,7 @@ class BukkitEnabledWorldsProviderTest
 	@Test
 	void serverWorldUids()
 	{
-//		var result = BukkitEnabledWorldsProvider.getServerWorldUids(pluginMock);
+//		var result = BukkitWorldRepository.getServerWorldUids(pluginMock);
 	}
 
 
@@ -146,9 +146,9 @@ class BukkitEnabledWorldsProviderTest
 		when(world3Mock.getUID()).thenReturn(world3Uid);
 //		when(world4Mock.getUID()).thenReturn(world4Uid);
 
-		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock, spawnLocationResolverMock);
+		WorldRepository worldRepository = BukkitWorldRepository.create(pluginMock, spawnLocationResolverMock);
 
-		List<UUID> uuids = enabledWorldsProvider.enabledUids();
+		List<UUID> uuids = worldRepository.enabledUids();
 
 		assertEquals(List.of(world1Uid, world2Uid, world3Uid), uuids);
 	}
@@ -182,7 +182,7 @@ class BukkitEnabledWorldsProviderTest
 //		when(world2Mock.getName()).thenReturn("world_nether");
 //		when(world3Mock.getName()).thenReturn("world_the_end");
 //
-//		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
+//		WorldRepository enabledWorldsProvider = BukkitWorldRepository.create(pluginMock);
 //
 //		Collection<String> names = enabledWorldsProvider.getEnabledWorldNames();
 //
@@ -211,7 +211,7 @@ class BukkitEnabledWorldsProviderTest
 //		when(world3Mock.getUID()).thenReturn(world3Uid);
 ////		when(world4Mock.getUID()).thenReturn(world4Uid);
 //
-//		EnabledWorldsProvider enabledWorldsProvider = BukkitEnabledWorldsProvider.create(pluginMock);
+//		WorldRepository enabledWorldsProvider = BukkitWorldRepository.create(pluginMock);
 //
 //		List<UUID> uuids = enabledWorldsProvider.getEnabledWorldUids();
 //

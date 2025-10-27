@@ -11,7 +11,9 @@ import java.util.Optional;
 
 public interface ItemRepository
 {
-	ItemRecord getRecord(ValidItemKey validItemKey);
+	ItemKey key(ItemStack itemStack);
+
+	Optional<ItemRecord> record(ValidItemKey validItemKey);
 
 	Optional<ItemStack> createItem(ValidItemKey validItemKey);
 
@@ -19,27 +21,12 @@ public interface ItemRepository
 
 	Optional<ItemStack> createItem(ValidItemKey validItemKey, int quantity, Map<String, String> replacements);
 
-	Optional<ItemRecord> getItemRecord(ValidItemKey validItemKey);
+	Optional<String> name(ValidItemKey validItemKey);
 
-	ItemKey getItemKey(ItemStack itemStack);
-
-	Optional<String> getItemDisplayName(String key);
-//	Optional<String> getItemDisplayName(ValidItemKey validItemKey);
+	Optional<String> displayName(ValidItemKey validItemKey);
 
 	boolean isItem(ItemStack itemStack);
 
 	@Deprecated
-	Optional<ItemStack> createItem(String key);
-
-	@Deprecated
-	Optional<ItemStack> createItem(String key, int quantity);
-
-	@Deprecated
-	Optional<ItemStack> createItem(String key, int quantity, Map<String, String> replacements);
-
-	@Deprecated
-	Optional<String> getItemName(String key);
-
-	@Deprecated
-	Optional<ItemRecord> getItemRecord(String key);
+	ItemRecord getRecord(ValidItemKey validItemKey);
 }

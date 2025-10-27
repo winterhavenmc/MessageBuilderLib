@@ -31,7 +31,7 @@ import com.winterhavenmc.library.messagebuilder.core.message.Message;
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
@@ -93,7 +93,7 @@ public final class MessageBuilder
 	private final ConstantRepository constants;
 	private final SoundRepository sounds;
 	private final LocaleProvider localeProvider;
-	private final EnabledWorldsProvider worlds;
+	private final WorldRepository worlds;
 	private final ItemRepository itemRepository;
 	private final Pipeline messagePipeline;
 
@@ -111,7 +111,7 @@ public final class MessageBuilder
 						   final ConstantRepository constants,
 						   final SoundRepository sounds,
 						   final LocaleProvider localeProvider,
-						   final EnabledWorldsProvider worlds,
+						   final WorldRepository worlds,
 						   final ItemRepository itemRepository,
 						   final Pipeline messagePipeline)
 	{
@@ -144,7 +144,7 @@ public final class MessageBuilder
 
 		// create configuration setting providers
 		final LocaleProvider localeProvider = createLocaleProvider(plugin);
-		final EnabledWorldsProvider enabledWorldsProvider = createEnabledWorldsProvider(plugin);
+		final WorldRepository worldRepository = createEnabledWorldsProvider(plugin);
 
 		// create resource file managers
 		final YamlLanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, localeProvider);
@@ -165,7 +165,7 @@ public final class MessageBuilder
 
 		// return instantiation of MessageBuilder library
 		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,
-				constantRepository, soundRepository, localeProvider, enabledWorldsProvider, itemRepository, messagePipeline);
+				constantRepository, soundRepository, localeProvider, worldRepository, itemRepository, messagePipeline);
 	}
 
 
@@ -226,7 +226,7 @@ public final class MessageBuilder
 							   final ConstantRepository constantRepository,
 							   final SoundRepository soundRepository,
 							   final LocaleProvider localeProvider,
-							   final EnabledWorldsProvider enabledWorlds,
+							   final WorldRepository enabledWorlds,
 							   final ItemRepository itemRepository,
 							   final MessagePipeline messagePipeline)
 	{
@@ -279,7 +279,7 @@ public final class MessageBuilder
 	/**
 	 * Provides external access to the enabled worlds provider
 	 */
-	public EnabledWorldsProvider worlds()
+	public WorldRepository worlds()
 	{
 		return worlds;
 	}
