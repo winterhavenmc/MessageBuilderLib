@@ -19,16 +19,18 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
+
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
 import com.winterhavenmc.library.messagebuilder.models.keys.*;
 import com.winterhavenmc.library.messagebuilder.models.language.*;
 
 import com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.validation.Parameter;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -45,7 +47,6 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
 
 public final class YamlItemRepository implements ItemRepository
 {
-	//TODO: review visibility and finality of these fields
 	public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
 	private static final String ITEM_KEY_STRING = "ITEM_KEY";
 	private static final Material DEFAULT_MATERIAL = Material.STICK;
@@ -53,18 +54,18 @@ public final class YamlItemRepository implements ItemRepository
 	private final Plugin plugin;
 	private final SectionProvider sectionProvider;
 	private final NamespacedKey namespacedKey;
-
-
 	private final MiniMessage miniMessage;
 
 
 	public YamlItemRepository(final Plugin plugin, final YamlLanguageResourceManager languageResourceManager)
 	{
+		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
-		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS.name());
-		this.miniMessage = MiniMessage.miniMessage();
+
 		this.plugin = plugin;
+		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS.name());
 		this.namespacedKey = new NamespacedKey(plugin, ITEM_KEY_STRING);
+		this.miniMessage = MiniMessage.miniMessage();
 	}
 
 
@@ -78,33 +79,6 @@ public final class YamlItemRepository implements ItemRepository
 		else return (sectionProvider.getSection().isConfigurationSection(validItemKey.toString()))
 				? ItemRecord.of(validItemKey, sectionProvider.getSection().getConfigurationSection(validItemKey.toString()))
 				: ItemRecord.empty(validItemKey, InvalidRecordReason.ITEM_ENTRY_MISSING);
-	}
-
-
-	@Override @Deprecated
-	public Optional<ItemStack> createItem(final String key)
-	{
-		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
-				? createItem(validItemKey, 1, Map.of())
-				: Optional.empty();
-	}
-
-
-	@Override @Deprecated
-	public Optional<ItemStack> createItem(final String key, final int quantity)
-	{
-		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
-				? createItem(validItemKey, quantity, Map.of())
-				: Optional.empty();
-	}
-
-
-	@Override @Deprecated
-	public Optional<ItemStack> createItem(final String key, final int quantity, final Map<String, String> replacements)
-	{
-		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
-				? createItem(validItemKey, quantity, replacements)
-				: Optional.empty();
 	}
 
 
@@ -151,6 +125,63 @@ public final class YamlItemRepository implements ItemRepository
 		{
 			return Optional.empty();
 		}
+	}
+
+
+	@Override
+	public Optional<String> name(final ValidItemKey validItemKey)
+	{
+		return (getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+				? Optional.of(validItemRecord.name())
+				: Optional.empty();
+	}
+
+
+	@Override
+	public Optional<String> displayName(final ValidItemKey validItemKey)
+	{
+		return (getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+				? Optional.of(validItemRecord.displayName())
+				: Optional.empty();
+	}
+
+
+	@Override
+	public Optional<ItemRecord> record(final ValidItemKey validItemKey)
+	{
+		ItemRecord itemRecord = getRecord(validItemKey);
+		if (itemRecord instanceof ValidItemRecord validItemRecord)
+		{
+			return Optional.of(validItemRecord);
+		}
+
+		return Optional.empty();
+	}
+
+
+	@Override
+	public boolean isItem(ItemStack itemStack)
+	{
+		return (itemStack != null
+				&& itemStack.hasItemMeta()
+				&& itemStack.getItemMeta() != null
+				&& itemStack.getItemMeta().getPersistentDataContainer().has(namespacedKey));
+	}
+
+
+	public Optional<String> getItemKeyString(ItemStack itemStack)
+	{
+		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
+				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
+				: Optional.empty();
+	}
+
+
+	@Override
+	public ItemKey key(ItemStack itemStack)
+	{
+		return getItemKeyString(itemStack).map(ItemKey::of)
+				.orElseGet(() -> new InvalidItemKey("unknown", InvalidKeyReason.KEY_INVALID));
 	}
 
 
@@ -247,96 +278,6 @@ public final class YamlItemRepository implements ItemRepository
 		itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-	}
-
-
-	@Override
-	public Optional<String> getItemName(final String key)
-	{
-		ItemKey itemKey = ItemKey.of(key);
-		if (itemKey instanceof ValidItemKey validItemKey)
-		{
-			ItemRecord itemRecord = getRecord(validItemKey);
-			if (itemRecord instanceof ValidItemRecord validItemRecord)
-			{
-				return Optional.of(validItemRecord.name());
-			}
-		}
-
-		return Optional.empty();
-	}
-
-
-	@Override
-	public Optional<String> getItemDisplayName(final String key)
-	{
-		ItemKey itemKey = ItemKey.of(key);
-		if (itemKey instanceof ValidItemKey validItemKey)
-		{
-			ItemRecord itemRecord = getRecord(validItemKey);
-			if (itemRecord instanceof ValidItemRecord validItemRecord)
-			{
-				return Optional.of(validItemRecord.displayName());
-			}
-		}
-
-		return Optional.empty();
-	}
-
-
-	@Override
-	public Optional<ItemRecord> getItemRecord(final String key)
-	{
-		ItemKey itemKey = ItemKey.of(key);
-		if (itemKey instanceof ValidItemKey validItemKey)
-		{
-			ItemRecord itemRecord = getRecord(validItemKey);
-			if (itemRecord instanceof ValidItemRecord validItemRecord)
-			{
-				return Optional.of(validItemRecord);
-			}
-		}
-
-		return Optional.empty();
-	}
-
-
-	@Override
-	public Optional<ItemRecord> getItemRecord(final ValidItemKey validItemKey)
-	{
-		ItemRecord itemRecord = getRecord(validItemKey);
-		if (itemRecord instanceof ValidItemRecord validItemRecord)
-		{
-			return Optional.of(validItemRecord);
-		}
-
-		return Optional.empty();
-	}
-
-
-	@Override
-	public boolean isItem(ItemStack itemStack)
-	{
-		return (itemStack != null
-				&& itemStack.hasItemMeta()
-				&& itemStack.getItemMeta() != null
-				&& itemStack.getItemMeta().getPersistentDataContainer().has(namespacedKey));
-	}
-
-
-	public Optional<String> getItemKeyString(ItemStack itemStack)
-	{
-		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
-				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
-				: Optional.empty();
-	}
-
-
-	@Override
-	public ItemKey getItemKey(ItemStack itemStack)
-	{
-		return getItemKeyString(itemStack).map(ItemKey::of)
-				.orElseGet(() -> new InvalidItemKey("unknown", InvalidKeyReason.KEY_INVALID));
 	}
 
 }

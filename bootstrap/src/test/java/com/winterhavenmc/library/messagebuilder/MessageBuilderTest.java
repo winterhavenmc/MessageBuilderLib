@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSou
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.util.MessageId;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
@@ -69,7 +69,8 @@ class MessageBuilderTest
 	@Mock ConstantRepository constantRepositoryMock;
 	@Mock SoundRepository soundRepositoryMock;
 	@Mock MessageRepository messageRepositoryMock;
-	@Mock EnabledWorldsProvider enabledWorldsProviderMock;
+	@Mock
+	WorldRepository worldRepositoryMock;
 	@Mock LocaleProvider localeProviderMock;
 
 	@Mock FormatterCtx formatterCtx;
@@ -96,7 +97,7 @@ class MessageBuilderTest
 				constantRepositoryMock,
 				soundRepositoryMock,
 				localeProviderMock,
-				enabledWorldsProviderMock,
+				worldRepositoryMock,
 				itemRepositoryMock,
 				messagePipelineMock);
 	}
@@ -226,7 +227,7 @@ class MessageBuilderTest
 						constantRepositoryMock,
 						soundRepositoryMock,
 						localeProviderMock,
-						enabledWorldsProviderMock,
+						worldRepositoryMock,
 						itemRepositoryMock,
 						messagePipelineMock));
 
@@ -247,7 +248,7 @@ class MessageBuilderTest
 						constantRepositoryMock,
 						soundRepositoryMock,
 						localeProviderMock,
-						enabledWorldsProviderMock,
+						worldRepositoryMock,
 						itemRepositoryMock,
 						messagePipelineMock));
 
@@ -268,7 +269,7 @@ class MessageBuilderTest
 						constantRepositoryMock,
 						soundRepositoryMock,
 						localeProviderMock,
-						enabledWorldsProviderMock,
+						worldRepositoryMock,
 						itemRepositoryMock,
 						null));
 

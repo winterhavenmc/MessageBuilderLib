@@ -39,7 +39,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worl
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitEnabledWorldsProvider;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
@@ -63,7 +63,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -223,10 +223,10 @@ public final class BootstrapUtility
 	}
 
 
-	static EnabledWorldsProvider createEnabledWorldsProvider(final Plugin plugin)
+	static WorldRepository createEnabledWorldsProvider(final Plugin plugin)
 	{
 		SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.get(plugin.getServer().getPluginManager());
-		return BukkitEnabledWorldsProvider.create(plugin, spawnLocationResolver);
+		return BukkitWorldRepository.create(plugin, spawnLocationResolver);
 	}
 
 }

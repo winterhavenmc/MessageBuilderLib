@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
-import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsSetting;
 
 import org.bukkit.Location;
@@ -31,7 +31,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 
-public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
+public final class BukkitWorldRepository implements WorldRepository
 {
 	private final Plugin plugin;
 	private final SpawnLocationResolver spawnLocationResolver;
@@ -44,9 +44,9 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 	/**
 	 * private constructor, use {@code #create(plugin)} to instantiate
 	 */
-	private BukkitEnabledWorldsProvider(final Plugin plugin,
-										final SpawnLocationResolver spawnLocationResolver,
-										final Supplier<EnabledWorldsSetting> enabledWorldsSupplier)
+	private BukkitWorldRepository(final Plugin plugin,
+								  final SpawnLocationResolver spawnLocationResolver,
+								  final Supplier<EnabledWorldsSetting> enabledWorldsSupplier)
 	{
 		this.plugin = plugin;
 		this.spawnLocationResolver = spawnLocationResolver;
@@ -55,14 +55,14 @@ public final class BukkitEnabledWorldsProvider implements EnabledWorldsProvider
 
 
 	/**
-	 * Static factory method creates instance of EnabledWorldsProvider
+	 * Static factory method creates instance of WorldRepository
 	 *
 	 * @param plugin an instance of the plugin
-	 * @return an EnabledWorldsProvider
+	 * @return an WorldRepository
 	 */
-	public static EnabledWorldsProvider create(final Plugin plugin, SpawnLocationResolver spawnLocationResolver)
+	public static WorldRepository create(final Plugin plugin, SpawnLocationResolver spawnLocationResolver)
 	{
-		return new BukkitEnabledWorldsProvider(plugin, spawnLocationResolver, () -> getEnabledWorldsSetting(plugin));
+		return new BukkitWorldRepository(plugin, spawnLocationResolver, () -> getEnabledWorldsSetting(plugin));
 	}
 
 

@@ -81,32 +81,32 @@ class YamlItemRepositoryTest
 	}
 
 	@Test
-	void getItemKeyString()
+	void keyString()
 	{
 	}
 
 	@Test
-	void getItemKey()
+	void key()
 	{
 	}
 
 	@Test
-	void getItemName()
+	void name()
 	{
 	}
 
 	@Test
-	void getItemDisplayName()
+	void displayName()
 	{
 	}
 
 	@Test
-	void getItemRecord()
+	void record()
 	{
 	}
 
 	@Test
-	void testGetItemRecord()
+	void testRecord()
 	{
 	}
 }

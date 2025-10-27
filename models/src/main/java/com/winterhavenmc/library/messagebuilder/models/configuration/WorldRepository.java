@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-public interface EnabledWorldsProvider extends ConfigProvider<EnabledWorldsSetting>
+public interface WorldRepository extends ConfigProvider<EnabledWorldsSetting>
 {
 	String UNKNOWN_WORLD = "\uD83C\uDF10";
 	String CONSOLE_SENDER = "console";
