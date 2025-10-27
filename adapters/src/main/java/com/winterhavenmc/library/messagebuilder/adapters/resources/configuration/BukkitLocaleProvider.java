@@ -55,7 +55,7 @@ import java.util.function.Supplier;
  * @see Locale
  * @see ZoneId
  */
-public final class BukkitLocaleProvider implements LocaleProvider
+public final class BukkitLocaleProvider implements ConfigRepository
 {
 	private final Supplier<LanguageSetting> languageSettingSupplier;
 	private final Supplier<LocaleSetting> localeSettingSupplier;
@@ -106,9 +106,9 @@ public final class BukkitLocaleProvider implements LocaleProvider
 	 * </ol>
 	 *
 	 * @param plugin the plugin whose configuration will be consulted
-	 * @return a new {@code LocaleProvider} with dynamic access to locale and time zone settings
+	 * @return a new {@code ConfigRepository} with dynamic access to locale and time zone settings
 	 */
-	public static LocaleProvider create(final Plugin plugin)
+	public static ConfigRepository create(final Plugin plugin)
 	{
 		return new BukkitLocaleProvider(
 				() -> getLanguageSetting(plugin),
@@ -172,7 +172,7 @@ public final class BukkitLocaleProvider implements LocaleProvider
 	 * @return a valid LanguageTag
 	 */
 	@Override
-	public LanguageTag getLanguageTag()
+	public LanguageTag languageTag()
 	{
 		return localeSettingSupplier.get().languageTag();
 	}
@@ -184,7 +184,7 @@ public final class BukkitLocaleProvider implements LocaleProvider
 	 * @return a Java {@code Locale}
 	 */
 	@Override
-	public Locale getLocale()
+	public Locale locale()
 	{
 		return localeSettingSupplier.get().languageTag().getLocale();
 	}
@@ -196,14 +196,14 @@ public final class BukkitLocaleProvider implements LocaleProvider
 	 * @return the applicable time zone as represented by a {@code ZoneId} object.
 	 */
 	@Override
-	public ZoneId getZoneId()
+	public ZoneId zoneId()
 	{
 		return zoneIdSupplier.get();
 	}
 
 
 	@Override
-	public String getLanguage()
+	public String language()
 	{
 		//TODO: sanitize file name?
 		return languageSettingSupplier.get().name();

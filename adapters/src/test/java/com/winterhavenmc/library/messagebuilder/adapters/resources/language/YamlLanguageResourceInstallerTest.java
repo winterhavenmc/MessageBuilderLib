@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.adapters.util.MockUtility;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -51,7 +51,7 @@ public class YamlLanguageResourceInstallerTest
 {
 	@TempDir File tempDataDir;
 	@Mock Plugin pluginMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock ConfigRepository configRepositoryMock;
 	@Mock FileConfiguration fileConfigurationMock;
 
 	YamlLanguageResourceInstaller resourceInstaller;
@@ -60,7 +60,7 @@ public class YamlLanguageResourceInstallerTest
 	@BeforeEach
 	public void setUp()
 	{
-		lenient().when(localeProviderMock.getLocale()).thenReturn(Locale.US);
+		lenient().when(configRepositoryMock.locale()).thenReturn(Locale.US);
 		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 		lenient().when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 
@@ -68,7 +68,7 @@ public class YamlLanguageResourceInstallerTest
 				.when(pluginMock).getResource(anyString());
 
 		// create real instance of installer
-		resourceInstaller = new YamlLanguageResourceInstaller(pluginMock, localeProviderMock);
+		resourceInstaller = new YamlLanguageResourceInstaller(pluginMock, configRepositoryMock);
 		resourceInstaller.install();
 	}
 

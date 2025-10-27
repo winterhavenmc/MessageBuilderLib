@@ -21,6 +21,7 @@ import java.time.ZoneId;
 import java.util.Locale;
 
 
+@Deprecated(forRemoval = true)
 public interface LocaleProvider extends ConfigProvider<LocaleSetting>
 {
 	/**
@@ -36,22 +37,22 @@ public interface LocaleProvider extends ConfigProvider<LocaleSetting>
 	 *
 	 * @return a valid LanguageTag
 	 */
-	LanguageTag getLanguageTag();
+	LanguageTag languageTag();
 
 	/**
 	 * Returns the {@link Locale} object derived from the configuration.
 	 *
 	 * @return a Java {@code Locale}
 	 */
-	Locale getLocale();
+	Locale locale();
 
 	/**
 	 * Returns the configured {@link ZoneId} if valid, or the system default otherwise.
 	 *
 	 * @return the applicable time zone as represented by a {@code ZoneId} object.
 	 */
-	ZoneId getZoneId();
+	ZoneId zoneId();
 
 
-	String getLanguage();
+	String language();
 }

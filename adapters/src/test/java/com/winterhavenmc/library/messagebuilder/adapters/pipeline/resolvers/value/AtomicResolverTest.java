@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.val
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number.LocaleNumberFormatter;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
@@ -48,12 +48,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AtomicResolverTest
 {
-	@Mock
-	LocaleProvider localeProviderMock;
-	@Mock
-	MacroObjectMap macroObjectMapMock;
-	@Mock
-	LocalizedDurationFormatter durationFormatter;
+	@Mock ConfigRepository configRepositoryMock;
+	@Mock MacroObjectMap macroObjectMapMock;
+	@Mock LocalizedDurationFormatter durationFormatter;
 
 	private AtomicResolver resolver;
 
@@ -63,8 +60,8 @@ class AtomicResolverTest
 	@BeforeEach
 	void setUp()
 	{
-		LocaleNumberFormatter localeNumberFormatterMock = new LocaleNumberFormatter(localeProviderMock);
-		FormatterCtx formatterContainer = new FormatterCtx(localeProviderMock, durationFormatter, localeNumberFormatterMock);
+		LocaleNumberFormatter localeNumberFormatterMock = new LocaleNumberFormatter(configRepositoryMock);
+		FormatterCtx formatterContainer = new FormatterCtx(configRepositoryMock, durationFormatter, localeNumberFormatterMock);
 		resolver = new AtomicResolver(formatterContainer);
 	}
 
@@ -131,7 +128,7 @@ class AtomicResolverTest
 	{
 		// Arrange
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(42));
-		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
+		when(configRepositoryMock.locale()).thenReturn(Locale.US);
 
 		// Act
 		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
@@ -141,7 +138,7 @@ class AtomicResolverTest
 
 		// Verify
 		verify(macroObjectMapMock, atLeastOnce()).get(key);
-		verify(localeProviderMock, atLeastOnce()).getLocale();
+		verify(configRepositoryMock, atLeastOnce()).locale();
 	}
 
 
@@ -188,7 +185,7 @@ class AtomicResolverTest
 	{
 		// Arrange
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(420000));
-		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
+		when(configRepositoryMock.locale()).thenReturn(Locale.US);
 
 		// Act
 		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
@@ -198,7 +195,7 @@ class AtomicResolverTest
 
 		// Verify
 		verify(macroObjectMapMock, atLeastOnce()).get(key);
-		verify(localeProviderMock, atLeastOnce()).getLocale();
+		verify(configRepositoryMock, atLeastOnce()).locale();
 	}
 
 
@@ -207,7 +204,7 @@ class AtomicResolverTest
 	{
 		// Arrange
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(420000));
-		when(localeProviderMock.getLocale()).thenReturn(Locale.GERMAN);
+		when(configRepositoryMock.locale()).thenReturn(Locale.GERMAN);
 
 		// Act
 		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
@@ -217,7 +214,7 @@ class AtomicResolverTest
 
 		// Verify
 		verify(macroObjectMapMock, atLeastOnce()).get(key);
-		verify(localeProviderMock, atLeastOnce()).getLocale();
+		verify(configRepositoryMock, atLeastOnce()).locale();
 	}
 
 

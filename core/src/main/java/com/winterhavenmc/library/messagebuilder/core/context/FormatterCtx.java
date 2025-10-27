@@ -19,9 +19,9 @@ package com.winterhavenmc.library.messagebuilder.core.context;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
 
-public record FormatterCtx(LocaleProvider localeProvider,
+public record FormatterCtx(ConfigRepository configRepository,
 						   DurationFormatter durationFormatter,
 						   NumberFormatter localeNumberFormatter) { }

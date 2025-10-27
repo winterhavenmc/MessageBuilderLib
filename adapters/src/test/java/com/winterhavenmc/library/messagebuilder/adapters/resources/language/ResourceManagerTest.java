@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProv
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
 
@@ -64,7 +64,7 @@ class YamlLanguageResourceManagerTest
 	@Mock ConstantRepository constantRepositoryMock;
 	@Mock ItemRecordRepository itemRecordRepositoryMock;
 	@Mock MessageRepository messageRepositoryMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock ConfigRepository configRepositoryMock;
 
 	YamlLanguageResourceManager resourceManager;
 	Configuration languageConfiguration;
@@ -149,7 +149,7 @@ class YamlLanguageResourceManagerTest
 		{
 			// Arrange
 			when(languageSectionProviderMock.getSection()).thenReturn(languageConfiguration);
-			YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock)
+			YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, configRepositoryMock)
 			{
 				@Override
 				public Configuration load() {
@@ -157,7 +157,7 @@ class YamlLanguageResourceManagerTest
 				}
 			};
 
-			YamlLanguageResourceInstaller installer = new YamlLanguageResourceInstaller(pluginMock, localeProviderMock);
+			YamlLanguageResourceInstaller installer = new YamlLanguageResourceInstaller(pluginMock, configRepositoryMock);
 			YamlLanguageResourceManager languageResourceManager = new YamlLanguageResourceManager(installer, loader);
 
 			// Act

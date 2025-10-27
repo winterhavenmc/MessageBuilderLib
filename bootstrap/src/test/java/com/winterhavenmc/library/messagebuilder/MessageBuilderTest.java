@@ -17,21 +17,22 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
-import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.util.MessageId;
-import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
-import com.winterhavenmc.library.messagebuilder.core.message.Message;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
+import com.winterhavenmc.library.messagebuilder.core.message.Message;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
+
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
+import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
 import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
+
+import com.winterhavenmc.library.messagebuilder.util.MessageId;
+
 import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -64,14 +65,12 @@ class MessageBuilderTest
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 	@Mock YamlSoundResourceManager soundResourceManagerMock;
 	@Mock MessagePipeline messagePipelineMock;
-	@Mock
-	ItemRepository itemRepositoryMock;
+	@Mock ItemRepository itemRepositoryMock;
 	@Mock ConstantRepository constantRepositoryMock;
 	@Mock SoundRepository soundRepositoryMock;
 	@Mock MessageRepository messageRepositoryMock;
-	@Mock
-	WorldRepository worldRepositoryMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock WorldRepository worldRepositoryMock;
+	@Mock ConfigRepository configRepositoryMock;
 
 	@Mock FormatterCtx formatterCtx;
 	@Mock AccessorCtx accessorCtx;
@@ -96,7 +95,7 @@ class MessageBuilderTest
 				soundResourceManagerMock,
 				constantRepositoryMock,
 				soundRepositoryMock,
-				localeProviderMock,
+				configRepositoryMock,
 				worldRepositoryMock,
 				itemRepositoryMock,
 				messagePipelineMock);
@@ -226,7 +225,7 @@ class MessageBuilderTest
 						soundResourceManagerMock,
 						constantRepositoryMock,
 						soundRepositoryMock,
-						localeProviderMock,
+						configRepositoryMock,
 						worldRepositoryMock,
 						itemRepositoryMock,
 						messagePipelineMock));
@@ -247,7 +246,7 @@ class MessageBuilderTest
 						soundResourceManagerMock,
 						constantRepositoryMock,
 						soundRepositoryMock,
-						localeProviderMock,
+						configRepositoryMock,
 						worldRepositoryMock,
 						itemRepositoryMock,
 						messagePipelineMock));
@@ -268,7 +267,7 @@ class MessageBuilderTest
 						soundResourceManagerMock,
 						constantRepositoryMock,
 						soundRepositoryMock,
-						localeProviderMock,
+						configRepositoryMock,
 						worldRepositoryMock,
 						itemRepositoryMock,
 						null));

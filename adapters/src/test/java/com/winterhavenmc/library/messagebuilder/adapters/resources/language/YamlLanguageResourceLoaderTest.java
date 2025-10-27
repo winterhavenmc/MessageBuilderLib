@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.adapters.util.MockUtility;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -49,7 +49,7 @@ class YamlLanguageResourceLoaderTest
 	@Mock Plugin pluginMock;
 	@Mock FileConfiguration fileConfigurationMock;
 	@Mock Logger loggerMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock ConfigRepository configRepositoryMock;
 
 	private YamlLanguageResourceLoader loader;
 
@@ -57,7 +57,7 @@ class YamlLanguageResourceLoaderTest
 	@BeforeEach
 	void setUp()
 	{
-		loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock);
+		loader = new YamlLanguageResourceLoader(pluginMock, configRepositoryMock);
 	}
 
 
@@ -223,7 +223,7 @@ class YamlLanguageResourceLoaderTest
 				when(pluginMock.getLogger()).thenReturn(loggerMock);
 				when(pluginMock.getResource("language/en-US.yml"))
 						.thenReturn(MockUtility.getResourceStream("language/en-US.yml"));
-				YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock);
+				YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, configRepositoryMock);
 
 				// Act
 				Configuration config = loader.loadFromResource(LanguageTag.of("en-US").orElseThrow());
@@ -246,7 +246,7 @@ class YamlLanguageResourceLoaderTest
 				when(pluginMock.getLogger()).thenReturn(loggerMock);
 				when(pluginMock.getResource("language/en-US.yml"))
 						.thenReturn(MockUtility.getResourceStream("language/en-US.yml"));
-				YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock);
+				YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, configRepositoryMock);
 				LanguageTag preferred = LanguageTag.of("ru-RU").orElseThrow();
 				LanguageTag fallback = LanguageTag.of("en-US").orElseThrow();
 
@@ -271,7 +271,7 @@ class YamlLanguageResourceLoaderTest
 				when(pluginMock.getLogger()).thenReturn(loggerMock);
 				InputStream garbage = new ByteArrayInputStream("%%%%%%%".getBytes(StandardCharsets.UTF_8));
 				when(pluginMock.getResource("language/en-US.yml")).thenReturn(garbage);
-				YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, localeProviderMock);
+				YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, configRepositoryMock);
 				LanguageTag preferred = LanguageTag.of("ru-RU").orElseThrow();
 				LanguageTag fallback = LanguageTag.of("en-US").orElseThrow();
 

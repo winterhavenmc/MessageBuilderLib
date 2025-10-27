@@ -39,8 +39,8 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worl
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitConfigRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitLocaleProvider;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
@@ -63,8 +63,8 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -102,19 +102,19 @@ public final class BootstrapUtility
 	 * @return an instance of the language resource manager
 	 */
 	static YamlLanguageResourceManager createLanguageResourceManager(final Plugin plugin,
-																	 final LocaleProvider localeProvider)
+																	 final ConfigRepository configRepository)
 	{
-		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin, localeProvider);
-		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin, localeProvider);
+		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin, configRepository);
+		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin, configRepository);
 
 		return new YamlLanguageResourceManager(resourceInstaller, resourceLoader);
 	}
 
 	static YamlSoundResourceManager createSoundResourceManager(final Plugin plugin,
-															   final LocaleProvider localeProvider)
+															   final ConfigRepository configRepository)
 	{
 		final YamlSoundResourceInstaller resourceInstaller = new YamlSoundResourceInstaller(plugin);
-		final YamlSoundResourceLoader resourceLoader = new YamlSoundResourceLoader(plugin, localeProvider);
+		final YamlSoundResourceLoader resourceLoader = new YamlSoundResourceLoader(plugin, configRepository);
 
 		return new YamlSoundResourceManager(resourceInstaller, resourceLoader);
 	}
@@ -170,14 +170,14 @@ public final class BootstrapUtility
 	 * @return the context container for to be injected into resolvers
 	 */
 	static FormatterCtx createFormatterContextContainer(final Plugin plugin,
-														final LocaleProvider localeProvider,
+														final ConfigRepository configRepository,
 														final ConstantRepository constants)
 	{
-		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProvider);
-		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProvider);
+		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(configRepository);
+		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(configRepository);
 		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, constants);
 
-		return new FormatterCtx(localeProvider, durationFormatter, localeNumberFormatter);
+		return new FormatterCtx(configRepository, durationFormatter, localeNumberFormatter);
 	}
 
 
@@ -201,9 +201,9 @@ public final class BootstrapUtility
 	}
 
 
-	static ItemRepository createItemRepository(final Plugin plugin, final LocaleProvider localeProvider)
+	static ItemRepository createItemRepository(final Plugin plugin, final ConfigRepository configRepository)
 	{
-		return new YamlItemRepository(plugin, createLanguageResourceManager(plugin, localeProvider));
+		return new YamlItemRepository(plugin, createLanguageResourceManager(plugin, configRepository));
 	}
 
 
@@ -217,9 +217,15 @@ public final class BootstrapUtility
 	}
 
 
-	static LocaleProvider createLocaleProvider(final Plugin plugin)
+//	static LocaleProvider createLocaleProvider(final Plugin plugin)
+//	{
+//		return BukkitLocaleProvider.create(plugin);
+//	}
+
+
+	static ConfigRepository createConfigRepository(final Plugin plugin)
 	{
-		return BukkitLocaleProvider.create(plugin);
+		return BukkitConfigRepository.create(plugin);
 	}
 
 

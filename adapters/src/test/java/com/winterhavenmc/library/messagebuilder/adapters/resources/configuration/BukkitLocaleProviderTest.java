@@ -17,10 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigProvider;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleSetting;
+import com.winterhavenmc.library.messagebuilder.models.configuration.*;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -93,10 +90,10 @@ class BukkitLocaleProviderTest
 		// Arrange
 		configuration = new YamlConfiguration();
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
+		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
-		Locale locale = localeProvider.getLocale();
+		Locale locale = configRepository.locale();
 
 		// Assert
 		assertNotNull(locale);
@@ -107,15 +104,15 @@ class BukkitLocaleProviderTest
 
 
 	@Test
-	void testGetLanguageTag()
+	void testLanguageTag()
 	{
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(configuration);
 
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
+		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
-		LanguageTag languageTag = localeProvider.getLanguageTag();
+		LanguageTag languageTag = configRepository.languageTag();
 
 		// Assert
 		assertEquals(Locale.FRANCE, languageTag.getLocale());
@@ -125,15 +122,14 @@ class BukkitLocaleProviderTest
 	}
 
 	@Test
-	void getLocale()
+	void locale()
 	{
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(configuration);
-
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
+		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
-		Locale locale = localeProvider.getLocale();
+		Locale locale = configRepository.locale();
 
 		// Assert
 		assertEquals(Locale.FRANCE, locale);
@@ -149,7 +145,7 @@ class BukkitLocaleProviderTest
 		// Arrange
 		configuration.set("timezone", "UTC");
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
+		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
 		ZoneId result = BukkitLocaleProvider.getZoneId(pluginMock);
@@ -167,7 +163,7 @@ class BukkitLocaleProviderTest
 	{
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
+		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
 		ZoneId result = BukkitLocaleProvider.getZoneId(pluginMock);
@@ -185,10 +181,10 @@ class BukkitLocaleProviderTest
 	{
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
+		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
-		ZoneId result = localeProvider.getZoneId();
+		ZoneId result = configRepository.zoneId();
 
 		// Assert
 		assertEquals(ZoneId.systemDefault(), result);
@@ -204,10 +200,10 @@ class BukkitLocaleProviderTest
 		// Arrange
 		configuration.set("timezone", "invalid");
 		when(pluginMock.getConfig()).thenReturn(configuration);
-		LocaleProvider localeProvider = BukkitLocaleProvider.create(pluginMock);
+		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
-		ZoneId result = localeProvider.getZoneId();
+		ZoneId result = configRepository.zoneId();
 
 		// Assert
 		assertEquals(ZoneId.systemDefault(), result);

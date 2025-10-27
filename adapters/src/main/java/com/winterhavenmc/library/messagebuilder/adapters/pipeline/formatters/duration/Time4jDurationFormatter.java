@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration;
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;
@@ -53,22 +54,22 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
  * a lower bound of {@code ChronoUnit.MINUTES} would discard all precision below minutes.
  *
  * @see PrettyTime
- * @see LocaleProvider
+ * @see ConfigRepository
  * @see DurationFormatter
  */
 public final class Time4jDurationFormatter implements DurationFormatter
 {
-	private final LocaleProvider localeProvider;
+	private final ConfigRepository configRepository;
 
 
 	/**
-	 * Constructs a {@code Time4jDurationFormatter} with the provided {@link LocaleProvider}.
+	 * Constructs a {@code Time4jDurationFormatter} with the provided {@link ConfigRepository}.
 	 *
-	 * @param localeProvider supplies the {@link java.util.Locale} to use for formatting
+	 * @param configRepository supplies the {@link java.util.Locale} to use for formatting
 	 */
-	public Time4jDurationFormatter(final LocaleProvider localeProvider)
+	public Time4jDurationFormatter(final ConfigRepository configRepository)
 	{
-		this.localeProvider = localeProvider;
+		this.configRepository = configRepository;
 	}
 
 
@@ -108,7 +109,7 @@ public final class Time4jDurationFormatter implements DurationFormatter
 				.with(minutes, ClockUnit.MINUTES)
 				.with(seconds, ClockUnit.SECONDS);
 
-		return PrettyTime.of(localeProvider.getLocale()).print(net.time4j.Duration.compose(calendarPart, clockPart), TextWidth.WIDE);
+		return PrettyTime.of(configRepository.locale()).print(net.time4j.Duration.compose(calendarPart, clockPart), TextWidth.WIDE);
 	}
 
 }

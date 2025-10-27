@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
 import org.bukkit.plugin.Plugin;
 
@@ -42,7 +42,7 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 	private static final String YAML_EXTENSION = ".yml";
 
 	private final Plugin plugin;
-	private final LocaleProvider localeProvider;
+	private final ConfigRepository configRepository;
 
 
 	/**
@@ -50,10 +50,10 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public YamlLanguageResourceInstaller(final Plugin plugin, final LocaleProvider localeProvider)
+	public YamlLanguageResourceInstaller(final Plugin plugin, final ConfigRepository configRepository)
 	{
 		this.plugin = plugin;
-		this.localeProvider = localeProvider;
+		this.configRepository = configRepository;
 	}
 
 
@@ -157,20 +157,20 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 			if (installedFile.exists())
 			{
 				plugin.getLogger().info(LanguageResourceMessage.LANGUAGE_RESOURCE_INSTALL_SUCCESS
-						.getLocalizedMessage(localeProvider.getLocale(), filePath));
+						.getLocalizedMessage(configRepository.locale(), filePath));
 				return InstallerStatus.SUCCESS;
 			}
 			else
 			{
 				plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_INSTALL_MISSING
-						.getLocalizedMessage(localeProvider.getLocale(), filePath));
+						.getLocalizedMessage(configRepository.locale(), filePath));
 				return InstallerStatus.FAIL;
 			}
 		}
 		catch (Exception exception)
 		{
 			plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_INSTALL_EXCEPTION
-					.getLocalizedMessage(localeProvider.getLocale(), resourceName, exception.getLocalizedMessage()));
+					.getLocalizedMessage(configRepository.locale(), resourceName, exception.getLocalizedMessage()));
 			return InstallerStatus.FAIL;
 		}
 	}

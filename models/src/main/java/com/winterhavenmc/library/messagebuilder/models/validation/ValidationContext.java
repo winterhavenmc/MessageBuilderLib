@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.models.validation;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -33,7 +33,7 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
  * during validation message formatting.
  * <p>
  * This singleton must be explicitly initialized during plugin startup
- * using {@link #initialize(LocaleProvider)}. After initialization,
+ * using {@link #initialize(ConfigRepository)}. After initialization,
  * the locale is considered immutable.
  * <p>
  * Validation logic (e.g., {@link Validator}) uses this context
@@ -43,11 +43,11 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
  * in unit tests only and should never be called during normal plugin execution.
  *
  * @see Validator
- * @see LocaleProvider
+ * @see ConfigRepository
  */
 public final class ValidationContext
 {
-	private static LocaleProvider localeProvider;
+	private static ConfigRepository configRepository;
 
 	private ValidationContext()
 	{
@@ -64,13 +64,13 @@ public final class ValidationContext
 	 * @param provider the plugin’s configured locale provider
 	 * @throws IllegalStateException if already initialized
 	 */
-	public static void initialize(final LocaleProvider provider)
+	public static void initialize(final ConfigRepository provider)
 	{
 		validate(provider, Objects::isNull, throwing(PARAMETER_NULL, LOCALE_PROVIDER));
 
-		if (localeProvider == null)
+		if (configRepository == null)
 		{
-			localeProvider = provider;
+			configRepository = provider;
 		}
 	}
 
@@ -83,8 +83,8 @@ public final class ValidationContext
 	 */
 	public static Locale getLocale()
 	{
-		return (localeProvider != null)
-				? localeProvider.getLocale()
+		return (configRepository != null)
+				? configRepository.locale()
 				: Locale.getDefault();
 	}
 
@@ -98,7 +98,7 @@ public final class ValidationContext
 	 */
 	static void reset()
 	{
-		localeProvider = null;
+		configRepository = null;
 	}
 
 }

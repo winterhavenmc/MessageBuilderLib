@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.instant;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
@@ -62,7 +62,7 @@ public interface Instantable
 	 *
 	 * @param baseKey the macro string prefix under which the {@code INSTANT} field will be inserted
 	 * @param formatStyle the {@link FormatStyle} to use for localization
-	 * @param ctx the adapter context container providing a {@link LocaleProvider}
+	 * @param ctx the adapter context container providing a {@link ConfigRepository}
 	 * @return a {@code MacroStringMap} with the formatted timestamp under {@code baseKey.INSTANT}
 	 */
 	default MacroStringMap extractInstant(final ValidMacroKey baseKey,
@@ -72,7 +72,7 @@ public interface Instantable
 		return baseKey.append(INSTANT).isValid()
 				.map(macroKey -> new MacroStringMap()
 				.with(macroKey, formatInstant(this.getInstant(), formatStyle, ctx.formatterCtx()
-						.localeProvider()).orElse(UNKNOWN_VALUE)))
+						.configRepository()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);
 	}
 
@@ -82,17 +82,17 @@ public interface Instantable
 	 *
 	 * @param instant the instant to format
 	 * @param formatStyle the formatting style to use
-	 * @param localeProvider a provider of the current locale and timezone
+	 * @param configRepository a provider of the current locale and timezone
 	 * @return an {@code Optional<Section>} containing the formatted timestamp, or empty if the instant is {@code null}
 	 */
 	static Optional<String> formatInstant(final Instant instant,
 										  final FormatStyle formatStyle,
-										  final LocaleProvider localeProvider)
+										  final ConfigRepository configRepository)
 	{
 		if (instant == null) { return Optional.empty(); }
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(formatStyle);
-		ZonedDateTime zonedDateTime = instant.atZone(localeProvider.getZoneId());
+		ZonedDateTime zonedDateTime = instant.atZone(configRepository.zoneId());
 
 		return Optional.of(formatter.format(zonedDateTime));
 	}
