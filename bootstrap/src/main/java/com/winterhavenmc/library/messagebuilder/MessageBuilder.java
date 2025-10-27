@@ -55,11 +55,11 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
 /**
  * A class that implements a builder pattern for messages to be sent to a player or console.
  * <p>
- * It should be instantiated in a plugin's onEnable method, and the build method is called
- * with a CommandSender as recipient and an E enum member to reference the message defined
+ * This class should be instantiated in a plugin's onEnable method, and the build method {@code compose} is called
+ * with a CommandSender as recipient and an enum constant whose name is used to reference the message key defined
  * in the language file. Macro replacements can then be assigned with a chained method call to
- * the setMacro method, which can be repeated as necessary to set all the macros to be replaced
- * in the message string. Finally, the send method is called, usually as a final chained method call
+ * the {@code setMacro} method, which can be repeated as necessary to set all the macros to be replaced
+ * in the message string. Finally, the {@code send} method is called as a final chained method call
  * to effectuate the actual sending of the message.
  * <p>
  * If the message is configured in the language file with a repeat-delay, an entry will be added to
@@ -77,10 +77,9 @@ import static com.winterhavenmc.library.messagebuilder.models.validation.Validat
  * }
  * <p>
  * Note that any object may be passed as the replacement string, which will be converted using
- * that object's toString method, except in the case of some placeholder keys that are treated
- * specially by the doMacroReplacements method. Special keys are:
- * ITEM or ITEM_NAME, ITEM_QUANTITY, WORLD or WORLD_NAME, PLAYER or PLAYER_NAME, LOCATION or PLAYER_LOCATION,
- * DURATION or DURATION_MINUTES
+ * that object's toString method. Some placeholders, such as {@code RECIPIENT}, {@code PLUGIN} and {@code SERVER} are
+ * automatically populated along with any subfields in all messages and are therefore always
+ * available as message placeholders,
  */
 public final class MessageBuilder
 {
