@@ -13,27 +13,33 @@ public interface ItemRepository
 {
 	ItemRecord getRecord(ValidItemKey validItemKey);
 
-	Optional<ItemStack> createItem(String key);
-
-	Optional<ItemStack> createItem(String key, int quantity);
-
-	Optional<ItemStack> createItem(String key, int quantity, Map<String, String> replacements);
-
 	Optional<ItemStack> createItem(ValidItemKey validItemKey);
 
 	Optional<ItemStack> createItem(ValidItemKey validItemKey, int quantity);
 
 	Optional<ItemStack> createItem(ValidItemKey validItemKey, int quantity, Map<String, String> replacements);
 
-	Optional<String> getItemName(String key);
+	Optional<ItemRecord> getItemRecord(ValidItemKey validItemKey);
+
+	ItemKey getItemKey(ItemStack itemStack);
 
 	Optional<String> getItemDisplayName(String key);
-
-	Optional<ItemRecord> getItemRecord(String key);
-
-	Optional<ItemRecord> getItemRecord(ValidItemKey validItemKey);
+//	Optional<String> getItemDisplayName(ValidItemKey validItemKey);
 
 	boolean isItem(ItemStack itemStack);
 
-	ItemKey getItemKey(ItemStack itemStack);
+	@Deprecated
+	Optional<ItemStack> createItem(String key);
+
+	@Deprecated
+	Optional<ItemStack> createItem(String key, int quantity);
+
+	@Deprecated
+	Optional<ItemStack> createItem(String key, int quantity, Map<String, String> replacements);
+
+	@Deprecated
+	Optional<String> getItemName(String key);
+
+	@Deprecated
+	Optional<ItemRecord> getItemRecord(String key);
 }

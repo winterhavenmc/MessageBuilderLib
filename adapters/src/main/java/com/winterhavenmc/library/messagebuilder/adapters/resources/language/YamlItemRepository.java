@@ -81,33 +81,6 @@ public final class YamlItemRepository implements ItemRepository
 	}
 
 
-	@Override @Deprecated
-	public Optional<ItemStack> createItem(final String key)
-	{
-		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
-				? createItem(validItemKey, 1, Map.of())
-				: Optional.empty();
-	}
-
-
-	@Override @Deprecated
-	public Optional<ItemStack> createItem(final String key, final int quantity)
-	{
-		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
-				? createItem(validItemKey, quantity, Map.of())
-				: Optional.empty();
-	}
-
-
-	@Override @Deprecated
-	public Optional<ItemStack> createItem(final String key, final int quantity, final Map<String, String> replacements)
-	{
-		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
-				? createItem(validItemKey, quantity, replacements)
-				: Optional.empty();
-	}
-
-
 	@Override
 	public Optional<ItemStack> createItem(final ValidItemKey validItemKey)
 	{
@@ -151,6 +124,123 @@ public final class YamlItemRepository implements ItemRepository
 		{
 			return Optional.empty();
 		}
+	}
+
+
+	@Override
+	public Optional<String> getItemName(final String key)
+	{
+		ItemKey itemKey = ItemKey.of(key);
+		if (itemKey instanceof ValidItemKey validItemKey)
+		{
+			ItemRecord itemRecord = getRecord(validItemKey);
+			if (itemRecord instanceof ValidItemRecord validItemRecord)
+			{
+				return Optional.of(validItemRecord.name());
+			}
+		}
+
+		return Optional.empty();
+	}
+
+
+	@Override
+	public Optional<String> getItemDisplayName(final String key)
+	{
+		ItemKey itemKey = ItemKey.of(key);
+		if (itemKey instanceof ValidItemKey validItemKey)
+		{
+			ItemRecord itemRecord = getRecord(validItemKey);
+			if (itemRecord instanceof ValidItemRecord validItemRecord)
+			{
+				return Optional.of(validItemRecord.displayName());
+			}
+		}
+
+		return Optional.empty();
+	}
+
+
+	@Override
+	public Optional<ItemRecord> getItemRecord(final String key)
+	{
+		ItemKey itemKey = ItemKey.of(key);
+		if (itemKey instanceof ValidItemKey validItemKey)
+		{
+			ItemRecord itemRecord = getRecord(validItemKey);
+			if (itemRecord instanceof ValidItemRecord validItemRecord)
+			{
+				return Optional.of(validItemRecord);
+			}
+		}
+
+		return Optional.empty();
+	}
+
+
+	@Override
+	public Optional<ItemRecord> getItemRecord(final ValidItemKey validItemKey)
+	{
+		ItemRecord itemRecord = getRecord(validItemKey);
+		if (itemRecord instanceof ValidItemRecord validItemRecord)
+		{
+			return Optional.of(validItemRecord);
+		}
+
+		return Optional.empty();
+	}
+
+
+	@Override
+	public boolean isItem(ItemStack itemStack)
+	{
+		return (itemStack != null
+				&& itemStack.hasItemMeta()
+				&& itemStack.getItemMeta() != null
+				&& itemStack.getItemMeta().getPersistentDataContainer().has(namespacedKey));
+	}
+
+
+	public Optional<String> getItemKeyString(ItemStack itemStack)
+	{
+		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
+				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
+				: Optional.empty();
+	}
+
+
+	@Override
+	public ItemKey getItemKey(ItemStack itemStack)
+	{
+		return getItemKeyString(itemStack).map(ItemKey::of)
+				.orElseGet(() -> new InvalidItemKey("unknown", InvalidKeyReason.KEY_INVALID));
+	}
+
+
+	@Override @Deprecated
+	public Optional<ItemStack> createItem(final String key)
+	{
+		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
+				? createItem(validItemKey, 1, Map.of())
+				: Optional.empty();
+	}
+
+
+	@Override @Deprecated
+	public Optional<ItemStack> createItem(final String key, final int quantity)
+	{
+		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
+				? createItem(validItemKey, quantity, Map.of())
+				: Optional.empty();
+	}
+
+
+	@Override @Deprecated
+	public Optional<ItemStack> createItem(final String key, final int quantity, final Map<String, String> replacements)
+	{
+		return (ItemKey.of(key) instanceof ValidItemKey validItemKey)
+				? createItem(validItemKey, quantity, replacements)
+				: Optional.empty();
 	}
 
 
@@ -247,96 +337,6 @@ public final class YamlItemRepository implements ItemRepository
 		itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-	}
-
-
-	@Override
-	public Optional<String> getItemName(final String key)
-	{
-		ItemKey itemKey = ItemKey.of(key);
-		if (itemKey instanceof ValidItemKey validItemKey)
-		{
-			ItemRecord itemRecord = getRecord(validItemKey);
-			if (itemRecord instanceof ValidItemRecord validItemRecord)
-			{
-				return Optional.of(validItemRecord.name());
-			}
-		}
-
-		return Optional.empty();
-	}
-
-
-	@Override
-	public Optional<String> getItemDisplayName(final String key)
-	{
-		ItemKey itemKey = ItemKey.of(key);
-		if (itemKey instanceof ValidItemKey validItemKey)
-		{
-			ItemRecord itemRecord = getRecord(validItemKey);
-			if (itemRecord instanceof ValidItemRecord validItemRecord)
-			{
-				return Optional.of(validItemRecord.displayName());
-			}
-		}
-
-		return Optional.empty();
-	}
-
-
-	@Override
-	public Optional<ItemRecord> getItemRecord(final String key)
-	{
-		ItemKey itemKey = ItemKey.of(key);
-		if (itemKey instanceof ValidItemKey validItemKey)
-		{
-			ItemRecord itemRecord = getRecord(validItemKey);
-			if (itemRecord instanceof ValidItemRecord validItemRecord)
-			{
-				return Optional.of(validItemRecord);
-			}
-		}
-
-		return Optional.empty();
-	}
-
-
-	@Override
-	public Optional<ItemRecord> getItemRecord(final ValidItemKey validItemKey)
-	{
-		ItemRecord itemRecord = getRecord(validItemKey);
-		if (itemRecord instanceof ValidItemRecord validItemRecord)
-		{
-			return Optional.of(validItemRecord);
-		}
-
-		return Optional.empty();
-	}
-
-
-	@Override
-	public boolean isItem(ItemStack itemStack)
-	{
-		return (itemStack != null
-				&& itemStack.hasItemMeta()
-				&& itemStack.getItemMeta() != null
-				&& itemStack.getItemMeta().getPersistentDataContainer().has(namespacedKey));
-	}
-
-
-	public Optional<String> getItemKeyString(ItemStack itemStack)
-	{
-		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
-				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
-				: Optional.empty();
-	}
-
-
-	@Override
-	public ItemKey getItemKey(ItemStack itemStack)
-	{
-		return getItemKeyString(itemStack).map(ItemKey::of)
-				.orElseGet(() -> new InvalidItemKey("unknown", InvalidKeyReason.KEY_INVALID));
 	}
 
 }
