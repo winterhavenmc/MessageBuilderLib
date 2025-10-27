@@ -30,4 +30,14 @@
 			<artifactId>multiverse-core</artifactId>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<!-- Resources -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
 </project>
