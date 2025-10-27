@@ -18,7 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.*;
-
 import org.bukkit.plugin.Plugin;
 
 import java.time.ZoneId;
@@ -55,12 +54,13 @@ import java.util.function.Supplier;
  * @see Locale
  * @see ZoneId
  */
-public final class BukkitLocaleProvider implements ConfigRepository
+public final class BukkitConfigRepository implements ConfigRepository
 {
 	private final Supplier<LanguageSetting> languageSettingSupplier;
 	private final Supplier<LocaleSetting> localeSettingSupplier;
 	private final Supplier<ZoneId> zoneIdSupplier;
 	private final static String FALLBACK_NAME = "en-US";
+
 
 	/**
 	 * Enum representing the recognized configuration keys for locale setting, in order of preference.
@@ -84,9 +84,9 @@ public final class BukkitLocaleProvider implements ConfigRepository
 	 * @param localeSettingSupplier supplies the current {@link LocaleSetting}
 	 * @param zoneIdSupplier supplies the current {@link ZoneId}
 	 */
-	private BukkitLocaleProvider(final Supplier<LanguageSetting> languageSettingSupplier,
-								 final Supplier<LocaleSetting> localeSettingSupplier,
-								 final Supplier<ZoneId> zoneIdSupplier)
+	private BukkitConfigRepository(final Supplier<LanguageSetting> languageSettingSupplier,
+								  final Supplier<LocaleSetting> localeSettingSupplier,
+								  final Supplier<ZoneId> zoneIdSupplier)
 	{
 		this.languageSettingSupplier = languageSettingSupplier;
 		this.localeSettingSupplier = localeSettingSupplier;
@@ -106,11 +106,11 @@ public final class BukkitLocaleProvider implements ConfigRepository
 	 * </ol>
 	 *
 	 * @param plugin the plugin whose configuration will be consulted
-	 * @return a new {@code ConfigRepository} with dynamic access to locale and time zone settings
+	 * @return a new {@code LocaleProvider} with dynamic access to locale and time zone settings
 	 */
 	public static ConfigRepository create(final Plugin plugin)
 	{
-		return new BukkitLocaleProvider(
+		return new BukkitConfigRepository(
 				() -> getLanguageSetting(plugin),
 				() -> getLocaleSetting(plugin),
 				() -> getZoneId(plugin));

@@ -90,7 +90,7 @@ public interface Protectable
 			// formatted date/time from Instant
 			protectionKey.append(INSTANT).isValid().ifPresent(macroKey ->
 					resultMap.put(macroKey, Instantable.formatInstant(this.getProtection(), formatStyle, ctx.formatterCtx()
-							.localeProvider())
+							.configRepository())
 							.orElse(UNKNOWN_VALUE)));
 		});
 

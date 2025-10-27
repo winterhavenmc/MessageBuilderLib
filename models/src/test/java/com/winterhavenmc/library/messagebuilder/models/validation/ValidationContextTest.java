@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.models.validation;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -35,8 +35,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ValidationContextTest
 {
-	@Mock LocaleProvider localeProviderMockUS;
-	@Mock LocaleProvider localeProviderMockFR;
+	@Mock ConfigRepository ConfigRepositoryMockUS;
+	@Mock ConfigRepository ConfigRepositoryMockFR;
 
 
 	@AfterEach
@@ -48,7 +48,7 @@ class ValidationContextTest
 	@Test @DisplayName("initialize() does not throw exception with valid parameter.")
 	void initialize_does_not_throw_with_valid_parameter()
 	{
-		assertDoesNotThrow(() -> ValidationContext.initialize(localeProviderMockUS));
+		assertDoesNotThrow(() -> ValidationContext.initialize(ConfigRepositoryMockUS));
 	}
 
 	@Test @DisplayName("initialize() throws ValidationException with null parameter.")
@@ -66,12 +66,12 @@ class ValidationContextTest
 	void initialize_twice_does_not_mutate_localeProvider_field()
 	{
 		// Arrange
-		lenient().when(localeProviderMockFR.getLocale()).thenReturn(Locale.FRANCE);
-		lenient().when(localeProviderMockUS.getLocale()).thenReturn(Locale.US);
+		lenient().when(ConfigRepositoryMockFR.locale()).thenReturn(Locale.FRANCE);
+		lenient().when(ConfigRepositoryMockUS.locale()).thenReturn(Locale.US);
 
 		// Act
-		ValidationContext.initialize(localeProviderMockFR);
-		ValidationContext.initialize(localeProviderMockUS);
+		ValidationContext.initialize(ConfigRepositoryMockFR);
+		ValidationContext.initialize(ConfigRepositoryMockUS);
 
 		// Assert
 		assertEquals(Locale.FRANCE, ValidationContext.getLocale());
@@ -83,7 +83,7 @@ class ValidationContextTest
 	void getLocale_returns_valid_locale_object()
 	{
 		// Arrange
-		when(localeProviderMockUS.getLocale()).thenReturn(Locale.FRANCE);
+		when(ConfigRepositoryMockUS.locale()).thenReturn(Locale.FRANCE);
 
 		// Act
 		Locale result = ValidationContext.getLocale();

@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.FieldAccessor;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
@@ -102,7 +102,7 @@ class FieldAccessorTest
 	@Mock FormatterCtx formatterContainerMock;
 	@Mock DurationFormatter durationFormatterMock;
 	@Mock NumberFormatter numberFormatterMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock ConfigRepository configRepositoryMock;
 
 	FieldAccessor extractor;
 	ValidMacroKey baseKey;
@@ -199,9 +199,9 @@ class FieldAccessorTest
 
 		when(adapterContextContainerMock.formatterCtx()).thenReturn(formatterContainerMock);
 		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
-		when(formatterContainerMock.localeProvider()).thenReturn(localeProviderMock);
+		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("formatted duration");
-		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
+		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
 
 		// Act
 		MacroStringMap result = extractor.extract(baseKey, expirationAdapter, testObject);
@@ -213,9 +213,9 @@ class FieldAccessorTest
 		// Verify
 		verify(adapterContextContainerMock, atLeastOnce()).formatterCtx();
 		verify(formatterContainerMock, atLeastOnce()).durationFormatter();
-		verify(formatterContainerMock, atLeastOnce()).localeProvider();
+		verify(formatterContainerMock, atLeastOnce()).configRepository();
 		verify(durationFormatterMock, atLeastOnce()).format(any(), eq(ChronoUnit.MINUTES));
-		verify(localeProviderMock, atLeastOnce()).getZoneId();
+		verify(configRepositoryMock, atLeastOnce()).zoneId();
 	}
 
 
@@ -237,8 +237,8 @@ class FieldAccessorTest
 		TestObject testObject = new TestObject();
 
 		when(adapterContextContainerMock.formatterCtx()).thenReturn(formatterContainerMock);
-		when(formatterContainerMock.localeProvider()).thenReturn(localeProviderMock);
-		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
+		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
+		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
 
 		// Act
 		MacroStringMap result = extractor.extract(baseKey, instantAdapter, testObject);
@@ -248,8 +248,8 @@ class FieldAccessorTest
 
 		// Verify
 		verify(adapterContextContainerMock, atLeastOnce()).formatterCtx();
-		verify(formatterContainerMock, atLeastOnce()).localeProvider();
-		verify(localeProviderMock, atLeastOnce()).getZoneId();
+		verify(formatterContainerMock, atLeastOnce()).configRepository();
+		verify(configRepositoryMock, atLeastOnce()).zoneId();
 	}
 
 
@@ -467,9 +467,9 @@ class FieldAccessorTest
 
 		when(adapterContextContainerMock.formatterCtx()).thenReturn(formatterContainerMock);
 		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
-		when(formatterContainerMock.localeProvider()).thenReturn(localeProviderMock);
+		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("formatted duration");
-		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
+		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
 
 		ProtectionAdapter protectionAdapter = new ProtectionAdapter();
 		TestObject testObject = new TestObject();
@@ -483,7 +483,7 @@ class FieldAccessorTest
 
 		// Verify
 		verify(durationFormatterMock, atLeastOnce()).format(any(), eq(ChronoUnit.MINUTES));
-		verify(localeProviderMock, atLeastOnce()).getZoneId();
+		verify(configRepositoryMock, atLeastOnce()).zoneId();
 	}
 
 

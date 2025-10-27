@@ -19,10 +19,9 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.e
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
-import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
 import java.time.Instant;
 import java.time.format.FormatStyle;
@@ -53,7 +52,7 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.acces
  * implementation, such as {@code LocalizedDurationFormatter}, and the instant string is formatted using a
  * {@link java.time.format.DateTimeFormatter DateTimeFormatter} constructed with
  * {@link java.time.format.FormatStyle FormatStyle} and a
- * {@link LocaleProvider LocaleProvider}.
+ * {@link com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository ConfigRepository}.
  *
  * <p>These macros provide flexibility to server operators, allowing them to choose the display format
  * that best suits their message context.
@@ -108,7 +107,7 @@ public interface Expirable
 			// formatted date/time from Instant
 			protectionKey.append(INSTANT).isValid().ifPresent(macroKey ->
 					resultMap.put(macroKey,
-							formatInstant(this.getExpiration(), formatStyle, ctx.formatterCtx().localeProvider())
+							formatInstant(this.getExpiration(), formatStyle, ctx.formatterCtx().configRepository())
 							.orElse(UNKNOWN_VALUE)));
 		});
 

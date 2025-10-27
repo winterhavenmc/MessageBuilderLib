@@ -33,7 +33,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.util.MessageId;
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
@@ -82,7 +82,7 @@ class MessageProcessorTest
 {
 	@Mock Plugin pluginMock;
 	@Mock Player playerMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock ConfigRepository configRepositoryMock;
 	@Mock DefaultResolver worldNameResolverMock;
 	@Mock MessagePipeline messagePipelineMock;
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
@@ -116,9 +116,9 @@ class MessageProcessorTest
 
 		message = new ValidMessage(pluginMock, recipient, messageKey, messagePipelineMock);
 
-		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(localeProviderMock);
-		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(localeProviderMock);
-		FormatterCtx formatterContainer = new FormatterCtx(localeProviderMock, time4jDurationFormatter, localeNumberFormatter);
+		Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(configRepositoryMock);
+		LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(configRepositoryMock);
+		FormatterCtx formatterContainer = new FormatterCtx(configRepositoryMock, time4jDurationFormatter, localeNumberFormatter);
 		AccessorCtx adapterContextContainer = new AccessorCtx(worldNameResolverMock,
 				new BukkitItemNameResolver(), new BukkitItemDisplayNameResolver(),
 				new BukkitItemPluralNameResolver(itemRepositoryMock), formatterContainer);

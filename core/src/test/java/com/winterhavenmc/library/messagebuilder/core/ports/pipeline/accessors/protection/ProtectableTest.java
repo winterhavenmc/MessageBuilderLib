@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -53,7 +53,7 @@ class ProtectableTest
 	@Mock AccessorCtx ctxMock;
 	@Mock FormatterCtx formatterContainerMock;
 	@Mock DurationFormatter durationFormatterMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock ConfigRepository configRepositoryMock;
 
 
 	static class TestObject implements Protectable
@@ -103,8 +103,8 @@ class ProtectableTest
 
 		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
 		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
-		when(formatterContainerMock.localeProvider()).thenReturn(localeProviderMock);
-		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
+		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
+		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("valid duration string");
 
 		// Act

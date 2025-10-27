@@ -22,7 +22,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -49,7 +49,7 @@ class DurationableTest
 {
 	@Mock AccessorCtx ctxMock;
 	@Mock FormatterCtx formatterContainerMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock ConfigRepository configRepository;
 	@Mock DurationFormatter durationFormatterMock;
 
 

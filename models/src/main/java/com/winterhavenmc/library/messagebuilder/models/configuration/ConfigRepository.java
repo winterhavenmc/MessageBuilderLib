@@ -21,8 +21,7 @@ import java.time.ZoneId;
 import java.util.Locale;
 
 
-@Deprecated(forRemoval = true)
-public interface LocaleProvider extends ConfigProvider<LocaleSetting>
+public interface ConfigRepository extends ConfigProvider<LocaleSetting>
 {
 	/**
 	 * Returns the resolved {@link LocaleSetting} based on the plugin configuration.

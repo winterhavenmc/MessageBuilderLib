@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -46,7 +46,7 @@ class InstantableTest
 {
 	@Mock AccessorCtx ctxMock;
 	@Mock FormatterCtx formatterContainerMock;
-	@Mock LocaleProvider localeProviderMock;
+	@Mock ConfigRepository configRepositoryMock;
 
 	static class TestObject implements Instantable
 	{
@@ -91,8 +91,8 @@ class InstantableTest
 		ValidMacroKey subKey = baseKey.append("INSTANT").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
-		when(formatterContainerMock.localeProvider()).thenReturn(localeProviderMock);
-		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
+		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
+		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
 
 		// Act
 		MacroStringMap result = testObject.extractInstant(baseKey, FormatStyle.MEDIUM, ctxMock);
@@ -108,10 +108,10 @@ class InstantableTest
 		// Arrange
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(localeProviderMock.getZoneId()).thenReturn(ZoneId.of("UTC"));
+		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
 
 		// Act
-		Optional<String> result = Instantable.formatInstant(testObject.getInstant(), FormatStyle.MEDIUM, localeProviderMock);
+		Optional<String> result = Instantable.formatInstant(testObject.getInstant(), FormatStyle.MEDIUM, configRepositoryMock);
 
 		// Assert
 		assertEquals(Optional.of("Jan 1, 1970, 12:00:00 AM"), result);
@@ -126,7 +126,7 @@ class InstantableTest
 		TestObject testObject = new TestObject();
 
 		// Act
-		Optional<String> result = Instantable.formatInstant(null, FormatStyle.MEDIUM, localeProviderMock);
+		Optional<String> result = Instantable.formatInstant(null, FormatStyle.MEDIUM, configRepositoryMock);
 
 		// Assert
 		assertEquals(Optional.empty(), result);

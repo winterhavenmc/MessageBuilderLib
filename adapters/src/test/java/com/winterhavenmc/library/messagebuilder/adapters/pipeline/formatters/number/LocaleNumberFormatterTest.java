@@ -20,7 +20,8 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.nu
 
 import java.util.Locale;
 
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -33,15 +34,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class LocaleNumberFormatterTest
 {
-	@Mock
-	LocaleProvider localeProviderMock;
+	@Mock ConfigRepository configRepositoryMock;
 
 
 	@Test
 	void getFormatted_US()
 	{
-		when(localeProviderMock.getLocale()).thenReturn(Locale.US);
-		LocaleNumberFormatter formatter = new LocaleNumberFormatter(localeProviderMock);
+		when(configRepositoryMock.locale()).thenReturn(Locale.US);
+		LocaleNumberFormatter formatter = new LocaleNumberFormatter(configRepositoryMock);
 
 		String result = formatter.format(42000);
 
@@ -52,8 +52,8 @@ class LocaleNumberFormatterTest
 	@Test
 	void getFormatted_DE()
 	{
-		when(localeProviderMock.getLocale()).thenReturn(Locale.GERMAN);
-		LocaleNumberFormatter formatter = new LocaleNumberFormatter(localeProviderMock);
+		when(configRepositoryMock.locale()).thenReturn(Locale.GERMAN);
+		LocaleNumberFormatter formatter = new LocaleNumberFormatter(configRepositoryMock);
 
 		String result = formatter.format(42000);
 
