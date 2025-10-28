@@ -32,12 +32,14 @@ public interface LocaleProvider extends ConfigProvider<LocaleSetting>
 	@Override
 	LocaleSetting get();
 
+
 	/**
 	 * Returns the resolved {@link LanguageTag} representing the locale tag.
 	 *
 	 * @return a valid LanguageTag
 	 */
 	LanguageTag languageTag();
+
 
 	/**
 	 * Returns the {@link Locale} object derived from the configuration.
@@ -46,13 +48,19 @@ public interface LocaleProvider extends ConfigProvider<LocaleSetting>
 	 */
 	Locale locale();
 
+
 	/**
-	 * Returns the configured {@link ZoneId} if valid, or the system default otherwise.
+	 * Returns the configured {@link ZoneId} if valid, or the system default.
 	 *
 	 * @return the applicable time zone as represented by a {@code ZoneId} object.
 	 */
 	ZoneId zoneId();
 
 
+	/**
+	 * Returns the configured language string if valid, or the system default locale as string.
+	 *
+	 * @return the applicable time zone as represented by a {@code ZoneId} object.
+	 */
 	String language();
 }
