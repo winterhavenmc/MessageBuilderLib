@@ -113,19 +113,6 @@ public final class BukkitWorldRepository implements WorldRepository
 
 
 	/**
-	 * Check if a world is enabled by bukkit world object
-	 *
-	 * @param world bukkit world object
-	 * @return {@code true} if world is enabled, {@code false} if disabled
-	 */
-	@Override @Deprecated
-	public boolean isEnabled(final World world)
-	{
-		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
-	}
-
-
-	/**
 	 * Check if a world is enabled by name
 	 *
 	 * @param worldName name of world as string to check
