@@ -11,10 +11,6 @@ import java.util.UUID;
 
 public interface WorldRepository extends ConfigProvider<EnabledWorldsSetting>
 {
-	String UNKNOWN_WORLD = "\uD83C\uDF10";
-	String CONSOLE_SENDER = "console";
-
-
 	/**
 	 * Returns the current {@link EnabledWorldsSetting}.
 	 *
