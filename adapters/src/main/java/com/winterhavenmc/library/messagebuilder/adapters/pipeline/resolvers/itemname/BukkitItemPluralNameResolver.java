@@ -31,7 +31,9 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 
@@ -50,25 +52,73 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	{
 		MiniMessage miniMessage = MiniMessage.miniMessage();
 
-		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
-		{
-			// check if item is custom item defined in language file, and if so, try to set pluralized name
-			if (itemRepository.isItem(itemStack))
-			{
-				if (itemRepository.key(itemStack) instanceof ValidItemKey validItemKey
-						&& itemRepository.getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
-				{
-					String pluralString = validItemRecord.pluralName()
-							.replaceAll(Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE), String.valueOf(itemStack.getAmount()));
-					Component component = miniMessage.deserialize(pluralString, Formatter.choice("choice", itemStack.getAmount()));
-					return YamlItemRepository.LEGACY_SERIALIZER.serializeOr(component, "");
-				}
-			}
-
-			else if (itemStack.getItemMeta().hasDisplayName()) return ChatColor.stripColor(itemStack.getItemMeta().getDisplayName());
-			else if (itemStack.getItemMeta().hasItemName()) return ChatColor.stripColor(itemStack.getItemMeta().getItemName());
-		}
-
-		return "";
+		return Optional.ofNullable(itemStack)
+				.filter(ItemStack::hasItemMeta)
+				.flatMap(item ->
+						resolveCustomItem(item, miniMessage)
+								.or(() -> resolveDisplayName(item))
+								.or(() -> resolveItemName(item))
+				)
+				.orElse("");
 	}
+
+
+	private Optional<String> resolveCustomItem(ItemStack stack, MiniMessage miniMessage) {
+		if (!itemRepository.isItem(stack)) return Optional.empty();
+
+		return getValidKey(stack)
+				.flatMap(this::getValidRecord)
+				.map(record -> deserializePluralName(record, stack, miniMessage));
+	}
+
+
+	private Optional<ValidItemKey> getValidKey(ItemStack itemStack)
+	{
+		return Optional.ofNullable(itemRepository.key(itemStack))
+				.filter(ValidItemKey.class::isInstance)
+				.map(ValidItemKey.class::cast);
+	}
+
+
+	private Optional<ValidItemRecord> getValidRecord(ValidItemKey key)
+	{
+		return itemRepository.record(key)
+				.filter(ValidItemRecord.class::isInstance)
+				.map(ValidItemRecord.class::cast);
+	}
+
+
+	private String deserializePluralName(ValidItemRecord record, ItemStack stack, MiniMessage miniMessage)
+	{
+		String pluralString = record.pluralName().replaceAll(
+				Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE),
+				String.valueOf(stack.getAmount())
+		);
+
+		Component component = miniMessage.deserialize(
+				pluralString,
+				Formatter.choice("choice", stack.getAmount())
+		);
+
+		return YamlItemRepository.LEGACY_SERIALIZER.serializeOr(component, "");
+	}
+
+
+	private Optional<String> resolveDisplayName(ItemStack itemStack)
+	{
+		return Optional.ofNullable(itemStack.getItemMeta())
+				.filter(ItemMeta::hasDisplayName)
+				.map(ItemMeta::getDisplayName)
+				.map(ChatColor::stripColor);
+	}
+
+
+	private Optional<String> resolveItemName(ItemStack itemStack)
+	{
+		return Optional.ofNullable(itemStack.getItemMeta())
+				.filter(ItemMeta::hasItemName)
+				.map(ItemMeta::getItemName)
+				.map(ChatColor::stripColor);
+	}
+
 }

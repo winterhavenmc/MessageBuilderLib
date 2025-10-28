@@ -4,7 +4,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.Lang
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
+
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;

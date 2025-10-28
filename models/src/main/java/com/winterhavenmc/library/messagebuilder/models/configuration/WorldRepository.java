@@ -1,7 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.models.configuration;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.jetbrains.annotations.Contract;
 
 import java.util.List;
@@ -11,10 +10,6 @@ import java.util.UUID;
 
 public interface WorldRepository extends ConfigProvider<EnabledWorldsSetting>
 {
-	String UNKNOWN_WORLD = "\uD83C\uDF10";
-	String CONSOLE_SENDER = "console";
-
-
 	/**
 	 * Returns the current {@link EnabledWorldsSetting}.
 	 *
@@ -24,6 +19,12 @@ public interface WorldRepository extends ConfigProvider<EnabledWorldsSetting>
 	EnabledWorldsSetting get();
 
 
+	/**
+	 * Returns a list of world uuids that are enabled by the plugin config. Only world uuids that match
+	 * a current server world are included in the list.
+	 *
+	 * @return List of enabled world uuids
+	 */
 	List<UUID> enabledUids();
 
 
@@ -35,7 +36,7 @@ public interface WorldRepository extends ConfigProvider<EnabledWorldsSetting>
 	List<String> enabledNames();
 
 
-	Optional<String> aliasOrName();
+	Optional<String> aliasOrName(UUID worldUid);
 
 
 	/**
@@ -45,15 +46,6 @@ public interface WorldRepository extends ConfigProvider<EnabledWorldsSetting>
 	 * @return {@code true} if world is enabled, {@code false} if disabled
 	 */
 	boolean isEnabled(UUID worldUID);
-
-
-	/**
-	 * Check if a world is enabled by bukkit world object
-	 *
-	 * @param world bukkit world object
-	 * @return {@code true} if world is enabled, {@code false} if disabled
-	 */
-	boolean isEnabled(World world);
 
 
 	/**

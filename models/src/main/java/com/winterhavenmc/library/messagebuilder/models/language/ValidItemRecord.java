@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.models.language;
 
+import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -40,7 +41,7 @@ import java.util.List;
  */
 public final class ValidItemRecord implements ItemRecord
 {
-	private final ValidItemKey key;
+	private final ItemKey key;
 	private final String material;
 	private final String name;
 	private final String pluralName;
@@ -97,7 +98,7 @@ public final class ValidItemRecord implements ItemRecord
 
 
 	@Override
-	public ValidItemKey key()
+	public ItemKey key()
 	{
 		return key;
 	}

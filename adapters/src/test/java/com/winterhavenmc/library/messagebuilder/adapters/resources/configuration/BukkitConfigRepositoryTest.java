@@ -39,7 +39,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class BukkitLocaleProviderTest
+class BukkitConfigRepositoryTest
 {
 	@Mock
 	Plugin pluginMock;
@@ -58,7 +58,7 @@ class BukkitLocaleProviderTest
 	void create()
 	{
 		// Act
-		ConfigProvider<LocaleSetting> localeProvider = BukkitLocaleProvider.create(pluginMock);
+		ConfigProvider<LocaleSetting> localeProvider = BukkitConfigRepository.create(pluginMock);
 
 		// Assert
 		assertNotNull(localeProvider);
@@ -71,7 +71,7 @@ class BukkitLocaleProviderTest
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(configuration);
 
-		ConfigProvider<LocaleSetting> localeProvider = BukkitLocaleProvider.create(pluginMock);
+		ConfigProvider<LocaleSetting> localeProvider = BukkitConfigRepository.create(pluginMock);
 
 		// Act
 		Locale locale = localeProvider.get().languageTag().getLocale();
@@ -148,7 +148,7 @@ class BukkitLocaleProviderTest
 		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
-		ZoneId result = BukkitLocaleProvider.getZoneId(pluginMock);
+		ZoneId result = BukkitConfigRepository.getZoneId(pluginMock);
 
 		// Assert
 		assertEquals(ZoneId.of("UTC"), result);
@@ -166,7 +166,7 @@ class BukkitLocaleProviderTest
 		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
-		ZoneId result = BukkitLocaleProvider.getZoneId(pluginMock);
+		ZoneId result = BukkitConfigRepository.getZoneId(pluginMock);
 
 		// Assert
 		assertEquals(ZoneId.systemDefault(), result);

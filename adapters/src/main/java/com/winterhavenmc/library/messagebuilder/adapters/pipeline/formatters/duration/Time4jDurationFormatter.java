@@ -18,7 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.LocaleProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;
 

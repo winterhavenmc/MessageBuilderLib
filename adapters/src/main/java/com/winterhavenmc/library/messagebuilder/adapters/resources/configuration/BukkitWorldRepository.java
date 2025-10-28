@@ -37,6 +37,8 @@ public final class BukkitWorldRepository implements WorldRepository
 	private final SpawnLocationResolver spawnLocationResolver;
 	private final Supplier<EnabledWorldsSetting> enabledWorldsSupplier;
 
+	static final String UNKNOWN_WORLD = "\uD83C\uDF10";
+	static final String CONSOLE_SENDER = "console";
 	static final String ENABLED_WORLDS_KEY = "enabled-worlds";
 	static final String DISABLED_WORLDS_KEY = "disabled-worlds";
 
@@ -91,7 +93,7 @@ public final class BukkitWorldRepository implements WorldRepository
 
 
 	@Override
-	public Optional<String> aliasOrName()
+	public Optional<String> aliasOrName(final UUID worldUid)
 	{
 		return Optional.empty();
 	}
@@ -107,19 +109,6 @@ public final class BukkitWorldRepository implements WorldRepository
 	public boolean isEnabled(final UUID worldUID)
 	{
 		return worldUID != null && enabledWorldsSupplier.get().worldUids().contains(worldUID);
-	}
-
-
-	/**
-	 * Check if a world is enabled by bukkit world object
-	 *
-	 * @param world bukkit world object
-	 * @return {@code true} if world is enabled, {@code false} if disabled
-	 */
-	@Override @Deprecated
-	public boolean isEnabled(final World world)
-	{
-		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
 	}
 
 
