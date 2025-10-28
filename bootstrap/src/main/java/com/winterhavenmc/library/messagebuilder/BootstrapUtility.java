@@ -217,12 +217,6 @@ public final class BootstrapUtility
 	}
 
 
-//	static LocaleProvider createLocaleProvider(final Plugin plugin)
-//	{
-//		return BukkitLocaleProvider.create(plugin);
-//	}
-
-
 	static ConfigRepository createConfigRepository(final Plugin plugin)
 	{
 		return BukkitConfigRepository.create(plugin);
