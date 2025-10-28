@@ -93,7 +93,7 @@ public final class BukkitWorldRepository implements WorldRepository
 
 
 	@Override
-	public Optional<String> aliasOrName()
+	public Optional<String> aliasOrName(final UUID worldUid)
 	{
 		return Optional.empty();
 	}
