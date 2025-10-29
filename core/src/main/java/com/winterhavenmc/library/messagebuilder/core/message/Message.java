@@ -95,11 +95,11 @@ public sealed interface Message permits ValidMessage, InvalidMessage
 
 
     /**
-     * Sends the composed message to the resolved recipient, if valid.
-     * <p>
-     * No-op if the message is invalid or the recipient is missing or unsupported.
-     */
-    void send();
+	 * Sends the composed message to the resolved recipient, if valid.
+	 * <p>
+	 * No-op if the message is invalid or the recipient is missing or unsupported.
+	 */
+    boolean send();
 
 
     /**

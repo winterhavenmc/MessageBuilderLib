@@ -87,9 +87,10 @@ public record InvalidMessage(String reason) implements Message
 	}
 
 	@Override
-	public void send()
+	public boolean send()
 	{
 		logging(LogLevel.WARN, PARAMETER_INVALID, RECIPIENT);
+		return true;
 	}
 
 	@Override
