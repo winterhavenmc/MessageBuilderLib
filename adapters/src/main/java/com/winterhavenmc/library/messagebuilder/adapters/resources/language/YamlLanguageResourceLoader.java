@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.ResourceMessage;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
@@ -111,7 +112,7 @@ public class YamlLanguageResourceLoader implements ResourceLoader
 	{
 		return getConfiguredLanguageTag()
 				.map(tag -> loadWithFallback(tag, defaultLanguageTag))
-				.orElseThrow(() -> new IllegalStateException(LanguageResourceMessage.LANGUAGE_RESOURCE_TAG_MISSING
+				.orElseThrow(() -> new IllegalStateException(ResourceMessage.RESOURCE_TAG_MISSING
 						.getLocalizedMessage(configRepository.locale())));
 	}
 
@@ -133,33 +134,33 @@ public class YamlLanguageResourceLoader implements ResourceLoader
 		}
 		catch (FileNotFoundException exception)
 		{
-			plugin.getLogger().warning(LanguageResourceMessage.LANGUAGE_RESOURCE_NOT_FOUND
+			plugin.getLogger().warning(ResourceMessage.RESOURCE_NOT_FOUND
 					.getLocalizedMessage(configRepository.locale(), languageFile.getName()));
 		}
 		catch (IOException ioException)
 		{
-			plugin.getLogger().warning(LanguageResourceMessage.LANGUAGE_RESOURCE_UNREADABLE
+			plugin.getLogger().warning(ResourceMessage.RESOURCE_UNREADABLE
 					.getLocalizedMessage(configRepository.locale(), languageFile.getName()));
 		}
 		catch (InvalidConfigurationException configurationException)
 		{
-			plugin.getLogger().warning(LanguageResourceMessage.LANGUAGE_RESOURCE_INVALID_YAML
+			plugin.getLogger().warning(ResourceMessage.RESOURCE_INVALID_YAML
 					.getLocalizedMessage(configRepository.locale(), languageFile.getName()));
 		}
 		catch (IllegalArgumentException argumentException)
 		{
-			plugin.getLogger().warning(LanguageResourceMessage.LANGUAGE_RESOURCE_INVALID_FILE
+			plugin.getLogger().warning(ResourceMessage.RESOURCE_INVALID_FILE
 					.getLocalizedMessage(configRepository.locale(), languageFile.getName(), argumentException.getLocalizedMessage()));
 		}
 		catch (Exception exception)
 		{
-			plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_LOAD_EXCEPTION
+			plugin.getLogger().severe(ResourceMessage.RESOURCE_LOAD_EXCEPTION
 					.getLocalizedMessage(configRepository.locale(), languageFile.getName()));
 		}
 
 		if (success)
 		{
-			plugin.getLogger().info(LanguageResourceMessage.LANGUAGE_RESOURCE_LOAD_SUCCESS
+			plugin.getLogger().info(ResourceMessage.RESOURCE_LOAD_SUCCESS
 					.getLocalizedMessage(configRepository.locale(), languageFile.getName()));
 			return config;
 		}
@@ -182,19 +183,19 @@ public class YamlLanguageResourceLoader implements ResourceLoader
 			{
 				YamlConfiguration config = yamlFactory.get();
 				config.load(new InputStreamReader(stream, StandardCharsets.UTF_8));
-				plugin.getLogger().info(LanguageResourceMessage.LANGUAGE_RESOURCE_FALLBACK_SUCCESS
+				plugin.getLogger().info(ResourceMessage.RESOURCE_FALLBACK_SUCCESS
 						.getLocalizedMessage(configRepository.locale(), resourcePath));
 				return config;
 			}
 			else
 			{
-				plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_FALLBACK_MISSING
+				plugin.getLogger().severe(ResourceMessage.RESOURCE_FALLBACK_MISSING
 						.getLocalizedMessage(configRepository.locale(), resourcePath));
 			}
 		}
 		catch (IOException | InvalidConfigurationException exception)
 		{
-			plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_FALLBACK_FAILED
+			plugin.getLogger().severe(ResourceMessage.RESOURCE_FALLBACK_FAILED
 					.getLocalizedMessage(configRepository.locale(), resourcePath));
 		}
 
