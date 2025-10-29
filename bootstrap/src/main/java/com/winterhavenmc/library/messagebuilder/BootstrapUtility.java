@@ -191,7 +191,7 @@ public final class BootstrapUtility
 													  final ItemRepository itemRepository,
 													  final FormatterCtx formatterCtx)
 	{
-		WorldNameResolver worldNameResolver = getWorldNameResolver(plugin);
+		WorldNameResolver worldNameResolver = createWorldNameResolver(plugin);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
 		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRepository);
@@ -207,7 +207,8 @@ public final class BootstrapUtility
 	}
 
 
-	static WorldNameResolver getWorldNameResolver(final Plugin plugin)
+	//TODO: move this method into WorldNameResolver as static factory method
+	static WorldNameResolver createWorldNameResolver(final Plugin plugin)
 	{
 		Plugin mvPlugin = plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
 
@@ -223,10 +224,11 @@ public final class BootstrapUtility
 	}
 
 
-	static WorldRepository createEnabledWorldsProvider(final Plugin plugin)
+	static WorldRepository createWorldRepository(final Plugin plugin)
 	{
+		WorldNameResolver worldNameResolver = createWorldNameResolver(plugin);
 		SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.get(plugin.getServer().getPluginManager());
-		return BukkitWorldRepository.create(plugin, spawnLocationResolver);
+		return BukkitWorldRepository.create(plugin, worldNameResolver, spawnLocationResolver);
 	}
 
 }
