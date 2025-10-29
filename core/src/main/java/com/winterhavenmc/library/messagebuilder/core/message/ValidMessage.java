@@ -139,9 +139,10 @@ public final class ValidMessage implements Message
 
 
 	@Override
-	public void send()
+	public boolean send()
 	{
 		messagePipeline.initiate(this);
+		return true;
 	}
 
 
