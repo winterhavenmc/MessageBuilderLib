@@ -143,7 +143,7 @@ public final class MessageBuilder
 
 		// create configuration setting providers
 		final ConfigRepository configRepository = createConfigRepository(plugin);
-		final WorldRepository worldRepository = createEnabledWorldsProvider(plugin);
+		final WorldRepository worldRepository = createEnabledWorldsRepository(plugin);
 
 		// create resource file managers
 		final YamlLanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
