@@ -224,7 +224,7 @@ public final class BootstrapUtility
 	}
 
 
-	static WorldRepository createEnabledWorldsRepository(final Plugin plugin)
+	static WorldRepository createWorldRepository(final Plugin plugin)
 	{
 		WorldNameResolver worldNameResolver = createWorldNameResolver(plugin);
 		SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.get(plugin.getServer().getPluginManager());
