@@ -1,6 +1,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -31,6 +32,7 @@ class BukkitWorldRepositoryTest
 	@Mock World world2Mock;
 	@Mock World world3Mock;
 	@Mock World world4Mock;
+	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock SpawnLocationResolver spawnLocationResolverMock;
 
 	UUID world1Uid = new UUID(1, 1);
@@ -61,7 +63,7 @@ class BukkitWorldRepositoryTest
 		when(world3Mock.getUID()).thenReturn(world3Uid);
 
 		// Act
-		WorldRepository worldRepository = BukkitWorldRepository.create(pluginMock, spawnLocationResolverMock);
+		WorldRepository worldRepository = BukkitWorldRepository.create(pluginMock, worldNameResolverMock, spawnLocationResolverMock);
 		List<UUID> uuids = worldRepository.enabledUids();
 
 		// Assert
@@ -95,7 +97,7 @@ class BukkitWorldRepositoryTest
 		when(world4Mock.getUID()).thenReturn(world4Uid);
 
 		// Act
-		WorldRepository worldRepository = BukkitWorldRepository.create(pluginMock, spawnLocationResolverMock);
+		WorldRepository worldRepository = BukkitWorldRepository.create(pluginMock, worldNameResolverMock, spawnLocationResolverMock);
 		List<UUID> uuids = worldRepository.enabledUids();
 
 		// Assert
@@ -146,7 +148,7 @@ class BukkitWorldRepositoryTest
 		when(world3Mock.getUID()).thenReturn(world3Uid);
 //		when(world4Mock.getUID()).thenReturn(world4Uid);
 
-		WorldRepository worldRepository = BukkitWorldRepository.create(pluginMock, spawnLocationResolverMock);
+		WorldRepository worldRepository = BukkitWorldRepository.create(pluginMock, worldNameResolverMock, spawnLocationResolverMock);
 
 		List<UUID> uuids = worldRepository.enabledUids();
 
