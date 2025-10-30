@@ -18,8 +18,8 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.ResourceMessage;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 
