@@ -17,14 +17,9 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ConfigurationProvider;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.*;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
-
 import org.bukkit.configuration.Configuration;
 
 import java.io.File;
@@ -85,6 +80,24 @@ public final class YamlLanguageResourceManager implements ResourceManager
 		this.languageConfiguration = configuration;
 	}
 
+	/**
+	 * Constructs the resource path (in the JAR) for a given language tag, e.g. "language/en-US.yml".
+	 */
+	public static String getResourceName(LanguageTag languageTag)
+	{
+		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()) + ".yml";
+	}
+
+	/**
+	 * Retrieve the name of the potential language resource file as installed in the plugin data directory, as a Section.
+	 *
+	 * @return {@code Section} representation of the potential language resource file installed in the plugin data directory
+	 */
+	public static String getFileName(LanguageTag languageTag)
+	{
+		return String.join(File.separator, RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()) + ".yml";
+	}
+
 
 	/**
 	 * Reload the language resource. This method first calls the reload method in the resource loader,
@@ -133,29 +146,10 @@ public final class YamlLanguageResourceManager implements ResourceManager
 	/**
 	 * Installs any language resource files listed in auto-install.txt if they are not already installed.
 	 */
-	private void installResources()
+	@Override
+	public void installResources()
 	{
 		resourceInstaller.install();
-	}
-
-
-	/**
-	 * Constructs the resource path (in the JAR) for a given language tag, e.g. "language/en-US.yml".
-	 */
-	public static String getResourceName(final LanguageTag languageTag)
-	{
-		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()) + ".yml";
-	}
-
-
-	/**
-	 * Retrieve the name of the potential language resource file as installed in the plugin data directory, as a Section.
-	 *
-	 * @return {@code Section} representation of the potential language resource file installed in the plugin data directory
-	 */
-	public static String getFileName(final LanguageTag languageTag)
-	{
-		return String.join(File.separator, RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()) + ".yml";
 	}
 
 }
