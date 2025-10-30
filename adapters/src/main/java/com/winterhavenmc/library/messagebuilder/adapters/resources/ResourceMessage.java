@@ -64,7 +64,7 @@ public enum ResourceMessage
 	{
 		try
 		{
-			ResourceBundle bundle = ResourceBundle.getBundle(getClass().getSimpleName(), locale);
+			final ResourceBundle bundle = ResourceBundle.getBundle(getClass().getSimpleName(), locale);
 			return bundle.getString(name());
 		}
 		catch (MissingResourceException exception)
