@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
@@ -40,7 +41,7 @@ public final class YamlMessageRepository implements MessageRepository
 	private final SectionProvider sectionProvider;
 
 
-	public YamlMessageRepository(final YamlLanguageResourceManager languageResourceManager)
+	public YamlMessageRepository(final ResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, Validator.throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
 		this.sectionProvider = languageResourceManager.getSectionProvider(Section.MESSAGES.name());

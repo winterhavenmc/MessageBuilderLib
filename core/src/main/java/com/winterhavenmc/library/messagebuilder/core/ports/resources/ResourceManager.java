@@ -35,4 +35,10 @@ public interface ResourceManager
 	ConfigurationProvider getConfigurationProvider();
 
 	SectionProvider getSectionProvider(final String sectionName);
+
+
+	/**
+	 * Installs any language resource files listed in auto-install.txt if they are not already installed.
+	 */
+	void installResources();
 }

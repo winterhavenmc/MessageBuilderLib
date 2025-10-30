@@ -1,0 +1,623 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 2,
+    "backwardDepth": 0,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "Validator;*Key;Throwing;Logging;ValidationException;LanguageTag",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.MessageBuilder",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   BootstrapUtility103479893[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BootstrapUtility</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># createAccessorContextContainer(plugin: Plugin, itemRepository: ItemRepository, formatterCtx: FormatterCtx): AccessorCtx</TD></TR>
+<TR><TD ALIGN="LEFT" ># createConfigRepository(plugin: Plugin): ConfigRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># createFormatterContextContainer(plugin: Plugin, configRepository: ConfigRepository, constants: ConstantRepository): FormatterCtx</TD></TR>
+<TR><TD ALIGN="LEFT" ># createItemRepository(plugin: Plugin, configRepository: ConfigRepository): ItemRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># createLanguageResourceManager(plugin: Plugin, configRepository: ConfigRepository): YamlLanguageResourceManager</TD></TR>
+<TR><TD ALIGN="LEFT" >- createMacroReplacer(formatterCtx: FormatterCtx, accessorCtx: AccessorCtx): MessageProcessor</TD></TR>
+<TR><TD ALIGN="LEFT" ># createMessagePipeline(plugin: Plugin, messages: MessageRepository, sounds: SoundRepository, formatterCtx: FormatterCtx, accessorCtx: AccessorCtx): MessagePipeline</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createSenders(plugin: Plugin, messageCooldownMap: MessageCooldownMap, sounds: SoundRepository): List&lt;Sender&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" ># createSoundResourceManager(plugin: Plugin, configRepository: ConfigRepository): YamlSoundResourceManager</TD></TR>
+<TR><TD ALIGN="LEFT" ># createWorldNameResolver(plugin: Plugin): WorldNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" ># createWorldRepository(plugin: Plugin): WorldRepository</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitConfigRepository169038822[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitConfigRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   languageSettingSupplier: Supplier&lt;LanguageSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   zoneIdSupplier: Supplier&lt;ZoneId&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): ConfigRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># getLanguageSetting(plugin: Plugin): LanguageSetting</TD></TR>
+<TR><TD ALIGN="LEFT" ># getLocaleSetting(plugin: Plugin): LocaleSetting</TD></TR>
+<TR><TD ALIGN="LEFT" ># getZoneId(plugin: Plugin): ZoneId</TD></TR>
+<TR><TD ALIGN="LEFT" >+ language(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zoneId(): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitSpawnLocationResolver734649590[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)BukkitSpawnLocationResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(pluginManager: PluginManager): BukkitSpawnLocationResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): Location</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+BukkitWorldRepository169038822[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitWorldRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   enabledWorldsSupplier: Supplier&lt;EnabledWorldsSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   spawnLocationResolver: SpawnLocationResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldNameResolver: WorldNameResolver [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ aliasOrName(worldUid: UUID): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ contains(uuid: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin, worldNameResolver: WorldNameResolver, spawnLocationResolver: SpawnLocationResolver): WorldRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ enabledNames(): List&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ enabledUids(): List&lt;UUID&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" ># getConfigDisabledWorldUids(plugin: Plugin): List&lt;UUID&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" ># getConfigEnabledWorldUids(plugin: Plugin): List&lt;UUID&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" ># getEnabledWorldsSetting(plugin: Plugin): EnabledWorldsSetting</TD></TR>
+<TR><TD ALIGN="LEFT" ># getServerWorldUids(plugin: Plugin): List&lt;UUID&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldUID: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldName: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" ># size(): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ spawnLocation(worldUid: UUID): Optional&lt;Location&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ConfigProvider1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConfigProvider&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(): T</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ConfigRepository1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConfigRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(): LocaleSetting</TD></TR>
+<TR><TD ALIGN="LEFT" >+ language(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zoneId(): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ConstantRepository1152281911[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConstantRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBoolean(key: ValidConstantKey): Optional&lt;Boolean&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getInteger(key: ValidConstantKey): Optional&lt;Integer&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getString(key: ValidConstantKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getStringList(key: ValidConstantKey): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Invalid632050429[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Invalid</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   invalidReason: InvalidReason [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sender: CommandSender [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ invalidReason(): InvalidReason</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sender(): CommandSender</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InvalidMessage735945755[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InvalidMessage</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   reason: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(): InvalidMessage</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reason(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ send(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(quantity: int, macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, duration: Duration, lowerBound: ChronoUnit): Message</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ItemRepository1152281911[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int, replacements: Map&lt;String, String&gt;): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ displayName(validItemKey: ValidItemKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(validItemKey: ValidItemKey): ItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isItem(itemStack: ItemStack): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(itemStack: ItemStack): ItemKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ name(validItemKey: ValidItemKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ record(validItemKey: ValidItemKey): Optional&lt;ItemRecord&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Message735945755[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Message</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMessageKey(): ValidMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getObjectMap(): MacroObjectMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecipient(): Sendable</TD></TR>
+<TR><TD ALIGN="LEFT" >+ send(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(quantity: int, macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, duration: Duration, precision: ChronoUnit): Message</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MessageBuilder103479893[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configRepository: ConfigRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemRepository: ItemRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundResourceManager: ResourceManager [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sounds: SoundRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worlds: WorldRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ compose(recipient: CommandSender, messageId: E): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ config(): ConfigRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ constants(): ConstantRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ items(): ItemRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sounds(): SoundRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># test(plugin: Plugin, languageResourceManager: ResourceManager, soundResourceManager: ResourceManager, constantRepository: ConstantRepository, soundRepository: SoundRepository, configRepository: ConfigRepository, enabledWorlds: WorldRepository, itemRepository: ItemRepository, messagePipeline: MessagePipeline): MessageBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worlds(): WorldRepository</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessagePipeline1433414857[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessagePipeline</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: MessagePipelineCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ initiate(message: ValidMessage)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Pipeline47543914[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Pipeline</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ initiate(message: ValidMessage)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Proxied632050429[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Proxied</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   proxy: ProxiedCommandSender [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sender: CommandSender [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ proxy(): ProxiedCommandSender</TD></TR>
+<TR><TD ALIGN="LEFT" >+ sender(): CommandSender</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Recipient2105687416[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Recipient</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ of(sender: CommandSender): Recipient</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ResourceManager1859949731[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ResourceManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getConfigurationProvider(): ConfigurationProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getSectionProvider(sectionName: String): SectionProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ installResources()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SoundRepository1303222466[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SoundRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBukkitSoundName(key: String): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getKeys(): Collection&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(soundId: Enum&lt;?&gt;): SoundRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isRegistrySound(name: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValidBukkitSoundName(name: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValidSoundConfigKey(key: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ matchLongest(messageId: Enum&lt;?&gt;): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(sender: CommandSender, soundId: Enum&lt;?&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(location: Location, soundId: Enum&lt;?&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(sender: CommandSender, keyString: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ soundEffectsDisabled(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Valid632050429[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Valid</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   sender: CommandSender [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ sender(): CommandSender</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidMessage735945755[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidMessage</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   macroObjectMap: MacroObjectMap [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageKey: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   recipient: Sendable [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ send(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(quantity: int, macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, duration: Duration, lowerBound: ChronoUnit): Message</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+WorldRepository1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)WorldRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ aliasOrName(worldUid: UUID): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ contains(uuid: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ enabledNames(): List&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ enabledUids(): List&lt;UUID&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(): EnabledWorldsSetting</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldUID: UUID): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isEnabled(worldName: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ spawnLocation(worldUid: UUID): Optional&lt;Location&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+YamlConstantRepository312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlConstantRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   sectionProvider: SectionProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBoolean(validConstantKey: ValidConstantKey): Optional&lt;Boolean&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getInteger(validConstantKey: ValidConstantKey): Optional&lt;Integer&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getString(validConstantKey: ValidConstantKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getStringList(validConstantKey: ValidConstantKey): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlItemRepository312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlItemRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   miniMessage: MiniMessage [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   namespacedKey: NamespacedKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sectionProvider: SectionProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int, replacements: Map&lt;String, String&gt;): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ displayName(validItemKey: ValidItemKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemKeyString(itemStack: ItemStack): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(validItemKey: ValidItemKey): ItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isItem(itemStack: ItemStack): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(itemStack: ItemStack): ItemKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ name(validItemKey: ValidItemKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ record(validItemKey: ValidItemKey): Optional&lt;ItemRecord&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlLanguageResourceManager312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlLanguageResourceManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   languageConfiguration: Configuration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   resourceInstaller: ResourceInstaller [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   resourceLoader: ResourceLoader [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getFileName(languageTag: LanguageTag): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getResourceName(languageTag: LanguageTag): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getSectionProvider(sectionName: String): SectionProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ installResources()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlSoundRepository1058105345[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlSoundRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configurationProvider: ConfigurationProvider [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBukkitSoundName(key: String): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(soundId: Enum&lt;?&gt;): SoundRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(soundId: String): SoundRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isRegistrySound(name: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValidBukkitSoundName(key: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValidSoundConfigKey(key: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ matchLongest(messageId: Enum&lt;?&gt;): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(sender: CommandSender, soundId: Enum&lt;?&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(sender: CommandSender, soundId: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(location: Location, soundId: Enum&lt;?&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ soundEffectsDisabled(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlSoundResourceManager1058105345[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlSoundResourceManager</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   resourceInstaller: ResourceInstaller [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   resourceLoader: ResourceLoader [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   soundConfiguration: Configuration [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getSectionProvider(sectionName: String): SectionProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ installResources()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+BootstrapUtility103479893 -> BukkitConfigRepository169038822[label="createConfigRepository() -> create()"];
+BootstrapUtility103479893 -> BukkitSpawnLocationResolver734649590[label="createWorldRepository() -> get()"];
+BootstrapUtility103479893 -> BukkitWorldRepository169038822[label="createWorldRepository() -> create()"];
+ConfigProvider1582204715 -> ConfigRepository1582204715[arrowhead=none, arrowtail=empty, dir=both];
+ConfigProvider1582204715 -> WorldRepository1582204715[arrowhead=none, arrowtail=empty, dir=both];
+ConfigRepository1582204715 -> BukkitConfigRepository169038822[arrowhead=none, arrowtail=empty, dir=both];
+ConstantRepository1152281911 -> YamlConstantRepository312533400[arrowhead=none, arrowtail=empty, dir=both];
+ItemRepository1152281911 -> YamlItemRepository312533400[arrowhead=none, arrowtail=empty, dir=both];
+Message735945755 -> InvalidMessage735945755[arrowhead=none, arrowtail=empty, dir=both];
+Message735945755 -> ValidMessage735945755[arrowhead=none, arrowtail=empty, dir=both];
+MessageBuilder103479893 -> ConfigRepository1582204715[label="configRepository
+[0..1]"];
+MessageBuilder103479893 -> ConstantRepository1152281911[label="constants
+[0..1]"];
+MessageBuilder103479893 -> ItemRepository1152281911[label="itemRepository
+[0..1]"];
+MessageBuilder103479893 -> Message735945755[label="compose() -> empty()"];
+MessageBuilder103479893 -> Pipeline47543914[label="messagePipeline
+[0..1]"];
+MessageBuilder103479893 -> Recipient2105687416[label="compose() -> of()"];
+MessageBuilder103479893 -> ResourceManager1859949731[label="languageResourceManager
+[0..1]"];
+MessageBuilder103479893 -> ResourceManager1859949731[label="soundResourceManager
+[0..1]"];
+MessageBuilder103479893 -> SoundRepository1303222466[label="sounds
+[0..1]"];
+MessageBuilder103479893 -> WorldRepository1582204715[label="worlds
+[0..1]"];
+Pipeline47543914 -> MessagePipeline1433414857[arrowhead=none, arrowtail=empty, dir=both];
+Recipient2105687416 -> Invalid632050429[arrowhead=none, arrowtail=empty, dir=both];
+Recipient2105687416 -> Proxied632050429[arrowhead=none, arrowtail=empty, dir=both];
+Recipient2105687416 -> Valid632050429[arrowhead=none, arrowtail=empty, dir=both];
+ResourceManager1859949731 -> YamlLanguageResourceManager312533400[arrowhead=none, arrowtail=empty, dir=both];
+ResourceManager1859949731 -> YamlSoundResourceManager1058105345[arrowhead=none, arrowtail=empty, dir=both];
+SoundRepository1303222466 -> YamlSoundRepository1058105345[arrowhead=none, arrowtail=empty, dir=both];
+WorldRepository1582204715 -> BukkitWorldRepository169038822[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml

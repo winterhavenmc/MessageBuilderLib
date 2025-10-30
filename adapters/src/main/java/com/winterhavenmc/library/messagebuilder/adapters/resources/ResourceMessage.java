@@ -15,38 +15,39 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
+package com.winterhavenmc.library.messagebuilder.adapters.resources;
 
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public enum SoundResourceMessage
+public enum ResourceMessage
 {
-	SOUND_RESOURCE_INSTALL_SUCCESS("Installed resource: {0}"),
-	SOUND_RESOURCE_INSTALL_MISSING("Installation failed. File missing after save: {0}"),
-	SOUND_RESOURCE_INSTALL_EXCEPTION("An exception occurred while attempting to install language file ''{0}'': {1}"),
+	RESOURCE_INSTALL_SUCCESS("Resource file ''{0}'' was successfully installed."),
+	RESOURCE_INSTALL_MISSING("Resource installation failed. File missing after save: {0}"),
+	RESOURCE_INSTALL_EXCEPTION("An exception occurred while attempting to install resource file ''{0}'': {1}"),
 
-	SOUND_RESOURCE_LOAD_SUCCESS("Language file ''{0}'' was successfully loaded."),
-	SOUND_RESOURCE_LOAD_MISSING("The file '{0}' does not exist in the plugin data folder."),
-	SOUND_RESOURCE_LOAD_EXCEPTION("An exception occurred while attempting to load language file ''{0}''."),
+	RESOURCE_LOAD_SUCCESS("Resource file ''{0}'' was successfully loaded."),
+	RESOURCE_LOAD_MISSING("The file '{0}' does not exist in the plugin data folder."),
+	RESOURCE_LOAD_EXCEPTION("An exception occurred while attempting to load resource file ''{0}''."),
 
-	SOUND_RESOURCE_FALLBACK_SUCCESS("Loaded fallback language resource ''{0}'' from plugin JAR."),
-	SOUND_RESOURCE_FALLBACK_MISSING("Fallback language resource ''{0}'' is missing from plugin JAR."),
-	SOUND_RESOURCE_FALLBACK_FAILED("Failed to load fallback language resource ''{0}'' from JAR."),
+	RESOURCE_FALLBACK_SUCCESS("Loaded fallback resource ''{0}'' from plugin JAR."),
+	RESOURCE_FALLBACK_MISSING("Fallback resource ''{0}'' is missing from plugin JAR."),
+	RESOURCE_FALLBACK_FAILED("Failed to load fallback resource ''{0}'' from JAR."),
 
-	SOUND_RESOURCE_INVALID_FILE("Language file ''{0}'' is invalid: {1}"),
-	SOUND_RESOURCE_INVALID_YAML("Language file ''{0}'' is not valid YAML. Falling back to default."),
-	SOUND_RESOURCE_NOT_FOUND("Language file ''{0}'' not found. Falling back to default."),
-	SOUND_RESOURCE_TAG_MISSING("No valid language tag could be resolved from config or default."),
-	SOUND_RESOURCE_UNREADABLE("Language file ''{0}'' could not be read. Falling back to default."),
+	RESOURCE_INVALID_FILE("Resource file ''{0}'' is invalid: {1}"),
+	RESOURCE_INVALID_YAML("Resource file ''{0}'' is not valid YAML. Falling back to default."),
+	RESOURCE_NOT_FOUND("Resource file ''{0}'' not found. Falling back to default."),
+	RESOURCE_UNREADABLE("Resource file ''{0}'' could not be read. Falling back to default."),
+
+	RESOURCE_TAG_MISSING("No valid language tag could be resolved from config or default."),
 	;
 
 	private final String defaultMessage;
 
 
-	SoundResourceMessage(final String defaultMessage)
+	ResourceMessage(final String defaultMessage)
 	{
 		this.defaultMessage = defaultMessage;
 	}

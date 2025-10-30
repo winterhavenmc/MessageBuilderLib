@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 
@@ -57,7 +58,7 @@ public final class YamlItemRepository implements ItemRepository
 	private final MiniMessage miniMessage;
 
 
-	public YamlItemRepository(final Plugin plugin, final YamlLanguageResourceManager languageResourceManager)
+	public YamlItemRepository(final Plugin plugin, final ResourceManager languageResourceManager)
 	{
 		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));

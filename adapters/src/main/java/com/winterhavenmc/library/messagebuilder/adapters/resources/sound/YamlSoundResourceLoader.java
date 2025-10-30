@@ -1,6 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.LanguageResourceMessage;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.ResourceMessage;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.function.Supplier;
 
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.SoundResourceConstant.RESOURCE_NAME;
-import static com.winterhavenmc.library.messagebuilder.adapters.resources.sound.SoundResourceMessage.*;
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.ResourceMessage.*;
 
 
 public final class YamlSoundResourceLoader implements ResourceLoader
@@ -57,16 +57,16 @@ public final class YamlSoundResourceLoader implements ResourceLoader
 			if (soundConfigFile.exists())
 			{
 				configuration.load(soundConfigFile);
-				plugin.getLogger().info(SOUND_RESOURCE_LOAD_SUCCESS.getLocalizedMessage(configRepository.locale(), RESOURCE_NAME.toString()));
+				plugin.getLogger().info(RESOURCE_LOAD_SUCCESS.getLocalizedMessage(configRepository.locale(), RESOURCE_NAME.toString()));
 			}
 			else
 			{
-				plugin.getLogger().warning(SOUND_RESOURCE_LOAD_MISSING.getLocalizedMessage(configRepository.locale(), RESOURCE_NAME.toString()));
+				plugin.getLogger().warning(RESOURCE_LOAD_MISSING.getLocalizedMessage(configRepository.locale(), RESOURCE_NAME.toString()));
 			}
 		}
 		catch (IOException | InvalidConfigurationException e)
 		{
-			plugin.getLogger().warning(SOUND_RESOURCE_UNREADABLE.getLocalizedMessage(configRepository.locale(), RESOURCE_NAME.toString()));
+			plugin.getLogger().warning(RESOURCE_UNREADABLE.getLocalizedMessage(configRepository.locale(), RESOURCE_NAME.toString()));
 		}
 
 		return configuration;
@@ -84,19 +84,19 @@ public final class YamlSoundResourceLoader implements ResourceLoader
 			{
 				YamlConfiguration config = configurationSupplier.get();
 				config.load(new InputStreamReader(stream, StandardCharsets.UTF_8));
-				plugin.getLogger().info(LanguageResourceMessage.LANGUAGE_RESOURCE_FALLBACK_SUCCESS
+				plugin.getLogger().info(ResourceMessage.RESOURCE_FALLBACK_SUCCESS
 						.getLocalizedMessage(configRepository.locale(), RESOURCE_NAME));
 				return config;
 			}
 			else
 			{
-				plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_FALLBACK_MISSING
+				plugin.getLogger().severe(ResourceMessage.RESOURCE_FALLBACK_MISSING
 						.getLocalizedMessage(configRepository.locale(), RESOURCE_NAME));
 			}
 		}
 		catch (IOException | InvalidConfigurationException exception)
 		{
-			plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_FALLBACK_FAILED
+			plugin.getLogger().severe(ResourceMessage.RESOURCE_FALLBACK_FAILED
 					.getLocalizedMessage(configRepository.locale(), RESOURCE_NAME));
 		}
 

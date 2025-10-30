@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.ResourceMessage;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
@@ -156,20 +157,20 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 
 			if (installedFile.exists())
 			{
-				plugin.getLogger().info(LanguageResourceMessage.LANGUAGE_RESOURCE_INSTALL_SUCCESS
+				plugin.getLogger().info(ResourceMessage.RESOURCE_INSTALL_SUCCESS
 						.getLocalizedMessage(configRepository.locale(), filePath));
 				return InstallerStatus.SUCCESS;
 			}
 			else
 			{
-				plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_INSTALL_MISSING
+				plugin.getLogger().severe(ResourceMessage.RESOURCE_INSTALL_MISSING
 						.getLocalizedMessage(configRepository.locale(), filePath));
 				return InstallerStatus.FAIL;
 			}
 		}
 		catch (Exception exception)
 		{
-			plugin.getLogger().severe(LanguageResourceMessage.LANGUAGE_RESOURCE_INSTALL_EXCEPTION
+			plugin.getLogger().severe(ResourceMessage.RESOURCE_INSTALL_EXCEPTION
 					.getLocalizedMessage(configRepository.locale(), resourceName, exception.getLocalizedMessage()));
 			return InstallerStatus.FAIL;
 		}

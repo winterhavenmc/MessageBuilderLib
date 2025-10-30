@@ -1,10 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ConfigurationProvider;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceInstaller;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceLoader;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.*;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -39,6 +35,7 @@ public final class YamlSoundResourceManager implements ResourceManager
 	/**
 	 * reload sound configuration from yaml file in plugin data folder
 	 */
+	@Override
 	public boolean reload()
 	{
 		resourceInstaller.install();
@@ -65,6 +62,16 @@ public final class YamlSoundResourceManager implements ResourceManager
 	public SectionProvider getSectionProvider(String sectionName)
 	{
 		return new YamlSoundSectionProvider(() -> soundConfiguration, sectionName);
+	}
+
+
+	/**
+	 * Installs sound resource files if not already present in the plugin data folder
+	 */
+	@Override
+	public void installResources()
+	{
+		resourceInstaller.install();
 	}
 
 }
