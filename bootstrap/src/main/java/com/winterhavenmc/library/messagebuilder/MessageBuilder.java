@@ -19,7 +19,6 @@ package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
@@ -141,25 +140,27 @@ public final class MessageBuilder
 		// validate parameter
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, Parameter.PLUGIN));
 
-		// create configuration setting providers
+		// create configuration repository
 		final ConfigRepository configRepository = createConfigRepository(plugin);
-		final WorldRepository worldRepository = createWorldRepository(plugin);
 
-		// create resource file managers
-		final YamlLanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
-		final YamlSoundResourceManager soundResourceManager = createSoundResourceManager(plugin, configRepository);
-
-		// create repositories
+		// create language resource manager and repositories
+		final ResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
 		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
+
+		// create sound resource manager and repositories
+		final ResourceManager soundResourceManager = createSoundResourceManager(plugin, configRepository);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
+
+		// create world repository
+		final WorldRepository worldRepository = createWorldRepository(plugin);
 
 		// create context containers
 		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, configRepository, constantRepository);
 		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRepository, formatterCtx);
 
-		// create pipeline
+		// create message pipeline
 		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
 
 		// return instantiation of MessageBuilder library
