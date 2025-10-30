@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+
 public enum ResourceMessage
 {
 	RESOURCE_INSTALL_SUCCESS("Resource file ''{0}'' was successfully installed."),
