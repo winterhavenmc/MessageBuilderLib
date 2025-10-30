@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ConfigurationProvider;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
 import com.winterhavenmc.library.messagebuilder.models.sound.SoundRecord;
@@ -64,7 +65,7 @@ public final class YamlSoundRepository implements SoundRepository
 	/**
 	 * Class constructor
 	 */
-	public YamlSoundRepository(final Plugin plugin, final YamlSoundResourceManager soundResourceManager)
+	public YamlSoundRepository(final Plugin plugin, final ResourceManager soundResourceManager)
 	{
 		validate(soundResourceManager, Objects::isNull, throwing(PARAMETER_NULL, SOUND_RESOURCE_MANAGER));
 		this.configurationProvider = soundResourceManager.getConfigurationProvider();

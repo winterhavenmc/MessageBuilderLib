@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
@@ -39,7 +40,7 @@ public final class YamlConstantRepository implements ConstantRepository
 	private final SectionProvider sectionProvider;
 
 
-	public YamlConstantRepository(final YamlLanguageResourceManager languageResourceManager)
+	public YamlConstantRepository(final ResourceManager languageResourceManager)
 	{
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
 		this.sectionProvider = languageResourceManager.getSectionProvider(Section.CONSTANTS.name());
