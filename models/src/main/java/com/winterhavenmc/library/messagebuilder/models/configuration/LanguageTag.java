@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -46,6 +47,10 @@ import static java.util.Locale.forLanguageTag;
  */
 public final class LanguageTag
 {
+	// allowed language tags that are not returned by locale.getISOLanguages()
+	private final static List<String> exceptions = List.of("haw"); // allow Hawaiian
+	private final static List<String> rejections = List.of("und"); // block obsoleted
+
 	private final String wrappedLanguageTag;
 
 
@@ -100,10 +105,22 @@ public final class LanguageTag
 		Locale locale = Locale.forLanguageTag(string);
 		String language = locale.getLanguage();
 
-		if (language.isEmpty() || "und".equalsIgnoreCase(language)) return false;
+		// reject ISO-639 codes in rejections list
+		if (rejections.contains(language.toLowerCase()))
+		{
+			return false;
+		}
 
-		// Ensure the language code is one of the official ISO 639 codes
-		return Arrays.asList(Locale.getISOLanguages()).contains(language);
+		// accept ISO-639 codes in exceptions list
+		if (exceptions.contains(language.toLowerCase()))
+		{
+			return true;
+		}
+		else
+		{
+			// Ensure the language code is one of the official ISO 639 codes
+			return Arrays.asList(Locale.getISOLanguages()).contains(language);
+		}
 	};
 
 
