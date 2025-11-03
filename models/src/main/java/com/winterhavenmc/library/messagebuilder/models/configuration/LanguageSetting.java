@@ -17,8 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.models.configuration;
 
-import org.jetbrains.annotations.NotNull;
-
 
 /**
  * Represents a configured language file identifier.
