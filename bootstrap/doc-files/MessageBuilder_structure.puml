@@ -26,7 +26,7 @@ config=StructureConfiguration;
   "graphRestriction": {
     "classPackageExcludeFilter": "",
     "classPackageIncludeFilter": "",
-    "classNameExcludeFilter": "BootstrapUtility",
+    "classNameExcludeFilter": "",
     "classNameIncludeFilter": "",
     "methodNameExcludeFilter": "",
     "methodNameIncludeFilter": "",
@@ -45,11 +45,11 @@ config=StructureConfiguration;
     "cutConstructors": true
   },
   "graphTraversal": {
-    "forwardDepth": 3,
-    "backwardDepth": 3,
+    "forwardDepth": 2,
+    "backwardDepth": 1,
     "classPackageExcludeFilter": "",
     "classPackageIncludeFilter": "",
-    "classNameExcludeFilter": "",
+    "classNameExcludeFilter": "*Ctx;BootstrapUtility",
     "classNameIncludeFilter": "",
     "methodNameExcludeFilter": "",
     "methodNameIncludeFilter": "",
@@ -95,17 +95,54 @@ subgraph cluster_1655488073 {
 	fillcolor="#d8d8d8"
 	style=filled
    
-   BukkitWorldRepository169038822[
+   BukkitConfigRepository169038822[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitConfigRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   languageSettingSupplier: Supplier&lt;LanguageSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   zoneIdSupplier: Supplier&lt;ZoneId&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): ConfigRepository</TD></TR>
+<TR><TD ALIGN="LEFT" ># getLanguageSetting(plugin: Plugin): LanguageSetting</TD></TR>
+<TR><TD ALIGN="LEFT" ># getLocaleSetting(plugin: Plugin): LocaleSetting</TD></TR>
+<TR><TD ALIGN="LEFT" ># getZoneId(plugin: Plugin): ZoneId</TD></TR>
+<TR><TD ALIGN="LEFT" >+ language(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zoneId(): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitSpawnLocationResolver734649590[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)BukkitSpawnLocationResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(pluginManager: PluginManager): BukkitSpawnLocationResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): Location</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+BukkitWorldRepository169038822[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)BukkitWorldRepository</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >-   enabledWorldsSupplier: Supplier&lt;EnabledWorldsSetting&gt; [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   spawnLocationResolver: SpawnLocationResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldNameResolver: WorldNameResolver [0..1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ aliasOrName(worldUid: UUID): Optional&lt;String&gt;</TD></TR>
 <TR><TD ALIGN="LEFT" >+ contains(uuid: UUID): boolean</TD></TR>
-<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin, spawnLocationResolver: SpawnLocationResolver): WorldRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin, worldNameResolver: WorldNameResolver, spawnLocationResolver: SpawnLocationResolver): WorldRepository</TD></TR>
 <TR><TD ALIGN="LEFT" >+ enabledNames(): List&lt;String&gt;</TD></TR>
 <TR><TD ALIGN="LEFT" >+ enabledUids(): List&lt;UUID&gt;</TD></TR>
 <TR><TD ALIGN="LEFT" ># getConfigDisabledWorldUids(plugin: Plugin): List&lt;UUID&gt;</TD></TR>
@@ -123,18 +160,6 @@ subgraph cluster_1655488073 {
 	fillcolor="#FFFFFF"
 ];
 
-ConfigProvider1582204715[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)ConfigProvider&lt;T&gt;</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ get(): T</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
 ConfigRepository1582204715[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(I)ConfigRepository</TD></TR>
@@ -144,31 +169,6 @@ ConfigRepository1582204715[
 <TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
 <TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
 <TR><TD ALIGN="LEFT" >+ zoneId(): ZoneId</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
-ConfigurationProvider1859949731[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)ConfigurationProvider</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ getConfiguration(): Configuration</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
-ConstantKey1959363381[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)ConstantKey</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidConstantKey&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ of(key: String): ConstantKey</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -189,6 +189,18 @@ ConstantRepository1152281911[
 	margin=0
 	shape=plaintext
 	fillcolor="#F1E5FD"
+];
+
+DefaultResolver734649590[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DefaultResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): Location</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
 ];
 
 EnabledWorldsSetting1582204715[
@@ -229,7 +241,7 @@ InvalidMessage735945755[
 <HR/>
 <TR><TD ALIGN="LEFT" >+ empty(): InvalidMessage</TD></TR>
 <TR><TD ALIGN="LEFT" >+ reason(): String</TD></TR>
-<TR><TD ALIGN="LEFT" >+ send()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ send(): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ setMacro(macro: K, value: V): Message</TD></TR>
 <TR><TD ALIGN="LEFT" >+ setMacro(quantity: int, macro: K, value: V): Message</TD></TR>
 <TR><TD ALIGN="LEFT" >+ setMacro(macro: K, duration: Duration, lowerBound: ChronoUnit): Message</TD></TR>
@@ -256,33 +268,6 @@ InvalidMessageKey1959363381[
 	fillcolor="#FFFFFF"
 ];
 
-ItemKey1959363381[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)ItemKey</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidItemKey&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ of(key: String): ItemKey</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
-ItemRecord1572118503[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)ItemRecord</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ empty(itemKey: RecordKey, reason: InvalidRecordReason): InvalidItemRecord</TD></TR>
-<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidItemRecord&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ of(itemKey: ValidItemKey, itemEntry: ConfigurationSection): ItemRecord</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
 ItemRepository1152281911[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(I)ItemRepository</TD></TR>
@@ -303,42 +288,62 @@ ItemRepository1152281911[
 	fillcolor="#F1E5FD"
 ];
 
-LanguageProvider1582204715[
+LanguageSetting1582204715[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)LanguageProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >(C)LanguageSetting</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >+ get(): LanguageSetting</TD></TR>
-<TR><TD ALIGN="LEFT" >+ getName(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ name(): String</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
 	shape=plaintext
-	fillcolor="#F1E5FD"
+	fillcolor="#FFFFFF"
 ];
 
-MacroKey1959363381[
+LanguageTag1582204715[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)MacroKey</TD></TR>
+<TR><TD ALIGN="LEFT" >(C)LanguageTag</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidMacroKey&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ of(key: String): MacroKey</TD></TR>
-<TR><TD ALIGN="LEFT" >+ of(key: E): MacroKey</TD></TR>
+<TR><TD ALIGN="LEFT" >-   wrappedLanguageTag: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ of(locale: Locale): Optional&lt;LanguageTag&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(string: String): Optional&lt;LanguageTag&gt;</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
 	shape=plaintext
-	fillcolor="#F1E5FD"
+	fillcolor="#FFFFFF"
 ];
 
-MacroObjectMap474154237[
+LocaleSetting1582204715[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)MacroObjectMap</TD></TR>
+<TR><TD ALIGN="LEFT" >(C)LocaleSetting</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >-   INTERNAL_MAP: Map&lt;MacroKey, Object&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageTag: LanguageTag [0..1]</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >+ get(macroKey: MacroKey): Optional&lt;Object&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ put(macroKey: MacroKey, value: T)</TD></TR>
-<TR><TD ALIGN="LEFT" >+ putIfAbsent(macroKey: MacroKey, value: T)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Logging1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Logging&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   logLevel: LogLevel [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageKey: ErrorMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   parameter: Parameter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ handleInvalid(value: T): Optional&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logLevel(): LogLevel</TD></TR>
+<TR><TD ALIGN="LEFT" >+ messageKey(): ErrorMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ parameter(): Parameter</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -354,7 +359,7 @@ Message735945755[
 <TR><TD ALIGN="LEFT" >+ getMessageKey(): ValidMessageKey</TD></TR>
 <TR><TD ALIGN="LEFT" >+ getObjectMap(): MacroObjectMap</TD></TR>
 <TR><TD ALIGN="LEFT" >+ getRecipient(): Sendable</TD></TR>
-<TR><TD ALIGN="LEFT" >+ send()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ send(): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ setMacro(macro: K, value: V): Message</TD></TR>
 <TR><TD ALIGN="LEFT" >+ setMacro(quantity: int, macro: K, value: V): Message</TD></TR>
 <TR><TD ALIGN="LEFT" >+ setMacro(macro: K, duration: Duration, precision: ChronoUnit): Message</TD></TR>
@@ -409,6 +414,20 @@ MessageKey1959363381[
 	fillcolor="#F1E5FD"
 ];
 
+MessagePipeline1433414857[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessagePipeline</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: MessagePipelineCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ initiate(message: ValidMessage)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
 Pipeline47543914[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(I)Pipeline</TD></TR>
@@ -419,6 +438,20 @@ Pipeline47543914[
 	margin=0
 	shape=plaintext
 	fillcolor="#F1E5FD"
+];
+
+PluginBasedResolver734649590[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PluginBasedResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): Location</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
 ];
 
 Proxied632050429[
@@ -459,74 +492,14 @@ RecordKey1959363381[
 	fillcolor="#F1E5FD"
 ];
 
-ResourceInstaller1859949731[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)ResourceInstaller</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ install(): InstallerStatus</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
-ResourceLoader1859949731[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)ResourceLoader</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ load(): Configuration</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
 ResourceManager1859949731[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(I)ResourceManager</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ getConfigurationProvider(): ConfigurationProvider</TD></TR>
 <TR><TD ALIGN="LEFT" >+ getSectionProvider(sectionName: String): SectionProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ installResources()</TD></TR>
 <TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
-SectionProvider1859949731[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)SectionProvider</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ getSection(): ConfigurationSection</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
-Sendable632050429[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)Sendable</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ sender(): CommandSender</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#F1E5FD"
-];
-
-SoundRecord618404846[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)SoundRecord</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ key(): String</TD></TR>
-<TR><TD ALIGN="LEFT" >+ of(key: String, enabled: boolean, playerOnly: boolean, bukkitSoundName: String, volume: float, pitch: float): SoundRecord</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -568,14 +541,19 @@ SpawnLocationResolver890185301[
 	fillcolor="#F1E5FD"
 ];
 
-StandardKey1959363381[
+Throwing1155524858[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(I)StandardKey</TD></TR>
+<TR><TD ALIGN="LEFT" >(C)Throwing&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   exceptionSupplier: Supplier&lt;ValidationException&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ exceptionSupplier(): Supplier&lt;ValidationException&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ handleInvalid(value: T): Optional&lt;T&gt;</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
 	shape=plaintext
-	fillcolor="#F1E5FD"
+	fillcolor="#FFFFFF"
 ];
 
 Valid632050429[
@@ -592,31 +570,6 @@ Valid632050429[
 	fillcolor="#FFFFFF"
 ];
 
-ValidItemRecord1572118503[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)ValidItemRecord</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   displayName: String [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   itemLore: List&lt;String&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   key: ItemKey [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   material: String [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   pluralName: String [0..1]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ create(key: ValidItemKey, section: ConfigurationSection): ValidItemRecord</TD></TR>
-<TR><TD ALIGN="LEFT" >+ displayName(): String</TD></TR>
-<TR><TD ALIGN="LEFT" >+ key(): ItemKey</TD></TR>
-<TR><TD ALIGN="LEFT" >+ lore(): List&lt;String&gt;</TD></TR>
-<TR><TD ALIGN="LEFT" >+ material(): String</TD></TR>
-<TR><TD ALIGN="LEFT" >+ name(): String</TD></TR>
-<TR><TD ALIGN="LEFT" >+ pluralName(): String</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
 ValidMessage735945755[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)ValidMessage</TD></TR>
@@ -626,7 +579,7 @@ ValidMessage735945755[
 <TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   recipient: Sendable [0..1]</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >+ send()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ send(): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ setMacro(macro: K, value: V): Message</TD></TR>
 <TR><TD ALIGN="LEFT" >+ setMacro(quantity: int, macro: K, value: V): Message</TD></TR>
 <TR><TD ALIGN="LEFT" >+ setMacro(macro: K, duration: Duration, lowerBound: ChronoUnit): Message</TD></TR>
@@ -649,30 +602,6 @@ ValidMessageKey1959363381[
 	fillcolor="#FFFFFF"
 ];
 
-ValidSoundRecord618404846[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)ValidSoundRecord</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   enabled: boolean [1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   key: String [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   pitch: float [1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   playerOnly: boolean [1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   soundName: String [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   volume: float [1]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >+ enabled(): boolean</TD></TR>
-<TR><TD ALIGN="LEFT" >+ key(): String</TD></TR>
-<TR><TD ALIGN="LEFT" >+ pitch(): float</TD></TR>
-<TR><TD ALIGN="LEFT" >+ playerOnly(): boolean</TD></TR>
-<TR><TD ALIGN="LEFT" >+ soundName(): String</TD></TR>
-<TR><TD ALIGN="LEFT" >+ volume(): float</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
 Validator1155524858[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(I)Validator&lt;T&gt;</TD></TR>
@@ -682,6 +611,18 @@ Validator1155524858[
 <TR><TD ALIGN="LEFT" >+ logging(level: LogLevel, messageKey: ErrorMessageKey, parameter: Parameter): Validator&lt;T&gt;</TD></TR>
 <TR><TD ALIGN="LEFT" >+ throwing(messageKey: ErrorMessageKey, parameter: Parameter): Validator&lt;T&gt;</TD></TR>
 <TR><TD ALIGN="LEFT" >+ validate(value: T, predicate: Predicate&lt;T&gt;, handler: Validator&lt;T&gt;): Optional&lt;T&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+WorldNameResolver1650746392[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)WorldNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): String</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -762,7 +703,7 @@ YamlLanguageResourceManager312533400[
 <TR><TD ALIGN="LEFT" >+ getFileName(languageTag: LanguageTag): String</TD></TR>
 <TR><TD ALIGN="LEFT" >+ getResourceName(languageTag: LanguageTag): String</TD></TR>
 <TR><TD ALIGN="LEFT" >+ getSectionProvider(sectionName: String): SectionProvider</TD></TR>
-<TR><TD ALIGN="LEFT" >- installResources()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ installResources()</TD></TR>
 <TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
 </TABLE>>
 	style=filled
@@ -805,6 +746,7 @@ YamlSoundResourceManager1058105345[
 <TR><TD ALIGN="LEFT" >-   soundConfiguration: Configuration [0..1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ getSectionProvider(sectionName: String): SectionProvider</TD></TR>
+<TR><TD ALIGN="LEFT" >+ installResources()</TD></TR>
 <TR><TD ALIGN="LEFT" >+ reload(): boolean</TD></TR>
 </TABLE>>
 	style=filled
@@ -816,18 +758,26 @@ YamlSoundResourceManager1058105345[
 } 
 
 'edges    
+BukkitConfigRepository169038822 -> LanguageSetting1582204715[label="languageSettingSupplier
+[0..1]"];
+BukkitConfigRepository169038822 -> LocaleSetting1582204715[label="localeSettingSupplier
+[0..1]"];
+BukkitSpawnLocationResolver734649590 -> DefaultResolver734649590[arrowhead=none, arrowtail=empty, dir=both];
+BukkitSpawnLocationResolver734649590 -> PluginBasedResolver734649590[arrowhead=none, arrowtail=empty, dir=both];
 BukkitWorldRepository169038822 -> EnabledWorldsSetting1582204715[label="enabledWorldsSupplier
 [0..1]"];
 BukkitWorldRepository169038822 -> SpawnLocationResolver890185301[label="spawnLocationResolver
 [0..1]"];
-ConfigProvider1582204715 -> ConfigRepository1582204715[arrowhead=none, arrowtail=empty, dir=both];
-ConfigProvider1582204715 -> LanguageProvider1582204715[arrowhead=none, arrowtail=empty, dir=both];
-ConfigProvider1582204715 -> WorldRepository1582204715[arrowhead=none, arrowtail=empty, dir=both];
+BukkitWorldRepository169038822 -> WorldNameResolver1650746392[label="worldNameResolver
+[0..1]"];
+ConfigRepository1582204715 -> BukkitConfigRepository169038822[arrowhead=none, arrowtail=empty, dir=both];
 ConstantRepository1152281911 -> YamlConstantRepository312533400[arrowhead=none, arrowtail=empty, dir=both];
-InvalidMessage735945755 -> Validator1155524858[label="send() -> logging()"];
 ItemRepository1152281911 -> YamlItemRepository312533400[arrowhead=none, arrowtail=empty, dir=both];
 Message735945755 -> InvalidMessage735945755[arrowhead=none, arrowtail=empty, dir=both];
 Message735945755 -> ValidMessage735945755[arrowhead=none, arrowtail=empty, dir=both];
+MessageBuilder103479893 -> BukkitConfigRepository169038822[label="createConfigRepository() -> create()", arrowhead=none];
+MessageBuilder103479893 -> BukkitSpawnLocationResolver734649590[label="createWorldRepository() -> get()", arrowhead=none];
+MessageBuilder103479893 -> BukkitWorldRepository169038822[label="createWorldRepository() -> create()", arrowhead=none];
 MessageBuilder103479893 -> ConfigRepository1582204715[label="configRepository
 [0..1]"];
 MessageBuilder103479893 -> ConstantRepository1152281911[label="constants
@@ -848,41 +798,18 @@ MessageBuilder103479893 -> WorldRepository1582204715[label="worlds
 [0..1]"];
 MessageKey1959363381 -> InvalidMessageKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
 MessageKey1959363381 -> ValidMessageKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
+Pipeline47543914 -> MessagePipeline1433414857[arrowhead=none, arrowtail=empty, dir=both];
 Recipient2105687416 -> Invalid632050429[arrowhead=none, arrowtail=empty, dir=both];
 Recipient2105687416 -> Proxied632050429[arrowhead=none, arrowtail=empty, dir=both];
 Recipient2105687416 -> Valid632050429[arrowhead=none, arrowtail=empty, dir=both];
-RecordKey1959363381 -> ConstantKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
-RecordKey1959363381 -> ItemKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
 RecordKey1959363381 -> MessageKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
 ResourceManager1859949731 -> YamlLanguageResourceManager312533400[arrowhead=none, arrowtail=empty, dir=both];
 ResourceManager1859949731 -> YamlSoundResourceManager1058105345[arrowhead=none, arrowtail=empty, dir=both];
-Sendable632050429 -> Proxied632050429[arrowhead=none, arrowtail=empty, dir=both];
-Sendable632050429 -> Valid632050429[arrowhead=none, arrowtail=empty, dir=both];
 SoundRepository1303222466 -> YamlSoundRepository1058105345[arrowhead=none, arrowtail=empty, dir=both];
-StandardKey1959363381 -> RecordKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
-ValidMessage735945755 -> MacroObjectMap474154237[label="macroObjectMap
-[0..1]"];
-ValidMessage735945755 -> Pipeline47543914[label="messagePipeline
-[0..1]"];
-ValidMessage735945755 -> Sendable632050429[label="recipient
-[0..1]"];
-ValidMessage735945755 -> ValidMessageKey1959363381[label="messageKey
-[0..1]"];
+SpawnLocationResolver890185301 -> BukkitSpawnLocationResolver734649590[arrowhead=none, arrowtail=empty, dir=both];
+Validator1155524858 -> Logging1155524858[arrowhead=none, arrowtail=empty, dir=both];
+Validator1155524858 -> Throwing1155524858[arrowhead=none, arrowtail=empty, dir=both];
 WorldRepository1582204715 -> BukkitWorldRepository169038822[arrowhead=none, arrowtail=empty, dir=both];
-YamlConstantRepository312533400 -> SectionProvider1859949731[label="sectionProvider
-[0..1]"];
-YamlItemRepository312533400 -> SectionProvider1859949731[label="sectionProvider
-[0..1]"];
-YamlLanguageResourceManager312533400 -> ResourceInstaller1859949731[label="resourceInstaller
-[0..1]"];
-YamlLanguageResourceManager312533400 -> ResourceLoader1859949731[label="resourceLoader
-[0..1]"];
-YamlSoundRepository1058105345 -> ConfigurationProvider1859949731[label="configurationProvider
-[0..1]"];
-YamlSoundResourceManager1058105345 -> ResourceInstaller1859949731[label="resourceInstaller
-[0..1]"];
-YamlSoundResourceManager1058105345 -> ResourceLoader1859949731[label="resourceLoader
-[0..1]"];
     
 }
 @enduml
