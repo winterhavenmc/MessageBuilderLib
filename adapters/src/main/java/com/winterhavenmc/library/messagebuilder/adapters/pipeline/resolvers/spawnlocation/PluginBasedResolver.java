@@ -37,17 +37,15 @@ public final class PluginBasedResolver implements BukkitSpawnLocationResolver
 	}
 
 
-	public Location resolve(final World world)
+	public Optional<Location> resolve(final World world)
 	{
-		if (world == null) { return null; }
+		if (world == null) { return Optional.empty(); }
 
-		Optional<Location> result = (plugin != null
-						&& plugin.getDescription().getVersion().startsWith("5")
-						&& plugin instanceof org.mvplugins.multiverse.core.MultiverseCore)
-				? new MultiverseRetriever().getSpawnLocation(world)
-				: new DefaultRetriever().getSpawnLocation(world);
-
-		return result.orElseGet(world::getSpawnLocation);
+		return (plugin != null
+				&& plugin.getDescription().getVersion().startsWith("5")
+				&& plugin instanceof org.mvplugins.multiverse.core.MultiverseCore)
+						? new MultiverseRetriever().getSpawnLocation(world)
+						: new DefaultRetriever().getSpawnLocation(world);
 	}
 
 }
