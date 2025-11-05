@@ -161,7 +161,7 @@ public final class BukkitWorldRepository implements WorldRepository
 
 			if (world != null)
 			{
-				return Optional.of(spawnLocationResolver.resolve(world));
+				return spawnLocationResolver.resolve(world);
 			}
 		}
 
