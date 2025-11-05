@@ -24,6 +24,10 @@ import java.util.UUID;
 
 
 /**
- * @param worldUids the list of enabled world names from the plugin config.yml file
+ * Represents a list of enabled worlds, derived from the 'enabled-worlds' and 'disabled-worlds' settings
+ * in the plugin configuration
+ *
+ * @param worldUids the list of enabled world uuids
+ * @since 2.0.0
  */
 public record EnabledWorldsSetting(@NotNull List<UUID> worldUids) { }
