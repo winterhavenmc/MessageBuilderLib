@@ -43,6 +43,7 @@ import static java.util.Locale.forLanguageTag;
  *  LanguageTag tag = LanguageTag.of(Locale.US);
  * }
  *
+ * @since 1.x
  * @see Locale
  */
 public final class LanguageTag
