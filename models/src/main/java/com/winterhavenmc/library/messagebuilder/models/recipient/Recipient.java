@@ -44,9 +44,12 @@ import org.bukkit.entity.Player;
  * during construction via the static factory method {@link #of(CommandSender)}, which guarantees
  * type safety and clarity at the call site.
  *
+ * <p>Both {@code Valid} and {@code Proxied} subtypes implement the {@link Sendable} interface, which
+ * can be used to differentiate between the {@code Invalid} subtype using the {@code instanceof} operator.
+ *
  * <p>Typical usage:
  * {@snippet lang="java":
- *  Recipient recipient = Recipient.of(sender);
+ *  Recipient recipient = Recipient.of(player);
  *
  *  if (recipient instanceof Recipient.Sendable sendable) {
  *      sendable.sender().sendMessage("Hello!");
