@@ -22,23 +22,25 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spa
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.Optional;
+
 
 public final class DefaultResolver implements BukkitSpawnLocationResolver
 {
 	/**
-	 * Returns the default Bukkit world name by calling {@link World#getName()}.
+	 * Returns the default Bukkit world spawn location by calling {@link World#getSpawnLocation()} ()}.
 	 *
-	 * @param world the {@link World} to resolve a name for
-	 * @return the world's raw name as defined by Bukkit
+	 * @param world the {@link World} to resolve a location for the world's spawn
+	 * @return Optional containing the world's spawn location as defined by Bukkit
 	 */
 	@Override
-	public Location resolve(final World world)
+	public Optional<Location> resolve(final World world)
 	{
-		if (world == null) { return null; }
+		if (world == null) { return Optional.empty(); }
 
 		SpawnLocationRetriever retriever = new DefaultRetriever();
 
-		return retriever.getSpawnLocation(world).orElse(null);
+		return retriever.getSpawnLocation(world);
 	}
 
 }

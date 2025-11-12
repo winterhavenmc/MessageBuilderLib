@@ -20,8 +20,10 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.s
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.Optional;
+
 
 public interface SpawnLocationResolver
 {
-	Location resolve(World world);
+	Optional<Location> resolve(World world);
 }

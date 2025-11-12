@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import static java.util.Locale.forLanguageTag;
 
@@ -43,6 +42,7 @@ import static java.util.Locale.forLanguageTag;
  *  LanguageTag tag = LanguageTag.of(Locale.US);
  * }
  *
+ * @since 1.x
  * @see Locale
  */
 public final class LanguageTag
@@ -89,17 +89,14 @@ public final class LanguageTag
 	@Contract("_->!null")
 	public static Optional<LanguageTag> of(final String string)
 	{
-		return (VALID_LOCALE.test(string))
+		return (isValid(string))
 				? Optional.of(new LanguageTag(Locale.forLanguageTag(string).toLanguageTag()))
 				: Optional.empty();
 	}
 
 
-	/**
-	 * Predicate that evaluates to {@code true} if the input string resolves to a valid ISO 639 language
-	 * code recognized by the JVM. Rejects null, blank, "und", or non-existent tags.
-	 */
-	public static final Predicate<String> VALID_LOCALE = string -> {
+	public static boolean isValid(final String string)
+	{
 		if (string == null || string.isBlank()) return false;
 
 		Locale locale = Locale.forLanguageTag(string);
@@ -121,7 +118,7 @@ public final class LanguageTag
 			// Ensure the language code is one of the official ISO 639 codes
 			return Arrays.asList(Locale.getISOLanguages()).contains(language);
 		}
-	};
+	}
 
 
 	/**

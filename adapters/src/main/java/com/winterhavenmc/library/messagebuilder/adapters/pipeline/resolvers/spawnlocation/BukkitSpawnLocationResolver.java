@@ -23,15 +23,20 @@ import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.Optional;
+
 
 public sealed interface BukkitSpawnLocationResolver extends SpawnLocationResolver permits DefaultResolver, PluginBasedResolver
 {
-	Location resolve(World world);
+	Optional<Location> resolve(World world);
 
 
 	static BukkitSpawnLocationResolver get(final PluginManager pluginManager)
 	{
-		if (pluginManager == null) { return new DefaultResolver(); }
+		if (pluginManager == null)
+		{
+			return new DefaultResolver();
+		}
 
 		Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
 
