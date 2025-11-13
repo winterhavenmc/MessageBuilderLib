@@ -148,7 +148,7 @@ public final class YamlItemRepository implements ItemRepository
 
 
 	@Override
-	public Optional<ItemRecord> record(final ValidItemKey validItemKey)
+	public Optional<ItemRecord> getRecordOpt(final ValidItemKey validItemKey)
 	{
 		ItemRecord itemRecord = getRecord(validItemKey);
 		if (itemRecord instanceof ValidItemRecord validItemRecord)
@@ -161,7 +161,7 @@ public final class YamlItemRepository implements ItemRepository
 
 
 	@Override
-	public boolean isItem(ItemStack itemStack)
+	public boolean isItem(final ItemStack itemStack)
 	{
 		return (itemStack != null
 				&& itemStack.hasItemMeta()
@@ -179,7 +179,7 @@ public final class YamlItemRepository implements ItemRepository
 
 
 	@Override
-	public ItemKey key(ItemStack itemStack)
+	public ItemKey key(final ItemStack itemStack)
 	{
 		return getItemKeyString(itemStack).map(ItemKey::of)
 				.orElseGet(() -> new InvalidItemKey("unknown", InvalidKeyReason.KEY_INVALID));

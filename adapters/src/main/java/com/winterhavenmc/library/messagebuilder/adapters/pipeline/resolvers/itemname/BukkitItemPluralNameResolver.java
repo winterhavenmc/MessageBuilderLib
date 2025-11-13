@@ -82,7 +82,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 
 	private Optional<ValidItemRecord> getValidRecord(ValidItemKey key)
 	{
-		return itemRepository.record(key)
+		return itemRepository.getRecordOpt(key)
 				.filter(ValidItemRecord.class::isInstance)
 				.map(ValidItemRecord.class::cast);
 	}

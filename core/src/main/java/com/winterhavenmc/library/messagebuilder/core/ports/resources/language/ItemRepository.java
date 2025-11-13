@@ -13,7 +13,9 @@ public interface ItemRepository
 {
 	ItemKey key(ItemStack itemStack);
 
-	Optional<ItemRecord> record(ValidItemKey validItemKey);
+	ItemRecord getRecord(ValidItemKey validItemKey);
+
+	Optional<ItemRecord> getRecordOpt(ValidItemKey validItemKey);
 
 	Optional<ItemStack> createItem(ValidItemKey validItemKey);
 
@@ -26,7 +28,4 @@ public interface ItemRepository
 	Optional<String> displayName(ValidItemKey validItemKey);
 
 	boolean isItem(ItemStack itemStack);
-
-	@Deprecated
-	ItemRecord getRecord(ValidItemKey validItemKey);
 }
