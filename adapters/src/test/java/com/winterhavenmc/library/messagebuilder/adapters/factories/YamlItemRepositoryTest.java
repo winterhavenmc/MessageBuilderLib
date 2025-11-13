@@ -101,12 +101,12 @@ class YamlItemRepositoryTest
 	}
 
 	@Test
-	void record()
+	void getRecordOpt()
 	{
 	}
 
 	@Test
-	void testRecord()
+	void testGetRecordOpt()
 	{
 	}
 }

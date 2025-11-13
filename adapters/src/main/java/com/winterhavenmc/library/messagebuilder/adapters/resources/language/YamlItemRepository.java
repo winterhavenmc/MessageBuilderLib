@@ -148,7 +148,7 @@ public final class YamlItemRepository implements ItemRepository
 
 
 	@Override
-	public Optional<ItemRecord> record(final ValidItemKey validItemKey)
+	public Optional<ItemRecord> getRecordOpt(final ValidItemKey validItemKey)
 	{
 		ItemRecord itemRecord = getRecord(validItemKey);
 		if (itemRecord instanceof ValidItemRecord validItemRecord)
