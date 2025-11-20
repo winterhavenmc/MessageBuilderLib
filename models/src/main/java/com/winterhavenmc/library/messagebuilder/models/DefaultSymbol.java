@@ -5,6 +5,7 @@ public enum DefaultSymbol
 	NULL("ø"),
 	BLANK("⬚"),
 	UNKNOWN("???"),
+	UNKNOWN_WORLD("🌐"),
 	;
 
 	private final String symbolString;

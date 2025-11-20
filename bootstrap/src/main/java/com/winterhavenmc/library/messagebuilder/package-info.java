@@ -42,6 +42,5 @@
  *
  * @see com.winterhavenmc.library.messagebuilder.MessageBuilder MessageBuilder
  * @see com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap MacroObjectMap
- * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers resolvers
  */
 package com.winterhavenmc.library.messagebuilder;
