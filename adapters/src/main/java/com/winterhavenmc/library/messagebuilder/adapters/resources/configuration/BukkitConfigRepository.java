@@ -142,8 +142,7 @@ public final class BukkitConfigRepository implements ConfigRepository
 	static LocaleSetting getLocaleSetting(final Plugin plugin)
 	{
 		return new LocaleSetting(LanguageTag.of(plugin.getConfig().getString(ConfigKey.LOCALE.key()))
-				.orElse(LanguageTag.of(plugin.getConfig().getString(ConfigKey.LANGUAGE.key()))
-						.orElse(LanguageTag.getSystemDefault())));
+				.orElse(LanguageTag.getSystemDefault()));
 	}
 
 
