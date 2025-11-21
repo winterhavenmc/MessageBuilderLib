@@ -22,7 +22,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.time.ZoneId;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 
@@ -127,9 +126,9 @@ public final class BukkitConfigRepository implements ConfigRepository
 	 */
 	static LanguageSetting getLanguageSetting(final Plugin plugin)
 	{
-		return new LanguageSetting(Optional.ofNullable(plugin.getConfig().getString(ConfigKey.LANGUAGE.key()))
-				.orElse(Optional.ofNullable(plugin.getConfig().getString(ConfigKey.LOCALE.key()))
-						.orElse(FALLBACK_NAME)));
+		return (plugin.getConfig().contains(ConfigKey.LANGUAGE.key()))
+				? new LanguageSetting(plugin.getConfig().getString(ConfigKey.LANGUAGE.key()))
+				: new LanguageSetting(DEFAULT_LANGUAGE_SETTING);
 	}
 
 
