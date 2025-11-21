@@ -59,7 +59,7 @@ public final class BukkitConfigRepository implements ConfigRepository
 	private final Supplier<LanguageSetting> languageSettingSupplier;
 	private final Supplier<LocaleSetting> localeSettingSupplier;
 	private final Supplier<ZoneId> zoneIdSupplier;
-	private final static String FALLBACK_NAME = "en-US";
+	private final static String DEFAULT_LANGUAGE_SETTING = "en-US";
 
 
 	/**
