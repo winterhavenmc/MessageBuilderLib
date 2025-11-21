@@ -117,6 +117,14 @@ public final class BukkitConfigRepository implements ConfigRepository
 	}
 
 
+	/**
+	 * Returns the language setting from the plugin config.yml file. Returns DEFAULT_LANGUAGE_SETTING
+	 * declared in this class if language configuration setting is not present in the plugin config.yml file.
+	 *
+	 * @param plugin instance of the plugin
+	 * @return a LanguageSetting object encapsulating the configured or default language setting string from
+	 * the plugin config.yml file
+	 */
 	static LanguageSetting getLanguageSetting(final Plugin plugin)
 	{
 		return new LanguageSetting(Optional.ofNullable(plugin.getConfig().getString(ConfigKey.LANGUAGE.key()))
@@ -125,6 +133,13 @@ public final class BukkitConfigRepository implements ConfigRepository
 	}
 
 
+	/**
+	 * Returns the locale setting from the plugin config.yml file. Returns system default locale if locale configuration
+	 * setting is not present in the plugin config.yml file.
+	 *
+	 * @param plugin instance of the plugin
+	 * @return a LocaleSetting object encapsulating the configured or system default locale setting
+	 */
 	static LocaleSetting getLocaleSetting(final Plugin plugin)
 	{
 		return new LocaleSetting(LanguageTag.of(plugin.getConfig().getString(ConfigKey.LOCALE.key()))
@@ -139,7 +154,6 @@ public final class BukkitConfigRepository implements ConfigRepository
 	 * If the {@code timezone} value is present in the configuration and matches
 	 * one of the available {@link ZoneId} recognized by the JVM, it is used.
 	 * Otherwise, this method falls back to the system default time zone.
-	 * </p>
 	 *
 	 * @param plugin the plugin whose configuration is queried for the timezone
 	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
