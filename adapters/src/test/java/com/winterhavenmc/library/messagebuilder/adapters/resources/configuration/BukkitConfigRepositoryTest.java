@@ -51,6 +51,7 @@ class BukkitConfigRepositoryTest
 	{
 		configuration = new YamlConfiguration();
 		configuration.set("language", "fr-FR");
+		configuration.set("locale", "fr-FR");
 	}
 
 
