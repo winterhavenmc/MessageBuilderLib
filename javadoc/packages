@@ -71,6 +71,9 @@ com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number
 com.winterhavenmc.library.messagebuilder.models.language
+com.winterhavenmc.library.messagebuilder.models.language.constant
+com.winterhavenmc.library.messagebuilder.models.language.message
+com.winterhavenmc.library.messagebuilder.models.language.item
 com.winterhavenmc.library.messagebuilder.models.sound
 com.winterhavenmc.library.messagebuilder.models.configuration
 com.winterhavenmc.library.messagebuilder.models.keys

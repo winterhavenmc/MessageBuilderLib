@@ -74,6 +74,9 @@ com.winterhavenmc.library.messagebuilder.models
 com.winterhavenmc.library.messagebuilder.models.configuration
 com.winterhavenmc.library.messagebuilder.models.keys
 com.winterhavenmc.library.messagebuilder.models.language
+com.winterhavenmc.library.messagebuilder.models.language.constant
+com.winterhavenmc.library.messagebuilder.models.language.item
+com.winterhavenmc.library.messagebuilder.models.language.message
 com.winterhavenmc.library.messagebuilder.models.recipient
 com.winterhavenmc.library.messagebuilder.models.sound
 com.winterhavenmc.library.messagebuilder.models.time
