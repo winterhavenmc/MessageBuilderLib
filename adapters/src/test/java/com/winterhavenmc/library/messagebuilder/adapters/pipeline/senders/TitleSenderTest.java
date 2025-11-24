@@ -21,9 +21,9 @@ import com.winterhavenmc.library.messagebuilder.adapters.util.MessageId;
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
 
 import org.bukkit.command.ConsoleCommandSender;

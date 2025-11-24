@@ -24,9 +24,9 @@
  * <p>
  * Each section is represented by a sealed interface:
  * <ul>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.models.language.MessageRecord}</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.models.language.ItemRecord}</li>
- *   <li>{@link com.winterhavenmc.library.messagebuilder.models.language.ConstantRecord}</li>
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord}</li>
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord}</li>
+ *   <li>{@link com.winterhavenmc.library.messagebuilder.models.language.constant.ConstantRecord}</li>
  * </ul>
  *
  * These interfaces have two core implementations:
@@ -47,14 +47,14 @@
  *
  * <h2>Typical Usage</h2>
  * {@snippet lang = "java":
- * 	ItemRecord itemRecord = queryHandler.getItemRecord(MY_ITEM_KEY);
+ * 	import com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord;import com.winterhavenmc.library.messagebuilder.models.language.item.ValidItemRecord;ItemRecord itemRecord = queryHandler.getItemRecord(MY_ITEM_KEY);
  * 	if (itemRecord instanceof ValidItemRecord valid) {
  * 		Section name = valid.name();
  * 	}
  *}
  *
- * @see com.winterhavenmc.library.messagebuilder.models.language.MessageRecord MessageRecord
- * @see com.winterhavenmc.library.messagebuilder.models.language.ItemRecord ItemRecord
- * @see com.winterhavenmc.library.messagebuilder.models.language.ConstantRecord ConstantRecord
+ * @see com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord MessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord ItemRecord
+ * @see com.winterhavenmc.library.messagebuilder.models.language.constant.ConstantRecord ConstantRecord
  */
 package com.winterhavenmc.library.messagebuilder.models.language;

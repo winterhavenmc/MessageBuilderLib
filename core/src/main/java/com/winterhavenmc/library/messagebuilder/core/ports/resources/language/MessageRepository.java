@@ -18,7 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
-import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord;
 
 
 @FunctionalInterface

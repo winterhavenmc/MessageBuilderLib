@@ -15,10 +15,12 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.models.language;
+package com.winterhavenmc.library.messagebuilder.models.language.constant;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidConstantKey;
+import com.winterhavenmc.library.messagebuilder.models.language.InvalidRecordReason;
+import com.winterhavenmc.library.messagebuilder.models.language.SectionRecord;
 
 
 /**

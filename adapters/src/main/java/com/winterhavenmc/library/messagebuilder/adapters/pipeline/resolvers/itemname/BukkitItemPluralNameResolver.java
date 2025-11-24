@@ -23,7 +23,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.It
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
-import com.winterhavenmc.library.messagebuilder.models.language.ValidItemRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.item.ValidItemRecord;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;

@@ -1,6 +1,6 @@
 /**
  * Defines the entry point to the message pipeline, responsible for retrieving
- * {@link com.winterhavenmc.library.messagebuilder.models.language.MessageRecord MessageRecord}
+ * {@link com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord MessageRecord}
  * instances from a configuration-backed query system.
  *
  * <p>This package encapsulates the "retrieval" stage, where a {@code LegacyRecordKey}
@@ -23,6 +23,6 @@
  *
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever MessageRetriever
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.MessageRetriever MessageRetriever
- * @see com.winterhavenmc.library.messagebuilder.models.language.MessageRecord MessageRecord
+ * @see com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord MessageRecord
  */
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers;

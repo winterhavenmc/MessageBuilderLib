@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown.MessageCooldownMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
 
 /**
  * Sends a title and optional subtitle to a {@link org.bukkit.entity.Player}
- * using values from a {@link com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord}.
+ * using values from a {@link FinalMessageRecord}.
  *
  * <p>This implementation ensures that:
  * <ul>
@@ -43,7 +43,7 @@ import org.bukkit.entity.Player;
  * </ul>
  *
  * @see Sender
- * @see com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord
+ * @see FinalMessageRecord
  * @see MessageCooldownMap
  */
 public final class KyoriTitleSender implements Sender

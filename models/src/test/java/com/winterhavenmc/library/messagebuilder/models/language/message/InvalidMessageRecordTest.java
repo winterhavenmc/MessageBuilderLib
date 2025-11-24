@@ -15,11 +15,12 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.models.language;
+package com.winterhavenmc.library.messagebuilder.models.language.message;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
+import com.winterhavenmc.library.messagebuilder.models.language.InvalidRecordReason;
 import com.winterhavenmc.library.messagebuilder.models.util.MessageId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

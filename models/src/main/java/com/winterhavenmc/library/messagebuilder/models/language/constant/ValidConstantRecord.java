@@ -15,9 +15,10 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.models.language;
+package com.winterhavenmc.library.messagebuilder.models.language.constant;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidConstantKey;
+import com.winterhavenmc.library.messagebuilder.models.language.Section;
 
 import java.util.Objects;
 

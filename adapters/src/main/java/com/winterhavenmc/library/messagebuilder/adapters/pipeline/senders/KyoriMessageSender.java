@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown.Messa
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
-import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -33,7 +33,7 @@ import java.util.Optional;
 
 /**
  * Sends chat messages to a {@link com.winterhavenmc.library.messagebuilder.models.recipient.Recipient.Sendable}
- * based on the contents of a {@link com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord}.
+ * based on the contents of a {@link FinalMessageRecord}.
  *
  * <p>This implementation handles:
  * <ul>
@@ -45,7 +45,7 @@ import java.util.Optional;
  * <p>It is typically used to deliver the main message body, rather than titles or subtitles.
  *
  * @see Sender
- * @see com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord
+ * @see FinalMessageRecord
  * @see MessageCooldownMap
  */
 public final class KyoriMessageSender implements Sender
