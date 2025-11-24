@@ -45,6 +45,14 @@ public interface ConfigRepository extends ConfigProvider<LocaleSetting>
 	 */
 	Locale locale();
 
+	Locale numberLocale();
+
+	Locale dateLocale();
+
+	Locale timeLocale();
+
+	Locale logLocale();
+
 	/**
 	 * Returns the configured {@link ZoneId} if valid, or the system default otherwise.
 	 *

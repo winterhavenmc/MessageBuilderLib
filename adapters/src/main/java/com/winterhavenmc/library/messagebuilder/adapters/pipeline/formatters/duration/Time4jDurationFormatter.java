@@ -108,7 +108,7 @@ public final class Time4jDurationFormatter implements DurationFormatter
 				.with(minutes, ClockUnit.MINUTES)
 				.with(seconds, ClockUnit.SECONDS);
 
-		return PrettyTime.of(configRepository.locale()).print(net.time4j.Duration.compose(calendarPart, clockPart), TextWidth.WIDE);
+		return PrettyTime.of(configRepository.timeLocale()).print(net.time4j.Duration.compose(calendarPart, clockPart), TextWidth.WIDE);
 	}
 
 }

@@ -21,6 +21,7 @@ import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
 import java.time.Instant;
@@ -52,7 +53,7 @@ import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.acces
  * implementation, such as {@code LocalizedDurationFormatter}, and the instant string is formatted using a
  * {@link java.time.format.DateTimeFormatter DateTimeFormatter} constructed with
  * {@link java.time.format.FormatStyle FormatStyle} and a
- * {@link com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository ConfigRepository}.
+ * {@link ConfigRepository ConfigRepository}.
  *
  * <p>These macros provide flexibility to server operators, allowing them to choose the display format
  * that best suits their message context.

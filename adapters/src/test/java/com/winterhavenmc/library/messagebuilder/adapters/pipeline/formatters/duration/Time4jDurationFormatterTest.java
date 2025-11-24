@@ -49,6 +49,7 @@ class Time4jDurationFormatterTest
 	{
 		MockitoAnnotations.openMocks(this);
 		when(configRepositoryMock.locale()).thenReturn(Locale.ENGLISH);
+		when(configRepositoryMock.timeLocale()).thenReturn(Locale.ENGLISH);
 		formatter = new Time4jDurationFormatter(configRepositoryMock);
 	}
 

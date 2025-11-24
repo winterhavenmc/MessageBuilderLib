@@ -62,7 +62,7 @@ public class LocaleNumberFormatter implements NumberFormatter
 	@Override
 	public String format(final Number number)
 	{
-		return NumberFormat.getInstance(configRepository.locale()).format(number);
+		return NumberFormat.getInstance(configRepository.numberLocale()).format(number);
 	}
 
 }

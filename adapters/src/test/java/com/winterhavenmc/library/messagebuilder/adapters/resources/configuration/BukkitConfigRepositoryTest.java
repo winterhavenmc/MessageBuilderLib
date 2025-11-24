@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.*;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -149,7 +150,7 @@ class BukkitConfigRepositoryTest
 		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
-		ZoneId result = BukkitConfigRepository.getZoneId(pluginMock);
+		ZoneId result = new ZoneIdSetting(pluginMock).get();
 
 		// Assert
 		assertEquals(ZoneId.of("UTC"), result);
@@ -167,7 +168,7 @@ class BukkitConfigRepositoryTest
 		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
 		// Act
-		ZoneId result = BukkitConfigRepository.getZoneId(pluginMock);
+		ZoneId result = new ZoneIdSetting(pluginMock).get();
 
 		// Assert
 		assertEquals(ZoneId.systemDefault(), result);
@@ -233,7 +234,7 @@ class BukkitConfigRepositoryTest
 //
 //		// Act
 //		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
-//		LanguageSetting setting = provider.get();
+//		LocaleLanguageSetting setting = provider.get();
 //
 //		// Assert
 //		assertEquals("custom", setting.name());
@@ -252,7 +253,7 @@ class BukkitConfigRepositoryTest
 //
 //		// Act
 //		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
-//		LanguageSetting setting = provider.get();
+//		LocaleLanguageSetting setting = provider.get();
 //
 //		// Assert
 //		assertEquals("fr-FR", setting.name());
@@ -271,7 +272,7 @@ class BukkitConfigRepositoryTest
 //
 //		// Act
 //		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
-//		LanguageSetting setting = provider.get();
+//		LocaleLanguageSetting setting = provider.get();
 //
 //		// Assert
 //		assertEquals("en-US", setting.name()); // The hardcoded fallback

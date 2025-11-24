@@ -91,7 +91,7 @@ public interface Instantable
 	{
 		if (instant == null) { return Optional.empty(); }
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(formatStyle);
+		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(formatStyle).withLocale(configRepository.dateLocale());
 		ZonedDateTime zonedDateTime = instant.atZone(configRepository.zoneId());
 
 		return Optional.of(formatter.format(zonedDateTime));

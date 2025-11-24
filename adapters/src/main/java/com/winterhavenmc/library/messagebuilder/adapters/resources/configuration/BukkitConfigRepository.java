@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.configuration;
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.*;
 import org.bukkit.plugin.Plugin;
 
@@ -57,8 +58,12 @@ public final class BukkitConfigRepository implements ConfigRepository
 {
 	private final Supplier<LanguageSetting> languageSettingSupplier;
 	private final Supplier<LocaleSetting> localeSettingSupplier;
+	private final Supplier<LocaleSetting> numberLocaleSettingSupplier;
+	private final Supplier<LocaleSetting> dateLocaleSettingSupplier;
+	private final Supplier<LocaleSetting> timeLocaleSettingSupplier;
+	private final Supplier<LocaleSetting> logLocaleSettingSupplier;
 	private final Supplier<ZoneId> zoneIdSupplier;
-	private final static String DEFAULT_LANGUAGE_SETTING = "en-US";
+	final static String DEFAULT_LANGUAGE_SETTING = "en-US";
 
 
 	/**
@@ -67,6 +72,10 @@ public final class BukkitConfigRepository implements ConfigRepository
 	enum ConfigKey
 	{
 		LOCALE("locale"),
+		LOCALE_NUMBER("locale.number"),
+		LOCALE_DATE("locale.date"),
+		LOCALE_TIME("locale.time"),
+		LOCALE_LOG("locale.log"),
 		LANGUAGE("language"),
 		TIME_ZONE("timezone");
 
@@ -84,11 +93,19 @@ public final class BukkitConfigRepository implements ConfigRepository
 	 * @param zoneIdSupplier supplies the current {@link ZoneId}
 	 */
 	private BukkitConfigRepository(final Supplier<LanguageSetting> languageSettingSupplier,
-								  final Supplier<LocaleSetting> localeSettingSupplier,
-								  final Supplier<ZoneId> zoneIdSupplier)
+								   final Supplier<LocaleSetting> localeSettingSupplier,
+								   final Supplier<LocaleSetting> numberLocaleSettingSupplier,
+								   final Supplier<LocaleSetting> dateLocaleSettingSupplier,
+								   final Supplier<LocaleSetting> timeLocaleSettingSupplier,
+								   final Supplier<LocaleSetting> logLocaleSettingSupplier,
+								   final Supplier<ZoneId> zoneIdSupplier)
 	{
 		this.languageSettingSupplier = languageSettingSupplier;
 		this.localeSettingSupplier = localeSettingSupplier;
+		this.numberLocaleSettingSupplier = numberLocaleSettingSupplier;
+		this.dateLocaleSettingSupplier = dateLocaleSettingSupplier;
+		this.timeLocaleSettingSupplier = timeLocaleSettingSupplier;
+		this.logLocaleSettingSupplier = logLocaleSettingSupplier;
 		this.zoneIdSupplier = zoneIdSupplier;
 	}
 
@@ -110,59 +127,13 @@ public final class BukkitConfigRepository implements ConfigRepository
 	public static ConfigRepository create(final Plugin plugin)
 	{
 		return new BukkitConfigRepository(
-				() -> getLanguageSetting(plugin),
-				() -> getLocaleSetting(plugin),
-				() -> getZoneId(plugin));
-	}
-
-
-	/**
-	 * Returns the language setting from the plugin config.yml file. Returns DEFAULT_LANGUAGE_SETTING
-	 * declared in this class if language configuration setting is not present in the plugin config.yml file.
-	 *
-	 * @param plugin instance of the plugin
-	 * @return a LanguageSetting object encapsulating the configured or default language setting string from
-	 * the plugin config.yml file
-	 */
-	static LanguageSetting getLanguageSetting(final Plugin plugin)
-	{
-		return (plugin.getConfig().contains(ConfigKey.LANGUAGE.key()))
-				? new LanguageSetting(plugin.getConfig().getString(ConfigKey.LANGUAGE.key()))
-				: new LanguageSetting(DEFAULT_LANGUAGE_SETTING);
-	}
-
-
-	/**
-	 * Returns the locale setting from the plugin config.yml file. Returns system default locale if locale configuration
-	 * setting is not present in the plugin config.yml file.
-	 *
-	 * @param plugin instance of the plugin
-	 * @return a LocaleSetting object encapsulating the configured or system default locale setting
-	 */
-	static LocaleSetting getLocaleSetting(final Plugin plugin)
-	{
-		return new LocaleSetting(LanguageTag.of(plugin.getConfig().getString(ConfigKey.LOCALE.key()))
-				.orElse(LanguageTag.getSystemDefault()));
-	}
-
-
-	/**
-	 * Resolves the configured {@code timezone} string into a valid {@link ZoneId}.
-	 * <p>
-	 * If the {@code timezone} value is present in the configuration and matches
-	 * one of the available {@link ZoneId} recognized by the JVM, it is used.
-	 * Otherwise, this method falls back to the system default time zone.
-	 *
-	 * @param plugin the plugin whose configuration is queried for the timezone
-	 * @return a valid {@code ZoneId}, or the system default if no valid setting is found
-	 */
-	static ZoneId getZoneId(final Plugin plugin)
-	{
-		String timezone = plugin.getConfig().getString(ConfigKey.TIME_ZONE.key());
-
-		return (timezone != null && ZoneId.getAvailableZoneIds().contains(timezone))
-				? ZoneId.of(timezone)
-				: ZoneId.systemDefault();
+				() -> new LocaleLanguageSetting(plugin).get(),
+				() -> new GlobalLocaleSetting(plugin).get(),
+				() -> new NumberLocaleSetting(plugin).get(),
+				() -> new DateLocaleSetting(plugin).get(),
+				() -> new TimeLocaleSetting(plugin).get(),
+				() -> new LoggingLocaleSetting(plugin).get(),
+				() -> new ZoneIdSetting(plugin).get());
 	}
 
 
@@ -198,7 +169,31 @@ public final class BukkitConfigRepository implements ConfigRepository
 	@Override
 	public Locale locale()
 	{
-		return localeSettingSupplier.get().languageTag().getLocale();
+		return localeSettingSupplier.get().locale();
+	}
+
+	@Override
+	public Locale numberLocale()
+	{
+		return numberLocaleSettingSupplier.get().locale();
+	}
+
+	@Override
+	public Locale dateLocale()
+	{
+		return dateLocaleSettingSupplier.get().locale();
+	}
+
+	@Override
+	public Locale timeLocale()
+	{
+		return timeLocaleSettingSupplier.get().locale();
+	}
+
+	@Override
+	public Locale logLocale()
+	{
+		return logLocaleSettingSupplier.get().locale();
 	}
 
 

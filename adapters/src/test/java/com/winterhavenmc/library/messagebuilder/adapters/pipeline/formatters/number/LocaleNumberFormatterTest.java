@@ -40,7 +40,7 @@ class LocaleNumberFormatterTest
 	@Test
 	void getFormatted_US()
 	{
-		when(configRepositoryMock.locale()).thenReturn(Locale.US);
+		when(configRepositoryMock.numberLocale()).thenReturn(Locale.US);
 		LocaleNumberFormatter formatter = new LocaleNumberFormatter(configRepositoryMock);
 
 		String result = formatter.format(42000);
@@ -52,7 +52,7 @@ class LocaleNumberFormatterTest
 	@Test
 	void getFormatted_DE()
 	{
-		when(configRepositoryMock.locale()).thenReturn(Locale.GERMAN);
+		when(configRepositoryMock.numberLocale()).thenReturn(Locale.GERMAN);
 		LocaleNumberFormatter formatter = new LocaleNumberFormatter(configRepositoryMock);
 
 		String result = formatter.format(42000);
