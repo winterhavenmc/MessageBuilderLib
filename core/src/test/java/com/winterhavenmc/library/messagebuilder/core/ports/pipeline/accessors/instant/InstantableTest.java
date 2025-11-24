@@ -28,6 +28,7 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.FormatStyle;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -93,6 +94,7 @@ class InstantableTest
 		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
 		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
+		when(configRepositoryMock.dateLocale()).thenReturn(Locale.US);
 
 		// Act
 		MacroStringMap result = testObject.extractInstant(baseKey, FormatStyle.MEDIUM, ctxMock);
@@ -109,6 +111,7 @@ class InstantableTest
 		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
+		when(configRepositoryMock.dateLocale()).thenReturn(Locale.US);
 
 		// Act
 		Optional<String> result = Instantable.formatInstant(testObject.getInstant(), FormatStyle.MEDIUM, configRepositoryMock);

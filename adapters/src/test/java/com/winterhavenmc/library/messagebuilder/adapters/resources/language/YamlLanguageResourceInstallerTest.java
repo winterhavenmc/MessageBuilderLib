@@ -61,6 +61,7 @@ public class YamlLanguageResourceInstallerTest
 	public void setUp()
 	{
 		lenient().when(configRepositoryMock.locale()).thenReturn(Locale.US);
+		lenient().when(configRepositoryMock.logLocale()).thenReturn(Locale.US);
 		lenient().when(pluginMock.getLogger()).thenReturn(Logger.getLogger(this.getClass().getName()));
 		lenient().when(pluginMock.getDataFolder()).thenReturn(tempDataDir);
 

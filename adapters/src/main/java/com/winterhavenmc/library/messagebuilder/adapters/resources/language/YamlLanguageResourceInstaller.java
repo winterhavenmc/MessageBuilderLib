@@ -158,20 +158,20 @@ public final class YamlLanguageResourceInstaller implements ResourceInstaller
 			if (installedFile.exists())
 			{
 				plugin.getLogger().info(ResourceMessage.RESOURCE_INSTALL_SUCCESS
-						.getLocalizedMessage(configRepository.locale(), filePath));
+						.getLocalizedMessage(configRepository.logLocale(), filePath));
 				return InstallerStatus.SUCCESS;
 			}
 			else
 			{
 				plugin.getLogger().severe(ResourceMessage.RESOURCE_INSTALL_MISSING
-						.getLocalizedMessage(configRepository.locale(), filePath));
+						.getLocalizedMessage(configRepository.logLocale(), filePath));
 				return InstallerStatus.FAIL;
 			}
 		}
 		catch (Exception exception)
 		{
 			plugin.getLogger().severe(ResourceMessage.RESOURCE_INSTALL_EXCEPTION
-					.getLocalizedMessage(configRepository.locale(), resourceName, exception.getLocalizedMessage()));
+					.getLocalizedMessage(configRepository.logLocale(), resourceName, exception.getLocalizedMessage()));
 			return InstallerStatus.FAIL;
 		}
 	}

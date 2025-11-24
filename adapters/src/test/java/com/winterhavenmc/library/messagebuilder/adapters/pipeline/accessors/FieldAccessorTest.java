@@ -71,6 +71,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 import java.util.UUID;
 
 import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.DURATION;
@@ -202,6 +203,7 @@ class FieldAccessorTest
 		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("formatted duration");
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
+		when(configRepositoryMock.dateLocale()).thenReturn(Locale.US);
 
 		// Act
 		MacroStringMap result = extractor.extract(baseKey, expirationAdapter, testObject);
@@ -239,6 +241,7 @@ class FieldAccessorTest
 		when(adapterContextContainerMock.formatterCtx()).thenReturn(formatterContainerMock);
 		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
+		when(configRepositoryMock.dateLocale()).thenReturn(Locale.US);
 
 		// Act
 		MacroStringMap result = extractor.extract(baseKey, instantAdapter, testObject);
@@ -470,6 +473,7 @@ class FieldAccessorTest
 		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("formatted duration");
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
+		when(configRepositoryMock.dateLocale()).thenReturn(Locale.US);
 
 		ProtectionAdapter protectionAdapter = new ProtectionAdapter();
 		TestObject testObject = new TestObject();

@@ -128,7 +128,7 @@ class AtomicResolverTest
 	{
 		// Arrange
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(42));
-		when(configRepositoryMock.locale()).thenReturn(Locale.US);
+		when(configRepositoryMock.numberLocale()).thenReturn(Locale.US);
 
 		// Act
 		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
@@ -138,7 +138,7 @@ class AtomicResolverTest
 
 		// Verify
 		verify(macroObjectMapMock, atLeastOnce()).get(key);
-		verify(configRepositoryMock, atLeastOnce()).locale();
+		verify(configRepositoryMock, atLeastOnce()).numberLocale();
 	}
 
 
@@ -185,7 +185,8 @@ class AtomicResolverTest
 	{
 		// Arrange
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(420000));
-		when(configRepositoryMock.locale()).thenReturn(Locale.US);
+		when(configRepositoryMock.numberLocale()).thenReturn(Locale.US);
+
 
 		// Act
 		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
@@ -195,7 +196,7 @@ class AtomicResolverTest
 
 		// Verify
 		verify(macroObjectMapMock, atLeastOnce()).get(key);
-		verify(configRepositoryMock, atLeastOnce()).locale();
+		verify(configRepositoryMock, atLeastOnce()).numberLocale();
 	}
 
 
@@ -204,7 +205,7 @@ class AtomicResolverTest
 	{
 		// Arrange
 		when(macroObjectMapMock.get(key)).thenReturn(Optional.of(420000));
-		when(configRepositoryMock.locale()).thenReturn(Locale.GERMAN);
+		when(configRepositoryMock.numberLocale()).thenReturn(Locale.GERMAN);
 
 		// Act
 		MacroStringMap result = resolver.resolve(key, macroObjectMapMock);
@@ -214,7 +215,7 @@ class AtomicResolverTest
 
 		// Verify
 		verify(macroObjectMapMock, atLeastOnce()).get(key);
-		verify(configRepositoryMock, atLeastOnce()).locale();
+		verify(configRepositoryMock, atLeastOnce()).numberLocale();
 	}
 
 

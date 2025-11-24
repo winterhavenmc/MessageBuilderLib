@@ -32,6 +32,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -105,6 +106,7 @@ class ExpirableTest
 		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
 		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
+		when(configRepositoryMock.dateLocale()).thenReturn(Locale.US);
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("valid duration string");
 
 		// Act
