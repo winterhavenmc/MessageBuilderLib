@@ -2,6 +2,8 @@
  * Contains a sealed model hierarchy representing classified message recipients
  * in a Bukkit-based command or messaging context.
  * <p>
+ * <img src="doc-files/Recipient_structure.svg" alt="Recipient Structure">
+ * <p>
  * The {@link com.winterhavenmc.library.messagebuilder.models.recipient.Recipient} interface
  * and its nested types allow plugin developers to reason about the type of a {@link org.bukkit.command.CommandSender}
  * at runtime using a type-safe, data-driven approach.

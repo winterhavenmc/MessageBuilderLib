@@ -20,7 +20,7 @@
  * </ul>
  *
  * <p>All implementations are expected to work with fully processed
- * {@link com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord FinalMessageRecord} instances
+ * {@link com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord FinalMessageRecord} instances
  * and should not perform macro resolution or placeholder detection themselves.
  *
  * @see com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender

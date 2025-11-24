@@ -4,7 +4,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.it
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
-import com.winterhavenmc.library.messagebuilder.models.language.ItemRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;

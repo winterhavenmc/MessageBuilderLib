@@ -19,7 +19,7 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown;
 
 
 import com.winterhavenmc.library.messagebuilder.models.keys.CooldownKey;
-import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 
 /**

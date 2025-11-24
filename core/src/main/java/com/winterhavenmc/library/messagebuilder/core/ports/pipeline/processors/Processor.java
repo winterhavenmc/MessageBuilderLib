@@ -19,15 +19,15 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.processors;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
-import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.replacers.MacroReplacer;
 
 
 /**
  * A functional interface representing the final stage in the message pipeline: transforming a
- * {@link com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord ValidMessageRecord}
- * into a {@link com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord FinalMessageRecord}
+ * {@link ValidMessageRecord ValidMessageRecord}
+ * into a {@link FinalMessageRecord FinalMessageRecord}
  * by resolving and replacing all macro placeholders.
  *
  * <p>This step is typically performed after a message record has been retrieved and
@@ -36,8 +36,8 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.replacers.Ma
  * <p>Macro resolution is delegated internally to a {@link ValueResolver ValueResolver},
  * and placeholder substitution is handled by a {@link MacroReplacer MacroReplacer}.
  *
- * @see com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord ValidMessageRecord
- * @see com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord FinalMessageRecord
+ * @see ValidMessageRecord ValidMessageRecord
+ * @see FinalMessageRecord FinalMessageRecord
  * @see MacroObjectMap MacroObjectMap
  */
 @FunctionalInterface
@@ -47,7 +47,7 @@ public interface Processor
 	 * Processes a valid message record by replacing all macros using the provided macro object map.
 	 *
 	 * <p>This includes macro substitution in the message body, title, and subtitle fields.
-	 * The result is a {@link com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord}
+	 * The result is a {@link FinalMessageRecord}
 	 * containing the final rendered strings ready for output.
 	 *
 	 * @param messageRecord the message record to process

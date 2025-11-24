@@ -24,8 +24,8 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.processors.P
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.replacers.MacroReplacer;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.macro.ValueResolver;
 
-import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 
 
@@ -35,16 +35,16 @@ import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
  *
  * <p>This class uses a {@link MacroReplacer}
  * to apply all relevant placeholder substitutions on a
- * {@link com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord},
- * producing a new {@link com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord}
+ * {@link ValidMessageRecord},
+ * producing a new {@link FinalMessageRecord}
  * with all final strings populated.
  *
  * <p>It serves as the final step in the message pipeline before rendering or dispatching.
  *
  * @see Processor
  * @see MacroReplacer
- * @see com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord
- * @see com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord
+ * @see ValidMessageRecord
+ * @see FinalMessageRecord
  */
 public class MessageProcessor implements Processor
 {
@@ -65,7 +65,7 @@ public class MessageProcessor implements Processor
 
 
 	/**
-	 * Processes a {@link com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord}
+	 * Processes a {@link ValidMessageRecord}
 	 * by replacing all macros in its fields using the provided {@link MacroObjectMap},
 	 * and return new message record with final string fields added with macro replacements performed.
 	 *

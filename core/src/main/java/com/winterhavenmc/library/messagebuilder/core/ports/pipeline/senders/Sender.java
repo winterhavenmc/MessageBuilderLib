@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders;
 
-import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 
 
