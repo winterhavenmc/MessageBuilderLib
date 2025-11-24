@@ -1,4 +1,4 @@
 /**
- * This package contains data structure models used in the library.
+ * Contains packages that implement models used in the library.
  */
 package com.winterhavenmc.library.messagebuilder.models;
