@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.models.language.message;
+package com.winterhavenmc.library.messagebuilder.models.language;
 
 import java.text.MessageFormat;
 import java.util.Locale;
