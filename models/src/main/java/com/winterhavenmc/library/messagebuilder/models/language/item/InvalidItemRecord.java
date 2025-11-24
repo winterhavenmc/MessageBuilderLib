@@ -15,10 +15,11 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.models.language;
+package com.winterhavenmc.library.messagebuilder.models.language.item;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.RecordKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
+import com.winterhavenmc.library.messagebuilder.models.language.message.InvalidRecordReason;
 
 
 /**

@@ -21,8 +21,8 @@ import com.winterhavenmc.library.messagebuilder.core.context.MessagePipelineCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.CooldownKey;
-import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
-import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.ValidMessageRecord;
 
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 

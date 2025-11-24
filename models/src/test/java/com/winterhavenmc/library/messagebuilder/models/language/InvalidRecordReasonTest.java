@@ -1,5 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.models.language;
 
+import com.winterhavenmc.library.messagebuilder.models.language.message.InvalidRecordReason;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;

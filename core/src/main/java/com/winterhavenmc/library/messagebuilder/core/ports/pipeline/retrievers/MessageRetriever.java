@@ -18,13 +18,13 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
-import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
 
 
 /**
  * A functional interface representing the first stage of the message pipeline:
- * retrieving a {@link com.winterhavenmc.library.messagebuilder.models.language.MessageRecord}
+ * retrieving a {@link MessageRecord}
  * associated with a given {@link ValidMessageKey}.
  *
  * <p>Implementations of this interface typically fetch records from a pre-parsed
@@ -34,7 +34,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
  * <p>This interface abstracts retrieval behavior for flexibility and testability,
  * and is typically used by {@link Pipeline}.
  *
- * @see com.winterhavenmc.library.messagebuilder.models.language.MessageRecord MessageRecord
+ * @see MessageRecord MessageRecord
  */
 @FunctionalInterface
 public interface MessageRetriever

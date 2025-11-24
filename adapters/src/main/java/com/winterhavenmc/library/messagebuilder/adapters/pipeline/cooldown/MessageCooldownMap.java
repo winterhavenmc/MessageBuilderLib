@@ -21,7 +21,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown.Coo
 import com.winterhavenmc.library.messagebuilder.models.keys.CooldownKey;
 
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
-import com.winterhavenmc.library.messagebuilder.models.language.FinalMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
 
 import java.time.Instant;
 import java.util.Map;

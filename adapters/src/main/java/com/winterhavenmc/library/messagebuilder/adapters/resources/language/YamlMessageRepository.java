@@ -22,9 +22,9 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.Me
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
-import com.winterhavenmc.library.messagebuilder.models.language.InvalidMessageRecord;
-import com.winterhavenmc.library.messagebuilder.models.language.InvalidRecordReason;
-import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.InvalidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.InvalidRecordReason;
+import com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord;
 
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey;

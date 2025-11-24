@@ -22,14 +22,15 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.M
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
 
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
-import com.winterhavenmc.library.messagebuilder.models.language.InvalidRecordReason;
-import com.winterhavenmc.library.messagebuilder.models.language.MessageRecord;
-import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.InvalidMessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.InvalidRecordReason;
+import com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord;
+import com.winterhavenmc.library.messagebuilder.models.language.message.ValidMessageRecord;
 
 
 /**
  * Default implementation of the {@link MessageRetriever} interface that retrieves
- * a {@link com.winterhavenmc.library.messagebuilder.models.language.MessageRecord}
+ * a {@link MessageRecord}
  *
  * <p>This class ensures safety and consistency by always returning a non-null record.
  * If the underlying query handler fails to provide a valid message, a fallback
@@ -40,9 +41,9 @@ import com.winterhavenmc.library.messagebuilder.models.language.ValidMessageReco
  * {@link MessagePipeline MessagePipeline}.
  *
  * @see MessageRetriever
- * @see com.winterhavenmc.library.messagebuilder.models.language.MessageRecord MessageRecord
- * @see com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord ValidMessageRecord
- * @see com.winterhavenmc.library.messagebuilder.models.language.InvalidMessageRecord InvalidMessageRecord
+ * @see MessageRecord MessageRecord
+ * @see ValidMessageRecord ValidMessageRecord
+ * @see InvalidMessageRecord InvalidMessageRecord
  */
 public final class LocalizedMessageRetriever implements MessageRetriever
 {
@@ -59,9 +60,9 @@ public final class LocalizedMessageRetriever implements MessageRetriever
 
 
 	/**
-	 * Retrieves a {@link com.winterhavenmc.library.messagebuilder.models.language.MessageRecord}
+	 * Retrieves a {@link MessageRecord}
 	 *
-	 * <p>If the result is not an instance of {@link com.winterhavenmc.library.messagebuilder.models.language.ValidMessageRecord},
+	 * <p>If the result is not an instance of {@link ValidMessageRecord},
 	 * this method returns an {@code MessageRecord#empty(com.winterhavenmc.library.messagebuilder.models.keys.RecordKey, InvalidRecordReason)
 	 * empty record} as a safe fallback.
 	 *
