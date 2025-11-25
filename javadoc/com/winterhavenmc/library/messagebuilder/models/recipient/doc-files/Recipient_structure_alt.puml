@@ -24,6 +24,9 @@ package recipient {
     interface Recipient <<entity>> {
         + of(sender: CommandSender): Recipient
     }
+    interface Sendable <<entity-valid>> {
+        + sender(): CommandSender
+    }
     class ValidRecipient <<entity-valid>> {
         - sender: CommandSender
         --
@@ -46,8 +49,9 @@ package recipient {
 }
 
 'edges
-Recipient <-- ValidRecipient
-Recipient <-- ProxiedRecipient
+Recipient <-- Sendable
 Recipient <-- InvalidRecipient
+Sendable <-- ValidRecipient
+Sendable <-- ProxiedRecipient
 
 @enduml
