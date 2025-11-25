@@ -46,7 +46,7 @@ config=StructureConfiguration;
   },
   "graphTraversal": {
     "forwardDepth": 3,
-    "backwardDepth": 3,
+    "backwardDepth": 1,
     "classPackageExcludeFilter": "",
     "classPackageIncludeFilter": "",
     "classNameExcludeFilter": "",
@@ -139,6 +139,18 @@ Recipient2105687416[
 	fillcolor="#F1E5FD"
 ];
 
+Sendable632050429[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Sendable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ sender(): CommandSender</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
 Valid632050429[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)Valid</TD></TR>
@@ -157,8 +169,9 @@ Valid632050429[
 
 'edges    
 Recipient2105687416 -> Invalid632050429[arrowhead=none, arrowtail=empty, dir=both];
-Recipient2105687416 -> Proxied632050429[arrowhead=none, arrowtail=empty, dir=both];
-Recipient2105687416 -> Valid632050429[arrowhead=none, arrowtail=empty, dir=both];
+Recipient2105687416 -> Sendable632050429[arrowhead=none, arrowtail=empty, dir=both];
+Sendable632050429 -> Proxied632050429[arrowhead=none, arrowtail=empty, dir=both];
+Sendable632050429 -> Valid632050429[arrowhead=none, arrowtail=empty, dir=both];
     
 }
 @enduml
