@@ -1,0 +1,173 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 2,
+    "backwardDepth": 0,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   InvalidItemRecord322141128[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InvalidItemRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   key: RecordKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   reason: InvalidRecordReason [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reason(): InvalidRecordReason</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ItemRecord322141128[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(itemKey: RecordKey, reason: InvalidRecordReason): InvalidItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(itemKey: ValidItemKey, itemEntry: ConfigurationSection): ItemRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SectionRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SectionRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ValidItemRecord322141128[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidItemRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   displayName: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemLore: List&lt;String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: ItemKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   material: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pluralName: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(key: ValidItemKey, section: ConfigurationSection): ValidItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ displayName(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ItemKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ lore(): List&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ material(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ name(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ pluralName(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+ItemRecord322141128 -> InvalidItemRecord322141128[arrowhead=none, arrowtail=empty, dir=both];
+ItemRecord322141128 -> ValidItemRecord322141128[arrowhead=none, arrowtail=empty, dir=both];
+SectionRecord1572118503 -> ItemRecord322141128[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml

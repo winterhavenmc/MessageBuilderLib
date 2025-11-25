@@ -1,0 +1,164 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 2,
+    "backwardDepth": 0,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.models.language.constant.ConstantRecord",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   ConstantRecord1440710183[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConstantRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(constantKey: RecordKey, reason: InvalidRecordReason): InvalidConstantRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(constantKey: ValidConstantKey, constantEntry: Object): ConstantRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+InvalidConstantRecord1440710183[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InvalidConstantRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   key: RecordKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   reason: InvalidRecordReason [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reason(): InvalidRecordReason</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SectionRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SectionRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ValidConstantRecord1440710183[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidConstantRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   key: ValidConstantKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   value: Object [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(key: ValidConstantKey, value: Object): ValidConstantRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ValidConstantKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ value(): Object</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+ConstantRecord1440710183 -> InvalidConstantRecord1440710183[arrowhead=none, arrowtail=empty, dir=both];
+ConstantRecord1440710183 -> ValidConstantRecord1440710183[arrowhead=none, arrowtail=empty, dir=both];
+SectionRecord1572118503 -> ConstantRecord1440710183[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml

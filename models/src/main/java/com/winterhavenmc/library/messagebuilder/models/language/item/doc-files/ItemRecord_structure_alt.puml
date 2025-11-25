@@ -1,0 +1,62 @@
+@startuml
+
+' === GLOBAL STYLING ===
+skinparam backgroundColor #f9f9f9
+skinparam shadowing true
+skinparam roundCorner 15
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1.2
+skinparam ArrowFontSize 11
+skinparam packageTitleFontSize 14
+skinparam classFontName "Helvetica"
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor white
+  BorderColor #888888
+}
+skinparam class {
+  BackgroundColor<<entity>> #cfefff
+  BackgroundColor<<entity-valid>> #e6ffe6
+  BackgroundColor<<entity-invalid>> #ffe6e6
+}
+
+package item {
+    interface SectionRecord <<entity>> {
+        + key(): RecordKey
+    }
+    interface ItemRecord <<entity>> {
+        + empty(itemKey: RecordKey, reason: InvalidRecordReason): InvalidItemRecord
+        + isValid(): Optional<ValidItemRecord>
+        + of(itemKey: ValidItemKey, itemEntry: ConfigurationSection): ItemRecord
+    }
+    class ValidItemRecord <<entity-valid>> {
+        - displayName: String
+        - itemLore: List<String>
+        - key: ItemKey
+        - material: String
+        - name: String
+        - pluralName: String
+        --
+        + create(key: ValidItemKey, section: ConfigurationSection): ValidItemRecord
+        + displayName(): String
+        + key(): ItemKey
+        + lore(): List<String>
+        + material(): String
+        + name(): String
+        + pluralName(): String
+    }
+    class InvalidItemRecord <<entity-invalid>> {
+        - key: RecordKey
+        - reason: InvalidRecordReason
+        --
+        + key(): RecordKey
+        + reason(): InvalidRecordReason
+    }
+}
+
+'edges
+SectionRecord <-- ItemRecord
+ItemRecord <-- ValidItemRecord
+ItemRecord <-- InvalidItemRecord
+
+@enduml
