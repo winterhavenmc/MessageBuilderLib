@@ -21,9 +21,6 @@ skinparam class {
 }
 
 package item {
-    interface SectionRecord <<entity>> {
-        + key(): RecordKey
-    }
     interface ItemRecord <<entity>> {
         + empty(itemKey: RecordKey, reason: InvalidRecordReason): InvalidItemRecord
         + isValid(): Optional<ValidItemRecord>
@@ -55,7 +52,6 @@ package item {
 }
 
 'edges
-SectionRecord <-- ItemRecord
 ItemRecord <-- ValidItemRecord
 ItemRecord <-- InvalidItemRecord
 

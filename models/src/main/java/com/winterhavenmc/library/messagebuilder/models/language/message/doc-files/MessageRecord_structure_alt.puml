@@ -21,10 +21,6 @@ skinparam class {
 }
 
 package message {
-    interface SectionRecord <<entity>> {
-        + key(): RecordKey
-    }
-
     interface MessageRecord <<entity>> {
         + empty(messageKey: RecordKey, reason: InvalidRecordReason): InvalidMessageRecord
         + of(messageKey: ValidMessageKey, messageEntry: ConfigurationSection): MessageRecord
@@ -90,13 +86,7 @@ package message {
     }
 }
 
-'MessageRecord788219698 -> FinalMessageRecord788219698[arrowhead=none, arrowtail=empty, dir=both];
-'MessageRecord788219698 -> InvalidMessageRecord788219698[arrowhead=none, arrowtail=empty, dir=both];
-'MessageRecord788219698 -> ValidMessageRecord788219698[arrowhead=none, arrowtail=empty, dir=both];
-'SectionRecord1572118503 -> MessageRecord788219698[arrowhead=none, arrowtail=empty, dir=both];
-
 'edges
-SectionRecord <-- MessageRecord
 MessageRecord <-- ValidMessageRecord
 MessageRecord <-- FinalMessageRecord
 MessageRecord <-- InvalidMessageRecord
