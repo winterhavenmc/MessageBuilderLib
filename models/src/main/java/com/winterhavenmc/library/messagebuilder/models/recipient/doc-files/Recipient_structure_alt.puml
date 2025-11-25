@@ -1,0 +1,53 @@
+@startuml
+
+' === GLOBAL STYLING ===
+skinparam backgroundColor #f9f9f9
+skinparam shadowing true
+skinparam roundCorner 15
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1.2
+skinparam ArrowFontSize 11
+skinparam packageTitleFontSize 14
+skinparam classFontName "Helvetica"
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor white
+  BorderColor #888888
+}
+skinparam class {
+  BackgroundColor<<entity>> #cfefff
+  BackgroundColor<<entity-valid>> #e6ffe6
+  BackgroundColor<<entity-invalid>> #ffe6e6
+}
+
+package recipient {
+    interface Recipient <<entity>> {
+        + of(sender: CommandSender): Recipient
+    }
+    class ValidRecipient <<entity-valid>> {
+        - sender: CommandSender
+        --
+        + sender(): CommandSender
+    }
+    class ProxiedRecipient <<entity-valid>> {
+        - proxy: ProxiedCommandSender
+        - sender: CommandSender
+        --
+        + proxy(): ProxiedCommandSender
+        + sender(): CommandSender
+    }
+    class InvalidRecipient <<entity-invalid>> {
+        - invalidReason: InvalidReason
+        - sender: CommandSender
+        --
+        + invalidReason(): InvalidReason
+        + sender(): CommandSender
+    }
+}
+
+'edges
+Recipient <-- ValidRecipient
+Recipient <-- ProxiedRecipient
+Recipient <-- InvalidRecipient
+
+@enduml
