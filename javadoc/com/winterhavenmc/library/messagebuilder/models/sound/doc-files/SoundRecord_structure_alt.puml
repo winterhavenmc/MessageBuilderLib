@@ -1,0 +1,56 @@
+@startuml
+
+' === GLOBAL STYLING ===
+skinparam backgroundColor #f9f9f9
+skinparam shadowing true
+skinparam roundCorner 15
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1.2
+skinparam ArrowFontSize 11
+skinparam packageTitleFontSize 14
+skinparam classFontName "Helvetica"
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor white
+  BorderColor #888888
+}
+skinparam class {
+  BackgroundColor<<entity>> #cfefff
+  BackgroundColor<<entity-valid>> #e6ffe6
+  BackgroundColor<<entity-invalid>> #ffe6e6
+}
+
+package sound {
+    interface SoundRecord <<entity>> {
+        + key(): String
+        + of(key: String, enabled: boolean, playerOnly: boolean, bukkitSoundName: String, volume: float, pitch: float): SoundRecord
+    }
+    class ValidSoundRecord <<entity-valid>> {
+        - enabled: boolean
+        - key: String
+        - pitch: float
+        - playerOnly: boolean
+        - soundName: String
+        - volume: float
+        --
+        + enabled(): boolean
+        + key(): String
+        + pitch(): float
+        + playerOnly(): boolean
+        + soundName(): String
+        + volume(): float
+    }
+    class InvalidSoundRecord <<entity-invalid>> {
+        - key: String
+        - reason: String
+        --
+        + key(): String
+        + reason(): String
+    }
+}
+
+'edges
+SoundRecord <-- ValidSoundRecord
+SoundRecord <-- InvalidSoundRecord
+
+@enduml
