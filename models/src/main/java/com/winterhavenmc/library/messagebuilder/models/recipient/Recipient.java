@@ -62,7 +62,7 @@ import org.bukkit.entity.Player;
  * @see Recipient.Invalid
  * @see Recipient.InvalidReason
  */
-public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Recipient.Invalid
+public sealed interface Recipient permits Recipient.Sendable, Recipient.Invalid
 {
 	/**
 	 * A marker subinterface for {@link Recipient} types that are capable of
@@ -70,7 +70,7 @@ public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Re
 	 * <p>
 	 * Includes {@link Valid} and {@link Proxied} recipients.
 	 */
-	sealed interface Sendable permits Recipient.Valid, Recipient.Proxied
+	sealed interface Sendable extends Recipient permits Recipient.Valid, Recipient.Proxied
 	{
 		/**
 		 * The actual {@link CommandSender} that may receive messages.
@@ -86,7 +86,7 @@ public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Re
 	 *
 	 * @param sender the original {@link CommandSender}
 	 */
-	record Valid(CommandSender sender) implements Recipient, Sendable { }
+	record Valid(CommandSender sender) implements Sendable { }
 
 
 	/**
@@ -96,7 +96,7 @@ public sealed interface Recipient permits Recipient.Valid, Recipient.Proxied, Re
 	 * @param sender the origin {@link CommandSender}
 	 * @param proxy  the {@link ProxiedCommandSender} that is delegating the command
 	 */
-	record Proxied(CommandSender sender, ProxiedCommandSender proxy) implements Recipient, Sendable { }
+	record Proxied(CommandSender sender, ProxiedCommandSender proxy) implements Sendable { }
 
 
 	/**
