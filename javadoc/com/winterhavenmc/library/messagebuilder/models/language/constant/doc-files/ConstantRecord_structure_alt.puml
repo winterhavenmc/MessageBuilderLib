@@ -1,0 +1,51 @@
+@startuml
+
+' === GLOBAL STYLING ===
+skinparam backgroundColor #f9f9f9
+skinparam shadowing true
+skinparam roundCorner 15
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1.2
+skinparam ArrowFontSize 11
+skinparam packageTitleFontSize 14
+skinparam classFontName "Helvetica"
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor white
+  BorderColor #888888
+}
+skinparam class {
+  BackgroundColor<<entity>> #cfefff
+  BackgroundColor<<entity-valid>> #e6ffe6
+  BackgroundColor<<entity-invalid>> #ffe6e6
+}
+
+package constant {
+    interface ConstantRecord <<entity>> {
+        + empty(constantKey: RecordKey, reason: InvalidRecordReason): InvalidConstantRecord
+        + of(constantKey: ValidConstantKey, constantEntry: Object): ConstantRecord
+    }
+
+    class ValidConstantRecord <<entity-valid>> {
+        -   key: ValidConstantKey
+        -   value: Object
+        --
+        + create(key: ValidConstantKey, value: Object): ValidConstantRecord
+        + key(): ValidConstantKey
+        + value(): Object
+    }
+
+    class InvalidConstantRecord <<entity-invalid>> {
+        - key: RecordKey
+        - reason: InvalidRecordReason
+        --
+        + key(): RecordKey
+        + reason(): InvalidRecordReason
+    }
+}
+
+'edges
+ConstantRecord <-- ValidConstantRecord
+ConstantRecord <-- InvalidConstantRecord
+
+@enduml
