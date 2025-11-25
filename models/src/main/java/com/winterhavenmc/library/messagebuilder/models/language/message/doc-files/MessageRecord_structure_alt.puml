@@ -1,0 +1,94 @@
+@startuml
+
+' === GLOBAL STYLING ===
+skinparam backgroundColor #f9f9f9
+skinparam shadowing true
+skinparam roundCorner 15
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1.2
+skinparam ArrowFontSize 11
+skinparam packageTitleFontSize 14
+skinparam classFontName "Helvetica"
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor white
+  BorderColor #888888
+}
+skinparam class {
+  BackgroundColor<<entity>> #cfefff
+  BackgroundColor<<entity-valid>> #e6ffe6
+  BackgroundColor<<entity-invalid>> #ffe6e6
+}
+
+package message {
+    interface MessageRecord <<entity>> {
+        + empty(messageKey: RecordKey, reason: InvalidRecordReason): InvalidMessageRecord
+        + of(messageKey: ValidMessageKey, messageEntry: ConfigurationSection): MessageRecord
+    }
+
+    class ValidMessageRecord <<entity-valid>> {
+        - enabled: boolean
+        - key: ValidMessageKey
+        - message: String
+        - repeatDelay: Duration
+        - subtitle: String
+        - title: String
+        - titleFadeIn: Duration
+        - titleFadeOut: Duration
+        - titleStay: Duration
+        --
+        + create(key: ValidMessageKey, section: ConfigurationSection): ValidMessageRecord
+        + enabled(): boolean
+        + key(): ValidMessageKey
+        + message(): String
+        + repeatDelay(): Duration
+        + subtitle(): String
+        + title(): String
+        + titleFadeIn(): Duration
+        + titleFadeOut(): Duration
+        + titleStay(): Duration
+    }
+
+    class FinalMessageRecord <<entity-valid>> {
+        - enabled: boolean
+        - finalMessageString: Optional<String>
+        - finalSubtitleString: Optional<String>
+        - finalTitleString: Optional<String>
+        - key: ValidMessageKey
+        - message: String
+        - repeatDelay: Duration
+        - subtitle: String
+        - title: String
+        - titleFadeIn: Duration
+        - titleFadeOut: Duration
+        - titleStay: Duration
+        --
+        + enabled(): boolean
+        + finalMessageString(): Optional<String>
+        + finalSubtitleString(): Optional<String>
+        + finalTitleString(): Optional<String>
+        + key(): ValidMessageKey
+        + message(): String
+        + repeatDelay(): Duration
+        + subtitle(): String
+        + title(): String
+        + titleFadeIn(): Duration
+        + titleFadeOut(): Duration
+        + titleStay(): Duration
+    }
+
+    class InvalidMessageRecord <<entity-invalid>> {
+        - key: RecordKey
+        - reason: InvalidRecordReason
+        --
+        + key(): RecordKey
+        + reason(): InvalidRecordReason
+    }
+}
+
+'edges
+MessageRecord <-- ValidMessageRecord
+MessageRecord <-- FinalMessageRecord
+MessageRecord <-- InvalidMessageRecord
+
+@enduml
