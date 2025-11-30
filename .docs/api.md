@@ -1,4 +1,4 @@
-# MessageBuilder API
+# MessageBuilder 2.0 API
 
 ## Instantiate
 
