@@ -24,25 +24,32 @@ messageBuilder.compose(recipient, messageId)
 ### Constant Repository
 
 ```(java)
-messageBuilder.constants().get(validConstantKey);
+List<String> stringList = messageBuilder.constants().getStringList(validConstantKey);
+Optional<String> string = messageBuilder.constants().getString(validConstantKey);
+Optional<int> value = messageBuilder.constants().getInt(validConstantKey);
+Optional<boolean> value = messageBuilder.constants().getBoolean(validConstantKey);
 ```
+Note: empty optional denotes non-present constant entry for key
 
 ### Item Repository
 
 ```(java)
-ItemStack customItem = messageBuilder.items().create(validItemKey);
+Optional<ItemStack> customItem = messageBuilder.items().createItem(validItemKey);
+Optional<ItemStack> customItem = messageBuilder.items().createItem(validItemKey, qty);
 ```
+Note: empty optional denotes non-present or invalid item entry for key
+
 
 ### Sound Repository
 ```(java)
-messageBuilder.sounds().play(player, validSoundKey);
+messageBuilder.sounds().play(player, soundId);
 ```
 
 ### World Repository
 ```(java)
 boolean enabled = messageBuilder.worlds().isEnabled(worldUid);
 Optional<String> worldName = messageBuilder.worlds().aliasOrName(worldUid);
-Location spawnLocation = messageBuilder.worlds().spawnLocation(worldUid);
+Optional<Location> spawnLocation = messageBuilder.worlds().spawnLocation(worldUid);
 ```
 
 ### Config Repository
