@@ -18,10 +18,13 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline;
 
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
+import net.kyori.adventure.text.Component;
+
+import java.util.Optional;
 
 
-@FunctionalInterface
 public interface Pipeline
 {
 	void initiate(ValidMessage message);
+	Optional<Component> retrieve(ValidMessage message);
 }

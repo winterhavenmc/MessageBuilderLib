@@ -68,4 +68,33 @@ public final class MessagePipeline implements Pipeline
 				.ifPresent(sendMessageRecord);
 	}
 
+
+	public Optional<Component> retrieve(final ValidMessage message)
+	{
+		// queries CooldownMap, returns ValidMessageRecord
+		Function<CooldownKey, Optional<ValidMessageRecord>> retrieveMessageRecord = key ->
+				(ctx.messageRetriever().getRecord(message.getMessageKey()) instanceof ValidMessageRecord validMessageRecord)
+						? Optional.of(validMessageRecord)
+						: Optional.empty();
+
+		// transforms ValidMessageRecord into FinalMessageRecord
+		Function<ValidMessageRecord, FinalMessageRecord> processMessageRecord =messageRecord -> ctx.messageProcessor()
+				.process(messageRecord, message.getObjectMap());
+
+		// process message through pipeline
+		return CooldownKey.of(message.getRecipient(), message.getMessageKey())
+				.filter(ctx.cooldownMap()::notCooling)
+				.flatMap(retrieveMessageRecord)
+				.map(processMessageRecord)
+				.map(this::toComponent);
+	}
+
+
+	private Component toComponent(final FinalMessageRecord finalMessageRecord)
+	{
+		return (finalMessageRecord.finalMessageString().isPresent())
+				? miniMessage.deserialize(finalMessageRecord.finalMessageString().get())
+				: Component.empty();
+	}
+
 }
