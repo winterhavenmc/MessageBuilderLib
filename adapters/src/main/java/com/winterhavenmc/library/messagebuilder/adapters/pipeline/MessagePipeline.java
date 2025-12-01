@@ -25,6 +25,8 @@ import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMes
 import com.winterhavenmc.library.messagebuilder.models.language.message.ValidMessageRecord;
 
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -34,6 +36,7 @@ import java.util.function.Function;
 public final class MessagePipeline implements Pipeline
 {
 	private final MessagePipelineCtx ctx;
+	private final MiniMessage miniMessage = MiniMessage.miniMessage(); //TODO: inject this via ctx
 
 
 	public MessagePipeline(final MessagePipelineCtx ctx)
@@ -66,6 +69,35 @@ public final class MessagePipeline implements Pipeline
 				.flatMap(retrieveMessageRecord)
 				.map(processMessageRecord)
 				.ifPresent(sendMessageRecord);
+	}
+
+
+	public Optional<Component> retrieve(final ValidMessage message)
+	{
+		// queries CooldownMap, returns ValidMessageRecord
+		Function<CooldownKey, Optional<ValidMessageRecord>> retrieveMessageRecord = key ->
+				(ctx.messageRetriever().getRecord(message.getMessageKey()) instanceof ValidMessageRecord validMessageRecord)
+						? Optional.of(validMessageRecord)
+						: Optional.empty();
+
+		// transforms ValidMessageRecord into FinalMessageRecord
+		Function<ValidMessageRecord, FinalMessageRecord> processMessageRecord =messageRecord -> ctx.messageProcessor()
+				.process(messageRecord, message.getObjectMap());
+
+		// process message through pipeline
+		return CooldownKey.of(message.getRecipient(), message.getMessageKey())
+				.filter(ctx.cooldownMap()::notCooling)
+				.flatMap(retrieveMessageRecord)
+				.map(processMessageRecord)
+				.map(this::toComponent);
+	}
+
+
+	private Component toComponent(final FinalMessageRecord finalMessageRecord)
+	{
+		return (finalMessageRecord.finalMessageString().isPresent())
+				? miniMessage.deserialize(finalMessageRecord.finalMessageString().get())
+				: Component.empty();
 	}
 
 }

@@ -15,7 +15,7 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.models.configuration;
+package com.winterhavenmc.library.messagebuilder.models.configuration.worlds;
 
 import org.jetbrains.annotations.NotNull;
 

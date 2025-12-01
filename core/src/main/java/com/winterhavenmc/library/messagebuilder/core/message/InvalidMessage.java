@@ -21,9 +21,11 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;
+import net.kyori.adventure.text.Component;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.RECIPIENT;
@@ -91,6 +93,12 @@ public record InvalidMessage(String reason) implements Message
 	{
 		logging(LogLevel.WARN, PARAMETER_INVALID, RECIPIENT);
 		return true;
+	}
+
+	@Override
+	public Optional<Component> toComponent()
+	{
+		return Optional.empty();
 	}
 
 	@Override

@@ -19,8 +19,8 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.configuratio
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
-import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.EnabledWorldsSetting;
+import com.winterhavenmc.library.messagebuilder.models.configuration.worlds.WorldRepository;
+import com.winterhavenmc.library.messagebuilder.models.configuration.worlds.EnabledWorldsSetting;
 
 import org.bukkit.Location;
 import org.bukkit.World;
