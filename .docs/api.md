@@ -19,6 +19,8 @@ messageBuilder.compose(recipient, messageId)
 	.send();
 ```
 
+## Retrieve
+
 ```(java)
 Component text = messageBuilder.compose(recipient, messageId)
 	.setMacro(Macro.ITEM, itemStack)
