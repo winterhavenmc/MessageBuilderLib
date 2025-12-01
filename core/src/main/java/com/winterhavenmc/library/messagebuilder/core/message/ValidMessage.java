@@ -28,11 +28,13 @@ import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
 import com.winterhavenmc.library.messagebuilder.models.validation.LogLevel;
 import com.winterhavenmc.library.messagebuilder.models.validation.Parameter;
 import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
+import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.Plugin;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_INVALID;
 import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
@@ -143,6 +145,13 @@ public final class ValidMessage implements Message
 	{
 		messagePipeline.initiate(this);
 		return true;
+	}
+
+
+	@Override
+	public Optional<Component> toComponent()
+	{
+		return messagePipeline.retrieve(this);
 	}
 
 
