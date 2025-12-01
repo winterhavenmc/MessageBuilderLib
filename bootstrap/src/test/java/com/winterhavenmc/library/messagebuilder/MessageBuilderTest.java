@@ -28,7 +28,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
+import com.winterhavenmc.library.messagebuilder.models.configuration.worlds.WorldRepository;
 import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
 
 import com.winterhavenmc.library.messagebuilder.util.MessageId;

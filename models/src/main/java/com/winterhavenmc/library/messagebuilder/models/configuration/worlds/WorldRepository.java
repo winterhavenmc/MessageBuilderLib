@@ -1,5 +1,6 @@
-package com.winterhavenmc.library.messagebuilder.models.configuration;
+package com.winterhavenmc.library.messagebuilder.models.configuration.worlds;
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigProvider;
 import org.bukkit.Location;
 import org.jetbrains.annotations.Contract;
 

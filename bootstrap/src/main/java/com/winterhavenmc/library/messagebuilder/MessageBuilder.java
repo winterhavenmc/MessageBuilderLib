@@ -31,7 +31,7 @@ import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
+import com.winterhavenmc.library.messagebuilder.models.configuration.worlds.WorldRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MessageKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMessageKey;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;

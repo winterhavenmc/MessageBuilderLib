@@ -64,7 +64,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.It
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.WorldRepository;
+import com.winterhavenmc.library.messagebuilder.models.configuration.worlds.WorldRepository;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -148,6 +148,29 @@ public final class BootstrapUtility
 	 * @return an instance of the message pipeline
 	 */
 	static @NotNull MessagePipeline createMessagePipeline(final Plugin plugin,
+														  final MessageRepository messages,
+														  final SoundRepository sounds,
+														  final FormatterCtx formatterCtx,
+														  final AccessorCtx accessorCtx)
+	{
+		final LocalizedMessageRetriever localizedMessageRetriever = new LocalizedMessageRetriever(messages);
+		final MessageProcessor messageProcessor = createMacroReplacer(formatterCtx, accessorCtx);
+		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
+		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap, sounds);
+
+		final MessagePipelineCtx pipelineCtx = new MessagePipelineCtx(localizedMessageRetriever, messageProcessor, messageCooldownMap, messageSenders);
+		return new MessagePipeline(pipelineCtx);
+	}
+
+
+	/**
+	 * A static factory method to create the message processing pipeline
+	 *
+	 * @param formatterCtx a context container which contains instances of string formatters for specific types
+	 * @param accessorCtx a context container for injecting dependencies into adapters
+	 * @return an instance of the message pipeline
+	 */
+	static @NotNull MessagePipeline createComponentPipeline(final Plugin plugin,
 														  final MessageRepository messages,
 														  final SoundRepository sounds,
 														  final FormatterCtx formatterCtx,
