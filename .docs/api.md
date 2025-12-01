@@ -19,6 +19,13 @@ messageBuilder.compose(recipient, messageId)
 	.send();
 ```
 
+```(java)
+Component text = messageBuilder.compose(recipient, messageId)
+	.setMacro(Macro.ITEM, itemStack)
+	.setMacro(Macro.ENTITY, entity)
+	.toComponent();
+```
+
 ## Utilities
 
 ### Constant Repository
