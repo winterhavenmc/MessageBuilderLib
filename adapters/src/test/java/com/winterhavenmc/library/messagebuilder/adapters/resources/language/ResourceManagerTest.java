@@ -20,7 +20,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 import com.winterhavenmc.library.messagebuilder.adapters.util.MockUtility;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ConstantRepository;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRecordRepository;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.MessageRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
@@ -62,7 +62,7 @@ class YamlLanguageResourceManagerTest
 	@Mock Configuration languageConfigurationMock;
 	@Mock Plugin pluginMock;
 	@Mock ConstantRepository constantRepositoryMock;
-	@Mock ItemRecordRepository itemRecordRepositoryMock;
+	@Mock ItemRepository itemRepositoryMock;
 	@Mock MessageRepository messageRepositoryMock;
 	@Mock ConfigRepository configRepositoryMock;
 
