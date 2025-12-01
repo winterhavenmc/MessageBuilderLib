@@ -72,6 +72,7 @@ com.winterhavenmc.library.messagebuilder.core.ports.resources.language
 com.winterhavenmc.library.messagebuilder.core.ports.resources.sound
 com.winterhavenmc.library.messagebuilder.models
 com.winterhavenmc.library.messagebuilder.models.configuration
+com.winterhavenmc.library.messagebuilder.models.configuration.worlds
 com.winterhavenmc.library.messagebuilder.models.keys
 com.winterhavenmc.library.messagebuilder.models.language
 com.winterhavenmc.library.messagebuilder.models.language.constant
