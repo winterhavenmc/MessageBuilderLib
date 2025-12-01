@@ -20,9 +20,11 @@ package com.winterhavenmc.library.messagebuilder.core.message;
 import com.winterhavenmc.library.messagebuilder.models.keys.*;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
+import net.kyori.adventure.text.Component;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 
 /**
@@ -100,6 +102,9 @@ public sealed interface Message permits ValidMessage, InvalidMessage
 	 * No-op if the message is invalid or the recipient is missing or unsupported.
 	 */
     boolean send();
+
+
+	Optional<Component> toComponent();
 
 
     /**
