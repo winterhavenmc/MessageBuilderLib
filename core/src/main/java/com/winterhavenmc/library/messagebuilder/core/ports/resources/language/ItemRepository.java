@@ -31,14 +31,14 @@ ItemStack customItem = messageBuilder.items().createItem(validItemKey, quantity)
 ItemStack customItem = messageBuilder.items().createItem(validItemKey, quantity, stringReplacementMap);
 }
 {@snippet :
-boolean isItem = messageBuilder.items().isCustomItem(itemStack);
-}
-{@snippet :
 Optional<String> name(ValidItemKey validItemKey);
 }
 {@snippet :
 Optional<String> displayName(ValidItemKey validItemKey);
 }
+ {@snippet :
+		 boolean isItem = messageBuilder.items().isCustomItem(itemStack);
+		 }
  *
  */
 public interface ItemRepository
