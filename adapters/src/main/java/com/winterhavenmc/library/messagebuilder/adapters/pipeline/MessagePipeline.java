@@ -25,6 +25,8 @@ import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMes
 import com.winterhavenmc.library.messagebuilder.models.language.message.ValidMessageRecord;
 
 import com.winterhavenmc.library.messagebuilder.core.message.ValidMessage;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -34,6 +36,7 @@ import java.util.function.Function;
 public final class MessagePipeline implements Pipeline
 {
 	private final MessagePipelineCtx ctx;
+	private final MiniMessage miniMessage = MiniMessage.miniMessage(); //TODO: inject this via ctx
 
 
 	public MessagePipeline(final MessagePipelineCtx ctx)
