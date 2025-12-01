@@ -10,8 +10,6 @@ import java.util.Optional;
 
 
 /**
- * <h1>Item Repository</h1>
- *
  * The item repository provides utility methods for creating custom items
  * as defined in the language file. Additional methods are provided for
  * examining an ItemStack as being a custom item.
