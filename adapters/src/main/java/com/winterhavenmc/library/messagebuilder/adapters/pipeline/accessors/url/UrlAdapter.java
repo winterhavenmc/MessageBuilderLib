@@ -23,6 +23,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.ur
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 
+import java.net.URI;
 import java.util.Optional;
 
 
@@ -37,10 +38,33 @@ public class UrlAdapter implements Accessor
 		return switch (obj)
 		{
 			case UrlAddressable urlAddressable -> Optional.of(urlAddressable);
-			case Plugin plugin -> Optional.of(() -> plugin.getDescription().getWebsite());
-			case Server server -> Optional.of(() -> server.getIp());
+			case Plugin plugin -> Optional.of(() -> getPluginURI(plugin));
+			case Server server -> Optional.of(() -> getServerURI(server));
 			case null, default -> Optional.empty();
 		};
+	}
+
+
+	private static String getPluginURI(final Plugin plugin)
+	{
+		String website = plugin.getDescription().getWebsite();
+
+		return website != null && !website.isBlank()
+				? URI.create(website).toASCIIString()
+				: URI.create(UNKNOWN_VALUE).toASCIIString();
+	}
+
+
+	private static String getServerURI(final Server server)
+	{
+		String serverIp = (!server.getIp().isBlank()) ? server.getIp() : "0.0.0.0";
+		if (serverIp.contains(":"))
+		{
+			serverIp = "[" + serverIp + "]";
+		}
+		String serverPort = (server.getPort() != 0) ? String.valueOf(server.getPort()) : "25565";
+
+		return URI.create("minecraft://" + serverIp + ":" + serverPort).toASCIIString();
 	}
 
 }
