@@ -1,5 +1,5 @@
 /**
- * Provides an adapter and interface for extracting and formatting display names from objects.
+ * Provides an adapter for extracting and formatting display names from objects.
  *
  * <p>Any object that implements the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname.DisplayNameable DisplayNameable}
  * interface can participate in macro replacement via the {@code {OBJECT.DISPLAY_NAME}} placeholder in language file strings.
