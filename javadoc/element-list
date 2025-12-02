@@ -14,6 +14,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.owner
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.pluralname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.protection
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.uri
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.url
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.version
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown
@@ -52,6 +53,7 @@ com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.owner
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.pluralname
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.protection
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.quantity
+com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.uri
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.url
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.version
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.cooldown

@@ -13,6 +13,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.owner
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.duration
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.location
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.uri
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.pluralname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.displayname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.version
@@ -49,6 +50,7 @@ com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.identity
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.owner
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.duration
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.location
+com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.uri
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.pluralname
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors
 com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname
