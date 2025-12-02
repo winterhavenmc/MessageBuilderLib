@@ -1,0 +1,395 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 2,
+    "backwardDepth": 1,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.FieldAccessor",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   AccessorCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AccessorCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   formatterCtx: FormatterCtx [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemDisplayNameResolver: ItemDisplayNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemNameResolver: ItemNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemPluralNameResolver: ItemPluralNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldNameResolver: WorldNameResolver [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ formatterCtx(): FormatterCtx</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemDisplayNameResolver(): ItemDisplayNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemNameResolver(): ItemNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemPluralNameResolver(): ItemPluralNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worldNameResolver(): WorldNameResolver</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DisplayNameable1057303015[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)DisplayNameable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractDisplayName(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatDisplayName(displayName: String): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getDisplayName(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Durationable391527482[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Durationable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ durationUntil(instant: Instant): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ extractDuration(baseKey: ValidMacroKey, lowerBound: ChronoUnit, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatDuration(duration: Duration, lowerBound: ChronoUnit, durationFormatter: DurationFormatter): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getDuration(): Duration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Expirable526788565[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Expirable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractExpiration(baseKey: ValidMacroKey, lowerBound: ChronoUnit, formatStyle: FormatStyle, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getExpiration(): Instant</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+FieldAccessor1261593464[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)FieldAccessor</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extract(baseKey: ValidMacroKey, accessor: Accessor, adapted: T): MacroStringMap</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Identifiable2047189148[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Identifiable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractUid(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatUid(uniqueId: UUID): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getUniqueId(): UUID</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Instantable787532411[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Instantable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractInstant(baseKey: ValidMacroKey, formatStyle: FormatStyle, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatInstant(instant: Instant, formatStyle: FormatStyle, configRepository: ConfigRepository): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getInstant(): Instant</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Killable1601849521[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Killable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractKiller(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatKiller(killer: AnimalTamer): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getKiller(): AnimalTamer</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Locatable10383781[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Locatable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractLocation(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatLocation(location: Location, ctx: AccessorCtx): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getLocation(): Location</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getLocationWorldName(location: Location, ctx: AccessorCtx): Optional&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Lootable1636116859[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Lootable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractLooter(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatLooter(looter: AnimalTamer): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getLooter(): AnimalTamer</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MacroFieldAccessor421844953[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MacroFieldAccessor</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extract(baseKey: ValidMacroKey, accessor: Accessor, adapted: T): MacroStringMap</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MacroStringMap474154237[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MacroStringMap</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   INTERNAL_MAP: Map&lt;ValidMacroKey, String&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ containsKey(key: ValidMacroKey): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ empty(): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ entrySet(): Iterable&lt;? extends Entry&lt;ValidMacroKey, String&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(macroKey: ValidMacroKey): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ keySet(): Set&lt;ValidMacroKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ put(macroKey: ValidMacroKey, value: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ putAll(insertionMap: MacroStringMap)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ putIfAbsent(macroKey: ValidMacroKey, value: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ size(): int</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Nameable1646439473[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Nameable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractName(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatName(name: String): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getName(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Ownable498403891[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Ownable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractOwner(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatOwner(owner: AnimalTamer): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getOwner(): AnimalTamer</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+PluralNameable1919716661[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)PluralNameable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractPluralName(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatPluralName(pluralName: String): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getPluralName(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Protectable320604161[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Protectable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractProtection(baseKey: ValidMacroKey, lowerBound: ChronoUnit, formatStyle: FormatStyle, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getProtection(): Instant</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Quantifiable1098535729[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Quantifiable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractQuantity(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatQuantity(quantity: int, numberFormatter: NumberFormatter): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getQuantity(): int</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+UrlAddressable607307529[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)UrlAddressable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractUrl(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatVersion(versionString: String): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getUrl(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Versionable818429582[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Versionable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extractVersion(baseKey: ValidMacroKey, ctx: AccessorCtx): MacroStringMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatVersion(versionString: String): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getVersion(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+} 
+} 
+
+'edges    
+FieldAccessor1261593464 -> MacroFieldAccessor421844953[arrowhead=none, arrowtail=empty, dir=both];
+MacroFieldAccessor421844953 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+MacroFieldAccessor421844953 -> Durationable391527482[label="extract() -> extractDuration()"];
+MacroFieldAccessor421844953 -> Expirable526788565[label="extract() -> extractExpiration()"];
+MacroFieldAccessor421844953 -> Identifiable2047189148[label="extract() -> extractUid()"];
+MacroFieldAccessor421844953 -> Instantable787532411[label="extract() -> extractInstant()"];
+MacroFieldAccessor421844953 -> Locatable10383781[label="extract() -> extractLocation()"];
+MacroFieldAccessor421844953 -> Protectable320604161[label="extract() -> extractProtection()"];
+MacroFieldAccessor421844953 -> Quantifiable1098535729[label="extract() -> extractQuantity()"];
+MacroFieldAccessor421844953 -> UrlAddressable607307529[label="extract() -> extractUrl()"];
+MacroFieldAccessor421844953 -> Versionable818429582[label="extract() -> extractVersion()"];
+    
+}
+@enduml

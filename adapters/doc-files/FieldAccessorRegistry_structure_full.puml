@@ -1,0 +1,1031 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 10,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   Accessor1261593464[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Accessor</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(object: Object): Optional&lt;?&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ supports(object: Object): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+AccessorCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AccessorCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   formatterCtx: FormatterCtx [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemDisplayNameResolver: ItemDisplayNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemNameResolver: ItemNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemPluralNameResolver: ItemPluralNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldNameResolver: WorldNameResolver [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ formatterCtx(): FormatterCtx</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemDisplayNameResolver(): ItemDisplayNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemNameResolver(): ItemNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemPluralNameResolver(): ItemPluralNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worldNameResolver(): WorldNameResolver</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+AccessorRegistry1261593464[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)AccessorRegistry</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getMatchingAdapters(object: Object): Stream&lt;Accessor&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ register(accessor: Accessor)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+BukkitConfigRepository169038822[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitConfigRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   dateLocaleSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageSettingSupplier: Supplier&lt;LanguageSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   logLocaleSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   numberLocaleSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   timeLocaleSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   zoneIdSupplier: Supplier&lt;ZoneId&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): ConfigRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ dateLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ language(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ numberLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ timeLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zoneId(): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitItemDisplayNameResolver685434620[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitItemDisplayNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitItemNameResolver685434620[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitItemNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitItemPluralNameResolver685434620[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitItemPluralNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   itemRepository: ItemRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- deserializePluralName(record: ValidItemRecord, stack: ItemStack, miniMessage: MiniMessage): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- getValidKey(itemStack: ItemStack): Optional&lt;ValidItemKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getValidRecord(key: ValidItemKey): Optional&lt;ValidItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- resolveCustomItem(stack: ItemStack, miniMessage: MiniMessage): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- resolveDisplayName(itemStack: ItemStack): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- resolveItemName(itemStack: ItemStack): Optional&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitQuantityAccessor1474925966[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitQuantityAccessor</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Quantifiable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CompositeResolver1685669451[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CompositeResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   accessorRegistry: AccessorRegistry [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   macroFieldAccessor: MacroFieldAccessor [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(macroKey: ValidMacroKey, macroObjectMap: MacroObjectMap): MacroStringMap</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ConfigProvider1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConfigProvider&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(): T</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ConfigRepository1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConfigRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ dateLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(): LocaleSetting</TD></TR>
+<TR><TD ALIGN="LEFT" >+ language(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ numberLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ timeLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zoneId(): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ConstantRepository1152281911[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConstantRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBoolean(key: ValidConstantKey): Optional&lt;Boolean&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getInteger(key: ValidConstantKey): Optional&lt;Integer&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getString(key: ValidConstantKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getStringList(key: ValidConstantKey): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+DefaultResolver817154825[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DefaultResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DefaultRetriever1031569393[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DefaultRetriever</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getWorldName(world: World): Optional&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DisplayNameAdapter226180870[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DisplayNameAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;DisplayNameable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DurationAdapter2113033083[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DurationAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Durationable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DurationFormatter2068475765[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)DurationFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ExpirationAdapter1331262166[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ExpirationAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Expirable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+FieldAccessorRegistry421844953[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FieldAccessorRegistry</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   accessors: List&lt;Accessor&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getMatchingAdapters(object: Object): Stream&lt;Accessor&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ register(accessor: Accessor)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+FormatterCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FormatterCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configRepository: ConfigRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   durationFormatter: DurationFormatter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeNumberFormatter: NumberFormatter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ configRepository(): ConfigRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ durationFormatter(): DurationFormatter</TD></TR>
+<TR><TD ALIGN="LEFT" >+ localeNumberFormatter(): NumberFormatter</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InstantAdapter1120159514[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InstantAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Instantable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InvalidItemKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InvalidItemKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   reason: InvalidKeyReason [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   string: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ reason(): InvalidKeyReason</TD></TR>
+<TR><TD ALIGN="LEFT" >+ string(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InvalidItemRecord322141128[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InvalidItemRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   key: RecordKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   reason: InvalidRecordReason [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reason(): InvalidRecordReason</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ItemDisplayNameResolver1888027075[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemDisplayNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ItemKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidItemKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: String): ItemKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ItemNameResolver1888027075[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ItemPluralNameResolver1888027075[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemPluralNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ItemRecord322141128[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(itemKey: RecordKey, reason: InvalidRecordReason): InvalidItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(itemKey: ValidItemKey, itemEntry: ConfigurationSection): ItemRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ItemRepository1152281911[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int, replacements: Map&lt;String, String&gt;): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ displayName(validItemKey: ValidItemKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(validItemKey: ValidItemKey): ItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecordOpt(validItemKey: ValidItemKey): Optional&lt;ItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isItem(itemStack: ItemStack): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(itemStack: ItemStack): ItemKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ name(validItemKey: ValidItemKey): Optional&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+KillerAdapter49988558[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)KillerAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Killable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LocaleNumberFormatter1184662007[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocaleNumberFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configRepository: ConfigRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(number: Number): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LocalizedDurationFormatter399425452[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocalizedDurationFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   delegate: DurationFormatter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># formatLessThan(lowerBound: ChronoUnit): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># formatNormal(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># formatUnlimited(): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># getTimeConstant(constantKey: ValidConstantKey, durationType: DurationType): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LocationAdapter1711121820[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocationAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Locatable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Logging1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Logging&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   logLevel: LogLevel [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageKey: ErrorMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   parameter: Parameter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ handleInvalid(value: T): Optional&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logLevel(): LogLevel</TD></TR>
+<TR><TD ALIGN="LEFT" >+ messageKey(): ErrorMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ parameter(): Parameter</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LooterAdapter15721220[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LooterAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Lootable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MultiverseResolver817154825[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MultiverseResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   mvPlugin: Plugin [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MultiverseRetriever1031569393[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MultiverseRetriever</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   mvPlugin: MultiverseCore [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getWorldName(world: World): Optional&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+NameAdapter1322873870[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)NameAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Nameable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+NumberFormatter1517289110[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)NumberFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(number: Number): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+OwnerAdapter1942162988[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)OwnerAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Ownable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PluralNameAdapter1570777034[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PluralNameAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;PluralNameable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ProtectionAdapter483869440[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ProtectionAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Protectable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RecordKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)RecordKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SectionProvider1859949731[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SectionProvider</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getSection(): ConfigurationSection</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SectionRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SectionRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Throwing1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Throwing&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   exceptionSupplier: Supplier&lt;ValidationException&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ exceptionSupplier(): Supplier&lt;ValidationException&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ handleInvalid(value: T): Optional&lt;T&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Time4jDurationFormatter399425452[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Time4jDurationFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configRepository: ConfigRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+UniqueIdAdapter325683547[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)UniqueIdAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Identifiable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+UrlAdapter927165224[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)UrlAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;UrlAddressable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidItemKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidItemKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   string: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidItemRecord322141128[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidItemRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   displayName: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemLore: List&lt;String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: ItemKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   material: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pluralName: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(key: ValidItemKey, section: ConfigurationSection): ValidItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ displayName(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ItemKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ lore(): List&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ material(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ name(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ pluralName(): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidationException1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidationException</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   errorMessageKey: ErrorMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   parameter: Parameter [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Validator1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Validator&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ formatMessage(errorMessageKey: ErrorMessageKey, parameter: Parameter): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ handleInvalid(value: T): Optional&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logging(level: LogLevel, messageKey: ErrorMessageKey, parameter: Parameter): Validator&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ throwing(messageKey: ErrorMessageKey, parameter: Parameter): Validator&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ validate(value: T, predicate: Predicate&lt;T&gt;, handler: Validator&lt;T&gt;): Optional&lt;T&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+VersionAdapter485802479[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)VersionAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Versionable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+WorldNameResolver1650746392[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)WorldNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+WorldNameRetriever1650746392[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)WorldNameRetriever</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getWorldName(world: World): Optional&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+YamlConstantRepository312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlConstantRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   sectionProvider: SectionProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBoolean(validConstantKey: ValidConstantKey): Optional&lt;Boolean&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getInteger(validConstantKey: ValidConstantKey): Optional&lt;Integer&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getString(validConstantKey: ValidConstantKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getStringList(validConstantKey: ValidConstantKey): List&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+YamlItemRepository312533400[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)YamlItemRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   miniMessage: MiniMessage [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   namespacedKey: NamespacedKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sectionProvider: SectionProvider [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createItem(validItemKey: ValidItemKey, quantity: int, replacements: Map&lt;String, String&gt;): Optional&lt;ItemStack&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ displayName(validItemKey: ValidItemKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItemKeyString(itemStack: ItemStack): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(validItemKey: ValidItemKey): ItemRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecordOpt(validItemKey: ValidItemKey): Optional&lt;ItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isItem(itemStack: ItemStack): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(itemStack: ItemStack): ItemKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ name(validItemKey: ValidItemKey): Optional&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+Accessor1261593464 -> BukkitQuantityAccessor1474925966[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> DisplayNameAdapter226180870[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> DurationAdapter2113033083[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> ExpirationAdapter1331262166[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> InstantAdapter1120159514[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> KillerAdapter49988558[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> LocationAdapter1711121820[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> LooterAdapter15721220[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> NameAdapter1322873870[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> OwnerAdapter1942162988[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> PluralNameAdapter1570777034[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> ProtectionAdapter483869440[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> UniqueIdAdapter325683547[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> UrlAdapter927165224[arrowhead=none, arrowtail=empty, dir=both];
+Accessor1261593464 -> VersionAdapter485802479[arrowhead=none, arrowtail=empty, dir=both];
+AccessorCtx732551619 -> FormatterCtx732551619[label="formatterCtx
+[0..1]"];
+AccessorCtx732551619 -> ItemDisplayNameResolver1888027075[label="itemDisplayNameResolver
+[0..1]"];
+AccessorCtx732551619 -> ItemNameResolver1888027075[label="itemNameResolver
+[0..1]"];
+AccessorCtx732551619 -> ItemPluralNameResolver1888027075[label="itemPluralNameResolver
+[0..1]"];
+AccessorCtx732551619 -> WorldNameResolver1650746392[label="worldNameResolver
+[0..1]"];
+AccessorRegistry1261593464 -> FieldAccessorRegistry421844953[arrowhead=none, arrowtail=empty, dir=both];
+BukkitItemPluralNameResolver685434620 -> ItemRepository1152281911[label="itemRepository
+[0..1]"];
+BukkitItemPluralNameResolver685434620 -> ValidItemRecord322141128[label="deserializePluralName() -> pluralName()"];
+CompositeResolver1685669451 -> AccessorRegistry1261593464[label="accessorRegistry
+[0..1]"];
+ConfigProvider1582204715 -> ConfigRepository1582204715[arrowhead=none, arrowtail=empty, dir=both];
+ConfigRepository1582204715 -> BukkitConfigRepository169038822[arrowhead=none, arrowtail=empty, dir=both];
+ConstantRepository1152281911 -> YamlConstantRepository312533400[arrowhead=none, arrowtail=empty, dir=both];
+DefaultResolver817154825 -> DefaultRetriever1031569393[label="resolve() -> getWorldName()"];
+DisplayNameAdapter226180870 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+DisplayNameAdapter226180870 -> ItemDisplayNameResolver1888027075[label="adapt() -> resolve()"];
+DisplayNameAdapter226180870 -> WorldNameResolver1650746392[label="adapt() -> resolve()"];
+DurationFormatter2068475765 -> LocalizedDurationFormatter399425452[arrowhead=none, arrowtail=empty, dir=both];
+DurationFormatter2068475765 -> Time4jDurationFormatter399425452[arrowhead=none, arrowtail=empty, dir=both];
+FieldAccessorRegistry421844953 -> Accessor1261593464[label="accessors
+[0..*]"];
+FormatterCtx732551619 -> ConfigRepository1582204715[label="configRepository
+[0..1]"];
+FormatterCtx732551619 -> DurationFormatter2068475765[label="durationFormatter
+[0..1]"];
+FormatterCtx732551619 -> NumberFormatter1517289110[label="localeNumberFormatter
+[0..1]"];
+ItemDisplayNameResolver1888027075 -> BukkitItemDisplayNameResolver685434620[arrowhead=none, arrowtail=empty, dir=both];
+ItemKey1959363381 -> InvalidItemKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
+ItemKey1959363381 -> ValidItemKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
+ItemNameResolver1888027075 -> BukkitItemNameResolver685434620[arrowhead=none, arrowtail=empty, dir=both];
+ItemPluralNameResolver1888027075 -> BukkitItemPluralNameResolver685434620[arrowhead=none, arrowtail=empty, dir=both];
+ItemRecord322141128 -> InvalidItemRecord322141128[arrowhead=none, arrowtail=empty, dir=both];
+ItemRecord322141128 -> ValidItemRecord322141128[arrowhead=none, arrowtail=empty, dir=both];
+ItemRepository1152281911 -> YamlItemRepository312533400[arrowhead=none, arrowtail=empty, dir=both];
+LocaleNumberFormatter1184662007 -> ConfigRepository1582204715[label="configRepository
+[0..1]"];
+LocalizedDurationFormatter399425452 -> ConstantRepository1152281911[label="constants
+[0..1]"];
+LocalizedDurationFormatter399425452 -> DurationFormatter2068475765[label="delegate
+[0..1]"];
+MultiverseResolver817154825 -> DefaultRetriever1031569393[label="resolve() -> getWorldName()"];
+MultiverseResolver817154825 -> MultiverseRetriever1031569393[label="resolve() -> getWorldName()"];
+NameAdapter1322873870 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+NameAdapter1322873870 -> ItemNameResolver1888027075[label="adapt() -> resolve()"];
+NumberFormatter1517289110 -> LocaleNumberFormatter1184662007[arrowhead=none, arrowtail=empty, dir=both];
+PluralNameAdapter1570777034 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+PluralNameAdapter1570777034 -> ItemPluralNameResolver1888027075[label="adapt() -> resolve()"];
+RecordKey1959363381 -> ItemKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
+SectionRecord1572118503 -> ItemRecord322141128[arrowhead=none, arrowtail=empty, dir=both];
+Throwing1155524858 -> ValidationException1155524858[label="exceptionSupplier
+[0..1]"];
+Time4jDurationFormatter399425452 -> ConfigRepository1582204715[label="configRepository
+[0..1]"];
+ValidItemRecord322141128 -> ItemKey1959363381[label="key
+[0..1]"];
+Validator1155524858 -> Logging1155524858[arrowhead=none, arrowtail=empty, dir=both];
+Validator1155524858 -> Throwing1155524858[arrowhead=none, arrowtail=empty, dir=both];
+WorldNameResolver1650746392 -> DefaultResolver817154825[arrowhead=none, arrowtail=empty, dir=both];
+WorldNameResolver1650746392 -> MultiverseResolver817154825[arrowhead=none, arrowtail=empty, dir=both];
+WorldNameRetriever1650746392 -> DefaultRetriever1031569393[arrowhead=none, arrowtail=empty, dir=both];
+WorldNameRetriever1650746392 -> MultiverseRetriever1031569393[arrowhead=none, arrowtail=empty, dir=both];
+YamlItemRepository312533400 -> SectionProvider1859949731[label="sectionProvider
+[0..1]"];
+    
+}
+@enduml

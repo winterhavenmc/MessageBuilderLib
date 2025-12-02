@@ -1,0 +1,231 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   Accessor1261593464[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Accessor</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(object: Object): Optional&lt;?&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ supports(object: Object): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+AccessorRegistry1261593464[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)AccessorRegistry</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getMatchingAdapters(object: Object): Stream&lt;Accessor&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ register(accessor: Accessor)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+CompositeResolver1685669451[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CompositeResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   accessorRegistry: AccessorRegistry [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   macroFieldAccessor: MacroFieldAccessor [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(macroKey: ValidMacroKey, macroObjectMap: MacroObjectMap): MacroStringMap</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+FieldAccessorRegistry421844953[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FieldAccessorRegistry</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   accessors: List&lt;Accessor&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getMatchingAdapters(object: Object): Stream&lt;Accessor&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ register(accessor: Accessor)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Logging1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Logging&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   logLevel: LogLevel [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageKey: ErrorMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   parameter: Parameter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ handleInvalid(value: T): Optional&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logLevel(): LogLevel</TD></TR>
+<TR><TD ALIGN="LEFT" >+ messageKey(): ErrorMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ parameter(): Parameter</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Throwing1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Throwing&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   exceptionSupplier: Supplier&lt;ValidationException&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ exceptionSupplier(): Supplier&lt;ValidationException&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ handleInvalid(value: T): Optional&lt;T&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidationException1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidationException</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   errorMessageKey: ErrorMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   parameter: Parameter [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Validator1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Validator&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ formatMessage(errorMessageKey: ErrorMessageKey, parameter: Parameter): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ handleInvalid(value: T): Optional&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logging(level: LogLevel, messageKey: ErrorMessageKey, parameter: Parameter): Validator&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ throwing(messageKey: ErrorMessageKey, parameter: Parameter): Validator&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ validate(value: T, predicate: Predicate&lt;T&gt;, handler: Validator&lt;T&gt;): Optional&lt;T&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+} 
+} 
+
+'edges    
+AccessorRegistry1261593464 -> FieldAccessorRegistry421844953[arrowhead=none, arrowtail=empty, dir=both];
+CompositeResolver1685669451 -> AccessorRegistry1261593464[label="accessorRegistry
+[0..1]"];
+FieldAccessorRegistry421844953 -> Accessor1261593464[label="accessors
+[0..*]"];
+Throwing1155524858 -> ValidationException1155524858[label="exceptionSupplier
+[0..1]"];
+Validator1155524858 -> Logging1155524858[arrowhead=none, arrowtail=empty, dir=both];
+Validator1155524858 -> Throwing1155524858[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml
