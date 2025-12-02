@@ -1,7 +1,12 @@
 /**
  * Provides an adapter for objects that expose a {@link java.time.Duration}.
  *
- * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.duration.Durationable}
+ * <p>This package defines the
+ * {@link com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.duration.DurationAdapter} class,
+ * which implements a wrapper class that provides a Durationable interface compliant accessor method
+ * to retrieve a {@code Duration} field from the wrapped object.
+ * <p>
+ * {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.duration.Durationable}
  * interface, which should be implemented by any object that can expose a duration value for use in macro substitution.
  * Macros of the form {@code {OBJECT.DURATION}} are supported by extracting and formatting the value returned from
  * {@code getDuration()}.
