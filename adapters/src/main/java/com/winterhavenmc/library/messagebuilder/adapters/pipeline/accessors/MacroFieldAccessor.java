@@ -187,12 +187,13 @@ public class MacroFieldAccessor implements FieldAccessor
 			case ProtectionAdapter __ when adapted instanceof Protectable protectable ->
 					resultMap.putAll(protectable.extractProtection(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, ctx));
 
+			// Extract url as string
+			case UrlAdapter __ when adapted instanceof UrlAddressable urlAddressable ->
+					resultMap.putAll(urlAddressable.extractUrl(baseKey, ctx));
+
 			// Extract version field as string
 			case VersionAdapter __ when adapted instanceof Versionable versionable ->
 					resultMap.putAll(versionable.extractVersion(baseKey, ctx));
-
-			case UrlAdapter __ when adapted instanceof UrlAddressable urlAddressable ->
-					resultMap.putAll(urlAddressable.extractUrl(baseKey, ctx));
 
 			default -> {} // no-op
 		}
