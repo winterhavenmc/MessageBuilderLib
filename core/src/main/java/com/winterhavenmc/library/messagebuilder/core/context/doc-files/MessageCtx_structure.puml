@@ -1,0 +1,295 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 2,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.core.context.MessageCtx",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   MacroKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)MacroKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidMacroKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: String): MacroKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: E): MacroKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MacroObjectMap474154237[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MacroObjectMap</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   INTERNAL_MAP: Map&lt;MacroKey, Object&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(macroKey: MacroKey): Optional&lt;Object&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ put(macroKey: MacroKey, value: T)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ putIfAbsent(macroKey: MacroKey, value: T)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Message735945755[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Message</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMessageKey(): ValidMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getObjectMap(): MacroObjectMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecipient(): Sendable</TD></TR>
+<TR><TD ALIGN="LEFT" >+ send(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(quantity: int, macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, duration: Duration, precision: ChronoUnit): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ toComponent(): Optional&lt;Component&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MessageCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   plugin: Plugin [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   validMessage: ValidMessage [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   validMessageKey: ValidMessageKey [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ messagePipeline(): Pipeline</TD></TR>
+<TR><TD ALIGN="LEFT" >+ plugin(): Plugin</TD></TR>
+<TR><TD ALIGN="LEFT" >+ validMessage(): ValidMessage</TD></TR>
+<TR><TD ALIGN="LEFT" >+ validMessageKey(): ValidMessageKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)MessageKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ isValid(): Optional&lt;ValidMessageKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: String): MessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(key: E): MessageKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MessagePipeline1433414857[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessagePipeline</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: MessagePipelineCtx [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   miniMessage: MiniMessage [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ initiate(message: ValidMessage)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ retrieve(message: ValidMessage): Optional&lt;Component&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- toComponent(finalMessageRecord: FinalMessageRecord): Component</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Pipeline47543914[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Pipeline</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ initiate(message: ValidMessage)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ retrieve(message: ValidMessage): Optional&lt;Component&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Sendable632050429[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Sendable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ sender(): CommandSender</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ValidMessage735945755[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidMessage</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   macroObjectMap: MacroObjectMap [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageKey: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messagePipeline: Pipeline [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   recipient: Sendable [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ send(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(quantity: int, macro: K, value: V): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ setMacro(macro: K, duration: Duration, lowerBound: ChronoUnit): Message</TD></TR>
+<TR><TD ALIGN="LEFT" >+ toComponent(): Optional&lt;Component&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ValidMessageKey1959363381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidMessageKey</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   string: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Validator1155524858[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Validator&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ formatMessage(errorMessageKey: ErrorMessageKey, parameter: Parameter): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ handleInvalid(value: T): Optional&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logging(level: LogLevel, messageKey: ErrorMessageKey, parameter: Parameter): Validator&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ throwing(messageKey: ErrorMessageKey, parameter: Parameter): Validator&lt;T&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ validate(value: T, predicate: Predicate&lt;T&gt;, handler: Validator&lt;T&gt;): Optional&lt;T&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+} 
+} 
+
+'edges    
+Message735945755 -> ValidMessage735945755[arrowhead=none, arrowtail=empty, dir=both];
+MessageCtx732551619 -> Pipeline47543914[label="messagePipeline
+[0..1]"];
+MessageCtx732551619 -> ValidMessage735945755[label="validMessage
+[0..1]"];
+MessageCtx732551619 -> ValidMessageKey1959363381[label="validMessageKey
+[0..1]"];
+MessageKey1959363381 -> ValidMessageKey1959363381[arrowhead=none, arrowtail=empty, dir=both];
+Pipeline47543914 -> MessagePipeline1433414857[arrowhead=none, arrowtail=empty, dir=both];
+ValidMessage735945755 -> MacroObjectMap474154237[label="macroObjectMap
+[0..1]"];
+ValidMessage735945755 -> Pipeline47543914[label="messagePipeline
+[0..1]"];
+ValidMessage735945755 -> Sendable632050429[label="recipient
+[0..1]"];
+ValidMessage735945755 -> ValidMessageKey1959363381[label="messageKey
+[0..1]"];
+    
+}
+@enduml
