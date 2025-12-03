@@ -51,7 +51,7 @@ public class UriAdapter implements Accessor
 	{
 		String website = plugin.getDescription().getWebsite();
 
-		return website != null && !website.isBlank()
+		return (website != null && !website.isBlank())
 				? URI.create(website)
 				: URI.create(UNKNOWN_VALUE);
 	}
