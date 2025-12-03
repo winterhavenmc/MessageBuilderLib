@@ -50,7 +50,7 @@ class UrlAdapterTest
 
 
 	@Test
-	void adapt_returns_url_string_when_given_plugin_with_unspecified_website()
+	void adapt_returns_empty_url_string_when_given_plugin_with_unspecified_website()
 	{
 		// Arrange
 		when(pluginMock.getDescription()).thenReturn(descriptionFileMock);
@@ -62,7 +62,7 @@ class UrlAdapterTest
 
 		// Assert
 		assertTrue(result.isPresent());
-		assertEquals("-", result.get().getUrl());
+		assertEquals("", result.get().getUrl());
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getDescription();

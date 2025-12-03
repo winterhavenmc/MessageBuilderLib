@@ -6,8 +6,10 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.ur
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -42,6 +44,27 @@ class UriAdapterTest
 		// Assert
 		assertTrue(result.isPresent());
 		assertEquals("https://www.example.com", result.get().getUri().toASCIIString());
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getDescription();
+		verify(descriptionFileMock, atLeastOnce()).getWebsite();
+	}
+
+
+	@Test
+	void adapt_returns_empty_uri_when_given_plugin_with_unspecified_website()
+	{
+		// Arrange
+		when(pluginMock.getDescription()).thenReturn(descriptionFileMock);
+		when(descriptionFileMock.getWebsite()).thenReturn(null);
+		UriAdapter uriAdapter = new UriAdapter(ctxMock);
+
+		// Act
+		Optional<UriAddressable> result = uriAdapter.adapt(pluginMock);
+
+		// Assert
+		assertTrue(result.isPresent());
+		assertEquals(URI.create(""), result.get().getUri());
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getDescription();
