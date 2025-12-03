@@ -63,7 +63,8 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private Optional<String> resolveCustomItem(ItemStack stack, MiniMessage miniMessage) {
+	private Optional<String> resolveCustomItem(ItemStack stack, MiniMessage miniMessage)
+	{
 		if (!itemRepository.isItem(stack)) return Optional.empty();
 
 		return getValidKey(stack)

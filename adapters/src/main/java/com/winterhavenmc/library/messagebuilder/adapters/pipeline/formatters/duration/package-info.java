@@ -1,5 +1,5 @@
 /**
- * Provides formatting for {@link java.time.Duration} values into localized, human-readable strings.
+ * Provides formatting for {@link java.time.Duration} values into localized, natural language strings.
  *
  * <p>This package defines the {@link com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter}
  * interface and multiple implementations that support natural-language duration formatting.
