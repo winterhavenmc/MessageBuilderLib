@@ -24,6 +24,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.replacers
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value

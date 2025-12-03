@@ -29,6 +29,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown
