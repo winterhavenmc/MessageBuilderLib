@@ -30,3 +30,22 @@ Optional<String> name(ValidItemKey validItemKey);
 ```java
 Optional<String> displayName(ValidItemKey validItemKey);
 ```
+### Item Keys
+All MessageBuilder keys are implemented as algebraic data types, which
+are validated on creation to ensure only non-null, non-blank, and 
+naming-scheme compliant keys are used to reference key/value pairs.
+A valid key can be constructed from a string
+
+```java
+ItemKey itemKey = ItemKey.of("VALID_KEY_STRING");
+if (itemKey instance of ValidItemKey validItemKey) { }
+```
+
+```java
+Optional<ValidItemKey> validItemKey = ItemKey.of("VALID_KEY").isValid();
+if (validItemKey.isPresent()) { }
+```
+
+```java
+ValidItemKey validItemKey = ItemKey.of("VALID_KEY").isValid().orElseThrow();
+```
