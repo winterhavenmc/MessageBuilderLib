@@ -38,7 +38,7 @@ A valid key can be constructed from a string as follows:
 
 ```java
 ItemKey itemKey = ItemKey.of("VALID_KEY_STRING");
-if (itemKey instance of ValidItemKey validItemKey) { }
+if (itemKey instanceof ValidItemKey validItemKey) { }
 ```
 
 ```java
