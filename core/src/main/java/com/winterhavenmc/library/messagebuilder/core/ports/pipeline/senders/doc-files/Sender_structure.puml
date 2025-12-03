@@ -1,0 +1,266 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 2,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   FinalMessageRecord788219698[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FinalMessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   enabled: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   finalMessageString: Optional&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   finalSubtitleString: Optional&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   finalTitleString: Optional&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   message: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   repeatDelay: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   subtitle: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   title: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeIn: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeOut: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleStay: Duration [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ enabled(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ finalMessageString(): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ finalSubtitleString(): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ finalTitleString(): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ValidMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ message(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ repeatDelay(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ subtitle(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ title(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeIn(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeOut(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleStay(): Duration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+KyoriMessageSender850956473[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)KyoriMessageSender</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   audiences: BukkitAudiences [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageCooldownMap: MessageCooldownMap [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   miniMessage: MiniMessage [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sounds: SoundRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># matchLongest(messageKey: ValidMessageKey): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" ># playMatchingSound(recipient: Sendable, messageKey: ValidMessageKey)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ send(recipient: Sendable, messageRecord: FinalMessageRecord)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+KyoriTitleSender850956473[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)KyoriTitleSender</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   audiences: BukkitAudiences [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageCooldownMap: MessageCooldownMap [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   miniMessage: MiniMessage [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ send(recipient: Sendable, messageRecord: FinalMessageRecord)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageCooldownMap1184227600[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessageCooldownMap</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   COOLDOWN_MAP: Map&lt;CooldownKey, Instant&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ notCooling(key: CooldownKey): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ putExpirationTime(recipient: Sendable, messageRecord: FinalMessageRecord)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ removeExpired(): int</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessagePipelineCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MessagePipelineCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   cooldownMap: CooldownMap [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageProcessor: Processor [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   messageRetriever: MessageRetriever [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   senders: List&lt;Sender&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ cooldownMap(): CooldownMap</TD></TR>
+<TR><TD ALIGN="LEFT" >+ messageProcessor(): Processor</TD></TR>
+<TR><TD ALIGN="LEFT" >+ messageRetriever(): MessageRetriever</TD></TR>
+<TR><TD ALIGN="LEFT" >+ senders(): List&lt;Sender&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Sendable632050429[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Sendable</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ sender(): CommandSender</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+Sender1842260314[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)Sender</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ send(recipient: Sendable, messageRecord: FinalMessageRecord)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SoundRepository1303222466[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SoundRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getBukkitSoundName(key: String): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getKeys(): Collection&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getRecord(soundId: Enum&lt;?&gt;): SoundRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isRegistrySound(name: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValidBukkitSoundName(name: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ isValidSoundConfigKey(key: String): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ matchLongest(messageId: Enum&lt;?&gt;): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(sender: CommandSender, soundId: Enum&lt;?&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(location: Location, soundId: Enum&lt;?&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ play(sender: CommandSender, keyString: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ soundEffectsDisabled(): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+} 
+} 
+
+'edges    
+KyoriMessageSender850956473 -> MessageCooldownMap1184227600[label="messageCooldownMap
+[0..1]"];
+KyoriMessageSender850956473 -> SoundRepository1303222466[label="sounds
+[0..1]"];
+KyoriTitleSender850956473 -> MessageCooldownMap1184227600[label="messageCooldownMap
+[0..1]"];
+MessagePipelineCtx732551619 -> Sender1842260314[label="senders
+[0..*]"];
+Sender1842260314 -> KyoriMessageSender850956473[arrowhead=none, arrowtail=empty, dir=both];
+Sender1842260314 -> KyoriTitleSender850956473[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml
