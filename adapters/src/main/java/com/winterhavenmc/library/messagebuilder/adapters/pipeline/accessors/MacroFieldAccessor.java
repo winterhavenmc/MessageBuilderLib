@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.quantity.BukkitQuantityAccessor;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.uri.UriAdapter;
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.FieldAccessor;
 
@@ -46,6 +47,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.pr
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.protection.ProtectionAdapter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.quantity.Quantifiable;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.url.UrlAdapter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.uri.UriAddressable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.url.UrlAddressable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.identity.Identifiable;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.identity.UniqueIdAdapter;
@@ -186,6 +188,10 @@ public class MacroFieldAccessor implements FieldAccessor
 			// Extract protection fields as strings
 			case ProtectionAdapter __ when adapted instanceof Protectable protectable ->
 					resultMap.putAll(protectable.extractProtection(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, ctx));
+
+			// Extract uri as string
+			case UriAdapter __ when adapted instanceof UriAddressable uriAddressable ->
+					resultMap.putAll(uriAddressable.extractUri(baseKey, ctx));
 
 			// Extract url as string
 			case UrlAdapter __ when adapted instanceof UrlAddressable urlAddressable ->
