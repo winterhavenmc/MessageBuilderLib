@@ -62,11 +62,6 @@ public class UriAdapter implements Accessor
 		String serverIp = (!server.getIp().isBlank()) ? server.getIp() : "0.0.0.0";
 		String serverPort = (server.getPort() != 0) ? String.valueOf(server.getPort()) : "25565";
 
-		if (serverIp.contains(":"))
-		{
-			serverIp = "[" + serverIp + "]";
-		}
-
 		return URI.create("minecraft://" + serverIp + ":" + serverPort);
 	}
 

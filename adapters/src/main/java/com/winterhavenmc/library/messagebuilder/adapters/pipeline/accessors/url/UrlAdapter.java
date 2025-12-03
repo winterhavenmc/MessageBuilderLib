@@ -49,7 +49,7 @@ public class UrlAdapter implements Accessor
 	{
 		String website = plugin.getDescription().getWebsite();
 
-		return website != null && !website.isBlank()
+		return (website != null && !website.isBlank())
 				? URI.create(website).toASCIIString()
 				: URI.create(UNKNOWN_VALUE).toASCIIString();
 	}
@@ -58,10 +58,6 @@ public class UrlAdapter implements Accessor
 	private static String getServerURI(final Server server)
 	{
 		String serverIp = (!server.getIp().isBlank()) ? server.getIp() : "0.0.0.0";
-		if (serverIp.contains(":"))
-		{
-			serverIp = "[" + serverIp + "]";
-		}
 		String serverPort = (server.getPort() != 0) ? String.valueOf(server.getPort()) : "25565";
 
 		return URI.create("minecraft://" + serverIp + ":" + serverPort).toASCIIString();
