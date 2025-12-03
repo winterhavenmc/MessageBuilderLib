@@ -36,7 +36,7 @@ public interface UriAddressable
 	URI getUri();
 
 
-	default MacroStringMap extractUrl(final ValidMacroKey baseKey, final AccessorCtx ctx)
+	default MacroStringMap extractUri(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(URL).isValid()
 				.map(macroKey -> new MacroStringMap()
