@@ -51,7 +51,7 @@ public class UrlAdapter implements Accessor
 
 		return (website != null && !website.isBlank())
 				? URI.create(website).toASCIIString()
-				: URI.create(UNKNOWN_VALUE).toASCIIString();
+				: "";
 	}
 
 

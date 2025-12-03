@@ -53,7 +53,7 @@ public class UriAdapter implements Accessor
 
 		return (website != null && !website.isBlank())
 				? URI.create(website)
-				: URI.create(UNKNOWN_VALUE);
+				: URI.create("");
 	}
 
 
