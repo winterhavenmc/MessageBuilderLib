@@ -18,6 +18,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.uri
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.url
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.version
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers

@@ -33,6 +33,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number
 com.winterhavenmc.library.messagebuilder
 com.winterhavenmc.library.messagebuilder.core.message
