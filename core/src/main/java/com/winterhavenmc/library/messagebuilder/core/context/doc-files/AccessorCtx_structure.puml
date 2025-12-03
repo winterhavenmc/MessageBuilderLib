@@ -1,0 +1,390 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 2,
+    "backwardDepth": 1,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   AccessorCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AccessorCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   formatterCtx: FormatterCtx [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemDisplayNameResolver: ItemDisplayNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemNameResolver: ItemNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemPluralNameResolver: ItemPluralNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldNameResolver: WorldNameResolver [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ formatterCtx(): FormatterCtx</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemDisplayNameResolver(): ItemDisplayNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemNameResolver(): ItemNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemPluralNameResolver(): ItemPluralNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worldNameResolver(): WorldNameResolver</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitItemDisplayNameResolver685434620[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitItemDisplayNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitItemNameResolver685434620[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitItemNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitItemPluralNameResolver685434620[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitItemPluralNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   itemRepository: ItemRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- deserializePluralName(record: ValidItemRecord, stack: ItemStack, miniMessage: MiniMessage): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- getValidKey(itemStack: ItemStack): Optional&lt;ValidItemKey&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- getValidRecord(key: ValidItemKey): Optional&lt;ValidItemRecord&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- resolveCustomItem(stack: ItemStack, miniMessage: MiniMessage): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- resolveDisplayName(itemStack: ItemStack): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >- resolveItemName(itemStack: ItemStack): Optional&lt;String&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ConfigRepository1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConfigRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ dateLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(): LocaleSetting</TD></TR>
+<TR><TD ALIGN="LEFT" >+ language(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ numberLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ timeLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zoneId(): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+DefaultResolver817154825[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DefaultResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DisplayNameAdapter226180870[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DisplayNameAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;DisplayNameable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DurationFormatter2068475765[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)DurationFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+FormatterCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FormatterCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configRepository: ConfigRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   durationFormatter: DurationFormatter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeNumberFormatter: NumberFormatter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ configRepository(): ConfigRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ durationFormatter(): DurationFormatter</TD></TR>
+<TR><TD ALIGN="LEFT" >+ localeNumberFormatter(): NumberFormatter</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ItemDisplayNameResolver1888027075[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemDisplayNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ItemNameResolver1888027075[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ItemPluralNameResolver1888027075[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ItemPluralNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(itemStack: ItemStack): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+MacroFieldAccessor421844953[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MacroFieldAccessor</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extract(baseKey: ValidMacroKey, accessor: Accessor, adapted: T): MacroStringMap</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MultiverseResolver817154825[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MultiverseResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   mvPlugin: Plugin [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+NameAdapter1322873870[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)NameAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Nameable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+NumberFormatter1517289110[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)NumberFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(number: Number): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+PluralNameAdapter1570777034[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PluralNameAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;PluralNameable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+WorldNameResolver1650746392[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)WorldNameResolver</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ resolve(world: World): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+} 
+} 
+
+'edges    
+AccessorCtx732551619 -> FormatterCtx732551619[label="formatterCtx
+[0..1]"];
+AccessorCtx732551619 -> ItemDisplayNameResolver1888027075[label="itemDisplayNameResolver
+[0..1]"];
+AccessorCtx732551619 -> ItemNameResolver1888027075[label="itemNameResolver
+[0..1]"];
+AccessorCtx732551619 -> ItemPluralNameResolver1888027075[label="itemPluralNameResolver
+[0..1]"];
+AccessorCtx732551619 -> WorldNameResolver1650746392[label="worldNameResolver
+[0..1]"];
+DisplayNameAdapter226180870 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+FormatterCtx732551619 -> ConfigRepository1582204715[label="configRepository
+[0..1]"];
+FormatterCtx732551619 -> DurationFormatter2068475765[label="durationFormatter
+[0..1]"];
+FormatterCtx732551619 -> NumberFormatter1517289110[label="localeNumberFormatter
+[0..1]"];
+ItemDisplayNameResolver1888027075 -> BukkitItemDisplayNameResolver685434620[arrowhead=none, arrowtail=empty, dir=both];
+ItemNameResolver1888027075 -> BukkitItemNameResolver685434620[arrowhead=none, arrowtail=empty, dir=both];
+ItemPluralNameResolver1888027075 -> BukkitItemPluralNameResolver685434620[arrowhead=none, arrowtail=empty, dir=both];
+MacroFieldAccessor421844953 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+NameAdapter1322873870 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+PluralNameAdapter1570777034 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+WorldNameResolver1650746392 -> DefaultResolver817154825[arrowhead=none, arrowtail=empty, dir=both];
+WorldNameResolver1650746392 -> MultiverseResolver817154825[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml

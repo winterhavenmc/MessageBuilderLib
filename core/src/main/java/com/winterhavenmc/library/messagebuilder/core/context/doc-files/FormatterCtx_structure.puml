@@ -1,0 +1,351 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 2,
+    "backwardDepth": 2,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   AccessorCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AccessorCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   formatterCtx: FormatterCtx [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemDisplayNameResolver: ItemDisplayNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemNameResolver: ItemNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   itemPluralNameResolver: ItemPluralNameResolver [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   worldNameResolver: WorldNameResolver [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ formatterCtx(): FormatterCtx</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemDisplayNameResolver(): ItemDisplayNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemNameResolver(): ItemNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemPluralNameResolver(): ItemPluralNameResolver</TD></TR>
+<TR><TD ALIGN="LEFT" >+ worldNameResolver(): WorldNameResolver</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BukkitConfigRepository169038822[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BukkitConfigRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   dateLocaleSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   languageSettingSupplier: Supplier&lt;LanguageSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   logLocaleSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   numberLocaleSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   timeLocaleSettingSupplier: Supplier&lt;LocaleSetting&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   zoneIdSupplier: Supplier&lt;ZoneId&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(plugin: Plugin): ConfigRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ dateLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ language(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ numberLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ timeLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zoneId(): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ConfigProvider1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConfigProvider&lt;T&gt;</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ get(): T</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ConfigRepository1582204715[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)ConfigRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ dateLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ get(): LocaleSetting</TD></TR>
+<TR><TD ALIGN="LEFT" >+ language(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ languageTag(): LanguageTag</TD></TR>
+<TR><TD ALIGN="LEFT" >+ locale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ logLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ numberLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ timeLocale(): Locale</TD></TR>
+<TR><TD ALIGN="LEFT" >+ zoneId(): ZoneId</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+DisplayNameAdapter226180870[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DisplayNameAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;DisplayNameable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DurationFormatter2068475765[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)DurationFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+FormatterCtx732551619[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FormatterCtx</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configRepository: ConfigRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   durationFormatter: DurationFormatter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   localeNumberFormatter: NumberFormatter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ configRepository(): ConfigRepository</TD></TR>
+<TR><TD ALIGN="LEFT" >+ durationFormatter(): DurationFormatter</TD></TR>
+<TR><TD ALIGN="LEFT" >+ localeNumberFormatter(): NumberFormatter</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LocaleNumberFormatter1184662007[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocaleNumberFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configRepository: ConfigRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(number: Number): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+LocalizedDurationFormatter399425452[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)LocalizedDurationFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   constants: ConstantRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   delegate: DurationFormatter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># formatLessThan(lowerBound: ChronoUnit): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># formatNormal(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># formatUnlimited(): String</TD></TR>
+<TR><TD ALIGN="LEFT" ># getTimeConstant(constantKey: ValidConstantKey, durationType: DurationType): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MacroFieldAccessor421844953[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MacroFieldAccessor</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ extract(baseKey: ValidMacroKey, accessor: Accessor, adapted: T): MacroStringMap</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+NameAdapter1322873870[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)NameAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;Nameable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+NumberFormatter1517289110[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)NumberFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(number: Number): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+PluralNameAdapter1570777034[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PluralNameAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   ctx: AccessorCtx [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ adapt(obj: Object): Optional&lt;PluralNameable&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Time4jDurationFormatter399425452[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Time4jDurationFormatter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   configRepository: ConfigRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ format(duration: Duration, lowerBound: ChronoUnit): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+AccessorCtx732551619 -> FormatterCtx732551619[label="formatterCtx
+[0..1]"];
+ConfigProvider1582204715 -> ConfigRepository1582204715[arrowhead=none, arrowtail=empty, dir=both];
+ConfigRepository1582204715 -> BukkitConfigRepository169038822[arrowhead=none, arrowtail=empty, dir=both];
+DisplayNameAdapter226180870 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+DurationFormatter2068475765 -> LocalizedDurationFormatter399425452[arrowhead=none, arrowtail=empty, dir=both];
+DurationFormatter2068475765 -> Time4jDurationFormatter399425452[arrowhead=none, arrowtail=empty, dir=both];
+FormatterCtx732551619 -> ConfigRepository1582204715[label="configRepository
+[0..1]"];
+FormatterCtx732551619 -> DurationFormatter2068475765[label="durationFormatter
+[0..1]"];
+FormatterCtx732551619 -> NumberFormatter1517289110[label="localeNumberFormatter
+[0..1]"];
+MacroFieldAccessor421844953 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+NameAdapter1322873870 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+NumberFormatter1517289110 -> LocaleNumberFormatter1184662007[arrowhead=none, arrowtail=empty, dir=both];
+PluralNameAdapter1570777034 -> AccessorCtx732551619[label="ctx
+[0..1]"];
+    
+}
+@enduml
