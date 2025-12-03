@@ -61,7 +61,9 @@ class VersionAdapterTest
 
 		// Act
 		Optional<Versionable> adapter = new VersionAdapter(accessorCtxMock).adapt(serverMock);
-		String result = adapter.get().getVersion();
+		String result = (adapter.isPresent())
+				? adapter.get().getVersion()
+				: "";
 
 		// Assert
 		assertEquals("Some version string", result, "The adapter should return the version from the Server.");
