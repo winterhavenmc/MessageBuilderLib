@@ -25,17 +25,19 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.Mock;
 
 import java.time.ZoneId;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -57,7 +59,7 @@ class BukkitConfigRepositoryTest
 
 
 	@Test
-	void create()
+	void create_returns_valid_locale_provider()
 	{
 		// Act
 		ConfigProvider<LocaleSetting> localeProvider = BukkitConfigRepository.create(pluginMock);
@@ -68,26 +70,20 @@ class BukkitConfigRepositoryTest
 
 
 	@Test
-	void testGet()
+	void get_returns_locale_setting()
 	{
 		// Arrange
 		when(pluginMock.getConfig()).thenReturn(configuration);
+		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
-		ConfigProvider<LocaleSetting> localeProvider = BukkitConfigRepository.create(pluginMock);
+		LocaleSetting result = configRepository.get();
 
-		// Act
-		Locale locale = localeProvider.get().languageTag().getLocale();
-
-		// Assert
-		assertEquals(Locale.FRANCE, locale);
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
+		assertInstanceOf(LocaleSetting.class, result);
 	}
 
 
 	@Test
-	void testGet_empty_config()
+	void get_returns_default_language_tag_given_empty_config()
 	{
 		// Arrange
 		configuration = new YamlConfiguration();
@@ -99,203 +95,340 @@ class BukkitConfigRepositoryTest
 
 		// Assert
 		assertNotNull(locale);
+		assertEquals(Locale.getDefault(), locale);
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getConfig();
 	}
 
 
-	@Test
-	void testLanguageTag()
+	@Nested
+	class StringConfig
 	{
-		// Arrange
-		when(pluginMock.getConfig()).thenReturn(configuration);
+		@Test
+		void locale_returns_configured_locale()
+		{
+			// Arrange
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
-		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+			// Act
+			Locale locale = configRepository.locale();
 
-		// Act
-		LanguageTag languageTag = configRepository.languageTag();
+			// Assert
+			assertEquals(Locale.FRANCE, locale);
 
-		// Assert
-		assertEquals(Locale.FRANCE, languageTag.getLocale());
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
 
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
+
+		@Test
+		void logLocale_returns_configured_log_locale()
+		{
+			// Arrange
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			Locale locale = configRepository.logLocale();
+
+			// Assert
+			assertEquals(Locale.FRANCE, locale);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void dateLocale_returns_configured_date_locale()
+		{
+			// Arrange
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			Locale locale = configRepository.dateLocale();
+
+			// Assert
+			assertEquals(Locale.FRANCE, locale);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void timeLocale_returns_configured_time_locale()
+		{
+			// Arrange
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			Locale locale = configRepository.timeLocale();
+
+			// Assert
+			assertEquals(Locale.FRANCE, locale);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void numberLocale_returns_configured_number_locale()
+		{
+			// Arrange
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			Locale locale = configRepository.numberLocale();
+
+			// Assert
+			assertEquals(Locale.FRANCE, locale);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
 	}
 
-	@Test
-	void locale()
+
+	@Nested
+	class MapConfig
 	{
-		// Arrange
-		when(pluginMock.getConfig()).thenReturn(configuration);
-		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+		@Test
+		void locale_returns_configured_locale()
+		{
+			// Arrange
+			configuration = new YamlConfiguration();
+			configuration.set("locale.log", "fr-FR");
 
-		// Act
-		Locale locale = configRepository.locale();
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
-		// Assert
-		assertEquals(Locale.FRANCE, locale);
+			// Act
+			Locale locale = configRepository.locale();
 
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
+			// Assert
+			assertEquals(Locale.FRANCE, locale);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void logLocale_returns_configured_log_locale()
+		{
+			// Arrange
+			configuration = new YamlConfiguration();
+			configuration.set("locale.log", "fr-FR");
+
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			Locale result = configRepository.logLocale();
+
+			// Assert
+			assertEquals(Locale.FRANCE, result);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void dateLocale_returns_configured_date_locale()
+		{
+			// Arrange
+			configuration = new YamlConfiguration();
+			configuration.set("locale.date", "fr-FR");
+
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			Locale locale = configRepository.dateLocale();
+
+			// Assert
+			assertEquals(Locale.FRANCE, locale);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void timeLocale_returns_configured_time_locale()
+		{
+			// Arrange
+			configuration = new YamlConfiguration();
+			configuration.set("locale.time", "fr-FR");
+
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			Locale locale = configRepository.timeLocale();
+
+			// Assert
+			assertEquals(Locale.FRANCE, locale);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void numberLocale_returns_configured_number_locale()
+		{
+			// Arrange
+			configuration = new YamlConfiguration();
+			configuration.set("locale.number", "fr-FR");
+
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			Locale locale = configRepository.numberLocale();
+
+			// Assert
+			assertEquals(Locale.FRANCE, locale);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
 	}
 
 
-	@Test
-	void getZoneId_returns_configured_timezone()
+	@Nested
+	class ZoneIdTests
 	{
-		// Arrange
-		configuration.set("timezone", "UTC");
-		when(pluginMock.getConfig()).thenReturn(configuration);
-		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+		@Test
+		void getZoneId_returns_configured_timezone()
+		{
+			// Arrange
+			configuration.set("timezone", "UTC");
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
-		// Act
-		ZoneId result = new ZoneIdSetting(pluginMock).get();
+			// Act
+			ZoneId result = new ZoneIdSetting(pluginMock).get();
 
-		// Assert
-		assertEquals(ZoneId.of("UTC"), result);
+			// Assert
+			assertEquals(ZoneId.of("UTC"), result);
 
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void getZoneId_returns_configured_system_default_timezone_when_not_set()
+		{
+			// Arrange
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			ZoneId result = new ZoneIdSetting(pluginMock).get();
+
+			// Assert
+			assertEquals(ZoneId.systemDefault(), result);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void getZoneId_returns_configured_timezone_when_valid()
+		{
+			// Arrange
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			ZoneId result = configRepository.zoneId();
+
+			// Assert
+			assertEquals(ZoneId.systemDefault(), result);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void getZoneId_returns_system_default_timezone_when_configured_is_invalid()
+		{
+			// Arrange
+			configuration.set("timezone", "invalid");
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			ZoneId result = configRepository.zoneId();
+
+			// Assert
+			assertEquals(ZoneId.systemDefault(), result);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
 	}
 
 
-	@Test
-	void getZoneId_returns_configured_system_default_timezone_when_not_set()
+	@Nested
+	class LanguageSettingTests
 	{
-		// Arrange
-		when(pluginMock.getConfig()).thenReturn(configuration);
-		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+		@Test
+		void getLanguage_returns_configured_language()
+		{
+			// Arrange
+			configuration.set("language", "language_file_name");
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
 
-		// Act
-		ZoneId result = new ZoneIdSetting(pluginMock).get();
+			// Act
+			String result = configRepository.language();
 
-		// Assert
-		assertEquals(ZoneId.systemDefault(), result);
+			// Assert
+			assertEquals("language_file_name", result);
 
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
+
+
+		@Test
+		void getLanguage_returns_default_when_not_configured()
+		{
+			// Arrange
+			configuration.set("language", null);
+			when(pluginMock.getConfig()).thenReturn(configuration);
+			ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
+
+			// Act
+			String result = configRepository.language();
+
+			// Assert
+			assertEquals("en-US", result);
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getConfig();
+		}
 	}
 
-
-	@Test
-	void getZoneId_returns_configured_timezone_when_valid()
+	@ParameterizedTest
+	@EnumSource(BukkitConfigRepository.ConfigKey.class)
+	void test_enum_toString(BukkitConfigRepository.ConfigKey configKey)
 	{
-		// Arrange
-		when(pluginMock.getConfig()).thenReturn(configuration);
-		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
-
-		// Act
-		ZoneId result = configRepository.zoneId();
-
-		// Assert
-		assertEquals(ZoneId.systemDefault(), result);
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
+		assertEquals(configKey.key(), configKey.toString());
 	}
-
-
-	@Test
-	void getZoneId_returns_system_default_timezone_when_configured_is_invalid()
-	{
-		// Arrange
-		configuration.set("timezone", "invalid");
-		when(pluginMock.getConfig()).thenReturn(configuration);
-		ConfigRepository configRepository = BukkitConfigRepository.create(pluginMock);
-
-		// Act
-		ZoneId result = configRepository.zoneId();
-
-		// Assert
-		assertEquals(ZoneId.systemDefault(), result);
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getConfig();
-	}
-
-
-//	@Mock Plugin pluginMock;
-//	@Mock FileConfiguration configurationMock;
-//
-//
-//	@BeforeEach
-//	void setUp()
-//	{
-//		when(pluginMock.getConfig()).thenReturn(configurationMock);
-//	}
-//
-//
-//	@Test
-//	void returns_language_setting_when_present()
-//	{
-//		// Arrange
-//		when(configurationMock.getString("language")).thenReturn("custom");
-//
-//		// Act
-//		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
-//		LocaleLanguageSetting setting = provider.get();
-//
-//		// Assert
-//		assertEquals("custom", setting.name());
-//
-//		// Verify
-//		verify(configurationMock, atLeastOnce()).getString("language");
-//	}
-//
-//
-//	@Test
-//	void falls_back_to_locale_setting_when_language_setting_missing()
-//	{
-//		// Arrange
-//		when(configurationMock.getString("language")).thenReturn(null);
-//		when(configurationMock.getString("locale")).thenReturn("fr-FR");
-//
-//		// Act
-//		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
-//		LocaleLanguageSetting setting = provider.get();
-//
-//		// Assert
-//		assertEquals("fr-FR", setting.name());
-//
-//		// Verify
-//		verify(configurationMock, atLeast(2)).getString(anyString());
-//	}
-//
-//
-//	@Test
-//	void falls_back_to_system_default_if_both_settings_missing()
-//	{
-//		// Arrange
-//		when(configurationMock.getString("language")).thenReturn(null);
-//		when(configurationMock.getString("locale")).thenReturn(null);
-//
-//		// Act
-//		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
-//		LocaleLanguageSetting setting = provider.get();
-//
-//		// Assert
-//		assertEquals("en-US", setting.name()); // The hardcoded fallback
-//
-//		// Verify
-//		verify(configurationMock, atLeast(2)).getString(anyString());
-//	}
-//
-//
-//	@Test
-//	void getName_when_language_setting_present()
-//	{
-//		// Arrange
-//		when(configurationMock.getString("language")).thenReturn("custom");
-//
-//		// Act
-//		LanguageProvider provider = BukkitLanguageProvider.create(pluginMock);
-//
-//		// Assert
-//		assertEquals("custom", provider.getName());
-//
-//		// Verify
-//		verify(configurationMock, atLeastOnce()).getString("language");
-//	}
 
 }

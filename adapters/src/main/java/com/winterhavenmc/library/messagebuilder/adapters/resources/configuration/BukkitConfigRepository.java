@@ -150,18 +150,6 @@ public final class BukkitConfigRepository implements ConfigRepository
 
 
 	/**
-	 * Returns the resolved {@link LanguageTag} representing the locale tag.
-	 *
-	 * @return a valid LanguageTag
-	 */
-	@Override
-	public LanguageTag languageTag()
-	{
-		return localeSettingSupplier.get().languageTag();
-	}
-
-
-	/**
 	 * Returns the resolved {@link Locale} object derived from the configuration.
 	 *
 	 * @return a Java {@code Locale}
