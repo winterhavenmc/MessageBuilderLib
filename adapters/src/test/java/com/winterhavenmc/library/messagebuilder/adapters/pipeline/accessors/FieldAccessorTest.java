@@ -20,11 +20,13 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.pluralname.PluralNameAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.uri.UriAdapter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.url.UrlAdapter;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.version.VersionAdapter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.FieldAccessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.pluralname.PluralNameable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.uri.UriAddressable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.url.UrlAddressable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.version.Versionable;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
@@ -80,16 +82,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.UUID;
 
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.DURATION;
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.EXPIRATION;
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.INSTANT;
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.KILLER;
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.LOOTER;
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.NAME;
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.OWNER;
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.PROTECTION;
-import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.QUANTITY;
-
+import static com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor.BuiltIn.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -508,6 +501,28 @@ class FieldAccessorTest
 
 		// Assert
 		assertEquals("Test Name", result.get(subKey));
+	}
+
+
+	@Test @DisplayName("VersionAdapter adapts Versionable objects.")
+	void VersionAdapter_adapts_with_Versionable_objects()
+	{
+		// Arrange
+		class TestObject implements Versionable
+		{
+			@Override
+			public String getVersion() { return "Version 2.0"; }
+		}
+
+		ValidMacroKey subKey = baseKey.append(VERSION).isValid().orElseThrow();
+		VersionAdapter versionAdapter = new VersionAdapter(adapterContextContainerMock);
+		TestObject testObject = new TestObject();
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, versionAdapter, testObject);
+
+		// Assert
+		assertEquals("Version 2.0", result.get(subKey));
 	}
 
 
