@@ -26,7 +26,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -39,7 +38,7 @@ public final class BukkitWorldRepository implements WorldRepository
 	private final SpawnLocationResolver spawnLocationResolver;
 	private final Supplier<EnabledWorldsSetting> enabledWorldsSupplier;
 
-	static final String UNKNOWN_WORLD = "\uD83C\uDF10";
+	static final String UNKNOWN_WORLD = "🌐";
 	static final String CONSOLE_SENDER = "console";
 	static final String ENABLED_WORLDS_KEY = "enabled-worlds";
 	static final String DISABLED_WORLDS_KEY = "disabled-worlds";
@@ -138,20 +137,6 @@ public final class BukkitWorldRepository implements WorldRepository
 	}
 
 
-	/**
-	 * check if uuid is present in the registry
-	 *
-	 * @param uuid the uuid of a world
-	 * @return {@code boolean} true if the world uuid is present in the registry, or false if not
-	 */
-	@Contract(pure = true)
-	@Override
-	public boolean contains(final UUID uuid)
-	{
-		return enabledWorldsSupplier.get().worldUids().contains(uuid);
-	}
-
-
 	@Override
 	public Optional<Location> spawnLocation(final UUID worldUid)
 	{
@@ -166,17 +151,6 @@ public final class BukkitWorldRepository implements WorldRepository
 		}
 
 		return Optional.empty();
-	}
-
-	/**
-	 * get the current size of the registry. used for testing
-	 *
-	 * @return {@code int} the size of the registry
-	 */
-	@Contract(pure = true)
-	int size()
-	{
-		return enabledWorldsSupplier.get().worldUids().size();
 	}
 
 
