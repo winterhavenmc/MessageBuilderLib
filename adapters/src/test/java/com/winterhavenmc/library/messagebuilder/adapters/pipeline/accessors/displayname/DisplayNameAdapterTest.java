@@ -42,7 +42,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-public class DisplayNameAccessorTest
+public class DisplayNameAdapterTest
 {
 	@Mock WorldNameResolver worldNameResolverMock;
 	@Mock AccessorCtx adapterContextContainerMock;
