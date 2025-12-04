@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository.DISABLED_WORLDS_KEY;
@@ -301,9 +302,26 @@ class BukkitWorldRepositoryTest
 
 
 	@Test
-	void testContains()
+	void aliasOrName_returns_optional_string()
 	{
+		// Arrange
+		when(pluginMock.getServer()).thenReturn(serverMock);
+		when(serverMock.getWorld(world1Uid)).thenReturn(world1Mock);
+		when(worldNameResolverMock.resolve(world1Mock)).thenReturn("world");
+		WorldRepository worlds = BukkitWorldRepository.create(pluginMock, worldNameResolverMock, spawnLocationResolverMock);
+
+		// Act
+		Optional<String> result = worlds.aliasOrName(world1Uid);
+
+		// Assert
+		assertTrue(result.isPresent());
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getServer();
+		verify(serverMock, atLeastOnce()).getWorld(world1Uid);
+		verify(worldNameResolverMock, atLeastOnce()).resolve(world1Mock);
 	}
+
 
 	@Test
 	void spawnLocation()
