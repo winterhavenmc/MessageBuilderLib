@@ -168,17 +168,6 @@ public final class BukkitWorldRepository implements WorldRepository
 		return Optional.empty();
 	}
 
-	/**
-	 * get the current size of the registry. used for testing
-	 *
-	 * @return {@code int} the size of the registry
-	 */
-	@Contract(pure = true)
-	int size()
-	{
-		return enabledWorldsSupplier.get().worldUids().size();
-	}
-
 
 	static EnabledWorldsSetting getEnabledWorldsSetting(final Plugin plugin)
 	{
