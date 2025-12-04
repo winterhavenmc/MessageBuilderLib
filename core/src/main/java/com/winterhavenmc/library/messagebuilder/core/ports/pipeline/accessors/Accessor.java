@@ -162,6 +162,7 @@ public interface Accessor
 		INSTANT,
 		QUANTITY,
 		UUID,
+		URI,
 		URL,
 		VERSION,
 
