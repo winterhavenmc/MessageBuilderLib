@@ -32,13 +32,6 @@ public interface ConfigRepository extends ConfigProvider<LocaleSetting>
 	LocaleSetting get();
 
 	/**
-	 * Returns the resolved {@link LanguageTag} representing the locale tag.
-	 *
-	 * @return a valid LanguageTag
-	 */
-	LanguageTag languageTag();
-
-	/**
 	 * Returns the {@link Locale} object derived from the configuration.
 	 *
 	 * @return a Java {@code Locale}
