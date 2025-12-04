@@ -26,7 +26,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -135,20 +134,6 @@ public final class BukkitWorldRepository implements WorldRepository
 		World world = plugin.getServer().getWorld(worldName);
 
 		return world != null && enabledWorldsSupplier.get().worldUids().contains(world.getUID());
-	}
-
-
-	/**
-	 * check if uuid is present in the registry
-	 *
-	 * @param uuid the uuid of a world
-	 * @return {@code boolean} true if the world uuid is present in the registry, or false if not
-	 */
-	@Contract(pure = true)
-	@Override
-	public boolean contains(final UUID uuid)
-	{
-		return enabledWorldsSupplier.get().worldUids().contains(uuid);
 	}
 
 

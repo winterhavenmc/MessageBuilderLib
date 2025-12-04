@@ -2,7 +2,6 @@ package com.winterhavenmc.library.messagebuilder.models.configuration.worlds;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigProvider;
 import org.bukkit.Location;
-import org.jetbrains.annotations.Contract;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,16 +86,6 @@ public interface WorldRepository extends ConfigProvider<EnabledWorldsSetting>
 	 * @return {@code true} if world is enabled, {@code false} if disabled
 	 */
 	boolean isEnabled(String worldName);
-
-
-	/**
-	 * check if uuid is present in the registry
-	 *
-	 * @param uuid the uuid of a world
-	 * @return {@code boolean} true if the world uuid is present in the registry, or false if not
-	 */
-	@Contract(pure = true)
-	boolean contains(UUID uuid);
 
 
 	Optional<Location> spawnLocation(UUID worldUid);
