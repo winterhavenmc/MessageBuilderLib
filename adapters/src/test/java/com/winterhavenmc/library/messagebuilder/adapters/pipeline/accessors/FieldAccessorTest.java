@@ -18,9 +18,13 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.pluralname.PluralNameAdapter;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.uri.UriAdapter;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.url.UrlAdapter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.FieldAccessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.pluralname.PluralNameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.uri.UriAddressable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.url.UrlAddressable;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
@@ -97,9 +101,13 @@ class FieldAccessorTest
 	@Mock World worldMock;
 	@Mock DisplayNameAdapter displayNameAdapterMock;
 	@Mock PluralNameAdapter pluralNameAdapterMock;
+	@Mock UriAdapter uriAdapterMock;
+	@Mock UrlAdapter urlAdapterMock;
 
 	@Mock DisplayNameable displayNameableMock;
 	@Mock PluralNameable pluralNameableMock;
+	@Mock UriAddressable uriAddressableMock;
+	@Mock UrlAddressable urlAddressableMock;
 	@Mock Identifiable identifiableMock;
 	@Mock Locatable locatableMock;
 
@@ -168,6 +176,52 @@ class FieldAccessorTest
 
 		// Verify
 		verify(pluralNameableMock, atLeastOnce()).extractPluralName(any(), any());
+	}
+
+
+	@Test
+	@DisplayName("UriAdapter adapts UriAddressable objects.")
+	void UriAdapter_adapts_UriAddressable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "https://example.com");
+		expected.put(baseKey.append(Accessor.BuiltIn.URI).isValid().orElseThrow(), "ObjectName_subfield");
+		when(uriAddressableMock.extractUri(baseKey, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, uriAdapterMock, uriAddressableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals("https://example.com", result.get(baseKey));
+
+		// Verify
+		verify(uriAddressableMock, atLeastOnce()).extractUri(any(), any());
+	}
+
+
+	@Test
+	@DisplayName("UrlAdapter adapts UrlAddressable objects.")
+	void UrlAdapter_adapts_UrlAddressable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "https://example.com");
+		expected.put(baseKey.append(Accessor.BuiltIn.URL).isValid().orElseThrow(), "ObjectName_subfield");
+		when(urlAddressableMock.extractUrl(baseKey, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, urlAdapterMock, urlAddressableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals("https://example.com", result.get(baseKey));
+
+		// Verify
+		verify(urlAddressableMock, atLeastOnce()).extractUrl(any(), any());
 	}
 
 
