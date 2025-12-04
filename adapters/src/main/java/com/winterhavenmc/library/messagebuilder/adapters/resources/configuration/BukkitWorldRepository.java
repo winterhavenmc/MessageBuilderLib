@@ -39,7 +39,7 @@ public final class BukkitWorldRepository implements WorldRepository
 	private final SpawnLocationResolver spawnLocationResolver;
 	private final Supplier<EnabledWorldsSetting> enabledWorldsSupplier;
 
-	static final String UNKNOWN_WORLD = "\uD83C\uDF10";
+	static final String UNKNOWN_WORLD = "🌐";
 	static final String CONSOLE_SENDER = "console";
 	static final String ENABLED_WORLDS_KEY = "enabled-worlds";
 	static final String DISABLED_WORLDS_KEY = "disabled-worlds";
