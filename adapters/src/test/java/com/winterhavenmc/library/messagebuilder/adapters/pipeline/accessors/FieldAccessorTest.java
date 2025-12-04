@@ -17,8 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.pluralname.PluralNameAdapter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.FieldAccessor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.pluralname.PluralNameable;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
@@ -91,11 +93,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class FieldAccessorTest
 {
-	@Mock DisplayNameAdapter displayNameAdapterMock;
 	@Mock Player playerMock;
 	@Mock World worldMock;
+	@Mock DisplayNameAdapter displayNameAdapterMock;
+	@Mock PluralNameAdapter pluralNameAdapterMock;
 
 	@Mock DisplayNameable displayNameableMock;
+	@Mock PluralNameable pluralNameableMock;
 	@Mock Identifiable identifiableMock;
 	@Mock Locatable locatableMock;
 
@@ -139,6 +143,31 @@ class FieldAccessorTest
 
 		// Verify
 		verify(displayNameableMock, atLeastOnce()).extractDisplayName(any(), any());
+	}
+
+
+	@Test
+	@DisplayName("PluralNameAdapter adapts PluralNameable objects.")
+	void PluralNameAdapter_adapts_PluralNameable_objects()
+	{
+		// Arrange
+		MacroStringMap expected = new MacroStringMap();
+		expected.put(baseKey, "PluralName");
+		expected.put(baseKey.append(Accessor.BuiltIn.PLURAL_NAME).isValid().orElseThrow(), "PluralName_subfield");
+		when(pluralNameableMock.getPluralName()).thenReturn("PluralName");
+		when(pluralNameableMock.extractPluralName(baseKey, adapterContextContainerMock)).thenReturn(expected);
+
+		// Act
+		MacroStringMap result = extractor.extract(baseKey, pluralNameAdapterMock, pluralNameableMock);
+
+		// Assert
+		assertEquals(2, result.size());
+		assertNotNull(result.get(baseKey));
+		assertEquals("PluralName", result.get(baseKey));
+		assertTrue(result.containsKey(baseKey.append(Accessor.BuiltIn.PLURAL_NAME).isValid().orElseThrow()));
+
+		// Verify
+		verify(pluralNameableMock, atLeastOnce()).extractPluralName(any(), any());
 	}
 
 
