@@ -1,13 +1,15 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
+
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
