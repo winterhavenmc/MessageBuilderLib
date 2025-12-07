@@ -3,7 +3,6 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.*;
 
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
 
 
 public final class YamlSoundResourceManager implements ResourceManager
@@ -19,35 +18,6 @@ public final class YamlSoundResourceManager implements ResourceManager
 		this.resourceLoader = resourceLoader;
 
 		reload();
-	}
-
-
-	YamlSoundResourceManager(final ResourceLoader resourceLoader,
-							 final ResourceInstaller resourceInstaller,
-							 final FileConfiguration configuration)
-	{
-		this.resourceInstaller = resourceInstaller;
-		this.resourceLoader = resourceLoader;
-		this.soundConfiguration = configuration;
-	}
-
-
-	/**
-	 * reload sound configuration from yaml file in plugin data folder
-	 */
-	@Override
-	public boolean reload()
-	{
-		resourceInstaller.install();
-		Configuration soundConfiguration = resourceLoader.load();
-
-		if (soundConfiguration != null)
-		{
-			this.soundConfiguration = soundConfiguration;
-			return true;
-		}
-
-		return false;
 	}
 
 
@@ -72,6 +42,25 @@ public final class YamlSoundResourceManager implements ResourceManager
 	public void installResources()
 	{
 		resourceInstaller.install();
+	}
+
+
+	/**
+	 * reload sound configuration from yaml file in plugin data folder
+	 */
+	@Override
+	public boolean reload()
+	{
+		resourceInstaller.install();
+		Configuration soundConfiguration = resourceLoader.load();
+
+		if (soundConfiguration != null)
+		{
+			this.soundConfiguration = soundConfiguration;
+			return true;
+		}
+
+		return false;
 	}
 
 }
