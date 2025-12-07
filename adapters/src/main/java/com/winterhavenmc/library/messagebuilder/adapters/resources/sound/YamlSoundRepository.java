@@ -137,7 +137,7 @@ public final class YamlSoundRepository implements SoundRepository
 	@Override
 	public String getBukkitSoundName(final String key)
 	{
-		return this.configurationProvider.getConfiguration().getString(key + ".sound");
+		return this.configurationProvider.getConfiguration().getString(key + "." + Field.SOUND_NAME);
 	}
 
 
