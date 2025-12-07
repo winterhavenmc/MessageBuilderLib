@@ -54,7 +54,7 @@ class YamlConstantRepositoryTest
 	SectionProvider languageSectionProvider;
 	YamlConstantRepository constantRepository;
 
-	java.lang.String configString = """
+	String configString = """
 		CONSTANTS:
 		  TIME:
 		    LESS_THAN: "less than {DURATION}"
