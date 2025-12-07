@@ -27,7 +27,7 @@ class YamlSoundResourceManagerTest
 	}
 
 	@Test
-	void getSectionProvider()
+	void getSectionProvider_returns_valid_section_provider()
 	{
 		YamlSoundResourceManager soundResourceManager = new YamlSoundResourceManager(resourceInstallerMock, resourceLoaderMock);
 		var result = soundResourceManager.getSectionProvider("COMMAND_SUCCESS");
