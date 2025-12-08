@@ -90,6 +90,7 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 		return String.join("/", RESOURCE_SUBDIRECTORY.toString(), languageTag.toString()) + ".yml";
 	}
 
+
 	/**
 	 * Retrieve the name of the potential language resource file as installed in the plugin data directory, as a Section.
 	 *

@@ -33,7 +33,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -144,11 +143,9 @@ class YamlLanguageResourceManagerTest
 
 
 		@Test
-		@Disabled
-		void reload_failure_returnsFalse()
+		void reload_failure_returns_false()
 		{
 			// Arrange
-			when(languageSectionProviderMock.getSection()).thenReturn(languageConfiguration);
 			YamlLanguageResourceLoader loader = new YamlLanguageResourceLoader(pluginMock, configRepositoryMock)
 			{
 				@Override
@@ -165,16 +162,12 @@ class YamlLanguageResourceManagerTest
 
 			// Assert
 			assertFalse(result);
-
-			// Verify
-			verify(languageSectionProviderMock, atLeastOnce()).getSection();
 		}
 	}
 
 
 	@Test
-	@Disabled
-	void getResourceName_returns_only_valid_string()
+	void getResourceName_returns_valid_string()
 	{
 		// Arrange
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
@@ -186,15 +179,27 @@ class YamlLanguageResourceManagerTest
 
 
 	@Test
-	@Disabled
-	void getFileName_returns_only_valid_string()
+	void getFileName_returns_valid_string()
 	{
 		// Arrange
 		LanguageTag languageTag = LanguageTag.of(Locale.US).orElseThrow();
 
-		// Act & Assert
-		assertEquals("language" + File.separator + "en-US.yml", YamlLanguageResourceManager.getFileName(languageTag));
-		assertNotEquals("language" + File.separator + "fr-FR.yml", YamlLanguageResourceManager.getFileName(languageTag));
+		// Act
+		var result = YamlLanguageResourceManager.getFileName(languageTag);
+
+		// Assert
+		assertEquals("language" + File.separator + "en-US.yml", result);
+	}
+
+
+	@Test
+	void getConfigurationProviderTest()
+	{
+		// Act
+		var result = resourceManager.getConfigurationProvider();
+
+		// Assert
+		assertInstanceOf(Configuration.class, result.getConfiguration());
 	}
 
 }
