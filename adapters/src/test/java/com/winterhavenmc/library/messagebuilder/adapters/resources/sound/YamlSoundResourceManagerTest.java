@@ -20,33 +20,52 @@ class YamlSoundResourceManagerTest
 	@Test
 	void getConfigurationProvider_returns_valid_configuration_provider()
 	{
+		// Arrange
 		YamlSoundResourceManager soundResourceManager = new YamlSoundResourceManager(resourceInstallerMock, resourceLoaderMock);
+
+		// Act
 		var result = soundResourceManager.getConfigurationProvider();
 
+		// Assert
 		assertInstanceOf(YamlSoundConfigurationProvider.class, result);
 	}
 
 	@Test
 	void installResources()
 	{
+		// Arrange
+		YamlSoundResourceManager soundResourceManager = new YamlSoundResourceManager(resourceInstallerMock, resourceLoaderMock);
+
+		// Act
+		soundResourceManager.installResources();
+
+		// Assert
 	}
 
 	@Test
 	@Disabled("needs return values for resourceLoaderMock method(s)")
 	void reload_returns_true_on_success()
 	{
+		// Arrange
 		YamlSoundResourceManager soundResourceManager = new YamlSoundResourceManager(resourceInstallerMock, resourceLoaderMock);
+
+		// Act
 		var result = soundResourceManager.reload();
 
+		// Assert
 		assertTrue(result);
 	}
 
 	@Test
 	void reload_returns_false_on_failure()
 	{
+		// Arrange
 		YamlSoundResourceManager soundResourceManager = new YamlSoundResourceManager(resourceInstallerMock, resourceLoaderMock);
+
+		// Act
 		var result = soundResourceManager.reload();
 
+		// Assert
 		assertFalse(result);
 	}
 
