@@ -1,12 +1,12 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.*;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundResourceManager;
 
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
 
 
-public final class YamlSoundResourceManager implements ResourceManager
+public final class YamlSoundResourceManager implements SoundResourceManager
 {
 	private final ResourceLoader resourceLoader;
 	private final ResourceInstaller resourceInstaller;
@@ -22,13 +22,20 @@ public final class YamlSoundResourceManager implements ResourceManager
 	}
 
 
-	YamlSoundResourceManager(final ResourceLoader resourceLoader,
-							 final ResourceInstaller resourceInstaller,
-							 final FileConfiguration configuration)
+	@Override
+	public ConfigurationProvider getConfigurationProvider()
 	{
-		this.resourceInstaller = resourceInstaller;
-		this.resourceLoader = resourceLoader;
-		this.soundConfiguration = configuration;
+		return new YamlSoundConfigurationProvider(() -> soundConfiguration);
+	}
+
+
+	/**
+	 * Installs sound resource files if not already present in the plugin data folder
+	 */
+	@Override
+	public void installResources()
+	{
+		resourceInstaller.install();
 	}
 
 
@@ -48,30 +55,6 @@ public final class YamlSoundResourceManager implements ResourceManager
 		}
 
 		return false;
-	}
-
-
-	@Override
-	public ConfigurationProvider getConfigurationProvider()
-	{
-		return new YamlSoundConfigurationProvider(() -> soundConfiguration);
-	}
-
-
-	@Override
-	public SectionProvider getSectionProvider(String sectionName)
-	{
-		return new YamlSoundSectionProvider(() -> soundConfiguration, sectionName);
-	}
-
-
-	/**
-	 * Installs sound resource files if not already present in the plugin data folder
-	 */
-	@Override
-	public void installResources()
-	{
-		resourceInstaller.install();
 	}
 
 }

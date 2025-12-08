@@ -82,7 +82,7 @@ class YamlConstantRepositoryTest
 		languageConfig.loadFromString(configString);
 
 		Supplier<Configuration> configurationSupplier = () -> languageConfig;
-		when(languageResourceManagerMock.getSectionProvider(Section.CONSTANTS.name())).thenReturn(languageSectionProviderMock);
+		when(languageResourceManagerMock.getSectionProvider(Section.CONSTANTS)).thenReturn(languageSectionProviderMock);
 		ConfigurationSection section = languageConfig.getConfigurationSection(Section.CONSTANTS.name());
 		when(languageSectionProviderMock.getSection()).thenReturn(section);
 		constantRepository = new YamlConstantRepository(languageResourceManagerMock);

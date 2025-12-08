@@ -15,7 +15,10 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.core.ports.resources;
+package com.winterhavenmc.library.messagebuilder.core.ports.resources.sound;
+
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
 
 /**
@@ -23,22 +26,6 @@ package com.winterhavenmc.library.messagebuilder.core.ports.resources;
  * from the plugin jar file to the plugin data directory, as well as loading and reloading
  * the installed files at startup or issuance of the {@code reload} command.
  */
-public interface ResourceManager
+public interface SoundResourceManager extends ResourceManager
 {
-	ConfigurationProvider getConfigurationProvider();
-
-
-	/**
-	 * Installs any language resource files listed in auto-install.txt if they are not already installed.
-	 */
-	void installResources();
-
-
-	/**
-	 * Reload resource into a bukkit Configuration object
-	 *
-	 * @return true if successful, false if not
-	 */
-	boolean reload();
-
 }

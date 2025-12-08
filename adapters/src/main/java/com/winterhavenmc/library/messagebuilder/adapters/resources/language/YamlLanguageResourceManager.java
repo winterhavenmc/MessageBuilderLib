@@ -19,7 +19,9 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.*;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
+import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import org.bukkit.configuration.Configuration;
 
 import java.io.File;
@@ -40,7 +42,7 @@ import static com.winterhavenmc.library.messagebuilder.adapters.resources.langua
  * globally, anywhere within this library using this static method.
  * 
  */
-public final class YamlLanguageResourceManager implements ResourceManager
+public final class YamlLanguageResourceManager implements LanguageResourceManager
 {
 	private final ResourceLoader resourceLoader;
 	private final ResourceInstaller resourceInstaller;
@@ -130,9 +132,9 @@ public final class YamlLanguageResourceManager implements ResourceManager
 	 * @return the configuration provider
 	 */
 	@Override
-	public SectionProvider getSectionProvider(String sectionName)
+	public SectionProvider getSectionProvider(Section section)
 	{
-		return new YamlLanguageSectionProvider(() -> languageConfiguration, sectionName);
+		return new YamlLanguageSectionProvider(() -> languageConfiguration, section);
 	}
 
 
