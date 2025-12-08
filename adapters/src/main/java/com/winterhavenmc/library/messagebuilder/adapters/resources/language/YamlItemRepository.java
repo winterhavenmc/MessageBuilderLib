@@ -17,10 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceManager;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
 import com.winterhavenmc.library.messagebuilder.models.keys.*;
 import com.winterhavenmc.library.messagebuilder.models.language.*;
@@ -62,13 +62,13 @@ public final class YamlItemRepository implements ItemRepository
 	private final MiniMessage miniMessage;
 
 
-	public YamlItemRepository(final Plugin plugin, final ResourceManager languageResourceManager)
+	public YamlItemRepository(final Plugin plugin, final LanguageResourceManager languageResourceManager)
 	{
 		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
 		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
 
 		this.plugin = plugin;
-		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS.name());
+		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS);
 		this.namespacedKey = new NamespacedKey(plugin, ITEM_KEY_STRING);
 		this.miniMessage = MiniMessage.miniMessage();
 	}

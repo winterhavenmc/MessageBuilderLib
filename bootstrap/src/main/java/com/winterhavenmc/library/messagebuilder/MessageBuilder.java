@@ -144,7 +144,7 @@ public final class MessageBuilder
 		final ConfigRepository configRepository = createConfigRepository(plugin);
 
 		// create language resource manager and repositories
-		final ResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
+		final LanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
 		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
