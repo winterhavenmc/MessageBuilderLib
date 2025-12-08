@@ -25,6 +25,15 @@ package com.winterhavenmc.library.messagebuilder.core.ports.resources;
  */
 public interface ResourceManager
 {
+	ConfigurationProvider getConfigurationProvider();
+
+
+	/**
+	 * Installs any language resource files listed in auto-install.txt if they are not already installed.
+	 */
+	void installResources();
+
+
 	/**
 	 * Reload resource into a bukkit Configuration object
 	 *
@@ -32,13 +41,4 @@ public interface ResourceManager
 	 */
 	boolean reload();
 
-	ConfigurationProvider getConfigurationProvider();
-
-	SectionProvider getSectionProvider(final String sectionName);
-
-
-	/**
-	 * Installs any language resource files listed in auto-install.txt if they are not already installed.
-	 */
-	void installResources();
 }
