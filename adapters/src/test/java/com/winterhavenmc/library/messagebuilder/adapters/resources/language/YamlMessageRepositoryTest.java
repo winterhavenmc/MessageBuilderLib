@@ -66,7 +66,7 @@ class YamlMessageRepositoryTest
 		languageConfig.loadFromString(configString);
 
 		Supplier<Configuration> configurationSupplier = () -> languageConfig;
-		languageSectionProvider = new YamlLanguageSectionProvider(configurationSupplier, Section.MESSAGES.name());
+		languageSectionProvider = new YamlLanguageSectionProvider(configurationSupplier, Section.MESSAGES);
 	}
 
 
@@ -74,7 +74,7 @@ class YamlMessageRepositoryTest
 	void getMessageRecord_returns_invalid_record_when_no_entry_for_key()
 	{
 		// Arrange
-		when(languageResourceManagerMock.getSectionProvider(Section.MESSAGES.name())).thenReturn(languageSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.MESSAGES)).thenReturn(languageSectionProvider);
 		ValidMessageKey validMessageKey = MessageKey.of("KEY").isValid().orElseThrow();
 
 		// Act
@@ -91,7 +91,7 @@ class YamlMessageRepositoryTest
 	void getMessageRecord_with_valid_parameter_returns_ValidMessageRecord()
 	{
 		// Arrange
-		when(languageResourceManagerMock.getSectionProvider(Section.MESSAGES.name())).thenReturn(languageSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.MESSAGES)).thenReturn(languageSectionProvider);
 		ValidMessageKey validMessageKey = MessageKey.of("TEST_MESSAGE").isValid().orElseThrow();
 
 		// Act

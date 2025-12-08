@@ -93,7 +93,7 @@ class YamlLanguageResourceManagerTest
 
 	@ParameterizedTest
 	@EnumSource(Section.class)
-	void getSectionProvider(Section string)
+	void getSectionProvider(Section section)
 	{
 		// Arrange
 		lenient().when(languageConfigurationMock.getConfigurationSection("MESSAGES")).thenReturn(messagesSectionMock);
@@ -101,7 +101,7 @@ class YamlLanguageResourceManagerTest
 		lenient().when(languageConfigurationMock.getConfigurationSection("CONSTANTS")).thenReturn(constantsSectionMock);
 
 		// Act
-		SectionProvider sectionProvider = resourceManager.getSectionProvider(string.name());
+		SectionProvider sectionProvider = resourceManager.getSectionProvider(section);
 
 		// Assert
 		assertNotNull(sectionProvider);

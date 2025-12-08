@@ -47,7 +47,7 @@ class YamlLanguageStringProviderTest
 	void setUp()
 	{
 		Supplier<Configuration> configSupplier = () -> configuration;
-		provider = new YamlLanguageSectionProvider(configSupplier, Section.MESSAGES.toString());
+		provider = new YamlLanguageSectionProvider(configSupplier, Section.MESSAGES);
 	}
 
 	@Test

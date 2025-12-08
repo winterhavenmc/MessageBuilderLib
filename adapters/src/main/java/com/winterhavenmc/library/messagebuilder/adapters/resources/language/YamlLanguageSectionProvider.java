@@ -19,6 +19,7 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
+import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -28,20 +29,20 @@ import java.util.function.Supplier;
 public final class YamlLanguageSectionProvider implements SectionProvider
 {
 	private final Supplier<Configuration> configurationSupplier;
-	private final String sectionName;
+	private final Section section;
 
 
-	public YamlLanguageSectionProvider(final Supplier<Configuration> configurationSupplier, final String sectionName)
+	public YamlLanguageSectionProvider(final Supplier<Configuration> configurationSupplier, final Section section)
 	{
 		this.configurationSupplier = configurationSupplier;
-		this.sectionName = sectionName;
+		this.section = section;
 	}
 
 
 	@Override
 	public ConfigurationSection getSection()
 	{
-		return configurationSupplier.get().getConfigurationSection(sectionName);
+		return configurationSupplier.get().getConfigurationSection(section.name());
 	}
 
 }

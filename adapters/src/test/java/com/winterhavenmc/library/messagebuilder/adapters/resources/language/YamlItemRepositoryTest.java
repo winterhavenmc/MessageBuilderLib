@@ -47,7 +47,7 @@ class YamlItemRepositoryTest
 						""";
 
 	FileConfiguration configuration = new YamlConfiguration();
-	YamlLanguageSectionProvider itemSectionProvider = new YamlLanguageSectionProvider(() -> configuration, Section.ITEMS.name());
+	YamlLanguageSectionProvider itemSectionProvider = new YamlLanguageSectionProvider(() -> configuration, Section.ITEMS);
 
 
 	@Test
@@ -56,7 +56,7 @@ class YamlItemRepositoryTest
 		// Arrange
 		configuration.loadFromString(configString);
 		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS.name())).thenReturn(itemSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
@@ -67,7 +67,7 @@ class YamlItemRepositoryTest
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getName();
-		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS.name());
+		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
 	}
 
 
@@ -76,7 +76,7 @@ class YamlItemRepositoryTest
 	{
 		// Arrange
 		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS.name())).thenReturn(itemSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
@@ -87,7 +87,7 @@ class YamlItemRepositoryTest
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getName();
-		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS.name());
+		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
 	}
 
 
@@ -98,7 +98,7 @@ class YamlItemRepositoryTest
 		// Arrange
 		configuration.loadFromString(configString);
 		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS.name())).thenReturn(itemSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
@@ -132,7 +132,7 @@ class YamlItemRepositoryTest
 		// Arrange
 		configuration.loadFromString(configString);
 		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS.name())).thenReturn(itemSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
@@ -144,7 +144,7 @@ class YamlItemRepositoryTest
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getName();
-		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS.name());
+		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
 	}
 
 
@@ -154,7 +154,7 @@ class YamlItemRepositoryTest
 		// Arrange
 		configuration.loadFromString(configString);
 		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS.name())).thenReturn(itemSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
@@ -166,7 +166,7 @@ class YamlItemRepositoryTest
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getName();
-		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS.name());
+		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
 	}
 
 
@@ -176,7 +176,7 @@ class YamlItemRepositoryTest
 		// Arrange
 		configuration.loadFromString(configString);
 		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS.name())).thenReturn(itemSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
@@ -188,7 +188,7 @@ class YamlItemRepositoryTest
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getName();
-		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS.name());
+		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
 	}
 
 
@@ -200,7 +200,7 @@ class YamlItemRepositoryTest
 		ItemStack itemStack = new ItemStack(Material.STONE);
 		configuration.loadFromString(configString);
 		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS.name())).thenReturn(itemSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
@@ -211,7 +211,7 @@ class YamlItemRepositoryTest
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getName();
-		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS.name());
+		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
 	}
 
 
@@ -222,7 +222,7 @@ class YamlItemRepositoryTest
 		// Arrange
 		configuration.loadFromString(configString);
 		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS.name())).thenReturn(itemSectionProvider);
+		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
