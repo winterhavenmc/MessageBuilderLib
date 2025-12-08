@@ -174,7 +174,7 @@ public final class YamlItemRepository implements ItemRepository
 	}
 
 
-	public Optional<String> getItemKeyString(ItemStack itemStack)
+	private Optional<String> getItemKeyString(ItemStack itemStack)
 	{
 		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
 				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
