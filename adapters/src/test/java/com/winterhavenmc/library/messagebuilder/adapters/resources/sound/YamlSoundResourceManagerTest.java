@@ -1,5 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.resources.ConfigurationProvider;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,11 +25,12 @@ class YamlSoundResourceManagerTest
 		YamlSoundResourceManager soundResourceManager = new YamlSoundResourceManager(resourceInstallerMock, resourceLoaderMock);
 
 		// Act
-		var result = soundResourceManager.getConfigurationProvider();
+		ConfigurationProvider result = soundResourceManager.getConfigurationProvider();
 
 		// Assert
 		assertInstanceOf(YamlSoundConfigurationProvider.class, result);
 	}
+
 
 	@Test
 	void installResources()
