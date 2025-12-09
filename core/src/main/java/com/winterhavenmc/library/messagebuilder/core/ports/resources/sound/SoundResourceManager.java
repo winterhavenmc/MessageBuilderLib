@@ -18,7 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.resources.sound;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
 
 /**
