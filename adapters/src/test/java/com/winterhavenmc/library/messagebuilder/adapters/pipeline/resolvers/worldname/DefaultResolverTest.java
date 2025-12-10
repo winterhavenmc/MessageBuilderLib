@@ -25,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.UNKNOWN_WORLD;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -36,7 +37,7 @@ class DefaultResolverTest
 
 
 	@Test
-	void resolveWorldName()
+	void resolve_returns_valid_world_name_given_valid_world()
 	{
 		// Arrange
 		when(worldMock.getName()).thenReturn("test_world");
@@ -50,6 +51,20 @@ class DefaultResolverTest
 
 		// Verify
 		verify(worldMock, atLeastOnce()).getName();
+	}
+
+
+	@Test
+	void resolve_returns_unknown_world_symbol_given_invalid_world()
+	{
+		// Arrange
+		WorldNameResolver resolver = new DefaultResolver();
+
+		// Act
+		String result = resolver.resolve(null);
+
+		// Assert
+		assertEquals(UNKNOWN_WORLD.symbol(), result);
 	}
 
 }
