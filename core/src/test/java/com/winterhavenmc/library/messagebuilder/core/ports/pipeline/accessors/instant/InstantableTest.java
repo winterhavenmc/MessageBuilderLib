@@ -21,6 +21,12 @@ import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
@@ -45,9 +51,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class InstantableTest
 {
-	@Mock AccessorCtx ctxMock;
-	@Mock FormatterCtx formatterContainerMock;
 	@Mock ConfigRepository configRepositoryMock;
+	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock ItemNameResolver itemNameResolverMock;
+	@Mock ItemDisplayNameResolver itemDisplayNameResolver;
+	@Mock ItemPluralNameResolver itemPluralNameResolver;
+	@Mock DurationFormatter durationFormatterMock;
+	@Mock NumberFormatter numberFormatterMock;
+
 
 	static class TestObject implements Instantable
 	{
@@ -91,13 +102,14 @@ class InstantableTest
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 		ValidMacroKey subKey = baseKey.append("INSTANT").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
-		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock, itemDisplayNameResolver,
+				itemPluralNameResolver, formatterCtx);
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
 		when(configRepositoryMock.dateLocale()).thenReturn(Locale.US);
 
 		// Act
-		MacroStringMap result = testObject.extractInstant(baseKey, FormatStyle.MEDIUM, ctxMock);
+		MacroStringMap result = testObject.extractInstant(baseKey, FormatStyle.MEDIUM, accessorCtx);
 
 		// Assert
 		assertEquals("Jan 1, 1970, 12:00:00 AM", result.get(subKey));
