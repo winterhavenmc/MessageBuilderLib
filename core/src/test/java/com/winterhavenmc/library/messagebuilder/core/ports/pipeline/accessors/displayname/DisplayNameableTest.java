@@ -18,8 +18,16 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.displayname;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -37,7 +45,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class DisplayNameableTest
 {
-	@Mock AccessorCtx ctxMock;
+	@Mock ConfigRepository configRepositoryMock;
+	@Mock DurationFormatter durationFormatterMock;
+	@Mock NumberFormatter numberFormatterMock;
+	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock ItemNameResolver itemNameResolverMock;
+	@Mock ItemDisplayNameResolver itemDisplayNameResolverMock;
+	@Mock ItemPluralNameResolver itemPluralNameResolver;
+
 
 	static class TestObject implements DisplayNameable
 	{
@@ -81,9 +96,12 @@ class DisplayNameableTest
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 		ValidMacroKey subKey = baseKey.append("DISPLAY_NAME").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
+				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 
 		// Act
-		MacroStringMap result = testObject.extractDisplayName(baseKey, ctxMock);
+		MacroStringMap result = testObject.extractDisplayName(baseKey, accessorCtx);
 
 		// Assert
 		assertEquals("Display Name", result.get(subKey));

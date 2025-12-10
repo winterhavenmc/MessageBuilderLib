@@ -21,8 +21,14 @@ import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name.Nameable;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -42,9 +48,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class QuantifiableTest
 {
-	@Mock AccessorCtx ctxMock;
-	@Mock FormatterCtx formatterContainerMock;
 	@Mock NumberFormatter numberFormatterMock;
+	@Mock ConfigRepository configRepositoryMock;
+	@Mock DurationFormatter durationFormatterMock;
+	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock ItemNameResolver itemNameResolverMock;
+	@Mock ItemDisplayNameResolver itemDisplayNameResolver;
+	@Mock ItemPluralNameResolver itemPluralNameResolver;
+
 
 	static class TestObject implements Quantifiable
 	{
@@ -59,7 +70,12 @@ class QuantifiableTest
 	@Test
 	void object_is_instance_of_Quantifiable()
 	{
-		// Arrange & Act
+		// Arrange
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock, itemDisplayNameResolver,
+				itemPluralNameResolver, formatterCtx);
+
+		// Act
 		TestObject testObject = new TestObject();
 
 		// Assert
@@ -88,12 +104,13 @@ class QuantifiableTest
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 		ValidMacroKey subKey = baseKey.append("QUANTITY").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
-		when(formatterContainerMock.localeNumberFormatter()).thenReturn(numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock, itemDisplayNameResolver,
+				itemPluralNameResolver, formatterCtx);
 		when(numberFormatterMock.format(42)).thenReturn("42");
 
 		// Act
-		MacroStringMap result = testObject.extractQuantity(baseKey, ctxMock);
+		MacroStringMap result = testObject.extractQuantity(baseKey, accessorCtx);
 
 		// Assert
 		assertEquals("42", result.get(subKey));

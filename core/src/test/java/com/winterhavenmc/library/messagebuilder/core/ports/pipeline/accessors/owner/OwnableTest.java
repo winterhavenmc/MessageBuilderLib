@@ -18,8 +18,16 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.owner;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
@@ -42,8 +50,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OwnableTest
 {
-	@Mock AccessorCtx ctxMock;
 	@Mock Player playerMock;
+	@Mock ConfigRepository configRepositoryMock;
+	@Mock DurationFormatter durationFormatterMock;
+	@Mock NumberFormatter numberFormatterMock;
+	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock ItemNameResolver itemNameResolverMock;
+	@Mock ItemDisplayNameResolver itemDisplayNameResolverMock;
+	@Mock ItemPluralNameResolver itemPluralNameResolver;
 
 
 	class TestObject implements Ownable
@@ -90,8 +104,12 @@ class OwnableTest
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Owner");
 
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock, itemDisplayNameResolverMock,
+				itemPluralNameResolver, formatterCtx);
+
 		// Act
-		MacroStringMap result = testObject.extractOwner(baseKey, ctxMock);
+		MacroStringMap result = testObject.extractOwner(baseKey, accessorCtx);
 
 		// Assert
 		assertEquals("Owner", result.get(subKey));
