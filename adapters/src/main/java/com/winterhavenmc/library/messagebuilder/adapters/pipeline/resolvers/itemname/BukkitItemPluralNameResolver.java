@@ -57,7 +57,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 				.flatMap(item ->
 						resolveCustomItem(item, miniMessage)
 								.or(() -> resolveDisplayName(item))
-								.or(() -> resolveItemName(item))
+								.or(() -> resolveName(item))
 				)
 				.orElse("");
 	}
@@ -114,7 +114,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private Optional<String> resolveItemName(ItemStack itemStack)
+	private Optional<String> resolveName(ItemStack itemStack)
 	{
 		return Optional.ofNullable(itemStack.getItemMeta())
 				.filter(ItemMeta::hasItemName)
