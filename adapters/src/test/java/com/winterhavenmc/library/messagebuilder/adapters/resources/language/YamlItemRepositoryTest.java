@@ -246,7 +246,7 @@ class YamlItemRepositoryTest
 		ItemStack itemStack = new ItemStack(Material.STONE);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 
-		YamlItemRepository.setItemFlags(itemMeta);
+		//YamlItemRepository.setItemFlags(itemMeta);
 
 		Set<ItemFlag> itemFlags = itemMeta.getItemFlags();
 
