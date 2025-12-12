@@ -64,7 +64,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private Optional<String> resolveCustomItem(ItemStack stack, MiniMessage miniMessage)
+	private Optional<String> resolveCustomItem(final ItemStack stack, final MiniMessage miniMessage)
 	{
 		if (!itemRepository.isItem(stack)) return Optional.empty();
 
@@ -74,7 +74,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private Optional<ValidItemKey> getValidKey(ItemStack itemStack)
+	private Optional<ValidItemKey> getValidKey(final ItemStack itemStack)
 	{
 		return Optional.ofNullable(itemRepository.key(itemStack))
 				.filter(ValidItemKey.class::isInstance)
@@ -82,7 +82,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private Optional<ValidItemRecord> getValidRecord(ValidItemKey key)
+	private Optional<ValidItemRecord> getValidRecord(final ValidItemKey key)
 	{
 		return itemRepository.getRecordOpt(key)
 				.filter(ValidItemRecord.class::isInstance)
@@ -90,7 +90,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private String deserializePluralName(ValidItemRecord record, ItemStack stack, MiniMessage miniMessage)
+	private String deserializePluralName(final ValidItemRecord record, final ItemStack stack, final MiniMessage miniMessage)
 	{
 		String pluralString = record.pluralName().replaceAll(
 				Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE),
@@ -106,7 +106,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private Optional<String> resolveDisplayName(ItemStack itemStack)
+	private Optional<String> resolveDisplayName(final ItemStack itemStack)
 	{
 		return Optional.ofNullable(itemStack.getItemMeta())
 				.filter(ItemMeta::hasDisplayName)
@@ -115,7 +115,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private Optional<String> resolveName(ItemStack itemStack)
+	private Optional<String> resolveName(final ItemStack itemStack)
 	{
 		return Optional.ofNullable(itemStack.getItemMeta())
 				.filter(ItemMeta::hasItemName)
