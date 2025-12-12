@@ -64,13 +64,13 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private Optional<String> resolveCustomItem(final ItemStack stack, final MiniMessage miniMessage)
+	private Optional<String> resolveCustomItem(final ItemStack itemStack, final MiniMessage miniMessage)
 	{
-		if (!itemRepository.isItem(stack)) return Optional.empty();
+		if (!itemRepository.isItem(itemStack)) return Optional.empty();
 
-		return getValidKey(stack)
+		return getValidKey(itemStack)
 				.flatMap(this::getValidRecord)
-				.map(record -> deserializePluralName(record, stack, miniMessage));
+				.map(record -> deserializePluralName(record, itemStack, miniMessage));
 	}
 
 
