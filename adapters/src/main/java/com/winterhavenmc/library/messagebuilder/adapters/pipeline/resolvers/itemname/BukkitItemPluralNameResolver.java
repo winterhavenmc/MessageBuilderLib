@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 
 public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 {
+	private final static String EMPTY_STRING = "";
 	private final ItemRepository itemRepository;
 
 
@@ -59,7 +60,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 								.or(() -> resolveDisplayName(item))
 								.or(() -> resolveName(item))
 				)
-				.orElse("");
+				.orElse(EMPTY_STRING);
 	}
 
 
@@ -101,7 +102,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 				Formatter.choice("choice", stack.getAmount())
 		);
 
-		return YamlItemRepository.LEGACY_SERIALIZER.serializeOr(component, "");
+		return YamlItemRepository.LEGACY_SERIALIZER.serializeOr(component, EMPTY_STRING);
 	}
 
 
