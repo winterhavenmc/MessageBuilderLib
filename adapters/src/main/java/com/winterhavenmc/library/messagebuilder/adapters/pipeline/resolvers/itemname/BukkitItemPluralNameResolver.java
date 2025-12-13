@@ -90,23 +90,23 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private String deserializePluralName(final ValidItemRecord record, final ItemStack stack, final MiniMessage miniMessage)
+	private String deserializePluralName(final ValidItemRecord record, final ItemStack itemStack, final MiniMessage miniMessage)
 	{
 		String pluralString = record.pluralName().replaceAll(
 				Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE),
-				String.valueOf(stack.getAmount())
+				String.valueOf(itemStack.getAmount())
 		);
 
 		Component component = miniMessage.deserialize(
 				pluralString,
-				Formatter.choice("choice", stack.getAmount())
+				Formatter.choice("choice", itemStack.getAmount())
 		);
 
 		return YamlItemRepository.LEGACY_SERIALIZER.serializeOr(component, EMPTY_STRING);
 	}
 
 
-	private Optional<String> resolveDisplayName(final ItemStack itemStack)
+	Optional<String> resolveDisplayName(final ItemStack itemStack)
 	{
 		return Optional.ofNullable(itemStack.getItemMeta())
 				.filter(ItemMeta::hasDisplayName)
@@ -115,7 +115,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	}
 
 
-	private Optional<String> resolveName(final ItemStack itemStack)
+	Optional<String> resolveName(final ItemStack itemStack)
 	{
 		return Optional.ofNullable(itemStack.getItemMeta())
 				.filter(ItemMeta::hasItemName)
