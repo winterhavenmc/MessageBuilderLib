@@ -22,6 +22,7 @@ com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.killer
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.looter
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.expiration
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.name
+com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers
 com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname
