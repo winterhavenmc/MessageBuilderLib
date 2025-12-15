@@ -1,15 +1,11 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord;
 
 import com.winterhavenmc.library.messagebuilder.models.language.item.ValidItemRecord;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,14 +14,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -79,39 +70,63 @@ class BukkitItemPluralNameResolverTest
 //	}
 
 
-	//TODO: this test is not finished
-	@Test
-	@Disabled
-	void resolve_with_quantity_1_item_stack_returns_singular_name() throws InvalidConfigurationException
-	{
-		// Arrange
-		when(pluginMock.getName()).thenReturn("test-plugin");
-
-		NamespacedKey namespacedKey = new NamespacedKey(pluginMock, "ITEM_KEY");
-
-		FileConfiguration languageConfig = new YamlConfiguration();
-		languageConfig.loadFromString(configString);
-
-		ConfigurationSection itemEntry = languageConfig.getConfigurationSection("ITEMS.TEST_ITEM");
-
-		ItemRecord itemRecord = ItemRecord.of(validItemKey, itemEntry);
-
-		ItemPluralNameResolver resolver = new BukkitItemPluralNameResolver(pluginMock, MiniMessage.miniMessage());
-
-		when(itemStackMock.hasItemMeta()).thenReturn(true);
-		when(itemStackMock.getItemMeta()).thenReturn(itemMetaMock);
-		when(itemMetaMock.getPersistentDataContainer()).thenReturn(persistentDataContainerMock);
-		// when(itemStackMock.getAmount()).thenReturn(1);
-		// when(persistentDataContainerMock.has(namespacedKey)).thenReturn(true);
-		// when(itemRecordRepositoryMock.getItemRecord(itemKey)).thenReturn(itemRecord);
+//	@Test
+//	void resolve_returns_valid_plural_name()
+//	{
+//		// Arrange
+//		ItemPluralNameResolver resolver = new BukkitItemPluralNameResolver(itemRepositoryMock, MiniMessage.miniMessage());
+//		when(itemStackMock.hasItemMeta()).thenReturn(true);
+//		when(itemStackMock.getItemMeta()).thenReturn(itemMetaMock);
+//
+////		when(itemRepositoryMock.getRecordOpt(validItemKey)).thenReturn(Optional.of(validItemRecord));
+//
+//		// Act
+//		String result = resolver.resolve(itemStackMock);
+//
+//		// Assert
+////		assertEquals("", result);
+//
+//		// Verify
+//		verify(itemStackMock, atLeastOnce()).hasItemMeta();
+//		verify(itemStackMock, atLeastOnce()).getItemMeta();
+////		verify(itemRepositoryMock, atLeastOnce()).getRecordOpt(validItemKey);
+//	}
 
 
-		// Act
-		String result = resolver.resolve(itemStackMock);
 
-		// Assert
-		assertEquals("one item", result);
-	}
+//	//TODO: this test is not finished
+//	@Test
+//	@Disabled
+//	void resolve_with_quantity_1_item_stack_returns_singular_name() throws InvalidConfigurationException
+//	{
+//		// Arrange
+//		when(pluginMock.getName()).thenReturn("test-plugin");
+//
+//		NamespacedKey namespacedKey = new NamespacedKey(pluginMock, "ITEM_KEY");
+//
+//		FileConfiguration languageConfig = new YamlConfiguration();
+//		languageConfig.loadFromString(configString);
+//
+//		ConfigurationSection itemEntry = languageConfig.getConfigurationSection("ITEMS.TEST_ITEM");
+//
+//		ItemRecord itemRecord = ItemRecord.of(validItemKey, itemEntry);
+//
+//		ItemPluralNameResolver resolver = new BukkitItemPluralNameResolver(pluginMock, MiniMessage.miniMessage());
+//
+//		when(itemStackMock.hasItemMeta()).thenReturn(true);
+//		when(itemStackMock.getItemMeta()).thenReturn(itemMetaMock);
+//		when(itemMetaMock.getPersistentDataContainer()).thenReturn(persistentDataContainerMock);
+//		// when(itemStackMock.getAmount()).thenReturn(1);
+//		// when(persistentDataContainerMock.has(namespacedKey)).thenReturn(true);
+//		// when(itemRecordRepositoryMock.getItemRecord(itemKey)).thenReturn(itemRecord);
+//
+//
+//		// Act
+//		String result = resolver.resolve(itemStackMock);
+//
+//		// Assert
+//		assertEquals("one item", result);
+//	}
 
 
 //	@Test

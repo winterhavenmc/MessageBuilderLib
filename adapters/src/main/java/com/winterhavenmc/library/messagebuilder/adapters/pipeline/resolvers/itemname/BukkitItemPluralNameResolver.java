@@ -17,15 +17,10 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Retriever;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.*;
+import com.winterhavenmc.library.messagebuilder.core.context.NameResolverCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
@@ -33,35 +28,25 @@ import java.util.Optional;
 public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 {
 	private final static String EMPTY_STRING = "";
-	private final ItemNameRetriever nameRetriever;
-	private final ItemDisplayNameRetriever displayNameRetriever;
-	private final Retriever pluralNameRetriever;
+	private final NameResolverCtx ctx;
 
 
-	public BukkitItemPluralNameResolver(final Plugin plugin, final MiniMessage miniMessage)
+	public BukkitItemPluralNameResolver(final NameResolverCtx ctx)
 	{
-		nameRetriever = new ItemNameRetriever();
-		displayNameRetriever = new ItemDisplayNameRetriever();
-		pluralNameRetriever = new PersistentPluralNameRetriever(plugin, miniMessage);
-	}
-
-
-	public BukkitItemPluralNameResolver(final ItemRepository itemRepository, final MiniMessage miniMessage)
-	{
-		nameRetriever = new ItemNameRetriever();
-		displayNameRetriever = new ItemDisplayNameRetriever();
-		pluralNameRetriever = new ItemPluralNameRetriever(itemRepository, miniMessage);
+		this.ctx = ctx;
 	}
 
 
 	public String resolve(final ItemStack itemStack)
 	{
-		return Optional.of(itemStack)
+		return (itemStack != null)
+			? Optional.of(itemStack)
 				.filter(ItemStack::hasItemMeta)
-				.flatMap(item -> pluralNameRetriever.retrieve(item)
-						.or(() -> displayNameRetriever.retrieve(item))
-						.or(() -> nameRetriever.retrieve(item)))
-				.orElse(EMPTY_STRING);
+				.flatMap(item -> ctx.pluralNameRetriever().retrieve(item)
+						.or(() -> ctx.displayNameRetriever().retrieve(item))
+						.or(() -> ctx.nameRetriever().retrieve(item)))
+				.orElse(EMPTY_STRING)
+			: EMPTY_STRING;
 	}
 
 }

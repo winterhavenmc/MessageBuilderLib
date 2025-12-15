@@ -1,6 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Retriever;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.ItemStackNameRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
 
@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 
-public class PersistentPluralNameRetriever implements Retriever
+public class PersistentPluralNameRetriever implements ItemStackNameRetriever
 {
 	private final static String PLURAL_KEY_STRING = "PLURAL_NAME";
 	private final Plugin plugin;
@@ -43,7 +43,7 @@ public class PersistentPluralNameRetriever implements Retriever
 
 				if (persistedPluralName != null && !persistedPluralName.isBlank())
 				{
-					String result = deserializePluralName(persistedPluralName, itemStack.getAmount(), miniMessage);
+					String result = deserializePluralName(persistedPluralName, itemStack.getAmount());
 					return Optional.ofNullable(itemMeta.getPersistentDataContainer().get(pluralKey, PersistentDataType.STRING));
 				}
 			}
@@ -52,7 +52,7 @@ public class PersistentPluralNameRetriever implements Retriever
 	}
 
 
-	String deserializePluralName(final String string, final int amount, final MiniMessage miniMessage)
+	String deserializePluralName(final String string, final int amount)
 	{
 		String pluralString = string.replaceAll(
 				Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE),

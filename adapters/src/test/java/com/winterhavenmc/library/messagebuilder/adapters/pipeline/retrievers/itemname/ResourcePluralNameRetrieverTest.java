@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ItemPluralNameRetrieverTest
+class ResourcePluralNameRetrieverTest
 {
 	@Mock ItemRepository itemRepositoryMock;
 	@Mock ItemStack itemStackMock;
@@ -34,7 +34,7 @@ class ItemPluralNameRetrieverTest
 	ValidItemKey validItemKey;
 	FileConfiguration configuration;
 	ValidItemRecord validItemRecord;
-	ItemPluralNameRetriever retriever;
+	ResourcePluralNameRetriever retriever;
 
 	String configString = """
 						ITEMS:
@@ -59,7 +59,7 @@ class ItemPluralNameRetrieverTest
 		validItemRecord = ItemRecord.of(validItemKey, configuration
 				.getConfigurationSection("ITEMS.TEST_ITEM")).isValid().orElseThrow();
 
-		retriever = new ItemPluralNameRetriever(itemRepositoryMock, miniMessage);
+		retriever = new ResourcePluralNameRetriever(itemRepositoryMock, miniMessage);
 	}
 
 

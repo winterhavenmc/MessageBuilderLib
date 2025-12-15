@@ -1,6 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Retriever;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.retrievers.ItemStackNameRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
@@ -14,13 +14,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public class ItemPluralNameRetriever implements Retriever
+public class ResourcePluralNameRetriever implements ItemStackNameRetriever
 {
 	private final ItemRepository itemRepository;
 	private final MiniMessage miniMessage;
 
 
-	public ItemPluralNameRetriever(final ItemRepository itemRepository, final MiniMessage miniMessage)
+	public ResourcePluralNameRetriever(final ItemRepository itemRepository, final MiniMessage miniMessage)
 	{
 		this.itemRepository = itemRepository;
 		this.miniMessage = miniMessage;
