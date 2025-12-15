@@ -54,6 +54,7 @@ public final class YamlItemRepository implements ItemRepository
 {
 	public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
 	private static final String ITEM_KEY_STRING = "ITEM_KEY";
+	private static final String PLURAL_KEY_STRING = "PLURAL_NAME";
 	private static final Material DEFAULT_MATERIAL = Material.STICK;
 
 	private final Plugin plugin;
@@ -120,7 +121,7 @@ public final class YamlItemRepository implements ItemRepository
 				setItemName(validItemRecord, itemMeta, replacements);
 				setItemDisplayName(validItemRecord, itemMeta, replacements);
 				setItemLore(validItemRecord, itemMeta, replacements);
-				setItemPersistentData(plugin, validItemRecord, itemMeta);
+				setItemPersistentData(validItemRecord, itemMeta);
 				setItemFlags(itemMeta);
 			}
 			itemStack.setItemMeta(itemMeta);
@@ -170,7 +171,7 @@ public final class YamlItemRepository implements ItemRepository
 		return (itemStack != null
 				&& itemStack.hasItemMeta()
 				&& itemStack.getItemMeta() != null
-				&& itemStack.getItemMeta().getPersistentDataContainer().has(namespacedKey));
+				&& itemStack.getItemMeta().getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING));
 	}
 
 
@@ -271,10 +272,27 @@ public final class YamlItemRepository implements ItemRepository
 
 	private static void setItemPersistentData(final Plugin plugin, final ValidItemRecord itemRecord, final ItemMeta itemMeta)
 	{
+		String itemRecordKey = itemRecord.key().toString();
 		NamespacedKey itemKey = new NamespacedKey(plugin, ITEM_KEY_STRING);
-		NamespacedKey nsk = new NamespacedKey(plugin, itemRecord.key().toString());
-		itemMeta.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, itemRecord.key().toString());
-		itemMeta.getPersistentDataContainer().set(nsk, PersistentDataType.STRING, itemRecord.key().toString());
+		itemMeta.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, itemRecordKey);
+
+		if (itemRecord.pluralName() != null && !itemRecord.pluralName().isBlank())
+		{
+			NamespacedKey pluralKey = new NamespacedKey(plugin, PLURAL_KEY_STRING);
+			itemMeta.getPersistentDataContainer().set(pluralKey, PersistentDataType.STRING, itemRecord.pluralName());
+		}
+	}
+
+
+	private void setItemPersistentData(final ValidItemRecord itemRecord, final ItemMeta itemMeta)
+	{
+		itemMeta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, itemRecord.key().toString());
+
+		if (itemRecord.pluralName() != null && !itemRecord.pluralName().isBlank())
+		{
+			NamespacedKey pluralKey = new NamespacedKey(plugin, PLURAL_KEY_STRING);
+			itemMeta.getPersistentDataContainer().set(pluralKey, PersistentDataType.STRING, itemRecord.pluralName());
+		}
 	}
 
 
