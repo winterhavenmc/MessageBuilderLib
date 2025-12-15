@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitConfigRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
@@ -141,7 +142,7 @@ public final class MessageBuilder
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, Parameter.PLUGIN));
 
 		// create configuration repository
-		final ConfigRepository configRepository = createConfigRepository(plugin);
+		final ConfigRepository configRepository = BukkitConfigRepository.create(plugin);
 
 		// create language resource manager and repositories
 		final LanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
