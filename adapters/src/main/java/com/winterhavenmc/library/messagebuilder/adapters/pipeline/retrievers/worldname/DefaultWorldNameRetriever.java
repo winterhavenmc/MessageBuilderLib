@@ -40,7 +40,7 @@ import java.util.Optional;
  * @see WorldNameRetriever
  * @see World
  */
-public final class DefaultRetriever implements WorldNameRetriever
+public final class DefaultWorldNameRetriever implements WorldNameRetriever
 {
 	/**
 	 * Attempts to retrieve the alias name of the given {@link World}

@@ -15,9 +15,8 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.MultiverseRetriever;
 import org.bukkit.World;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +38,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MultiverseRetrieverTest
+class MultiverseWorldNameRetrieverTest
 {
 	@Mock World worldMock;
 	@Mock MultiverseCore multiverseCoreMock;
@@ -73,7 +72,7 @@ class MultiverseRetrieverTest
 		when(optionWorldMock.isEmpty()).thenReturn(false);
 		when(optionWorldMock.getOrNull()).thenReturn(mvWorldMock);
 		when(mvWorldMock.getAliasOrName()).thenReturn("World Alias");
-		MultiverseRetriever retriever = new MultiverseRetriever(multiverseCoreMock);
+		MultiverseWorldNameRetriever retriever = new MultiverseWorldNameRetriever(multiverseCoreMock);
 
 		// Act
 		Optional<String> result = retriever.getWorldName(worldMock);
@@ -95,7 +94,7 @@ class MultiverseRetrieverTest
 	{
 		// Arrange
 		mvApi.when(MultiverseCoreApi::get).thenReturn(multiverseCoreApiMock);
-		MultiverseRetriever retriever = new MultiverseRetriever(multiverseCoreMock);
+		MultiverseWorldNameRetriever retriever = new MultiverseWorldNameRetriever(multiverseCoreMock);
 
 		// Act
 		Optional<String> result = retriever.getWorldName(null);
@@ -111,7 +110,7 @@ class MultiverseRetrieverTest
 		// Arrange
 		mvApi.when(MultiverseCoreApi::get).thenReturn(multiverseCoreApiMock);
 		when(multiverseCoreApiMock.getWorldManager()).thenReturn(null);
-		MultiverseRetriever retriever = new MultiverseRetriever(multiverseCoreMock);
+		MultiverseWorldNameRetriever retriever = new MultiverseWorldNameRetriever(multiverseCoreMock);
 
 		// Act
 		Optional<String> result = retriever.getWorldName(worldMock);
@@ -132,7 +131,7 @@ class MultiverseRetrieverTest
 		when(multiverseCoreApiMock.getWorldManager()).thenReturn(worldManagerMock);
 		when(worldManagerMock.getWorld(worldMock)).thenReturn(optionWorldMock);
 		when(optionWorldMock.isEmpty()).thenReturn(true);
-		MultiverseRetriever retriever = new MultiverseRetriever(multiverseCoreMock);
+		MultiverseWorldNameRetriever retriever = new MultiverseWorldNameRetriever(multiverseCoreMock);
 
 		// Act
 		Optional<String> result = retriever.getWorldName(worldMock);
@@ -156,7 +155,7 @@ class MultiverseRetrieverTest
 		when(worldManagerMock.getWorld(worldMock)).thenReturn(optionWorldMock);
 		when(optionWorldMock.isEmpty()).thenReturn(false);
 		when(optionWorldMock.getOrNull()).thenReturn(null);
-		MultiverseRetriever retriever = new MultiverseRetriever(multiverseCoreMock);
+		MultiverseWorldNameRetriever retriever = new MultiverseWorldNameRetriever(multiverseCoreMock);
 
 		// Act
 		Optional<String> result = retriever.getWorldName(worldMock);
@@ -177,7 +176,7 @@ class MultiverseRetrieverTest
 	{
 		// Arrange
 		mvApi.when(MultiverseCoreApi::get).thenThrow(IllegalStateException.class);
-		MultiverseRetriever retriever = new MultiverseRetriever(multiverseCoreMock);
+		MultiverseWorldNameRetriever retriever = new MultiverseWorldNameRetriever(multiverseCoreMock);
 
 		// Act
 		Optional<String> result = retriever.getWorldName(worldMock);
