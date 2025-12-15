@@ -19,8 +19,6 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.ite
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
-
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
@@ -29,8 +27,6 @@ public class BukkitItemNameResolver implements ItemNameResolver
 {
 	public String resolve(final ItemStack itemStack)
 	{
-		MiniMessage miniMessage = MiniMessage.miniMessage();
-
 		if (itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
 		{
 			if (itemStack.getItemMeta().hasItemName()) return ChatColor.stripColor(itemStack.getItemMeta().getItemName());
