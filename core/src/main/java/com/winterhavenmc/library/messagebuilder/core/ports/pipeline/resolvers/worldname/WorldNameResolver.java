@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname;
 
-import org.bukkit.World;
+import java.util.UUID;
 
 
 /**
@@ -44,8 +44,8 @@ public interface WorldNameResolver
 	 * Resolves the user-facing name of the given {@link org.bukkit.World}, using
 	 * either the native Bukkit name or a plugin-provided alias.
 	 *
-	 * @param world the {@link org.bukkit.World} whose name should be resolved
+	 * @param worldUid the {@link UUID} of the world whose name is to be resolved
 	 * @return the display or alias name for the world
 	 */
-	String resolve(World world);
+	String resolve(UUID worldUid);
 }

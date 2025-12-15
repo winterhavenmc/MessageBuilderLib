@@ -100,7 +100,7 @@ public final class BukkitWorldRepository implements WorldRepository
 	@Override
 	public Optional<String> aliasOrName(final UUID worldUid)
 	{
-		return Optional.ofNullable(worldNameResolver.resolve(plugin.getServer().getWorld(worldUid)));
+		return Optional.ofNullable(worldNameResolver.resolve(worldUid));
 	}
 
 

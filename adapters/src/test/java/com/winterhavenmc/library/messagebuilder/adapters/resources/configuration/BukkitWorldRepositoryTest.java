@@ -308,8 +308,7 @@ class BukkitWorldRepositoryTest
 	{
 		// Arrange
 		when(pluginMock.getServer()).thenReturn(serverMock);
-		when(serverMock.getWorld(world1Uid)).thenReturn(world1Mock);
-		when(worldNameResolverMock.resolve(world1Mock)).thenReturn("world");
+		when(worldNameResolverMock.resolve(world1Uid)).thenReturn("world");
 		WorldRepository worlds = BukkitWorldRepository.create(pluginMock, worldNameResolverMock, spawnLocationResolverMock);
 
 		// Act
@@ -320,8 +319,7 @@ class BukkitWorldRepositoryTest
 
 		// Verify
 		verify(pluginMock, atLeastOnce()).getServer();
-		verify(serverMock, atLeastOnce()).getWorld(world1Uid);
-		verify(worldNameResolverMock, atLeastOnce()).resolve(world1Mock);
+		verify(worldNameResolverMock, atLeastOnce()).resolve(world1Uid);
 	}
 
 

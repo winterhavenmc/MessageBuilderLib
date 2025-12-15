@@ -78,7 +78,7 @@ public class DisplayNameAdapter implements Accessor
 			case DisplayNameable displayNameable -> Optional.of(displayNameable);
 			case Player player -> Optional.of(player::getDisplayName);
 			case Nameable nameable -> Optional.of(nameable::getCustomName); // Note: this is bukkit Nameable, NOT MessageBuilder Nameable
-			case World world -> Optional.of(() -> ctx.worldNameResolver().resolve(world));
+			case World world -> Optional.of(() -> ctx.worldNameResolver().resolve(world.getUID()));
 			case ItemStack itemStack -> Optional.of(() -> ctx.itemDisplayNameResolver().resolve(itemStack));
 			case null, default -> Optional.empty();
 		};
