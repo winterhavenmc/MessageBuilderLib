@@ -249,8 +249,12 @@ public final class BootstrapUtility
 
 	static WorldRepository createWorldRepository(final Plugin plugin)
 	{
-		WorldNameResolver worldNameResolver = createWorldNameResolver(plugin);
-		SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.get(plugin.getServer().getPluginManager());
+		final WorldNameRetriever worldNameRetriever = NameRetriever.getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+		final SpawnLocationRetriever spawnLocationRetriever = NameRetriever.getSpawnLocationRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+
+		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(worldNameRetriever);
+		final SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.create(spawnLocationRetriever);
+
 		return BukkitWorldRepository.create(plugin, worldNameResolver, spawnLocationResolver);
 	}
 
