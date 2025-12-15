@@ -4,6 +4,9 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.wo
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameRetriever;
 
 import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
+
+import java.util.UUID;
 
 import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.UNKNOWN_WORLD;
 
@@ -23,14 +26,16 @@ import static com.winterhavenmc.library.messagebuilder.models.DefaultSymbol.UNKN
  */
 public class BukkitWorldNameResolver implements WorldNameResolver
 {
+	private final Plugin plugin;
 	private final WorldNameRetriever retriever;
 
 
 	/**
 	 * Constructor
 	 */
-	private BukkitWorldNameResolver(final WorldNameRetriever retriever)
+	private BukkitWorldNameResolver(final Plugin plugin, final WorldNameRetriever retriever)
 	{
+		this.plugin = plugin;
 		this.retriever = retriever;
 	}
 
@@ -38,9 +43,9 @@ public class BukkitWorldNameResolver implements WorldNameResolver
 	/**
 	 * Static factory method
 	 */
-	public static WorldNameResolver create(final WorldNameRetriever retriever)
+	public static WorldNameResolver create(final Plugin plugin, final WorldNameRetriever retriever)
 	{
-		return new BukkitWorldNameResolver(retriever);
+		return new BukkitWorldNameResolver(plugin, retriever);
 	}
 
 
@@ -48,13 +53,17 @@ public class BukkitWorldNameResolver implements WorldNameResolver
 	 * Resolves the user-facing name of the given {@link World}, using
 	 * either the native Bukkit name or a plugin-provided alias.
 	 *
-	 * @param world the {@link World} whose name should be resolved
+	 * @param worldUid the {@link UUID} of the world whose name is to be resolved
 	 * @return the display or alias name for the world
 	 */
 	@Override
-	public String resolve(World world)
+	public String resolve(final UUID worldUid)
 	{
-		return retriever.getWorldName(world).orElse(UNKNOWN_WORLD.symbol());
+		final World world = plugin.getServer().getWorld(worldUid);
+
+		return (world != null)
+				? retriever.getWorldName(world).orElse(UNKNOWN_WORLD.symbol())
+				: UNKNOWN_WORLD.symbol();
 	}
 
 }

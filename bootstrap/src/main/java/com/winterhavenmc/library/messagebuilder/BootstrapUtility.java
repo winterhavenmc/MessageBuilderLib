@@ -223,7 +223,7 @@ public final class BootstrapUtility
 	{
 		final WorldNameRetriever worldNameRetriever = getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
 
-		WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(worldNameRetriever);
+		WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(plugin, worldNameRetriever);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
 
@@ -240,7 +240,7 @@ public final class BootstrapUtility
 		final WorldNameRetriever worldNameRetriever = getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
 		final SpawnLocationRetriever spawnLocationRetriever = getSpawnLocationRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
 
-		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(worldNameRetriever);
+		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(plugin, worldNameRetriever);
 		final SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.create(spawnLocationRetriever);
 
 		return BukkitWorldRepository.create(plugin, worldNameResolver, spawnLocationResolver);
