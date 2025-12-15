@@ -1,5 +1,6 @@
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Retriever;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
 import com.winterhavenmc.library.messagebuilder.models.Delimiter;
 
@@ -17,7 +18,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 
-public class PersistentPluralNameRetriever implements NameRetriever
+public class PersistentPluralNameRetriever implements Retriever
 {
 	private final static String PLURAL_KEY_STRING = "PLURAL_NAME";
 	private final Plugin plugin;

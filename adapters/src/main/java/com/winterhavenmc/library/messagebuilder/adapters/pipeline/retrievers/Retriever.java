@@ -1,4 +1,4 @@
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.DefaultSpawnLocationRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.MultiverseSpawnLocationRetriever;
@@ -13,7 +13,7 @@ import org.mvplugins.multiverse.core.MultiverseCore;
 import java.util.Optional;
 
 
-public interface NameRetriever
+public interface Retriever
 {
 	Optional<String> retrieve(ItemStack itemStack);
 

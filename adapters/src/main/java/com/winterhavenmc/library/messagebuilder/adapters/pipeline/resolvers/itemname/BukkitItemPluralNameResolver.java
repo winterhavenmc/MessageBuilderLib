@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Retriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
 
@@ -34,7 +35,7 @@ public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 	private final static String EMPTY_STRING = "";
 	private final ItemNameRetriever nameRetriever;
 	private final ItemDisplayNameRetriever displayNameRetriever;
-	private final NameRetriever pluralNameRetriever;
+	private final Retriever pluralNameRetriever;
 
 
 	public BukkitItemPluralNameResolver(final Plugin plugin, final MiniMessage miniMessage)

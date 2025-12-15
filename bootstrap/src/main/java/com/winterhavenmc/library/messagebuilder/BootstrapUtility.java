@@ -34,7 +34,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.item
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemPluralNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.BukkitWorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.LocalizedMessageRetriever;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.NameRetriever;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Retriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
@@ -217,7 +217,7 @@ public final class BootstrapUtility
 													  final ItemRepository itemRepository,
 													  final FormatterCtx formatterCtx)
 	{
-		final WorldNameRetriever worldNameRetriever = NameRetriever.getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+		final WorldNameRetriever worldNameRetriever = Retriever.getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
 
 		WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(worldNameRetriever);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
@@ -243,8 +243,8 @@ public final class BootstrapUtility
 
 	static WorldRepository createWorldRepository(final Plugin plugin)
 	{
-		final WorldNameRetriever worldNameRetriever = NameRetriever.getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
-		final SpawnLocationRetriever spawnLocationRetriever = NameRetriever.getSpawnLocationRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+		final WorldNameRetriever worldNameRetriever = Retriever.getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+		final SpawnLocationRetriever spawnLocationRetriever = Retriever.getSpawnLocationRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
 
 		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(worldNameRetriever);
 		final SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.create(spawnLocationRetriever);
