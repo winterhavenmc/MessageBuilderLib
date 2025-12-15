@@ -12,7 +12,9 @@ import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -233,6 +236,23 @@ class YamlItemRepositoryTest
 
 		// Assert
 		assertNull(result);
+	}
+
+
+	@Test
+	@Disabled("needs static mock server")
+	void setItemFlags()
+	{
+		ItemStack itemStack = new ItemStack(Material.STONE);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+
+		//YamlItemRepository.setItemFlags(itemMeta);
+
+		Set<ItemFlag> itemFlags = itemMeta.getItemFlags();
+
+		assertTrue(itemFlags.contains(ItemFlag.HIDE_ATTRIBUTES));
+		assertTrue(itemFlags.contains(ItemFlag.HIDE_ENCHANTS));
+		assertTrue(itemFlags.contains(ItemFlag.HIDE_UNBREAKABLE));
 	}
 
 }

@@ -36,20 +36,20 @@ class BukkitItemDisplayNameResolverTest
 
 
 	@Test
-	void resolve_with_valid_parameter_returns_displayname()
+	void resolve_with_valid_parameter_returns_item_displayname()
 	{
 		// Arrange
-		ItemDisplayNameResolver resolver = new BukkitItemDisplayNameResolver();
 		when(itemStackMock.hasItemMeta()).thenReturn(true);
 		when(itemStackMock.getItemMeta()).thenReturn(itemMetaMock);
 		when(itemMetaMock.hasDisplayName()).thenReturn(true);
-		when(itemMetaMock.getDisplayName()).thenReturn("display name");
+		when(itemMetaMock.getDisplayName()).thenReturn("item display name");
 
 		// Act
+		ItemDisplayNameResolver resolver = new BukkitItemDisplayNameResolver();
 		String result = resolver.resolve(itemStackMock);
 
 		// Assert
-		assertEquals("display name", result);
+		assertEquals("item display name", result);
 
 		// Verify
 		verify(itemStackMock, atLeastOnce()).hasItemMeta();
@@ -60,17 +60,16 @@ class BukkitItemDisplayNameResolverTest
 
 
 	@Test
-	void resolve_with_valid_parameter_without_displayname_returns_item_name()
+	void resolve_itemstack_without_display_name_returns_item_name()
 	{
 		// Arrange
-		ItemDisplayNameResolver resolver = new BukkitItemDisplayNameResolver();
 		when(itemStackMock.hasItemMeta()).thenReturn(true);
 		when(itemStackMock.getItemMeta()).thenReturn(itemMetaMock);
-		when(itemMetaMock.hasDisplayName()).thenReturn(false);
 		when(itemMetaMock.hasItemName()).thenReturn(true);
 		when(itemMetaMock.getItemName()).thenReturn("item name");
 
 		// Act
+		ItemDisplayNameResolver resolver = new BukkitItemDisplayNameResolver();
 		String result = resolver.resolve(itemStackMock);
 
 		// Assert
@@ -79,7 +78,6 @@ class BukkitItemDisplayNameResolverTest
 		// Verify
 		verify(itemStackMock, atLeastOnce()).hasItemMeta();
 		verify(itemStackMock, atLeastOnce()).getItemMeta();
-		verify(itemMetaMock, atLeastOnce()).hasDisplayName();
 		verify(itemMetaMock, atLeastOnce()).hasItemName();
 		verify(itemMetaMock, atLeastOnce()).getItemName();
 	}

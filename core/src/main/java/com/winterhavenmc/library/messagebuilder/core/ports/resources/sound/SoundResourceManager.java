@@ -18,7 +18,6 @@
 package com.winterhavenmc.library.messagebuilder.core.ports.resources.sound;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
-import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProvider;
 
 
 /**
@@ -26,6 +25,4 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.SectionProv
  * from the plugin jar file to the plugin data directory, as well as loading and reloading
  * the installed files at startup or issuance of the {@code reload} command.
  */
-public interface SoundResourceManager extends ResourceManager
-{
-}
+public interface SoundResourceManager extends ResourceManager { }

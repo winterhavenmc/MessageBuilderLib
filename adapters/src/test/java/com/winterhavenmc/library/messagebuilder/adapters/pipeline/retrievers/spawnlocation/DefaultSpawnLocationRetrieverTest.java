@@ -15,41 +15,56 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation;
 
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.DefaultWorldNameRetriever;
 import org.bukkit.World;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class DefaultResolverTest
+class DefaultSpawnLocationRetrieverTest
 {
 	@Mock World worldMock;
 
 
 	@Test
-	void resolveWorldName()
+	void getWorldName_with_valid_world()
 	{
 		// Arrange
-		when(worldMock.getName()).thenReturn("test_world");
-		WorldNameResolver resolver = new DefaultResolver();
+		DefaultWorldNameRetriever retriever = new DefaultWorldNameRetriever();
+		when(worldMock.getName()).thenReturn("world_name");
 
 		// Act
-		String result = resolver.resolve(worldMock);
+		Optional<String> result = retriever.getWorldName(worldMock);
 
 		// Assert
-		assertEquals("test_world", result);
+		assertEquals(Optional.of("world_name"), result);
 
 		// Verify
 		verify(worldMock, atLeastOnce()).getName();
+	}
+
+
+	@Test
+	void getWorldName_with_null_world()
+	{
+		// Arrange
+		DefaultWorldNameRetriever retriever = new DefaultWorldNameRetriever();
+
+		// Act
+		Optional<String> result = retriever.getWorldName(null);
+
+		// Assert
+		assertEquals(Optional.empty(), result);
 	}
 
 }

@@ -22,6 +22,11 @@ import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
@@ -31,6 +36,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -47,10 +53,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class DurationableTest
 {
-	@Mock AccessorCtx ctxMock;
-	@Mock FormatterCtx formatterContainerMock;
 	@Mock ConfigRepository configRepository;
 	@Mock DurationFormatter durationFormatterMock;
+	@Mock ConfigRepository configRepositoryMock;
+	@Mock NumberFormatter numberFormatterMock;
+	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock ItemNameResolver itemNameResolverMock;
+	@Mock ItemDisplayNameResolver itemDisplayNameResolverMock;
+	@Mock ItemPluralNameResolver itemPluralNameResolver;
 
 
 	static class TestObject implements Durationable
@@ -95,12 +105,13 @@ class DurationableTest
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 		ValidMacroKey subKey = baseKey.append("DURATION").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
-		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("valid duration string");
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
+		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
+				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 
 		// Act
-		MacroStringMap result = testObject.extractDuration(baseKey, ChronoUnit.MINUTES, ctxMock);
+		MacroStringMap result = testObject.extractDuration(baseKey, ChronoUnit.MINUTES, accessorCtx);
 
 		// Assert
 		assertEquals("valid duration string", result.get(subKey));

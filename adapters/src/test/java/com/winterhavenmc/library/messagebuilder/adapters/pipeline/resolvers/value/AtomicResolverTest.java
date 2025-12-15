@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,7 +62,7 @@ class AtomicResolverTest
 	void setUp()
 	{
 		LocaleNumberFormatter localeNumberFormatterMock = new LocaleNumberFormatter(configRepositoryMock);
-		FormatterCtx formatterContainer = new FormatterCtx(configRepositoryMock, durationFormatter, localeNumberFormatterMock);
+		FormatterCtx formatterContainer = new FormatterCtx(configRepositoryMock, durationFormatter, localeNumberFormatterMock, MiniMessage.miniMessage());
 		resolver = new AtomicResolver(formatterContainer);
 	}
 

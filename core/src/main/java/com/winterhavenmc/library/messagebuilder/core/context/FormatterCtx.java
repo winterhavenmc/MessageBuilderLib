@@ -20,8 +20,10 @@ package com.winterhavenmc.library.messagebuilder.core.context;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 
 public record FormatterCtx(ConfigRepository configRepository,
 						   DurationFormatter durationFormatter,
-						   NumberFormatter localeNumberFormatter) { }
+						   NumberFormatter localeNumberFormatter,
+						   MiniMessage miniMessage) { }

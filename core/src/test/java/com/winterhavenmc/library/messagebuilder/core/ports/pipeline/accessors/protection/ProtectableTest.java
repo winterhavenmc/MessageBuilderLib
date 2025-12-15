@@ -22,10 +22,16 @@ import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.Plugin;
 
 import java.time.Instant;
@@ -51,10 +57,13 @@ import static org.mockito.Mockito.when;
 class ProtectableTest
 {
 	@Mock Plugin pluginMock;
-	@Mock AccessorCtx ctxMock;
-	@Mock FormatterCtx formatterContainerMock;
 	@Mock DurationFormatter durationFormatterMock;
 	@Mock ConfigRepository configRepositoryMock;
+	@Mock NumberFormatter numberFormatterMock;
+	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock ItemNameResolver itemNameResolverMock;
+	@Mock ItemDisplayNameResolver itemDisplayNameResolver;
+	@Mock ItemPluralNameResolver itemPluralNameResolver;
 
 
 	static class TestObject implements Protectable
@@ -102,15 +111,16 @@ class ProtectableTest
 		ValidMacroKey durationKey = expirationKey.append("DURATION").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 
-		when(ctxMock.formatterCtx()).thenReturn(formatterContainerMock);
-		when(formatterContainerMock.durationFormatter()).thenReturn(durationFormatterMock);
-		when(formatterContainerMock.configRepository()).thenReturn(configRepositoryMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
+		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock, itemDisplayNameResolver,
+				itemPluralNameResolver, formatterCtx);
+
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
 		when(configRepositoryMock.dateLocale()).thenReturn(Locale.US);
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("valid duration string");
 
 		// Act
-		MacroStringMap result = testObject.extractProtection(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, ctxMock);
+		MacroStringMap result = testObject.extractProtection(baseKey, ChronoUnit.MINUTES, FormatStyle.MEDIUM, accessorCtx);
 
 		// Assert
 		assertEquals("Jan 1, 1970, 12:00:00 AM", result.get(instantKey));

@@ -17,32 +17,47 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
+
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 import java.util.Optional;
 
 
-public sealed interface BukkitSpawnLocationResolver extends SpawnLocationResolver permits DefaultResolver, PluginBasedResolver
+public final class BukkitSpawnLocationResolver implements SpawnLocationResolver
 {
-	Optional<Location> resolve(World world);
+	private final SpawnLocationRetriever retriever;
 
 
-	static BukkitSpawnLocationResolver get(final PluginManager pluginManager)
+	/**
+	 * Constructor
+	 */
+	private BukkitSpawnLocationResolver(final SpawnLocationRetriever retriever)
 	{
-		if (pluginManager == null)
-		{
-			return new DefaultResolver();
-		}
+		this.retriever = retriever;
+	}
 
-		Plugin plugin = pluginManager.getPlugin("Multiverse-Core");
 
-		return (plugin != null && plugin.isEnabled())
-				? new PluginBasedResolver(plugin)
-				: new DefaultResolver();
+	/**
+	 * Static factory method
+	 */
+	public static SpawnLocationResolver create(final SpawnLocationRetriever spawnLocationRetriever)
+	{
+		return new BukkitSpawnLocationResolver(spawnLocationRetriever);
+	}
+
+
+	/**
+	 * Returns the default Bukkit world spawn location by calling {@link World#getSpawnLocation()}.
+	 *
+	 * @param world the {@link World} to resolve a location for the world's spawn
+	 * @return Optional containing the world's spawn location as defined by Bukkit
+	 */
+	public Optional<Location> resolve(final World world)
+	{
+		return retriever.getSpawnLocation(world);
 	}
 
 }

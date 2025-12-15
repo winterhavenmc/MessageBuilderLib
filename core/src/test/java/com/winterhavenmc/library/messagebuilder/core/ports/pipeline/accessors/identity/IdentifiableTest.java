@@ -21,14 +21,21 @@ import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Accessor;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemDisplayNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
 import java.util.Optional;
 import java.util.UUID;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -42,9 +49,13 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 @ExtendWith(MockitoExtension.class)
 class IdentifiableTest
 {
-	@Mock AccessorCtx ctxMock;
-	@Mock FormatterCtx formatterContainerMock;
 	@Mock NumberFormatter numberFormatterMock;
+	@Mock ConfigRepository configRepositoryMock;
+	@Mock DurationFormatter durationFormatterMock;
+	@Mock WorldNameResolver worldNameResolverMock;
+	@Mock ItemNameResolver itemNameResolverMock;
+	@Mock ItemDisplayNameResolver itemDisplayNameResolverMock;
+	@Mock ItemPluralNameResolver itemPluralNameResolver;
 
 	static class TestObject implements Identifiable
 	{
@@ -88,9 +99,12 @@ class IdentifiableTest
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 		ValidMacroKey subKey = baseKey.append(Accessor.BuiltIn.UUID).isValid().orElseThrow();
 		TestObject testObject = new TestObject();
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
+		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
+				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 
 		// Act
-		MacroStringMap result = testObject.extractUid(baseKey, ctxMock);
+		MacroStringMap result = testObject.extractUid(baseKey, accessorCtx);
 
 		// Assert
 		assertEquals(new UUID(42, 42).toString(), result.get(subKey));

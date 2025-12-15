@@ -18,6 +18,7 @@
 package com.winterhavenmc.library.messagebuilder;
 
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.MacroFieldAccessor;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown.MessageCooldownMap;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.Time4jDurationFormatter;
@@ -31,13 +32,13 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.valu
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemDisplayNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.BukkitWorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.LocalizedMessageRetriever;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Retriever;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.DefaultResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitConfigRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository;
@@ -57,6 +58,7 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.Ac
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameRetriever;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.senders.Sender;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
@@ -199,8 +201,9 @@ public final class BootstrapUtility
 		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(configRepository);
 		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(configRepository);
 		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, constants);
+		final MiniMessage miniMessage = MiniMessage.miniMessage();
 
-		return new FormatterCtx(configRepository, durationFormatter, localeNumberFormatter);
+		return new FormatterCtx(configRepository, durationFormatter, localeNumberFormatter, miniMessage);
 	}
 
 
@@ -214,10 +217,12 @@ public final class BootstrapUtility
 													  final ItemRepository itemRepository,
 													  final FormatterCtx formatterCtx)
 	{
-		WorldNameResolver worldNameResolver = createWorldNameResolver(plugin);
+		final WorldNameRetriever worldNameRetriever = Retriever.getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+
+		WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(worldNameRetriever);
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
-		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRepository);
+		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(itemRepository, formatterCtx.miniMessage());
 
 		return new AccessorCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
 				bukkitItemPluralNameResolver, formatterCtx);
@@ -230,17 +235,6 @@ public final class BootstrapUtility
 	}
 
 
-	//TODO: move this method into WorldNameResolver as static factory method
-	static WorldNameResolver createWorldNameResolver(final Plugin plugin)
-	{
-		Plugin mvPlugin = plugin.getServer().getPluginManager().getPlugin("Multiverse-Core");
-
-		return (mvPlugin != null && mvPlugin.isEnabled())
-				? new MultiverseResolver(mvPlugin)
-				: new DefaultResolver();
-	}
-
-
 	static ConfigRepository createConfigRepository(final Plugin plugin)
 	{
 		return BukkitConfigRepository.create(plugin);
@@ -249,8 +243,12 @@ public final class BootstrapUtility
 
 	static WorldRepository createWorldRepository(final Plugin plugin)
 	{
-		WorldNameResolver worldNameResolver = createWorldNameResolver(plugin);
-		SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.get(plugin.getServer().getPluginManager());
+		final WorldNameRetriever worldNameRetriever = Retriever.getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+		final SpawnLocationRetriever spawnLocationRetriever = Retriever.getSpawnLocationRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+
+		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(worldNameRetriever);
+		final SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.create(spawnLocationRetriever);
+
 		return BukkitWorldRepository.create(plugin, worldNameResolver, spawnLocationResolver);
 	}
 

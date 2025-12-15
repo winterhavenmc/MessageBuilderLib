@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.MultiverseResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameRetriever;
 import org.bukkit.World;
 import org.mvplugins.multiverse.core.MultiverseCore;
@@ -41,15 +40,14 @@ import java.util.logging.Logger;
  * If the world is not managed by Multiverse, or if any part of the plugin's world
  * management system is unavailable, this retriever returns {@code null}.
  * <p>
- * Typically used internally by {@link MultiverseResolver}, and not intended
+ * Typically used internally by {@code MultiverseResolver}, and not intended
  * to be used directly unless fine-grained access to Multiverse aliases is needed.
  *
  * @see WorldNameRetriever
- * @see MultiverseResolver
  * @see MultiverseCore
  * @see World
  */
-public final class MultiverseRetriever implements WorldNameRetriever
+public final class MultiverseWorldNameRetriever implements WorldNameRetriever
 {
 	private final MultiverseCore mvPlugin;
 
@@ -59,7 +57,7 @@ public final class MultiverseRetriever implements WorldNameRetriever
 	 *
 	 * @param mvPlugin the active {@link MultiverseCore} plugin instance
 	 */
-	public MultiverseRetriever(MultiverseCore mvPlugin)
+	public MultiverseWorldNameRetriever(MultiverseCore mvPlugin)
 	{
 		this.mvPlugin = mvPlugin;
 	}
