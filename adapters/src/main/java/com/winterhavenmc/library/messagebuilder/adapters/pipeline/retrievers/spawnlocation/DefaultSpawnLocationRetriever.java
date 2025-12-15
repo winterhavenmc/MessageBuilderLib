@@ -23,7 +23,7 @@ import org.bukkit.World;
 import java.util.Optional;
 
 
-public final class DefaultRetriever implements SpawnLocationRetriever
+public final class DefaultSpawnLocationRetriever implements SpawnLocationRetriever
 {
 	public Optional<Location> getSpawnLocation(final World world)
 	{

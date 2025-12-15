@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 
-public final class MultiverseRetriever implements SpawnLocationRetriever
+public final class MultiverseSpawnLocationRetriever implements SpawnLocationRetriever
 {
 	@Override
 	public Optional<Location> getSpawnLocation(World world)

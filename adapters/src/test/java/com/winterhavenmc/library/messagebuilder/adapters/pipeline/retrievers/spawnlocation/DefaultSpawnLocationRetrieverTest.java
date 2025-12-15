@@ -15,9 +15,9 @@
  *
  */
 
-package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname;
+package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.DefaultRetriever;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.DefaultWorldNameRetriever;
 import org.bukkit.World;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class DefaultRetrieverTest
+class DefaultSpawnLocationRetrieverTest
 {
 	@Mock World worldMock;
 
@@ -40,7 +40,7 @@ class DefaultRetrieverTest
 	void getWorldName_with_valid_world()
 	{
 		// Arrange
-		DefaultRetriever retriever = new DefaultRetriever();
+		DefaultWorldNameRetriever retriever = new DefaultWorldNameRetriever();
 		when(worldMock.getName()).thenReturn("world_name");
 
 		// Act
@@ -58,7 +58,7 @@ class DefaultRetrieverTest
 	void getWorldName_with_null_world()
 	{
 		// Arrange
-		DefaultRetriever retriever = new DefaultRetriever();
+		DefaultWorldNameRetriever retriever = new DefaultWorldNameRetriever();
 
 		// Act
 		Optional<String> result = retriever.getWorldName(null);
