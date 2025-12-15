@@ -17,110 +17,50 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.itemname.ItemPluralNameResolver;
+
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.ItemRepository;
-import com.winterhavenmc.library.messagebuilder.models.Delimiter;
-
-import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
-import com.winterhavenmc.library.messagebuilder.models.language.item.ValidItemRecord;
-
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 
 public class BukkitItemPluralNameResolver implements ItemPluralNameResolver
 {
 	private final static String EMPTY_STRING = "";
-	private final ItemRepository itemRepository;
+	private final ItemNameRetriever nameRetriever;
+	private final ItemDisplayNameRetriever displayNameRetriever;
+	private final NameRetriever pluralNameRetriever;
 
 
-	public BukkitItemPluralNameResolver(final ItemRepository itemRepository)
+	public BukkitItemPluralNameResolver(final Plugin plugin, final MiniMessage miniMessage)
 	{
-		this.itemRepository = itemRepository;
+		nameRetriever = new ItemNameRetriever();
+		displayNameRetriever = new ItemDisplayNameRetriever();
+		pluralNameRetriever = new PersistentPluralNameRetriever(plugin, miniMessage);
+	}
+
+
+	public BukkitItemPluralNameResolver(final ItemRepository itemRepository, final MiniMessage miniMessage)
+	{
+		nameRetriever = new ItemNameRetriever();
+		displayNameRetriever = new ItemDisplayNameRetriever();
+		pluralNameRetriever = new ItemPluralNameRetriever(itemRepository, miniMessage);
 	}
 
 
 	public String resolve(final ItemStack itemStack)
 	{
-		MiniMessage miniMessage = MiniMessage.miniMessage();
-
-		return Optional.ofNullable(itemStack)
+		return Optional.of(itemStack)
 				.filter(ItemStack::hasItemMeta)
-				.flatMap(item ->
-						resolveCustomItem(item, miniMessage)
-								.or(() -> resolveDisplayName(item))
-								.or(() -> resolveName(item))
-				)
+				.flatMap(item -> pluralNameRetriever.retrieve(item)
+						.or(() -> displayNameRetriever.retrieve(item))
+						.or(() -> nameRetriever.retrieve(item)))
 				.orElse(EMPTY_STRING);
-	}
-
-
-	private Optional<String> resolveCustomItem(final ItemStack itemStack, final MiniMessage miniMessage)
-	{
-		if (!itemRepository.isItem(itemStack)) return Optional.empty();
-
-		return getValidKey(itemStack)
-				.flatMap(this::getValidRecord)
-				.map(record -> deserializePluralName(record, itemStack, miniMessage));
-	}
-
-
-	private Optional<ValidItemKey> getValidKey(final ItemStack itemStack)
-	{
-		return Optional.ofNullable(itemRepository.key(itemStack))
-				.filter(ValidItemKey.class::isInstance)
-				.map(ValidItemKey.class::cast);
-	}
-
-
-	private Optional<ValidItemRecord> getValidRecord(final ValidItemKey key)
-	{
-		return itemRepository.getRecordOpt(key)
-				.filter(ValidItemRecord.class::isInstance)
-				.map(ValidItemRecord.class::cast);
-	}
-
-
-	private String deserializePluralName(final ValidItemRecord record, final ItemStack itemStack, final MiniMessage miniMessage)
-	{
-		String pluralString = record.pluralName().replaceAll(
-				Pattern.quote(Delimiter.OPEN + "QUANTITY" + Delimiter.CLOSE),
-				String.valueOf(itemStack.getAmount())
-		);
-
-		Component component = miniMessage.deserialize(
-				pluralString,
-				Formatter.choice("choice", itemStack.getAmount())
-		);
-
-		return YamlItemRepository.LEGACY_SERIALIZER.serializeOr(component, EMPTY_STRING);
-	}
-
-
-	Optional<String> resolveDisplayName(final ItemStack itemStack)
-	{
-		return Optional.ofNullable(itemStack.getItemMeta())
-				.filter(ItemMeta::hasDisplayName)
-				.map(ItemMeta::getDisplayName)
-				.map(ChatColor::stripColor);
-	}
-
-
-	Optional<String> resolveName(final ItemStack itemStack)
-	{
-		return Optional.ofNullable(itemStack.getItemMeta())
-				.filter(ItemMeta::hasItemName)
-				.map(ItemMeta::getItemName)
-				.map(ChatColor::stripColor);
 	}
 
 }
