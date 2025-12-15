@@ -19,11 +19,11 @@ jobs:
       uses: actions/checkout@v4
 
     # 2. Set up Java
-    - name: Set up JDK 21
+    - name: Set up JDK 25
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: '21'
+        java-version: '25'
 
     # 3. Build with Maven and generate coverage report
     - name: Build and generate coverage report
