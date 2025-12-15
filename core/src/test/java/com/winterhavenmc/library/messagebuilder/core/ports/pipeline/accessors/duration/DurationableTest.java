@@ -36,6 +36,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -105,7 +106,7 @@ class DurationableTest
 		ValidMacroKey subKey = baseKey.append("DURATION").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("valid duration string");
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
 				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 

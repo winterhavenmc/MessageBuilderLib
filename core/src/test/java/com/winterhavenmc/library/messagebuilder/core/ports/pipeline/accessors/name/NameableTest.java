@@ -33,6 +33,7 @@ import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
 import java.util.Optional;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -97,7 +98,7 @@ class NameableTest
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 		ValidMacroKey subKey = baseKey.append("NAME").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
 				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 

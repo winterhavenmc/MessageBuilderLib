@@ -31,6 +31,7 @@ import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepos
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Player;
 
@@ -104,7 +105,7 @@ class KillableTest
 		ValidMacroKey subKey = baseKey.append(KILLER).isValid().orElseThrow();
 		TestObject testObject = new TestObject();
 		when(playerMock.getName()).thenReturn("Killer");
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
 				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 

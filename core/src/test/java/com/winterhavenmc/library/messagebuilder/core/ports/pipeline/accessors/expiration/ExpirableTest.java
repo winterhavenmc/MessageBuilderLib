@@ -31,6 +31,7 @@ import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepos
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.Plugin;
 
 import java.time.Instant;
@@ -113,7 +114,7 @@ class ExpirableTest
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
 		when(configRepositoryMock.dateLocale()).thenReturn(Locale.US);
 		when(durationFormatterMock.format(any(), eq(ChronoUnit.MINUTES))).thenReturn("valid duration string");
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
 				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 

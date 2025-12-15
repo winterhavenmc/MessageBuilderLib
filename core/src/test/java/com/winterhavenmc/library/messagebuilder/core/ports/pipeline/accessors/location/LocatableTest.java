@@ -31,6 +31,7 @@ import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepos
 import com.winterhavenmc.library.messagebuilder.models.keys.MacroKey;
 import com.winterhavenmc.library.messagebuilder.models.keys.ValidMacroKey;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -111,7 +112,7 @@ class LocatableTest
 		when(localeNumberFormatterMock.format(12)).thenReturn("12");
 		when(localeNumberFormatterMock.format(13)).thenReturn("13");
 		TestObject testObject = new TestObject();
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
 				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 
@@ -136,7 +137,7 @@ class LocatableTest
 		when(worldMock.getName()).thenReturn("test_world");
 
 		TestObject testObject = new TestObject();
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
 				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 
@@ -157,7 +158,7 @@ class LocatableTest
 	{
 		// Arrange
 		TestObject testObject = new TestObject();
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
 				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 
@@ -176,7 +177,7 @@ class LocatableTest
 		// Arrange
 		Location testLocation = new Location(null, 11, 12, 13);
 
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
 				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 
@@ -197,7 +198,7 @@ class LocatableTest
 		when(worldMock.getName()).thenReturn("test_world");
 		when(worldNameResolverMock.resolve(any())).thenReturn("test_world");
 
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
 				itemDisplayNameResolverMock, itemPluralNameResolver, formatterCtx);
 

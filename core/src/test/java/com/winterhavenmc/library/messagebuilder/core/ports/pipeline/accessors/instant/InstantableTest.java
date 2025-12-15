@@ -37,6 +37,7 @@ import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.Optional;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -102,7 +103,7 @@ class InstantableTest
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 		ValidMacroKey subKey = baseKey.append("INSTANT").isValid().orElseThrow();
 		TestObject testObject = new TestObject();
-		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock);
+		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock, itemDisplayNameResolver,
 				itemPluralNameResolver, formatterCtx);
 		when(configRepositoryMock.zoneId()).thenReturn(ZoneId.of("UTC"));
