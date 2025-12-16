@@ -78,7 +78,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetrieverFactory.getSpawnLocationRetriever;
+import static com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever.create;
 import static com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.WorldNameRetrieverFactory.getWorldNameRetriever;
 
 
@@ -238,7 +238,7 @@ public final class BootstrapUtility
 	static WorldRepository createWorldRepository(final Plugin plugin)
 	{
 		final WorldNameRetriever worldNameRetriever = getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
-		final SpawnLocationRetriever spawnLocationRetriever = getSpawnLocationRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+		final SpawnLocationRetriever spawnLocationRetriever = create(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
 
 		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(plugin, worldNameRetriever);
 		final SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.create(spawnLocationRetriever);

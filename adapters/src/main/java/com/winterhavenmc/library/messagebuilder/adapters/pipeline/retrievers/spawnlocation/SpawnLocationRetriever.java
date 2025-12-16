@@ -19,6 +19,8 @@ package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.sp
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
+import org.mvplugins.multiverse.core.MultiverseCore;
 
 import java.util.Optional;
 
@@ -26,4 +28,12 @@ import java.util.Optional;
 public interface SpawnLocationRetriever
 {
 	Optional<Location> getSpawnLocation(World world);
+
+
+	static SpawnLocationRetriever create(final Plugin plugin)
+	{
+		return (plugin instanceof MultiverseCore mvPlugin && mvPlugin.isEnabled())
+				? new MultiverseSpawnLocationRetriever()
+				: new DefaultSpawnLocationRetriever();
+	}
 }
