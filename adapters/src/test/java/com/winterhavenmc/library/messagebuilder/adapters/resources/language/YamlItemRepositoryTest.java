@@ -8,7 +8,9 @@ import com.winterhavenmc.library.messagebuilder.models.language.item.InvalidItem
 import com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord;
 
 import com.winterhavenmc.library.messagebuilder.models.language.item.ValidItemRecord;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,6 +22,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -33,6 +37,7 @@ import static org.mockito.Mockito.*;
 class YamlItemRepositoryTest
 {
 	@Mock Plugin pluginMock;
+	@Mock Server serverMock;
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 
 	ValidItemKey validItemKey = ItemKey.of("TEST_ITEM").isValid().orElseThrow();
@@ -95,7 +100,7 @@ class YamlItemRepositoryTest
 
 
 	@Test
-	@Disabled("needs static mock server")
+	@Disabled("needs registry mock")
 	void createItem_returns_valid_item() throws InvalidConfigurationException
 	{
 		// Arrange
@@ -103,15 +108,20 @@ class YamlItemRepositoryTest
 		when(pluginMock.getName()).thenReturn("PluginName");
 		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
-		// Act
-		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
-		Optional<ItemStack> item = items.createItem(validItemKey);
+		try (MockedStatic<Bukkit> bukkitMockedStatic = Mockito.mockStatic(Bukkit.class))
+		{
+			bukkitMockedStatic.when(Bukkit::getServer).thenReturn(serverMock);
 
-		// Assert
-		assertTrue(item.isPresent());
+			// Act
+			ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			Optional<ItemStack> item = items.createItem(validItemKey);
 
-		// Verify
-		verify(pluginMock, atLeastOnce()).getName();
+			// Assert
+			assertTrue(item.isPresent());
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getName();
+		}
 	}
 
 
