@@ -17,10 +17,12 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.DefaultWorldNameRetriever;
+import org.bukkit.Location;
 import org.bukkit.World;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -37,31 +39,34 @@ class DefaultSpawnLocationRetrieverTest
 
 
 	@Test
-	void getWorldName_with_valid_world()
+	void getSpawnLocation_with_valid_world()
 	{
 		// Arrange
-		DefaultWorldNameRetriever retriever = new DefaultWorldNameRetriever();
-		when(worldMock.getName()).thenReturn("world_name");
+		Location location = new Location(worldMock, 10, 20, 30);
+
+		DefaultSpawnLocationRetriever retriever = new DefaultSpawnLocationRetriever();
+		when(worldMock.getSpawnLocation()).thenReturn(location);
 
 		// Act
-		Optional<String> result = retriever.getWorldName(worldMock);
+		Optional<Location> result = retriever.getSpawnLocation(worldMock);
 
 		// Assert
-		assertEquals(Optional.of("world_name"), result);
+		assertTrue(result.isPresent());
+		assertEquals(location, result.get());
 
 		// Verify
-		verify(worldMock, atLeastOnce()).getName();
+		verify(worldMock, atLeastOnce()).getSpawnLocation();
 	}
 
 
 	@Test
-	void getWorldName_with_null_world()
+	void getSpawnLocation_with_null_world()
 	{
 		// Arrange
-		DefaultWorldNameRetriever retriever = new DefaultWorldNameRetriever();
+		DefaultSpawnLocationRetriever retriever = new DefaultSpawnLocationRetriever();
 
 		// Act
-		Optional<String> result = retriever.getWorldName(null);
+		Optional<Location> result = retriever.getSpawnLocation(null);
 
 		// Assert
 		assertEquals(Optional.empty(), result);

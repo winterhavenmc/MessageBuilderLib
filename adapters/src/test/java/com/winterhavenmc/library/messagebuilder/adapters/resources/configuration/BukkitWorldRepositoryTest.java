@@ -307,9 +307,7 @@ class BukkitWorldRepositoryTest
 	void aliasOrName_returns_optional_string()
 	{
 		// Arrange
-		when(pluginMock.getServer()).thenReturn(serverMock);
-		when(serverMock.getWorld(world1Uid)).thenReturn(world1Mock);
-		when(worldNameResolverMock.resolve(world1Mock)).thenReturn("world");
+		when(worldNameResolverMock.resolve(world1Uid)).thenReturn("world");
 		WorldRepository worlds = BukkitWorldRepository.create(pluginMock, worldNameResolverMock, spawnLocationResolverMock);
 
 		// Act
@@ -319,29 +317,21 @@ class BukkitWorldRepositoryTest
 		assertTrue(result.isPresent());
 
 		// Verify
-		verify(pluginMock, atLeastOnce()).getServer();
-		verify(serverMock, atLeastOnce()).getWorld(world1Uid);
-		verify(worldNameResolverMock, atLeastOnce()).resolve(world1Mock);
+		verify(worldNameResolverMock, atLeastOnce()).resolve(world1Uid);
 	}
 
 
 	@Test
-	void aliasOrName_returns_empty_optional_given_null_world()
+	void aliasOrName_returns_empty_optional_given_null_world_uid()
 	{
 		// Arrange
-		when(pluginMock.getServer()).thenReturn(serverMock);
-		when(serverMock.getWorld(world1Uid)).thenReturn(null);
 		WorldRepository worlds = BukkitWorldRepository.create(pluginMock, worldNameResolverMock, spawnLocationResolverMock);
 
 		// Act
-		Optional<String> result = worlds.aliasOrName(world1Uid);
+		Optional<String> result = worlds.aliasOrName(null);
 
 		// Assert
 		assertTrue(result.isEmpty());
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getServer();
-		verify(serverMock, atLeastOnce()).getWorld(world1Uid);
 	}
 
 

@@ -107,7 +107,7 @@ public class DisplayNameAdapterTest
 	void getDisplayName_with_valid_world()
 	{
 		when(adapterContextContainerMock.worldNameResolver()).thenReturn(worldNameResolverMock);
-		when(worldNameResolverMock.resolve(worldMock)).thenReturn("Resolved World Name");
+		when(worldNameResolverMock.resolve(worldMock.getUID())).thenReturn("Resolved World Name");
 
 		DisplayNameAdapter adapter = new DisplayNameAdapter(adapterContextContainerMock);
 		Optional<DisplayNameable> adapted = adapter.adapt(worldMock);
