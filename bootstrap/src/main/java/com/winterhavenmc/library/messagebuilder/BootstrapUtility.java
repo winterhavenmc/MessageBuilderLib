@@ -36,7 +36,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worl
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.LocalizedMessageRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.ItemDisplayNameRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.ItemNameRetriever;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.ResourcePluralNameRetriever;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.PersistentPluralNameRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
@@ -227,7 +227,7 @@ public final class BootstrapUtility
 		BukkitItemNameResolver bukkitItemNameResolver = new BukkitItemNameResolver();
 		BukkitItemDisplayNameResolver bukkitItemDisplayNameResolver = new BukkitItemDisplayNameResolver();
 
-		NameResolverCtx nameResolverCtx = new NameResolverCtx(new ItemNameRetriever(), new ItemDisplayNameRetriever(), new ResourcePluralNameRetriever(itemRepository, MiniMessage.miniMessage()));
+		NameResolverCtx nameResolverCtx = new NameResolverCtx(new ItemNameRetriever(), new ItemDisplayNameRetriever(), new PersistentPluralNameRetriever(plugin, formatterCtx.miniMessage()));
 		BukkitItemPluralNameResolver bukkitItemPluralNameResolver = new BukkitItemPluralNameResolver(nameResolverCtx);
 
 		return new AccessorCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,

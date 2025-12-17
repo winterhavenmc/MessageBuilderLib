@@ -90,6 +90,32 @@ class MultiverseSpawnLocationRetrieverTest
 
 
 	@Test
+	void getSpawnLocation_returns_empty_optional_when_multiverse_returns_null_world()
+	{
+		// Arrange
+		final Location location = new Location(worldMock, 10, 20, 30);
+		final MultiverseSpawnLocationRetriever locationRetriever = new MultiverseSpawnLocationRetriever();
+
+		try (MockedStatic<MultiverseCoreApi> mvApi = Mockito.mockStatic(MultiverseCoreApi.class))
+		{
+			mvApi.when(MultiverseCoreApi::get).thenReturn(multiverseCoreApiMock);
+			when(multiverseCoreApiMock.getWorldManager()).thenReturn(worldManagerMock);
+			when(worldManagerMock.getWorld(worldMock)).thenReturn(Option.of(null));
+
+			// Act
+			Optional<Location> result = locationRetriever.getSpawnLocation(worldMock);
+
+			// Assert
+			assertTrue(result.isEmpty());
+
+			// Verify
+			verify(multiverseCoreApiMock, atLeastOnce()).getWorldManager();
+			verify(worldManagerMock, atLeastOnce()).getWorld(worldMock);
+		}
+	}
+
+
+	@Test
 	void getSpawnLocation_returns_optional_location()
 	{
 		// Arrange
