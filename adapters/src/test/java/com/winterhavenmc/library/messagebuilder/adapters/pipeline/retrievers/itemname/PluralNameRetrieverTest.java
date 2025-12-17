@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class PersistentPluralNameRetrieverTest
+class PluralNameRetrieverTest
 {
 	@Mock Plugin pluginMock;
 	@Mock ItemStack itemStackMock;
@@ -66,6 +66,35 @@ class PersistentPluralNameRetrieverTest
 		verify(pluginMock, atLeastOnce()).getName();
 		verify(itemStackMock, atLeastOnce()).getItemMeta();
 		verify(itemMetaMock, atLeastOnce()).getPersistentDataContainer();
+	}
+
+
+	@Test
+	void retrieve_returns_empty_optional_given_ItemStack_with_blank_persisted_plural_name()
+	{
+		// Arrange
+		when(pluginMock.getName()).thenReturn("test-plugin");
+		NamespacedKey namespacedKey = new NamespacedKey(pluginMock, "PLURAL_NAME");
+
+		when(itemStackMock.getItemMeta()).thenReturn(itemMetaMock);
+		when(itemMetaMock.getPersistentDataContainer()).thenReturn(persistentDataContainerMock);
+		when(persistentDataContainerMock.has(namespacedKey, PersistentDataType.STRING)).thenReturn(true);
+		when(persistentDataContainerMock.get(namespacedKey, PersistentDataType.STRING)).thenReturn("");
+
+		PersistentPluralNameRetriever retriever = new PersistentPluralNameRetriever(pluginMock, miniMessage);
+
+		// Act
+		Optional<String> result = retriever.retrieve(itemStackMock);
+
+		// Assert
+		assertTrue(result.isEmpty());
+
+		// Verify
+		verify(pluginMock, atLeastOnce()).getName();
+		verify(itemStackMock, atLeastOnce()).getItemMeta();
+		verify(itemMetaMock, atLeastOnce()).getPersistentDataContainer();
+		verify(persistentDataContainerMock, atLeastOnce()).has(namespacedKey, PersistentDataType.STRING);
+		verify(persistentDataContainerMock, atLeastOnce()).get(namespacedKey, PersistentDataType.STRING);
 	}
 
 
