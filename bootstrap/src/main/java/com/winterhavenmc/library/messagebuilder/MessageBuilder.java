@@ -148,10 +148,13 @@ public final class MessageBuilder
 		// create configuration repository
 		final ConfigRepository configRepository = BukkitConfigRepository.create(plugin);
 
+		// Create custom item maker
+		CustomItemFactory customItemFactory = new CustomItemFactory(plugin, miniMessage);
+
 		// create language resource manager and repositories
 		final LanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
-		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager);
+		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager, customItemFactory);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 
 		// create sound resource manager and repositories
