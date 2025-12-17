@@ -39,6 +39,7 @@ import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.models.time.Tick;
 import com.winterhavenmc.library.messagebuilder.models.validation.*;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -141,13 +142,19 @@ public final class MessageBuilder
 		// validate parameter
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, Parameter.PLUGIN));
 
+		// Create MiniMessage instance
+		final MiniMessage miniMessage = MiniMessage.miniMessage();
+
 		// create configuration repository
 		final ConfigRepository configRepository = BukkitConfigRepository.create(plugin);
+
+		// Create custom item maker
+		CustomItemFactory customItemFactory = new CustomItemFactory(plugin, miniMessage);
 
 		// create language resource manager and repositories
 		final LanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
-		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager);
+		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager, customItemFactory);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 
 		// create sound resource manager and repositories
@@ -158,7 +165,7 @@ public final class MessageBuilder
 		final WorldRepository worldRepository = createWorldRepository(plugin);
 
 		// create context containers
-		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, configRepository, constantRepository);
+		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, configRepository, constantRepository, miniMessage);
 		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRepository, formatterCtx);
 
 		// create message pipeline

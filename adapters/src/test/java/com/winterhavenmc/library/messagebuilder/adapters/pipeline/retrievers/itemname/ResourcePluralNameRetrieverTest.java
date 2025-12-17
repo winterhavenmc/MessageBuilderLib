@@ -126,7 +126,7 @@ class ResourcePluralNameRetrieverTest
 	{
 		// Arrange
 		validItemKey = ItemKey.of("TEST_ITEM").isValid().orElseThrow();
-		when(itemRepositoryMock.getRecordOpt(validItemKey)).thenReturn(Optional.of(validItemRecord));
+		when(itemRepositoryMock.recordOpt(validItemKey)).thenReturn(Optional.of(validItemRecord));
 
 		// Act
 		Optional<ValidItemRecord> result = retriever.getValidRecord(validItemKey);
@@ -136,7 +136,7 @@ class ResourcePluralNameRetrieverTest
 		assertEquals("Test Item", result.get().name());
 
 		// Verify
-		verify(itemRepositoryMock, atLeastOnce()).getRecordOpt(validItemKey);
+		verify(itemRepositoryMock, atLeastOnce()).recordOpt(validItemKey);
 	}
 
 

@@ -54,7 +54,7 @@ public interface ItemRepository
 	 * @param validItemKey the valid item key
 	 * @return the item record referenced by the valid item key, or null if no item record found for key
 	 */
-	ItemRecord getRecord(ValidItemKey validItemKey);
+	ItemRecord record(ValidItemKey validItemKey);
 
 
 	/**
@@ -63,7 +63,7 @@ public interface ItemRepository
 	 * @param validItemKey the alid item key
 	 * @return an Optional of itemRecord, or an empty Optional if no item record found for key
 	 */
-	Optional<ItemRecord> getRecordOpt(ValidItemKey validItemKey);
+	Optional<ItemRecord> recordOpt(ValidItemKey validItemKey);
 
 	Optional<ItemStack> createItem(ValidItemKey validItemKey);
 

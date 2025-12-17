@@ -8,6 +8,7 @@ import com.winterhavenmc.library.messagebuilder.models.language.item.InvalidItem
 import com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord;
 
 import com.winterhavenmc.library.messagebuilder.models.language.item.ValidItemRecord;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -41,6 +42,8 @@ class YamlItemRepositoryTest
 	@Mock Server serverMock;
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 
+	MiniMessage miniMessage = MiniMessage.miniMessage();
+
 	ValidItemKey validItemKey = ItemKey.of("TEST_ITEM").isValid().orElseThrow();
 
 	String configString = """
@@ -68,8 +71,8 @@ class YamlItemRepositoryTest
 		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
-		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
-		ItemRecord result = items.getRecord(validItemKey);
+		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
+		ItemRecord result = items.record(validItemKey);
 
 		// Assert
 		assertInstanceOf(ValidItemRecord.class, result);
@@ -88,8 +91,8 @@ class YamlItemRepositoryTest
 		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
-		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
-		ItemRecord result = items.getRecord(validItemKey);
+		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
+		ItemRecord result = items.record(validItemKey);
 
 		// Assert
 		assertInstanceOf(InvalidItemRecord.class, result);
@@ -114,7 +117,7 @@ class YamlItemRepositoryTest
 //			bukkitMockedStatic.when(Bukkit::getServer).thenReturn(serverMock);
 
 			// Act
-			ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
 			Optional<ItemStack> item = items.createItem(validItemKey);
 
 			// Assert
@@ -185,7 +188,7 @@ class YamlItemRepositoryTest
 
 
 	@Test
-	void getRecordOpt() throws InvalidConfigurationException
+	void recordOpt() throws InvalidConfigurationException
 	{
 		// Arrange
 		configuration.loadFromString(configString);
@@ -193,8 +196,8 @@ class YamlItemRepositoryTest
 		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
-		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
-		Optional<ItemRecord> result = items.getRecordOpt(validItemKey);
+		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
+		Optional<ItemRecord> result = items.recordOpt(validItemKey);
 
 		// Assert
 		assertTrue(result.isPresent());
@@ -217,7 +220,7 @@ class YamlItemRepositoryTest
 		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
-		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
 		boolean result = items.isItem(itemStack);
 
 		// Assert
@@ -239,7 +242,7 @@ class YamlItemRepositoryTest
 		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 		// Act
-		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
 		Optional<ItemStack> itemStack = items.createItem(validItemKey);
 		ItemKey result;
 
@@ -277,7 +280,7 @@ class YamlItemRepositoryTest
 			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 			// Act
-			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
 			Optional<String> result = items.name(validItemKey);
 
 			// Assert
@@ -299,7 +302,7 @@ class YamlItemRepositoryTest
 			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 			// Act
-			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
 			Optional<String> result = items.name(null);
 
 			// Assert
@@ -321,7 +324,7 @@ class YamlItemRepositoryTest
 			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 			// Act
-			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
 			Optional<String> result = items.name(nonexistentItemKey);
 
 			// Assert
@@ -345,7 +348,7 @@ class YamlItemRepositoryTest
 			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 			// Act
-			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
 			Optional<String> result = items.displayName(validItemKey);
 
 			// Assert
@@ -367,7 +370,7 @@ class YamlItemRepositoryTest
 			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 			// Act
-			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
 			Optional<String> result = items.displayName(null);
 
 			// Assert
@@ -389,7 +392,7 @@ class YamlItemRepositoryTest
 			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
 			// Act
-			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
 			Optional<String> result = items.displayName(nonexistentItemKey);
 
 			// Assert
