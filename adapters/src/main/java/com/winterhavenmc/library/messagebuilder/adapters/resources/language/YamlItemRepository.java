@@ -67,19 +67,6 @@ public final class YamlItemRepository implements ItemRepository
 
 
 	@Override
-	public ItemRecord getRecord(final ValidItemKey validItemKey)
-	{
-		// confirm item section is not null
-		if (sectionProvider.getSection() == null) return new InvalidItemRecord(validItemKey, InvalidRecordReason.ITEM_SECTION_MISSING);
-
-		// confirm item entry in section is valid
-		else return (sectionProvider.getSection().isConfigurationSection(validItemKey.toString()))
-				? ItemRecord.of(validItemKey, sectionProvider.getSection().getConfigurationSection(validItemKey.toString()))
-				: ItemRecord.empty(validItemKey, InvalidRecordReason.ITEM_ENTRY_MISSING);
-	}
-
-
-	@Override
 	public Optional<ItemStack> createItem(final ValidItemKey validItemKey)
 	{
 		return createItem(validItemKey, 1, Map.of());
@@ -123,6 +110,19 @@ public final class YamlItemRepository implements ItemRepository
 
 
 	@Override
+	public ItemRecord getRecord(final ValidItemKey validItemKey)
+	{
+		// confirm item section is not null
+		if (sectionProvider.getSection() == null) return new InvalidItemRecord(validItemKey, InvalidRecordReason.ITEM_SECTION_MISSING);
+
+			// confirm item entry in section is valid
+		else return (sectionProvider.getSection().isConfigurationSection(validItemKey.toString()))
+				? ItemRecord.of(validItemKey, sectionProvider.getSection().getConfigurationSection(validItemKey.toString()))
+				: ItemRecord.empty(validItemKey, InvalidRecordReason.ITEM_ENTRY_MISSING);
+	}
+
+
+	@Override
 	public Optional<ItemRecord> getRecordOpt(final ValidItemKey validItemKey)
 	{
 		ItemRecord itemRecord = getRecord(validItemKey);
@@ -145,19 +145,19 @@ public final class YamlItemRepository implements ItemRepository
 	}
 
 
-	private Optional<String> getItemKeyString(ItemStack itemStack)
-	{
-		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
-				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
-				: Optional.empty();
-	}
-
-
 	@Override
 	public ItemKey key(final ItemStack itemStack)
 	{
 		return getItemKeyString(itemStack).map(ItemKey::of)
 				.orElseGet(() -> new InvalidItemKey("unknown", InvalidKeyReason.KEY_INVALID));
+	}
+
+
+	private Optional<String> getItemKeyString(ItemStack itemStack)
+	{
+		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
+				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))
+				: Optional.empty();
 	}
 
 }
