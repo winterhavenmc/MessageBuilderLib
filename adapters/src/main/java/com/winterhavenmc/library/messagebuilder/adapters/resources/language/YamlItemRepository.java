@@ -85,7 +85,7 @@ public final class YamlItemRepository implements ItemRepository
 										  final int quantity,
 										  final Map<String, String> replacements)
 	{
-		return (validItemKey != null && getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+		return (validItemKey != null && record(validItemKey) instanceof ValidItemRecord validItemRecord)
 				? customItemFactory.createItem(validItemRecord, quantity, (replacements != null) ? replacements : Map.of())
 				: Optional.empty();
 	}
@@ -94,7 +94,7 @@ public final class YamlItemRepository implements ItemRepository
 	@Override
 	public Optional<String> name(final ValidItemKey validItemKey)
 	{
-		return (validItemKey != null && getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+		return (validItemKey != null && record(validItemKey) instanceof ValidItemRecord validItemRecord)
 				? Optional.of(validItemRecord.name())
 				: Optional.empty();
 	}
@@ -103,14 +103,14 @@ public final class YamlItemRepository implements ItemRepository
 	@Override
 	public Optional<String> displayName(final ValidItemKey validItemKey)
 	{
-		return (validItemKey != null && getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+		return (validItemKey != null && record(validItemKey) instanceof ValidItemRecord validItemRecord)
 				? Optional.of(validItemRecord.displayName())
 				: Optional.empty();
 	}
 
 
 	@Override
-	public ItemRecord getRecord(final ValidItemKey validItemKey)
+	public ItemRecord record(final ValidItemKey validItemKey)
 	{
 		// confirm item section is not null
 		if (sectionProvider.getSection() == null) return new InvalidItemRecord(validItemKey, InvalidRecordReason.ITEM_SECTION_MISSING);
@@ -123,9 +123,9 @@ public final class YamlItemRepository implements ItemRepository
 
 
 	@Override
-	public Optional<ItemRecord> getRecordOpt(final ValidItemKey validItemKey)
+	public Optional<ItemRecord> recordOpt(final ValidItemKey validItemKey)
 	{
-		ItemRecord itemRecord = getRecord(validItemKey);
+		ItemRecord itemRecord = record(validItemKey);
 		if (itemRecord instanceof ValidItemRecord validItemRecord)
 		{
 			return Optional.of(validItemRecord);
@@ -148,12 +148,12 @@ public final class YamlItemRepository implements ItemRepository
 	@Override
 	public ItemKey key(final ItemStack itemStack)
 	{
-		return getItemKeyString(itemStack).map(ItemKey::of)
+		return itemKeyString(itemStack).map(ItemKey::of)
 				.orElseGet(() -> new InvalidItemKey("unknown", InvalidKeyReason.KEY_INVALID));
 	}
 
 
-	private Optional<String> getItemKeyString(ItemStack itemStack)
+	private Optional<String> itemKeyString(ItemStack itemStack)
 	{
 		return (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
 				? Optional.ofNullable(itemStack.getItemMeta().getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING))

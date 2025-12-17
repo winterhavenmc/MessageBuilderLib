@@ -72,7 +72,7 @@ class YamlItemRepositoryTest
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
-		ItemRecord result = items.getRecord(validItemKey);
+		ItemRecord result = items.record(validItemKey);
 
 		// Assert
 		assertInstanceOf(ValidItemRecord.class, result);
@@ -92,7 +92,7 @@ class YamlItemRepositoryTest
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
-		ItemRecord result = items.getRecord(validItemKey);
+		ItemRecord result = items.record(validItemKey);
 
 		// Assert
 		assertInstanceOf(InvalidItemRecord.class, result);
@@ -188,7 +188,7 @@ class YamlItemRepositoryTest
 
 
 	@Test
-	void getRecordOpt() throws InvalidConfigurationException
+	void recordOpt() throws InvalidConfigurationException
 	{
 		// Arrange
 		configuration.loadFromString(configString);
@@ -197,7 +197,7 @@ class YamlItemRepositoryTest
 
 		// Act
 		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock, new CustomItemFactory(pluginMock, miniMessage));
-		Optional<ItemRecord> result = items.getRecordOpt(validItemKey);
+		Optional<ItemRecord> result = items.recordOpt(validItemKey);
 
 		// Assert
 		assertTrue(result.isPresent());
