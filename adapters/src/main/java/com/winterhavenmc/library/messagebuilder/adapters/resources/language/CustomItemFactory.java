@@ -4,7 +4,6 @@ import com.winterhavenmc.library.messagebuilder.models.Delimiter;
 import com.winterhavenmc.library.messagebuilder.models.language.item.ValidItemRecord;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -18,10 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository.LEGACY_SERIALIZER;
+
 
 public final class CustomItemFactory
 {
-	public static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
 	static final String ITEM_KEY_STRING = "ITEM_KEY";
 	private static final Material DEFAULT_MATERIAL = Material.STICK;
 	private static final String PLURAL_KEY_STRING = "PLURAL_NAME";
