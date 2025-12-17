@@ -47,7 +47,7 @@ public class ResourcePluralNameRetriever implements ItemStackNameRetriever
 
 	Optional<ValidItemRecord> getValidRecord(final ValidItemKey key)
 	{
-		return itemRepository.recordOpt(key)
+		return itemRepository.itemRecordOpt(key)
 				.filter(ValidItemRecord.class::isInstance)
 				.map(ValidItemRecord.class::cast);
 	}

@@ -28,8 +28,6 @@ import com.winterhavenmc.library.messagebuilder.models.language.InvalidRecordRea
 import com.winterhavenmc.library.messagebuilder.models.language.item.InvalidItemRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.item.ValidItemRecord;
-import com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey;
-import com.winterhavenmc.library.messagebuilder.models.validation.Parameter;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.NamespacedKey;
@@ -40,6 +38,9 @@ import org.bukkit.plugin.Plugin;
 import java.util.*;
 
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.language.CustomItemFactory.ITEM_KEY_STRING;
+import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.LANGUAGE_RESOURCE_MANAGER;
+import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.PLUGIN;
 import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.throwing;
 import static com.winterhavenmc.library.messagebuilder.models.validation.Validator.validate;
 
@@ -57,8 +58,8 @@ public final class YamlItemRepository implements ItemRepository
 							  final LanguageResourceManager languageResourceManager,
 							  final CustomItemFactory customItemFactory)
 	{
-		validate(plugin, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.PLUGIN));
-		validate(languageResourceManager, Objects::isNull, throwing(ErrorMessageKey.PARAMETER_NULL, Parameter.LANGUAGE_RESOURCE_MANAGER));
+		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, PLUGIN));
+		validate(languageResourceManager, Objects::isNull, throwing(PARAMETER_NULL, LANGUAGE_RESOURCE_MANAGER));
 
 		this.customItemFactory = customItemFactory;
 		this.sectionProvider = languageResourceManager.getSectionProvider(Section.ITEMS);
@@ -85,7 +86,7 @@ public final class YamlItemRepository implements ItemRepository
 										  final int quantity,
 										  final Map<String, String> replacements)
 	{
-		return (validItemKey != null && record(validItemKey) instanceof ValidItemRecord validItemRecord)
+		return (itemRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 				? customItemFactory.createItem(validItemRecord, quantity, (replacements != null) ? replacements : Map.of())
 				: Optional.empty();
 	}
@@ -94,7 +95,7 @@ public final class YamlItemRepository implements ItemRepository
 	@Override
 	public Optional<String> name(final ValidItemKey validItemKey)
 	{
-		return (validItemKey != null && record(validItemKey) instanceof ValidItemRecord validItemRecord)
+		return (itemRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 				? Optional.of(validItemRecord.name())
 				: Optional.empty();
 	}
@@ -103,14 +104,14 @@ public final class YamlItemRepository implements ItemRepository
 	@Override
 	public Optional<String> displayName(final ValidItemKey validItemKey)
 	{
-		return (validItemKey != null && record(validItemKey) instanceof ValidItemRecord validItemRecord)
+		return (itemRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 				? Optional.of(validItemRecord.displayName())
 				: Optional.empty();
 	}
 
 
 	@Override
-	public ItemRecord record(final ValidItemKey validItemKey)
+	public ItemRecord itemRecord(final ValidItemKey validItemKey)
 	{
 		// confirm item section is not null
 		if (sectionProvider.getSection() == null) return new InvalidItemRecord(validItemKey, InvalidRecordReason.ITEM_SECTION_MISSING);
@@ -123,15 +124,11 @@ public final class YamlItemRepository implements ItemRepository
 
 
 	@Override
-	public Optional<ItemRecord> recordOpt(final ValidItemKey validItemKey)
+	public Optional<ItemRecord> itemRecordOpt(final ValidItemKey validItemKey)
 	{
-		ItemRecord itemRecord = record(validItemKey);
-		if (itemRecord instanceof ValidItemRecord validItemRecord)
-		{
-			return Optional.of(validItemRecord);
-		}
-
-		return Optional.empty();
+		return (itemRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+				? Optional.of(validItemRecord)
+				: Optional.empty();
 	}
 
 
