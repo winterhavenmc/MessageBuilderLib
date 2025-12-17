@@ -91,7 +91,7 @@ public final class YamlItemRepository implements ItemRepository
 	@Override
 	public Optional<ItemStack> createItem(final ValidItemKey validItemKey)
 	{
-		return createItem(validItemKey, 1);
+		return createItem(validItemKey, 1, Map.of());
 	}
 
 
@@ -107,37 +107,40 @@ public final class YamlItemRepository implements ItemRepository
 										  final int quantity,
 										  final Map<String, String> replacements)
 	{
-		if (getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+		return (validItemKey != null && getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+				? createItem(validItemRecord, quantity, replacements)
+				: Optional.empty();
+	}
+
+
+	Optional<ItemStack> createItem(final ValidItemRecord validItemRecord,
+								   final int quantity,
+								   final Map<String, String> replacements)
+	{
+		Material material = Material.matchMaterial(validItemRecord.material());
+		if (material == null || !material.isItem())
 		{
-			Material material = Material.matchMaterial(validItemRecord.material());
-			if (material == null || !material.isItem())
-			{
-				material = DEFAULT_MATERIAL;
-			}
-			ItemStack itemStack = new ItemStack(material, quantity);
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			if (itemMeta != null)
-			{
-				setItemName(validItemRecord, itemMeta, replacements);
-				setItemDisplayName(validItemRecord, itemMeta, replacements);
-				setItemLore(validItemRecord, itemMeta, replacements);
-				setItemPersistentData(validItemRecord, itemMeta);
-				setItemFlags(itemMeta);
-			}
-			itemStack.setItemMeta(itemMeta);
-			return Optional.of(itemStack);
+			material = DEFAULT_MATERIAL;
 		}
-		else
+		ItemStack itemStack = new ItemStack(material, quantity);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		if (itemMeta != null)
 		{
-			return Optional.empty();
+			setItemName(validItemRecord, itemMeta, replacements);
+			setItemDisplayName(validItemRecord, itemMeta, replacements);
+			setItemLore(validItemRecord, itemMeta, replacements);
+			setItemPersistentData(validItemRecord, itemMeta);
+			setItemFlags(itemMeta);
 		}
+		itemStack.setItemMeta(itemMeta);
+		return Optional.of(itemStack);
 	}
 
 
 	@Override
 	public Optional<String> name(final ValidItemKey validItemKey)
 	{
-		return (getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+		return (validItemKey != null && getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 				? Optional.of(validItemRecord.name())
 				: Optional.empty();
 	}
@@ -146,7 +149,7 @@ public final class YamlItemRepository implements ItemRepository
 	@Override
 	public Optional<String> displayName(final ValidItemKey validItemKey)
 	{
-		return (getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
+		return (validItemKey != null && getRecord(validItemKey) instanceof ValidItemRecord validItemRecord)
 				? Optional.of(validItemRecord.displayName())
 				: Optional.empty();
 	}
@@ -270,20 +273,6 @@ public final class YamlItemRepository implements ItemRepository
 	}
 
 
-	private static void setItemPersistentData(final Plugin plugin, final ValidItemRecord itemRecord, final ItemMeta itemMeta)
-	{
-		String itemRecordKey = itemRecord.key().toString();
-		NamespacedKey itemKey = new NamespacedKey(plugin, ITEM_KEY_STRING);
-		itemMeta.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, itemRecordKey);
-
-		if (itemRecord.pluralName() != null && !itemRecord.pluralName().isBlank())
-		{
-			NamespacedKey pluralKey = new NamespacedKey(plugin, PLURAL_KEY_STRING);
-			itemMeta.getPersistentDataContainer().set(pluralKey, PersistentDataType.STRING, itemRecord.pluralName());
-		}
-	}
-
-
 	private void setItemPersistentData(final ValidItemRecord itemRecord, final ItemMeta itemMeta)
 	{
 		itemMeta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, itemRecord.key().toString());
@@ -296,7 +285,7 @@ public final class YamlItemRepository implements ItemRepository
 	}
 
 
-	private static void setItemFlags(final ItemMeta itemMeta)
+	private void setItemFlags(final ItemMeta itemMeta)
 	{
 		itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

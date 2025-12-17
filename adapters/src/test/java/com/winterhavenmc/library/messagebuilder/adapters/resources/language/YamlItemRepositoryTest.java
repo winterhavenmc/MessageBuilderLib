@@ -8,7 +8,9 @@ import com.winterhavenmc.library.messagebuilder.models.language.item.InvalidItem
 import com.winterhavenmc.library.messagebuilder.models.language.item.ItemRecord;
 
 import com.winterhavenmc.library.messagebuilder.models.language.item.ValidItemRecord;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,9 +19,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -33,6 +38,7 @@ import static org.mockito.Mockito.*;
 class YamlItemRepositoryTest
 {
 	@Mock Plugin pluginMock;
+	@Mock Server serverMock;
 	@Mock YamlLanguageResourceManager languageResourceManagerMock;
 
 	ValidItemKey validItemKey = ItemKey.of("TEST_ITEM").isValid().orElseThrow();
@@ -95,7 +101,7 @@ class YamlItemRepositoryTest
 
 
 	@Test
-	@Disabled("needs static mock server")
+	@Disabled("needs registry mock")
 	void createItem_returns_valid_item() throws InvalidConfigurationException
 	{
 		// Arrange
@@ -103,15 +109,20 @@ class YamlItemRepositoryTest
 		when(pluginMock.getName()).thenReturn("PluginName");
 		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
 
-		// Act
-		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
-		Optional<ItemStack> item = items.createItem(validItemKey);
+		try (MockedStatic<Bukkit> bukkitMockedStatic = Mockito.mockStatic(Bukkit.class))
+		{
+//			bukkitMockedStatic.when(Bukkit::getServer).thenReturn(serverMock);
 
-		// Assert
-		assertTrue(item.isPresent());
+			// Act
+			ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			Optional<ItemStack> item = items.createItem(validItemKey);
 
-		// Verify
-		verify(pluginMock, atLeastOnce()).getName();
+			// Assert
+			assertTrue(item.isPresent());
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getName();
+		}
 	}
 
 
@@ -129,48 +140,48 @@ class YamlItemRepositoryTest
 	}
 
 
-	@Test
-	void name() throws InvalidConfigurationException
-	{
-		// Arrange
-		configuration.loadFromString(configString);
-		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
+//	@Test
+//	void name() throws InvalidConfigurationException
+//	{
+//		// Arrange
+//		configuration.loadFromString(configString);
+//		when(pluginMock.getName()).thenReturn("PluginName");
+//		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
+//
+//		// Act
+//		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+//		ItemRecord result = items.getRecord(validItemKey);
+//
+//		// Assert
+//		assertInstanceOf(ValidItemRecord.class, result);
+//		assertEquals("Test Item", result.isValid().orElseThrow().name());
+//
+//		// Verify
+//		verify(pluginMock, atLeastOnce()).getName();
+//		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
+//	}
 
-		// Act
-		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
-		ItemRecord result = items.getRecord(validItemKey);
 
-		// Assert
-		assertInstanceOf(ValidItemRecord.class, result);
-		assertEquals("Test Item", result.isValid().orElseThrow().name());
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getName();
-		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
-	}
-
-
-	@Test
-	void displayName() throws InvalidConfigurationException
-	{
-		// Arrange
-		configuration.loadFromString(configString);
-		when(pluginMock.getName()).thenReturn("PluginName");
-		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
-
-		// Act
-		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
-		ItemRecord result = items.getRecord(validItemKey);
-
-		// Assert
-		assertInstanceOf(ValidItemRecord.class, result);
-		assertEquals("Item Display Name", result.isValid().orElseThrow().displayName());
-
-		// Verify
-		verify(pluginMock, atLeastOnce()).getName();
-		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
-	}
+//	@Test
+//	void displayName() throws InvalidConfigurationException
+//	{
+//		// Arrange
+//		configuration.loadFromString(configString);
+//		when(pluginMock.getName()).thenReturn("PluginName");
+//		when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
+//
+//		// Act
+//		ItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+//		ItemRecord result = items.getRecord(validItemKey);
+//
+//		// Assert
+//		assertInstanceOf(ValidItemRecord.class, result);
+//		assertEquals("Item Display Name", result.isValid().orElseThrow().displayName());
+//
+//		// Verify
+//		verify(pluginMock, atLeastOnce()).getName();
+//		verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
+//	}
 
 
 	@Test
@@ -246,13 +257,148 @@ class YamlItemRepositoryTest
 		ItemStack itemStack = new ItemStack(Material.STONE);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 
-		//YamlItemRepository.setItemFlags(itemMeta);
-
 		Set<ItemFlag> itemFlags = itemMeta.getItemFlags();
 
 		assertTrue(itemFlags.contains(ItemFlag.HIDE_ATTRIBUTES));
 		assertTrue(itemFlags.contains(ItemFlag.HIDE_ENCHANTS));
 		assertTrue(itemFlags.contains(ItemFlag.HIDE_UNBREAKABLE));
+	}
+
+
+	@Nested
+	class NameTests
+	{
+		@Test
+		void name_returns_item_name_given_valid_item_key() throws InvalidConfigurationException
+		{
+			// Arrange
+			configuration.loadFromString(configString);
+			when(pluginMock.getName()).thenReturn("TestPlugin");
+			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
+
+			// Act
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			Optional<String> result = items.name(validItemKey);
+
+			// Assert
+			assertTrue(result.isPresent());
+			assertEquals("Test Item", result.get());
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getName();
+			verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
+		}
+
+
+		@Test
+		void name_returns_empty_optional_given_null_item_key() throws InvalidConfigurationException
+		{
+			// Arrange
+			configuration.loadFromString(configString);
+			when(pluginMock.getName()).thenReturn("TestPlugin");
+			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
+
+			// Act
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			Optional<String> result = items.name(null);
+
+			// Assert
+			assertTrue(result.isEmpty());
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getName();
+			verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
+		}
+
+
+		@Test
+		void name_returns_empty_optional_given_invalid_item_key() throws InvalidConfigurationException
+		{
+			// Arrange
+			ValidItemKey nonexistentItemKey = ItemKey.of("NONEXISTENT_KEY").isValid().orElseThrow();
+			configuration.loadFromString(configString);
+			when(pluginMock.getName()).thenReturn("TestPlugin");
+			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
+
+			// Act
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			Optional<String> result = items.name(nonexistentItemKey);
+
+			// Assert
+			assertTrue(result.isEmpty());
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getName();
+			verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
+		}
+	}
+
+	@Nested
+	class DisplayNameTests
+	{
+		@Test
+		void displayName_returns_item_displayName_given_valid_item_key() throws InvalidConfigurationException
+		{
+			// Arrange
+			configuration.loadFromString(configString);
+			when(pluginMock.getName()).thenReturn("TestPlugin");
+			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
+
+			// Act
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			Optional<String> result = items.displayName(validItemKey);
+
+			// Assert
+			assertTrue(result.isPresent());
+			assertEquals("Item Display Name", result.get());
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getName();
+			verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
+		}
+
+
+		@Test
+		void displayName_returns_empty_optional_given_null_item_key() throws InvalidConfigurationException
+		{
+			// Arrange
+			configuration.loadFromString(configString);
+			when(pluginMock.getName()).thenReturn("TestPlugin");
+			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
+
+			// Act
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			Optional<String> result = items.displayName(null);
+
+			// Assert
+			assertTrue(result.isEmpty());
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getName();
+			verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
+		}
+
+
+		@Test
+		void displayName_returns_empty_optional_given_invalid_item_key() throws InvalidConfigurationException
+		{
+			// Arrange
+			ValidItemKey nonexistentItemKey = ItemKey.of("NONEXISTENT_KEY").isValid().orElseThrow();
+			configuration.loadFromString(configString);
+			when(pluginMock.getName()).thenReturn("TestPlugin");
+			when(languageResourceManagerMock.getSectionProvider(Section.ITEMS)).thenReturn(itemSectionProvider);
+
+			// Act
+			YamlItemRepository items = new YamlItemRepository(pluginMock, languageResourceManagerMock);
+			Optional<String> result = items.displayName(nonexistentItemKey);
+
+			// Assert
+			assertTrue(result.isEmpty());
+
+			// Verify
+			verify(pluginMock, atLeastOnce()).getName();
+			verify(languageResourceManagerMock, atLeastOnce()).getSectionProvider(Section.ITEMS);
+		}
 	}
 
 }
