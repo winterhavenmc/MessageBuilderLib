@@ -200,12 +200,12 @@ public final class BootstrapUtility
 	 */
 	static FormatterCtx createFormatterContextContainer(final Plugin plugin,
 														final ConfigRepository configRepository,
-														final ConstantRepository constants)
+														final ConstantRepository constants,
+														final MiniMessage miniMessage)
 	{
 		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(configRepository);
 		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(configRepository);
 		final DurationFormatter durationFormatter = new LocalizedDurationFormatter(time4jDurationFormatter, constants);
-		final MiniMessage miniMessage = MiniMessage.miniMessage();
 
 		return new FormatterCtx(configRepository, durationFormatter, localeNumberFormatter, miniMessage);
 	}
