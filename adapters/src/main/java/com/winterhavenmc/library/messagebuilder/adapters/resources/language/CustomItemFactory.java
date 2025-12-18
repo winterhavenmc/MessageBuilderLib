@@ -20,6 +20,9 @@ import java.util.Optional;
 import static com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlItemRepository.LEGACY_SERIALIZER;
 
 
+/**
+ * Responsible for the creation of custom items as declared in the language file
+ */
 public final class CustomItemFactory
 {
 	static final String ITEM_KEY_STRING = "ITEM_KEY";
@@ -31,12 +34,19 @@ public final class CustomItemFactory
 	private final MiniMessage miniMessage;
 
 
+	/**
+	 * Class constructor
+	 *
+	 * @param plugin instance of plugin
+	 * @param miniMessage instance of MiniMessage
+	 */
 	public CustomItemFactory(final Plugin plugin, final MiniMessage miniMessage)
 	{
 		this.plugin = plugin;
 		this.miniMessage = miniMessage;
 		this.namespacedKey = new NamespacedKey(plugin, ITEM_KEY_STRING);
 	}
+
 
 	Optional<ItemStack> createItem(final ValidItemRecord validItemRecord,
 								   final int quantity,
