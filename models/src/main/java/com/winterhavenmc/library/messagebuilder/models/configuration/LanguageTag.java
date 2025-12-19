@@ -157,4 +157,20 @@ public final class LanguageTag
 		return this.wrappedLanguageTag;
 	}
 
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (!(o instanceof LanguageTag that)) return false;
+
+		return wrappedLanguageTag.equals(that.wrappedLanguageTag);
+	}
+
+
+	@Override
+	public int hashCode()
+	{
+		return wrappedLanguageTag.hashCode();
+	}
+
 }
