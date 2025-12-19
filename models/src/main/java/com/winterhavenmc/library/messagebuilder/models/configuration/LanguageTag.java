@@ -99,24 +99,25 @@ public final class LanguageTag
 	{
 		if (string == null || string.isBlank()) return false;
 
+		// get language string without country code from locale for passed in string
 		Locale locale = Locale.forLanguageTag(string);
-		String language = locale.getLanguage();
+		String languageString = locale.getLanguage();
 
 		// reject ISO-639 codes in rejections list
-		if (rejections.contains(language.toLowerCase()))
+		if (languageString.isBlank() || rejections.contains(languageString.toLowerCase()))
 		{
 			return false;
 		}
 
 		// accept ISO-639 codes in exceptions list
-		if (exceptions.contains(language.toLowerCase()))
+		if (exceptions.contains(languageString.toLowerCase()))
 		{
 			return true;
 		}
 		else
 		{
 			// Ensure the language code is one of the official ISO 639 codes
-			return Arrays.asList(Locale.getISOLanguages()).contains(language);
+			return Arrays.asList(Locale.getISOLanguages()).contains(languageString);
 		}
 	}
 
@@ -154,6 +155,22 @@ public final class LanguageTag
 	public String toString()
 	{
 		return this.wrappedLanguageTag;
+	}
+
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (!(o instanceof LanguageTag that)) return false;
+
+		return wrappedLanguageTag.equals(that.wrappedLanguageTag);
+	}
+
+
+	@Override
+	public int hashCode()
+	{
+		return wrappedLanguageTag.hashCode();
 	}
 
 }

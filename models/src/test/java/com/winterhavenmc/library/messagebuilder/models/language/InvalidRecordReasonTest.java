@@ -33,7 +33,7 @@ class InvalidRecordReasonTest
 	}
 
 	@Test
-	void getLocalizeMessage()
+	void getLocalizedMessage()
 	{
 		// Arrange
 		Locale locale = Locale.US;
