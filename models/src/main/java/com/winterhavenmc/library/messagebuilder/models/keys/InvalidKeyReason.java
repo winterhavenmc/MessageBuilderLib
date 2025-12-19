@@ -22,7 +22,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public enum InvalidKeyReason
+
+public enum InvalidKeyReason implements Reason
 {
 	KEY_NULL("The parameter 'key' was null."),
 	KEY_BLANK("The parameter 'key' was blank."),
@@ -58,7 +59,7 @@ public enum InvalidKeyReason
 	}
 
 
-	public String getLocalizeMessage(final Locale locale, final Object... objects)
+	public String getLocalizedMessage(final Locale locale, final Object... objects)
 	{
 		try
 		{
