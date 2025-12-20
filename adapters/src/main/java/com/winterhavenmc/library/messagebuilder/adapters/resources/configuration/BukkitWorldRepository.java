@@ -72,7 +72,6 @@ public final class BukkitWorldRepository implements WorldRepository
 		return new BukkitWorldRepository(plugin, worldNameResolver, spawnLocationResolver, () -> getEnabledWorldsSetting(plugin));
 	}
 
-
 	@Override
 	public EnabledWorldsSetting get()
 	{

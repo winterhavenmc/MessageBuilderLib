@@ -17,7 +17,11 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation.BukkitSpawnLocationResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.BukkitWorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitConfigRepository;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
@@ -26,6 +30,9 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSou
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameRetriever;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
@@ -48,6 +55,7 @@ import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
 import static com.winterhavenmc.library.messagebuilder.BootstrapUtility.*;
+import static com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.WorldNameRetrieverFactory.getWorldNameRetriever;
 import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.*;
@@ -162,8 +170,14 @@ public final class MessageBuilder
 		final ResourceManager soundResourceManager = YamlSoundResourceManager.create(plugin, configRepository);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
 
+		final WorldNameRetriever worldNameRetriever = getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+		final SpawnLocationRetriever spawnLocationRetriever = SpawnLocationRetriever.create(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+
+		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(plugin, worldNameRetriever);
+		final SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.create(spawnLocationRetriever);
+
 		// create world repository
-		final WorldRepository worldRepository = createWorldRepository(plugin);
+		final WorldRepository worldRepository = BukkitWorldRepository.create(plugin, worldNameResolver, spawnLocationResolver);
 
 		// create context containers
 		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, configRepository, constantRepository, miniMessage);

@@ -25,7 +25,6 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.dur
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.number.LocaleNumberFormatter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers.RegexPlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors.MessageProcessor;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation.BukkitSpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemDisplayNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemPluralNameResolver;
@@ -37,12 +36,9 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.Loc
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.ItemDisplayNameRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.ItemNameRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.PersistentPluralNameRetriever;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriMessageSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriTitleSender;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
-
-import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
@@ -50,7 +46,6 @@ import com.winterhavenmc.library.messagebuilder.core.context.MessagePipelineCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.NameResolverCtx;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameRetriever;
@@ -61,7 +56,6 @@ import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.It
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundRepository;
 
 import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.worlds.WorldRepository;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -73,7 +67,6 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
-import static com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever.create;
 import static com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.WorldNameRetrieverFactory.getWorldNameRetriever;
 
 
@@ -203,18 +196,6 @@ public final class BootstrapUtility
 
 		return new AccessorCtx(worldNameResolver, bukkitItemNameResolver, bukkitItemDisplayNameResolver,
 				bukkitItemPluralNameResolver, formatterCtx);
-	}
-
-
-	static WorldRepository createWorldRepository(final Plugin plugin)
-	{
-		final WorldNameRetriever worldNameRetriever = getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
-		final SpawnLocationRetriever spawnLocationRetriever = create(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
-
-		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(plugin, worldNameRetriever);
-		final SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.create(spawnLocationRetriever);
-
-		return BukkitWorldRepository.create(plugin, worldNameResolver, spawnLocationResolver);
 	}
 
 }
