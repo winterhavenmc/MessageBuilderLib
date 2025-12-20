@@ -17,8 +17,8 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.MacroFieldAccessor;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.MacroFieldAccessor;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.cooldown.MessageCooldownMap;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.LocalizedDurationFormatter;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.duration.Time4jDurationFormatter;
@@ -26,12 +26,12 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.formatters.num
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers.RegexPlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors.MessageProcessor;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation.BukkitSpawnLocationResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.MacroValueResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.AtomicResolver;
-import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.CompositeResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemDisplayNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.itemname.BukkitItemPluralNameResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.AtomicResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.CompositeResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.MacroValueResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.BukkitWorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.LocalizedMessageRetriever;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.itemname.ItemDisplayNameRetriever;
@@ -69,6 +69,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.Plugin;
 
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -96,14 +97,14 @@ public final class BootstrapUtility
 
 
 	/**
-	 * A static factory method to create a macro replacer instance
+	 * A static factory method to create a message processor instance
 	 *
 	 * @param formatterCtx the context container holding formatters
 	 * @param accessorCtx the context container for dependency injection into adapters
-	 * @return an instance of the macro replacer
+	 * @return an instance of the message processor
 	 */
-	private static @NotNull MessageProcessor createMacroReplacer(final FormatterCtx formatterCtx,
-																 final AccessorCtx accessorCtx)
+	public static @NotNull MessageProcessor createMessageProcessor(final FormatterCtx formatterCtx,
+																   final AccessorCtx accessorCtx)
 	{
 		final AccessorRegistry accessorRegistry = new FieldAccessorRegistry(accessorCtx);
 		final MacroFieldAccessor macroFieldAccessor = new MacroFieldAccessor(accessorCtx);
@@ -130,7 +131,7 @@ public final class BootstrapUtility
 														  final AccessorCtx accessorCtx)
 	{
 		final LocalizedMessageRetriever localizedMessageRetriever = new LocalizedMessageRetriever(messages);
-		final MessageProcessor messageProcessor = createMacroReplacer(formatterCtx, accessorCtx);
+		final MessageProcessor messageProcessor = createMessageProcessor(formatterCtx, accessorCtx);
 		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
 		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap, sounds);
 
@@ -147,13 +148,13 @@ public final class BootstrapUtility
 	 * @return an instance of the message pipeline
 	 */
 	static @NotNull MessagePipeline createComponentPipeline(final Plugin plugin,
-														  final MessageRepository messages,
-														  final SoundRepository sounds,
-														  final FormatterCtx formatterCtx,
-														  final AccessorCtx accessorCtx)
+															final MessageRepository messages,
+															final SoundRepository sounds,
+															final FormatterCtx formatterCtx,
+															final AccessorCtx accessorCtx)
 	{
 		final LocalizedMessageRetriever localizedMessageRetriever = new LocalizedMessageRetriever(messages);
-		final MessageProcessor messageProcessor = createMacroReplacer(formatterCtx, accessorCtx);
+		final MessageProcessor messageProcessor = createMessageProcessor(formatterCtx, accessorCtx);
 		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
 		final List<Sender> messageSenders = createSenders(plugin, messageCooldownMap, sounds);
 
@@ -168,10 +169,10 @@ public final class BootstrapUtility
 	 * @param plugin instance of the plugin
 	 * @return the context container for to be injected into resolvers
 	 */
-	static FormatterCtx createFormatterContextContainer(final Plugin plugin,
-														final ConfigRepository configRepository,
-														final ConstantRepository constants,
-														final MiniMessage miniMessage)
+	static @NonNull FormatterCtx createFormatterContextContainer(final Plugin plugin,
+																 final ConfigRepository configRepository,
+																 final ConstantRepository constants,
+																 final MiniMessage miniMessage)
 	{
 		final LocaleNumberFormatter localeNumberFormatter = new LocaleNumberFormatter(configRepository);
 		final Time4jDurationFormatter time4jDurationFormatter = new Time4jDurationFormatter(configRepository);
