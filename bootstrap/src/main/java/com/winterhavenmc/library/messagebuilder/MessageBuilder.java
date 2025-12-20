@@ -145,10 +145,10 @@ public final class MessageBuilder
 		// Create MiniMessage instance
 		final MiniMessage miniMessage = MiniMessage.miniMessage();
 
-		// create configuration repository
+		// create plugin configuration repository
 		final ConfigRepository configRepository = BukkitConfigRepository.create(plugin);
 
-		// Create custom item maker
+		// Create custom item factory
 		CustomItemFactory customItemFactory = new CustomItemFactory(plugin, miniMessage);
 
 		// create language resource manager and repositories
