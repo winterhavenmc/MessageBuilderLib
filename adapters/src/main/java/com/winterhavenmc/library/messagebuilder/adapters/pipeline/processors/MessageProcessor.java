@@ -70,7 +70,7 @@ public class MessageProcessor implements Processor
 	 * @param resolver the macro resolver used to extract string representations from context objects
 	 * @param placeholderMatcher the placeholder matcher used to detect macro keys in strings
 	 */
-	public MessageProcessor(final ValueResolver resolver, final PlaceholderMatcher placeholderMatcher)
+	private MessageProcessor(final ValueResolver resolver, final PlaceholderMatcher placeholderMatcher)
 	{
 		this.macroReplacer = new RegexMacroReplacer(resolver, placeholderMatcher);
 	}
