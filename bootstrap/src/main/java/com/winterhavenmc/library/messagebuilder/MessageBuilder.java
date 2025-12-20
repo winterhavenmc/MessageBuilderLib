@@ -22,6 +22,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
@@ -145,20 +146,20 @@ public final class MessageBuilder
 		// Create MiniMessage instance
 		final MiniMessage miniMessage = MiniMessage.miniMessage();
 
-		// create configuration repository
+		// create plugin configuration repository
 		final ConfigRepository configRepository = BukkitConfigRepository.create(plugin);
 
-		// Create custom item maker
+		// Create custom item factory
 		CustomItemFactory customItemFactory = new CustomItemFactory(plugin, miniMessage);
 
 		// create language resource manager and repositories
-		final LanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
+		final LanguageResourceManager languageResourceManager = YamlLanguageResourceManager.create(plugin, configRepository);
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
 		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager, customItemFactory);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 
 		// create sound resource manager and repositories
-		final ResourceManager soundResourceManager = createSoundResourceManager(plugin, configRepository);
+		final ResourceManager soundResourceManager = YamlSoundResourceManager.create(plugin, configRepository);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
 
 		// create world repository

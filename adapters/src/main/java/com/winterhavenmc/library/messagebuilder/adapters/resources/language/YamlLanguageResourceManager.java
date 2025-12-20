@@ -20,9 +20,11 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.language;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.*;
 
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.LanguageResourceManager;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import com.winterhavenmc.library.messagebuilder.models.configuration.LanguageTag;
 import com.winterhavenmc.library.messagebuilder.models.language.Section;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 
@@ -55,7 +57,7 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 	 * @param resourceInstaller a YamlLanguageResourceInstaller instance
 	 * @param resourceLoader  a YamlLanguageResourceLoader instance
 	 */
-	public YamlLanguageResourceManager(final ResourceInstaller resourceInstaller,
+	private YamlLanguageResourceManager(final ResourceInstaller resourceInstaller,
 									   final ResourceLoader resourceLoader)
 	{
 		this.resourceInstaller = resourceInstaller;
@@ -63,6 +65,22 @@ public final class YamlLanguageResourceManager implements LanguageResourceManage
 
 		installResources();
 		this.languageConfiguration = resourceLoader.load();
+	}
+
+
+	/**
+	 * Static factory method to create the language resource manager
+	 *
+	 * @param plugin an instance of the plugin
+	 * @return an instance of the language resource manager
+	 */
+	public static YamlLanguageResourceManager create(final Plugin plugin,
+													 final ConfigRepository configRepository)
+	{
+		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin, configRepository);
+		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin, configRepository);
+
+		return new YamlLanguageResourceManager(resourceInstaller, resourceLoader);
 	}
 
 
