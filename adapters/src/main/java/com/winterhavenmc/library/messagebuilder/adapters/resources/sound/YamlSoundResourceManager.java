@@ -3,7 +3,9 @@ package com.winterhavenmc.library.messagebuilder.adapters.resources.sound;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.*;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.sound.SoundResourceManager;
 
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.plugin.Plugin;
 
 
 public final class YamlSoundResourceManager implements SoundResourceManager
@@ -13,12 +15,25 @@ public final class YamlSoundResourceManager implements SoundResourceManager
 	private Configuration soundConfiguration;
 
 
-	public YamlSoundResourceManager(final ResourceInstaller resourceInstaller, final ResourceLoader resourceLoader)
+	private YamlSoundResourceManager(final ResourceInstaller resourceInstaller, final ResourceLoader resourceLoader)
 	{
 		this.resourceInstaller = resourceInstaller;
 		this.resourceLoader = resourceLoader;
 
 		reload();
+	}
+
+
+	/**
+	 * Static factory method returns instance of YamlSoundResourceManager
+	 */
+	public static YamlSoundResourceManager create(final Plugin plugin,
+												  final ConfigRepository configRepository)
+	{
+		final YamlSoundResourceInstaller resourceInstaller = new YamlSoundResourceInstaller(plugin);
+		final YamlSoundResourceLoader resourceLoader = new YamlSoundResourceLoader(plugin, configRepository);
+
+		return new YamlSoundResourceManager(resourceInstaller, resourceLoader);
 	}
 
 

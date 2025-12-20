@@ -43,12 +43,6 @@ import com.winterhavenmc.library.messagebuilder.adapters.pipeline.senders.KyoriT
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
 
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceInstaller;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceLoader;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.language.YamlLanguageResourceManager;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceInstaller;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceLoader;
-import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
@@ -100,15 +94,6 @@ public final class BootstrapUtility
 		return List.of(messageSender, titleSender);
 	}
 
-
-	static YamlSoundResourceManager createSoundResourceManager(final Plugin plugin,
-															   final ConfigRepository configRepository)
-	{
-		final YamlSoundResourceInstaller resourceInstaller = new YamlSoundResourceInstaller(plugin);
-		final YamlSoundResourceLoader resourceLoader = new YamlSoundResourceLoader(plugin, configRepository);
-
-		return new YamlSoundResourceManager(resourceInstaller, resourceLoader);
-	}
 
 	/**
 	 * A static factory method to create a macro replacer instance

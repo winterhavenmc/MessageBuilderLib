@@ -22,6 +22,7 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
 
+import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
@@ -158,7 +159,7 @@ public final class MessageBuilder
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);
 
 		// create sound resource manager and repositories
-		final ResourceManager soundResourceManager = createSoundResourceManager(plugin, configRepository);
+		final ResourceManager soundResourceManager = YamlSoundResourceManager.create(plugin, configRepository);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
 
 		// create world repository
