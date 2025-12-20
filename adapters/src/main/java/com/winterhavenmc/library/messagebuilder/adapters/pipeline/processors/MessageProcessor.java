@@ -17,8 +17,17 @@
 
 package com.winterhavenmc.library.messagebuilder.adapters.pipeline.processors;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.FieldAccessorRegistry;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.accessors.MacroFieldAccessor;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.matchers.RegexPlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.replacers.RegexMacroReplacer;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.AtomicResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.CompositeResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.value.MacroValueResolver;
+import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
+import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.AccessorRegistry;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.matchers.PlaceholderMatcher;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.processors.Processor;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.replacers.MacroReplacer;
@@ -27,6 +36,9 @@ import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.ma
 import com.winterhavenmc.library.messagebuilder.models.language.message.FinalMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.language.message.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroObjectMap;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 
 /**
@@ -61,6 +73,26 @@ public class MessageProcessor implements Processor
 	public MessageProcessor(final ValueResolver resolver, final PlaceholderMatcher placeholderMatcher)
 	{
 		this.macroReplacer = new RegexMacroReplacer(resolver, placeholderMatcher);
+	}
+
+	/**
+	 * A static factory method to create a message processor instance
+	 *
+	 * @param formatterCtx the context container holding formatters
+	 * @param accessorCtx the context container for dependency injection into adapters
+	 * @return an instance of the message processor
+	 */
+	public static @NotNull MessageProcessor create(final FormatterCtx formatterCtx,
+												   final AccessorCtx accessorCtx)
+	{
+		final AccessorRegistry accessorRegistry = new FieldAccessorRegistry(accessorCtx);
+		final MacroFieldAccessor macroFieldAccessor = new MacroFieldAccessor(accessorCtx);
+		final CompositeResolver compositeResolver = new CompositeResolver(accessorRegistry, macroFieldAccessor);
+		final AtomicResolver atomicResolver = new AtomicResolver(formatterCtx);
+		final MacroValueResolver macroValueResolver = new MacroValueResolver(List.of(compositeResolver, atomicResolver)); // atomic must come last
+		final RegexPlaceholderMatcher placeholderMatcher = new RegexPlaceholderMatcher();
+
+		return new MessageProcessor(macroValueResolver, placeholderMatcher);
 	}
 
 

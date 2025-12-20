@@ -20,6 +20,7 @@ package com.winterhavenmc.library.messagebuilder;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation.BukkitSpawnLocationResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.BukkitWorldNameResolver;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.WorldNameRetrieverFactory;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitConfigRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.*;
@@ -55,7 +56,6 @@ import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
 import static com.winterhavenmc.library.messagebuilder.BootstrapUtility.*;
-import static com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.WorldNameRetrieverFactory.getWorldNameRetriever;
 import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.PARAMETER_NULL;
 import static com.winterhavenmc.library.messagebuilder.models.validation.ErrorMessageKey.RELOAD_FAILED;
 import static com.winterhavenmc.library.messagebuilder.models.validation.Parameter.*;
@@ -170,10 +170,10 @@ public final class MessageBuilder
 		final ResourceManager soundResourceManager = YamlSoundResourceManager.create(plugin, configRepository);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
 
-		final WorldNameRetriever worldNameRetriever = getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
-		final SpawnLocationRetriever spawnLocationRetriever = SpawnLocationRetriever.create(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
-
+		final WorldNameRetriever worldNameRetriever = WorldNameRetrieverFactory.getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
 		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(plugin, worldNameRetriever);
+
+		final SpawnLocationRetriever spawnLocationRetriever = SpawnLocationRetriever.create(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
 		final SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.create(spawnLocationRetriever);
 
 		// create world repository
@@ -184,7 +184,7 @@ public final class MessageBuilder
 		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRepository, formatterCtx);
 
 		// create message pipeline
-		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
+		final MessagePipeline messagePipeline = MessagePipeline.createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
 
 		// return instantiation of MessageBuilder library
 		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,

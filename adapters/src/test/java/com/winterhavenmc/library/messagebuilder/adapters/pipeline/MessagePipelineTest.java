@@ -34,6 +34,7 @@ import com.winterhavenmc.library.messagebuilder.models.language.message.MessageR
 import com.winterhavenmc.library.messagebuilder.models.language.message.ValidMessageRecord;
 import com.winterhavenmc.library.messagebuilder.models.recipient.Recipient;
 import com.winterhavenmc.library.messagebuilder.models.validation.ValidationException;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
@@ -82,7 +83,8 @@ class MessagePipelineTest
 		};
 		cooldownMap = new MessageCooldownMap();
 
-		MessagePipelineCtx messagePipelineCtx = new MessagePipelineCtx(messageRetrieverMock, messageProcessorMock, cooldownMap, List.of(messageSenderMock, titleSenderMock));
+		MessagePipelineCtx messagePipelineCtx = new MessagePipelineCtx(messageRetrieverMock, messageProcessorMock,
+				cooldownMap, MiniMessage.miniMessage(), List.of(messageSenderMock, titleSenderMock));
 
 		messagePipeline = new MessagePipeline(messagePipelineCtx);
 
