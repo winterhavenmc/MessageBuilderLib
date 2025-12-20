@@ -75,8 +75,7 @@ public interface PluralNameable
 	default MacroStringMap extractPluralName(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(PLURAL_NAME).isValid()
-				.map(macroKey -> new MacroStringMap()
-						.with(macroKey, formatPluralName(this.getPluralName()).orElse(UNKNOWN_VALUE)))
+				.map(macroKey -> new MacroStringMap().with(macroKey, formatPluralName(this.getPluralName()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);
 	}
 
