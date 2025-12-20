@@ -90,7 +90,6 @@ public class RegexMacroReplacer implements MacroReplacer
 		this.placeholderMatcher = placeholderMatcher;
 	}
 
-
 	/**
 	 * Replaces all macro placeholders found in the given message string using the provided
 	 * {@link MacroObjectMap}.
