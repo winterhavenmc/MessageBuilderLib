@@ -152,7 +152,7 @@ public final class MessageBuilder
 		CustomItemFactory customItemFactory = new CustomItemFactory(plugin, miniMessage);
 
 		// create language resource manager and repositories
-		final LanguageResourceManager languageResourceManager = createLanguageResourceManager(plugin, configRepository);
+		final LanguageResourceManager languageResourceManager = YamlLanguageResourceManager.create(plugin, configRepository);
 		final ConstantRepository constantRepository = new YamlConstantRepository(languageResourceManager);
 		final ItemRepository itemRepository = new YamlItemRepository(plugin, languageResourceManager, customItemFactory);
 		final MessageRepository messageRepository = new YamlMessageRepository(languageResourceManager);

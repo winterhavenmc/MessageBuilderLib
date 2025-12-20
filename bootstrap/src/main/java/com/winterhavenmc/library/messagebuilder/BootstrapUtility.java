@@ -101,21 +101,6 @@ public final class BootstrapUtility
 	}
 
 
-	/**
-	 * A static factory method to create the language resource manager
-	 *
-	 * @param plugin an instance of the plugin
-	 * @return an instance of the language resource manager
-	 */
-	static YamlLanguageResourceManager createLanguageResourceManager(final Plugin plugin,
-																	 final ConfigRepository configRepository)
-	{
-		final YamlLanguageResourceInstaller resourceInstaller = new YamlLanguageResourceInstaller(plugin, configRepository);
-		final YamlLanguageResourceLoader resourceLoader = new YamlLanguageResourceLoader(plugin, configRepository);
-
-		return new YamlLanguageResourceManager(resourceInstaller, resourceLoader);
-	}
-
 	static YamlSoundResourceManager createSoundResourceManager(final Plugin plugin,
 															   final ConfigRepository configRepository)
 	{
