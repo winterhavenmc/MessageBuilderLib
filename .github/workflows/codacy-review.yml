@@ -12,13 +12,13 @@ jobs:
       pull-requests: write # needs issues: OR pull-requests: read & write to create labels on a PR
     steps:
       - name: Add Codacy label
-        uses: codacy/codacy-review-label-action@v1
+        uses: codacy/codacy-review-label-action@49e26d7e573128eeb18de157bffd8fe858dd35ba
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # default GH actions token
-#        with:
-#          include-drafts: false # optional, more details below
-#          bots: false # optional
+        with:
+          create-label: true # optional
+          label-color: "050B1A" # optional
+          include-drafts: false # optional, more details below
+          bots: false # optional
 #          required-title-keywords: "^feat:, docs" # optional
 #          exclude-title-keywords: "revert, ^draft, ^wip" # optional
-#          create-label: true # optional
-#          label-color: "050B1A" # optional
