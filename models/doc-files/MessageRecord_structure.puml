@@ -1,0 +1,215 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 2,
+    "backwardDepth": 0,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.winterhavenmc.library.messagebuilder.models.language.message.MessageRecord",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1655488073 { 
+   	label=winterhavenmc
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1412706428 { 
+   	label=library
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   FinalMessageRecord788219698[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FinalMessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   enabled: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   finalMessageString: Optional&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   finalSubtitleString: Optional&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   finalTitleString: Optional&lt;String&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   message: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   repeatDelay: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   subtitle: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   title: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeIn: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeOut: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleStay: Duration [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ enabled(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ finalMessageString(): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ finalSubtitleString(): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ finalTitleString(): Optional&lt;String&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ValidMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ message(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ repeatDelay(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ subtitle(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ title(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeIn(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeOut(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleStay(): Duration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+InvalidMessageRecord788219698[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)InvalidMessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   key: RecordKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   reason: InvalidRecordReason [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ reason(): InvalidRecordReason</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MessageRecord788219698[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)MessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ empty(messageKey: RecordKey, reason: InvalidRecordReason): InvalidMessageRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ of(messageKey: ValidMessageKey, messageEntry: ConfigurationSection): MessageRecord</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+SectionRecord1572118503[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(I)SectionRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ key(): RecordKey</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#F1E5FD"
+];
+
+ValidMessageRecord788219698[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ValidMessageRecord</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   enabled: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   key: ValidMessageKey [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   message: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   repeatDelay: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   subtitle: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   title: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeIn: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleFadeOut: Duration [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   titleStay: Duration [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ create(key: ValidMessageKey, section: ConfigurationSection): ValidMessageRecord</TD></TR>
+<TR><TD ALIGN="LEFT" >+ enabled(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ key(): ValidMessageKey</TD></TR>
+<TR><TD ALIGN="LEFT" >+ message(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ repeatDelay(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ subtitle(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ title(): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeIn(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleFadeOut(): Duration</TD></TR>
+<TR><TD ALIGN="LEFT" >+ titleStay(): Duration</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+MessageRecord788219698 -> FinalMessageRecord788219698[arrowhead=none, arrowtail=empty, dir=both];
+MessageRecord788219698 -> InvalidMessageRecord788219698[arrowhead=none, arrowtail=empty, dir=both];
+MessageRecord788219698 -> ValidMessageRecord788219698[arrowhead=none, arrowtail=empty, dir=both];
+SectionRecord1572118503 -> MessageRecord788219698[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml
