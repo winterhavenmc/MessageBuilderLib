@@ -99,11 +99,7 @@ public final class MessageBuilder
 	private final Plugin plugin;
 	private final ResourceManager languageResourceManager;
 	private final ResourceManager soundResourceManager;
-	private final ConstantRepository constants;
-	private final SoundRepository sounds;
-	private final ConfigRepository configRepository;
-	private final WorldRepository worlds;
-	private final ItemRepository itemRepository;
+	private final RepositoryContainer repositories;
 	private final Pipeline messagePipeline;
 
 
@@ -117,21 +113,13 @@ public final class MessageBuilder
 	private MessageBuilder(final Plugin plugin,
 						   final ResourceManager languageResourceManager,
 						   final ResourceManager soundResourceManager,
-						   final ConstantRepository constants,
-						   final SoundRepository sounds,
-						   final ConfigRepository configRepository,
-						   final WorldRepository worlds,
-						   final ItemRepository itemRepository,
+						   final RepositoryContainer repositories,
 						   final Pipeline messagePipeline)
 	{
 		this.plugin = plugin;
 		this.languageResourceManager = languageResourceManager;
 		this.soundResourceManager = soundResourceManager;
-		this.constants = constants;
-		this.sounds = sounds;
-		this.configRepository = configRepository;
-		this.worlds = worlds;
-		this.itemRepository = itemRepository;
+		this.repositories = repositories;
 		this.messagePipeline = messagePipeline;
 	}
 
@@ -179,6 +167,9 @@ public final class MessageBuilder
 		// create world repository
 		final WorldRepository worldRepository = BukkitWorldRepository.create(plugin, worldNameResolver, spawnLocationResolver);
 
+		// create repository container
+		final RepositoryContainer repositories = new RepositoryContainer(configRepository, constantRepository, itemRepository, soundRepository, worldRepository);
+
 		// create context containers
 		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, configRepository, constantRepository, miniMessage);
 		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRepository, formatterCtx);
@@ -187,8 +178,7 @@ public final class MessageBuilder
 		final MessagePipeline messagePipeline = MessagePipeline.createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
 
 		// return instantiation of MessageBuilder library
-		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,
-				constantRepository, soundRepository, configRepository, worldRepository, itemRepository, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, repositories, messagePipeline);
 	}
 
 
@@ -253,11 +243,7 @@ public final class MessageBuilder
 	static MessageBuilder test(final Plugin plugin,
 							   final ResourceManager languageResourceManager,
 							   final ResourceManager soundResourceManager,
-							   final ConstantRepository constantRepository,
-							   final SoundRepository soundRepository,
-							   final ConfigRepository configRepository,
-							   final WorldRepository enabledWorlds,
-							   final ItemRepository itemRepository,
+							   final RepositoryContainer repositories,
 							   final MessagePipeline messagePipeline)
 	{
 		validate(plugin, Objects::isNull, throwing(PARAMETER_NULL, Parameter.PLUGIN));
@@ -265,8 +251,7 @@ public final class MessageBuilder
 		validate(soundResourceManager, Objects::isNull, throwing(PARAMETER_NULL, SOUND_RESOURCE_MANAGER));
 		validate(messagePipeline, Objects::isNull, throwing(PARAMETER_NULL, MESSAGE_PROCESSOR));
 
-		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,
-				constantRepository, soundRepository, configRepository, enabledWorlds, itemRepository, messagePipeline);
+		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager, repositories, messagePipeline);
 	}
 
 
@@ -275,7 +260,7 @@ public final class MessageBuilder
 	 */
 	public ConfigRepository config()
 	{
-		return this.configRepository;
+		return repositories.config();
 	}
 
 
@@ -284,7 +269,7 @@ public final class MessageBuilder
 	 */
 	public ConstantRepository constants()
 	{
-		return constants;
+		return repositories.constants();
 	}
 
 
@@ -293,7 +278,7 @@ public final class MessageBuilder
 	 */
 	public ItemRepository items()
 	{
-		return this.itemRepository;
+		return repositories.items();
 	}
 
 
@@ -302,7 +287,7 @@ public final class MessageBuilder
 	 */
 	public SoundRepository sounds()
 	{
-		return sounds;
+		return repositories.sounds();
 	}
 
 
@@ -311,7 +296,7 @@ public final class MessageBuilder
 	 */
 	public WorldRepository worlds()
 	{
-		return worlds;
+		return repositories.worlds();
 	}
 
 }

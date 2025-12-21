@@ -36,6 +36,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -44,8 +45,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -102,15 +102,17 @@ class LocatableTest
 
 
 	@Test
-	@Disabled("needs fix")
 	void extractLocation_returns_populated_map()
 	{
 		// Arrange
+		UUID worldUid = new UUID(42, 42);
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 		ValidMacroKey locationKey = baseKey.append("LOCATION").isValid().orElseThrow();
-		when(localeNumberFormatterMock.format(11)).thenReturn("11");
-		when(localeNumberFormatterMock.format(12)).thenReturn("12");
-		when(localeNumberFormatterMock.format(13)).thenReturn("13");
+
+		when(numberFormatterMock.format(11)).thenReturn("11");
+		when(numberFormatterMock.format(12)).thenReturn("12");
+		when(numberFormatterMock.format(13)).thenReturn("13");
+
 		TestObject testObject = new TestObject();
 		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
 		AccessorCtx accessorCtx = new AccessorCtx(worldNameResolverMock, itemNameResolverMock,
@@ -120,21 +122,31 @@ class LocatableTest
 		MacroStringMap result = testObject.extractLocation(baseKey, accessorCtx);
 
 		// Assert
+		assertTrue(result.containsKey(locationKey));
 		assertEquals("- [11, 12, 13]", result.get(locationKey));
+
+		// Verify
+		verify(numberFormatterMock, atLeastOnce()).format(11);
+		verify(numberFormatterMock, atLeastOnce()).format(12);
+		verify(numberFormatterMock, atLeastOnce()).format(13);
 	}
 
 
 	@Test
-	@Disabled("needs fix")
 	void formatLocation_returns_optional_string()
 	{
 		// Arrange
+		UUID worldUid = new UUID(42, 42);
 		Location testLocation = new Location(worldMock, 11, 12, 13);
 		ValidMacroKey baseKey = MacroKey.of("TEST").isValid().orElseThrow();
 		ValidMacroKey locationKey = baseKey.append("LOCATION").isValid().orElseThrow();
 
-		when(worldNameResolverMock.resolve(any())).thenReturn("test_world");
 		when(worldMock.getName()).thenReturn("test_world");
+		when(worldMock.getUID()).thenReturn(worldUid);
+		when(worldNameResolverMock.resolve(worldUid)).thenReturn("test_world");
+		when(numberFormatterMock.format(11)).thenReturn("11");
+		when(numberFormatterMock.format(12)).thenReturn("12");
+		when(numberFormatterMock.format(13)).thenReturn("13");
 
 		TestObject testObject = new TestObject();
 		FormatterCtx formatterCtx = new FormatterCtx(configRepositoryMock, durationFormatterMock, numberFormatterMock, MiniMessage.miniMessage());
@@ -145,11 +157,16 @@ class LocatableTest
 		Optional<String> result = Locatable.formatLocation(testLocation, accessorCtx);
 
 		// Assert
-		assertEquals(Optional.of("test_world [11, 12, 13]"), result);
+		assertTrue(result.isPresent());
+		assertEquals("test_world [11, 12, 13]", result.get());
 
 		// Verify
-		verify(worldNameResolverMock, atLeastOnce()).resolve(any());
 		verify(worldMock, atLeastOnce()).getName();
+		verify(worldMock, atLeastOnce()).getUID();
+		verify(worldNameResolverMock, atLeastOnce()).resolve(worldUid);
+		verify(numberFormatterMock, atLeastOnce()).format(11);
+		verify(numberFormatterMock, atLeastOnce()).format(12);
+		verify(numberFormatterMock, atLeastOnce()).format(13);
 	}
 
 

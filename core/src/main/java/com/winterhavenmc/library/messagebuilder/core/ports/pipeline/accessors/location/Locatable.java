@@ -88,6 +88,7 @@ public interface Locatable
 
 		if (getLocation() != null)
 		{
+			// create location subkey if base key does not end with 'LOCATION'
 			ValidMacroKey locationKey = (!baseKey.toString().endsWith("LOCATION"))
 					? baseKey.append(LOCATION).isValid().orElseThrow()
 					: baseKey;
