@@ -80,6 +80,8 @@ class MessageBuilderTest
 
 	MessageBuilder messageBuilder;
 
+	RepositoryContainer repositories;
+
 
 	@BeforeEach
 	void setUp()
@@ -90,14 +92,13 @@ class MessageBuilderTest
 		pluginConfiguration.set("locale", "en-US");
 		lenient().when(pluginMock.getConfig()).thenReturn(pluginConfiguration);
 
+		repositories = new RepositoryContainer(configRepositoryMock, constantRepositoryMock,
+				itemRepositoryMock, soundRepositoryMock, worldRepositoryMock);
+
 		messageBuilder = MessageBuilder.test(pluginMock,
 				languageResourceManagerMock,
 				soundResourceManagerMock,
-				constantRepositoryMock,
-				soundRepositoryMock,
-				configRepositoryMock,
-				worldRepositoryMock,
-				itemRepositoryMock,
+				repositories,
 				messagePipelineMock);
 	}
 
@@ -223,11 +224,7 @@ class MessageBuilderTest
 				() -> MessageBuilder.test(null,
 						languageResourceManagerMock,
 						soundResourceManagerMock,
-						constantRepositoryMock,
-						soundRepositoryMock,
-						configRepositoryMock,
-						worldRepositoryMock,
-						itemRepositoryMock,
+						repositories,
 						messagePipelineMock));
 
 		// Assert
@@ -244,11 +241,7 @@ class MessageBuilderTest
 				() -> MessageBuilder.test(pluginMock,
 						null,
 						soundResourceManagerMock,
-						constantRepositoryMock,
-						soundRepositoryMock,
-						configRepositoryMock,
-						worldRepositoryMock,
-						itemRepositoryMock,
+						repositories,
 						messagePipelineMock));
 
 		// Assert
@@ -265,11 +258,7 @@ class MessageBuilderTest
 				() -> MessageBuilder.test(pluginMock,
 						languageResourceManagerMock,
 						soundResourceManagerMock,
-						constantRepositoryMock,
-						soundRepositoryMock,
-						configRepositoryMock,
-						worldRepositoryMock,
-						itemRepositoryMock,
+						repositories,
 						null));
 
 		// Assert
