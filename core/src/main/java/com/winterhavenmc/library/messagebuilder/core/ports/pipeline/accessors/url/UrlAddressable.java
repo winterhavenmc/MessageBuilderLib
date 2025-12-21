@@ -34,20 +34,19 @@ public interface UrlAddressable
 {
 	String getUrl();
 
+	Predicate<String> VALID_URL = version -> version != null && !version.isBlank();
+
 
 	default MacroStringMap extractUrl(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(URL).isValid()
 				.map(macroKey -> new MacroStringMap()
-						.with(macroKey, formatVersion(this.getUrl()).orElse(UNKNOWN_VALUE)))
+						.with(macroKey, formatUrl(this.getUrl()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);
 	}
 
 
-	Predicate<String> VALID_URL = version -> version != null && !version.isBlank();
-
-
-	static Optional<String> formatVersion(final String versionString)
+	static Optional<String> formatUrl(final String versionString)
 	{
 		return (VALID_URL.test(versionString))
 				? Optional.of(versionString)
