@@ -15,10 +15,10 @@ jobs:
         uses: codacy/codacy-review-label-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # default GH actions token
-#        with:
-#          include-drafts: false # optional, more details below
-#          bots: false # optional
+        with:
+          create-label: true # optional
+          label-color: "050B1A" # optional
+          include-drafts: false # optional, more details below
+          bots: false # optional
 #          required-title-keywords: "^feat:, docs" # optional
 #          exclude-title-keywords: "revert, ^draft, ^wip" # optional
-#          create-label: true # optional
-#          label-color: "050B1A" # optional
