@@ -55,7 +55,7 @@ public final class YamlSoundResourceManager implements SoundResourceManager
 
 
 	/**
-	 * reload sound configuration from yaml file in plugin data folder
+	 * reload sound configuration from YAML file in plugin data folder
 	 */
 	@Override
 	public boolean reload()

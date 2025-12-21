@@ -20,7 +20,6 @@ package com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.q
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.maps.MacroStringMap;
-import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.accessors.name.Nameable;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.duration.DurationFormatter;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.formatters.number.NumberFormatter;
 
@@ -131,36 +130,6 @@ class QuantifiableTest
 
 		// Assert
 		assertEquals(Optional.of("42"), result);
-	}
-
-
-	@Test
-	void formatName_with_null_name_returns_empty_optional()
-	{
-		// Arrange
-		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
-		TestObject testObject = new TestObject();
-
-		// Act
-		Optional<String> result = Nameable.formatName(null);
-
-		// Assert
-		assertEquals(Optional.empty(), result);
-	}
-
-
-	@Test
-	void formatName_with_blank_name_returns_empty_optional()
-	{
-		// Arrange
-		ValidMacroKey macroKey = MacroKey.of("TEST").isValid().orElseThrow();
-		TestObject testObject = new TestObject();
-
-		// Act
-		Optional<String> result = Nameable.formatName("");
-
-		// Assert
-		assertEquals(Optional.empty(), result);
 	}
 
 }

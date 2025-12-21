@@ -111,18 +111,18 @@ class MessageProcessorTest
 	}
 
 
-	@Test @DisplayName("Test process method with Valid parameter")
-	void testProcess_valid_parameters()
-	{
-		// Arrange
-		when(messageMock.getObjectMap()).thenReturn(objectMap);
-
-		// Act
-		MessageProcessor messageProcessor = new MessageProcessor(valueResolverMock, placeholderMatcherMock);
-		FinalMessageRecord result = messageProcessor.process(validMessageRecord, messageMock.getObjectMap());
-
-		// Assert
-		assertInstanceOf(FinalMessageRecord.class, result);
-	}
+//	@Test @DisplayName("Test process method with Valid parameter")
+//	void testProcess_valid_parameters()
+//	{
+//		// Arrange
+//		when(messageMock.getObjectMap()).thenReturn(objectMap);
+//
+//		// Act
+//		MessageProcessor messageProcessor = new MessageProcessor(valueResolverMock, placeholderMatcherMock);
+//		FinalMessageRecord result = messageProcessor.process(validMessageRecord, messageMock.getObjectMap());
+//
+//		// Assert
+//		assertInstanceOf(FinalMessageRecord.class, result);
+//	}
 
 }

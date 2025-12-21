@@ -17,7 +17,12 @@
 
 package com.winterhavenmc.library.messagebuilder;
 
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.spawnlocation.BukkitSpawnLocationResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.resolvers.worldname.BukkitWorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.spawnlocation.SpawnLocationRetriever;
+import com.winterhavenmc.library.messagebuilder.adapters.pipeline.retrievers.worldname.WorldNameRetrieverFactory;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitConfigRepository;
+import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitWorldRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSoundRepository;
 import com.winterhavenmc.library.messagebuilder.adapters.pipeline.MessagePipeline;
@@ -26,6 +31,9 @@ import com.winterhavenmc.library.messagebuilder.adapters.resources.sound.YamlSou
 import com.winterhavenmc.library.messagebuilder.core.context.AccessorCtx;
 import com.winterhavenmc.library.messagebuilder.core.context.FormatterCtx;
 import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.Pipeline;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.spawnlocation.SpawnLocationResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameResolver;
+import com.winterhavenmc.library.messagebuilder.core.ports.pipeline.resolvers.worldname.WorldNameRetriever;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.ResourceManager;
 import com.winterhavenmc.library.messagebuilder.core.ports.resources.language.*;
 import com.winterhavenmc.library.messagebuilder.core.message.Message;
@@ -162,15 +170,21 @@ public final class MessageBuilder
 		final ResourceManager soundResourceManager = YamlSoundResourceManager.create(plugin, configRepository);
 		final SoundRepository soundRepository = new YamlSoundRepository(plugin, soundResourceManager);
 
+		final WorldNameRetriever worldNameRetriever = WorldNameRetrieverFactory.getWorldNameRetriever(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+		final WorldNameResolver worldNameResolver = BukkitWorldNameResolver.create(plugin, worldNameRetriever);
+
+		final SpawnLocationRetriever spawnLocationRetriever = SpawnLocationRetriever.create(plugin.getServer().getPluginManager().getPlugin("Multiverse-Core"));
+		final SpawnLocationResolver spawnLocationResolver = BukkitSpawnLocationResolver.create(spawnLocationRetriever);
+
 		// create world repository
-		final WorldRepository worldRepository = createWorldRepository(plugin);
+		final WorldRepository worldRepository = BukkitWorldRepository.create(plugin, worldNameResolver, spawnLocationResolver);
 
 		// create context containers
 		final FormatterCtx formatterCtx = createFormatterContextContainer(plugin, configRepository, constantRepository, miniMessage);
 		final AccessorCtx accessorCtx = createAccessorContextContainer(plugin, itemRepository, formatterCtx);
 
 		// create message pipeline
-		final MessagePipeline messagePipeline = createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
+		final MessagePipeline messagePipeline = MessagePipeline.createMessagePipeline(plugin, messageRepository, soundRepository, formatterCtx, accessorCtx);
 
 		// return instantiation of MessageBuilder library
 		return new MessageBuilder(plugin, languageResourceManager, soundResourceManager,

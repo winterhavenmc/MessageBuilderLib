@@ -188,7 +188,7 @@ class MessageBuilderTest
 
 		try (MockedStatic<BootstrapUtility> bootstrapMockedStatic = Mockito.mockStatic(BootstrapUtility.class))
 		{
-			bootstrapMockedStatic.when(() -> BootstrapUtility
+			bootstrapMockedStatic.when(() -> MessagePipeline
 					.createMessagePipeline(pluginMock, messageRepositoryMock, soundRepositoryMock, formatterCtx, accessorCtx))
 					.thenReturn(messagePipelineMock);
 

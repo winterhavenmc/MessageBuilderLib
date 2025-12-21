@@ -35,17 +35,15 @@ public interface UriAddressable
 {
 	URI getUri();
 
+	Predicate<URI> VALID_URI = Objects::nonNull;
+
 
 	default MacroStringMap extractUri(final ValidMacroKey baseKey, final AccessorCtx ctx)
 	{
 		return baseKey.append(URL).isValid()
-				.map(macroKey -> new MacroStringMap()
-						.with(macroKey, formatUri(this.getUri()).orElse(UNKNOWN_VALUE)))
+				.map(macroKey -> new MacroStringMap().with(macroKey, formatUri(this.getUri()).orElse(UNKNOWN_VALUE)))
 				.orElseGet(MacroStringMap::empty);
 	}
-
-
-	Predicate<URI> VALID_URI = Objects::nonNull;
 
 
 	static Optional<String> formatUri(final URI uri)
