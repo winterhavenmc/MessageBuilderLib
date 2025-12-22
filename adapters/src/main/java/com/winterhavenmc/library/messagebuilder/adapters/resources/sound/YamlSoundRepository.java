@@ -76,14 +76,7 @@ public final class YamlSoundRepository implements SoundRepository
 	@Override
 	public SoundRecord getRecord(final Enum<?> soundId)
 	{
-		final Configuration soundConfiguration = this.configurationProvider.getConfiguration();
-
-		return SoundRecord.of(soundId.name(),
-				soundConfiguration.getBoolean(soundId + "." + Field.ENABLED),
-				soundConfiguration.getBoolean(soundId + "." + Field.PLAYER_ONLY),
-				soundConfiguration.getString(soundId + "." + Field.SOUND_NAME),
-				(float) soundConfiguration.getDouble(soundId + "." + Field.VOLUME),
-				(float) soundConfiguration.getDouble(soundId + "." + Field.PITCH));
+		return getRecord(soundId.name());
 	}
 
 
@@ -150,44 +143,7 @@ public final class YamlSoundRepository implements SoundRepository
 	@Override
 	public void play(final CommandSender sender, final Enum<?> soundId)
 	{
-		// if sound effects are configured false, do nothing and return
-		if (soundEffectsDisabled())
-		{
-			return;
-		}
-
-		// if sender is not a player do nothing and return
-		if (!(sender instanceof Player player))
-		{
-			return;
-		}
-
-		if (getRecord(soundId) instanceof ValidSoundRecord validSoundRecord
-				&& validSoundRecord.enabled())
-		{
-			// check that sound name is valid
-			if (Registry.SOUNDS.match(validSoundRecord.soundName()) != null)
-			{
-				// if sound is set player only, use player.playSound()
-				if (validSoundRecord.playerOnly())
-				{
-					player.playSound(player.getLocation(), Objects.requireNonNull(Registry.SOUNDS
-							.match(validSoundRecord.soundName())), validSoundRecord.volume(), validSoundRecord.pitch());
-				}
-				// else use world.playSound() so other players in vicinity can hear
-				else
-				{
-					player.getWorld().playSound(player.getLocation(), Objects.requireNonNull(Registry.SOUNDS
-							.match(validSoundRecord.soundName())), validSoundRecord.volume(), validSoundRecord.pitch());
-				}
-			}
-			else
-			{
-				Logger.getLogger(this.getClass().getName()).warning("An error occurred while trying to play the sound '"
-						+ validSoundRecord.soundName() + "'. You may need to update the sound name in your "
-						+ RESOURCE_NAME + " file.");
-			}
-		}
+		play(sender, soundId.name());
 	}
 
 
