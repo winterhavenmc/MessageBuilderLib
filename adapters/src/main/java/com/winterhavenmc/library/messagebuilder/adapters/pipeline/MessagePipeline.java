@@ -75,7 +75,8 @@ public final class MessagePipeline implements Pipeline
 		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
 		final List<Sender> messageSenders = SenderFactory.createSenders(plugin, messageCooldownMap, sounds);
 
-		final MessagePipelineCtx pipelineCtx = new MessagePipelineCtx(localizedMessageRetriever, messageProcessor, messageCooldownMap, formatterCtx.miniMessage(), messageSenders);
+		final MessagePipelineCtx pipelineCtx = new MessagePipelineCtx(localizedMessageRetriever, messageProcessor,
+				messageCooldownMap, formatterCtx.miniMessage(), messageSenders);
 		return new MessagePipeline(pipelineCtx);
 	}
 
@@ -98,7 +99,8 @@ public final class MessagePipeline implements Pipeline
 		final MessageCooldownMap messageCooldownMap = new MessageCooldownMap();
 		final List<Sender> messageSenders = SenderFactory.createSenders(plugin, messageCooldownMap, sounds);
 
-		final MessagePipelineCtx pipelineCtx = new MessagePipelineCtx(localizedMessageRetriever, messageProcessor, messageCooldownMap, formatterCtx.miniMessage(), messageSenders);
+		final MessagePipelineCtx pipelineCtx = new MessagePipelineCtx(localizedMessageRetriever, messageProcessor,
+				messageCooldownMap, formatterCtx.miniMessage(), messageSenders);
 		return new MessagePipeline(pipelineCtx);
 	}
 
