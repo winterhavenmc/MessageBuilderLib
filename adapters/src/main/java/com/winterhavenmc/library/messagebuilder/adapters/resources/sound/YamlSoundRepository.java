@@ -76,14 +76,7 @@ public final class YamlSoundRepository implements SoundRepository
 	@Override
 	public SoundRecord getRecord(final Enum<?> soundId)
 	{
-		final Configuration soundConfiguration = this.configurationProvider.getConfiguration();
-
-		return SoundRecord.of(soundId.name(),
-				soundConfiguration.getBoolean(soundId + "." + Field.ENABLED),
-				soundConfiguration.getBoolean(soundId + "." + Field.PLAYER_ONLY),
-				soundConfiguration.getString(soundId + "." + Field.SOUND_NAME),
-				(float) soundConfiguration.getDouble(soundId + "." + Field.VOLUME),
-				(float) soundConfiguration.getDouble(soundId + "." + Field.PITCH));
+		return getRecord(soundId.name());
 	}
 
 
